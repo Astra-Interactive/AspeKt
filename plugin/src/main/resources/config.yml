@@ -1,14 +1,37 @@
-config1: "string config"
-confi2: 0
-config3: false
-section:
-  value1: "value"
-  value2: 0
-list:
-  - "config"
-  - "config"
-another_list:
-  - value1: "value"
-    value2: 0
-  - value1: "value2"
-    value2: 0
+core:
+  sit: true
+
+discordsrv:
+  on_linked:
+    discord:
+      add_roles: ["777633457664294943"]
+      remove_roles: []
+    luckperms:
+      add_roles: ["group.gr_resident","gr_resident"]
+      remove_roles: ["default", "group.default" ]
+
+  on_unlinked:
+    discord:
+      add_roles: []
+      remove_roles: ["777633457664294943"]
+    luckperms:
+      add_roles: ["default", "group.default" ]
+      remove_roles: ["group.gr_resident","gr_resident"]
+announcements:
+  interval: 5
+  announcements:
+    - '#FFFFFF[#baa51c!#FFFFFF]: #03b5fcДискорд сервера #03fc56discord.gg/Gwukdr8'
+    - '#FFFFFF[#baa51c!#FFFFFF]: #03b5fcДискорд сервера #03fc56discord.gg/Gwukdr8'
+    - '#FFFFFF[#baa51c!#FFFFFF]: #03b5fcСайт сервера #03fc56empireProjekt.ru'
+    - '#FFFFFF[#baa51c!#FFFFFF]: #03b5fcВступайте в нашу группу в ВК #03fc56vk.com/empireprojekt'
+    - '#FFFFFF[#baa51c!#FFFFFF]: #03b5fcВступайте в наш Telegram-канал #03fc56t.me/empiresmp'
+    - '#FFFFFF[#baa51c!#FFFFFF]: #03b5fcЧтобы получить роль с более шиироким спектром возможностей - привяжите аккаунт дискорда #03fc56/discord link и отправьте код EmpireBot'
+    - '#FFFFFF[#baa51c!#FFFFFF]: #03b5fcОткрыть меню через #03fc56/menu'
+    - '#FFFFFF[#baa51c!#FFFFFF]: #03b5fcМеню помощи и информации #03fc56/help'
+    - '#FFFFFF[#baa51c!#FFFFFF]: #03b5fcПовысьте/понизьте рейтинг игрока с помощью #03fc56/arating like/dislike <player>'
+    - '#FFFFFF[#baa51c!#FFFFFF]: #03b5fcЕсли кто-то из модераторов или билдеров ведет себя неподобающим образом - напишите об этом создателю в дискорде #03fc56RomaRoman#2919'
+    - '#FFFFFF[#baa51c!#FFFFFF]: #03b5fcЧтобы прочувствовать весь экспириенс - установите ресурс-пак /empack!'
+    - '#FFFFFF[#baa51c!#FFFFFF]: #03b5fcНе забывайте, что есть рынок - /amarket. Используйте /amarket sell ЦЕНА КОЛИЧЕСТВО'
+    - '#FFFFFF[#baa51c!#FFFFFF]: #03b5fcНе забывайте, что можно скачивать собственные картинки /imagemp download NAME URL'
+
+

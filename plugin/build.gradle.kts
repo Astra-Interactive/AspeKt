@@ -25,6 +25,8 @@ dependencies {
     compileOnly(libs.paperApi)
     compileOnly(libs.spigotApi)
     compileOnly(libs.spigot)
+    compileOnly(libs.discordsrv)
+    compileOnly("net.luckperms:api:5.4")
     // Test-Core
     testImplementation(platform(libs.junit.bom))
     testImplementation(kotlin("test-junit5"))
@@ -33,6 +35,4 @@ dependencies {
     testImplementation(libs.coroutines.core)
     testImplementation(libs.coroutines.coreJvm)
     testImplementation(libs.xerial.sqlite.jdbc)
-    // Local
-    implementation(project(":domain"))
 }

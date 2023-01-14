@@ -1,9 +1,9 @@
 [versions]
 # Plugin/Mod core
-plugin = "4.2.0"
-name = "AstraTemplate"
+plugin = "2.0.0"
+name = "AstraEssentials"
 group = "com.astrainteractive"
-description = "Template plugin for EmpireProjekt"
+description = "Essentials plugin for EmpireProjekt"
 destinationDirectoryPath = "D:\\Minecraft Servers\\EmpireProjekt_remake\\smp\\plugins"
 destinationDirectoryFabricPath = "C:\\Users\\makee\\Desktop\\server\\mods"
 destinationDirectoryForgePath = "C:\\Users\\makee\\Desktop\\Forge\\mods"
