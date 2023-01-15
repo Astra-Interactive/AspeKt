@@ -1,6 +1,6 @@
 [versions]
 # Plugin/Mod core
-plugin = "2.0.0"
+plugin = "2.0.1"
 name = "AstraEssentials"
 group = "com.astrainteractive"
 description = "Essentials plugin for EmpireProjekt"

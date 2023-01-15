@@ -12,5 +12,6 @@ class EventHandler {
     init {
         SitEvent()
         SortEvent()
+        AutoCrop()
     }
 }
