@@ -1,6 +1,9 @@
-package ru.astrainteractive.astraessentials.utils
+package ru.astrainteractive.astraessentials.plugin
 
 import org.bukkit.configuration.file.FileConfiguration
+import ru.astrainteractive.astraessentials.utils.cBoolean
+import ru.astrainteractive.astraessentials.utils.cInt
+import ru.astrainteractive.astraessentials.utils.cStringList
 import ru.astrainteractive.astralibs.configuration.getValue
 
 

@@ -3,7 +3,7 @@ package ru.astrainteractive.astraessentials.commands
 import ru.astrainteractive.astraessentials.AstraEssentials
 import ru.astrainteractive.astraessentials.modules.TranslationModule
 import ru.astrainteractive.astralibs.commands.registerCommand
-import ru.astrainteractive.astraessentials.utils.Permission
+import ru.astrainteractive.astraessentials.plugin.Permission
 
 /**
  * Reload command handler

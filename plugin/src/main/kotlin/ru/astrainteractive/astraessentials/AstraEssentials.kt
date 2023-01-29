@@ -1,6 +1,5 @@
 package ru.astrainteractive.astraessentials
 
-import kotlinx.coroutines.cancel
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.astralibs.AstraLibs
@@ -14,7 +13,7 @@ import ru.astrainteractive.astraessentials.commands.CommandManager
 import ru.astrainteractive.astraessentials.events.EventHandler
 import ru.astrainteractive.astraessentials.events.sit.SitController
 import ru.astrainteractive.astraessentials.modules.*
-import ru.astrainteractive.astraessentials.utils.Files
+import ru.astrainteractive.astraessentials.plugin.Files
 import ru.astrainteractive.astraessentials.utils.Singleton
 
 /**
@@ -51,7 +50,7 @@ class AstraEssentials : JavaPlugin() {
         AutoBroadcast.onDisable()
         HandlerList.unregisterAll(this)
         GlobalEventManager.onDisable()
-        PluginScope.cancel()
+        PluginScope.close()
         discordEvent?.onDisable()
     }
 

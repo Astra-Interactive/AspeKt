@@ -1,4 +1,4 @@
-package ru.astrainteractive.astraessentials.utils
+package ru.astrainteractive.astraessentials.plugin
 
 import ru.astrainteractive.astralibs.file_manager.FileManager
 import ru.astrainteractive.astralibs.utils.BaseTranslation

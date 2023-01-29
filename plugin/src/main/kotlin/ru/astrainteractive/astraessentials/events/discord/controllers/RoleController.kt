@@ -2,7 +2,7 @@ package ru.astrainteractive.astraessentials.events.discord.controllers
 
 import github.scarsz.discordsrv.api.events.AccountLinkedEvent
 import github.scarsz.discordsrv.api.events.AccountUnlinkedEvent
-import ru.astrainteractive.astraessentials.utils.PluginConfiguration
+import ru.astrainteractive.astraessentials.plugin.PluginConfiguration
 
 interface RoleController {
 

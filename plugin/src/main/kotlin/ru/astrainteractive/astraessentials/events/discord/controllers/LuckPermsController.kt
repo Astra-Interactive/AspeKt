@@ -9,7 +9,7 @@ import org.bukkit.OfflinePlayer
 import ru.astrainteractive.astralibs.Logger
 import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.astraessentials.modules.PluginConfigModule
-import ru.astrainteractive.astraessentials.utils.PluginConfiguration
+import ru.astrainteractive.astraessentials.plugin.PluginConfiguration
 
 class LuckPermsController : RoleController {
     private val pluginConfiguration by PluginConfigModule
