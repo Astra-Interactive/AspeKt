@@ -13,6 +13,9 @@ class CommandManager {
 
     init {
         reload()
+        AstraEssentials.instance.registerCommand("rtp") {
+            sender.sendMessage("#db2c18Возможно, вы хотели ввести /tpr".HEX())
+        }
         AstraEssentials.instance.registerCommand("sit") {
             (sender as? Player)?.let(SitController::toggleSitPlayer)
         }

@@ -13,3 +13,4 @@ loadbefore: [ ]
 commands:
   sit:
   tellchat:
+  rtp:
