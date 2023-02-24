@@ -1,35 +1,76 @@
 package ru.astrainteractive.astraessentials.utils
 
+import kotlinx.serialization.json.Json.Default.configuration
 import org.bukkit.configuration.file.FileConfiguration
+import ru.astrainteractive.astralibs.configuration.Configuration
+import ru.astrainteractive.astralibs.configuration.DefaultConfiguration
 import ru.astrainteractive.astralibs.utils.getFloat
-import ru.astrainteractive.astralibs.configuration.configuration
 import ru.astrainteractive.astralibs.utils.HEX
 
-fun FileConfiguration.cString(path: String, default: String) = configuration(path) {
-    if (!this.contains(path)) this.set(path, default)
-    this.getString(path, default) ?: default
-}
+class StringConfiguration(
+    path: String,
+    default: String,
+    fc: FileConfiguration
+) : Configuration<String> by DefaultConfiguration(
+    default = default,
+    load = {
+        if (!fc.contains(path)) fc.set(path, default)
+        fc.getString(path, default) ?: default
+    },
+    save = {
+        fc.set(path, it)
+    }
+)
 
-fun FileConfiguration.cStringList(path: String) = configuration(path) {
-    if (!this.contains(path)) this.set(path, emptyList<String>())
-    this.getStringList(path).map { it.HEX() }
-}
+class StringListConfiguration(
+    path: String,
+    default: List<String>,
+    fc: FileConfiguration
+) : Configuration<List<String>> by DefaultConfiguration(
+    default = default,
+    load = {
+        if (!fc.contains(path)) fc.set(path, emptyList<String>())
+        fc.getStringList(path).map { it.HEX() }
+    },
+    save = {
+        fc.set(path, it)
+    }
+)
 
-fun FileConfiguration.cBoolean(path: String, default: Boolean) = configuration(path) {
-    if (!this.contains(path)) this.set(path, default)
-    this.getBoolean(path, default)
-}
+class BooleanConfiguration(
+    path: String,
+    default: Boolean,
+    fc: FileConfiguration
+) : Configuration<Boolean> by DefaultConfiguration(
+    default = default,
+    load = {
+        if (!fc.contains(path)) fc.set(path, default)
+        fc.getBoolean(path, default)
+    },
+    save = {
+        fc.set(path, it)
+    }
+)
 
-fun FileConfiguration.cDouble(path: String, default: Double) = configuration(path) {
-    if (!this.contains(path)) this.set(path, default)
-    this.getDouble(path, default)
-}
-fun FileConfiguration.cInt(path: String, default: Int) = configuration(path) {
-    if (!this.contains(path)) this.set(path, default)
-    this.getInt(path, default)
-}
+class IntConfiguration(
+    path: String,
+    default: Int,
+    fc: FileConfiguration
+) : Configuration<Int> by DefaultConfiguration(
+    default = default,
+    load = {
+        if (!fc.contains(path)) fc.set(path, default)
+        fc.getInt(path, default)
+    },
+    save = {
+        fc.set(path, it)
+    }
+)
 
-fun FileConfiguration.cFloat(path: String, default: Float) = configuration(path) {
-    if (!this.contains(path)) this.set(path, default)
-    this.getFloat(path, default)
-}
+fun FileConfiguration.cString(path: String, default: String) = StringConfiguration(path, default, this)
+
+fun FileConfiguration.cStringList(path: String) = StringListConfiguration(path, emptyList(), this)
+
+fun FileConfiguration.cBoolean(path: String, default: Boolean) = BooleanConfiguration(path, default, this)
+
+fun FileConfiguration.cInt(path: String, default: Int) = IntConfiguration(path, default, this)

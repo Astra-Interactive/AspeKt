@@ -4,11 +4,10 @@ import org.bukkit.configuration.file.FileConfiguration
 import ru.astrainteractive.astraessentials.utils.cBoolean
 import ru.astrainteractive.astraessentials.utils.cInt
 import ru.astrainteractive.astraessentials.utils.cStringList
-import ru.astrainteractive.astralibs.configuration.getValue
 
 
 class PluginConfiguration(fc: FileConfiguration) {
-    val sit by fc.cBoolean("core.sit", true)
+    val sit = fc.cBoolean("core.sit", true)
     val discordSRVLink = DiscordSRVLink(fc)
     val announcements = Announcements(fc)
 

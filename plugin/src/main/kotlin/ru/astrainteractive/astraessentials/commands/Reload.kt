@@ -3,7 +3,7 @@ package ru.astrainteractive.astraessentials.commands
 import ru.astrainteractive.astraessentials.AstraEssentials
 import ru.astrainteractive.astraessentials.modules.TranslationModule
 import ru.astrainteractive.astralibs.commands.registerCommand
-import ru.astrainteractive.astraessentials.plugin.Permission
+import ru.astrainteractive.astraessentials.plugin.EPermission
 
 /**
  * Reload command handler
@@ -16,7 +16,7 @@ import ru.astrainteractive.astraessentials.plugin.Permission
  */
 fun CommandManager.reload() = AstraEssentials.instance.registerCommand("atempreload") {
     val translation = TranslationModule.value
-    if (!Permission.Reload.hasPermission(sender)) {
+    if (!EPermission.Reload.hasPermission(sender)) {
         sender.sendMessage(translation.noPermission)
         return@registerCommand
     }

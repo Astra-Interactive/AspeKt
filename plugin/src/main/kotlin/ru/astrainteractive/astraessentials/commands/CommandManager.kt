@@ -1,11 +1,15 @@
 package ru.astrainteractive.astraessentials.commands
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import ru.astrainteractive.astraessentials.AstraEssentials
 import ru.astrainteractive.astraessentials.events.sit.SitController
-import ru.astrainteractive.astraessentials.plugin.Permission
+import ru.astrainteractive.astraessentials.gui.EntitiesGui
+import ru.astrainteractive.astraessentials.plugin.EPermission
+import ru.astrainteractive.astralibs.async.PluginScope
 import ru.astrainteractive.astralibs.commands.registerCommand
 import ru.astrainteractive.astralibs.commands.registerTabCompleter
 import ru.astrainteractive.astralibs.utils.HEX
@@ -21,9 +25,16 @@ class CommandManager {
         AstraEssentials.instance.registerCommand("sit") {
             (sender as? Player)?.let(SitController::toggleSitPlayer)
         }
+        AstraEssentials.instance.registerCommand("entities") {
+            if (!EPermission.Entities.hasPermission(sender)) return@registerCommand
+            PluginScope.launch(Dispatchers.IO) {
+                val player = sender as? Player ?: return@launch
+                EntitiesGui(player).open()
+            }
+        }
 
         AstraEssentials.instance.registerCommand("maxonline") {
-            if (!Permission.MaxOnline.hasPermission(sender)) return@registerCommand
+            if (!EPermission.MaxOnline.hasPermission(sender)) return@registerCommand
             argument(0) {
                 it?.toIntOrNull()
             }.onFailure {
@@ -40,7 +51,7 @@ class CommandManager {
         }
 
         AstraEssentials.instance.registerCommand("tellchat") {
-            if (!Permission.TellChat.hasPermission(sender)) return@registerCommand
+            if (!EPermission.TellChat.hasPermission(sender)) return@registerCommand
             argument(0) {
                 it?.let(Bukkit::getPlayer)
             }.onSuccess {
@@ -61,7 +72,7 @@ class CommandManager {
 
         }
         AstraEssentials.instance.registerCommand("atemframe") {
-            if (!Permission.AtemFrame.hasPermission(sender)) return@registerCommand
+            if (!EPermission.AtemFrame.hasPermission(sender)) return@registerCommand
             val player = sender as? Player ?: return@registerCommand
             val isVisible = argument(0) { it == "true" }.successOrNull()?.value ?: true
             val isFixed = argument(1) { it == "true" }.successOrNull()?.value ?: true
