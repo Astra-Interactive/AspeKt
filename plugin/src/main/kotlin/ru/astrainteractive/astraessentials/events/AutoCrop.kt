@@ -1,5 +1,6 @@
 package ru.astrainteractive.astraessentials.events
 
+import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.attribute.Attribute
 import org.bukkit.block.data.Ageable
@@ -11,6 +12,10 @@ import kotlin.math.min
 import kotlin.random.Random
 
 class AutoCrop {
+
+    private val locationSet = HashMap<Location, Long>()
+    private var lastClear = System.currentTimeMillis()
+
     val onCropInteract = DSLEvent.event<PlayerInteractEvent> { e ->
         if (e.action != Action.RIGHT_CLICK_BLOCK) return@event
         val clickedBlock = e.clickedBlock ?: return@event
@@ -27,7 +32,16 @@ class AutoCrop {
             else -> null
         }
         val luckModifier = (e.player.getAttribute(Attribute.GENERIC_LUCK)?.value ?: 0.0).coerceAtLeast(1.0)
-        val item = ItemStack(material ?: return@event, Random.nextInt((3*luckModifier).toInt(), (8*luckModifier).toInt()))
+        val luckModifierAmount = Random.nextInt((3 * luckModifier).toInt(), (8 * luckModifier).toInt())
+        val lastTimeClicked = locationSet[clickedBlock.location].also {
+            locationSet[clickedBlock.location] = System.currentTimeMillis()
+        } ?: 0
+        val amount = if (System.currentTimeMillis() - lastTimeClicked < 15_000L) 1 else luckModifierAmount
+        if (System.currentTimeMillis() - lastClear > 60_000) {
+            locationSet.clear()
+            lastClear = System.currentTimeMillis()
+        }
+        val item = ItemStack(material ?: return@event, amount)
         clickedCrop.age = 0
         clickedBlock.setBlockData(clickedCrop, true)
         clickedBlock.location.let { loc ->
