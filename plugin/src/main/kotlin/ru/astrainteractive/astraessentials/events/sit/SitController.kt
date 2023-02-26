@@ -6,12 +6,16 @@ import org.bukkit.block.BlockFace
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
+import ru.astrainteractive.astraessentials.plugin.PluginTranslation
+import ru.astrainteractive.astralibs.di.Dependency
 import ru.astrainteractive.astralibs.di.getValue
-import ru.astrainteractive.astraessentials.modules.TranslationModule
 
-object SitController {
+class SitController(
+    translation: Dependency<PluginTranslation>
+) {
     private val sitPlayers = mutableMapOf<String, ArmorStand>()
-    private val translation by TranslationModule
+    private val translation by translation
+
     /**
      * Заставляет игрока сесть
      */
@@ -52,10 +56,10 @@ object SitController {
         armorStand.remove()
         sitPlayers.remove(player.uniqueId.toString())
         //Телепортируем чуть повыше
-        player.teleport(player.location.add(0.0,1.6,0.0))
+        player.teleport(player.location.add(0.0, 1.6, 0.0))
     }
 
-    fun onDisable(){
+    fun onDisable() {
         for (player in sitPlayers.keys)
             sitPlayers[player]!!.remove()
         sitPlayers.clear()

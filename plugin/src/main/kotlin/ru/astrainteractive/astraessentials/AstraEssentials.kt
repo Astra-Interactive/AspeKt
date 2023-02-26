@@ -26,8 +26,9 @@ class AstraEssentials : JavaPlugin() {
         instance = this
     }
 
-    private val discordEvent by discordEventModule
-
+    private val discordEvent by ServiceLocator.discordEventModule
+    private val autoBroadcast by ServiceLocator.autoBroadcast
+    private val sitController by ServiceLocator.Controllers.sitController
 
     /**
      * This method called when server starts or PlugMan load plugin.
@@ -35,10 +36,15 @@ class AstraEssentials : JavaPlugin() {
     override fun onEnable() {
         AstraLibs.rememberPlugin(this)
         Logger.setupWithSpigot("AstraTemplate", this)
-        EventHandler()
-        CommandManager()
+        EventHandler(
+            controllers = ServiceLocator.Controllers
+        )
+        CommandManager(
+            serviceLocator = ServiceLocator,
+            controllers = ServiceLocator.Controllers
+        )
         SharedInventoryClickEvent.onEnable(this)
-        AutoBroadcast.onEnable()
+        autoBroadcast.onEnable()
         discordEvent?.onEnable()
     }
 
@@ -46,8 +52,8 @@ class AstraEssentials : JavaPlugin() {
      * This method called when server is shutting down or when PlugMan disable plugin.
      */
     override fun onDisable() {
-        SitController.onDisable()
-        AutoBroadcast.onDisable()
+        sitController.onDisable()
+        autoBroadcast.onDisable()
         HandlerList.unregisterAll(this)
         GlobalEventListener.onDisable()
         PluginScope.close()
@@ -58,13 +64,13 @@ class AstraEssentials : JavaPlugin() {
      * As it says, function for plugin reload
      */
     fun reloadPlugin() {
-        SitController.onDisable()
+        sitController.onDisable()
         Files.configFile.reload()
-        PluginConfigModule.reload()
-        TranslationModule.reload()
+        ServiceLocator.PluginConfigModule.reload()
+        ServiceLocator.TranslationModule.reload()
 
-        AutoBroadcast.onDisable()
-        AutoBroadcast.onEnable()
+        autoBroadcast.onDisable()
+        autoBroadcast.onEnable()
     }
 
 }

@@ -10,15 +10,19 @@ import ru.astrainteractive.astralibs.async.PluginScope
 import ru.astrainteractive.astraessentials.events.discord.controllers.DiscordController
 import ru.astrainteractive.astraessentials.events.discord.controllers.LuckPermsController
 import ru.astrainteractive.astraessentials.events.discord.controllers.RoleController
+import ru.astrainteractive.astralibs.di.Dependency
+import ru.astrainteractive.astralibs.di.getValue
 
 
 /**
  * Template event class
  */
 class DiscordEvent(
-    private val discordController: RoleController = DiscordController(),
-    private val luckPermsController: RoleController = LuckPermsController()
+    discordController: Dependency<RoleController>,
+    luckPermsController: Dependency<RoleController>
 ) {
+    private val discordController by discordController
+    private val luckPermsController by luckPermsController
     @Subscribe
     fun onAccountLinked(e: AccountLinkedEvent) {
         PluginScope.launch(Dispatchers.IO) {
