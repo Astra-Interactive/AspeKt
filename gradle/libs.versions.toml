@@ -1,7 +1,7 @@
 [versions]
 # Plugin/Mod core
 plugin = "2.1.3"
-name = "AstraEssentials"
+name = "AspeKt"
 group = "com.astrainteractive"
 description = "Essentials plugin for EmpireProjekt"
 destinationDirectoryPath = "D:\\Minecraft Servers\\Servers\\esmp-configuration\\smp\\plugins"

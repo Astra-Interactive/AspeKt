@@ -37,7 +37,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AstraEssentials"
+rootProject.name = "AspeKt"
 
 // Shared
 include("domain")

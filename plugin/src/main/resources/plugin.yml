@@ -1,4 +1,4 @@
-main: ru.astrainteractive.astraessentials.AstraEssentials
+main: ru.astrainteractive.aspekt.AspeKt
 prefix: '${name}'
 description: '${description}'
 version: '${version}'
