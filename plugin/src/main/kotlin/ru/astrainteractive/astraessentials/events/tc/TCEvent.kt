@@ -1,5 +1,9 @@
 package ru.astrainteractive.astraessentials.events.tc
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.Block
@@ -11,6 +15,9 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
 import ru.astrainteractive.astraessentials.plugin.PluginConfiguration
+import ru.astrainteractive.astralibs.async.BukkitAsync
+import ru.astrainteractive.astralibs.async.BukkitMain
+import ru.astrainteractive.astralibs.async.PluginScope
 import ru.astrainteractive.astralibs.di.Dependency
 import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.astralibs.events.DSLEvent
@@ -26,6 +33,7 @@ class TCEvent(
 
     private val onBlockBreak = DSLEvent.event<BlockBreakEvent> { e ->
         val block = e.block
+        val material = block.type
         val player = e.player
         val tool = player.inventory.itemInMainHand
         if (!tool.type.name.contains("AXE", true)) return@event
@@ -33,6 +41,29 @@ class TCEvent(
         if (!tcConfig.enabled) return@event
         if (!isLog(block.type)) return@event
         breakRecursively(player, block, 0, tool)
+        if (tcConfig.replant) {
+            val sapling = saplingFromBlock(material) ?: return@event
+            placeSapling(sapling, block, 0)
+        }
+    }
+
+    private fun placeSapling(sapling: Material, block: Block, i: Int) {
+        if (i >= tcConfig.replantMaxIterations) return
+        if (!isDirt(block.type)) {
+            placeSapling(sapling, block.getRelative(BlockFace.DOWN), i + 1)
+            return
+        }
+        val airBlock = block.getRelative(BlockFace.UP)
+        if (airBlock.type != Material.AIR) {
+            placeSapling(sapling, block.getRelative(BlockFace.DOWN), i + 1)
+            return
+        }
+        PluginScope.launch(Dispatchers.BukkitAsync) {
+            delay(100)
+            withContext(Dispatchers.BukkitMain) {
+                airBlock.location.block.setType(sapling, true)
+            }
+        }
     }
 
     private fun breakRecursively(player: Player, block: Block, i: Int, tool: ItemStack) {
@@ -49,6 +80,13 @@ class TCEvent(
         BlockFace.values().forEach {
             breakRecursively(player, block.getRelative(it), i + 1, tool)
         }
+    }
+
+    private fun isDirt(mat: Material): Boolean {
+        return mat == Material.GRASS_BLOCK
+                || mat == Material.DIRT
+                || mat == Material.ROOTED_DIRT
+                || mat == Material.COARSE_DIRT
     }
 
     /**
@@ -100,7 +138,7 @@ class TCEvent(
      * Converts WoodLog into it's sapling
      * @return sapling material or null if it's not found
      */
-    private fun plantFromWood(material: Material): Material? {
+    private fun saplingFromBlock(material: Material): Material? {
         return when (material) {
             Material.OAK_LOG -> Material.OAK_SAPLING
             Material.DARK_OAK_LOG -> Material.DARK_OAK_SAPLING

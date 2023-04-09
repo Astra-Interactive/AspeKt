@@ -22,6 +22,7 @@ class PluginConfiguration(private val fc: FileConfiguration) {
         val damageAxe by fc.cBoolean("$PATH.damage_axe", true)
         val breakAxe by fc.cBoolean("$PATH.break_axe", true)
         val replant by fc.cBoolean("$PATH.replant", true)
+        val replantMaxIterations by fc.cInt("$PATH.replant_max_iterations", 16)
         val destroyLeaves by fc.cBoolean("$PATH.destroy_leaves", true)
     }
 

@@ -6,6 +6,7 @@ core:
     damage_axe: true
     break_axe: true
     replant: true
+    replant_max_iterations: 10
     destroy_leaves: true
   auto_crop:
     enabled: true
