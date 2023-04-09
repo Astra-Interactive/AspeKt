@@ -6,6 +6,7 @@ import ru.astrainteractive.astralibs.configuration.Configuration
 import ru.astrainteractive.astralibs.configuration.DefaultConfiguration
 import ru.astrainteractive.astralibs.utils.getFloat
 import ru.astrainteractive.astralibs.utils.HEX
+import kotlin.reflect.KProperty
 
 class StringConfiguration(
     path: String,
@@ -74,3 +75,7 @@ fun FileConfiguration.cStringList(path: String) = StringListConfiguration(path, 
 fun FileConfiguration.cBoolean(path: String, default: Boolean) = BooleanConfiguration(path, default, this)
 
 fun FileConfiguration.cInt(path: String, default: Int) = IntConfiguration(path, default, this)
+inline operator fun <reified T, K> Configuration<T>.getValue(t: K?, property: KProperty<*>): T {
+    return this.value
+}
+

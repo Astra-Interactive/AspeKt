@@ -37,7 +37,9 @@ class AstraEssentials : JavaPlugin() {
         AstraLibs.rememberPlugin(this)
         Logger.setupWithSpigot("AstraTemplate", this)
         EventHandler(
-            controllers = ServiceLocator.Controllers
+            sitControllerDependency = ServiceLocator.Controllers.sitController,
+            sortControllerDependency = ServiceLocator.Controllers.sortController,
+            pluginConfigDep = ServiceLocator.PluginConfigModule
         )
         CommandManager(
             serviceLocator = ServiceLocator,

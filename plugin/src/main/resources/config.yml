@@ -1,6 +1,13 @@
 core:
   sit: true
-
+  auto_crop:
+    enabled: true
+    min: 1
+    max: 2
+    duping:
+      enabled: true
+      clear_every: 60000
+      location_timeout: 15000
 discordsrv:
   on_linked:
     discord:
