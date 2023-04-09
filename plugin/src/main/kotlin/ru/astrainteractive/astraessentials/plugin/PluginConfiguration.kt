@@ -11,7 +11,7 @@ import kotlin.reflect.KProperty
 
 
 class PluginConfiguration(private val fc: FileConfiguration) {
-    val sit = fc.cBoolean("core.sit", true)
+    val sit by fc.cBoolean("core.sit", true)
     val discordSRVLink = DiscordSRVLink()
     val announcements = Announcements()
     val autoCrop = AutoCrop()

@@ -2,11 +2,11 @@ package ru.astrainteractive.astraessentials.commands
 
 import org.bukkit.Bukkit
 import ru.astrainteractive.astraessentials.AstraEssentials
-import ru.astrainteractive.astraessentials.plugin.EPermission
+import ru.astrainteractive.astraessentials.plugin.PluginPermission
 import ru.astrainteractive.astralibs.commands.registerCommand
 
 fun CommandManager.maxOnline() = AstraEssentials.instance.registerCommand("maxonline") {
-    if (!EPermission.MaxOnline.hasPermission(sender)) return@registerCommand
+    if (!PluginPermission.MaxOnline.hasPermission(sender)) return@registerCommand
     argument(0) {
         it?.toIntOrNull()
     }.onFailure {

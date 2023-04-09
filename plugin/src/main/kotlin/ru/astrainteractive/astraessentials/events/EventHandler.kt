@@ -20,7 +20,7 @@ class EventHandler(
 ) {
 
     init {
-        SitEvent(sitControllerDependency)
+        SitEvent(sitControllerDependency, pluginConfigDep)
         SortEvent(sortControllerDependency)
         AutoCrop(pluginConfigDep)
     }

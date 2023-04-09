@@ -3,7 +3,7 @@ package ru.astrainteractive.astraessentials.commands
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import ru.astrainteractive.astraessentials.AstraEssentials
-import ru.astrainteractive.astraessentials.plugin.EPermission
+import ru.astrainteractive.astraessentials.plugin.PluginPermission
 import ru.astrainteractive.astralibs.commands.registerCommand
 import ru.astrainteractive.astralibs.commands.registerTabCompleter
 
@@ -20,7 +20,7 @@ fun CommandManager.atemFrameTabCompleter() = AstraEssentials.instance.registerTa
 }
 
 fun CommandManager.atemFrame() = AstraEssentials.instance.registerCommand("atemframe") {
-    if (!EPermission.AtemFrame.hasPermission(sender)) return@registerCommand
+    if (!PluginPermission.AtemFrame.hasPermission(sender)) return@registerCommand
     val player = sender as? Player ?: return@registerCommand
     val isVisible = argument(0) { it == "true" }.successOrNull()?.value ?: true
     val isFixed = argument(1) { it == "true" }.successOrNull()?.value ?: true

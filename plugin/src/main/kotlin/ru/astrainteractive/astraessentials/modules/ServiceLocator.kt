@@ -14,7 +14,7 @@ import ru.astrainteractive.astraessentials.plugin.PluginConfiguration
 import ru.astrainteractive.astraessentials.plugin.PluginTranslation
 
 object ServiceLocator {
-    val PluginConfigModule = reloadable {
+    val pluginConfigModule = reloadable {
         PluginConfiguration(Files.configFile.fileConfiguration)
     }
     val TranslationModule = reloadable {
@@ -24,31 +24,31 @@ object ServiceLocator {
         Bukkit.getPluginManager().getPlugin("DiscordSRV") ?: return@module null
         Bukkit.getPluginManager().getPlugin("LuckPerms") ?: return@module null
         DiscordEvent(
-            discordController = Controllers.discordController,
-            luckPermsController = Controllers.luckPermsController
+            discordController = Controllers.discordControllerModule,
+            luckPermsController = Controllers.luckPermsControllerModule
         )
     }
-    val autoBroadcast = module {
+    val autoBroadcastModule = module {
         AutoBroadcast(
-            config = PluginConfigModule
+            config = pluginConfigModule
         )
     }
 
     object Controllers {
-        val discordController = module {
+        val discordControllerModule = module {
             DiscordController(
-                pluginConfiguration = PluginConfigModule
+                pluginConfiguration = pluginConfigModule
             ) as RoleController
         }
-        val luckPermsController = module {
+        val luckPermsControllerModule = module {
             LuckPermsController(
-                pluginConfiguration = PluginConfigModule
+                pluginConfiguration = pluginConfigModule
             )as RoleController
         }
-        val sitController = module {
-            SitController(TranslationModule)
+        val sitControllerModule = module {
+            SitController(TranslationModule, pluginConfigModule)
         }
-        val sortController = module {
+        val sortControllerModule = module {
             SortController()
         }
     }

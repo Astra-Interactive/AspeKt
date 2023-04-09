@@ -6,20 +6,24 @@ import org.bukkit.block.BlockFace
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
+import ru.astrainteractive.astraessentials.plugin.PluginConfiguration
 import ru.astrainteractive.astraessentials.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.di.Dependency
 import ru.astrainteractive.astralibs.di.getValue
 
 class SitController(
-    translation: Dependency<PluginTranslation>
+    translation: Dependency<PluginTranslation>,
+    pluginConfigurationDep: Dependency<PluginConfiguration>
 ) {
     private val sitPlayers = mutableMapOf<String, ArmorStand>()
     private val translation by translation
+    private val pluginConfiguration by pluginConfigurationDep
 
     /**
      * Заставляет игрока сесть
      */
     fun toggleSitPlayer(player: Player, location: Location = player.location) {
+        if (!pluginConfiguration.sit) return
         //Сидит ли уже игрок
         if (sitPlayers.contains(player.uniqueId.toString())) {
             player.sendMessage(translation.sitAlready)

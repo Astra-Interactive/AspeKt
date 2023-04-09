@@ -8,15 +8,17 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerTeleportEvent
 import org.spigotmc.event.entity.EntityDismountEvent
+import ru.astrainteractive.astraessentials.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.di.Dependency
 import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.astralibs.events.DSLEvent
 
 class SitEvent(
-    sitControllerDependency: Dependency<SitController>
+    sitControllerDependency: Dependency<SitController>,
+    pluginConfigurationDep: Dependency<PluginConfiguration>
 ) {
     private val sitController by sitControllerDependency
-
+    private val pluginConfiguration by pluginConfigurationDep
 
     val onDeathEvent = DSLEvent.event<PlayerDeathEvent> { e ->
         sitController.stopSitPlayer(e.entity)
@@ -27,6 +29,7 @@ class SitEvent(
     }
 
     val playerInteractEvent = DSLEvent.event<PlayerInteractEvent> { e ->
+        if (!pluginConfiguration.sit) return@event
         if (e.action != Action.RIGHT_CLICK_BLOCK)
             return@event
         if (e.player.inventory.itemInMainHand.type != Material.AIR)
@@ -43,8 +46,7 @@ class SitEvent(
         sitController.stopSitPlayer(e.player)
     }
     val onDismount = DSLEvent.event<EntityDismountEvent> { e ->
-        if (e.entity !is Player)
-            return@event
+        if (e.entity !is Player) return@event
         sitController.stopSitPlayer(e.entity as Player)
     }
 }

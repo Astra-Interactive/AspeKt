@@ -21,7 +21,9 @@ class SortEvent(
     }
     val inventoryClick = DSLEvent.event<InventoryClickEvent> { e ->
         if (e.click != ClickType.MIDDLE) return@event
+        if (!e.isShiftClick) return@event
         val clickedInventory = e.clickedInventory ?: return@event
-        sortController.trySortInventory(clickedInventory, e.whoClicked as? Player ?: return@event)
+        val player = e.whoClicked as? Player ?: return@event
+        sortController.trySortInventory(clickedInventory, player)
     }
 }

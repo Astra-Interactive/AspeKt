@@ -9,7 +9,6 @@ import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.astralibs.utils.setupWithSpigot
 import ru.astrainteractive.astraessentials.commands.CommandManager
 import ru.astrainteractive.astraessentials.events.EventHandler
-import ru.astrainteractive.astraessentials.events.sit.SitController
 import ru.astrainteractive.astraessentials.modules.*
 import ru.astrainteractive.astraessentials.plugin.Files
 import ru.astrainteractive.astraessentials.utils.Singleton
@@ -27,8 +26,8 @@ class AstraEssentials : JavaPlugin() {
     }
 
     private val discordEvent by ServiceLocator.discordEventModule
-    private val autoBroadcast by ServiceLocator.autoBroadcast
-    private val sitController by ServiceLocator.Controllers.sitController
+    private val autoBroadcast by ServiceLocator.autoBroadcastModule
+    private val sitController by ServiceLocator.Controllers.sitControllerModule
 
     /**
      * This method called when server starts or PlugMan load plugin.
@@ -37,9 +36,9 @@ class AstraEssentials : JavaPlugin() {
         AstraLibs.rememberPlugin(this)
         Logger.setupWithSpigot("AstraTemplate", this)
         EventHandler(
-            sitControllerDependency = ServiceLocator.Controllers.sitController,
-            sortControllerDependency = ServiceLocator.Controllers.sortController,
-            pluginConfigDep = ServiceLocator.PluginConfigModule
+            sitControllerDependency = ServiceLocator.Controllers.sitControllerModule,
+            sortControllerDependency = ServiceLocator.Controllers.sortControllerModule,
+            pluginConfigDep = ServiceLocator.pluginConfigModule
         )
         CommandManager(
             serviceLocator = ServiceLocator,
@@ -68,7 +67,7 @@ class AstraEssentials : JavaPlugin() {
     fun reloadPlugin() {
         sitController.onDisable()
         Files.configFile.reload()
-        ServiceLocator.PluginConfigModule.reload()
+        ServiceLocator.pluginConfigModule.reload()
         ServiceLocator.TranslationModule.reload()
 
         autoBroadcast.onDisable()
