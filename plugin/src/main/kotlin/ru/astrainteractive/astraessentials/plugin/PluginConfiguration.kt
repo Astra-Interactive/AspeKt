@@ -5,9 +5,6 @@ import ru.astrainteractive.astraessentials.utils.cBoolean
 import ru.astrainteractive.astraessentials.utils.cInt
 import ru.astrainteractive.astraessentials.utils.cStringList
 import ru.astrainteractive.astraessentials.utils.getValue
-import ru.astrainteractive.astralibs.configuration.Configuration
-import ru.astrainteractive.astralibs.di.Module
-import kotlin.reflect.KProperty
 
 
 class PluginConfiguration(private val fc: FileConfiguration) {
@@ -15,6 +12,18 @@ class PluginConfiguration(private val fc: FileConfiguration) {
     val discordSRVLink = DiscordSRVLink()
     val announcements = Announcements()
     val autoCrop = AutoCrop()
+    val tc = TC()
+
+    inner class TC {
+        private val PATH: String = "core.tree_capitator"
+
+        val enabled by fc.cBoolean("$PATH.enabled", true)
+        val destroyLimit by fc.cInt("$PATH.destroy_limit", 16)
+        val damageAxe by fc.cBoolean("$PATH.damage_axe", true)
+        val breakAxe by fc.cBoolean("$PATH.break_axe", true)
+        val replant by fc.cBoolean("$PATH.replant", true)
+        val destroyLeaves by fc.cBoolean("$PATH.destroy_leaves", true)
+    }
 
     inner class AutoCrop {
         val enabled by fc.cBoolean("core.auto_crop.enabled", true)

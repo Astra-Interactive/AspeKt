@@ -1,13 +1,20 @@
 core:
   sit: true
+  tree_capitator:
+    enabled: true
+    destroy_limit: 16
+    damage_axe: true
+    break_axe: true
+    replant: true
+    destroy_leaves: true
   auto_crop:
     enabled: true
     min: 1
     max: 2
-    duping:
-      enabled: true
-      clear_every: 60000
-      location_timeout: 15000
+  duping:
+    enabled: true
+    clear_every: 60000
+    location_timeout: 15000
 discordsrv:
   on_linked:
     discord:

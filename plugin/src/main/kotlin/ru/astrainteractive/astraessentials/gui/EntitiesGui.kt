@@ -3,6 +3,7 @@ package ru.astrainteractive.astraessentials.gui
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryCloseEvent
 import ru.astrainteractive.astraessentials.gui.store.EntitiesState
 import ru.astrainteractive.astralibs.menu.holder.DefaultPlayerHolder
 import ru.astrainteractive.astralibs.menu.holder.PlayerHolder
@@ -165,6 +166,10 @@ class EntitiesGui(player: Player) : PaginatedMenu() {
     override fun onInventoryClicked(e: InventoryClickEvent) {
         e.isCancelled = true
         clickListener.onClick(e)
+    }
+
+    override fun onInventoryClose(it: InventoryCloseEvent) {
+        close()
     }
 
     override fun onPageChanged() {

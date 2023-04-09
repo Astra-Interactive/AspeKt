@@ -18,7 +18,7 @@ import ru.astrainteractive.astralibs.di.getValue
  */
 fun CommandManager.reload(
     translationModule: Dependency<PluginTranslation>
-) = AstraEssentials.instance.registerCommand("atempreload") {
+) = AstraEssentials.instance.registerCommand("aesreload") {
     val translation by translationModule
     if (!PluginPermission.Reload.hasPermission(sender)) {
         sender.sendMessage(translation.noPermission)

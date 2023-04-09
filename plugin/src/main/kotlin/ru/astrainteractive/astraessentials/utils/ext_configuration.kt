@@ -1,10 +1,8 @@
 package ru.astrainteractive.astraessentials.utils
 
-import kotlinx.serialization.json.Json.Default.configuration
 import org.bukkit.configuration.file.FileConfiguration
-import ru.astrainteractive.astralibs.configuration.Configuration
 import ru.astrainteractive.astralibs.configuration.DefaultConfiguration
-import ru.astrainteractive.astralibs.utils.getFloat
+import ru.astrainteractive.astralibs.configuration.api.Configuration
 import ru.astrainteractive.astralibs.utils.HEX
 import kotlin.reflect.KProperty
 

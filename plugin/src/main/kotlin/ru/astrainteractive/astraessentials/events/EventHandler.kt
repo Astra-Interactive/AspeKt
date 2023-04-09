@@ -5,6 +5,7 @@ import ru.astrainteractive.astraessentials.events.sit.SitController
 import ru.astrainteractive.astraessentials.events.sit.SitEvent
 import ru.astrainteractive.astraessentials.events.sort.SortController
 import ru.astrainteractive.astraessentials.events.sort.SortEvent
+import ru.astrainteractive.astraessentials.events.tc.TCEvent
 import ru.astrainteractive.astraessentials.modules.ServiceLocator
 import ru.astrainteractive.astraessentials.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.di.Dependency
@@ -23,5 +24,6 @@ class EventHandler(
         SitEvent(sitControllerDependency, pluginConfigDep)
         SortEvent(sortControllerDependency)
         AutoCrop(pluginConfigDep)
+        TCEvent(pluginConfigDep)
     }
 }
