@@ -47,7 +47,7 @@ class TCEvent(
         }
     }
 
-    private fun placeSapling(sapling: Material, block: Block, i: Int) {
+    private tailrec fun placeSapling(sapling: Material, block: Block, i: Int) {
         if (i >= tcConfig.replantMaxIterations) return
         if (!isDirt(block.type)) {
             placeSapling(sapling, block.getRelative(BlockFace.DOWN), i + 1)
