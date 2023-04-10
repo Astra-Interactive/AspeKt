@@ -10,6 +10,7 @@ import ru.astrainteractive.astralibs.Logger
 import ru.astrainteractive.astralibs.di.Dependency
 import ru.astrainteractive.astralibs.di.getValue
 
+@Suppress("DuplicatedCode")
 class DiscordController(
     pluginConfiguration: Dependency<PluginConfiguration>
 ) : RoleController {
@@ -22,7 +23,7 @@ class DiscordController(
 
     override suspend fun onLinked(e: AccountLinkedEvent) {
         Logger.log("DiscordEvent", "Игрок ${e.player.name} линкует аккаунт")
-        val member = DiscordUtil.getMemberById(e.user.id) ?: run {
+        val member = e.user?.id?.let(DiscordUtil::getMemberById) ?: run {
             Logger.log("DiscordEvent", "Игрок ${e.player.name} не на нашем сервере")
             return
         }
@@ -39,7 +40,7 @@ class DiscordController(
 
     override suspend fun onUnLinked(e: AccountUnlinkedEvent) {
         Logger.log("DiscordEvent", "Игрок ${e.player.name} отменил линк аккаунта")
-        val member = DiscordUtil.getMemberById(e.discordUser.id) ?: run {
+        val member = e.discordUser?.id?.let(DiscordUtil::getMemberById) ?: run {
             Logger.log("DiscordEvent", "Игрок ${e.player.name} не на нашем сервере")
             return
         }

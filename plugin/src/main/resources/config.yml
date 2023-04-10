@@ -19,19 +19,19 @@ core:
 discordsrv:
   on_linked:
     discord:
-      add_roles: ["777633457664294943"]
-      remove_roles: []
+      add_roles: [ "777633457664294943" ]
+      remove_roles: [ ]
     luckperms:
-      add_roles: ["group.gr_resident","gr_resident"]
-      remove_roles: ["default", "group.default" ]
+      add_roles: [ "group.gr_resident", "gr_resident" ]
+      remove_roles: [ "default", "group.default" ]
 
   on_unlinked:
     discord:
-      add_roles: []
-      remove_roles: ["777633457664294943"]
+      add_roles: [ ]
+      remove_roles: [ "777633457664294943" ]
     luckperms:
-      add_roles: ["default", "group.default" ]
-      remove_roles: ["group.gr_resident","gr_resident"]
+      add_roles: [ "default", "group.default" ]
+      remove_roles: [ "group.gr_resident", "gr_resident" ]
 announcements:
   interval: 5
   announcements:
