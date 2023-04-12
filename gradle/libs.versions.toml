@@ -1,6 +1,6 @@
 [versions]
 # Plugin/Mod core
-plugin = "2.1.4"
+plugin = "2.1.5"
 name = "AspeKt"
 group = "com.astrainteractive"
 description = "Essentials plugin for EmpireProjekt"
