@@ -1,12 +1,20 @@
 core:
   sit: true
+  restrictions:
+    explode: false
+    place:
+      tnt: false
+      lava: false
+    spread:
+      lava: false
+      fire: false
   tree_capitator:
     enabled: true
-    destroy_limit: 16
+    destroy_limit: 32
     damage_axe: true
     break_axe: true
     replant: true
-    replant_max_iterations: 10
+    replant_max_iterations: 32
     destroy_leaves: true
   auto_crop:
     enabled: true

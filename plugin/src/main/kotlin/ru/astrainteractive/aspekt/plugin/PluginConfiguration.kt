@@ -13,6 +13,16 @@ class PluginConfiguration(private val fc: FileConfiguration) {
     val announcements = Announcements()
     val autoCrop = AutoCrop()
     val tc = TC()
+    val restrictions = Restrictions()
+
+    inner class Restrictions {
+        private val PATH: String = "core.restrictions"
+        val placeTnt by fc.cBoolean("$PATH.place.tnt", false)
+        val explode by fc.cBoolean("$PATH.explode", false)
+        val placeLava by fc.cBoolean("$PATH.place.lava", false)
+        val spreadLava by fc.cBoolean("$PATH.spread.lava", false)
+        val spreadFire by fc.cBoolean("$PATH.spread.fire", false)
+    }
 
     inner class TC {
         private val PATH: String = "core.tree_capitator"

@@ -1,6 +1,7 @@
 package ru.astrainteractive.aspekt.events
 
 import ru.astrainteractive.aspekt.events.crop.AutoCrop
+import ru.astrainteractive.aspekt.events.restrictions.RestrictionsEvent
 import ru.astrainteractive.aspekt.events.sit.SitController
 import ru.astrainteractive.aspekt.events.sit.SitEvent
 import ru.astrainteractive.aspekt.events.sort.SortController
@@ -24,5 +25,6 @@ class EventHandler(
         SortEvent(sortControllerDependency)
         AutoCrop(pluginConfigDep)
         TCEvent(pluginConfigDep)
+        RestrictionsEvent(pluginConfigDep)
     }
 }
