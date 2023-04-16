@@ -49,7 +49,6 @@ class AspeKt @Inject constructor(
 
     fun reload() {
         with(ServiceLocator) {
-            configurationFile.reload()
             configuration.reload()
         }
     }
