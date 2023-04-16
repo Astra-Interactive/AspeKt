@@ -37,6 +37,7 @@ class AspeKt @Inject constructor(
         ServiceLocator.dataDirectory.initialize(dataDirectory)
         logger.info("Hello there! I made my first plugin with Velocity.")
         logger.info("Here's your configuration: ${ServiceLocator.configuration.value}.")
+
     }
 
     @Subscribe
