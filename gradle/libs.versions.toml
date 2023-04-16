@@ -2,11 +2,13 @@
 # Plugin/Mod core
 plugin = "2.1.5"
 name = "AspeKt"
-group = "com.astrainteractive"
+group = "ru.astrainteractive.aspekt"
 description = "Essentials plugin for EmpireProjekt"
+url = "EmpireProjekt.ru"
 destinationDirectoryPath = "D:\\Minecraft Servers\\Servers\\esmp-configuration\\smp\\plugins"
 destinationDirectoryFabricPath = "C:\\Users\\makee\\Desktop\\server\\mods"
 destinationDirectoryForgePath = "C:\\Users\\makee\\Desktop\\Forge\\mods"
+destinationDirectoryVelocityPath = "D:\\Minecraft Servers\\Servers\\esmp-configuration\\velocity\\plugins"
 # Core
 kotlin = "1.7.0"
 coroutines = "1.6.3"
@@ -50,6 +52,8 @@ fabric-api = "0.60.0+1.19.2"
 netMinecraftForge = "5.1.+"
 forge-version = "1.19-41.0.35"
 junit-bom = "5.7.0"
+# BuildConfig
+buildconfig = "3.1.0"
 [libraries]
 # Core
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -101,3 +105,4 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
 fabricLoom = { id = "fabric-loom", version.ref = "fabricLoom" }
 netMinecraftForge = { id = "net.minecraftforge.gradle", version.ref = "netMinecraftForge" }
+buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
