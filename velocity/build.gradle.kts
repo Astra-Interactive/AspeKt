@@ -23,9 +23,6 @@ dependencies {
     // AstraLibs
     implementation(libs.astralibs.ktxCore)
     implementation(libs.astralibs.orm)
-    implementation(libs.astralibs.spigotGui)
-    implementation(libs.astralibs.spigotCore)
-    implementation(libs.bstats.bukkit)
     // Velocity
     compileOnly(libs.velocity.api)
     annotationProcessor(libs.velocity.api)
