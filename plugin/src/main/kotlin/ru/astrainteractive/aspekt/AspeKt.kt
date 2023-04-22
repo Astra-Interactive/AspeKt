@@ -3,16 +3,15 @@ package ru.astrainteractive.aspekt
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.astralibs.AstraLibs
-import ru.astrainteractive.astralibs.Logger
 import ru.astrainteractive.astralibs.async.PluginScope
 import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.astralibs.utils.setupWithSpigot
 import ru.astrainteractive.aspekt.commands.CommandManager
 import ru.astrainteractive.aspekt.events.EventHandler
 import ru.astrainteractive.aspekt.modules.*
-import ru.astrainteractive.aspekt.plugin.Files
-import ru.astrainteractive.aspekt.utils.Singleton
+import ru.astrainteractive.astralibs.di.Singleton
 import ru.astrainteractive.astralibs.events.GlobalEventListener
+import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.menu.event.SharedInventoryClickEvent
 
 /**
@@ -66,7 +65,7 @@ class AspeKt : JavaPlugin() {
      */
     fun reloadPlugin() {
         sitController.onDisable()
-        Files.configFile.reload()
+        ServiceLocator.configFileManager.value.reload()
         ServiceLocator.pluginConfigModule.reload()
         ServiceLocator.TranslationModule.reload()
 

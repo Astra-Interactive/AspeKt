@@ -9,13 +9,16 @@ import ru.astrainteractive.aspekt.events.discord.controllers.LuckPermsController
 import ru.astrainteractive.aspekt.events.discord.controllers.RoleController
 import ru.astrainteractive.aspekt.events.sit.SitController
 import ru.astrainteractive.aspekt.events.sort.SortController
-import ru.astrainteractive.aspekt.plugin.Files
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.astralibs.filemanager.SpigotFileManager
 
 object ServiceLocator {
+    val configFileManager = module {
+        SpigotFileManager("config.yml")
+    }
     val pluginConfigModule = reloadable {
-        PluginConfiguration(Files.configFile.fileConfiguration)
+        PluginConfiguration(configFileManager.value.fileConfiguration)
     }
     val TranslationModule = reloadable {
         PluginTranslation()

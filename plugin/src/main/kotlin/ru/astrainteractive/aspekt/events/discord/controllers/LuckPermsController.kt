@@ -6,14 +6,15 @@ import net.luckperms.api.LuckPerms
 import net.luckperms.api.node.types.InheritanceNode
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
-import ru.astrainteractive.astralibs.Logger
 import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.di.Dependency
+import ru.astrainteractive.astralibs.logging.Logger
 
 class LuckPermsController(
     pluginConfiguration: Dependency<PluginConfiguration>
 ) : RoleController {
+    private val logger by Logger
     private val pluginConfiguration by pluginConfiguration
     override val configuration: PluginConfiguration.DiscordSRVLink
         get() = pluginConfiguration.discordSRVLink
@@ -23,7 +24,7 @@ class LuckPermsController(
         api.userManager.modifyUser(uniqueId) {
             val groupNode = InheritanceNode.builder(group).build()
             val result = it.data().add(groupNode)
-            Logger.log("DiscordEvent", "Игроку ${name} выдана роль ${group}: ${result}")
+            logger.info("DiscordEvent", "Игроку ${name} выдана роль ${group}: ${result}")
         }
     }
 
@@ -31,7 +32,7 @@ class LuckPermsController(
         api.userManager.modifyUser(uniqueId) {
             val groupNode = InheritanceNode.builder(group).build()
             val result = it.data().remove(groupNode)
-            Logger.log("DiscordEvent", "У игрока ${name} убрана роль ${group}: ${result}")
+            logger.info("DiscordEvent", "У игрока ${name} убрана роль ${group}: ${result}")
         }
     }
 
