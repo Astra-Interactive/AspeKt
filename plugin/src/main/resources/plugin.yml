@@ -1,15 +1,16 @@
-main: ru.astrainteractive.aspekt.AspeKt
-prefix: '${name}'
+main: '${main}'
+prefix: '${prefix}'
 description: '${description}'
-version: '${version}'
 name: '${name}'
-authors: [ MakeevRoman ]
-author: MakeevRoman
-website: AstraInteractive.ru
+version: '${version}'
+authors: [ "${authors}" ]
+author: "${author}"
+website: "${url}"
 api-version: 1.18
 softdepend: [ DiscordSRV, LuckPerms ]
-depend: [ ]
+depend: [ AstraLibs ]
 loadbefore: [ ]
+libraries: [ "${libraries}" ]
 commands:
   sit:
   tellchat:

@@ -43,4 +43,4 @@ rootProject.name = "AspeKt"
 include("domain")
 // Spigot
 include("plugin")
-include("velocity")
+//include("velocity")

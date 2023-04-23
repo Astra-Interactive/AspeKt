@@ -1,5 +1,7 @@
-group = libs.versions.group
-version = libs.versions.plugin
+group = libs.versions.plugin.group.get()
+version = libs.versions.plugin.version.get()
+description = libs.versions.plugin.description.get()
+
 plugins {
     java
     `maven-publish`

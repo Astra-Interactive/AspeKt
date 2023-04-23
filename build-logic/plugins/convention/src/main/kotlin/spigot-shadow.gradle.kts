@@ -5,15 +5,13 @@ plugins {
     id("com.github.johnrengelman.shadow")
 }
 tasks.shadowJar {
-
-    isReproducibleFileOrder = true
-    mergeServiceFiles()
-    relocate("org.bstats", "${libs.versions.group.get()}.aspekt")
-    dependsOn(configurations)
+    dependencies {
+        include {
+            it.moduleGroup == libs.versions.plugin.group.get() || it.moduleGroup.contains("aspekt") || it.moduleGroup.contains("bstats")
+        }
+    }
+    relocate("org.bstats", "${libs.versions.plugin.group.get()}")
     archiveClassifier.set(null as String?)
-    from(sourceSets.main.get().output)
-    from(project.configurations.runtimeClasspath)
-    minimize()
-    archiveBaseName.set(libs.versions.name.get())
-    destinationDirectory.set(File(libs.versions.destinationDirectoryPath.get()))
+    archiveBaseName.set(libs.versions.plugin.name.get())
+    destinationDirectory.set(File(libs.versions.destionation.spigot.get()))
 }

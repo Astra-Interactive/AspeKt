@@ -1,6 +1,6 @@
+@file:OptIn(UnsafeApi::class)
 package ru.astrainteractive.aspekt.events.tc
 
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -14,35 +14,39 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
+import org.jetbrains.kotlin.tooling.core.UnsafeApi
+import ru.astrainteractive.aspekt.AspeKt
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.astralibs.async.BukkitAsync
-import ru.astrainteractive.astralibs.async.BukkitMain
+import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.async.PluginScope
 import ru.astrainteractive.astralibs.di.Dependency
 import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.astralibs.events.DSLEvent
+import ru.astrainteractive.astralibs.events.GlobalEventListener
 import kotlin.random.Random
 
 
 class TCEvent(
-    pluginConfigDep: Dependency<PluginConfiguration>
+    pluginConfigDep: Dependency<PluginConfiguration>,
+    private val bukkitDispatchers: BukkitDispatchers
 ) {
     private val pluginConfiguration by pluginConfigDep
+    private val plugin by AspeKt
     private val tcConfig: PluginConfiguration.TC
         get() = pluginConfiguration.tc
 
-    private val onBlockBreak = DSLEvent.event<BlockBreakEvent> { e ->
+    private val onBlockBreak = DSLEvent<BlockBreakEvent>(GlobalEventListener, plugin) { e ->
         val block = e.block
         val material = block.type
         val player = e.player
         val tool = player.inventory.itemInMainHand
-        if (!tool.type.name.contains("AXE", true)) return@event
-        if (!player.isSneaking) return@event
-        if (!tcConfig.enabled) return@event
-        if (!isLog(block.type)) return@event
+        if (!tool.type.name.contains("AXE", true)) return@DSLEvent
+        if (!player.isSneaking) return@DSLEvent
+        if (!tcConfig.enabled) return@DSLEvent
+        if (!isLog(block.type)) return@DSLEvent
         breakRecursively(player, block, 0, tool)
         if (tcConfig.replant) {
-            val sapling = saplingFromBlock(material) ?: return@event
+            val sapling = saplingFromBlock(material) ?: return@DSLEvent
             placeSapling(sapling, block, 0)
         }
     }
@@ -58,9 +62,9 @@ class TCEvent(
             placeSapling(sapling, block.getRelative(BlockFace.DOWN), i + 1)
             return
         }
-        PluginScope.launch(Dispatchers.BukkitAsync) {
+        PluginScope.launch(bukkitDispatchers.BukkitAsync) {
             delay(100)
-            withContext(Dispatchers.BukkitMain) {
+            withContext(bukkitDispatchers.BukkitMain) {
                 airBlock.location.block.setType(sapling, true)
             }
         }

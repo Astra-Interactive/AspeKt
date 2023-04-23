@@ -123,4 +123,5 @@ fun EntityType.toMaterial() = when (this) {
     EntityType.LIGHTNING -> Material.BARRIER
     EntityType.PLAYER -> Material.PLAYER_HEAD
     EntityType.UNKNOWN -> Material.BARRIER
+    EntityType.CAMEL -> Material.CAMEL_SPAWN_EGG
 }

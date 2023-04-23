@@ -5,9 +5,9 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
-group = libs.versions.group.get()
-version = libs.versions.plugin.get()
-description = libs.versions.description.get()
+group = libs.versions.plugin.group.get()
+version = libs.versions.plugin.version.get()
+description = libs.versions.plugin.description.get()
 
 java {
     withSourcesJar()
@@ -25,7 +25,7 @@ tasks {
         useJUnitPlatform()
     }
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.jvmTarget = "17"
+        kotlinOptions.jvmTarget = JavaVersion.VERSION_17.majorVersion
     }
     compileJava {
         options.encoding = "UTF-8"

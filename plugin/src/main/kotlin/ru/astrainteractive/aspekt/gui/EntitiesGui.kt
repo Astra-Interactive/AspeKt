@@ -4,42 +4,46 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
+import org.bukkit.inventory.ItemStack
 import ru.astrainteractive.aspekt.gui.store.EntitiesState
+import ru.astrainteractive.astralibs.async.BukkitDispatchers
+import ru.astrainteractive.astralibs.menu.clicker.MenuClickListener
 import ru.astrainteractive.astralibs.menu.holder.DefaultPlayerHolder
 import ru.astrainteractive.astralibs.menu.holder.PlayerHolder
+import ru.astrainteractive.astralibs.menu.menu.InventoryButton
+import ru.astrainteractive.astralibs.menu.menu.MenuSize
 import ru.astrainteractive.astralibs.menu.menu.PaginatedMenu
-import ru.astrainteractive.astralibs.menu.utils.InventoryButton
 import ru.astrainteractive.astralibs.menu.utils.ItemStackButtonBuilder
-import ru.astrainteractive.astralibs.menu.utils.MenuSize
-import ru.astrainteractive.astralibs.menu.utils.click.MenuClickListener
 
-class EntitiesGui(player: Player) : PaginatedMenu() {
+class EntitiesGui(
+    player: Player,
+    private val bukkitDispatchers: BukkitDispatchers
+) : PaginatedMenu() {
     private val clickListener = MenuClickListener()
     private val viewModel by lazy {
         EntitiesViewModel()
     }
     override val backPageButton: InventoryButton = ItemStackButtonBuilder {
         this.index = 49
-        this.itemStack {
-            this.type = Material.END_CRYSTAL
+        this.itemStack = ItemStack(Material.END_CRYSTAL).apply {
             this.editMeta {
                 it.setDisplayName("Back")
             }
         }
         this.onClick = {
-            when(viewModel.state.value){
+            when (viewModel.state.value) {
                 is EntitiesState.AllEntities -> inventory.close()
                 is EntitiesState.ExactEntity -> {
                     viewModel.loadData()
                 }
+
                 EntitiesState.Loading -> inventory.close()
             }
         }
     }
     override val nextPageButton: InventoryButton = ItemStackButtonBuilder {
-        this.index = backPageButton.index+1
-        this.itemStack {
-            this.type = Material.PAPER
+        this.index = backPageButton.index + 1
+        this.itemStack = ItemStack(Material.PAPER).apply {
             this.editMeta {
                 it.setDisplayName("Next")
             }
@@ -49,9 +53,8 @@ class EntitiesGui(player: Player) : PaginatedMenu() {
         }
     }
     override val prevPageButton: InventoryButton = ItemStackButtonBuilder {
-        this.index = backPageButton.index-1
-        this.itemStack {
-            this.type = Material.PAPER
+        this.index = backPageButton.index - 1
+        this.itemStack = ItemStack(Material.PAPER).apply {
             this.editMeta {
                 it.setDisplayName("Prev")
             }
@@ -64,9 +67,8 @@ class EntitiesGui(player: Player) : PaginatedMenu() {
         get() = ItemStackButtonBuilder {
             val state = viewModel.state.value
             val world = (state as? EntitiesState.AllEntities)?.world?.name
-            this.index = backPageButton.index+2
-            this.itemStack {
-                this.type = Material.ENDER_EYE
+            this.index = backPageButton.index + 2
+            this.itemStack = ItemStack(Material.ENDER_EYE).apply {
                 this.editMeta {
                     it.setDisplayName("World: $world")
                 }
@@ -79,9 +81,8 @@ class EntitiesGui(player: Player) : PaginatedMenu() {
         get() = ItemStackButtonBuilder {
             val state = viewModel.state.value
             val sort = (state as? EntitiesState.AllEntities)?.sort
-            this.index = backPageButton.index-2
-            this.itemStack {
-                this.type = Material.ENDER_EYE
+            this.index = backPageButton.index - 2
+            this.itemStack = ItemStack(Material.ENDER_EYE).apply {
                 this.editMeta {
                     it.setDisplayName("Sort: $sort")
                 }
@@ -104,7 +105,7 @@ class EntitiesGui(player: Player) : PaginatedMenu() {
 
 
     override fun onCreated() {
-        viewModel.state.collectOn(block = ::renderPage)
+        viewModel.state.collectOn(bukkitDispatchers.BukkitMain, block = ::renderPage)
         viewModel.loadData()
     }
 
@@ -120,8 +121,7 @@ class EntitiesGui(player: Player) : PaginatedMenu() {
                     val entity = state.list.getOrNull(index) ?: continue
                     ItemStackButtonBuilder {
                         this.index = i
-                        this.itemStack {
-                            this.type = entity.entityType.toMaterial()
+                        this.itemStack = ItemStack(entity.entityType.toMaterial()).apply {
                             this.editMeta {
                                 it.setDisplayName("${entity.entityType.name}: ${entity.count}")
                             }
@@ -139,8 +139,7 @@ class EntitiesGui(player: Player) : PaginatedMenu() {
                     val entity = state.list.getOrNull(index) ?: continue
                     ItemStackButtonBuilder {
                         this.index = i
-                        this.itemStack {
-                            this.type = entity.type.toMaterial()
+                        this.itemStack = ItemStack(entity.type.toMaterial()).apply {
                             val loc = entity.location
                             this.editMeta {
                                 it.setDisplayName("(${loc.x.toInt()}; ${loc.y.toInt()}; ${loc.z.toInt()})")

@@ -1,3 +1,4 @@
+@file:OptIn(UnsafeApi::class)
 package ru.astrainteractive.aspekt.events.discord
 
 import github.scarsz.discordsrv.DiscordSRV
@@ -6,6 +7,7 @@ import github.scarsz.discordsrv.api.events.AccountLinkedEvent
 import github.scarsz.discordsrv.api.events.AccountUnlinkedEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.astralibs.async.PluginScope
 import ru.astrainteractive.aspekt.events.discord.controllers.RoleController
 import ru.astrainteractive.astralibs.di.Dependency

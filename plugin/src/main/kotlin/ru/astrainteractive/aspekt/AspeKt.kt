@@ -1,8 +1,10 @@
+@file:OptIn(UnsafeApi::class)
+
 package ru.astrainteractive.aspekt
 
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
-import ru.astrainteractive.astralibs.AstraLibs
+import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.astralibs.async.PluginScope
 import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.astralibs.utils.setupWithSpigot
@@ -12,7 +14,7 @@ import ru.astrainteractive.aspekt.modules.*
 import ru.astrainteractive.astralibs.di.Singleton
 import ru.astrainteractive.astralibs.events.GlobalEventListener
 import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.astralibs.menu.event.SharedInventoryClickEvent
+import ru.astrainteractive.astralibs.menu.event.GlobalInventoryClickEvent
 
 /**
  * Initial class for your plugin
@@ -32,18 +34,19 @@ class AspeKt : JavaPlugin() {
      * This method called when server starts or PlugMan load plugin.
      */
     override fun onEnable() {
-        AstraLibs.rememberPlugin(this)
         Logger.setupWithSpigot("AspeKt", this)
         EventHandler(
             sitControllerDependency = ServiceLocator.Controllers.sitControllerModule,
             sortControllerDependency = ServiceLocator.Controllers.sortControllerModule,
-            pluginConfigDep = ServiceLocator.pluginConfigModule
+            pluginConfigDep = ServiceLocator.pluginConfigModule,
+            bukkitDispatchers = ServiceLocator.bukkitDispatchers.value
         )
         CommandManager(
             serviceLocator = ServiceLocator,
             controllers = ServiceLocator.Controllers
         )
-        SharedInventoryClickEvent.onEnable(this)
+        GlobalInventoryClickEvent.onEnable(this)
+        GlobalEventListener.onEnable(this)
         autoBroadcast.onEnable()
         discordEvent?.onEnable()
     }

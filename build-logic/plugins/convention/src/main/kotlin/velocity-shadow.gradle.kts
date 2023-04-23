@@ -13,8 +13,8 @@ tasks.shadowJar {
     from(sourceSets.main.get().output)
     from(project.configurations.runtimeClasspath)
     minimize()
-    archiveBaseName.set(libs.versions.name.get())
-    destinationDirectory.set(File(libs.versions.destinationDirectoryVelocityPath.get()))
+    archiveBaseName.set(libs.versions.plugin.name.get())
+    destinationDirectory.set(File(libs.versions.destionation.spigot.get()))
 }
 tasks.build {
     dependsOn(tasks.shadowJar)
