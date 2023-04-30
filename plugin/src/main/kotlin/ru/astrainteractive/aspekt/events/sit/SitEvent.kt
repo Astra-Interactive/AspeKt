@@ -1,4 +1,5 @@
 @file:OptIn(UnsafeApi::class)
+
 package ru.astrainteractive.aspekt.events.sit
 
 import org.bukkit.Material
@@ -10,49 +11,46 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerTeleportEvent
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import org.spigotmc.event.entity.EntityDismountEvent
-import ru.astrainteractive.aspekt.AspeKt
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.astralibs.async.BukkitDispatchers
-import ru.astrainteractive.astralibs.di.Dependency
-import ru.astrainteractive.astralibs.di.getValue
+import ru.astrainteractive.aspekt.events.di.EventsModule
 import ru.astrainteractive.astralibs.events.DSLEvent
-import ru.astrainteractive.astralibs.events.GlobalEventListener
+import ru.astrainteractive.astralibs.getValue
 
 class SitEvent(
-    sitControllerDependency: Dependency<SitController>,
-    pluginConfigurationDep: Dependency<PluginConfiguration>,
-    private val bukkitDispatchers: BukkitDispatchers
+    module: EventsModule
 ) {
-    private val plugin by AspeKt
-    private val sitController by sitControllerDependency
-    private val pluginConfiguration by pluginConfigurationDep
+    private val sitController by module.sitController
+    private val pluginConfiguration by module.configuration
+    private val eventListener by module.eventListener
+    private val plugin by module.plugin
 
-    val onDeathEvent = DSLEvent<PlayerDeathEvent>(GlobalEventListener, plugin) { e ->
+    val onDeathEvent = DSLEvent<PlayerDeathEvent>(eventListener, plugin) { e ->
         sitController.stopSitPlayer(e.entity)
     }
 
-    val onTeleportEvent = DSLEvent<PlayerTeleportEvent>(GlobalEventListener, plugin) { e ->
+    val onTeleportEvent = DSLEvent<PlayerTeleportEvent>(eventListener, plugin) { e ->
         sitController.stopSitPlayer(e.player)
     }
 
-    val playerInteractEvent = DSLEvent<PlayerInteractEvent>(GlobalEventListener, plugin) { e ->
+    val playerInteractEvent = DSLEvent<PlayerInteractEvent>(eventListener, plugin) { e ->
         if (!pluginConfiguration.sit) return@DSLEvent
-        if (e.action != Action.RIGHT_CLICK_BLOCK)
+        if (e.action != Action.RIGHT_CLICK_BLOCK) {
             return@DSLEvent
-        if (e.player.inventory.itemInMainHand.type != Material.AIR)
+        }
+        if (e.player.inventory.itemInMainHand.type != Material.AIR) {
             return@DSLEvent
-        if (e.clickedBlock?.type?.name?.contains("stairs", ignoreCase = true) == true)
+        }
+        if (e.clickedBlock?.type?.name?.contains("stairs", ignoreCase = true) == true) {
             sitController.toggleSitPlayer(
                 e.player,
                 e.clickedBlock?.location?.clone()?.add(0.5, 0.5, 0.5) ?: return@DSLEvent
             )
-
+        }
     }
 
-    val onDisconnect = DSLEvent<PlayerQuitEvent>(GlobalEventListener, plugin) { e ->
+    val onDisconnect = DSLEvent<PlayerQuitEvent>(eventListener, plugin) { e ->
         sitController.stopSitPlayer(e.player)
     }
-    val onDismount = DSLEvent<EntityDismountEvent>(GlobalEventListener, plugin) { e ->
+    val onDismount = DSLEvent<EntityDismountEvent>(eventListener, plugin) { e ->
         if (e.entity !is Player) return@DSLEvent
         sitController.stopSitPlayer(e.entity as Player)
     }

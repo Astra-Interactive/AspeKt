@@ -6,25 +6,28 @@ import net.luckperms.api.LuckPerms
 import net.luckperms.api.node.types.InheritanceNode
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
-import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.astralibs.di.Dependency
+import ru.astrainteractive.astralibs.Dependency
+import ru.astrainteractive.astralibs.getValue
 import ru.astrainteractive.astralibs.logging.Logger
 
 class LuckPermsController(
-    pluginConfiguration: Dependency<PluginConfiguration>
+    pluginConfiguration: Dependency<PluginConfiguration>,
+    logger: Dependency<Logger>
 ) : RoleController {
-    private val logger by Logger
+    private val logger by logger
     private val pluginConfiguration by pluginConfiguration
+
     override val configuration: PluginConfiguration.DiscordSRVLink
         get() = pluginConfiguration.discordSRVLink
+
     private val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)!!
     private val api = luckPerms.provider
     private fun OfflinePlayer.addGroup(group: String) {
         api.userManager.modifyUser(uniqueId) {
             val groupNode = InheritanceNode.builder(group).build()
             val result = it.data().add(groupNode)
-            logger.info("DiscordEvent", "Игроку ${name} выдана роль ${group}: ${result}")
+            logger.info("DiscordEvent", "Игроку $name выдана роль $group: $result")
         }
     }
 
@@ -32,7 +35,7 @@ class LuckPermsController(
         api.userManager.modifyUser(uniqueId) {
             val groupNode = InheritanceNode.builder(group).build()
             val result = it.data().remove(groupNode)
-            logger.info("DiscordEvent", "У игрока ${name} убрана роль ${group}: ${result}")
+            logger.info("DiscordEvent", "У игрока $name убрана роль $group: $result")
         }
     }
 
@@ -53,5 +56,4 @@ class LuckPermsController(
             e.player.removeGroup(group)
         }
     }
-
 }

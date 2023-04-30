@@ -1,6 +1,5 @@
 package ru.astrainteractive.aspekt
 
-import ru.astrainteractive.aspekt.BuildKonfig
 import com.google.inject.Inject
 import com.google.inject.Injector
 import com.velocitypowered.api.event.Subscribe
@@ -12,7 +11,6 @@ import org.slf4j.Logger
 import ru.astrainteractive.aspekt.di.ServiceLocator
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
-
 
 @Plugin(
     id = BuildKonfig.id,
@@ -37,7 +35,6 @@ class AspeKt @Inject constructor(
         ServiceLocator.dataDirectory.initialize(dataDirectory)
         logger.info("Hello there! I made my first plugin with Velocity.")
         logger.info("Here's your configuration: ${ServiceLocator.configuration.value}.")
-
     }
 
     @Subscribe

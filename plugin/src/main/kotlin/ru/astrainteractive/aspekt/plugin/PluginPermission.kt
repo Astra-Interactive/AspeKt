@@ -8,5 +8,4 @@ sealed class PluginPermission(override val value: String) : Permission {
     object MaxOnline : PluginPermission("aspekt.maxonline")
     object AtemFrame : PluginPermission("aspekt.atemframe")
     object Entities : PluginPermission("aspekt.entities")
-
 }

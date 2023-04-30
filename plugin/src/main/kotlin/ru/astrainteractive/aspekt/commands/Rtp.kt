@@ -1,9 +1,9 @@
 package ru.astrainteractive.aspekt.commands
 
-import ru.astrainteractive.aspekt.AspeKt
+import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.astralibs.commands.registerCommand
-import ru.astrainteractive.astralibs.utils.HEX
+import ru.astrainteractive.astralibs.utils.hex
 
-fun CommandManager.rtp() = AspeKt.instance.registerCommand("rtp") {
-    sender.sendMessage("#db2c18Возможно, вы хотели ввести /tpr".HEX())
+fun CommandManager.rtp(plugin: JavaPlugin) = plugin.registerCommand("rtp") {
+    sender.sendMessage("#db2c18Возможно, вы хотели ввести /tpr".hex())
 }

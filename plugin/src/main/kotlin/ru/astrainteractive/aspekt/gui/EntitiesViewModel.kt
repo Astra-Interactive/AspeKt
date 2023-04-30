@@ -13,7 +13,10 @@ class EntitiesViewModel : AsyncComponent() {
     val state = MutableStateFlow<EntitiesState>(EntitiesState.Loading)
     fun loadData() {
         val world = Bukkit.getWorlds().first()
-        val grouped = world.entities.groupBy { it.type }.map { EntityData(it.key, it.value.size) }.sortedByDescending { it.count }
+        val grouped = world.entities
+            .groupBy { it.type }
+            .map { EntityData(it.key, it.value.size) }
+            .sortedByDescending { it.count }
         this.state.value = EntitiesState.AllEntities(list = grouped, sort = SortType.COUNT_DESC, world = world)
     }
 

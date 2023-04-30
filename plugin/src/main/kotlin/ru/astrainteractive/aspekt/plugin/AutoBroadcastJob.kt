@@ -1,30 +1,33 @@
 @file:OptIn(UnsafeApi::class)
-package ru.astrainteractive.aspekt.modules
 
+package ru.astrainteractive.aspekt.plugin
+
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.astralibs.async.PluginScope
-import ru.astrainteractive.astralibs.di.getValue
-import ru.astrainteractive.astralibs.utils.HEX
 import ru.astrainteractive.aspekt.utils.ScheduledJob
+import ru.astrainteractive.astralibs.Dependency
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
-import ru.astrainteractive.astralibs.di.Dependency
+import ru.astrainteractive.astralibs.getValue
+import ru.astrainteractive.astralibs.utils.hex
 
-class AutoBroadcast(
+class AutoBroadcastJob(
     config: Dependency<PluginConfiguration>,
-    private val bukkitDispatchers: BukkitDispatchers
+    private val dispatchers: BukkitDispatchers,
+    private val scope: CoroutineScope
 ) : ScheduledJob("AutoBroadcast") {
     private val config by config
+
     override val delayMillis: Long
         get() = config.announcements.interval.value * 1000L
+
     override val initialDelayMillis: Long
         get() = 0L
 
     override fun execute() {
-        PluginScope.launch(bukkitDispatchers.BukkitMain) {
-            val message = config.announcements.announcements.value.randomOrNull()?.HEX() ?: return@launch
+        scope.launch(dispatchers.BukkitMain) {
+            val message = config.announcements.announcements.value.randomOrNull()?.hex() ?: return@launch
             Bukkit.getOnlinePlayers().forEach {
                 it.sendMessage(message)
             }

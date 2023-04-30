@@ -10,7 +10,7 @@ api-version: 1.18
 softdepend: [ DiscordSRV, LuckPerms ]
 depend: [ AstraLibs ]
 loadbefore: [ ]
-libraries: [ "${libraries}" ]
+#libraries: [ "${libraries}" ]
 commands:
   sit:
   tellchat:

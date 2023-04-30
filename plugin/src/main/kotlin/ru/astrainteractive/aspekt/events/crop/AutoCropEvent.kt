@@ -1,4 +1,5 @@
 @file:OptIn(UnsafeApi::class)
+
 package ru.astrainteractive.aspekt.events.crop
 
 import org.bukkit.Material
@@ -7,25 +8,21 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
-import ru.astrainteractive.aspekt.AspeKt
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.astralibs.async.BukkitDispatchers
-import ru.astrainteractive.astralibs.di.Dependency
-import ru.astrainteractive.astralibs.di.getValue
+import ru.astrainteractive.aspekt.events.di.EventsModule
 import ru.astrainteractive.astralibs.events.DSLEvent
-import ru.astrainteractive.astralibs.events.GlobalEventListener
+import ru.astrainteractive.astralibs.getValue
 import kotlin.random.Random
 
-
 class AutoCropEvent(
-    pluginConfigDep: Dependency<PluginConfiguration>,
-    private val bukkitDispatchers: BukkitDispatchers
+    module: EventsModule
 ) {
-    private val plugin by AspeKt
-    private val pluginConfiguration by pluginConfigDep
-    private val controller = CropDupeController(pluginConfigDep)
+    private val plugin by module.plugin
+    private val pluginConfiguration by module.configuration
+    private val eventListener by module.eventListener
 
-    val onCropInteract = DSLEvent<PlayerInteractEvent>(GlobalEventListener, plugin) { e ->
+    private val controller = CropDupeController(module.configuration)
+
+    val onCropInteract = DSLEvent<PlayerInteractEvent>(eventListener, plugin) { e ->
         val autoCropConfig = pluginConfiguration.autoCrop
         if (!autoCropConfig.enabled) return@DSLEvent
 

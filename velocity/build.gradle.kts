@@ -9,7 +9,6 @@ plugins {
     alias(libs.plugins.buildconfig)
 }
 
-
 dependencies {
     // Kotlin
     implementation(libs.kotlinGradlePlugin)

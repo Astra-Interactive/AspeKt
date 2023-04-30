@@ -10,4 +10,3 @@ interface RoleController {
     suspend fun onLinked(e: AccountLinkedEvent)
     suspend fun onUnLinked(e: AccountUnlinkedEvent)
 }
-

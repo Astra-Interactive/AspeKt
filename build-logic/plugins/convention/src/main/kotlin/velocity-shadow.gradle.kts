@@ -14,7 +14,7 @@ tasks.shadowJar {
     from(project.configurations.runtimeClasspath)
     minimize()
     archiveBaseName.set(libs.versions.plugin.name.get())
-    destinationDirectory.set(File(libs.versions.destionation.spigot.get()))
+    destinationDirectory.set(File(libs.versions.destination.paper.get()))
 }
 tasks.build {
     dependsOn(tasks.shadowJar)

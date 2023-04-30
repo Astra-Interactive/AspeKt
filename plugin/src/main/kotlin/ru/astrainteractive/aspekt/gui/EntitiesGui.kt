@@ -103,7 +103,6 @@ class EntitiesGui(
     override var page: Int = 0
     override val playerHolder: PlayerHolder = DefaultPlayerHolder(player)
 
-
     override fun onCreated() {
         viewModel.state.collectOn(bukkitDispatchers.BukkitMain, block = ::renderPage)
         viewModel.loadData()
@@ -143,10 +142,11 @@ class EntitiesGui(
                             val loc = entity.location
                             this.editMeta {
                                 it.setDisplayName("(${loc.x.toInt()}; ${loc.y.toInt()}; ${loc.z.toInt()})")
-                                if (playerHolder.player.location.world == loc.world)
+                                if (playerHolder.player.location.world == loc.world) {
                                     it.lore = listOf(
                                         "Distance: ${loc.distance(playerHolder.player.location).toInt()}"
                                     )
+                                }
                             }
                         }
                         this.onClick = {

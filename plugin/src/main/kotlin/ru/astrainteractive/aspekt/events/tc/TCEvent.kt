@@ -1,4 +1,5 @@
 @file:OptIn(UnsafeApi::class)
+
 package ru.astrainteractive.aspekt.events.tc
 
 import kotlinx.coroutines.delay
@@ -15,27 +16,25 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
-import ru.astrainteractive.aspekt.AspeKt
+import ru.astrainteractive.aspekt.events.di.EventsModule
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.async.PluginScope
-import ru.astrainteractive.astralibs.di.Dependency
-import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.astralibs.events.DSLEvent
-import ru.astrainteractive.astralibs.events.GlobalEventListener
+import ru.astrainteractive.astralibs.getValue
 import kotlin.random.Random
 
-
 class TCEvent(
-    pluginConfigDep: Dependency<PluginConfiguration>,
-    private val bukkitDispatchers: BukkitDispatchers
+    module: EventsModule
 ) {
-    private val pluginConfiguration by pluginConfigDep
-    private val plugin by AspeKt
+    private val pluginConfiguration by module.configuration
+    private val plugin by module.plugin
+    private val eventListener by module.eventListener
+    private val dispatchers by module.dispatchers
     private val tcConfig: PluginConfiguration.TC
         get() = pluginConfiguration.tc
 
-    private val onBlockBreak = DSLEvent<BlockBreakEvent>(GlobalEventListener, plugin) { e ->
+    @Suppress("UnusedPrivateMember")
+    private val onBlockBreak = DSLEvent<BlockBreakEvent>(eventListener, plugin) { e ->
         val block = e.block
         val material = block.type
         val player = e.player
@@ -62,9 +61,9 @@ class TCEvent(
             placeSapling(sapling, block.getRelative(BlockFace.DOWN), i + 1)
             return
         }
-        PluginScope.launch(bukkitDispatchers.BukkitAsync) {
+        PluginScope.launch(dispatchers.BukkitAsync) {
             delay(100)
-            withContext(bukkitDispatchers.BukkitMain) {
+            withContext(dispatchers.BukkitMain) {
                 airBlock.location.block.setType(sapling, true)
             }
         }
@@ -75,8 +74,9 @@ class TCEvent(
         val isLog = isLog(block.type)
         val isLeave = isLeaves(block.type)
         if (!isLog && !isLeave) return
-        if (isLeave && tcConfig.destroyLeaves)
+        if (isLeave && tcConfig.destroyLeaves) {
             block.breakNaturally()
+        }
         if (isLog) {
             block.breakNaturally()
             damageItem(player, tool)
@@ -87,20 +87,20 @@ class TCEvent(
     }
 
     private fun isDirt(mat: Material): Boolean {
-        return mat == Material.GRASS_BLOCK
-                || mat == Material.DIRT
-                || mat == Material.ROOTED_DIRT
-                || mat == Material.COARSE_DIRT
+        return mat == Material.GRASS_BLOCK ||
+            mat == Material.DIRT ||
+            mat == Material.ROOTED_DIRT ||
+            mat == Material.COARSE_DIRT
     }
 
     /**
      * Checks if material is log or not
      */
     private fun isLog(mat: Material): Boolean {
-        return mat.name.contains("STRIPPED_")
-                || mat.name.contains("_LOG")
-                || mat == Material.CRIMSON_STEM
-                || mat == Material.WARPED_STEM
+        return mat.name.contains("STRIPPED_") ||
+            mat.name.contains("_LOG") ||
+            mat == Material.CRIMSON_STEM ||
+            mat == Material.WARPED_STEM
     }
 
     /**
@@ -132,10 +132,10 @@ class TCEvent(
      * Checks if material is leave or not
      */
     private fun isLeaves(mat: Material): Boolean {
-        return mat.name.contains("LEAVES")
-                || mat == Material.NETHER_WART_BLOCK
-                || mat == Material.WARPED_WART_BLOCK
-                || mat == Material.SHROOMLIGHT
+        return mat.name.contains("LEAVES") ||
+            mat == Material.NETHER_WART_BLOCK ||
+            mat == Material.WARPED_WART_BLOCK ||
+            mat == Material.SHROOMLIGHT
     }
 
     /**

@@ -1,4 +1,5 @@
 @file:OptIn(UnsafeApi::class)
+
 package ru.astrainteractive.aspekt.events.restrictions
 
 import org.bukkit.Material
@@ -11,37 +12,34 @@ import org.bukkit.event.block.BlockSpreadEvent
 import org.bukkit.event.entity.ExplosionPrimeEvent
 import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
-import ru.astrainteractive.aspekt.AspeKt
+import ru.astrainteractive.aspekt.events.di.EventsModule
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.astralibs.async.BukkitDispatchers
-import ru.astrainteractive.astralibs.di.Dependency
-import ru.astrainteractive.astralibs.di.Module
-import ru.astrainteractive.astralibs.di.getValue
 import ru.astrainteractive.astralibs.events.DSLEvent
-import ru.astrainteractive.astralibs.events.GlobalEventListener
+import ru.astrainteractive.astralibs.getValue
 
 class RestrictionsEvent(
-    pluginConfigurationModule: Dependency<PluginConfiguration>,
-    private val bukkitDispatchers: BukkitDispatchers
+    module: EventsModule
 ) {
-    private val plugin by AspeKt
-    private val pluginConfiguration by pluginConfigurationModule
+    private val plugin by module.plugin
+    private val pluginConfiguration by module.configuration
+    private val eventListener by module.eventListener
+
     private val restrictions: PluginConfiguration.Restrictions
         get() = pluginConfiguration.restrictions
 
     // Explosions
-    val onBlockExplode = DSLEvent<BlockExplodeEvent>(GlobalEventListener, plugin) {
+    val onBlockExplode = DSLEvent<BlockExplodeEvent>(eventListener, plugin) {
         if (restrictions.explode) it.isCancelled = true
     }
-    val onEntityExplode = DSLEvent<BlockExplodeEvent>(GlobalEventListener, plugin) {
+    val onEntityExplode = DSLEvent<BlockExplodeEvent>(eventListener, plugin) {
         if (!restrictions.explode) it.isCancelled = true
     }
-    val onPrimeExplosion = DSLEvent<ExplosionPrimeEvent>(GlobalEventListener, plugin) {
+    val onPrimeExplosion = DSLEvent<ExplosionPrimeEvent>(eventListener, plugin) {
         if (!restrictions.explode) it.isCancelled = true
     }
 
     // Placing
-    val bucketEmptyEvent = DSLEvent<PlayerBucketEmptyEvent>(GlobalEventListener, plugin) {
+    val bucketEmptyEvent = DSLEvent<PlayerBucketEmptyEvent>(eventListener, plugin) {
         when (it.bucket) {
             Material.LAVA_BUCKET -> {
                 if (!restrictions.placeLava) it.isCancelled = true
@@ -50,7 +48,7 @@ class RestrictionsEvent(
             else -> Unit
         }
     }
-    val blockPlace = DSLEvent<BlockPlaceEvent>(GlobalEventListener, plugin) {
+    val blockPlace = DSLEvent<BlockPlaceEvent>(eventListener, plugin) {
         when (it.blockPlaced.type) {
             Material.TNT -> {
                 if (!restrictions.placeTnt) it.isCancelled = true
@@ -67,9 +65,9 @@ class RestrictionsEvent(
             else -> Unit
         }
     }
-    val blockFromTo = DSLEvent<BlockFromToEvent>(GlobalEventListener, plugin) {
+    val blockFromTo = DSLEvent<BlockFromToEvent>(eventListener, plugin) {
 
-        when (it.block.type){
+        when (it.block.type) {
             Material.LAVA -> {
                 if (!restrictions.spreadLava) it.isCancelled = true
             }
@@ -81,14 +79,14 @@ class RestrictionsEvent(
             else -> Unit
         }
     }
-    val blockIgniteEvent = DSLEvent<BlockIgniteEvent>(GlobalEventListener, plugin) {
+    val blockIgniteEvent = DSLEvent<BlockIgniteEvent>(eventListener, plugin) {
         if (it.cause == BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL) return@DSLEvent
         if (!restrictions.spreadFire) it.isCancelled = true
     }
-    val blockBurnEvent = DSLEvent<BlockBurnEvent>(GlobalEventListener, plugin) {
+    val blockBurnEvent = DSLEvent<BlockBurnEvent>(eventListener, plugin) {
         if (!restrictions.spreadFire) it.isCancelled = true
     }
-    val blockSpread = DSLEvent<BlockSpreadEvent>(GlobalEventListener, plugin) {
+    val blockSpread = DSLEvent<BlockSpreadEvent>(eventListener, plugin) {
 
         when (it.source.type) {
             Material.LAVA -> {

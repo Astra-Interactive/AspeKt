@@ -1,4 +1,4 @@
-import org.gradle.api.file.DuplicatesStrategy
+
 import ru.astrainteractive.buildlogic.ProjectConfig.info
 
 plugins {

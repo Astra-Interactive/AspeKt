@@ -9,7 +9,7 @@ abstract class ScheduledJob(val key: String) {
     protected abstract fun execute()
 
     fun onEnable() {
-        scheduler = kotlin.concurrent.timer(key, false, initialDelayMillis,delayMillis ) {
+        scheduler = kotlin.concurrent.timer(key, false, initialDelayMillis, delayMillis) {
             execute()
         }
     }
