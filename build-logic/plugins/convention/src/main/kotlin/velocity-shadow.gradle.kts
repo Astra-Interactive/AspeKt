@@ -14,7 +14,10 @@ tasks.shadowJar {
     from(project.configurations.runtimeClasspath)
     minimize()
     archiveBaseName.set(libs.versions.plugin.name.get())
-    destinationDirectory.set(File(libs.versions.destination.paper.get()))
+    val folder = File(libs.versions.destination.velocity.get())
+    if (!folder.exists())
+        destinationDirectory.set(File("./jars"))
+    else destinationDirectory.set(folder)
 }
 tasks.build {
     dependsOn(tasks.shadowJar)
