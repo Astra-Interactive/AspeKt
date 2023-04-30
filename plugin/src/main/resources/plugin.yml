@@ -8,7 +8,7 @@ author: "${author}"
 website: "${url}"
 api-version: 1.18
 softdepend: [ DiscordSRV, LuckPerms ]
-depend: [ AstraLibs ]
+depend: [ ]
 loadbefore: [ ]
 #libraries: [ "${libraries}" ]
 commands:

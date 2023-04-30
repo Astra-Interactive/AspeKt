@@ -6,7 +6,7 @@ plugins {
 
 dependencies {
     // Kotlin
-    compileOnly(libs.bundles.kotlin)
+    implementation(libs.bundles.kotlin)
     // Spigot dependencies
     compileOnly(libs.minecraft.paper.api)
     implementation(libs.minecraft.bstats)
