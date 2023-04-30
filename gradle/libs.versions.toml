@@ -1,6 +1,6 @@
 [versions]
 # Plugin core
-plugin-version = "2.2.5"
+plugin-version = "2.2.6"
 plugin-name = "AspeKt"
 plugin-group = "ru.astrainteractive.aspekt"
 plugin-url = "EmpireProjekt.ru"
