@@ -21,8 +21,8 @@ tasks.shadowJar {
     from(project.configurations.runtimeClasspath)
     minimize()
     archiveBaseName.set(libs.versions.plugin.name.get())
-    val folder = File(libs.versions.destination.paper.get())
-    if (!folder.exists())
-        destinationDirectory.set(File("./jars"))
-    else destinationDirectory.set(folder)
+    File(libs.versions.destination.paper.get()).let {
+        if (!it.exists()) File(rootDir,"jars").also(File::mkdirs)
+        else it
+    }.also(destinationDirectory::set)
 }
