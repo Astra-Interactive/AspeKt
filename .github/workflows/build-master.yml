@@ -38,7 +38,7 @@ jobs:
           ./gradlew shadowJar --stacktrace
 
       - name: Archive plugin jars on GitHub
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v3
         with:
-          name: AspeKt plugin jars
-          path: ./jars
+          name: AspeKt-Package
+          path: /jars
