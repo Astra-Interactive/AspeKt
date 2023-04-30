@@ -1,25 +1,29 @@
 package ru.astrainteractive.aspekt.commands
 
-import ru.astrainteractive.aspekt.modules.ServiceLocator
-
+import ru.astrainteractive.aspekt.AspeKt
+import ru.astrainteractive.aspekt.commands.di.CommandsModule
 
 class CommandManager(
-    serviceLocator: ServiceLocator,
-    controllers: ServiceLocator.Controllers
+    module: CommandsModule,
+    plugin: AspeKt
 ) {
     init {
         reload(
-            translationModule = serviceLocator.TranslationModule
+            plugin,
+            module
         )
         sit(
-            sitControllerModule = controllers.sitControllerModule
+            plugin,
+            module
         )
-        rtp()
-        entities()
-        maxOnline()
-        tellChat()
-        atemFrameTabCompleter()
-        atemFrame()
-
+        entities(
+            plugin,
+            module
+        )
+        atemFrameTabCompleter(plugin)
+        atemFrame(plugin)
+        maxOnline(plugin)
+        tellChat(plugin)
+        rtp(plugin)
     }
 }

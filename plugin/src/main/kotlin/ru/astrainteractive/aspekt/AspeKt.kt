@@ -5,77 +5,69 @@ package ru.astrainteractive.aspekt
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
-import ru.astrainteractive.astralibs.async.PluginScope
-import ru.astrainteractive.astralibs.di.getValue
-import ru.astrainteractive.astralibs.utils.setupWithSpigot
 import ru.astrainteractive.aspekt.commands.CommandManager
+import ru.astrainteractive.aspekt.commands.di.CommandsModule
 import ru.astrainteractive.aspekt.events.EventHandler
-import ru.astrainteractive.aspekt.modules.*
-import ru.astrainteractive.astralibs.di.Singleton
+import ru.astrainteractive.aspekt.events.di.EventsModule
+import ru.astrainteractive.aspekt.modules.ControllersModule
+import ru.astrainteractive.aspekt.modules.RootModule
+import ru.astrainteractive.aspekt.modules.impl.CommandsModuleImpl
+import ru.astrainteractive.aspekt.modules.impl.ControllersModuleImpl
+import ru.astrainteractive.aspekt.modules.impl.EventsModuleImpl
+import ru.astrainteractive.aspekt.modules.impl.RootModuleImpl
+import ru.astrainteractive.astralibs.async.PluginScope
 import ru.astrainteractive.astralibs.events.GlobalEventListener
-import ru.astrainteractive.astralibs.logging.Logger
+import ru.astrainteractive.astralibs.getValue
 import ru.astrainteractive.astralibs.menu.event.GlobalInventoryClickEvent
 
 /**
  * Initial class for your plugin
  */
 class AspeKt : JavaPlugin() {
-    companion object : Singleton<AspeKt>()
-
     init {
-        instance = this
+        RootModuleImpl.plugin.initialize(this)
     }
 
-    private val discordEvent by ServiceLocator.discordEventModule
-    private val autoBroadcast by ServiceLocator.autoBroadcastModule
-    private val sitController by ServiceLocator.Controllers.sitControllerModule
+    private val rootModule: RootModule by RootModuleImpl
+    private val eventsModule: EventsModule by EventsModuleImpl
+    private val commandsModule: CommandsModule by CommandsModuleImpl
+    private val controllersModule: ControllersModule by ControllersModuleImpl
 
     /**
      * This method called when server starts or PlugMan load plugin.
      */
     override fun onEnable() {
-        Logger.setupWithSpigot("AspeKt", this)
-        EventHandler(
-            sitControllerDependency = ServiceLocator.Controllers.sitControllerModule,
-            sortControllerDependency = ServiceLocator.Controllers.sortControllerModule,
-            pluginConfigDep = ServiceLocator.pluginConfigModule,
-            bukkitDispatchers = ServiceLocator.bukkitDispatchers.value
-        )
-        CommandManager(
-            serviceLocator = ServiceLocator,
-            controllers = ServiceLocator.Controllers
-        )
+        EventHandler(eventsModule)
+        CommandManager(commandsModule, this)
         GlobalInventoryClickEvent.onEnable(this)
         GlobalEventListener.onEnable(this)
-        autoBroadcast.onEnable()
-        discordEvent?.onEnable()
+        rootModule.autoBroadcastJob.value.onEnable()
+        rootModule.discordEvent.value?.onEnable()
     }
 
     /**
      * This method called when server is shutting down or when PlugMan disable plugin.
      */
     override fun onDisable() {
-        sitController.onDisable()
-        autoBroadcast.onDisable()
+        controllersModule.sitController.value.onDisable()
+        rootModule.autoBroadcastJob.value.onDisable()
         HandlerList.unregisterAll(this)
         GlobalEventListener.onDisable()
         PluginScope.close()
-        discordEvent?.onDisable()
+        rootModule.discordEvent.value?.onDisable()
     }
 
     /**
      * As it says, function for plugin reload
      */
     fun reloadPlugin() {
-        sitController.onDisable()
-        ServiceLocator.configFileManager.value.reload()
-        ServiceLocator.pluginConfigModule.reload()
-        ServiceLocator.TranslationModule.reload()
-
-        autoBroadcast.onDisable()
-        autoBroadcast.onEnable()
+        controllersModule.sitController.value.onDisable()
+        RootModuleImpl.configFileManager.value.reload()
+        RootModuleImpl.pluginConfig.reload()
+        RootModuleImpl.translation.reload()
+        rootModule.autoBroadcastJob.value.apply {
+            this.onDisable()
+            this.onEnable()
+        }
     }
-
 }
-
-

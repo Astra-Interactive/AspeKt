@@ -37,10 +37,11 @@ dependencyResolutionManagement {
     }
 }
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "AspeKt"
 
 // Shared
 include("domain")
 // Spigot
 include("plugin")
-//include("velocity")
+// include("velocity")

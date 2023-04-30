@@ -6,7 +6,6 @@ import ru.astrainteractive.aspekt.utils.cInt
 import ru.astrainteractive.aspekt.utils.cStringList
 import ru.astrainteractive.aspekt.utils.getValue
 
-
 class PluginConfiguration(private val fc: FileConfiguration) {
     val sit by fc.cBoolean("core.sit", true)
     val discordSRVLink = DiscordSRVLink()
@@ -16,6 +15,7 @@ class PluginConfiguration(private val fc: FileConfiguration) {
     val restrictions = Restrictions()
 
     inner class Restrictions {
+        @Suppress("VariableNaming")
         private val PATH: String = "core.restrictions"
         val placeTnt by fc.cBoolean("$PATH.place.tnt", false)
         val explode by fc.cBoolean("$PATH.explode", false)
@@ -25,6 +25,7 @@ class PluginConfiguration(private val fc: FileConfiguration) {
     }
 
     inner class TC {
+        @Suppress("VariableNaming")
         private val PATH: String = "core.tree_capitator"
 
         val enabled by fc.cBoolean("$PATH.enabled", true)
@@ -49,6 +50,7 @@ class PluginConfiguration(private val fc: FileConfiguration) {
         }
     }
 
+    @Suppress("MemberNameEqualsClassName")
     inner class Announcements {
         val interval = fc.cInt("announcements.interval", 10)
         val announcements = fc.cStringList("announcements.announcements")

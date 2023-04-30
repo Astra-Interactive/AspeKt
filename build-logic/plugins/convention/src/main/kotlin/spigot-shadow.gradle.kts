@@ -5,13 +5,21 @@ plugins {
     id("com.github.johnrengelman.shadow")
 }
 tasks.shadowJar {
-    dependencies {
-        include {
-            it.moduleGroup == libs.versions.plugin.group.get() || it.moduleGroup.contains("aspekt") || it.moduleGroup.contains("bstats")
-        }
+    isReproducibleFileOrder = true
+    mergeServiceFiles()
+    relocate("org.bstats", libs.versions.plugin.group.get())
+    listOf(
+        "kotlin",
+        "org.jetbrains",
+        libs.minecraft.astralibs.ktxcore.get().module.group
+    ).forEach {
+        relocate(it, libs.versions.plugin.group.get() + ".$it")
     }
-    relocate("org.bstats", "${libs.versions.plugin.group.get()}")
+    dependsOn(configurations)
     archiveClassifier.set(null as String?)
+    from(sourceSets.main.get().output)
+    from(project.configurations.runtimeClasspath)
+    minimize()
     archiveBaseName.set(libs.versions.plugin.name.get())
-    destinationDirectory.set(File(libs.versions.destionation.spigot.get()))
+    destinationDirectory.set(File(libs.versions.destination.paper.get()))
 }

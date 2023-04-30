@@ -1,4 +1,5 @@
 @file:OptIn(UnsafeApi::class)
+
 package ru.astrainteractive.aspekt.events.discord
 
 import github.scarsz.discordsrv.DiscordSRV
@@ -8,11 +9,10 @@ import github.scarsz.discordsrv.api.events.AccountUnlinkedEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
-import ru.astrainteractive.astralibs.async.PluginScope
 import ru.astrainteractive.aspekt.events.discord.controllers.RoleController
-import ru.astrainteractive.astralibs.di.Dependency
-import ru.astrainteractive.astralibs.di.getValue
-
+import ru.astrainteractive.astralibs.Dependency
+import ru.astrainteractive.astralibs.async.PluginScope
+import ru.astrainteractive.astralibs.getValue
 
 /**
  * Template event class
@@ -23,6 +23,7 @@ class DiscordEvent(
 ) {
     private val discordController by discordController
     private val luckPermsController by luckPermsController
+
     @Subscribe
     fun onAccountLinked(e: AccountLinkedEvent) {
         PluginScope.launch(Dispatchers.IO) {
@@ -48,7 +49,6 @@ class DiscordEvent(
 //            luckPermsController.onUnLinked(e)
 //        }
 //    }
-
 
     fun onEnable() {
         DiscordSRV.api.subscribe(this)

@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.gui
 import org.bukkit.Material
 import org.bukkit.entity.EntityType
 
+@Suppress("CyclomaticComplexMethod", "LongMethod")
 fun EntityType.toMaterial() = when (this) {
     EntityType.DROPPED_ITEM -> Material.DIRT
     EntityType.EXPERIENCE_ORB -> Material.EXPERIENCE_BOTTLE

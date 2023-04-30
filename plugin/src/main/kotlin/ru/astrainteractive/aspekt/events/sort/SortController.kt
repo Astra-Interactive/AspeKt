@@ -8,7 +8,6 @@ import java.util.*
 
 class SortController {
 
-
     private val sortTypes = mutableMapOf<UUID, Sort>()
     fun rememberPlayer(player: Player) {
         sortTypes[player.uniqueId] = Sort.TYPE
@@ -19,7 +18,7 @@ class SortController {
     }
 
     fun trySortInventory(clickedInventory: Inventory, player: Player) {
-        val contents = clickedInventory.storageContents ?: return
+        val contents = clickedInventory.storageContents
         val prevSortType = sortTypes[player.uniqueId] ?: Sort.TYPE
         sortTypes[player.uniqueId] =
             if (!prevSortType.desc) prevSortType.apply { desc = !desc } else prevSortType.next()
@@ -38,8 +37,11 @@ class SortController {
         desc: Boolean,
         algorithm: () -> Comparator<ItemStack?>,
     ): Array<out ItemStack?> {
-        return if (desc) content.sortedArrayWith(algorithm())
-        else content.sortedArrayWith(algorithm()).reversedArray()
+        return if (desc) {
+            content.sortedArrayWith(algorithm())
+        } else {
+            content.sortedArrayWith(algorithm()).reversedArray()
+        }
     }
 
     private fun sortByType(content: Array<out ItemStack?>, desc: Boolean) =
@@ -62,7 +64,6 @@ class SortController {
         compareBy {
             it?.type?.name?.contains("glass", ignoreCase = true)
         }
-
     }
 
     private fun sortByBlock(content: Array<out ItemStack?>, desc: Boolean) = sortBy(content, desc) {
@@ -76,7 +77,7 @@ class SortController {
             { it?.type?.name?.contains("ore", ignoreCase = true) },
             { it?.type?.name?.contains("block", ignoreCase = true) },
 
-            )
+        )
     }
 
     private fun sortByTool(content: Array<out ItemStack?>, desc: Boolean) = sortBy(content, desc) {
@@ -103,7 +104,6 @@ class SortController {
             get() = { it?.typeContains("_sword") }
         val shovel: (ItemStack?) -> Comparable<*>?
             get() = { it?.typeContains("_shovel") }
-
     }
 
     object BlocksComparable {
@@ -118,7 +118,5 @@ class SortController {
             get() = { it?.typeContains("_fence") }
         val glass: (ItemStack?) -> Comparable<*>?
             get() = { it?.typeContains("_glass") }
-
     }
-
 }

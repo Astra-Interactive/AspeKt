@@ -6,16 +6,18 @@ import github.scarsz.discordsrv.dependencies.jda.api.JDA
 import github.scarsz.discordsrv.dependencies.jda.api.entities.Role
 import github.scarsz.discordsrv.util.DiscordUtil
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.astralibs.di.Dependency
-import ru.astrainteractive.astralibs.di.getValue
+import ru.astrainteractive.astralibs.Dependency
+import ru.astrainteractive.astralibs.getValue
 import ru.astrainteractive.astralibs.logging.Logger
 
 @Suppress("DuplicatedCode")
 class DiscordController(
-    pluginConfiguration: Dependency<PluginConfiguration>
+    pluginConfiguration: Dependency<PluginConfiguration>,
+    logger: Dependency<Logger>
 ) : RoleController {
-    private val logger by Logger
+    private val logger by logger
     private val pluginConfiguration by pluginConfiguration
+
     override val configuration: PluginConfiguration.DiscordSRVLink
         get() = pluginConfiguration.discordSRVLink
 
@@ -55,5 +57,4 @@ class DiscordController(
             logger.info("DiscordEvent", "У игрока ${e.player.name} снята роль ${it.id}: ${it.name}")
         }
     }
-
 }

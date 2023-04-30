@@ -1,11 +1,10 @@
 package ru.astrainteractive.aspekt.commands
 
 import ru.astrainteractive.aspekt.AspeKt
-import ru.astrainteractive.astralibs.commands.registerCommand
+import ru.astrainteractive.aspekt.commands.di.CommandsModule
 import ru.astrainteractive.aspekt.plugin.PluginPermission
-import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.di.Dependency
-import ru.astrainteractive.astralibs.di.getValue
+import ru.astrainteractive.astralibs.commands.registerCommand
+import ru.astrainteractive.astralibs.getValue
 
 /**
  * Reload command handler
@@ -17,20 +16,16 @@ import ru.astrainteractive.astralibs.di.getValue
  * Here you should also check for permission
  */
 fun CommandManager.reload(
-    translationModule: Dependency<PluginTranslation>
-) = AspeKt.instance.registerCommand("aesreload") {
-    val translation by translationModule
+    plugin: AspeKt,
+    module: CommandsModule
+) = plugin.registerCommand("aesreload") {
+    val translation by module.translation
+
     if (!PluginPermission.Reload.hasPermission(sender)) {
         sender.sendMessage(translation.noPermission)
         return@registerCommand
     }
     sender.sendMessage(translation.reload)
-    AspeKt.instance.reloadPlugin()
+    plugin.reloadPlugin()
     sender.sendMessage(translation.reloadComplete)
 }
-
-
-
-
-
-

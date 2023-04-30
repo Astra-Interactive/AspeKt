@@ -2,13 +2,14 @@ package ru.astrainteractive.aspekt.events.crop
 
 import org.bukkit.Location
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.astralibs.di.Dependency
-import ru.astrainteractive.astralibs.di.getValue
+import ru.astrainteractive.astralibs.Dependency
+import ru.astrainteractive.astralibs.getValue
 
 class CropDupeController(
     pluginConfigDep: Dependency<PluginConfiguration>
 ) {
     private val pluginConfiguration by pluginConfigDep
+
     private val locationSet = HashMap<Location, Long>()
     private var lastClear = System.currentTimeMillis()
     fun isDupingAtLocation(location: Location): Boolean {

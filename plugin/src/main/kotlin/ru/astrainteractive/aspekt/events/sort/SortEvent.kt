@@ -1,34 +1,31 @@
 @file:OptIn(UnsafeApi::class)
+
 package ru.astrainteractive.aspekt.events.sort
 
-import org.bukkit.Material
 import org.bukkit.entity.Player
-import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
-import ru.astrainteractive.aspekt.AspeKt
-import ru.astrainteractive.astralibs.async.BukkitDispatchers
-import ru.astrainteractive.astralibs.di.Dependency
-import ru.astrainteractive.astralibs.di.getValue
+import ru.astrainteractive.aspekt.events.di.EventsModule
 import ru.astrainteractive.astralibs.events.DSLEvent
-import ru.astrainteractive.astralibs.events.GlobalEventListener
+import ru.astrainteractive.astralibs.getValue
 
 class SortEvent(
-    sortControllerDependency: Dependency<SortController>,
-    private val bukkitDispatchers: BukkitDispatchers
+    module: EventsModule
 ) {
-    private val plugin by AspeKt
-    private val sortController by sortControllerDependency
-    val playerQuit = DSLEvent<PlayerQuitEvent>(GlobalEventListener, plugin) { e ->
+    private val plugin by module.plugin
+    private val eventListener by module.eventListener
+    private val sortController = SortController()
+
+    val playerQuit = DSLEvent<PlayerQuitEvent>(eventListener, plugin) { e ->
         sortController.rememberPlayer(e.player)
     }
-    val playerJoin = DSLEvent<PlayerJoinEvent>(GlobalEventListener, plugin) { e ->
+    val playerJoin = DSLEvent<PlayerJoinEvent>(eventListener, plugin) { e ->
         sortController.removePlayer(e.player)
     }
-    val inventoryClick = DSLEvent<InventoryClickEvent>(GlobalEventListener, plugin) { e ->
+    val inventoryClick = DSLEvent<InventoryClickEvent>(eventListener, plugin) { e ->
         if (e.click != ClickType.MIDDLE) return@DSLEvent
         if (!e.isShiftClick) return@DSLEvent
         val clickedInventory = e.clickedInventory ?: return@DSLEvent
