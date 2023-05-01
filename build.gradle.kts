@@ -12,3 +12,7 @@ plugins {
     alias(libs.plugins.gradle.shadow) apply false
     id("detekt-convention")
 }
+
+tasks.create("PublishPrimaryVersion") {
+    ru.astrainteractive.buildlogic.PublishPrimaryVersionTask(this).invoke()
+}
