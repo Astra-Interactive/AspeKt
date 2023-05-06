@@ -9,7 +9,7 @@ plugins {
 
 tasks.processResources {
     filteringCharset = "UTF-8"
-    inputs.property("version", libs.versions.plugin.version.get())
+    inputs.property("version", libs.versions.project.version.get())
     filesMatching("velocity-plugin.json") {
         mutableMapOf(
             "id" to info.id,

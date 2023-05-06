@@ -1,12 +1,12 @@
 [versions]
 # Plugin core
-plugin-version = "2.2.6"
-plugin-name = "AspeKt"
-plugin-group = "ru.astrainteractive.aspekt"
-plugin-url = "EmpireProjekt.ru"
-plugin-description = "Essentials plugin for EmpireProjekt"
-plugin-authors = "Roman Makeev"
-plugin-author = "Roman Makeev"
+project-version = "2.2.6"
+project-name = "AspeKt"
+project-group = "ru.astrainteractive.aspekt"
+project-url = "EmpireProjekt.ru"
+project-description = "Essentials plugin for EmpireProjekt"
+project-authors = "Roman Makeev"
+project-author = "Roman Makeev"
 
 # Plugin destinations
 destination-paper = "D:\\Minecraft Servers\\Servers\\esmp-configuration\\smp\\plugins"

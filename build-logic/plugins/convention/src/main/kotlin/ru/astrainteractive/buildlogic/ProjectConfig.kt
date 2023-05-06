@@ -6,12 +6,12 @@ import org.gradle.api.Project
 object ProjectConfig {
     val Project.info: ProjectInfo
         get() = DefaultProjectInfo(
-            id = libs.versions.plugin.name.get().toLowerCase(),
-            name = libs.versions.plugin.name.get(),
-            version = libs.versions.plugin.version.get(),
-            url = libs.versions.plugin.url.get(),
-            description = libs.versions.plugin.description.get(),
-            authors = libs.versions.plugin.authors.get().split(";"),
-            main = "${libs.versions.plugin.group.get()}.${libs.versions.plugin.name.get()}"
+            id = libs.versions.project.name.get().toLowerCase(),
+            name = libs.versions.project.name.get(),
+            version = libs.versions.project.version.get(),
+            url = libs.versions.project.url.get(),
+            description = libs.versions.project.description.get(),
+            authors = libs.versions.project.authors.get().split(";"),
+            main = "${libs.versions.project.group.get()}.${libs.versions.project.name.get()}"
         )
 }
