@@ -19,9 +19,9 @@ dependencies {
     // Spigot
     compileOnly("net.luckperms:api:5.4")
     compileOnly("com.discordsrv:discordsrv:1.25.0")
+
     // Test
-    testImplementation(platform(libs.tests.junit.bom))
-    testImplementation(libs.bundles.testing.libs)
     testImplementation(libs.bundles.testing.kotlin)
+    testImplementation(libs.tests.kotlin.test)
     testImplementation(libs.minecraft.mockbukkit)
 }

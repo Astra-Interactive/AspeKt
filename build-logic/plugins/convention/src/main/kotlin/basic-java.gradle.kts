@@ -15,13 +15,13 @@ java {
     java.sourceCompatibility = JavaVersion.VERSION_1_8
     java.targetCompatibility = JavaVersion.VERSION_17
 }
-
+// TODO
+// kotlin {
+//    jvmToolchain(11)
+// }
 tasks {
     withType<JavaCompile>() {
         options.encoding = "UTF-8"
-    }
-    withType<Test>().configureEach {
-        useJUnitPlatform()
     }
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions.jvmTarget = JavaVersion.VERSION_17.majorVersion
@@ -30,7 +30,7 @@ tasks {
         options.encoding = "UTF-8"
     }
     test {
-        useJUnitPlatform()
+        useJUnit()
         testLogging {
             events("passed", "skipped", "failed")
             this.showStandardStreams = true
