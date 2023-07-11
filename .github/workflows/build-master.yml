@@ -13,7 +13,7 @@ jobs:
     needs: gradle_validation
     uses: ./.github/workflows/tests-validation.yml
   create_artifact:
-    needs: gradle_validation
+    needs: [ gradle_validation, detekt_validation, tests_validation ]
     uses: ./.github/workflows/create-artifacts.yml
     secrets:
       ACTIONS_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
