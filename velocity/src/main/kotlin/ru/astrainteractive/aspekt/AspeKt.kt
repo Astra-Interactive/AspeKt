@@ -8,7 +8,7 @@ import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.plugin.annotation.DataDirectory
 import com.velocitypowered.api.proxy.ProxyServer
 import org.slf4j.Logger
-import ru.astrainteractive.aspekt.di.ServiceLocator
+import ru.astrainteractive.aspekt.di.RootModule
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 
@@ -27,16 +27,19 @@ class AspeKt @Inject constructor(
     @DataDirectory dataDirectory: Path
 ) {
     init {
-        ru.astrainteractive.astralibs.Logger.logger = java.util.logging.Logger.getAnonymousLogger()
-        ru.astrainteractive.astralibs.Logger.logsFolderPath = dataDirectory.absolutePathString()
-        ServiceLocator.injector.initialize(injector)
-        ServiceLocator.server.initialize(server)
-        ServiceLocator.logger.initialize(logger)
-        ServiceLocator.dataDirectory.initialize(dataDirectory)
+        val logger = java.util.logging.Logger.getAnonymousLogger()
+
+        @Suppress("UnusedPrivateMember")
+        val logsFolderPath = dataDirectory.absolutePathString()
+        RootModule.injector.initialize(injector)
+        RootModule.server.initialize(server)
+        RootModule.logger.initialize(logger)
+        RootModule.dataDirectory.initialize(dataDirectory)
         logger.info("Hello there! I made my first plugin with Velocity.")
-        logger.info("Here's your configuration: ${ServiceLocator.configuration.value}.")
+        logger.info("Here's your configuration: ${RootModule.configuration.value}.")
     }
 
+    @Suppress("UnusedPrivateMember")
     @Subscribe
     fun onProxyInitialization(event: ProxyInitializeEvent?) {
         // Do some operation demanding access to the Velocity API here.
@@ -45,7 +48,7 @@ class AspeKt @Inject constructor(
     }
 
     fun reload() {
-        with(ServiceLocator) {
+        with(RootModule) {
             configuration.reload()
         }
     }

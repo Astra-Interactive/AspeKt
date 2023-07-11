@@ -1,9 +1,9 @@
-package ru.astrainteractive.aspekt.modules.impl
+package ru.astrainteractive.aspekt.di.impl
 
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.AspeKt
+import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.aspekt.events.discord.DiscordEvent
-import ru.astrainteractive.aspekt.modules.RootModule
 import ru.astrainteractive.aspekt.plugin.AutoBroadcastJob
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -26,14 +26,14 @@ object RootModuleImpl : RootModule {
         JUtilLogger("AspeKt", plugin.dataFolder)
     }
     override val eventListener: Dependency<EventListener> = Single {
-        object : EventListener {}
+        object : EventListener {} // todo DefaultEventListener
     }
     override val dispatchers = Single {
         val plugin by plugin
         DefaultBukkitDispatchers(plugin)
     }
     override val scope: Dependency<AsyncComponent> = Single {
-        object : AsyncComponent() {}
+        object : AsyncComponent() {} // todo DefaultAsyncComponent
     }
     override val configFileManager = Single {
         val plugin by plugin

@@ -1,5 +1,3 @@
-@file:OptIn(UnsafeApi::class)
-
 package ru.astrainteractive.aspekt.events.crop
 
 import org.bukkit.Material
@@ -7,7 +5,6 @@ import org.bukkit.block.data.Ageable
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
-import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.events.di.EventsModule
 import ru.astrainteractive.astralibs.events.DSLEvent
 import ru.astrainteractive.astralibs.getValue

@@ -1,5 +1,4 @@
 pluginManagement {
-    includeBuild("build-logic")
     repositories {
         maven("https://plugins.gradle.org/m2/")
         maven("https://jitpack.io")
@@ -40,8 +39,6 @@ dependencyResolutionManagement {
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "AspeKt"
 
-// Shared
-include("domain")
 // Spigot
 include("plugin")
-// include("velocity")
+include("velocity")

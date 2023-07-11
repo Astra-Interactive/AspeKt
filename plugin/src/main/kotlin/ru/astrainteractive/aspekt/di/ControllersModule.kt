@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.modules
+package ru.astrainteractive.aspekt.di
 
 import ru.astrainteractive.aspekt.events.discord.controllers.RoleController
 import ru.astrainteractive.aspekt.events.sit.SitController

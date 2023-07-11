@@ -1,3 +1,5 @@
+@file:Suppress("Filename")
+
 package ru.astrainteractive.aspekt.utils
 
 import org.bukkit.configuration.file.FileConfiguration

@@ -1,13 +1,13 @@
-package ru.astrainteractive.aspekt.modules.impl
+package ru.astrainteractive.aspekt.di.impl
 
+import ru.astrainteractive.aspekt.di.ControllersModule
+import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.aspekt.events.di.EventsModule
 import ru.astrainteractive.aspekt.events.discord.controllers.DiscordController
 import ru.astrainteractive.aspekt.events.discord.controllers.LuckPermsController
 import ru.astrainteractive.aspekt.events.discord.controllers.RoleController
 import ru.astrainteractive.aspekt.events.sit.SitController
 import ru.astrainteractive.aspekt.events.sort.SortController
-import ru.astrainteractive.aspekt.modules.ControllersModule
-import ru.astrainteractive.aspekt.modules.RootModule
 import ru.astrainteractive.astralibs.Single
 import ru.astrainteractive.astralibs.getValue
 
