@@ -1,10 +1,10 @@
-package ru.astrainteractive.aspekt.modules.impl
+package ru.astrainteractive.aspekt.di.impl
 
 import ru.astrainteractive.aspekt.AspeKt
 import ru.astrainteractive.aspekt.commands.di.CommandsModule
+import ru.astrainteractive.aspekt.di.ControllersModule
+import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.aspekt.events.sit.SitController
-import ru.astrainteractive.aspekt.modules.ControllersModule
-import ru.astrainteractive.aspekt.modules.RootModule
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.Dependency
 import ru.astrainteractive.astralibs.Single

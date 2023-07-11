@@ -1,3 +1,5 @@
+@file:Suppress("Filename")
+
 package ru.astrainteractive.aspekt.gui
 
 import org.bukkit.Material
@@ -125,4 +127,9 @@ fun EntityType.toMaterial() = when (this) {
     EntityType.PLAYER -> Material.PLAYER_HEAD
     EntityType.UNKNOWN -> Material.BARRIER
     EntityType.CAMEL -> Material.CAMEL_SPAWN_EGG
+    EntityType.BLOCK_DISPLAY -> Material.BARRIER
+    EntityType.INTERACTION -> Material.BARRIER
+    EntityType.ITEM_DISPLAY -> Material.BARRIER
+    EntityType.SNIFFER -> Material.SNIFFER_SPAWN_EGG
+    EntityType.TEXT_DISPLAY -> Material.BARRIER
 }

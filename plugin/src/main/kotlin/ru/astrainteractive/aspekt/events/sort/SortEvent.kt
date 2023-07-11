@@ -1,5 +1,3 @@
-@file:OptIn(UnsafeApi::class)
-
 package ru.astrainteractive.aspekt.events.sort
 
 import org.bukkit.entity.Player
@@ -7,7 +5,6 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
-import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.events.di.EventsModule
 import ru.astrainteractive.astralibs.events.DSLEvent
 import ru.astrainteractive.astralibs.getValue

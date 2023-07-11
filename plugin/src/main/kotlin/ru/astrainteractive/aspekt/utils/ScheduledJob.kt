@@ -1,6 +1,6 @@
 package ru.astrainteractive.aspekt.utils
 
-import java.util.*
+import java.util.Timer
 
 abstract class ScheduledJob(val key: String) {
     private var scheduler: Timer? = null

@@ -1,7 +1,8 @@
+import ru.astrainteractive.gradleplugin.setupSpigotProcessor
+import ru.astrainteractive.gradleplugin.setupSpigotShadow
+
 plugins {
-    id("spigot-resource-processor")
-    id("spigot-shadow")
-    id("basic-java")
+    kotlin("jvm")
 }
 
 dependencies {
@@ -25,3 +26,6 @@ dependencies {
     testImplementation(libs.tests.kotlin.test)
     testImplementation(libs.minecraft.mockbukkit)
 }
+
+setupSpigotShadow()
+setupSpigotProcessor()

@@ -1,50 +1,43 @@
-import ru.astrainteractive.buildlogic.ProjectConfig.info
+
+import ru.astrainteractive.gradleplugin.setupSpigotShadow
+import ru.astrainteractive.gradleplugin.setupVelocityProcessor
+import ru.astrainteractive.gradleplugin.util.ProjectProperties.projectInfo
 
 plugins {
-    id("spigot-shadow")
-    id("basic-java")
-    id("com.github.johnrengelman.shadow")
-    id("velocity-resource-processor")
-    id("velocity-shadow")
-    alias(libs.plugins.buildconfig)
+    kotlin("jvm")
+    alias(libs.plugins.gradle.buildconfig)
 }
 
 dependencies {
     // Kotlin
-    implementation(libs.kotlinGradlePlugin)
-    // Coroutines
-    implementation(libs.coroutines.coreJvm)
-    implementation(libs.coroutines.core)
-    // Serialization
-    implementation(libs.kotlin.serialization)
-    implementation(libs.kotlin.serializationJson)
-    implementation(libs.kotlin.serializationKaml)
-    // AstraLibs
-    implementation(libs.astralibs.ktxCore)
-    implementation(libs.astralibs.orm)
+    implementation(libs.bundles.kotlin)
     // Velocity
-    compileOnly(libs.velocity.api)
-    annotationProcessor(libs.velocity.api)
-    // Test-Core
-    testImplementation(platform(libs.junit.bom))
-    testImplementation(kotlin("test-junit5"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    // Test-libs
-    testImplementation(libs.coroutines.core)
-    testImplementation(libs.coroutines.coreJvm)
-    testImplementation(libs.xerial.sqlite.jdbc)
+    compileOnly(libs.minecraft.velocity.api)
+    annotationProcessor(libs.minecraft.velocity.api)
+    // AstraLibs
+    implementation(libs.minecraft.astralibs.ktxcore)
+    implementation(libs.minecraft.astralibs.orm)
+    implementation(libs.minecraft.astralibs.di)
+    // Test
+    testImplementation(libs.bundles.testing.kotlin)
+    testImplementation(libs.tests.kotlin.test)
+    testImplementation(libs.minecraft.mockbukkit)
 }
 
 buildConfig {
+    val projectInfo = projectInfo
     className("BuildKonfig")
-    packageName(libs.versions.group.get())
+    packageName(projectInfo.group)
     fun buildConfigStringField(name: String, value: String) {
         buildConfigField("String", name, "\"${value}\"")
     }
-    buildConfigStringField("id", info.id)
-    buildConfigStringField("name", info.name)
-    buildConfigStringField("version", info.version)
-    buildConfigStringField("url", info.url)
-    buildConfigStringField("description", info.description)
-    buildConfigStringField("author", info.authors.first())
+    buildConfigStringField("id", projectInfo.name.toLowerCase())
+    buildConfigStringField("name", projectInfo.name)
+    buildConfigStringField("version", projectInfo.versionString)
+    buildConfigStringField("url", projectInfo.url)
+    buildConfigStringField("description", projectInfo.description)
+    buildConfigStringField("author", projectInfo.developersList.first().id)
 }
+
+setupSpigotShadow()
+setupVelocityProcessor()

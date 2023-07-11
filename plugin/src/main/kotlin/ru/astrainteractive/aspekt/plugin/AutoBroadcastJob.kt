@@ -1,11 +1,8 @@
-@file:OptIn(UnsafeApi::class)
-
 package ru.astrainteractive.aspekt.plugin
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
-import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.utils.ScheduledJob
 import ru.astrainteractive.astralibs.Dependency
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
