@@ -3,11 +3,11 @@ package ru.astrainteractive.aspekt.plugin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
-import ru.astrainteractive.aspekt.utils.ScheduledJob
-import ru.astrainteractive.astralibs.Dependency
+import ru.astrainteractive.aspekt.util.ScheduledJob
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
-import ru.astrainteractive.astralibs.getValue
 import ru.astrainteractive.astralibs.utils.hex
+import ru.astrainteractive.klibs.kdi.Dependency
+import ru.astrainteractive.klibs.kdi.getValue
 
 class AutoBroadcastJob(
     config: Dependency<PluginConfiguration>,
