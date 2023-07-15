@@ -72,4 +72,19 @@ class AdminPrivateControllerTest {
             }
         }
     }
+
+    @Test
+    fun testIsAble(): Unit = runBlocking {
+        val module = Module()
+        val controller = AdminPrivateController(module)
+        randomChunk.let { chunk ->
+            assertTrue { controller.isAble(chunk, ChunkFlag.BREAK) }
+            controller.claim(chunk)
+            assertFalse { controller.isAble(chunk, ChunkFlag.BREAK) }
+            controller.setFlag(ChunkFlag.BREAK, true, chunk)
+            assertTrue { controller.isAble(chunk, ChunkFlag.BREAK) }
+            controller.setFlag(ChunkFlag.BREAK, false, chunk)
+            assertFalse { controller.isAble(chunk, ChunkFlag.BREAK) }
+        }
+    }
 }

@@ -11,12 +11,16 @@ import ru.astrainteractive.astralibs.filemanager.FileManager
 
 class AdminPrivateRepositoryImpl(
     private val fileManager: FileManager,
-    private val dispatchers: KotlinDispatchers
+    dispatchers: KotlinDispatchers
 ) : AdminPrivateRepository {
     private val limitedDispatcher = dispatchers.IO.limitedParallelism(1)
 
+    override fun getConfig(): AdminPrivateConfig {
+        return ConfigLoader.toClassOrDefault(fileManager.configFile, ::AdminPrivateConfig)
+    }
+
     override suspend fun getAllChunks(): List<AdminChunk> = withContext(limitedDispatcher) {
-        val rootConfig = ConfigLoader.toClassOrDefault(fileManager.configFile, ::AdminPrivateConfig)
+        val rootConfig = getConfig()
         rootConfig.chunks.map { it.value }
     }
 
@@ -27,7 +31,7 @@ class AdminPrivateRepositoryImpl(
     }
 
     override suspend fun saveChunk(chunk: AdminChunk) = withContext(limitedDispatcher) {
-        val rootConfig = ConfigLoader.toClassOrDefault(fileManager.configFile, ::AdminPrivateConfig)
+        val rootConfig = getConfig()
         val newRootConfig = rootConfig.copy(
             chunks = rootConfig.chunks.toMutableMap().apply {
                 this[chunk.uniqueWorldKey] = chunk
@@ -37,7 +41,7 @@ class AdminPrivateRepositoryImpl(
     }
 
     override suspend fun deleteChunk(chunk: AdminChunk) = withContext(limitedDispatcher) {
-        val rootConfig = ConfigLoader.toClassOrDefault(fileManager.configFile, ::AdminPrivateConfig)
+        val rootConfig = getConfig()
         val newRootConfig = rootConfig.copy(
             chunks = rootConfig.chunks.toMutableMap().apply {
                 remove(chunk.uniqueWorldKey)
