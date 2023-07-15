@@ -1,6 +1,7 @@
 package ru.astrainteractive.aspekt.event.di
 
 import ru.astrainteractive.aspekt.AspeKt
+import ru.astrainteractive.aspekt.adminprivate.controller.AdminPrivateController
 import ru.astrainteractive.aspekt.event.crop.CropDupeController
 import ru.astrainteractive.aspekt.event.sit.SitController
 import ru.astrainteractive.aspekt.event.sort.SortController
@@ -19,4 +20,5 @@ interface EventsModule : Module {
     val sitController: SitController
     val cropDupeController: CropDupeController
     val sortController: SortController
+    val adminPrivateController: AdminPrivateController
 }

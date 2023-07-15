@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.di.impl
 
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.AspeKt
+import ru.astrainteractive.aspekt.adminprivate.controller.di.AdminPrivateControllerModule
 import ru.astrainteractive.aspekt.command.di.CommandsModule
 import ru.astrainteractive.aspekt.di.ControllersModule
 import ru.astrainteractive.aspekt.di.RootModule
@@ -14,6 +15,8 @@ import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.astralibs.async.DefaultBukkitDispatchers
 import ru.astrainteractive.astralibs.events.EventListener
 import ru.astrainteractive.astralibs.filemanager.DefaultSpigotFileManager
+import ru.astrainteractive.astralibs.filemanager.FileManager
+import ru.astrainteractive.astralibs.filemanager.impl.JVMFileManager
 import ru.astrainteractive.astralibs.logging.JUtilLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.klibs.kdi.Dependency
@@ -47,6 +50,9 @@ class RootModuleImpl : RootModule {
     override val pluginConfig = Reloadable {
         PluginConfiguration(configFileManager.value.fileConfiguration)
     }
+    override val adminChunksYml: Reloadable<FileManager> = Reloadable {
+        JVMFileManager("adminchunks.yml", plugin.value.dataFolder)
+    }
     override val translation = Reloadable {
         val plugin by plugin
         PluginTranslation(plugin)
@@ -61,6 +67,9 @@ class RootModuleImpl : RootModule {
     }
     override val commandsModule: CommandsModule by Single {
         CommandsModuleImpl(this)
+    }
+    override val adminPrivateModule: AdminPrivateControllerModule by Single {
+        AdminPrivateControllerModuleImpl(this)
     }
 
     // etc

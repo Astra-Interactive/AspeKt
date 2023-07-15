@@ -12,5 +12,6 @@ class CommandManager(module: CommandsModule) : CommandsModule by module {
         maxOnline()
         tellChat()
         rtp()
+        adminPrivate()
     }
 }

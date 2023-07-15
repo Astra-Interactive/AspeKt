@@ -1,6 +1,7 @@
 package ru.astrainteractive.aspekt.di.impl
 
 import ru.astrainteractive.aspekt.AspeKt
+import ru.astrainteractive.aspekt.adminprivate.controller.AdminPrivateController
 import ru.astrainteractive.aspekt.di.ControllersModule
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.aspekt.event.crop.CropDupeController
@@ -31,5 +32,8 @@ class EventsModuleImpl(
     }
     override val sortController: SortController by Provider {
         rootModule.controllersModule.sortControllers
+    }
+    override val adminPrivateController: AdminPrivateController by Provider {
+        rootModule.controllersModule.adminPrivateController
     }
 }
