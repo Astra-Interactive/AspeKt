@@ -1,6 +1,6 @@
 package ru.astrainteractive.aspekt.event.adminprivate
 
-import org.bukkit.event.block.BlockPlaceEvent
+import org.bukkit.event.block.BlockBreakEvent
 import ru.astrainteractive.aspekt.adminprivate.debounce.EventDebounce
 import ru.astrainteractive.aspekt.adminprivate.debounce.RetractKey
 import ru.astrainteractive.aspekt.adminprivate.models.ChunkFlag
@@ -13,11 +13,12 @@ class AdminPrivateEvent(
 ) : EventsModule by module {
     private val debounce = EventDebounce<RetractKey>(5000L)
 
-    val onBlockPlaced = DSLEvent<BlockPlaceEvent>(eventListener, plugin) { e ->
+    val blockBreakEvent = DSLEvent<BlockBreakEvent>(eventListener, plugin) { e ->
         val retractKey = RetractKey.Vararg(e.block.chunk, e.player)
         debounce.getOrNull(retractKey, e) {
             val isAble = adminPrivateController.isAble(e.block.chunk.adminChunk, ChunkFlag.BREAK)
-            if (isAble) null else false
+            val isCancelled = !isAble
+            isCancelled
         }
     }
 }

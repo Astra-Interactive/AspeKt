@@ -26,7 +26,7 @@ fun CommandManager.adminPrivate() = plugin.registerCommand("adminprivate") {
             runCatching {
                 adminPrivateController.claim(player.chunk.adminChunk)
             }.onSuccess {
-                sender.sendMessage(translation.chunkUnClaimed)
+                sender.sendMessage(translation.chunkClaimed)
             }.onFailure {
                 it.printStackTrace()
                 sender.sendMessage(translation.error)
@@ -37,7 +37,7 @@ fun CommandManager.adminPrivate() = plugin.registerCommand("adminprivate") {
             runCatching {
                 adminPrivateController.unclaim(player.chunk.adminChunk)
             }.onSuccess {
-                sender.sendMessage(translation.chunkClaimed)
+                sender.sendMessage(translation.chunkUnClaimed)
             }.onFailure {
                 it.printStackTrace()
                 sender.sendMessage(translation.error)
@@ -50,7 +50,7 @@ fun CommandManager.adminPrivate() = plugin.registerCommand("adminprivate") {
                     sender.sendMessage(translation.wrongUsage)
                 }.successOrNull()?.value ?: return@launch
 
-                val value = argument(1) { it.toBoolean() }.onFailure {
+                val value = argument(2) { it.toBoolean() }.onFailure {
                     sender.sendMessage(translation.wrongUsage)
                 }.successOrNull()?.value ?: return@launch
                 adminPrivateController.setFlag(

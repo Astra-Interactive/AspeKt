@@ -29,5 +29,5 @@ dependencies {
     testImplementation(libs.minecraft.mockbukkit)
 }
 
-setupSpigotShadow()
+setupSpigotShadow(File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\smp\\plugins"))
 setupSpigotProcessor()
