@@ -1,10 +1,10 @@
 package ru.astrainteractive.aspekt.plugin
 
 import org.bukkit.configuration.file.FileConfiguration
-import ru.astrainteractive.aspekt.utils.cBoolean
-import ru.astrainteractive.aspekt.utils.cInt
-import ru.astrainteractive.aspekt.utils.cStringList
-import ru.astrainteractive.aspekt.utils.getValue
+import ru.astrainteractive.aspekt.util.cBoolean
+import ru.astrainteractive.aspekt.util.cInt
+import ru.astrainteractive.aspekt.util.cStringList
+import ru.astrainteractive.aspekt.util.getValue
 
 class PluginConfiguration(private val fc: FileConfiguration) {
     val sit by fc.cBoolean("core.sit", true)

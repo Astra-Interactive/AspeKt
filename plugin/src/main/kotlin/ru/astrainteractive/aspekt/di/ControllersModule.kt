@@ -1,14 +1,12 @@
 package ru.astrainteractive.aspekt.di
 
-import ru.astrainteractive.aspekt.events.discord.controllers.RoleController
-import ru.astrainteractive.aspekt.events.sit.SitController
-import ru.astrainteractive.aspekt.events.sort.SortController
-import ru.astrainteractive.astralibs.Module
-import ru.astrainteractive.astralibs.Single
+import ru.astrainteractive.aspekt.adminprivate.controller.AdminPrivateController
+import ru.astrainteractive.aspekt.event.sit.SitController
+import ru.astrainteractive.aspekt.event.sort.SortController
+import ru.astrainteractive.klibs.kdi.Module
 
 interface ControllersModule : Module {
-    val discordController: Single<RoleController>
-    val luckPermsController: Single<RoleController>
-    val sitController: Single<SitController>
-    val sortControllers: Single<SortController>
+    val sitController: SitController
+    val sortControllers: SortController
+    val adminPrivateController: AdminPrivateController
 }

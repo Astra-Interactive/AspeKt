@@ -3,12 +3,12 @@ package ru.astrainteractive.aspekt.di
 import com.google.inject.Injector
 import com.velocitypowered.api.proxy.ProxyServer
 import ru.astrainteractive.aspekt.plugin.Configuration
-import ru.astrainteractive.astralibs.Lateinit
-import ru.astrainteractive.astralibs.Reloadable
-import ru.astrainteractive.astralibs.Single
 import ru.astrainteractive.astralibs.configloader.ConfigLoader
 import ru.astrainteractive.astralibs.filemanager.impl.JVMFileManager
-import ru.astrainteractive.astralibs.getValue
+import ru.astrainteractive.klibs.kdi.Lateinit
+import ru.astrainteractive.klibs.kdi.Reloadable
+import ru.astrainteractive.klibs.kdi.Single
+import ru.astrainteractive.klibs.kdi.getValue
 import java.nio.file.Path
 import java.util.logging.Logger
 

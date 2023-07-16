@@ -3,6 +3,7 @@ import ru.astrainteractive.gradleplugin.setupSpigotShadow
 
 plugins {
     kotlin("jvm")
+    kotlin("plugin.serialization")
 }
 
 dependencies {
@@ -15,6 +16,7 @@ dependencies {
     implementation(libs.minecraft.astralibs.ktxcore)
     implementation(libs.minecraft.astralibs.orm)
     implementation(libs.minecraft.astralibs.di)
+    implementation(libs.klibs.kdi)
     implementation(libs.minecraft.astralibs.spigot.gui)
     implementation(libs.minecraft.astralibs.spigot.core)
     // Spigot
@@ -27,5 +29,5 @@ dependencies {
     testImplementation(libs.minecraft.mockbukkit)
 }
 
-setupSpigotShadow()
+setupSpigotShadow(File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\smp\\plugins"))
 setupSpigotProcessor()

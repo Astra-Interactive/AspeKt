@@ -1,5 +1,5 @@
-[![kotlin_version](https://img.shields.io/badge/kotlin-1.7.0-blueviolet?style=flat-square)](https://github.com/Astra-Interactive/AstraLibs)
-[![minecraft_version](https://img.shields.io/badge/minecraft-1.19-green?style=flat-square)](https://github.com/Astra-Interactive/AstraLibs)
+[![kotlin_version](https://img.shields.io/badge/kotlin-1.9.0-blueviolet?style=flat-square)](https://github.com/Astra-Interactive/AstraLibs)
+[![minecraft_version](https://img.shields.io/badge/minecraft-1.20-green?style=flat-square)](https://github.com/Astra-Interactive/AstraLibs)
 [![platforms](https://img.shields.io/badge/platform-spigot-blue?style=flat-square)](https://github.com/Astra-Interactive/AstraLibs)
 
 # AspeKt
@@ -76,6 +76,37 @@ core:
     replant_max_iterations: 10
     destroy_leaves: true
 ```
+
+### AdminPrivate
+
+This feature allows admins to create chunk-based private system.
+
+Data stored in adminchunks.yml and can be easily modified. Changes are applied by plugin reload.
+
+```yaml
+# Sample config
+isEnabled: true
+chunks:
+  "-863288426379_world":
+    x: 117
+    z: -201
+    worldName: "world"
+    chunkKey: -863288426379
+    flags:
+      "BREAK": false
+      "PLACE": false
+      "INTERACT": false
+      "EXPLODE": false
+      "EMPTY_BUCKET": false
+      "SPREAD": false
+```
+
+| Command                            | Permission           | Description                       |
+|:-----------------------------------|:---------------------|:----------------------------------|
+| `/adminprivate map`                | `aspekt.admin_claim` | `Show map of near claimed chunks` |
+| `/adminprivate claim`              | `aspekt.admin_claim` | `Claim current chunk`             |
+| `/adminprivate unclaim`            | `aspekt.admin_claim` | `Unclaim current chunk`           |
+| `/adminprivate flag <flag> <bool>` | `aspekt.admin_claim` | `Set flag for chunk`              |
 
 ### Inventory sort
 

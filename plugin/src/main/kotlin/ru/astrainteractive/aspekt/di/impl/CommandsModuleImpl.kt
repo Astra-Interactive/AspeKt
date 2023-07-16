@@ -1,21 +1,28 @@
 package ru.astrainteractive.aspekt.di.impl
 
 import ru.astrainteractive.aspekt.AspeKt
-import ru.astrainteractive.aspekt.commands.di.CommandsModule
+import ru.astrainteractive.aspekt.adminprivate.controller.AdminPrivateController
+import ru.astrainteractive.aspekt.command.di.CommandsModule
 import ru.astrainteractive.aspekt.di.ControllersModule
 import ru.astrainteractive.aspekt.di.RootModule
-import ru.astrainteractive.aspekt.events.sit.SitController
+import ru.astrainteractive.aspekt.event.sit.SitController
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.Dependency
-import ru.astrainteractive.astralibs.Single
+import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
-import ru.astrainteractive.astralibs.getValue
+import ru.astrainteractive.klibs.kdi.Provider
+import ru.astrainteractive.klibs.kdi.getValue
 
-object CommandsModuleImpl : CommandsModule {
-    private val rootModule: RootModule by RootModuleImpl
-    private val controllersModule: ControllersModule by ControllersModuleImpl
-    override val plugin: Dependency<AspeKt> = rootModule.plugin
-    override val translation: Dependency<PluginTranslation> = rootModule.translation
-    override val dispatchers: Dependency<BukkitDispatchers> = rootModule.dispatchers
-    override val sitController: Single<SitController> = controllersModule.sitController
+class CommandsModuleImpl(
+    rootModule: RootModule
+) : CommandsModule {
+    private val controllersModule: ControllersModule by rootModule.controllersModule
+
+    override val plugin: AspeKt by rootModule.plugin
+    override val translation: PluginTranslation by rootModule.translation
+    override val dispatchers: BukkitDispatchers by rootModule.dispatchers
+    override val pluginScope: AsyncComponent by rootModule.scope
+    override val sitController: SitController by Provider { controllersModule.sitController }
+    override val adminPrivateController: AdminPrivateController by Provider {
+        rootModule.controllersModule.adminPrivateController
+    }
 }
