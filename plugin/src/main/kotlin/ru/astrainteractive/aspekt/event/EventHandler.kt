@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.event
 
+import ru.astrainteractive.aspekt.event.adminprivate.AdminPrivateEvent
 import ru.astrainteractive.aspekt.event.crop.AutoCropEvent
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.event.restrictions.RestrictionsEvent
@@ -20,5 +21,6 @@ class EventHandler(
         AutoCropEvent(module)
         TCEvent(module)
         RestrictionsEvent(module)
+        AdminPrivateEvent(module)
     }
 }
