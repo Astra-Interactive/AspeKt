@@ -33,6 +33,7 @@ class PluginTranslation(plugin: Plugin) : BaseTranslation() {
     val chunkClaimed = translationValue("general.adminprivate.claimed", "#db2c18Вы заняли чанк!")
     val chunkUnClaimed = translationValue("general.adminprivate.unclaimed", "#db2c18Чанк свободен!")
     val error = translationValue("general.adminprivate.error", "#db2c18Ошибка! Смотрите консоль")
+    val blockMap = translationValue("general.adminprivate.map", "#18dbd1Карта блоков:")
     private val actionIsBlockByAdminClaim = translationValue(
         "general.adminprivate.action_blocked",
         "#db2c18Ошибка! Действией %action% заблокировано на этом чанке!"

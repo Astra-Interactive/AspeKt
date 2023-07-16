@@ -15,6 +15,7 @@ import ru.astrainteractive.klibs.kdi.getValue
 import java.io.File
 import java.util.UUID
 import kotlin.random.Random
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
@@ -85,6 +86,21 @@ class AdminPrivateControllerTest {
             assertTrue { controller.isAble(chunk, ChunkFlag.BREAK) }
             controller.setFlag(ChunkFlag.BREAK, false, chunk)
             assertFalse { controller.isAble(chunk, ChunkFlag.BREAK) }
+        }
+    }
+
+    @Test
+    fun testMapThree(): Unit = runBlocking {
+        val module = Module()
+        val controller = AdminPrivateController(module)
+        randomChunk.let { chunk ->
+            controller.claim(chunk)
+            val expectArray = listOf(
+                listOf(false, false, false),
+                listOf(false, true, false),
+                listOf(false, false, false)
+            )
+            assertContentEquals(expectArray, controller.map(3, chunk).map { it.toList() }.toList())
         }
     }
 }

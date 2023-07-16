@@ -16,6 +16,24 @@ class AdminPrivateController(module: AdminPrivateControllerModule) :
 
     fun updateChunks() = chunks.reload()
 
+    suspend fun map(size: Int, chunk: AdminChunk): Array<Array<Boolean>> {
+        val halfSize = size / 2
+        val m = Array(size) {
+            Array(size) { false }
+        }
+        val chunks = repository.getAllChunks()
+        for (i in 0 until size) {
+            for (j in 0 until size) {
+                m[i][j] = chunks.any {
+                    val x = chunk.x - size / 2 + i
+                    val z = chunk.z + size / 2 - j
+                    it.x == x && it.z == z
+                }
+            }
+        }
+        return m
+    }
+
     suspend fun claim(adminChunk: AdminChunk) {
         val actualAdminChunk = adminChunk.copy(
             flags = ChunkFlag.values().associateWith { false }

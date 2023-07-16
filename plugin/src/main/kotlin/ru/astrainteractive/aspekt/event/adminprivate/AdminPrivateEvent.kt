@@ -20,6 +20,7 @@ import ru.astrainteractive.aspekt.adminprivate.models.AdminChunk
 import ru.astrainteractive.aspekt.adminprivate.models.ChunkFlag
 import ru.astrainteractive.aspekt.adminprivate.util.adminChunk
 import ru.astrainteractive.aspekt.event.di.EventsModule
+import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.events.DSLEvent
 
 class AdminPrivateEvent(
@@ -33,6 +34,8 @@ class AdminPrivateEvent(
         player: Player?,
         flag: ChunkFlag
     ) where T : Event, T : Cancellable {
+        if (player?.let(PluginPermission.AdminClaim::hasPermission) == true) return
+
         debounce.debounceEvent(retractKey, e) {
             val isAble = adminPrivateController.isAble(adminChunk, flag)
             val isCancelled = !isAble

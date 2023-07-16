@@ -7,6 +7,7 @@ import ru.astrainteractive.aspekt.adminprivate.util.adminChunk
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.commands.registerCommand
 import ru.astrainteractive.astralibs.commands.registerTabCompleter
+import ru.astrainteractive.astralibs.utils.hex
 import ru.astrainteractive.astralibs.utils.withEntry
 
 /**
@@ -24,6 +25,20 @@ fun CommandManager.adminPrivate() = plugin.registerCommand("adminprivate") {
         return@registerCommand
     }
     when (args.getOrNull(0)) {
+        "map" -> pluginScope.launch(dispatchers.IO) {
+            runCatching {
+                adminPrivateController.map(5, player.chunk.adminChunk)
+            }.onSuccess {
+                sender.sendMessage(translation.blockMap)
+                it.forEach {
+                    it.map { if (it) "#1cba56☒".hex() else "#c91e1e☒".hex() }.joinToString("").run(sender::sendMessage)
+                }
+            }.onFailure {
+                it.printStackTrace()
+                sender.sendMessage(translation.error)
+            }
+        }
+
         "claim" -> pluginScope.launch(dispatchers.IO) {
             runCatching {
                 adminPrivateController.claim(player.chunk.adminChunk)
@@ -74,7 +89,7 @@ fun CommandManager.adminPrivate() = plugin.registerCommand("adminprivate") {
 
 fun CommandManager.adminPrivateCompleter() = plugin.registerTabCompleter("adminprivate") {
     when {
-        args.size <= 1 -> listOf("claim", "unclaim", "flag").withEntry(args.getOrNull(0))
+        args.size <= 1 -> listOf("claim", "unclaim", "flag", "map").withEntry(args.getOrNull(0))
         args.getOrNull(0) == "flag" -> when (args.size) {
             2 -> ChunkFlag.values().map(ChunkFlag::toString).withEntry(args.getOrNull(1))
             3 -> listOf("true", "false").withEntry(args.getOrNull(2))
