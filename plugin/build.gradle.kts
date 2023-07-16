@@ -28,6 +28,6 @@ dependencies {
     testImplementation(libs.tests.kotlin.test)
     testImplementation(libs.minecraft.mockbukkit)
 }
-
-setupSpigotShadow(File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\smp\\plugins"))
+val localFile = File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\smp\\plugins")
+if (localFile.exists()) setupSpigotShadow(localFile) else setupSpigotShadow()
 setupSpigotProcessor()
