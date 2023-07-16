@@ -85,8 +85,8 @@ Data stored in adminchunks.yml and can be easily modified. Changes are applied b
 
 ```yaml
 # Sample config
+isEnabled: true
 chunks:
-  isEnabled: true
   "-863288426379_world":
     x: 117
     z: -201
