@@ -13,5 +13,6 @@ class CommandManager(module: CommandsModule) : CommandsModule by module {
         tellChat()
         rtp()
         adminPrivate()
+        adminPrivateCompleter()
     }
 }

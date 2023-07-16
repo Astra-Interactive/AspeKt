@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 enum class ChunkFlag {
-    BREAK, PLACE, INTERACT
+    BREAK, PLACE, INTERACT, EXPLODE, EMPTY_BUCKET, SPREAD
 }

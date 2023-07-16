@@ -13,11 +13,21 @@ import java.util.concurrent.TimeUnit
  * Copyright (C) WorldGuard team and contributors
  */
 class EventDebounce<K : RetractKey>(debounceTime: Long) {
-    private inner class LocalCacheLoader : CacheLoader<K, Entry>() {
-        override fun load(key: K): Entry = Entry()
+    private inner class LocalCacheLoader : CacheLoader<K, EntryHolder>() {
+        override fun load(key: K): EntryHolder = EntryHolder()
     }
 
-    private val cache: LoadingCache<K, Entry> by lazy {
+    sealed class Entry(val isCancelled: Boolean) {
+        data object Pending : Entry(false)
+        class Loaded(isCancelled: Boolean) : Entry(isCancelled)
+    }
+
+    class EntryHolder(var entry: Entry = Entry.Pending) {
+        val isCancelled: Boolean
+            get() = entry.isCancelled
+    }
+
+    private val cache: LoadingCache<K, EntryHolder> by lazy {
         CacheBuilder.newBuilder()
             .maximumSize(100)
             .expireAfterWrite(debounceTime, TimeUnit.MILLISECONDS)
@@ -25,19 +35,14 @@ class EventDebounce<K : RetractKey>(debounceTime: Long) {
             .build(LocalCacheLoader())
     }
 
-    fun <T> getOrNull(
+    fun <T> debounceEvent(
         key: K,
         originalEvent: T,
-        cancellation: () -> Boolean?
-    ): Entry? where T : Event?, T : Cancellable? {
-        val entry: Entry? = runCatching { cache.getUnchecked(key) }.getOrNull()
-        val isCancelled = entry?.isCancelled ?: cancellation() ?: return entry
-        if (isCancelled) {
-            originalEvent?.isCancelled = isCancelled
-            entry?.isCancelled = isCancelled
-        }
-        return entry
+        shouldBeCancelled: () -> Boolean
+    ) where T : Event, T : Cancellable {
+        val entryHolder = cache.getUnchecked(key)
+        if (entryHolder.entry is Entry.Pending) entryHolder.entry = shouldBeCancelled.invoke().let(Entry::Loaded)
+        val isCancelled = entryHolder.isCancelled
+        if (isCancelled) originalEvent.isCancelled = isCancelled
     }
-
-    data class Entry(var isCancelled: Boolean? = null)
 }

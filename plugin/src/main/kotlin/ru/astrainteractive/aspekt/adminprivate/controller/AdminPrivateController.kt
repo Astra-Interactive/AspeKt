@@ -17,7 +17,10 @@ class AdminPrivateController(module: AdminPrivateControllerModule) :
     fun updateChunks() = chunks.reload()
 
     suspend fun claim(adminChunk: AdminChunk) {
-        repository.saveChunk(adminChunk)
+        val actualAdminChunk = adminChunk.copy(
+            flags = ChunkFlag.values().associateWith { false }
+        )
+        repository.saveChunk(actualAdminChunk)
         updateChunks()
     }
 

@@ -6,6 +6,8 @@ import ru.astrainteractive.aspekt.adminprivate.models.ChunkFlag
 import ru.astrainteractive.aspekt.adminprivate.util.adminChunk
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.commands.registerCommand
+import ru.astrainteractive.astralibs.commands.registerTabCompleter
+import ru.astrainteractive.astralibs.utils.withEntry
 
 /**
  * /adminprivate claim
@@ -67,5 +69,18 @@ fun CommandManager.adminPrivate() = plugin.registerCommand("adminprivate") {
         }
 
         else -> sender.sendMessage(translation.wrongUsage)
+    }
+}
+
+fun CommandManager.adminPrivateCompleter() = plugin.registerTabCompleter("adminprivate") {
+    when {
+        args.size <= 1 -> listOf("claim", "unclaim", "flag").withEntry(args.getOrNull(0))
+        args.getOrNull(0) == "flag" -> when (args.size) {
+            2 -> ChunkFlag.values().map(ChunkFlag::toString).withEntry(args.getOrNull(1))
+            3 -> listOf("true", "false").withEntry(args.getOrNull(2))
+            else -> emptyList()
+        }
+
+        else -> emptyList()
     }
 }

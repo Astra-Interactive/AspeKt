@@ -33,6 +33,12 @@ class PluginTranslation(plugin: Plugin) : BaseTranslation() {
     val chunkClaimed = translationValue("general.adminprivate.claimed", "#db2c18Вы заняли чанк!")
     val chunkUnClaimed = translationValue("general.adminprivate.unclaimed", "#db2c18Чанк свободен!")
     val error = translationValue("general.adminprivate.error", "#db2c18Ошибка! Смотрите консоль")
+    private val actionIsBlockByAdminClaim = translationValue(
+        "general.adminprivate.action_blocked",
+        "#db2c18Ошибка! Действией %action% заблокировано на этом чанке!"
+    )
+
+    fun actionIsBlockByAdminClaim(action: String) = actionIsBlockByAdminClaim.replace("%action%", action)
 
     // Sit
     public val sitAlready: String = translationValue("sit.already", "#dbbb18Вы уже сидите")
