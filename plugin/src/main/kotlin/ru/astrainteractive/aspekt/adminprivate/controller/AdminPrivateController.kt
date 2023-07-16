@@ -5,7 +5,9 @@ import ru.astrainteractive.aspekt.adminprivate.models.AdminChunk
 import ru.astrainteractive.aspekt.adminprivate.models.ChunkFlag
 import ru.astrainteractive.aspekt.adminprivate.util.uniqueWorldKey
 import ru.astrainteractive.astralibs.async.AsyncComponent
+import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.Reloadable
+import ru.astrainteractive.klibs.kdi.getValue
 
 class AdminPrivateController(module: AdminPrivateControllerModule) :
     AsyncComponent(),
@@ -13,11 +15,13 @@ class AdminPrivateController(module: AdminPrivateControllerModule) :
     private val chunks = Reloadable {
         repository.getConfig()
     }
+    val isEnabled by Provider {
+        chunks.value.isEnabled
+    }
 
     fun updateChunks() = chunks.reload()
 
     suspend fun map(size: Int, chunk: AdminChunk): Array<Array<Boolean>> {
-        val halfSize = size / 2
         val m = Array(size) {
             Array(size) { false }
         }

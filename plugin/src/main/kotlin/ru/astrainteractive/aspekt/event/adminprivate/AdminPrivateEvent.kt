@@ -34,8 +34,8 @@ class AdminPrivateEvent(
         player: Player?,
         flag: ChunkFlag
     ) where T : Event, T : Cancellable {
+        if (!adminPrivateController.isEnabled) return
         if (player?.let(PluginPermission.AdminClaim::hasPermission) == true) return
-
         debounce.debounceEvent(retractKey, e) {
             val isAble = adminPrivateController.isAble(adminChunk, flag)
             val isCancelled = !isAble

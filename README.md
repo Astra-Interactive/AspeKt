@@ -77,6 +77,37 @@ core:
     destroy_leaves: true
 ```
 
+### AdminPrivate
+
+This feature allows admins to create chunk-based private system.
+
+Data stored in adminchunks.yml and can be easily modified. Changes are applied by plugin reload.
+
+```yaml
+# Sample config
+chunks:
+  isEnabled: true
+  "-863288426379_world":
+    x: 117
+    z: -201
+    worldName: "world"
+    chunkKey: -863288426379
+    flags:
+      "BREAK": false
+      "PLACE": false
+      "INTERACT": false
+      "EXPLODE": false
+      "EMPTY_BUCKET": false
+      "SPREAD": false
+```
+
+| Command                            | Permission           | Description                       |
+|:-----------------------------------|:---------------------|:----------------------------------|
+| `/adminprivate map`                | `aspekt.admin_claim` | `Show map of near claimed chunks` |
+| `/adminprivate claim`              | `aspekt.admin_claim` | `Claim current chunk`             |
+| `/adminprivate unclaim`            | `aspekt.admin_claim` | `Unclaim current chunk`           |
+| `/adminprivate flag <flag> <bool>` | `aspekt.admin_claim` | `Set flag for chunk`              |
+
 ### Inventory sort
 
 AspeKt allows players to sort their inventories by pressing Shift+MiddleMouseButton
