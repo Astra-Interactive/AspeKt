@@ -60,7 +60,6 @@ class RestrictionsEvent(
                 if (restrictions.placeLava) it.isCancelled = true
             }
 
-
             else -> Unit
         }
     }
