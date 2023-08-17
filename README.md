@@ -101,6 +101,48 @@ chunks:
       "SPREAD": false
 ```
 
+### Menu
+
+This feature allows admins to create simple menu guis
+
+Data stored in menu/XXX.yml and can be easily modified. Changes are applied by plugin reload.
+
+```yaml
+# XXS, XS, S, M, L, XL
+size: XXS
+# Can be executed by /menu XXX
+# Example: /menu main
+command: main
+# Title of the menu
+title: Main Menu
+# Items stored in page
+items:
+  diamond:
+    permission: com.example.permission
+    index: 3
+    name: Item
+    lore:
+      - Lore1
+      - Lore2
+    amount: 3
+    material: DIAMOND
+    custom_model_data: 10
+    # Console command reward
+    reward:
+      !<console_command>
+      commands:
+        - say hello
+    # Player command reward
+    reward:
+      !<player_command>
+      commands:
+        - say hello
+    # Money price         
+    price:
+      !<money>
+      amount: 10
+```
+
 | Command                            | Permission           | Description                       |
 |:-----------------------------------|:---------------------|:----------------------------------|
 | `/adminprivate map`                | `aspekt.admin_claim` | `Show map of near claimed chunks` |

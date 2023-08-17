@@ -7,9 +7,9 @@ authors: [ "${authors}" ]
 author: "${author}"
 website: "${url}"
 api-version: 1.18
-softdepend: [ DiscordSRV, LuckPerms ]
+softdepend: [ DiscordSRV, LuckPerms, Vault ]
 depend: [ ]
-loadbefore: [ ]
+loadbefore: [ Vault ]
 #libraries: [ "${libraries}" ]
 commands:
   sit:
@@ -20,3 +20,4 @@ commands:
   entities:
   aesreload:
   adminprivate:
+  menu:

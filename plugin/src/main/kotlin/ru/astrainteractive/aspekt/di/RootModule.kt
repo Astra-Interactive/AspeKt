@@ -6,10 +6,12 @@ import ru.astrainteractive.aspekt.command.di.CommandsModule
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.event.discord.DiscordEvent
 import ru.astrainteractive.aspekt.plugin.AutoBroadcastJob
+import ru.astrainteractive.aspekt.plugin.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
+import ru.astrainteractive.astralibs.economy.EconomyProvider
 import ru.astrainteractive.astralibs.events.EventListener
 import ru.astrainteractive.astralibs.filemanager.FileManager
 import ru.astrainteractive.astralibs.filemanager.SpigotFileManager
@@ -31,9 +33,10 @@ interface RootModule : Module {
     val translation: Reloadable<PluginTranslation>
     val discordEvent: Dependency<DiscordEvent?>
     val autoBroadcastJob: Dependency<AutoBroadcastJob>
-
+    val menuModels: Reloadable<List<MenuModel>>
     val controllersModule: ControllersModule
     val eventsModule: EventsModule
     val commandsModule: CommandsModule
     val adminPrivateModule: AdminPrivateControllerModule
+    val economyProvider: Reloadable<EconomyProvider?>
 }

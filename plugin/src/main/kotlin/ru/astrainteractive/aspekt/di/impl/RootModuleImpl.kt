@@ -6,13 +6,17 @@ import ru.astrainteractive.aspekt.adminprivate.controller.di.AdminPrivateControl
 import ru.astrainteractive.aspekt.command.di.CommandsModule
 import ru.astrainteractive.aspekt.di.ControllersModule
 import ru.astrainteractive.aspekt.di.RootModule
+import ru.astrainteractive.aspekt.di.factories.EconomyProviderFactory
+import ru.astrainteractive.aspekt.di.factories.MenuModelFactory
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.event.discord.DiscordEvent
 import ru.astrainteractive.aspekt.plugin.AutoBroadcastJob
+import ru.astrainteractive.aspekt.plugin.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.astralibs.async.DefaultBukkitDispatchers
+import ru.astrainteractive.astralibs.economy.EconomyProvider
 import ru.astrainteractive.astralibs.events.EventListener
 import ru.astrainteractive.astralibs.filemanager.DefaultSpigotFileManager
 import ru.astrainteractive.astralibs.filemanager.FileManager
@@ -24,6 +28,7 @@ import ru.astrainteractive.klibs.kdi.Lateinit
 import ru.astrainteractive.klibs.kdi.Reloadable
 import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
+import java.io.File
 
 class RootModuleImpl : RootModule {
 
@@ -57,6 +62,22 @@ class RootModuleImpl : RootModule {
         val plugin by plugin
         PluginTranslation(plugin)
     }
+    override val menuModels: Reloadable<List<MenuModel>> = Reloadable {
+        val dataFolder = plugin.value.dataFolder
+        val menuFolder = File(dataFolder, "menu").also {
+            if (!it.exists()) it.mkdirs()
+        }
+        menuFolder.listFiles()
+            .orEmpty()
+            .filterNotNull()
+            .filter(File::exists)
+            .filter(File::isFile)
+            .mapNotNull {
+                runCatching { MenuModelFactory(it).create() }
+                    .onFailure { it.printStackTrace() }
+                    .getOrNull()
+            }
+    }
 
     // Modules
     override val controllersModule: ControllersModule by Single {
@@ -70,6 +91,11 @@ class RootModuleImpl : RootModule {
     }
     override val adminPrivateModule: AdminPrivateControllerModule by Single {
         AdminPrivateControllerModuleImpl(this)
+    }
+    override val economyProvider: Reloadable<EconomyProvider?> = Reloadable {
+        runCatching {
+            EconomyProviderFactory().create()
+        }.onFailure { it.printStackTrace() }.getOrNull()
     }
 
     // etc

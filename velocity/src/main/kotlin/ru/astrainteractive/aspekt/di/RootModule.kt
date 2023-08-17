@@ -23,6 +23,6 @@ object RootModule {
     }
     val configuration = Reloadable {
         val configurationFile by configurationFile
-        ConfigLoader.toClassOrDefault<Configuration>(file = configurationFile.configFile, default = ::Configuration)
+        ConfigLoader().toClassOrDefault<Configuration>(file = configurationFile.configFile, default = ::Configuration)
     }
 }

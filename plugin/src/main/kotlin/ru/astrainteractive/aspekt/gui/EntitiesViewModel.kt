@@ -7,7 +7,7 @@ import ru.astrainteractive.aspekt.gui.store.EntitiesState
 import ru.astrainteractive.aspekt.gui.store.EntityData
 import ru.astrainteractive.aspekt.gui.store.SortType
 import ru.astrainteractive.astralibs.async.AsyncComponent
-import ru.astrainteractive.astralibs.utils.next
+import ru.astrainteractive.klibs.mikro.core.util.next
 
 class EntitiesViewModel : AsyncComponent() {
     val state = MutableStateFlow<EntitiesState>(EntitiesState.Loading)
@@ -22,7 +22,7 @@ class EntitiesViewModel : AsyncComponent() {
 
     fun onSortClicked() {
         val state = state.value as? EntitiesState.AllEntities ?: return
-        val sort = state.sort.next()
+        val sort = state.sort.next(SortType.values())
         val list = when (sort) {
             SortType.COUNT_ASC -> state.list.sortedBy { it.count }
             SortType.COUNT_DESC -> state.list.sortedByDescending { it.count }

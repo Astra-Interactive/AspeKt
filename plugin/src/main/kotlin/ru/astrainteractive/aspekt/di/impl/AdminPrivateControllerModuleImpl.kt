@@ -4,9 +4,9 @@ import ru.astrainteractive.aspekt.adminprivate.controller.di.AdminPrivateControl
 import ru.astrainteractive.aspekt.adminprivate.data.AdminPrivateRepository
 import ru.astrainteractive.aspekt.adminprivate.data.AdminPrivateRepositoryImpl
 import ru.astrainteractive.aspekt.di.RootModule
-import ru.astrainteractive.astralibs.async.KotlinDispatchers
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
+import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 class AdminPrivateControllerModuleImpl(rootModule: RootModule) : AdminPrivateControllerModule {
     override val repository: AdminPrivateRepository by Provider {

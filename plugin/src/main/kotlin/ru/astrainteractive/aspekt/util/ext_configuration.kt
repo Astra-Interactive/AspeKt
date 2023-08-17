@@ -3,22 +3,22 @@
 package ru.astrainteractive.aspekt.util
 
 import org.bukkit.configuration.file.FileConfiguration
-import ru.astrainteractive.astralibs.configuration.DefaultConfiguration
-import ru.astrainteractive.astralibs.configuration.api.Configuration
 import ru.astrainteractive.astralibs.utils.hex
+import ru.astrainteractive.klibs.kstorage.MutableStorageValue
+import ru.astrainteractive.klibs.kstorage.api.MutableStorageValue
 import kotlin.reflect.KProperty
 
 class StringConfiguration(
     path: String,
     default: String,
     fc: FileConfiguration
-) : Configuration<String> by DefaultConfiguration(
+) : MutableStorageValue<String> by MutableStorageValue(
     default = default,
-    load = {
+    loadSettingsValue = {
         if (!fc.contains(path)) fc.set(path, default)
         fc.getString(path, default) ?: default
     },
-    save = {
+    saveSettingsValue = {
         fc.set(path, it)
     }
 )
@@ -27,13 +27,13 @@ class StringListConfiguration(
     path: String,
     default: List<String>,
     fc: FileConfiguration
-) : Configuration<List<String>> by DefaultConfiguration(
+) : MutableStorageValue<List<String>> by MutableStorageValue(
     default = default,
-    load = {
+    loadSettingsValue = {
         if (!fc.contains(path)) fc.set(path, emptyList<String>())
         fc.getStringList(path).map { it.hex() }
     },
-    save = {
+    saveSettingsValue = {
         fc.set(path, it)
     }
 )
@@ -42,13 +42,13 @@ class BooleanConfiguration(
     path: String,
     default: Boolean,
     fc: FileConfiguration
-) : Configuration<Boolean> by DefaultConfiguration(
+) : MutableStorageValue<Boolean> by MutableStorageValue(
     default = default,
-    load = {
+    loadSettingsValue = {
         if (!fc.contains(path)) fc.set(path, default)
         fc.getBoolean(path, default)
     },
-    save = {
+    saveSettingsValue = {
         fc.set(path, it)
     }
 )
@@ -57,13 +57,13 @@ class IntConfiguration(
     path: String,
     default: Int,
     fc: FileConfiguration
-) : Configuration<Int> by DefaultConfiguration(
+) : MutableStorageValue<Int> by MutableStorageValue(
     default = default,
-    load = {
+    loadSettingsValue = {
         if (!fc.contains(path)) fc.set(path, default)
         fc.getInt(path, default)
     },
-    save = {
+    saveSettingsValue = {
         fc.set(path, it)
     }
 )
@@ -75,6 +75,6 @@ fun FileConfiguration.cStringList(path: String) = StringListConfiguration(path, 
 fun FileConfiguration.cBoolean(path: String, default: Boolean) = BooleanConfiguration(path, default, this)
 
 fun FileConfiguration.cInt(path: String, default: Int) = IntConfiguration(path, default, this)
-inline operator fun <reified T, K> Configuration<T>.getValue(t: K?, property: KProperty<*>): T {
+inline operator fun <reified T, K> MutableStorageValue<T>.getValue(t: K?, property: KProperty<*>): T {
     return this.value
 }

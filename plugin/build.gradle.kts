@@ -15,10 +15,10 @@ dependencies {
     // AstraLibs
     implementation(libs.minecraft.astralibs.ktxcore)
     implementation(libs.minecraft.astralibs.orm)
-    implementation(libs.minecraft.astralibs.di)
     implementation(libs.klibs.kdi)
     implementation(libs.minecraft.astralibs.spigot.gui)
     implementation(libs.minecraft.astralibs.spigot.core)
+    implementation(libs.minecraft.vaultapi)
     // Spigot
     compileOnly("net.luckperms:api:5.4")
     compileOnly("com.discordsrv:discordsrv:1.25.0")

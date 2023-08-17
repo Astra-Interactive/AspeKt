@@ -14,5 +14,7 @@ class CommandManager(module: CommandsModule) : CommandsModule by module {
         rtp()
         adminPrivate()
         adminPrivateCompleter()
+        menuCompleter()
+        menu()
     }
 }

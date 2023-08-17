@@ -7,7 +7,7 @@ import ru.astrainteractive.astralibs.commands.registerCommand
 fun CommandManager.maxOnline() = plugin.registerCommand("maxonline") {
     if (!PluginPermission.MaxOnline.hasPermission(sender)) return@registerCommand
     argument(0) {
-        it?.toIntOrNull()
+        it.toIntOrNull() ?: Bukkit.getServer().maxPlayers
     }.onFailure {
         sender.sendMessage("/maxonline 10")
     }.onSuccess {

@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.event.sort
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
-import ru.astrainteractive.astralibs.utils.next
+import ru.astrainteractive.klibs.mikro.core.util.next
 import java.util.*
 
 class SortController {
@@ -21,7 +21,7 @@ class SortController {
         val contents = clickedInventory.storageContents
         val prevSortType = sortTypes[player.uniqueId] ?: Sort.TYPE
         sortTypes[player.uniqueId] =
-            if (!prevSortType.desc) prevSortType.apply { desc = !desc } else prevSortType.next()
+            if (!prevSortType.desc) prevSortType.apply { desc = !desc } else prevSortType.next(Sort.values())
         clickedInventory.storageContents = when (prevSortType) {
             Sort.TYPE -> sortByType(contents, prevSortType.desc)
             Sort.NAME -> sortByName(contents, prevSortType.desc)

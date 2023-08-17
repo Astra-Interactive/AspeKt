@@ -25,8 +25,10 @@ class PluginTranslation(plugin: Plugin) : BaseTranslation() {
     val reload = translationValue("general.reload", "#dbbb18Перезагрузка плагина")
     val reloadComplete = translationValue("general.reload_complete", "#42f596Перезагрузка успешно завершена")
     val noPermission = translationValue("general.no_permission", "#db2c18У вас нет прав!")
+    val notEnoughMoney = translationValue("general.not_enough_money", "#db2c18Недостаточно средств!")
     val wrongUsage = translationValue("general.wrong_usage", "#db2c18Неверное использование!")
     val onlyPlayerCommand = translationValue("general.only_player_command", "#db2c18Эта команда только для игроков!")
+    val menuNotFound = translationValue("general.menu_not_found", "#db2c18Меню с заданным ID не найдено")
 
     // Admin claim
     val chunkFlagChanged = translationValue("general.adminprivate.flag_changed", "#db2c18Флаг чанка изменен!")

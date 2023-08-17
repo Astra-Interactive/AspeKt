@@ -7,11 +7,11 @@ import ru.astrainteractive.aspekt.adminprivate.data.AdminPrivateRepository
 import ru.astrainteractive.aspekt.adminprivate.data.AdminPrivateRepositoryImpl
 import ru.astrainteractive.aspekt.adminprivate.models.AdminChunk
 import ru.astrainteractive.aspekt.adminprivate.models.ChunkFlag
-import ru.astrainteractive.astralibs.async.KDispatchers
-import ru.astrainteractive.astralibs.async.KotlinDispatchers
 import ru.astrainteractive.astralibs.filemanager.impl.JVMFileManager
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
+import ru.astrainteractive.klibs.mikro.core.dispatchers.DefaultKotlinDispatchers
+import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import java.io.File
 import java.util.UUID
 import kotlin.random.Random
@@ -38,9 +38,9 @@ class AdminPrivateControllerTest {
     }
 
     inner class Module : AdminPrivateControllerModule {
-        override val dispatchers: KotlinDispatchers = KDispatchers
+        override val dispatchers: KotlinDispatchers = DefaultKotlinDispatchers
         override val repository: AdminPrivateRepository =
-            AdminPrivateRepositoryImpl(JVMFileManager(UUID.randomUUID().toString(), tempFile), KDispatchers)
+            AdminPrivateRepositoryImpl(JVMFileManager(UUID.randomUUID().toString(), tempFile), dispatchers)
     }
 
     @Test

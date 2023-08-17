@@ -63,6 +63,8 @@ class AspeKt : JavaPlugin() {
         rootModule.configFileManager.value.reload()
         rootModule.pluginConfig.reload()
         rootModule.translation.reload()
+        rootModule.menuModels.reload()
+        rootModule.economyProvider.reload()
         rootModule.controllersModule.adminPrivateController.updateChunks()
         rootModule.autoBroadcastJob.value.apply {
             this.onDisable()
