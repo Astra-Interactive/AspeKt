@@ -24,7 +24,7 @@ import ru.astrainteractive.klibs.kdi.getValue
 
 class MenuGui(
     player: Player,
-    private val economyProvider: EconomyProvider,
+    private val economyProvider: EconomyProvider?,
     private val translation: PluginTranslation,
     private val menuModel: MenuModel
 ) : Menu() {
@@ -39,6 +39,7 @@ class MenuGui(
             "{PLAYER}" to playerHolder.player.name
         )
     }
+
     override fun onCreated() {
         render()
     }
@@ -62,10 +63,34 @@ class MenuGui(
         }
     }
 
+    private fun isMeetConditions(conditions: List<MenuModel.Condition>): Boolean {
+        if (conditions.isEmpty()) return true
+        return conditions.any {
+            when (it) {
+                is MenuModel.Condition.Permission -> {
+                    val hasPermission = playerHolder.player.hasPermission(it.permission)
+                    if (it.isInverted) {
+                        !hasPermission
+                    } else {
+                        hasPermission
+                    }
+                }
+            }
+        }
+    }
+
+    private fun isMeetClickConditions(menuItem: MenuModel.MenuItem): Boolean {
+        return isMeetConditions(menuItem.clickableConditions)
+    }
+
+    private fun isMeetVisibilityConditions(menuItem: MenuModel.MenuItem): Boolean {
+        return isMeetConditions(menuItem.visibilityConditions)
+    }
+
     @Suppress("CyclomaticComplexMethod") // todo
     private fun render() {
         clickListener.clearClickListener()
-        menuModel.items.values.forEach { menuItem ->
+        menuModel.items.values.filter(::isMeetVisibilityConditions).forEach { menuItem ->
             ItemStackButtonBuilder {
                 this.itemStack = menuItem.toItemStack()
                 this.index = menuItem.index
@@ -76,22 +101,14 @@ class MenuGui(
                         playerHolder.player.sendMessage(translation.noPermission)
                         return@onClick
                     }
-                    val meetClickConditions = menuItem.clickableConditions.any {
-                        when (it) {
-                            is MenuModel.Condition.Permission -> {
-                                val hasPermission = playerHolder.player.hasPermission(it.permission)
-                                if (it.isInverted) {
-                                    !hasPermission
-                                } else {
-                                    hasPermission
-                                }
-                            }
-                        }
-                    }
-                    if (!meetClickConditions) return@onClick
+
+                    if (!isMeetClickConditions(menuItem)) return@onClick
                     val hasPriceCheckPassed = when (menuItem.price) {
                         is MenuModel.Price.Money -> {
-                            economyProvider.takeMoney(playerHolder.player.uniqueId, menuItem.price.amount.toDouble())
+                            economyProvider?.takeMoney(
+                                playerHolder.player.uniqueId,
+                                menuItem.price.amount
+                            ) ?: false
                         }
 
                         MenuModel.Price.Nothing -> true
@@ -127,6 +144,7 @@ class MenuGui(
 
                         MenuModel.Reward.Nothing -> Unit
                     }
+                    render()
                 }
             }.also(clickListener::remember).setInventoryButton()
         }

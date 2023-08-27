@@ -24,7 +24,9 @@ data class MenuModel(
         val price: Price = Price.Nothing,
         val reward: Reward = Reward.Nothing,
         @SerialName("clickable_conditions")
-        val clickableConditions: List<Condition> = emptyList()
+        val clickableConditions: List<Condition> = emptyList(),
+        @SerialName("visibility_conditions")
+        val visibilityConditions: List<Condition> = emptyList()
     )
 
     @Serializable

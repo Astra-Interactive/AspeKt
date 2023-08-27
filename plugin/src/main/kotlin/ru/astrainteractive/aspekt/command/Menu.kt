@@ -26,7 +26,7 @@ fun CommandManager.menu() = plugin.registerCommand("menu") {
     pluginScope.launch(dispatchers.BukkitAsync) {
         val gui = MenuGui(
             player = sender as Player,
-            economyProvider = economyProvider ?: error("Economy not provided"),
+            economyProvider = economyProvider,
             translation = translation,
             menuModel = menuModel
         )
