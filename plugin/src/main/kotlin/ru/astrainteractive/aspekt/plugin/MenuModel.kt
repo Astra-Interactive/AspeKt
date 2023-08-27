@@ -6,6 +6,8 @@ import ru.astrainteractive.astralibs.menu.menu.MenuSize
 
 @Serializable
 data class MenuModel(
+    @SerialName("update_interval")
+    val updateInterval: Long? = null,
     val size: MenuSize,
     val command: String,
     val title: String,

@@ -20,6 +20,7 @@ import ru.astrainteractive.klibs.kdi.Dependency
 import ru.astrainteractive.klibs.kdi.Lateinit
 import ru.astrainteractive.klibs.kdi.Module
 import ru.astrainteractive.klibs.kdi.Reloadable
+import ru.astrainteractive.klibs.kdi.Single
 
 interface RootModule : Module {
     val plugin: Lateinit<AspeKt>
@@ -38,5 +39,5 @@ interface RootModule : Module {
     val eventsModule: EventsModule
     val commandsModule: CommandsModule
     val adminPrivateModule: AdminPrivateControllerModule
-    val economyProvider: Reloadable<EconomyProvider?>
+    val economyProvider: Single<EconomyProvider?>
 }

@@ -28,7 +28,8 @@ fun CommandManager.menu() = plugin.registerCommand("menu") {
             player = sender as Player,
             economyProvider = economyProvider,
             translation = translation,
-            menuModel = menuModel
+            menuModel = menuModel,
+            dispatchers = dispatchers
         )
         withContext(dispatchers.BukkitMain) {
             gui.open()

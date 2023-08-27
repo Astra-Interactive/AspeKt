@@ -30,10 +30,10 @@ import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
 import java.io.File
 
-class RootModuleImpl : RootModule {
+object RootModuleImpl : RootModule {
 
     // Core
-    override val plugin = Lateinit<AspeKt>()
+    override val plugin = Lateinit<AspeKt>(true)
     override val logger: Dependency<Logger> = Single {
         val plugin by plugin
         JUtilLogger("AspeKt", plugin.dataFolder)
@@ -92,7 +92,7 @@ class RootModuleImpl : RootModule {
     override val adminPrivateModule: AdminPrivateControllerModule by Single {
         AdminPrivateControllerModuleImpl(this)
     }
-    override val economyProvider: Reloadable<EconomyProvider?> = Reloadable {
+    override val economyProvider: Single<EconomyProvider?> = Single {
         runCatching {
             EconomyProviderFactory().create()
         }.onFailure { it.printStackTrace() }.getOrNull()

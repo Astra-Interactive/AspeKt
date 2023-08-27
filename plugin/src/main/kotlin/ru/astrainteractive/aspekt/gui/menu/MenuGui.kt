@@ -1,5 +1,9 @@
 package ru.astrainteractive.aspekt.gui.menu
 
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -9,6 +13,7 @@ import org.bukkit.inventory.ItemStack
 import ru.astrainteractive.aspekt.plugin.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.economy.EconomyProvider
 import ru.astrainteractive.astralibs.menu.clicker.ClickListener
 import ru.astrainteractive.astralibs.menu.clicker.MenuClickListener
@@ -22,11 +27,13 @@ import ru.astrainteractive.astralibs.utils.hex
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 
+@Suppress("TooManyFunctions")
 class MenuGui(
     player: Player,
     private val economyProvider: EconomyProvider?,
     private val translation: PluginTranslation,
-    private val menuModel: MenuModel
+    private val menuModel: MenuModel,
+    private val dispatchers: BukkitDispatchers
 ) : Menu() {
     override val menuSize: MenuSize = menuModel.size
     override var menuTitle: String = menuModel.title.hex()
@@ -42,6 +49,18 @@ class MenuGui(
 
     override fun onCreated() {
         render()
+        menuModel.updateInterval?.let(::startAutoUpdate)
+    }
+
+    private fun startAutoUpdate(interval: Long) {
+        componentScope.launch(dispatchers.IO) {
+            while (isActive) {
+                delay(interval)
+                withContext(dispatchers.BukkitMain) {
+                    render()
+                }
+            }
+        }
     }
 
     override fun onInventoryClicked(e: InventoryClickEvent) {
@@ -87,6 +106,48 @@ class MenuGui(
         return isMeetConditions(menuItem.visibilityConditions)
     }
 
+    private fun processReward(menuItem: MenuModel.MenuItem) {
+        when (menuItem.reward) {
+            is MenuModel.Reward.ConsoleCommands -> {
+                val consoleSender = Bukkit.getConsoleSender()
+                val server = Bukkit.getServer()
+                menuItem.reward.commands.forEach { cmd ->
+                    var command = cmd
+                    PLACEHOLDERS.forEach { (k, v) ->
+                        command = command.replace(k, v)
+                    }
+                    server.dispatchCommand(consoleSender, command)
+                }
+            }
+
+            is MenuModel.Reward.PlayerCommands -> {
+                val sender = playerHolder.player
+                menuItem.reward.commands.forEach { cmd ->
+                    var command = cmd
+                    PLACEHOLDERS.forEach { (k, v) ->
+                        command = command.replace(k, v)
+                    }
+                    sender.performCommand(command)
+                }
+            }
+
+            MenuModel.Reward.Nothing -> Unit
+        }
+    }
+
+    private fun isMeetPriceCheck(menuItem: MenuModel.MenuItem): Boolean {
+        return when (menuItem.price) {
+            is MenuModel.Price.Money -> {
+                economyProvider?.takeMoney(
+                    playerHolder.player.uniqueId,
+                    menuItem.price.amount
+                ) ?: false
+            }
+
+            MenuModel.Price.Nothing -> true
+        }
+    }
+
     @Suppress("CyclomaticComplexMethod") // todo
     private fun render() {
         clickListener.clearClickListener()
@@ -103,48 +164,12 @@ class MenuGui(
                     }
 
                     if (!isMeetClickConditions(menuItem)) return@onClick
-                    val hasPriceCheckPassed = when (menuItem.price) {
-                        is MenuModel.Price.Money -> {
-                            economyProvider?.takeMoney(
-                                playerHolder.player.uniqueId,
-                                menuItem.price.amount
-                            ) ?: false
-                        }
-
-                        MenuModel.Price.Nothing -> true
-                    }
-                    if (!hasPriceCheckPassed) {
+                    if (!isMeetPriceCheck(menuItem)) {
                         playerHolder.player.sendMessage(translation.notEnoughMoney)
                         return@onClick
                     }
 
-                    when (menuItem.reward) {
-                        is MenuModel.Reward.ConsoleCommands -> {
-                            val consoleSender = Bukkit.getConsoleSender()
-                            val server = Bukkit.getServer()
-                            menuItem.reward.commands.forEach { cmd ->
-                                var command = cmd
-                                PLACEHOLDERS.forEach { (k, v) ->
-                                    command = command.replace(k, v)
-                                }
-                                server.dispatchCommand(consoleSender, command)
-                            }
-                        }
-
-                        is MenuModel.Reward.PlayerCommands -> {
-                            val sender = playerHolder.player
-                            menuItem.reward.commands.forEach { cmd ->
-                                var command = cmd
-                                PLACEHOLDERS.forEach { (k, v) ->
-                                    command = command.replace(k, v)
-                                }
-                                sender.performCommand(command)
-                            }
-                        }
-
-                        MenuModel.Reward.Nothing -> Unit
-                    }
-                    render()
+                    processReward(menuItem)
                 }
             }.also(clickListener::remember).setInventoryButton()
         }

@@ -2,6 +2,8 @@
 
 package ru.astrainteractive.aspekt
 
+import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
@@ -14,17 +16,13 @@ import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.astralibs.async.PluginScope
 import ru.astrainteractive.astralibs.events.GlobalEventListener
 import ru.astrainteractive.astralibs.menu.event.GlobalInventoryClickEvent
-import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
 
 /**
  * Initial class for your plugin
  */
 class AspeKt : JavaPlugin() {
-    private val rootModuleComponent by Single {
-        RootModuleImpl()
-    }
-    private val rootModule by rootModuleComponent
+    private val rootModule by RootModuleImpl
     private val eventsModule: EventsModule by rootModule.eventsModule
     private val commandsModule: CommandsModule by rootModule.commandsModule
     private val controllersModule: ControllersModule by rootModule.controllersModule
@@ -52,6 +50,7 @@ class AspeKt : JavaPlugin() {
         GlobalEventListener.onDisable()
         PluginScope.close()
         rootModule.discordEvent.value?.onDisable()
+        Bukkit.getOnlinePlayers().forEach(Player::closeInventory)
     }
 
     /**
@@ -63,11 +62,11 @@ class AspeKt : JavaPlugin() {
         rootModule.pluginConfig.reload()
         rootModule.translation.reload()
         rootModule.menuModels.reload()
-        rootModule.economyProvider.reload()
         rootModule.controllersModule.adminPrivateController.updateChunks()
         rootModule.autoBroadcastJob.value.apply {
             this.onDisable()
             this.onEnable()
         }
+        Bukkit.getOnlinePlayers().forEach(Player::closeInventory)
     }
 }
