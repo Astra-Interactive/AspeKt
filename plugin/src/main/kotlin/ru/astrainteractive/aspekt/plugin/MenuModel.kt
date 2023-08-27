@@ -22,8 +22,21 @@ data class MenuModel(
         @SerialName("custom_model_data")
         val customModelData: Int = 0,
         val price: Price = Price.Nothing,
-        val reward: Reward = Reward.Nothing
+        val reward: Reward = Reward.Nothing,
+        @SerialName("clickable_conditions")
+        val clickableConditions: List<Condition> = emptyList()
     )
+
+    @Serializable
+    sealed interface Condition {
+        @Serializable
+        @SerialName("permission")
+        data class Permission(
+            val permission: String,
+            @SerialName("is_inverted")
+            val isInverted: Boolean = false
+        ) : Condition
+    }
 
     @Serializable
     sealed interface Price {

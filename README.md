@@ -107,6 +107,10 @@ This feature allows admins to create simple menu guis
 
 Data stored in menu/XXX.yml and can be easily modified. Changes are applied by plugin reload.
 
+#### Placeholders:
+
+- `{PLAYER}` - player, opened an inventory 
+
 ```yaml
 # XXS, XS, S, M, L, XL
 size: XXS
@@ -132,6 +136,7 @@ items:
       !<console_command>
       commands:
         - say hello
+        - give {PLAYER} dirt 64
     # Player command reward
     reward:
       !<player_command>

@@ -14,14 +14,14 @@ import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.astralibs.async.PluginScope
 import ru.astrainteractive.astralibs.events.GlobalEventListener
 import ru.astrainteractive.astralibs.menu.event.GlobalInventoryClickEvent
-import ru.astrainteractive.klibs.kdi.Reloadable
+import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
 
 /**
  * Initial class for your plugin
  */
 class AspeKt : JavaPlugin() {
-    private val rootModuleComponent = Reloadable {
+    private val rootModuleComponent by Single {
         RootModuleImpl()
     }
     private val rootModule by rootModuleComponent
@@ -52,7 +52,6 @@ class AspeKt : JavaPlugin() {
         GlobalEventListener.onDisable()
         PluginScope.close()
         rootModule.discordEvent.value?.onDisable()
-        rootModuleComponent.reload()
     }
 
     /**

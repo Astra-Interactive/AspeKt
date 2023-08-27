@@ -17,6 +17,10 @@ import ru.astrainteractive.astralibs.menu.holder.PlayerHolder
 import ru.astrainteractive.astralibs.menu.menu.Menu
 import ru.astrainteractive.astralibs.menu.menu.MenuSize
 import ru.astrainteractive.astralibs.menu.utils.ItemStackButtonBuilder
+import ru.astrainteractive.astralibs.utils.convertHex
+import ru.astrainteractive.astralibs.utils.hex
+import ru.astrainteractive.klibs.kdi.Provider
+import ru.astrainteractive.klibs.kdi.getValue
 
 class MenuGui(
     player: Player,
@@ -25,9 +29,16 @@ class MenuGui(
     private val menuModel: MenuModel
 ) : Menu() {
     override val menuSize: MenuSize = menuModel.size
-    override var menuTitle: String = menuModel.title
+    override var menuTitle: String = menuModel.title.hex()
     override val playerHolder: PlayerHolder = DefaultPlayerHolder(player)
     private val clickListener: ClickListener = MenuClickListener()
+
+    @Suppress("VariableNaming")
+    private val PLACEHOLDERS by Provider {
+        mapOf(
+            "{PLAYER}" to playerHolder.player.name
+        )
+    }
     override fun onCreated() {
         render()
     }
@@ -43,14 +54,15 @@ class MenuGui(
         val menuItem = this
         val material = Material.getMaterial(menuItem.material) ?: error("No material found named ${menuItem.material}")
         return ItemStack(material, menuItem.amount).apply {
-            this.lore = menuItem.lore
+            this.lore = menuItem.lore.map(::convertHex)
             this.itemMeta = itemMeta.apply {
-                this.setDisplayName(menuItem.name)
+                this.setDisplayName(menuItem.name.hex())
                 this.setCustomModelData(menuItem.customModelData)
             }
         }
     }
 
+    @Suppress("CyclomaticComplexMethod") // todo
     private fun render() {
         clickListener.clearClickListener()
         menuModel.items.values.forEach { menuItem ->
@@ -64,6 +76,19 @@ class MenuGui(
                         playerHolder.player.sendMessage(translation.noPermission)
                         return@onClick
                     }
+                    val meetClickConditions = menuItem.clickableConditions.any {
+                        when (it) {
+                            is MenuModel.Condition.Permission -> {
+                                val hasPermission = playerHolder.player.hasPermission(it.permission)
+                                if (it.isInverted) {
+                                    !hasPermission
+                                } else {
+                                    hasPermission
+                                }
+                            }
+                        }
+                    }
+                    if (!meetClickConditions) return@onClick
                     val hasPriceCheckPassed = when (menuItem.price) {
                         is MenuModel.Price.Money -> {
                             economyProvider.takeMoney(playerHolder.player.uniqueId, menuItem.price.amount.toDouble())
@@ -80,14 +105,22 @@ class MenuGui(
                         is MenuModel.Reward.ConsoleCommands -> {
                             val consoleSender = Bukkit.getConsoleSender()
                             val server = Bukkit.getServer()
-                            menuItem.reward.commands.forEach { command ->
+                            menuItem.reward.commands.forEach { cmd ->
+                                var command = cmd
+                                PLACEHOLDERS.forEach { (k, v) ->
+                                    command = command.replace(k, v)
+                                }
                                 server.dispatchCommand(consoleSender, command)
                             }
                         }
 
                         is MenuModel.Reward.PlayerCommands -> {
                             val sender = playerHolder.player
-                            menuItem.reward.commands.forEach { command ->
+                            menuItem.reward.commands.forEach { cmd ->
+                                var command = cmd
+                                PLACEHOLDERS.forEach { (k, v) ->
+                                    command = command.replace(k, v)
+                                }
                                 sender.performCommand(command)
                             }
                         }
