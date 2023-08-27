@@ -18,10 +18,10 @@ class SortEvent(
         sortController.removePlayer(e.player)
     }
     val inventoryClick = DSLEvent<InventoryClickEvent>(eventListener, plugin) { e ->
-        if (e.click != ClickType.MIDDLE) return@DSLEvent
-        if (!e.isShiftClick) return@DSLEvent
+        if (e.click != ClickType.SHIFT_RIGHT) return@DSLEvent
         val clickedInventory = e.clickedInventory ?: return@DSLEvent
         val player = e.whoClicked as? Player ?: return@DSLEvent
+        e.isCancelled = true
         sortController.trySortInventory(clickedInventory, player)
     }
 }
