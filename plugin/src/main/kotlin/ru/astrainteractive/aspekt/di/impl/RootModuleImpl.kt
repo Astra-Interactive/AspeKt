@@ -20,6 +20,7 @@ import ru.astrainteractive.astralibs.economy.EconomyProvider
 import ru.astrainteractive.astralibs.events.EventListener
 import ru.astrainteractive.astralibs.filemanager.DefaultSpigotFileManager
 import ru.astrainteractive.astralibs.filemanager.FileManager
+import ru.astrainteractive.astralibs.filemanager.SpigotFileManager
 import ru.astrainteractive.astralibs.filemanager.impl.JVMFileManager
 import ru.astrainteractive.astralibs.logging.JUtilLogger
 import ru.astrainteractive.astralibs.logging.Logger
@@ -96,6 +97,9 @@ object RootModuleImpl : RootModule {
         runCatching {
             EconomyProviderFactory().create()
         }.onFailure { it.printStackTrace() }.getOrNull()
+    }
+    override val tempFileManager: Reloadable<SpigotFileManager> = Reloadable {
+        DefaultSpigotFileManager(plugin.value, "temp.yml")
     }
 
     // etc

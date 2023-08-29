@@ -40,4 +40,5 @@ interface RootModule : Module {
     val commandsModule: CommandsModule
     val adminPrivateModule: AdminPrivateControllerModule
     val economyProvider: Single<EconomyProvider?>
+    val tempFileManager: Reloadable<SpigotFileManager>
 }

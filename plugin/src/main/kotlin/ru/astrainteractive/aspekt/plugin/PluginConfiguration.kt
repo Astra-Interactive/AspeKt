@@ -57,6 +57,7 @@ class PluginConfiguration(private val fc: FileConfiguration) {
     }
 
     inner class DiscordSRVLink {
+        val moneyForLink by fc.cInt("discordsrv.on_linked.add_money", 0)
         val discordOnLinked = Roles("on_linked.discord")
         val luckPermsOnLinked = Roles("on_linked.luckperms")
         val discordOnUnLinked = Roles("on_unlinked.discord")

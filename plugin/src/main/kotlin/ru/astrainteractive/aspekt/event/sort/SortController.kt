@@ -22,7 +22,6 @@ class SortController {
         val contents = clickedInventory.storageContents
         val sortType = sortTypes[player.uniqueId]?.next(Sort.values()) ?: Sort.values().first()
         sortTypes[player.uniqueId] = sortType
-        println(sortType)
         clickedInventory.storageContents = when (sortType) {
             Sort.TYPE_ASC -> sortByType(contents, sortType.desc)
             Sort.TYPE_DESC -> sortByType(contents, sortType.desc)

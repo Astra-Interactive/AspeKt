@@ -5,8 +5,11 @@ import github.scarsz.discordsrv.api.events.AccountUnlinkedEvent
 import github.scarsz.discordsrv.dependencies.jda.api.JDA
 import github.scarsz.discordsrv.dependencies.jda.api.entities.Role
 import github.scarsz.discordsrv.util.DiscordUtil
+import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.event.discord.controllers.di.RoleControllerModule
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
+import ru.astrainteractive.astralibs.utils.uuid
+import java.util.UUID
 
 @Suppress("DuplicatedCode")
 class DiscordController(module: RoleControllerModule) : RoleController, RoleControllerModule by module {
@@ -17,7 +20,26 @@ class DiscordController(module: RoleControllerModule) : RoleController, RoleCont
     private suspend fun mapRoles(jda: JDA, list: List<String>): List<Role> =
         list.mapNotNull { jda.getRoleById(it) }
 
+    private fun tryAddMoney(uuid: UUID) {
+        val player = Bukkit.getPlayer(uuid) ?: return
+        val key = "discord.linked.was_before.${player.uuid}"
+        val wasLinkedBefore = tempFileManager.fileConfiguration.getBoolean(key, false)
+        if (wasLinkedBefore) {
+            logger.info("DiscordEvent", "Игрок ${player.name} уже линковал аккаунт, пропускаем выдачу денег")
+            return
+        }
+        logger.info(
+            "DiscordEvent",
+            "Игроку ${player.name} выдано ${configuration.moneyForLink} за линковку с дискордом"
+        )
+        tempFileManager.fileConfiguration.set(key, true)
+        tempFileManager.save()
+        economyProvider?.addMoney(uuid, configuration.moneyForLink.toDouble())
+        player.sendMessage(translation.discordLinkReward(configuration.moneyForLink))
+    }
+
     override suspend fun onLinked(e: AccountLinkedEvent) {
+        tryAddMoney(e.player.uniqueId)
         logger.info("DiscordEvent", "Игрок ${e.player.name} линкует аккаунт")
         val member = e.user?.id?.let(DiscordUtil::getMemberById) ?: run {
             logger.info("DiscordEvent", "Игрок ${e.player.name} не на нашем сервере")

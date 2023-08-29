@@ -29,6 +29,11 @@ class PluginTranslation(plugin: Plugin) : BaseTranslation() {
     val wrongUsage = translationValue("general.wrong_usage", "#db2c18Неверное использование!")
     val onlyPlayerCommand = translationValue("general.only_player_command", "#db2c18Эта команда только для игроков!")
     val menuNotFound = translationValue("general.menu_not_found", "#db2c18Меню с заданным ID не найдено")
+    private val discordLinkReward = translationValue(
+        "general.discord_link_reward",
+        "#42f596Вы получили {AMOUNT}$ за привязку дискорда!"
+    )
+    fun discordLinkReward(amount: Number) = discordLinkReward.replace("{AMOUNT}", "${amount.toInt()}")
 
     // Admin claim
     val chunkFlagChanged = translationValue("general.adminprivate.flag_changed", "#db2c18Флаг чанка изменен!")
