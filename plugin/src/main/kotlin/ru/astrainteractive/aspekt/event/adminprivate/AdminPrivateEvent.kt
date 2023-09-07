@@ -74,7 +74,6 @@ class AdminPrivateEvent(
     }
     val interactEvent = DSLEvent<PlayerInteractEvent>(eventListener, plugin) { e ->
         val location = e.interactionPoint ?: e.player.location
-        println("Interact: ${e.action} ${e.hand} ${e.clickedBlock}")
         if (e.action == Action.LEFT_CLICK_AIR) return@DSLEvent
         if (e.action == Action.RIGHT_CLICK_AIR) return@DSLEvent
         handleDefault(
