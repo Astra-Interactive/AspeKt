@@ -27,6 +27,7 @@ dependencyResolutionManagement {
         maven("https://nexus.scarsz.me/content/groups/public/")
         maven("https://repo.dmulloy2.net/repository/public/")
         maven("https://repo.essentialsx.net/snapshots/")
+        maven("https://repo.essentialsx.net/releases/")
         maven("https://repo.maven.apache.org/maven2/")
         maven("https://maven.enginehub.org/repo/")
         maven("https://m2.dv8tion.net/releases")

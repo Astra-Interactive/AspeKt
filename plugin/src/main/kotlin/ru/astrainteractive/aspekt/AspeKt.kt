@@ -38,6 +38,7 @@ class AspeKt : JavaPlugin() {
         GlobalEventListener.onEnable(this)
         rootModule.autoBroadcastJob.value.onEnable()
         rootModule.discordEvent.value?.onEnable()
+        rootModule.economyProvider.reload()
     }
 
     /**
@@ -62,6 +63,7 @@ class AspeKt : JavaPlugin() {
         rootModule.pluginConfig.reload()
         rootModule.translation.reload()
         rootModule.menuModels.reload()
+        rootModule.economyProvider.reload()
         rootModule.controllersModule.adminPrivateController.updateChunks()
         rootModule.tempFileManager.reload()
         rootModule.autoBroadcastJob.value.apply {

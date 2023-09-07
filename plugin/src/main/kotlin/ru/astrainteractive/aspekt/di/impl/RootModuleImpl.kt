@@ -93,7 +93,7 @@ object RootModuleImpl : RootModule {
     override val adminPrivateModule: AdminPrivateControllerModule by Single {
         AdminPrivateControllerModuleImpl(this)
     }
-    override val economyProvider: Single<EconomyProvider?> = Single {
+    override val economyProvider: Reloadable<EconomyProvider?> = Reloadable {
         runCatching {
             EconomyProviderFactory().create()
         }.onFailure { it.printStackTrace() }.getOrNull()

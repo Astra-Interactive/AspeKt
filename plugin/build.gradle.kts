@@ -22,7 +22,7 @@ dependencies {
     // Spigot
     compileOnly("net.luckperms:api:5.4")
     compileOnly("com.discordsrv:discordsrv:1.25.0")
-
+    compileOnly("net.essentialsx:EssentialsX:2.20.1")
     // Test
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
