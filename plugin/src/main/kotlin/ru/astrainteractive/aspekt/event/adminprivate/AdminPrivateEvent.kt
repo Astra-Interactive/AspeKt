@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.event.adminprivate
 import io.papermc.paper.event.player.PlayerItemFrameChangeEvent
 import org.bukkit.Material
 import org.bukkit.entity.ArmorStand
+import org.bukkit.entity.Enemy
 import org.bukkit.entity.Monster
 import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
@@ -15,8 +16,8 @@ import org.bukkit.event.block.BlockFromToEvent
 import org.bukkit.event.block.BlockIgniteEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.block.BlockSpreadEvent
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
-import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntitySpawnEvent
 import org.bukkit.event.entity.ExplosionPrimeEvent
 import org.bukkit.event.hanging.HangingBreakByEntityEvent
@@ -111,13 +112,13 @@ class AdminPrivateEvent(
             flag = ChunkFlag.INTERACT
         )
     }
-    val armorStandBreakEvent = DSLEvent<EntityDeathEvent>(eventListener, plugin) { e ->
+    val armorStandBreakEvent = DSLEvent<EntityDamageByEntityEvent>(eventListener, plugin) { e ->
         val armorStand = e.entity as? ArmorStand ?: return@DSLEvent
         handleDefault(
             retractKey = RetractKey.Vararg(armorStand.location, armorStand, "armorStandBreakEvent"),
             e = e,
             adminChunk = armorStand.location.chunk.adminChunk,
-            player = null,
+            player = e.damager as? Player,
             flag = ChunkFlag.INTERACT
         )
     }
@@ -217,7 +218,6 @@ class AdminPrivateEvent(
     }
     val playerDamageEvent = DSLEvent<EntityDamageEvent>(eventListener, plugin) { e ->
         val player = e.entity as? Player ?: return@DSLEvent
-
         handleDefault(
             retractKey = RetractKey.Vararg(e.entity.location.chunk, player, "playerDamageEvent"),
             e = e,
@@ -227,7 +227,7 @@ class AdminPrivateEvent(
         )
     }
     val entitySpawnEvent = DSLEvent<EntitySpawnEvent>(eventListener, plugin) { e ->
-        if (e.entity !is Monster) return@DSLEvent
+        if (e.entity !is Monster || e.entity !is Enemy) return@DSLEvent
         handleDefault(
             retractKey = RetractKey.Vararg(e.entity.location.chunk, e.entity, "entitySpawnEvent"),
             e = e,
