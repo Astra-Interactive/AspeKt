@@ -12,6 +12,7 @@ class CommandManager(module: CommandsModule) : CommandsModule by module {
         maxOnline()
         tellChat()
         rtp()
+        rtpBypassed()
         adminPrivate()
         adminPrivateCompleter()
         menuCompleter()
