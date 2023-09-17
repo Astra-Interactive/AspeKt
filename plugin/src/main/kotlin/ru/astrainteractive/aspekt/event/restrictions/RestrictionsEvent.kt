@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.astralibs.events.DSLEvent
+import ru.astrainteractive.astralibs.event.DSLEvent
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 

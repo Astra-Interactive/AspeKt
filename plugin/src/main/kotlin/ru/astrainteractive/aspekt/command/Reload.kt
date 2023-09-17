@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.command
 
 import ru.astrainteractive.aspekt.plugin.PluginPermission
-import ru.astrainteractive.astralibs.commands.registerCommand
+import ru.astrainteractive.astralibs.command.registerCommand
 
 /**
  * Reload command handler

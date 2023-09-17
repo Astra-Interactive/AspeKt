@@ -5,7 +5,7 @@ import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.util.ScheduledJob
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
-import ru.astrainteractive.astralibs.utils.hex
+import ru.astrainteractive.astralibs.util.hex
 import ru.astrainteractive.klibs.kdi.Dependency
 import ru.astrainteractive.klibs.kdi.getValue
 

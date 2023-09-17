@@ -6,7 +6,7 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import ru.astrainteractive.aspekt.event.di.EventsModule
-import ru.astrainteractive.astralibs.events.DSLEvent
+import ru.astrainteractive.astralibs.event.DSLEvent
 
 class SortEvent(
     module: EventsModule

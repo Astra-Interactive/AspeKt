@@ -1,6 +1,6 @@
 package ru.astrainteractive.aspekt.plugin
 
-import ru.astrainteractive.astralibs.utils.Permission
+import ru.astrainteractive.astralibs.util.Permission
 
 sealed class PluginPermission(override val value: String) : Permission {
     data object Reload : PluginPermission("aspekt.reload")

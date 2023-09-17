@@ -3,8 +3,8 @@ package ru.astrainteractive.aspekt.command
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.plugin.PluginPermission
-import ru.astrainteractive.astralibs.commands.registerCommand
-import ru.astrainteractive.astralibs.commands.registerTabCompleter
+import ru.astrainteractive.astralibs.command.registerCommand
+import ru.astrainteractive.astralibs.command.registerTabCompleter
 
 // atemframe isVisible isFixed radius
 fun CommandManager.atemFrameTabCompleter() = plugin.registerTabCompleter("atemframe") {

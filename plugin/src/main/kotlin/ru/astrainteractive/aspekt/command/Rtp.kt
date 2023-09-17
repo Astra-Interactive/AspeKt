@@ -3,9 +3,9 @@ package ru.astrainteractive.aspekt.command
 import com.earth2me.essentials.Essentials
 import com.earth2me.essentials.RandomTeleport
 import org.bukkit.Bukkit
-import ru.astrainteractive.astralibs.commands.registerCommand
-import ru.astrainteractive.astralibs.commands.types.PrimitiveArgumentType
-import ru.astrainteractive.astralibs.utils.hex
+import ru.astrainteractive.astralibs.command.registerCommand
+import ru.astrainteractive.astralibs.command.types.PrimitiveArgumentType
+import ru.astrainteractive.astralibs.util.hex
 
 fun CommandManager.rtp() = plugin.registerCommand("rtp") {
     sender.sendMessage("#db2c18Возможно, вы хотели ввести /tpr".hex())

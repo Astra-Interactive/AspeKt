@@ -10,7 +10,7 @@ import ru.astrainteractive.aspekt.event.sort.SortController
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
-import ru.astrainteractive.astralibs.events.EventListener
+import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue

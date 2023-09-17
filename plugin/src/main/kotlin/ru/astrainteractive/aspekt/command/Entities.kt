@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.gui.EntitiesGui
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.async.PluginScope
-import ru.astrainteractive.astralibs.commands.registerCommand
+import ru.astrainteractive.astralibs.command.registerCommand
 
 fun CommandManager.entities() = plugin.registerCommand("entities") {
     if (!PluginPermission.Entities.hasPermission(sender)) return@registerCommand

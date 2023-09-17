@@ -2,8 +2,8 @@ package ru.astrainteractive.aspekt.command
 
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.plugin.PluginPermission
-import ru.astrainteractive.astralibs.commands.registerCommand
-import ru.astrainteractive.astralibs.utils.hex
+import ru.astrainteractive.astralibs.command.registerCommand
+import ru.astrainteractive.astralibs.util.hex
 
 fun CommandManager.tellChat() = plugin.registerCommand("tellchat") {
     if (!PluginPermission.TellChat.hasPermission(sender)) return@registerCommand

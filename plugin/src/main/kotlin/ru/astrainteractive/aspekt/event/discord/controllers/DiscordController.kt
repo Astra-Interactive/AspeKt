@@ -8,7 +8,7 @@ import github.scarsz.discordsrv.util.DiscordUtil
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.event.discord.controllers.di.RoleControllerModule
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.astralibs.utils.uuid
+import ru.astrainteractive.astralibs.util.uuid
 import java.util.UUID
 
 @Suppress("DuplicatedCode")

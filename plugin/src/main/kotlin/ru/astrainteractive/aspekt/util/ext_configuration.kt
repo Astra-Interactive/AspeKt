@@ -3,7 +3,7 @@
 package ru.astrainteractive.aspekt.util
 
 import org.bukkit.configuration.file.FileConfiguration
-import ru.astrainteractive.astralibs.utils.hex
+import ru.astrainteractive.astralibs.util.hex
 import ru.astrainteractive.klibs.kstorage.MutableStorageValue
 import ru.astrainteractive.klibs.kstorage.api.MutableStorageValue
 import kotlin.reflect.KProperty

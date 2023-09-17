@@ -37,7 +37,7 @@ class AdminPrivateRepositoryImpl(
                 this[chunk.uniqueWorldKey] = chunk
             }
         )
-        fileManager.configFile.writeText(ConfigLoader().defaultYaml.encodeToString(newRootConfig))
+        fileManager.configFile.writeText(ConfigLoader().yaml.encodeToString(newRootConfig))
     }
 
     override suspend fun deleteChunk(chunk: AdminChunk) = withContext(limitedDispatcher) {
@@ -47,6 +47,6 @@ class AdminPrivateRepositoryImpl(
                 remove(chunk.uniqueWorldKey)
             }
         )
-        fileManager.configFile.writeText(ConfigLoader().defaultYaml.encodeToString(newRootConfig))
+        fileManager.configFile.writeText(ConfigLoader().yaml.encodeToString(newRootConfig))
     }
 }

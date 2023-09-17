@@ -6,7 +6,7 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import ru.astrainteractive.aspekt.event.di.EventsModule
-import ru.astrainteractive.astralibs.events.DSLEvent
+import ru.astrainteractive.astralibs.event.DSLEvent
 import kotlin.random.Random
 
 class AutoCropEvent(

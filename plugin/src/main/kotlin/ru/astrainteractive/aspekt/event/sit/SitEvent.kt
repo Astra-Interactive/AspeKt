@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerTeleportEvent
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import org.spigotmc.event.entity.EntityDismountEvent
 import ru.astrainteractive.aspekt.event.di.EventsModule
-import ru.astrainteractive.astralibs.events.DSLEvent
+import ru.astrainteractive.astralibs.event.DSLEvent
 
 class SitEvent(
     module: EventsModule

@@ -31,7 +31,7 @@ import ru.astrainteractive.aspekt.adminprivate.models.ChunkFlag
 import ru.astrainteractive.aspekt.adminprivate.util.adminChunk
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.plugin.PluginPermission
-import ru.astrainteractive.astralibs.events.DSLEvent
+import ru.astrainteractive.astralibs.event.DSLEvent
 
 class AdminPrivateEvent(
     module: EventsModule

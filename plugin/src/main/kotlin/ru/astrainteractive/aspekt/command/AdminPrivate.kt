@@ -5,10 +5,10 @@ import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.adminprivate.models.ChunkFlag
 import ru.astrainteractive.aspekt.adminprivate.util.adminChunk
 import ru.astrainteractive.aspekt.plugin.PluginPermission
-import ru.astrainteractive.astralibs.commands.registerCommand
-import ru.astrainteractive.astralibs.commands.registerTabCompleter
-import ru.astrainteractive.astralibs.utils.hex
-import ru.astrainteractive.astralibs.utils.withEntry
+import ru.astrainteractive.astralibs.command.registerCommand
+import ru.astrainteractive.astralibs.command.registerTabCompleter
+import ru.astrainteractive.astralibs.util.hex
+import ru.astrainteractive.astralibs.util.withEntry
 
 /**
  * /adminprivate claim

@@ -6,7 +6,6 @@ import ru.astrainteractive.aspekt.adminprivate.controller.di.AdminPrivateControl
 import ru.astrainteractive.aspekt.command.di.CommandsModule
 import ru.astrainteractive.aspekt.di.ControllersModule
 import ru.astrainteractive.aspekt.di.RootModule
-import ru.astrainteractive.aspekt.di.factories.EconomyProviderFactory
 import ru.astrainteractive.aspekt.di.factories.MenuModelFactory
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.event.discord.DiscordEvent
@@ -16,8 +15,9 @@ import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.astralibs.async.DefaultBukkitDispatchers
+import ru.astrainteractive.astralibs.economy.AnyEconomyProvider
 import ru.astrainteractive.astralibs.economy.EconomyProvider
-import ru.astrainteractive.astralibs.events.EventListener
+import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.filemanager.DefaultSpigotFileManager
 import ru.astrainteractive.astralibs.filemanager.FileManager
 import ru.astrainteractive.astralibs.filemanager.SpigotFileManager
@@ -95,7 +95,7 @@ object RootModuleImpl : RootModule {
     }
     override val economyProvider: Reloadable<EconomyProvider?> = Reloadable {
         runCatching {
-            EconomyProviderFactory().create()
+            AnyEconomyProvider(plugin.value)
         }.onFailure { it.printStackTrace() }.getOrNull()
     }
     override val tempFileManager: Reloadable<SpigotFileManager> = Reloadable {

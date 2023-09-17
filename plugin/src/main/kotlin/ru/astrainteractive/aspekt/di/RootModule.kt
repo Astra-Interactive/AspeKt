@@ -12,7 +12,7 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.economy.EconomyProvider
-import ru.astrainteractive.astralibs.events.EventListener
+import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.filemanager.FileManager
 import ru.astrainteractive.astralibs.filemanager.SpigotFileManager
 import ru.astrainteractive.astralibs.logging.Logger

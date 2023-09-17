@@ -15,15 +15,16 @@ import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.economy.EconomyProvider
+import ru.astrainteractive.astralibs.menu.clicker.Click
 import ru.astrainteractive.astralibs.menu.clicker.ClickListener
 import ru.astrainteractive.astralibs.menu.clicker.MenuClickListener
 import ru.astrainteractive.astralibs.menu.holder.DefaultPlayerHolder
 import ru.astrainteractive.astralibs.menu.holder.PlayerHolder
+import ru.astrainteractive.astralibs.menu.menu.InventorySlot
 import ru.astrainteractive.astralibs.menu.menu.Menu
 import ru.astrainteractive.astralibs.menu.menu.MenuSize
-import ru.astrainteractive.astralibs.menu.utils.ItemStackButtonBuilder
-import ru.astrainteractive.astralibs.utils.convertHex
-import ru.astrainteractive.astralibs.utils.hex
+import ru.astrainteractive.astralibs.util.convertHex
+import ru.astrainteractive.astralibs.util.hex
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 
@@ -152,21 +153,21 @@ class MenuGui(
     private fun render() {
         clickListener.clearClickListener()
         menuModel.items.values.filter(::isMeetVisibilityConditions).forEach { menuItem ->
-            ItemStackButtonBuilder {
+            InventorySlot.Builder {
                 this.itemStack = menuItem.toItemStack()
                 this.index = menuItem.index
-                this.onClick = onClick@{
+                this.click = Click {
                     val permission = menuItem.permission?.let(PluginPermission::CustomPermission)
                     val hasPermission = permission?.hasPermission(playerHolder.player) ?: true
                     if (!hasPermission) {
                         playerHolder.player.sendMessage(translation.noPermission)
-                        return@onClick
+                        return@Click
                     }
 
-                    if (!isMeetClickConditions(menuItem)) return@onClick
+                    if (!isMeetClickConditions(menuItem)) return@Click
                     if (!isMeetPriceCheck(menuItem)) {
                         playerHolder.player.sendMessage(translation.notEnoughMoney)
-                        return@onClick
+                        return@Click
                     }
 
                     processReward(menuItem)

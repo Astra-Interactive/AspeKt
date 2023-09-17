@@ -7,13 +7,13 @@ import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.ItemStack
 import ru.astrainteractive.aspekt.gui.store.EntitiesState
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
+import ru.astrainteractive.astralibs.menu.clicker.Click
 import ru.astrainteractive.astralibs.menu.clicker.MenuClickListener
 import ru.astrainteractive.astralibs.menu.holder.DefaultPlayerHolder
 import ru.astrainteractive.astralibs.menu.holder.PlayerHolder
-import ru.astrainteractive.astralibs.menu.menu.InventoryButton
+import ru.astrainteractive.astralibs.menu.menu.InventorySlot
 import ru.astrainteractive.astralibs.menu.menu.MenuSize
 import ru.astrainteractive.astralibs.menu.menu.PaginatedMenu
-import ru.astrainteractive.astralibs.menu.utils.ItemStackButtonBuilder
 
 class EntitiesGui(
     player: Player,
@@ -23,14 +23,14 @@ class EntitiesGui(
     private val viewModel by lazy {
         EntitiesViewModel()
     }
-    override val backPageButton: InventoryButton = ItemStackButtonBuilder {
+    override val backPageButton: InventorySlot = InventorySlot.Builder {
         this.index = 49
         this.itemStack = ItemStack(Material.END_CRYSTAL).apply {
             this.editMeta {
                 it.setDisplayName("Back")
             }
         }
-        this.onClick = {
+        this.click = Click {
             when (viewModel.state.value) {
                 is EntitiesState.AllEntities -> inventory.close()
                 is EntitiesState.ExactEntity -> {
@@ -41,30 +41,30 @@ class EntitiesGui(
             }
         }
     }
-    override val nextPageButton: InventoryButton = ItemStackButtonBuilder {
+    override val nextPageButton: InventorySlot = InventorySlot.Builder {
         this.index = backPageButton.index + 1
         this.itemStack = ItemStack(Material.PAPER).apply {
             this.editMeta {
                 it.setDisplayName("Next")
             }
         }
-        this.onClick = {
+        this.click = Click {
             showPage(page - 1)
         }
     }
-    override val prevPageButton: InventoryButton = ItemStackButtonBuilder {
+    override val prevPageButton: InventorySlot = InventorySlot.Builder {
         this.index = backPageButton.index - 1
         this.itemStack = ItemStack(Material.PAPER).apply {
             this.editMeta {
                 it.setDisplayName("Prev")
             }
         }
-        this.onClick = {
+        this.click = Click {
             showPage(page - 1)
         }
     }
-    private val worldButton: InventoryButton
-        get() = ItemStackButtonBuilder {
+    private val worldButton: InventorySlot
+        get() = InventorySlot.Builder {
             val state = viewModel.state.value
             val world = (state as? EntitiesState.AllEntities)?.world?.name
             this.index = backPageButton.index + 2
@@ -73,12 +73,12 @@ class EntitiesGui(
                     it.setDisplayName("World: $world")
                 }
             }
-            this.onClick = {
+            this.click = Click {
                 viewModel.onWorldChangeClicked()
             }
         }
-    private val filterButton: InventoryButton
-        get() = ItemStackButtonBuilder {
+    private val filterButton: InventorySlot
+        get() = InventorySlot.Builder {
             val state = viewModel.state.value
             val sort = (state as? EntitiesState.AllEntities)?.sort
             this.index = backPageButton.index - 2
@@ -87,7 +87,7 @@ class EntitiesGui(
                     it.setDisplayName("Sort: $sort")
                 }
             }
-            this.onClick = {
+            this.click = Click {
                 viewModel.onSortClicked()
             }
         }
@@ -118,14 +118,14 @@ class EntitiesGui(
                 for (i in 0 until maxItemsPerPage) {
                     val index = maxItemsPerPage * page + i
                     val entity = state.list.getOrNull(index) ?: continue
-                    ItemStackButtonBuilder {
+                    InventorySlot.Builder {
                         this.index = i
                         this.itemStack = ItemStack(entity.entityType.toMaterial()).apply {
                             this.editMeta {
                                 it.setDisplayName("${entity.entityType.name}: ${entity.count}")
                             }
                         }
-                        this.onClick = {
+                        this.click = Click {
                             viewModel.onEntityClicked(entity.entityType)
                         }
                     }.also(clickListener::remember).setInventoryButton()
@@ -136,7 +136,7 @@ class EntitiesGui(
                 for (i in 0 until maxItemsPerPage) {
                     val index = maxItemsPerPage * page + i
                     val entity = state.list.getOrNull(index) ?: continue
-                    ItemStackButtonBuilder {
+                    InventorySlot.Builder {
                         this.index = i
                         this.itemStack = ItemStack(entity.type.toMaterial()).apply {
                             val loc = entity.location
@@ -149,7 +149,7 @@ class EntitiesGui(
                                 }
                             }
                         }
-                        this.onClick = {
+                        this.click = Click {
                             playerHolder.player.teleport(entity.location)
                         }
                     }.also(clickListener::remember).setInventoryButton()

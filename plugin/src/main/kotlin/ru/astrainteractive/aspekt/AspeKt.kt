@@ -14,7 +14,7 @@ import ru.astrainteractive.aspekt.di.impl.RootModuleImpl
 import ru.astrainteractive.aspekt.event.EventHandler
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.astralibs.async.PluginScope
-import ru.astrainteractive.astralibs.events.GlobalEventListener
+import ru.astrainteractive.astralibs.event.GlobalEventListener
 import ru.astrainteractive.astralibs.menu.event.GlobalInventoryClickEvent
 import ru.astrainteractive.klibs.kdi.getValue
 

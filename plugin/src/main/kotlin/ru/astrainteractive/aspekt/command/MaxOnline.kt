@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.command
 
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.plugin.PluginPermission
-import ru.astrainteractive.astralibs.commands.registerCommand
+import ru.astrainteractive.astralibs.command.registerCommand
 
 fun CommandManager.maxOnline() = plugin.registerCommand("maxonline") {
     if (!PluginPermission.MaxOnline.hasPermission(sender)) return@registerCommand
