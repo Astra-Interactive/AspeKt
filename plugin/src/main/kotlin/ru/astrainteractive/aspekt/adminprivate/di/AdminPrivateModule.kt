@@ -2,8 +2,6 @@ package ru.astrainteractive.aspekt.adminprivate.di
 
 import ru.astrainteractive.aspekt.adminprivate.controller.AdminPrivateController
 import ru.astrainteractive.aspekt.adminprivate.controller.di.AdminPrivateControllerDependencies
-import ru.astrainteractive.aspekt.event.adminprivate.AdminPrivateEvent
-import ru.astrainteractive.aspekt.event.adminprivate.di.AdminPrivateDependencies
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue

@@ -6,7 +6,6 @@ import org.bukkit.block.BlockFace
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
-import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.string.BukkitTranslationContext

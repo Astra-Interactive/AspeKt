@@ -26,6 +26,5 @@ interface SitModule {
             )
             SitEvent(dependencies)
         }
-
     }
 }

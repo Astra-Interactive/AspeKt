@@ -1,3 +1,5 @@
+@file:Suppress("MaxLineLength", "MaximumLineLength", "LongParameterList")
+
 package ru.astrainteractive.aspekt.plugin
 
 import kotlinx.serialization.SerialName

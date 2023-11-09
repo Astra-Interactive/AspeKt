@@ -3,7 +3,6 @@ package ru.astrainteractive.aspekt.event.crop.di
 import ru.astrainteractive.aspekt.AspeKt
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.aspekt.event.crop.CropDupeController
-import ru.astrainteractive.aspekt.event.restrictions.di.RestrictionsDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kdi.Provider

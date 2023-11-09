@@ -6,7 +6,6 @@ import ru.astrainteractive.aspekt.event.sit.SitController
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
 
 interface SitDependencies {
@@ -29,6 +28,5 @@ interface SitDependencies {
         override val configuration: PluginConfiguration by Provider {
             rootModule.pluginConfig.value
         }
-
     }
 }

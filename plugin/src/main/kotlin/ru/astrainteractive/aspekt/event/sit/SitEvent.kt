@@ -11,7 +11,6 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerTeleportEvent
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import org.spigotmc.event.entity.EntityDismountEvent
-import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.event.sit.di.SitDependencies
 import ru.astrainteractive.astralibs.event.DSLEvent
 

@@ -10,6 +10,7 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.economy.EconomyProvider
+import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 import ru.astrainteractive.klibs.kdi.Module
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
@@ -24,6 +25,8 @@ interface CommandsDependencies : Module {
     val menuModels: List<MenuModel>
     val economyProvider: EconomyProvider?
     val router: Router
+    val translationContext: BukkitTranslationContext
+
     class Default(
         rootModule: RootModule
     ) : CommandsDependencies {
@@ -39,5 +42,6 @@ interface CommandsDependencies : Module {
             rootModule.adminPrivateModule.adminPrivateController
         }
         override val router: Router by rootModule.router
+        override val translationContext: BukkitTranslationContext = rootModule.translationContext
     }
 }

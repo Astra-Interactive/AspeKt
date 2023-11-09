@@ -12,7 +12,6 @@ import org.bukkit.event.block.BlockSpreadEvent
 import org.bukkit.event.entity.ExplosionPrimeEvent
 import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
-import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.event.restrictions.di.RestrictionsDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.DSLEvent

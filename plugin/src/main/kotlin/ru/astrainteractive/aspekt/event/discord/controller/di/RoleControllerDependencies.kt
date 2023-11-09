@@ -27,5 +27,4 @@ interface RoleControllerDependencies {
         override val translation: PluginTranslation by rootModule.translation
         override val translationContext: BukkitTranslationContext = rootModule.translationContext
     }
-
 }

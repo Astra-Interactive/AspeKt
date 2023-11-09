@@ -29,6 +29,5 @@ interface DiscordEventDependencies {
         }
         override val scope: CoroutineScope by rootModule.scope
         override val dispatchers: BukkitDispatchers by rootModule.dispatchers
-
     }
 }

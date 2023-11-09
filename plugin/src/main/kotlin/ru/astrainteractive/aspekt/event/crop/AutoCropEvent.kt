@@ -5,10 +5,9 @@ import org.bukkit.block.data.Ageable
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
-import ru.astrainteractive.aspekt.event.di.EventsModule
+import ru.astrainteractive.aspekt.event.crop.di.AutoCropDependencies
 import ru.astrainteractive.astralibs.event.DSLEvent
 import kotlin.random.Random
-import ru.astrainteractive.aspekt.event.crop.di.AutoCropDependencies
 
 class AutoCropEvent(
     module: AutoCropDependencies

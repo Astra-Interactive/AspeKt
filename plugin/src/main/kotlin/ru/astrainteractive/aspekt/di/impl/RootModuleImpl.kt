@@ -1,10 +1,14 @@
 package ru.astrainteractive.aspekt.di.impl
 
 import ru.astrainteractive.aspekt.AspeKt
+import ru.astrainteractive.aspekt.adminprivate.di.AdminPrivateModule
+import ru.astrainteractive.aspekt.command.di.CommandsDependencies
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.aspekt.di.factory.MenuModelFactory
+import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.gui.Router
 import ru.astrainteractive.aspekt.gui.RouterImpl
+import ru.astrainteractive.aspekt.gui.di.GuiModule
 import ru.astrainteractive.aspekt.plugin.AutoBroadcastJob
 import ru.astrainteractive.aspekt.plugin.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
@@ -30,10 +34,6 @@ import ru.astrainteractive.klibs.kdi.Reloadable
 import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
 import java.io.File
-import ru.astrainteractive.aspekt.adminprivate.di.AdminPrivateModule
-import ru.astrainteractive.aspekt.command.di.CommandsDependencies
-import ru.astrainteractive.aspekt.event.di.EventsModule
-import ru.astrainteractive.aspekt.gui.di.GuiModule
 
 class RootModuleImpl : RootModule {
 

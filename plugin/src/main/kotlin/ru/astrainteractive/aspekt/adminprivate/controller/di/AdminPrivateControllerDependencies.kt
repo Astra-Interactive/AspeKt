@@ -3,7 +3,6 @@ package ru.astrainteractive.aspekt.adminprivate.controller.di
 import ru.astrainteractive.aspekt.adminprivate.data.AdminPrivateRepository
 import ru.astrainteractive.aspekt.adminprivate.data.AdminPrivateRepositoryImpl
 import ru.astrainteractive.astralibs.filemanager.FileManager
-import ru.astrainteractive.klibs.kdi.Dependency
 import ru.astrainteractive.klibs.kdi.Module
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue

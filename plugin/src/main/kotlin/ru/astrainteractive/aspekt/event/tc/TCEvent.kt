@@ -16,13 +16,12 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
-import ru.astrainteractive.aspekt.event.di.EventsModule
+import ru.astrainteractive.aspekt.event.tc.di.TCDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.DSLEvent
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 import kotlin.random.Random
-import ru.astrainteractive.aspekt.event.tc.di.TCDependencies
 
 class TCEvent(
     module: TCDependencies

@@ -1,11 +1,9 @@
 package ru.astrainteractive.aspekt.di
 
 import ru.astrainteractive.aspekt.AspeKt
-import ru.astrainteractive.aspekt.adminprivate.controller.di.AdminPrivateControllerDependencies
 import ru.astrainteractive.aspekt.adminprivate.di.AdminPrivateModule
 import ru.astrainteractive.aspekt.command.di.CommandsDependencies
 import ru.astrainteractive.aspekt.event.di.EventsModule
-import ru.astrainteractive.aspekt.event.discord.DiscordEvent
 import ru.astrainteractive.aspekt.gui.Router
 import ru.astrainteractive.aspekt.gui.di.GuiModule
 import ru.astrainteractive.aspekt.plugin.AutoBroadcastJob
