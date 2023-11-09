@@ -15,7 +15,7 @@ dependencies {
     // AstraLibs
     implementation(libs.minecraft.astralibs.ktxcore)
     implementation(libs.minecraft.astralibs.orm)
-    implementation(libs.klibs.kdi)
+    implementation(klibs.klibs.kdi)
     implementation(libs.minecraft.astralibs.spigot.gui)
     implementation(libs.minecraft.astralibs.spigot.core)
     implementation(libs.minecraft.vaultapi)

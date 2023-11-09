@@ -6,11 +6,9 @@ import github.scarsz.discordsrv.DiscordSRV
 import github.scarsz.discordsrv.api.Subscribe
 import github.scarsz.discordsrv.api.events.AccountLinkedEvent
 import github.scarsz.discordsrv.api.events.AccountUnlinkedEvent
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.event.discord.di.DiscordEventModule
-import ru.astrainteractive.astralibs.async.PluginScope
 
 /**
  * Template event class
@@ -18,7 +16,7 @@ import ru.astrainteractive.astralibs.async.PluginScope
 class DiscordEvent(module: DiscordEventModule) : DiscordEventModule by module {
     @Subscribe
     fun onAccountLinked(e: AccountLinkedEvent) {
-        PluginScope.launch(Dispatchers.IO) {
+        scope.launch(dispatchers.IO) {
             discordController.onLinked(e)
             luckPermsController.onLinked(e)
         }
@@ -26,7 +24,7 @@ class DiscordEvent(module: DiscordEventModule) : DiscordEventModule by module {
 
     @Subscribe
     fun onAccountUnlinked(e: AccountUnlinkedEvent) {
-        PluginScope.launch(Dispatchers.IO) {
+        scope.launch(dispatchers.IO) {
             discordController.onUnLinked(e)
             luckPermsController.onUnLinked(e)
         }

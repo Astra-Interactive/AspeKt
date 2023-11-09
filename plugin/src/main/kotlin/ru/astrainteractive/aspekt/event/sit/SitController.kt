@@ -7,10 +7,13 @@ import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.event.di.EventsModule
+import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 
 class SitController(
-    module: EventsModule
-) : EventsModule by module {
+    module: EventsModule,
+    translationContext: BukkitTranslationContext
+) : EventsModule by module,
+    BukkitTranslationContext by translationContext {
     private val sitPlayers = mutableMapOf<String, ArmorStand>()
 
     /**

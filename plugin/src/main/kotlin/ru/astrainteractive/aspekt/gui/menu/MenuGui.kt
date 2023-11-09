@@ -4,6 +4,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -23,6 +24,9 @@ import ru.astrainteractive.astralibs.menu.holder.PlayerHolder
 import ru.astrainteractive.astralibs.menu.menu.InventorySlot
 import ru.astrainteractive.astralibs.menu.menu.Menu
 import ru.astrainteractive.astralibs.menu.menu.MenuSize
+import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
+import ru.astrainteractive.astralibs.string.BukkitTranslationContext
+import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.astralibs.util.convertHex
 import ru.astrainteractive.astralibs.util.hex
 import ru.astrainteractive.klibs.kdi.Provider
@@ -34,10 +38,12 @@ class MenuGui(
     private val economyProvider: EconomyProvider?,
     private val translation: PluginTranslation,
     private val menuModel: MenuModel,
-    private val dispatchers: BukkitDispatchers
-) : Menu() {
+    private val dispatchers: BukkitDispatchers,
+    translationContext: BukkitTranslationContext
+) : Menu(),
+    BukkitTranslationContext by translationContext {
     override val menuSize: MenuSize = menuModel.size
-    override var menuTitle: String = menuModel.title.hex()
+    override var menuTitle: Component = StringDesc.Raw(menuModel.title).toComponent()
     override val playerHolder: PlayerHolder = DefaultPlayerHolder(player)
     private val clickListener: ClickListener = MenuClickListener()
 
@@ -158,7 +164,8 @@ class MenuGui(
                 this.index = menuItem.index
                 this.click = Click {
                     val permission = menuItem.permission?.let(PluginPermission::CustomPermission)
-                    val hasPermission = permission?.hasPermission(playerHolder.player) ?: true
+
+                    val hasPermission = permission?.let(playerHolder.player.toPermissible()::hasPermission) ?: true
                     if (!hasPermission) {
                         playerHolder.player.sendMessage(translation.noPermission)
                         return@Click
@@ -172,7 +179,7 @@ class MenuGui(
 
                     processReward(menuItem)
                 }
-            }.also(clickListener::remember).setInventoryButton()
+            }.also(clickListener::remember).setInventorySlot()
         }
     }
 }

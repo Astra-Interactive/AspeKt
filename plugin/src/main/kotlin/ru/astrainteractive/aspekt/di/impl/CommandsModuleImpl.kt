@@ -6,6 +6,7 @@ import ru.astrainteractive.aspekt.command.di.CommandsModule
 import ru.astrainteractive.aspekt.di.ControllersModule
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.aspekt.event.sit.SitController
+import ru.astrainteractive.aspekt.gui.Router
 import ru.astrainteractive.aspekt.plugin.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.AsyncComponent
@@ -22,11 +23,12 @@ class CommandsModuleImpl(
     override val plugin: AspeKt by rootModule.plugin
     override val translation: PluginTranslation by rootModule.translation
     override val dispatchers: BukkitDispatchers by rootModule.dispatchers
-    override val pluginScope: AsyncComponent by rootModule.scope
+    override val scope: AsyncComponent by rootModule.scope
     override val sitController: SitController by Provider { controllersModule.sitController }
     override val menuModels: List<MenuModel> by rootModule.menuModels
     override val economyProvider: EconomyProvider? by rootModule.economyProvider
     override val adminPrivateController: AdminPrivateController by Provider {
         rootModule.controllersModule.adminPrivateController
     }
+    override val router: Router by rootModule.router
 }

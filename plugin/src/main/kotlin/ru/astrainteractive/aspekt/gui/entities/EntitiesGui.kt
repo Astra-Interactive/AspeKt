@@ -1,11 +1,12 @@
-package ru.astrainteractive.aspekt.gui
+package ru.astrainteractive.aspekt.gui.entities
 
+import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.ItemStack
-import ru.astrainteractive.aspekt.gui.store.EntitiesState
+import ru.astrainteractive.aspekt.gui.entities.store.EntitiesState
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.menu.clicker.Click
 import ru.astrainteractive.astralibs.menu.clicker.MenuClickListener
@@ -14,11 +15,15 @@ import ru.astrainteractive.astralibs.menu.holder.PlayerHolder
 import ru.astrainteractive.astralibs.menu.menu.InventorySlot
 import ru.astrainteractive.astralibs.menu.menu.MenuSize
 import ru.astrainteractive.astralibs.menu.menu.PaginatedMenu
+import ru.astrainteractive.astralibs.string.BukkitTranslationContext
+import ru.astrainteractive.astralibs.string.StringDesc
 
 class EntitiesGui(
     player: Player,
-    private val bukkitDispatchers: BukkitDispatchers
-) : PaginatedMenu() {
+    private val bukkitDispatchers: BukkitDispatchers,
+    translationContext: BukkitTranslationContext
+) : PaginatedMenu(),
+    BukkitTranslationContext by translationContext {
     private val clickListener = MenuClickListener()
     private val viewModel by lazy {
         EntitiesViewModel()
@@ -98,7 +103,7 @@ class EntitiesGui(
             EntitiesState.Loading -> 0
         }
     override val menuSize: MenuSize = MenuSize.XL
-    override var menuTitle: String = "Entities"
+    override var menuTitle: Component = StringDesc.Raw("Entities").toComponent()
 
     override var page: Int = 0
     override val playerHolder: PlayerHolder = DefaultPlayerHolder(player)
@@ -113,8 +118,8 @@ class EntitiesGui(
         inventory.clear()
         when (state) {
             is EntitiesState.AllEntities -> {
-                filterButton.also(clickListener::remember).setInventoryButton()
-                worldButton.also(clickListener::remember).setInventoryButton()
+                filterButton.also(clickListener::remember).setInventorySlot()
+                worldButton.also(clickListener::remember).setInventorySlot()
                 for (i in 0 until maxItemsPerPage) {
                     val index = maxItemsPerPage * page + i
                     val entity = state.list.getOrNull(index) ?: continue
@@ -128,7 +133,7 @@ class EntitiesGui(
                         this.click = Click {
                             viewModel.onEntityClicked(entity.entityType)
                         }
-                    }.also(clickListener::remember).setInventoryButton()
+                    }.also(clickListener::remember).setInventorySlot()
                 }
             }
 
@@ -152,7 +157,7 @@ class EntitiesGui(
                         this.click = Click {
                             playerHolder.player.teleport(entity.location)
                         }
-                    }.also(clickListener::remember).setInventoryButton()
+                    }.also(clickListener::remember).setInventorySlot()
                 }
             }
 

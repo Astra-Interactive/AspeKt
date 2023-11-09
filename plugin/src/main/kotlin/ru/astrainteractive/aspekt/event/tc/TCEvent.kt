@@ -18,7 +18,6 @@ import org.bukkit.inventory.meta.ItemMeta
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.astralibs.async.PluginScope
 import ru.astrainteractive.astralibs.event.DSLEvent
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
@@ -59,7 +58,7 @@ class TCEvent(
             placeSapling(sapling, block.getRelative(BlockFace.DOWN), i + 1)
             return
         }
-        PluginScope.launch(dispatchers.BukkitAsync) {
+        scope.launch(dispatchers.BukkitAsync) {
             delay(100)
             withContext(dispatchers.BukkitMain) {
                 airBlock.location.block.setType(sapling, true)

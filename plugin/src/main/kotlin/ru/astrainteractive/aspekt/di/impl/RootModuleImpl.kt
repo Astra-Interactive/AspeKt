@@ -9,6 +9,8 @@ import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.aspekt.di.factories.MenuModelFactory
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.event.discord.DiscordEvent
+import ru.astrainteractive.aspekt.gui.Router
+import ru.astrainteractive.aspekt.gui.RouterImpl
 import ru.astrainteractive.aspekt.plugin.AutoBroadcastJob
 import ru.astrainteractive.aspekt.plugin.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
@@ -24,14 +26,18 @@ import ru.astrainteractive.astralibs.filemanager.SpigotFileManager
 import ru.astrainteractive.astralibs.filemanager.impl.JVMFileManager
 import ru.astrainteractive.astralibs.logging.JUtilLogger
 import ru.astrainteractive.astralibs.logging.Logger
+import ru.astrainteractive.astralibs.menu.event.DefaultInventoryClickEvent
+import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 import ru.astrainteractive.klibs.kdi.Dependency
 import ru.astrainteractive.klibs.kdi.Lateinit
+import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.Reloadable
 import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
 import java.io.File
 
-object RootModuleImpl : RootModule {
+class RootModuleImpl : RootModule {
 
     // Core
     override val plugin = Lateinit<AspeKt>(true)
@@ -61,7 +67,7 @@ object RootModuleImpl : RootModule {
     }
     override val translation = Reloadable {
         val plugin by plugin
-        PluginTranslation(plugin)
+        PluginTranslation()
     }
     override val menuModels: Reloadable<List<MenuModel>> = Reloadable {
         val dataFolder = plugin.value.dataFolder
@@ -114,6 +120,22 @@ object RootModuleImpl : RootModule {
             config = pluginConfig,
             dispatchers = dispatchers.value,
             scope = scope.value
+        )
+    }
+    override val translationContext: BukkitTranslationContext by Single {
+        val serializer = KyoriComponentSerializer.Legacy
+        BukkitTranslationContext.Default { serializer }
+    }
+    override val inventoryClickEventListener: Single<DefaultInventoryClickEvent> = Single {
+        DefaultInventoryClickEvent()
+    }
+    override val router: Provider<Router> = Provider {
+        RouterImpl(
+            scope = scope.value,
+            dispatchers = dispatchers.value,
+            translationContext = translationContext,
+            economyProvider = economyProvider.value,
+            translation = translation.value
         )
     }
 }

@@ -5,6 +5,7 @@ import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.registerCommand
 import ru.astrainteractive.astralibs.command.registerTabCompleter
+import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
 
 // atemframe isVisible isFixed radius
 fun CommandManager.atemFrameTabCompleter() = plugin.registerTabCompleter("atemframe") {
@@ -17,7 +18,7 @@ fun CommandManager.atemFrameTabCompleter() = plugin.registerTabCompleter("atemfr
 }
 
 fun CommandManager.atemFrame() = plugin.registerCommand("atemframe") {
-    if (!PluginPermission.AtemFrame.hasPermission(sender)) return@registerCommand
+    if (!sender.toPermissible().hasPermission(PluginPermission.AtemFrame)) return@registerCommand
     val player = sender as? Player ?: return@registerCommand
     val isVisible = argument(0) { it == "true" }.successOrNull()?.value ?: true
     val isFixed = argument(1) { it == "true" }.successOrNull()?.value ?: true

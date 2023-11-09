@@ -32,10 +32,14 @@ import ru.astrainteractive.aspekt.adminprivate.util.adminChunk
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.event.DSLEvent
+import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
+import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 
 class AdminPrivateEvent(
-    module: EventsModule
-) : EventsModule by module {
+    module: EventsModule,
+    translationContext: BukkitTranslationContext
+) : EventsModule by module,
+    BukkitTranslationContext by translationContext {
     private val debounce = EventDebounce<RetractKey>(5000L)
     private fun <T> handleDefault(
         retractKey: RetractKey,
@@ -45,7 +49,8 @@ class AdminPrivateEvent(
         flag: ChunkFlag
     ) where T : Event, T : Cancellable {
         if (!adminPrivateController.isEnabled) return
-        if (player?.let(PluginPermission.AdminClaim::hasPermission) == true) return
+
+        if (player?.toPermissible()?.hasPermission(PluginPermission.AdminClaim) == true) return
         debounce.debounceEvent(retractKey, e) {
             val isAble = adminPrivateController.isAble(adminChunk, flag)
             val isCancelled = !isAble

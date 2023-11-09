@@ -21,6 +21,6 @@ class EventHandler(
         AutoCropEvent(module)
         TCEvent(module)
         RestrictionsEvent(module)
-        AdminPrivateEvent(module)
+        AdminPrivateEvent(module, module.translationContext)
     }
 }

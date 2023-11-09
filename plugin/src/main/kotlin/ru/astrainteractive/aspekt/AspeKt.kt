@@ -13,16 +13,13 @@ import ru.astrainteractive.aspekt.di.ControllersModule
 import ru.astrainteractive.aspekt.di.impl.RootModuleImpl
 import ru.astrainteractive.aspekt.event.EventHandler
 import ru.astrainteractive.aspekt.event.di.EventsModule
-import ru.astrainteractive.astralibs.async.PluginScope
-import ru.astrainteractive.astralibs.event.GlobalEventListener
-import ru.astrainteractive.astralibs.menu.event.GlobalInventoryClickEvent
 import ru.astrainteractive.klibs.kdi.getValue
 
 /**
  * Initial class for your plugin
  */
 class AspeKt : JavaPlugin() {
-    private val rootModule by RootModuleImpl
+    private val rootModule = RootModuleImpl()
     private val eventsModule: EventsModule by rootModule.eventsModule
     private val commandsModule: CommandsModule by rootModule.commandsModule
     private val controllersModule: ControllersModule by rootModule.controllersModule
@@ -33,9 +30,9 @@ class AspeKt : JavaPlugin() {
     override fun onEnable() {
         rootModule.plugin.initialize(this)
         EventHandler(eventsModule)
-        CommandManager(commandsModule)
-        GlobalInventoryClickEvent.onEnable(this)
-        GlobalEventListener.onEnable(this)
+        CommandManager(commandsModule, rootModule.translationContext)
+        rootModule.inventoryClickEventListener.value.onEnable(this)
+        rootModule.eventListener.value.onEnable(this)
         rootModule.autoBroadcastJob.value.onEnable()
         rootModule.discordEvent.value?.onEnable()
         rootModule.economyProvider.reload()
@@ -48,8 +45,9 @@ class AspeKt : JavaPlugin() {
         controllersModule.sitController.onDisable()
         rootModule.autoBroadcastJob.value.onDisable()
         HandlerList.unregisterAll(this)
-        GlobalEventListener.onDisable()
-        PluginScope.close()
+        rootModule.inventoryClickEventListener.value.onDisable()
+        rootModule.eventListener.value.onDisable()
+        rootModule.scope.value.close()
         rootModule.discordEvent.value?.onDisable()
         Bukkit.getOnlinePlayers().forEach(Player::closeInventory)
     }

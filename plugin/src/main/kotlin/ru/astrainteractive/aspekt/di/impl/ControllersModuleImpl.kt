@@ -14,7 +14,7 @@ class ControllersModuleImpl(
     private val eventsModule by rootModule.eventsModule
 
     override val sitController: SitController by Single {
-        SitController(eventsModule)
+        SitController(eventsModule, rootModule.translationContext)
     }
     override val sortControllers: SortController by Single {
         SortController()

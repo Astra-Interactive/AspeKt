@@ -1,11 +1,11 @@
-package ru.astrainteractive.aspekt.gui
+package ru.astrainteractive.aspekt.gui.entities
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.bukkit.Bukkit
 import org.bukkit.entity.EntityType
-import ru.astrainteractive.aspekt.gui.store.EntitiesState
-import ru.astrainteractive.aspekt.gui.store.EntityData
-import ru.astrainteractive.aspekt.gui.store.SortType
+import ru.astrainteractive.aspekt.gui.entities.store.EntitiesState
+import ru.astrainteractive.aspekt.gui.entities.store.EntityData
+import ru.astrainteractive.aspekt.gui.entities.store.SortType
 import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.klibs.mikro.core.util.next
 

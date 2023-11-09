@@ -7,6 +7,7 @@ import ru.astrainteractive.aspekt.adminprivate.util.adminChunk
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.registerCommand
 import ru.astrainteractive.astralibs.command.registerTabCompleter
+import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
 import ru.astrainteractive.astralibs.util.hex
 import ru.astrainteractive.astralibs.util.withEntry
 
@@ -20,12 +21,13 @@ fun CommandManager.adminPrivate() = plugin.registerCommand("adminprivate") {
         sender.sendMessage(translation.onlyPlayerCommand)
         return@registerCommand
     }
-    if (!PluginPermission.AdminClaim.hasPermission(player)) {
+
+    if (!player.toPermissible().hasPermission(PluginPermission.AdminClaim)) {
         sender.sendMessage(translation.noPermission)
         return@registerCommand
     }
     when (args.getOrNull(0)) {
-        "map" -> pluginScope.launch(dispatchers.IO) {
+        "map" -> scope.launch(dispatchers.IO) {
             runCatching {
                 adminPrivateController.map(5, player.chunk.adminChunk)
             }.onSuccess {
@@ -39,7 +41,7 @@ fun CommandManager.adminPrivate() = plugin.registerCommand("adminprivate") {
             }
         }
 
-        "claim" -> pluginScope.launch(dispatchers.IO) {
+        "claim" -> scope.launch(dispatchers.IO) {
             runCatching {
                 adminPrivateController.claim(player.chunk.adminChunk)
             }.onSuccess {
@@ -50,7 +52,7 @@ fun CommandManager.adminPrivate() = plugin.registerCommand("adminprivate") {
             }
         }
 
-        "unclaim" -> pluginScope.launch(dispatchers.IO) {
+        "unclaim" -> scope.launch(dispatchers.IO) {
             runCatching {
                 adminPrivateController.unclaim(player.chunk.adminChunk)
             }.onSuccess {
@@ -61,7 +63,7 @@ fun CommandManager.adminPrivate() = plugin.registerCommand("adminprivate") {
             }
         }
 
-        "flag" -> pluginScope.launch(dispatchers.IO) {
+        "flag" -> scope.launch(dispatchers.IO) {
             runCatching {
                 val flag = argument(1) { it?.let(ChunkFlag::valueOf) }.onFailure {
                     sender.sendMessage(translation.wrongUsage)

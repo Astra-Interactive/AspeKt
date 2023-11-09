@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.di.impl
 
+import kotlinx.coroutines.CoroutineScope
 import ru.astrainteractive.aspekt.AspeKt
 import ru.astrainteractive.aspekt.adminprivate.controller.AdminPrivateController
 import ru.astrainteractive.aspekt.di.RootModule
@@ -11,6 +12,7 @@ import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.event.EventListener
+import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
@@ -22,6 +24,7 @@ class EventsModuleImpl(
     override val configuration: PluginConfiguration by rootModule.pluginConfig
     override val dispatchers: BukkitDispatchers by rootModule.dispatchers
     override val eventListener: EventListener by rootModule.eventListener
+    override val scope: CoroutineScope by rootModule.scope
     override val translation: PluginTranslation by rootModule.translation
     override val sitController: SitController by Provider {
         rootModule.controllersModule.sitController
@@ -35,4 +38,5 @@ class EventsModuleImpl(
     override val adminPrivateController: AdminPrivateController by Provider {
         rootModule.controllersModule.adminPrivateController
     }
+    override val translationContext: BukkitTranslationContext = rootModule.translationContext
 }

@@ -8,11 +8,17 @@ import github.scarsz.discordsrv.util.DiscordUtil
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.event.discord.controllers.di.RoleControllerModule
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
+import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 import ru.astrainteractive.astralibs.util.uuid
 import java.util.UUID
 
 @Suppress("DuplicatedCode")
-class DiscordController(module: RoleControllerModule) : RoleController, RoleControllerModule by module {
+class DiscordController(
+    module: RoleControllerModule,
+    translationContext: BukkitTranslationContext
+) : RoleController,
+    RoleControllerModule by module,
+    BukkitTranslationContext by translationContext {
 
     override val configuration: PluginConfiguration.DiscordSRVLink
         get() = pluginConfiguration.discordSRVLink

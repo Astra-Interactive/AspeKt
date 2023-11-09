@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.gui.store
+package ru.astrainteractive.aspekt.gui.entities.store
 
 import org.bukkit.World
 import org.bukkit.entity.Entity
