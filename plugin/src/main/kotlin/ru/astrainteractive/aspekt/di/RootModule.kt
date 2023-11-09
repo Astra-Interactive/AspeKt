@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.di
 
 import ru.astrainteractive.aspekt.AspeKt
-import ru.astrainteractive.aspekt.adminprivate.controller.di.AdminPrivateControllerModule
+import ru.astrainteractive.aspekt.adminprivate.controller.di.AdminPrivateControllerDependencies
 import ru.astrainteractive.aspekt.command.di.CommandsModule
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.event.discord.DiscordEvent
@@ -42,7 +42,7 @@ interface RootModule : Module {
     val controllersModule: ControllersModule
     val eventsModule: EventsModule
     val commandsModule: CommandsModule
-    val adminPrivateModule: AdminPrivateControllerModule
+    val adminPrivateModule: AdminPrivateControllerDependencies
     val economyProvider: Reloadable<EconomyProvider?>
     val tempFileManager: Reloadable<SpigotFileManager>
     val translationContext: BukkitTranslationContext

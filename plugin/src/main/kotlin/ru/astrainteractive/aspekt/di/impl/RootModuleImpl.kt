@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.di.impl
 
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.AspeKt
-import ru.astrainteractive.aspekt.adminprivate.controller.di.AdminPrivateControllerModule
+import ru.astrainteractive.aspekt.adminprivate.controller.di.AdminPrivateControllerDependencies
 import ru.astrainteractive.aspekt.command.di.CommandsModule
 import ru.astrainteractive.aspekt.di.ControllersModule
 import ru.astrainteractive.aspekt.di.RootModule
@@ -96,8 +96,11 @@ class RootModuleImpl : RootModule {
     override val commandsModule: CommandsModule by Single {
         CommandsModuleImpl(this)
     }
-    override val adminPrivateModule: AdminPrivateControllerModule by Single {
-        AdminPrivateControllerModuleImpl(this)
+    override val adminPrivateModule: AdminPrivateControllerDependencies by Single {
+        AdminPrivateControllerDependencies.Default(
+            adminChunksYml = { adminChunksYml.value },
+            dispatchers = { dispatchers.value }
+        )
     }
     override val economyProvider: Reloadable<EconomyProvider?> = Reloadable {
         runCatching {
