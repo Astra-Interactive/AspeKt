@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.adminprivate.models
+package ru.astrainteractive.aspekt.adminprivate.model
 
 import kotlinx.serialization.Serializable
 

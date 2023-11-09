@@ -2,8 +2,8 @@ package ru.astrainteractive.aspekt.adminprivate.data
 
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
-import ru.astrainteractive.aspekt.adminprivate.models.AdminChunk
-import ru.astrainteractive.aspekt.adminprivate.models.AdminPrivateConfig
+import ru.astrainteractive.aspekt.adminprivate.model.AdminChunk
+import ru.astrainteractive.aspekt.adminprivate.model.AdminPrivateConfig
 import ru.astrainteractive.aspekt.adminprivate.util.uniqueWorldKey
 import ru.astrainteractive.astralibs.filemanager.FileManager
 import ru.astrainteractive.astralibs.serialization.YamlSerializer

@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.command
 
 import kotlinx.coroutines.launch
 import org.bukkit.entity.Player
-import ru.astrainteractive.aspekt.adminprivate.models.ChunkFlag
+import ru.astrainteractive.aspekt.adminprivate.model.ChunkFlag
 import ru.astrainteractive.aspekt.adminprivate.util.adminChunk
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.registerCommand

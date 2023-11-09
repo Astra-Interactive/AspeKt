@@ -1,12 +1,12 @@
 package ru.astrainteractive.aspekt.command
 
-import ru.astrainteractive.aspekt.command.di.CommandsModule
+import ru.astrainteractive.aspekt.command.di.CommandsDependencies
 import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 
 class CommandManager(
-    module: CommandsModule,
+    module: CommandsDependencies,
     translationContext: BukkitTranslationContext
-) : CommandsModule by module,
+) : CommandsDependencies by module,
     BukkitTranslationContext by translationContext {
     init {
         reload()

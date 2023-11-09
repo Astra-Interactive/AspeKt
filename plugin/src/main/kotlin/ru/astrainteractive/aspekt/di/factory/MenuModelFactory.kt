@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.di.factories
+package ru.astrainteractive.aspekt.di.factory
 
 import kotlinx.serialization.SerializationException
 import ru.astrainteractive.aspekt.plugin.MenuModel

@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.event.discord.controllers
+package ru.astrainteractive.aspekt.event.discord.controller
 
 import github.scarsz.discordsrv.api.events.AccountLinkedEvent
 import github.scarsz.discordsrv.api.events.AccountUnlinkedEvent
@@ -6,7 +6,7 @@ import github.scarsz.discordsrv.dependencies.jda.api.JDA
 import github.scarsz.discordsrv.dependencies.jda.api.entities.Role
 import github.scarsz.discordsrv.util.DiscordUtil
 import org.bukkit.Bukkit
-import ru.astrainteractive.aspekt.event.discord.controllers.di.RoleControllerModule
+import ru.astrainteractive.aspekt.event.discord.controller.di.RoleControllerDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 import ru.astrainteractive.astralibs.util.uuid
@@ -14,11 +14,10 @@ import java.util.UUID
 
 @Suppress("DuplicatedCode")
 class DiscordController(
-    module: RoleControllerModule,
-    translationContext: BukkitTranslationContext
+    module: RoleControllerDependencies,
 ) : RoleController,
-    RoleControllerModule by module,
-    BukkitTranslationContext by translationContext {
+    RoleControllerDependencies by module,
+    BukkitTranslationContext by module.translationContext {
 
     override val configuration: PluginConfiguration.DiscordSRVLink
         get() = pluginConfiguration.discordSRVLink

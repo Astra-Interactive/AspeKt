@@ -22,10 +22,11 @@ import ru.astrainteractive.astralibs.event.DSLEvent
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 import kotlin.random.Random
+import ru.astrainteractive.aspekt.event.tc.di.TCDependencies
 
 class TCEvent(
-    module: EventsModule
-) : EventsModule by module {
+    module: TCDependencies
+) : TCDependencies by module {
     private val tcConfig: PluginConfiguration.TC by Provider {
         configuration.tc
     }

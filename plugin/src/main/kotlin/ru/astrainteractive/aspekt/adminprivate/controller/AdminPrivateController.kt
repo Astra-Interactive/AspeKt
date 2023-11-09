@@ -1,8 +1,8 @@
 package ru.astrainteractive.aspekt.adminprivate.controller
 
 import ru.astrainteractive.aspekt.adminprivate.controller.di.AdminPrivateControllerDependencies
-import ru.astrainteractive.aspekt.adminprivate.models.AdminChunk
-import ru.astrainteractive.aspekt.adminprivate.models.ChunkFlag
+import ru.astrainteractive.aspekt.adminprivate.model.AdminChunk
+import ru.astrainteractive.aspekt.adminprivate.model.ChunkFlag
 import ru.astrainteractive.aspekt.adminprivate.util.uniqueWorldKey
 import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.klibs.kdi.Provider

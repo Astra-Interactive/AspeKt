@@ -14,13 +14,13 @@ import ru.astrainteractive.aspekt.event.tc.TCEvent
 class EventHandler(
     module: EventsModule
 ) {
-
     init {
-        SitEvent(module)
-        SortEvent(module)
-        AutoCropEvent(module)
-        TCEvent(module)
-        RestrictionsEvent(module)
-        AdminPrivateEvent(module, module.translationContext)
+        module.tcEvent
+        module.sortEvent
+        module.sitModule.sitEvent
+        module.restrictionsEvent
+        module.discordEvent
+        module.autoCropEvent
+        module.adminPrivateEvent
     }
 }

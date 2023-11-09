@@ -13,14 +13,15 @@ import org.bukkit.event.entity.ExplosionPrimeEvent
 import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.event.di.EventsModule
+import ru.astrainteractive.aspekt.event.restrictions.di.RestrictionsDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.DSLEvent
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 
 class RestrictionsEvent(
-    module: EventsModule
-) : EventsModule by module {
+    module: RestrictionsDependencies
+) : RestrictionsDependencies by module {
     private val restrictions: PluginConfiguration.Restrictions by Provider {
         configuration.restrictions
     }

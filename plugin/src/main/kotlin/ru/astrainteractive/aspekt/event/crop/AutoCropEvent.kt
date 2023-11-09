@@ -8,10 +8,11 @@ import org.bukkit.inventory.ItemStack
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.astralibs.event.DSLEvent
 import kotlin.random.Random
+import ru.astrainteractive.aspekt.event.crop.di.AutoCropDependencies
 
 class AutoCropEvent(
-    module: EventsModule
-) : EventsModule by module {
+    module: AutoCropDependencies
+) : AutoCropDependencies by module {
 
     val onCropInteract = DSLEvent<PlayerInteractEvent>(eventListener, plugin) { e ->
         val autoCropConfig = configuration.autoCrop

@@ -3,7 +3,7 @@
 package ru.astrainteractive.aspekt.adminprivate.util
 
 import org.bukkit.Chunk
-import ru.astrainteractive.aspekt.adminprivate.models.AdminChunk
+import ru.astrainteractive.aspekt.adminprivate.model.AdminChunk
 
 inline val AdminChunk.uniqueWorldKey: String
     get() = "${this.chunkKey}_${this.worldName}"

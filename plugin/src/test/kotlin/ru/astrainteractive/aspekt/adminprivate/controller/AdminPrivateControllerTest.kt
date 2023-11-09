@@ -5,8 +5,8 @@ import org.junit.Test
 import ru.astrainteractive.aspekt.adminprivate.controller.di.AdminPrivateControllerDependencies
 import ru.astrainteractive.aspekt.adminprivate.data.AdminPrivateRepository
 import ru.astrainteractive.aspekt.adminprivate.data.AdminPrivateRepositoryImpl
-import ru.astrainteractive.aspekt.adminprivate.models.AdminChunk
-import ru.astrainteractive.aspekt.adminprivate.models.ChunkFlag
+import ru.astrainteractive.aspekt.adminprivate.model.AdminChunk
+import ru.astrainteractive.aspekt.adminprivate.model.ChunkFlag
 import ru.astrainteractive.astralibs.filemanager.impl.JVMFileManager
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue

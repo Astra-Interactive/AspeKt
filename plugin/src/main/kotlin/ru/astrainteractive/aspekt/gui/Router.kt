@@ -12,5 +12,5 @@ interface Router {
         ) : Route
     }
 
-    fun open(router: Router.Route)
+    fun open(route: Router.Route)
 }

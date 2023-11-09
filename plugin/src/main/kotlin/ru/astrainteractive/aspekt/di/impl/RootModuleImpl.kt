@@ -1,14 +1,8 @@
 package ru.astrainteractive.aspekt.di.impl
 
-import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.AspeKt
-import ru.astrainteractive.aspekt.adminprivate.controller.di.AdminPrivateControllerDependencies
-import ru.astrainteractive.aspekt.command.di.CommandsModule
-import ru.astrainteractive.aspekt.di.ControllersModule
 import ru.astrainteractive.aspekt.di.RootModule
-import ru.astrainteractive.aspekt.di.factories.MenuModelFactory
-import ru.astrainteractive.aspekt.event.di.EventsModule
-import ru.astrainteractive.aspekt.event.discord.DiscordEvent
+import ru.astrainteractive.aspekt.di.factory.MenuModelFactory
 import ru.astrainteractive.aspekt.gui.Router
 import ru.astrainteractive.aspekt.gui.RouterImpl
 import ru.astrainteractive.aspekt.plugin.AutoBroadcastJob
@@ -36,6 +30,10 @@ import ru.astrainteractive.klibs.kdi.Reloadable
 import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
 import java.io.File
+import ru.astrainteractive.aspekt.adminprivate.di.AdminPrivateModule
+import ru.astrainteractive.aspekt.command.di.CommandsDependencies
+import ru.astrainteractive.aspekt.event.di.EventsModule
+import ru.astrainteractive.aspekt.gui.di.GuiModule
 
 class RootModuleImpl : RootModule {
 
@@ -86,22 +84,9 @@ class RootModuleImpl : RootModule {
             }
     }
 
-    // Modules
-    override val controllersModule: ControllersModule by Single {
-        ControllersModuleImpl(this)
-    }
-    override val eventsModule: EventsModule by Single {
-        EventsModuleImpl(this)
-    }
-    override val commandsModule: CommandsModule by Single {
-        CommandsModuleImpl(this)
-    }
-    override val adminPrivateModule: AdminPrivateControllerDependencies by Single {
-        AdminPrivateControllerDependencies.Default(
-            adminChunksYml = { adminChunksYml.value },
-            dispatchers = { dispatchers.value }
-        )
-    }
+    override val commandsDependencies: CommandsDependencies
+        get() = TODO("Not yet implemented")
+
     override val economyProvider: Reloadable<EconomyProvider?> = Reloadable {
         runCatching {
             AnyEconomyProvider(plugin.value)
@@ -111,13 +96,6 @@ class RootModuleImpl : RootModule {
         DefaultSpigotFileManager(plugin.value, "temp.yml")
     }
 
-    // etc
-    override val discordEvent = Single {
-        Bukkit.getPluginManager().getPlugin("DiscordSRV") ?: return@Single null
-        Bukkit.getPluginManager().getPlugin("LuckPerms") ?: return@Single null
-        val discordEventModule = DiscordEventModuleImpl(this)
-        DiscordEvent(discordEventModule)
-    }
     override val autoBroadcastJob = Single {
         AutoBroadcastJob(
             config = pluginConfig,
@@ -140,5 +118,15 @@ class RootModuleImpl : RootModule {
             economyProvider = economyProvider.value,
             translation = translation.value
         )
+    }
+
+    override val adminPrivateModule: AdminPrivateModule by lazy {
+        AdminPrivateModule.Default(this)
+    }
+    override val eventsModule: EventsModule by Single {
+        EventsModule.Default(this)
+    }
+    override val guiModule: GuiModule by Single {
+        GuiModule.Default(this)
     }
 }
