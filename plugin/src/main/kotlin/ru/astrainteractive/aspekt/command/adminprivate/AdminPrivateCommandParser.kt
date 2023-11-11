@@ -7,55 +7,40 @@ import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.api.CommandParser
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
 
-class AdminPrivateCommandParser : CommandParser<AdminPrivateCommandParser.Output> {
-    sealed interface Output {
-        data object WrongUsage : Output
-        data object NotPlayer : Output
-        data object NoPermission : Output
-        class ShowMap(val player: Player) : Output
-        class Claim(val player: Player) : Output
-        class UnClaim(val player: Player) : Output
-        class SetFlag(
-            val player: Player,
-            val flag: ChunkFlag,
-            val value: Boolean
-        ) : Output
-    }
+class AdminPrivateCommandParser : CommandParser<AdminPrivateCommand.Output> {
 
-    override val alias: String = "adminprivate"
-
-    override fun parse(args: Array<out String>, sender: CommandSender): Output {
+    override fun parse(args: Array<out String>, sender: CommandSender): AdminPrivateCommand.Output {
         if (!sender.toPermissible().hasPermission(PluginPermission.AdminClaim)) {
-            return Output.NoPermission
+            return AdminPrivateCommand.Output.NoPermission
         }
         return when (args.getOrNull(0)) {
             "map" -> {
-                (sender as? Player)?.let(Output::ShowMap) ?: Output.NotPlayer
+                (sender as? Player)?.let(AdminPrivateCommand.Output::ShowMap) ?: AdminPrivateCommand.Output.NotPlayer
             }
 
             "claim" -> {
-                (sender as? Player)?.let(Output::Claim) ?: Output.NotPlayer
+                (sender as? Player)?.let(AdminPrivateCommand.Output::Claim) ?: AdminPrivateCommand.Output.NotPlayer
             }
 
             "unclaim" -> {
-                (sender as? Player)?.let(Output::UnClaim) ?: Output.NotPlayer
+                (sender as? Player)?.let(AdminPrivateCommand.Output::UnClaim) ?: AdminPrivateCommand.Output.NotPlayer
             }
 
             "flag" -> {
                 val flag = args.getOrNull(1)?.let(ChunkFlag::valueOf)
-                flag ?: return Output.WrongUsage
+                flag ?: return AdminPrivateCommand.Output.WrongUsage
                 val value = args.getOrNull(2)?.toBoolean()
-                value ?: return Output.WrongUsage
+                value ?: return AdminPrivateCommand.Output.WrongUsage
                 val player = (sender as? Player)
-                player ?: return Output.NotPlayer
-                Output.SetFlag(
+                player ?: return AdminPrivateCommand.Output.NotPlayer
+                AdminPrivateCommand.Output.SetFlag(
                     player = player,
                     flag = flag,
                     value = value
                 )
             }
 
-            else -> Output.WrongUsage
+            else -> AdminPrivateCommand.Output.WrongUsage
         }
     }
 }

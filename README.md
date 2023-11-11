@@ -20,7 +20,8 @@ I don't provide support for plugins, which are not released by me on spigot or a
 
 To build AspeKt, you need JDK 18 or higher installed on your system.
 
-Clone this repository, modify `destinationDirectoryPath` in `gradle/libs.versions.toml` then run the following command:
+Clone this repository, modify `destination` in [build.gradle.kts](plugin/build.gradle.kts) then run the following
+command:
 
 * On Linux or macOS: `./gradlew shadowJar`
 * On Windows: `gradlew shadowJar`
@@ -109,7 +110,7 @@ Data stored in menu/XXX.yml and can be easily modified. Changes are applied by p
 
 #### Placeholders:
 
-- `{PLAYER}` - player, opened an inventory 
+- `{PLAYER}` - player, opened an inventory
 
 ```yaml
 # XXS, XS, S, M, L, XL

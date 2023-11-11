@@ -28,6 +28,9 @@ dependencies {
     testImplementation(libs.tests.kotlin.test)
     testImplementation(libs.minecraft.mockbukkit)
 }
-val localFile = File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\anarchy\\plugins")
-if (localFile.exists()) setupSpigotShadow(localFile) else setupSpigotShadow()
+val destination = File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\anarchy\\plugins")
+    .takeIf(File::exists)
+    ?: File(rootDir, "jars")
+
+setupSpigotShadow(destination)
 setupSpigotProcessor()
