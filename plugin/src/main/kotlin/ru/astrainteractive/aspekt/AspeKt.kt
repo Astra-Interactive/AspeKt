@@ -31,7 +31,7 @@ class AspeKt : JavaPlugin() {
         CommandManager(commandsDependencies, rootModule.translationContext)
         rootModule.inventoryClickEventListener.value.onEnable(this)
         rootModule.eventListener.value.onEnable(this)
-        rootModule.autoBroadcastJob.value.onEnable()
+        rootModule.autoBroadcastModule.value.autoBroadcastJob.onEnable()
         rootModule.eventsModule.discordEvent?.onEnable()
         rootModule.economyProvider.reload()
     }
@@ -41,7 +41,7 @@ class AspeKt : JavaPlugin() {
      */
     override fun onDisable() {
         rootModule.eventsModule.sitModule.sitController.onDisable()
-        rootModule.autoBroadcastJob.value.onDisable()
+        rootModule.autoBroadcastModule.value.autoBroadcastJob.onDisable()
         HandlerList.unregisterAll(this)
         rootModule.inventoryClickEventListener.value.onDisable()
         rootModule.eventListener.value.onDisable()
@@ -61,7 +61,7 @@ class AspeKt : JavaPlugin() {
         rootModule.economyProvider.reload()
         rootModule.adminPrivateModule.adminPrivateController.updateChunks()
         rootModule.tempFileManager.reload()
-        rootModule.autoBroadcastJob.value.apply {
+        rootModule.autoBroadcastModule.value.autoBroadcastJob.apply {
             this.onDisable()
             this.onEnable()
         }

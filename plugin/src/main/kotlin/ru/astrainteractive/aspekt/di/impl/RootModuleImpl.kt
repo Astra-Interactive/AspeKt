@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.di.impl
 import kotlinx.serialization.encodeToString
 import ru.astrainteractive.aspekt.AspeKt
 import ru.astrainteractive.aspekt.adminprivate.di.AdminPrivateModule
+import ru.astrainteractive.aspekt.autobroadcast.di.AutoBroadcastModule
 import ru.astrainteractive.aspekt.command.di.CommandsDependencies
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.aspekt.di.factory.MenuModelFactory
@@ -10,7 +11,6 @@ import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.gui.Router
 import ru.astrainteractive.aspekt.gui.RouterImpl
 import ru.astrainteractive.aspekt.gui.di.GuiModule
-import ru.astrainteractive.aspekt.plugin.AutoBroadcastJob
 import ru.astrainteractive.aspekt.plugin.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -100,13 +100,6 @@ class RootModuleImpl : RootModule {
         DefaultSpigotFileManager(plugin.value, "temp.yml")
     }
 
-    override val autoBroadcastJob = Single {
-        AutoBroadcastJob(
-            config = pluginConfig,
-            dispatchers = dispatchers.value,
-            scope = scope.value
-        )
-    }
     override val translationContext: BukkitTranslationContext by Single {
         val serializer = KyoriComponentSerializer.Legacy
         BukkitTranslationContext.Default { serializer }
@@ -132,5 +125,8 @@ class RootModuleImpl : RootModule {
     }
     override val guiModule: GuiModule by Single {
         GuiModule.Default(this)
+    }
+    override val autoBroadcastModule: Single<AutoBroadcastModule> = Single {
+        AutoBroadcastModule.Default(this)
     }
 }

@@ -2,11 +2,11 @@ package ru.astrainteractive.aspekt.di
 
 import ru.astrainteractive.aspekt.AspeKt
 import ru.astrainteractive.aspekt.adminprivate.di.AdminPrivateModule
+import ru.astrainteractive.aspekt.autobroadcast.di.AutoBroadcastModule
 import ru.astrainteractive.aspekt.command.di.CommandsDependencies
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.gui.Router
 import ru.astrainteractive.aspekt.gui.di.GuiModule
-import ru.astrainteractive.aspekt.plugin.AutoBroadcastJob
 import ru.astrainteractive.aspekt.plugin.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -38,7 +38,6 @@ interface RootModule : Module {
     val adminChunksYml: Reloadable<FileManager>
     val translation: Reloadable<PluginTranslation>
 
-    val autoBroadcastJob: Dependency<AutoBroadcastJob>
     val menuModels: Reloadable<List<MenuModel>>
     val commandsDependencies: CommandsDependencies
     val economyProvider: Reloadable<EconomyProvider?>
@@ -50,4 +49,5 @@ interface RootModule : Module {
     val adminPrivateModule: AdminPrivateModule
     val eventsModule: EventsModule
     val guiModule: GuiModule
+    val autoBroadcastModule: Single<AutoBroadcastModule>
 }
