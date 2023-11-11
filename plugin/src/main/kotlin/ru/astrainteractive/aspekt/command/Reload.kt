@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.command
 
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.registerCommand
+import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
 
 /**
  * Reload command handler
@@ -13,7 +14,7 @@ import ru.astrainteractive.astralibs.command.registerCommand
  * Here you should also check for permission
  */
 fun CommandManager.reload() = plugin.registerCommand("aesreload") {
-    if (!PluginPermission.Reload.hasPermission(sender)) {
+    if (!sender.toPermissible().hasPermission(PluginPermission.Reload)) {
         sender.sendMessage(translation.noPermission)
         return@registerCommand
     }

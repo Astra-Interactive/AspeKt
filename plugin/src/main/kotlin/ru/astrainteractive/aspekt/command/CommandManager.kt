@@ -1,8 +1,14 @@
 package ru.astrainteractive.aspekt.command
 
-import ru.astrainteractive.aspekt.command.di.CommandsModule
+import ru.astrainteractive.aspekt.command.adminprivate.AdminPrivateCommandFactory
+import ru.astrainteractive.aspekt.command.di.CommandsDependencies
+import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 
-class CommandManager(module: CommandsModule) : CommandsModule by module {
+class CommandManager(
+    module: CommandsDependencies,
+    translationContext: BukkitTranslationContext
+) : CommandsDependencies by module,
+    BukkitTranslationContext by translationContext {
     init {
         reload()
         sit()
@@ -13,9 +19,15 @@ class CommandManager(module: CommandsModule) : CommandsModule by module {
         tellChat()
         rtp()
         rtpBypassed()
-        adminPrivate()
-        adminPrivateCompleter()
         menuCompleter()
         menu()
+        AdminPrivateCommandFactory(
+            plugin = plugin,
+            adminPrivateController = module.adminPrivateController,
+            scope = module.scope,
+            translation = module.translation,
+            dispatchers = module.dispatchers,
+            translationContext = module.translationContext
+        ).create()
     }
 }

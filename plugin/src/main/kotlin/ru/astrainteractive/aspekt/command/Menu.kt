@@ -1,9 +1,7 @@
 package ru.astrainteractive.aspekt.command
 
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.bukkit.entity.Player
-import ru.astrainteractive.aspekt.gui.menu.MenuGui
+import ru.astrainteractive.aspekt.gui.Router
 import ru.astrainteractive.astralibs.command.registerCommand
 import ru.astrainteractive.astralibs.command.registerTabCompleter
 import ru.astrainteractive.astralibs.command.types.PrimitiveArgumentType
@@ -23,16 +21,9 @@ fun CommandManager.menu() = plugin.registerCommand("menu") {
         sender.sendMessage(translation.menuNotFound)
         return@registerCommand
     }
-    pluginScope.launch(dispatchers.BukkitAsync) {
-        val gui = MenuGui(
-            player = sender as Player,
-            economyProvider = economyProvider,
-            translation = translation,
-            menuModel = menuModel,
-            dispatchers = dispatchers
-        )
-        withContext(dispatchers.BukkitMain) {
-            gui.open()
-        }
-    }
+    val route = Router.Route.Menu(
+        player = sender as Player,
+        menuModel = menuModel
+    )
+    router.open(route)
 }

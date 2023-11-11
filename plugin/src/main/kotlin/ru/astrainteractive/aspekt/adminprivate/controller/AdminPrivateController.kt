@@ -1,17 +1,17 @@
 package ru.astrainteractive.aspekt.adminprivate.controller
 
-import ru.astrainteractive.aspekt.adminprivate.controller.di.AdminPrivateControllerModule
-import ru.astrainteractive.aspekt.adminprivate.models.AdminChunk
-import ru.astrainteractive.aspekt.adminprivate.models.ChunkFlag
+import ru.astrainteractive.aspekt.adminprivate.controller.di.AdminPrivateControllerDependencies
+import ru.astrainteractive.aspekt.adminprivate.model.AdminChunk
+import ru.astrainteractive.aspekt.adminprivate.model.ChunkFlag
 import ru.astrainteractive.aspekt.adminprivate.util.uniqueWorldKey
 import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.Reloadable
 import ru.astrainteractive.klibs.kdi.getValue
 
-class AdminPrivateController(module: AdminPrivateControllerModule) :
+class AdminPrivateController(module: AdminPrivateControllerDependencies) :
     AsyncComponent(),
-    AdminPrivateControllerModule by module {
+    AdminPrivateControllerDependencies by module {
     private val chunks = Reloadable {
         repository.getConfig()
     }

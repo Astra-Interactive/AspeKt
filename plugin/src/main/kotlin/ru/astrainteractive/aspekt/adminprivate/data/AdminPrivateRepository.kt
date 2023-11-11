@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.adminprivate.data
 
-import ru.astrainteractive.aspekt.adminprivate.models.AdminChunk
-import ru.astrainteractive.aspekt.adminprivate.models.AdminPrivateConfig
+import ru.astrainteractive.aspekt.adminprivate.model.AdminChunk
+import ru.astrainteractive.aspekt.adminprivate.model.AdminPrivateConfig
 
 interface AdminPrivateRepository {
     fun getConfig(): AdminPrivateConfig

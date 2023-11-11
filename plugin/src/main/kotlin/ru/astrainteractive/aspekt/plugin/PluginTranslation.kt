@@ -1,54 +1,70 @@
+@file:Suppress("MaxLineLength", "MaximumLineLength", "LongParameterList")
+
 package ru.astrainteractive.aspekt.plugin
 
-import org.bukkit.plugin.Plugin
-import ru.astrainteractive.astralibs.filemanager.DefaultSpigotFileManager
-import ru.astrainteractive.astralibs.filemanager.SpigotFileManager
-import ru.astrainteractive.astralibs.util.BaseTranslation
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import ru.astrainteractive.astralibs.string.StringDesc
+import ru.astrainteractive.astralibs.string.replace
 
 /**
  * All translation stored here
  */
-class PluginTranslation(plugin: Plugin) : BaseTranslation() {
-    /**
-     * This is a default translation file. Don't forget to create translation.yml in resources of the plugin
-     */
-    protected override val translationFile: SpigotFileManager = DefaultSpigotFileManager(plugin, "translations.yml")
-
-    val getByByCheck = translationValue("getByByCheck", "#db2c18getByByCheck")
-
+@Serializable
+class PluginTranslation(
+    @SerialName("getByByCheck")
+    val getByByCheck: StringDesc.Raw = StringDesc.Raw("&#db2c18getByByCheck"),
     // Database
-    val dbSuccess = translationValue("database.success", "#18dbd1Успешно подключено к базе данных")
-    val dbFail = translationValue("database.fail", "#db2c18Нет подключения к базе данных")
-
+    @SerialName("database.success")
+    val dbSuccess: StringDesc.Raw = StringDesc.Raw("&#18dbd1Успешно подключено к базе данных"),
+    @SerialName("database.fail")
+    val dbFail: StringDesc.Raw = StringDesc.Raw("&#db2c18Нет подключения к базе данных"),
     // General
-    val prefix = translationValue("general.prefix", "#18dbd1[AspeKt]")
-    val reload = translationValue("general.reload", "#dbbb18Перезагрузка плагина")
-    val reloadComplete = translationValue("general.reload_complete", "#42f596Перезагрузка успешно завершена")
-    val noPermission = translationValue("general.no_permission", "#db2c18У вас нет прав!")
-    val notEnoughMoney = translationValue("general.not_enough_money", "#db2c18Недостаточно средств!")
-    val wrongUsage = translationValue("general.wrong_usage", "#db2c18Неверное использование!")
-    val onlyPlayerCommand = translationValue("general.only_player_command", "#db2c18Эта команда только для игроков!")
-    val menuNotFound = translationValue("general.menu_not_found", "#db2c18Меню с заданным ID не найдено")
-    private val discordLinkReward = translationValue(
-        "general.discord_link_reward",
-        "#42f596Вы получили {AMOUNT}$ за привязку дискорда!"
-    )
-    fun discordLinkReward(amount: Number) = discordLinkReward.replace("{AMOUNT}", "${amount.toInt()}")
-
+    @SerialName("general.prefix")
+    val prefix: StringDesc.Raw = StringDesc.Raw("&#18dbd1[AspeKt]"),
+    @SerialName("general.reload")
+    val reload: StringDesc.Raw = StringDesc.Raw("&#dbbb18Перезагрузка плагина"),
+    @SerialName("general.reload_complete")
+    val reloadComplete: StringDesc.Raw = StringDesc.Raw("&#42f596Перезагрузка успешно завершена"),
+    @SerialName("general.no_permission")
+    val noPermission: StringDesc.Raw = StringDesc.Raw("&#db2c18У вас нет прав!"),
+    @SerialName("general.not_enough_money")
+    val notEnoughMoney: StringDesc.Raw = StringDesc.Raw("&#db2c18Недостаточно средств!"),
+    @SerialName("general.wrong_usage")
+    val wrongUsage: StringDesc.Raw = StringDesc.Raw("&#db2c18Неверное использование!"),
+    @SerialName("general.only_player_command")
+    val onlyPlayerCommand: StringDesc.Raw = StringDesc.Raw("&#db2c18Эта команда только для игроков!"),
+    @SerialName("general.menu_not_found")
+    val menuNotFound: StringDesc.Raw = StringDesc.Raw("&#db2c18Меню с заданным ID не найдено"),
+    @SerialName("general.discord_link_reward")
+    private val discordLinkReward: StringDesc.Raw = StringDesc.Raw(
+        "&#42f596Вы получили {AMOUNT}$ за привязку дискорда!"
+    ),
     // Admin claim
-    val chunkFlagChanged = translationValue("general.adminprivate.flag_changed", "#db2c18Флаг чанка изменен!")
-    val chunkClaimed = translationValue("general.adminprivate.claimed", "#db2c18Вы заняли чанк!")
-    val chunkUnClaimed = translationValue("general.adminprivate.unclaimed", "#db2c18Чанк свободен!")
-    val error = translationValue("general.adminprivate.error", "#db2c18Ошибка! Смотрите консоль")
-    val blockMap = translationValue("general.adminprivate.map", "#18dbd1Карта блоков:")
-    private val actionIsBlockByAdminClaim = translationValue(
-        "general.adminprivate.action_blocked",
-        "#db2c18Ошибка! Действией %action% заблокировано на этом чанке!"
-    )
-
-    fun actionIsBlockByAdminClaim(action: String) = actionIsBlockByAdminClaim.replace("%action%", action)
-
+    @SerialName("general.adminprivate.flag_changed")
+    val chunkFlagChanged: StringDesc.Raw = StringDesc.Raw("&#db2c18Флаг чанка изменен!"),
+    @SerialName("general.adminprivate.claimed")
+    val chunkClaimed: StringDesc.Raw = StringDesc.Raw("&#db2c18Вы заняли чанк!"),
+    @SerialName("general.adminprivate.unclaimed")
+    val chunkUnClaimed: StringDesc.Raw = StringDesc.Raw("&#db2c18Чанк свободен!"),
+    @SerialName("general.adminprivate.error")
+    val error: StringDesc.Raw = StringDesc.Raw("&#db2c18Ошибка! Смотрите консоль"),
+    @SerialName("general.adminprivate.map")
+    val blockMap: StringDesc.Raw = StringDesc.Raw("&#18dbd1Карта блоков:"),
+    @SerialName("general.adminprivate.action_blocked")
+    private val actionIsBlockByAdminClaim: StringDesc.Raw = StringDesc.Raw(
+        "&#db2c18Ошибка! Действией %action% заблокировано на этом чанке!"
+    ),
     // Sit
-    public val sitAlready: String = translationValue("sit.already", "#dbbb18Вы уже сидите")
-    public val sitInAir: String = translationValue("sit.air", "#dbbb18Нельзя сидеть в воздухе")
+    @SerialName("sit.already") val sitAlready: StringDesc.Raw = StringDesc.Raw("&#dbbb18Вы уже сидите"),
+    @SerialName("sit.air") val sitInAir: StringDesc.Raw = StringDesc.Raw("&#dbbb18Нельзя сидеть в воздухе")
+) {
+
+    fun actionIsBlockByAdminClaim(action: String): StringDesc.Raw {
+        return actionIsBlockByAdminClaim.replace("%action%", action)
+    }
+
+    fun discordLinkReward(amount: Number): StringDesc.Raw {
+        return discordLinkReward.replace("{AMOUNT}", "${amount.toInt()}")
+    }
 }

@@ -2,11 +2,11 @@ package ru.astrainteractive.aspekt.adminprivate.data
 
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
-import ru.astrainteractive.aspekt.adminprivate.models.AdminChunk
-import ru.astrainteractive.aspekt.adminprivate.models.AdminPrivateConfig
+import ru.astrainteractive.aspekt.adminprivate.model.AdminChunk
+import ru.astrainteractive.aspekt.adminprivate.model.AdminPrivateConfig
 import ru.astrainteractive.aspekt.adminprivate.util.uniqueWorldKey
-import ru.astrainteractive.astralibs.configloader.ConfigLoader
 import ru.astrainteractive.astralibs.filemanager.FileManager
+import ru.astrainteractive.astralibs.serialization.YamlSerializer
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 class AdminPrivateRepositoryImpl(
@@ -16,7 +16,7 @@ class AdminPrivateRepositoryImpl(
     private val limitedDispatcher = dispatchers.IO.limitedParallelism(1)
 
     override fun getConfig(): AdminPrivateConfig {
-        return ConfigLoader().toClassOrDefault(fileManager.configFile, ::AdminPrivateConfig)
+        return YamlSerializer().toClassOrDefault(fileManager.configFile, ::AdminPrivateConfig)
     }
 
     override suspend fun getAllChunks(): List<AdminChunk> = withContext(limitedDispatcher) {
@@ -37,7 +37,7 @@ class AdminPrivateRepositoryImpl(
                 this[chunk.uniqueWorldKey] = chunk
             }
         )
-        fileManager.configFile.writeText(ConfigLoader().yaml.encodeToString(newRootConfig))
+        fileManager.configFile.writeText(YamlSerializer().yaml.encodeToString(newRootConfig))
     }
 
     override suspend fun deleteChunk(chunk: AdminChunk) = withContext(limitedDispatcher) {
@@ -47,6 +47,6 @@ class AdminPrivateRepositoryImpl(
                 remove(chunk.uniqueWorldKey)
             }
         )
-        fileManager.configFile.writeText(ConfigLoader().yaml.encodeToString(newRootConfig))
+        fileManager.configFile.writeText(YamlSerializer().yaml.encodeToString(newRootConfig))
     }
 }

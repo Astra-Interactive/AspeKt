@@ -15,7 +15,7 @@ dependencies {
     // AstraLibs
     implementation(libs.minecraft.astralibs.ktxcore)
     implementation(libs.minecraft.astralibs.orm)
-    implementation(libs.klibs.kdi)
+    implementation(klibs.klibs.kdi)
     implementation(libs.minecraft.astralibs.spigot.gui)
     implementation(libs.minecraft.astralibs.spigot.core)
     implementation(libs.minecraft.vaultapi)
@@ -28,6 +28,9 @@ dependencies {
     testImplementation(libs.tests.kotlin.test)
     testImplementation(libs.minecraft.mockbukkit)
 }
-val localFile = File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\anarchy\\plugins")
-if (localFile.exists()) setupSpigotShadow(localFile) else setupSpigotShadow()
+val destination = File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\anarchy\\plugins")
+    .takeIf(File::exists)
+    ?: File(rootDir, "jars")
+
+setupSpigotShadow(destination)
 setupSpigotProcessor()

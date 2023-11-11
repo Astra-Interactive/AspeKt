@@ -18,9 +18,9 @@ minecraft-protocollib = "4.8.0"
 minecraft-wg = "7.0.7"
 minecraft-vault = "1.7"
 minecraft-coreprotect = "21.2"
-minecraft-astralibs = "2.11.0"
+minecraft-astralibs = "2.16.1"
 minecraft-bstats = "3.0.0"
-minecraft-mockbukkit = "v1.19-SNAPSHOT"
+minecraft-mockbukkit = "3.9.0"
 
 # Testing
 tests-org-testing = "7.1.0"
@@ -93,7 +93,7 @@ minecraft-protocollib = { module = "com.comphenix.protocol:ProtocolLib", version
 minecraft-papi = { module = "me.clip:placeholderapi", version.ref = "minecraft-papi" }
 minecraft-vaultapi = { module = "com.github.MilkBowl:VaultAPI", version.ref = "minecraft-vault" }
 minecraft-bstats = { module = "org.bstats:bstats-bukkit", version.ref = "minecraft-bstats" }
-minecraft-mockbukkit = { module = "com.github.MockBukkit:MockBukkit", version.ref = "minecraft-mockbukkit" }
+minecraft-mockbukkit = { module = "com.github.seeseemelk:MockBukkit-v1.20", version.ref = "minecraft-mockbukkit" }
 
 # AstraLibs
 minecraft-astralibs-ktxcore = { module = "ru.astrainteractive.astralibs:ktx-core", version.ref = "minecraft-astralibs" }

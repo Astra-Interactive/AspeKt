@@ -3,9 +3,10 @@ package ru.astrainteractive.aspekt.command
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.registerCommand
+import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
 
 fun CommandManager.maxOnline() = plugin.registerCommand("maxonline") {
-    if (!PluginPermission.MaxOnline.hasPermission(sender)) return@registerCommand
+    if (!sender.toPermissible().hasPermission(PluginPermission.MaxOnline)) return@registerCommand
     argument(0) {
         it.toIntOrNull() ?: Bukkit.getServer().maxPlayers
     }.onFailure {

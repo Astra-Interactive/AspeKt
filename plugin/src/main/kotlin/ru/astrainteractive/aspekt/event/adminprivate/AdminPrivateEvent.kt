@@ -26,16 +26,19 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import ru.astrainteractive.aspekt.adminprivate.debounce.EventDebounce
 import ru.astrainteractive.aspekt.adminprivate.debounce.RetractKey
-import ru.astrainteractive.aspekt.adminprivate.models.AdminChunk
-import ru.astrainteractive.aspekt.adminprivate.models.ChunkFlag
+import ru.astrainteractive.aspekt.adminprivate.model.AdminChunk
+import ru.astrainteractive.aspekt.adminprivate.model.ChunkFlag
 import ru.astrainteractive.aspekt.adminprivate.util.adminChunk
-import ru.astrainteractive.aspekt.event.di.EventsModule
+import ru.astrainteractive.aspekt.event.adminprivate.di.AdminPrivateDependencies
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.event.DSLEvent
+import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
+import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 
 class AdminPrivateEvent(
-    module: EventsModule
-) : EventsModule by module {
+    module: AdminPrivateDependencies,
+) : AdminPrivateDependencies by module,
+    BukkitTranslationContext by module.translationContext {
     private val debounce = EventDebounce<RetractKey>(5000L)
     private fun <T> handleDefault(
         retractKey: RetractKey,
@@ -45,7 +48,8 @@ class AdminPrivateEvent(
         flag: ChunkFlag
     ) where T : Event, T : Cancellable {
         if (!adminPrivateController.isEnabled) return
-        if (player?.let(PluginPermission.AdminClaim::hasPermission) == true) return
+
+        if (player?.toPermissible()?.hasPermission(PluginPermission.AdminClaim) == true) return
         debounce.debounceEvent(retractKey, e) {
             val isAble = adminPrivateController.isAble(adminChunk, flag)
             val isCancelled = !isAble

@@ -6,11 +6,20 @@ import org.bukkit.block.BlockFace
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
-import ru.astrainteractive.aspekt.event.di.EventsModule
+import ru.astrainteractive.aspekt.plugin.PluginConfiguration
+import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.astralibs.string.BukkitTranslationContext
+import ru.astrainteractive.klibs.kdi.Provider
+import ru.astrainteractive.klibs.kdi.getValue
 
 class SitController(
-    module: EventsModule
-) : EventsModule by module {
+    configuration: Provider<PluginConfiguration>,
+    translation: Provider<PluginTranslation>,
+    translationContext: BukkitTranslationContext
+) : BukkitTranslationContext by translationContext {
+    private val translation by translation
+    private val configuration by configuration
+
     private val sitPlayers = mutableMapOf<String, ArmorStand>()
 
     /**
