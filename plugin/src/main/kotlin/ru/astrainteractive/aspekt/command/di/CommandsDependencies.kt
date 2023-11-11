@@ -41,7 +41,9 @@ interface CommandsDependencies : Module {
         override val adminPrivateController: AdminPrivateController by Provider {
             rootModule.adminPrivateModule.adminPrivateController
         }
-        override val router: Router by rootModule.router
+        override val router: Router by Provider {
+            rootModule.guiModule.router
+        }
         override val translationContext: BukkitTranslationContext = rootModule.translationContext
     }
 }

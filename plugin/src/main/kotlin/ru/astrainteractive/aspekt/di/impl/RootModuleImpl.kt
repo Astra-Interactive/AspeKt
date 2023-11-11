@@ -4,12 +4,10 @@ import kotlinx.serialization.encodeToString
 import ru.astrainteractive.aspekt.AspeKt
 import ru.astrainteractive.aspekt.adminprivate.di.AdminPrivateModule
 import ru.astrainteractive.aspekt.autobroadcast.di.AutoBroadcastModule
-import ru.astrainteractive.aspekt.command.di.CommandsDependencies
+import ru.astrainteractive.aspekt.command.di.CommandManagerModule
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.aspekt.di.factory.MenuModelFactory
 import ru.astrainteractive.aspekt.event.di.EventsModule
-import ru.astrainteractive.aspekt.gui.Router
-import ru.astrainteractive.aspekt.gui.RouterImpl
 import ru.astrainteractive.aspekt.gui.di.GuiModule
 import ru.astrainteractive.aspekt.plugin.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
@@ -31,7 +29,6 @@ import ru.astrainteractive.astralibs.serialization.YamlSerializer
 import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 import ru.astrainteractive.klibs.kdi.Dependency
 import ru.astrainteractive.klibs.kdi.Lateinit
-import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.Reloadable
 import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
@@ -87,10 +84,6 @@ class RootModuleImpl : RootModule {
             }
     }
 
-    override val commandsDependencies: CommandsDependencies by lazy {
-        CommandsDependencies.Default(this)
-    }
-
     override val economyProvider: Reloadable<EconomyProvider?> = Reloadable {
         runCatching {
             AnyEconomyProvider(plugin.value)
@@ -107,15 +100,6 @@ class RootModuleImpl : RootModule {
     override val inventoryClickEventListener: Single<DefaultInventoryClickEvent> = Single {
         DefaultInventoryClickEvent()
     }
-    override val router: Provider<Router> = Provider {
-        RouterImpl(
-            scope = scope.value,
-            dispatchers = dispatchers.value,
-            translationContext = translationContext,
-            economyProvider = economyProvider.value,
-            translation = translation.value
-        )
-    }
 
     override val adminPrivateModule: AdminPrivateModule by lazy {
         AdminPrivateModule.Default(this)
@@ -126,7 +110,10 @@ class RootModuleImpl : RootModule {
     override val guiModule: GuiModule by Single {
         GuiModule.Default(this)
     }
-    override val autoBroadcastModule: Single<AutoBroadcastModule> = Single {
+    override val autoBroadcastModule by lazy {
         AutoBroadcastModule.Default(this)
+    }
+    override val commandManagerModule: CommandManagerModule by lazy {
+        CommandManagerModule.Default(this)
     }
 }

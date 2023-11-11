@@ -3,9 +3,8 @@ package ru.astrainteractive.aspekt.di
 import ru.astrainteractive.aspekt.AspeKt
 import ru.astrainteractive.aspekt.adminprivate.di.AdminPrivateModule
 import ru.astrainteractive.aspekt.autobroadcast.di.AutoBroadcastModule
-import ru.astrainteractive.aspekt.command.di.CommandsDependencies
+import ru.astrainteractive.aspekt.command.di.CommandManagerModule
 import ru.astrainteractive.aspekt.event.di.EventsModule
-import ru.astrainteractive.aspekt.gui.Router
 import ru.astrainteractive.aspekt.gui.di.GuiModule
 import ru.astrainteractive.aspekt.plugin.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
@@ -22,7 +21,6 @@ import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 import ru.astrainteractive.klibs.kdi.Dependency
 import ru.astrainteractive.klibs.kdi.Lateinit
 import ru.astrainteractive.klibs.kdi.Module
-import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.Reloadable
 import ru.astrainteractive.klibs.kdi.Single
 
@@ -39,15 +37,14 @@ interface RootModule : Module {
     val translation: Reloadable<PluginTranslation>
 
     val menuModels: Reloadable<List<MenuModel>>
-    val commandsDependencies: CommandsDependencies
     val economyProvider: Reloadable<EconomyProvider?>
     val tempFileManager: Reloadable<SpigotFileManager>
     val translationContext: BukkitTranslationContext
     val inventoryClickEventListener: Single<DefaultInventoryClickEvent>
-    val router: Provider<Router>
 
     val adminPrivateModule: AdminPrivateModule
     val eventsModule: EventsModule
     val guiModule: GuiModule
-    val autoBroadcastModule: Single<AutoBroadcastModule>
+    val autoBroadcastModule: AutoBroadcastModule
+    val commandManagerModule: CommandManagerModule
 }

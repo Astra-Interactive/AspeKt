@@ -7,8 +7,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
-import ru.astrainteractive.aspekt.command.CommandManager
-import ru.astrainteractive.aspekt.command.di.CommandsDependencies
 import ru.astrainteractive.aspekt.di.impl.RootModuleImpl
 import ru.astrainteractive.aspekt.event.EventHandler
 import ru.astrainteractive.aspekt.event.di.EventsModule
@@ -20,7 +18,6 @@ import ru.astrainteractive.klibs.kdi.getValue
 class AspeKt : JavaPlugin() {
     private val rootModule = RootModuleImpl()
     private val eventsModule: EventsModule by rootModule.eventsModule
-    private val commandsDependencies: CommandsDependencies by rootModule.commandsDependencies
 
     /**
      * This method called when server starts or PlugMan load plugin.
@@ -28,10 +25,10 @@ class AspeKt : JavaPlugin() {
     override fun onEnable() {
         rootModule.plugin.initialize(this)
         EventHandler(eventsModule)
-        CommandManager(commandsDependencies, rootModule.translationContext)
+        rootModule.commandManagerModule.commandManager
         rootModule.inventoryClickEventListener.value.onEnable(this)
         rootModule.eventListener.value.onEnable(this)
-        rootModule.autoBroadcastModule.value.autoBroadcastJob.onEnable()
+        rootModule.autoBroadcastModule.autoBroadcastJob.onEnable()
         rootModule.eventsModule.discordEvent?.onEnable()
         rootModule.economyProvider.reload()
     }
@@ -41,7 +38,7 @@ class AspeKt : JavaPlugin() {
      */
     override fun onDisable() {
         rootModule.eventsModule.sitModule.sitController.onDisable()
-        rootModule.autoBroadcastModule.value.autoBroadcastJob.onDisable()
+        rootModule.autoBroadcastModule.autoBroadcastJob.onDisable()
         HandlerList.unregisterAll(this)
         rootModule.inventoryClickEventListener.value.onDisable()
         rootModule.eventListener.value.onDisable()
@@ -61,7 +58,7 @@ class AspeKt : JavaPlugin() {
         rootModule.economyProvider.reload()
         rootModule.adminPrivateModule.adminPrivateController.updateChunks()
         rootModule.tempFileManager.reload()
-        rootModule.autoBroadcastModule.value.autoBroadcastJob.apply {
+        rootModule.autoBroadcastModule.autoBroadcastJob.apply {
             this.onDisable()
             this.onEnable()
         }
