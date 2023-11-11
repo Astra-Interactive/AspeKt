@@ -55,7 +55,6 @@ class AspeKt : JavaPlugin() {
      */
     fun reloadPlugin() {
         rootModule.eventsModule.sitModule.sitController.onDisable()
-        rootModule.configFileManager.value.reload()
         rootModule.pluginConfig.reload()
         rootModule.translation.reload()
         rootModule.menuModels.reload()

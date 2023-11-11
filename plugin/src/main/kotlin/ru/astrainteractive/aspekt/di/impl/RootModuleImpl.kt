@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.di.impl
 
+import kotlinx.serialization.encodeToString
 import ru.astrainteractive.aspekt.AspeKt
 import ru.astrainteractive.aspekt.adminprivate.di.AdminPrivateModule
 import ru.astrainteractive.aspekt.command.di.CommandsDependencies
@@ -26,6 +27,7 @@ import ru.astrainteractive.astralibs.logging.JUtilLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.menu.event.DefaultInventoryClickEvent
 import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.serialization.YamlSerializer
 import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 import ru.astrainteractive.klibs.kdi.Dependency
 import ru.astrainteractive.klibs.kdi.Lateinit
@@ -51,21 +53,22 @@ class RootModuleImpl : RootModule {
         DefaultBukkitDispatchers(plugin)
     }
     override val scope: Dependency<AsyncComponent> = Single {
-        object : AsyncComponent() {} // todo DefaultAsyncComponent
-    }
-    override val configFileManager = Single {
-        val plugin by plugin
-        DefaultSpigotFileManager(plugin, "config.yml")
+        AsyncComponent.Default()
     }
     override val pluginConfig = Reloadable {
-        PluginConfiguration(configFileManager.value.fileConfiguration)
+        val configFileManager = DefaultSpigotFileManager(plugin.value, "config.yml")
+        PluginConfiguration(configFileManager.fileConfiguration)
     }
     override val adminChunksYml: Reloadable<FileManager> = Reloadable {
         JVMFileManager("adminchunks.yml", plugin.value.dataFolder)
     }
     override val translation = Reloadable {
-        val plugin by plugin
-        PluginTranslation()
+        val file = DefaultSpigotFileManager(plugin.value, "translations.yml")
+        val translation = YamlSerializer().safeParse<PluginTranslation>(file.configFile)
+            .getOrNull() ?: PluginTranslation()
+        val yamlString = YamlSerializer().yaml.encodeToString(translation)
+        file.configFile.writeText(yamlString)
+        translation
     }
     override val menuModels: Reloadable<List<MenuModel>> = Reloadable {
         val dataFolder = plugin.value.dataFolder
@@ -84,8 +87,9 @@ class RootModuleImpl : RootModule {
             }
     }
 
-    override val commandsDependencies: CommandsDependencies
-        get() = TODO("Not yet implemented")
+    override val commandsDependencies: CommandsDependencies by lazy {
+        CommandsDependencies.Default(this)
+    }
 
     override val economyProvider: Reloadable<EconomyProvider?> = Reloadable {
         runCatching {

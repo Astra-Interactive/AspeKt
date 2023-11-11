@@ -4,7 +4,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.adminprivate.controller.AdminPrivateController
-import ru.astrainteractive.aspekt.adminprivate.model.ChunkFlag
 import ru.astrainteractive.aspekt.adminprivate.util.adminChunk
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.BukkitDispatchers

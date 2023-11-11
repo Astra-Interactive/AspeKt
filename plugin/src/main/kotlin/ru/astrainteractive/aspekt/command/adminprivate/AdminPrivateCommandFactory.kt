@@ -35,7 +35,8 @@ class AdminPrivateCommandFactory(
         }
     }
 
-    private inner class AdminPrivateCommandImpl : AdminPrivateCommand,
+    private inner class AdminPrivateCommandImpl :
+        AdminPrivateCommand,
         Command<AdminPrivateCommand.Output, AdminPrivateCommand.Input> by DefaultCommandFactory.create(
             alias = "adminprivate",
             commandParser = AdminPrivateCommandParser(),

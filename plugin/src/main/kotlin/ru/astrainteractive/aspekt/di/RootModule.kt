@@ -34,7 +34,6 @@ interface RootModule : Module {
     val dispatchers: Dependency<BukkitDispatchers>
     val scope: Dependency<AsyncComponent>
     val logger: Dependency<Logger>
-    val configFileManager: Dependency<SpigotFileManager>
     val pluginConfig: Reloadable<PluginConfiguration>
     val adminChunksYml: Reloadable<FileManager>
     val translation: Reloadable<PluginTranslation>
