@@ -2,9 +2,12 @@ package ru.astrainteractive.aspekt.command.di
 
 import ru.astrainteractive.aspekt.AspeKt
 import ru.astrainteractive.aspekt.adminprivate.controller.AdminPrivateController
-import ru.astrainteractive.aspekt.di.RootModule
+import ru.astrainteractive.aspekt.adminprivate.di.AdminPrivateModule
+import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.event.sit.SitController
 import ru.astrainteractive.aspekt.gui.Router
+import ru.astrainteractive.aspekt.gui.di.GuiModule
 import ru.astrainteractive.aspekt.plugin.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.AsyncComponent
@@ -28,22 +31,25 @@ interface CommandsDependencies : Module {
     val translationContext: BukkitTranslationContext
 
     class Default(
-        rootModule: RootModule
+        coreModule: CoreModule,
+        eventsModule: EventsModule,
+        adminPrivateModule: AdminPrivateModule,
+        guiModule: GuiModule
     ) : CommandsDependencies {
 
-        override val plugin: AspeKt by rootModule.plugin
-        override val translation: PluginTranslation by rootModule.translation
-        override val dispatchers: BukkitDispatchers by rootModule.dispatchers
-        override val scope: AsyncComponent by rootModule.scope
-        override val sitController: SitController by Provider { rootModule.eventsModule.sitModule.sitController }
-        override val menuModels: List<MenuModel> by rootModule.menuModels
-        override val economyProvider: EconomyProvider? by rootModule.economyProvider
+        override val plugin: AspeKt by coreModule.plugin
+        override val translation: PluginTranslation by coreModule.translation
+        override val dispatchers: BukkitDispatchers by coreModule.dispatchers
+        override val scope: AsyncComponent by coreModule.scope
+        override val sitController: SitController by Provider { eventsModule.sitModule.sitController }
+        override val menuModels: List<MenuModel> by coreModule.menuModels
+        override val economyProvider: EconomyProvider? by coreModule.economyProvider
         override val adminPrivateController: AdminPrivateController by Provider {
-            rootModule.adminPrivateModule.adminPrivateController
+            adminPrivateModule.adminPrivateController
         }
         override val router: Router by Provider {
-            rootModule.guiModule.router
+            guiModule.router
         }
-        override val translationContext: BukkitTranslationContext = rootModule.translationContext
+        override val translationContext: BukkitTranslationContext = coreModule.translationContext
     }
 }
