@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.di
 
 import kotlinx.serialization.encodeToString
 import ru.astrainteractive.aspekt.AspeKt
-import ru.astrainteractive.aspekt.di.factory.MenuModelFactory
+import ru.astrainteractive.aspekt.di.factory.MenuModelsFactory
 import ru.astrainteractive.aspekt.plugin.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -28,7 +28,6 @@ import ru.astrainteractive.klibs.kdi.Lateinit
 import ru.astrainteractive.klibs.kdi.Reloadable
 import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
-import java.io.File
 
 interface CoreModule : Lifecycle {
     val plugin: Lateinit<AspeKt>
@@ -80,29 +79,17 @@ interface CoreModule : Lifecycle {
         }
 
         override val translation = Reloadable {
-            val file = DefaultSpigotFileManager(plugin.value, "translations.yml")
-            val translation = YamlSerializer().safeParse<PluginTranslation>(file.configFile)
-                .getOrNull() ?: PluginTranslation()
-            val yamlString = YamlSerializer().yaml.encodeToString(translation)
-            file.configFile.writeText(yamlString)
+            val fileManager = DefaultSpigotFileManager(plugin.value, "translations.yml")
+            val yamlSerializer = YamlSerializer()
+
+            val translation = yamlSerializer.parseOrDefault(fileManager.configFile, ::PluginTranslation)
+            val yamlString = yamlSerializer.yaml.encodeToString(translation)
+            fileManager.configFile.writeText(yamlString)
             translation
         }
 
         override val menuModels: Reloadable<List<MenuModel>> = Reloadable {
-            val dataFolder = plugin.value.dataFolder
-            val menuFolder = File(dataFolder, "menu").also {
-                if (!it.exists()) it.mkdirs()
-            }
-            menuFolder.listFiles()
-                .orEmpty()
-                .filterNotNull()
-                .filter(File::exists)
-                .filter(File::isFile)
-                .mapNotNull {
-                    runCatching { MenuModelFactory(it).create() }
-                        .onFailure { it.printStackTrace() }
-                        .getOrNull()
-                }
+            MenuModelsFactory(plugin.value.dataFolder, YamlSerializer()).create()
         }
 
         override val economyProvider: Reloadable<EconomyProvider?> = Reloadable {
