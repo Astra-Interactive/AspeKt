@@ -23,6 +23,6 @@ object RootModule {
     }
     val configuration = Reloadable {
         val configurationFile by configurationFile
-        YamlSerializer().toClassOrDefault<Configuration>(file = configurationFile.configFile, default = ::Configuration)
+        YamlSerializer().parseOrDefault<Configuration>(file = configurationFile.configFile, factory = ::Configuration)
     }
 }
