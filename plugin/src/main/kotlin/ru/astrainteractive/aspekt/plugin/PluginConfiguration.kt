@@ -23,7 +23,7 @@ data class PluginConfiguration(
     data class Restrictions(
         @SerialName("explode")
         val explode: Boolean = true,
-        @SerialName("place:")
+        @SerialName("place")
         val place: Place = Place(),
         @SerialName("spread")
         val spread: Spread = Spread()
