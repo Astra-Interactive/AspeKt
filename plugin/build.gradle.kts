@@ -28,7 +28,7 @@ dependencies {
     testImplementation(libs.tests.kotlin.test)
     testImplementation(libs.minecraft.mockbukkit)
 }
-val destination = File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\anarchy\\plugins")
+val destination = File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\smp\\plugins")
     .takeIf(File::exists)
     ?: File(rootDir, "jars")
 
