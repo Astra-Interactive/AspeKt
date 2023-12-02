@@ -70,8 +70,13 @@ interface CoreModule : Lifecycle {
         }
 
         override val pluginConfig = Reloadable {
-            val configFileManager = DefaultSpigotFileManager(plugin.value, "config.yml")
-            PluginConfiguration(configFileManager.fileConfiguration)
+            val fileManager = DefaultSpigotFileManager(plugin.value, "config.yml")
+            val yamlSerializer = YamlSerializer()
+
+            val translation = yamlSerializer.parseOrDefault(fileManager.configFile, ::PluginConfiguration)
+            val yamlString = yamlSerializer.yaml.encodeToString(translation)
+            fileManager.configFile.writeText(yamlString)
+            translation
         }
 
         override val adminChunksYml: Reloadable<FileManager> = Reloadable {

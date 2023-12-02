@@ -1,71 +1,122 @@
 package ru.astrainteractive.aspekt.plugin
 
-import org.bukkit.configuration.file.FileConfiguration
-import ru.astrainteractive.aspekt.util.cBoolean
-import ru.astrainteractive.aspekt.util.cInt
-import ru.astrainteractive.aspekt.util.cStringList
-import ru.astrainteractive.aspekt.util.getValue
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-class PluginConfiguration(private val fc: FileConfiguration) {
-    val sit by fc.cBoolean("core.sit", true)
-    val discordSRVLink = DiscordSRVLink()
-    val announcements = Announcements()
-    val autoCrop = AutoCrop()
-    val tc = TC()
-    val restrictions = Restrictions()
+@Serializable
+data class PluginConfiguration(
+    @SerialName("sit")
+    val sit: Boolean = true,
+    @SerialName("discordsrv")
+    val discordSRVLink: DiscordSRVLink = DiscordSRVLink(),
+    @SerialName("announcements")
+    val announcements: Announcements = Announcements(),
+    @SerialName("auto_crop")
+    val autoCrop: AutoCrop = AutoCrop(),
+    @SerialName("tree_capitator")
+    val treeCapitator: TreeCapitator = TreeCapitator(),
+    @SerialName("restrictions")
+    val restrictions: Restrictions = Restrictions()
+) {
 
-    inner class Restrictions {
-        @Suppress("VariableNaming")
-        private val PATH: String = "core.restrictions"
-        val placeTnt by fc.cBoolean("$PATH.place.tnt", false)
-        val explode by fc.cBoolean("$PATH.explode", false)
-        val placeLava by fc.cBoolean("$PATH.place.lava", false)
-        val spreadLava by fc.cBoolean("$PATH.spread.lava", false)
-        val spreadFire by fc.cBoolean("$PATH.spread.fire", false)
+    @Serializable
+    data class Restrictions(
+        @SerialName("explode")
+        val explode: Boolean = true,
+        @SerialName("place:")
+        val place: Place = Place(),
+        @SerialName("spread")
+        val spread: Spread = Spread()
+    ) {
+        @Serializable
+        data class Place(
+            @SerialName("tnt")
+            val tnt: Boolean = true,
+            @SerialName("lava")
+            val lava: Boolean = true,
+        )
+
+        @Serializable
+        data class Spread(
+            @SerialName("lava")
+            val lava: Boolean = true,
+            @SerialName("fire")
+            val fire: Boolean = true
+        )
     }
 
-    inner class TC {
-        @Suppress("VariableNaming")
-        private val PATH: String = "core.tree_capitator"
+    @Serializable
+    @Suppress("LongParameterList")
+    data class TreeCapitator(
+        @SerialName("enabled")
+        val enabled: Boolean = true,
+        @SerialName("destroy_limit")
+        val destroyLimit: Int = 16,
+        @SerialName("damage_axe")
+        val damageAxe: Boolean = true,
+        @SerialName("break_axe")
+        val breakAxe: Boolean = true,
+        @SerialName("replant")
+        val replant: Boolean = true,
+        @SerialName("replant_max_iterations")
+        val replantMaxIterations: Int = 16,
+        @SerialName("destroy_leaves")
+        val destroyLeaves: Boolean = true
+    )
 
-        val enabled by fc.cBoolean("$PATH.enabled", true)
-        val destroyLimit by fc.cInt("$PATH.destroy_limit", 16)
-        val damageAxe by fc.cBoolean("$PATH.damage_axe", true)
-        val breakAxe by fc.cBoolean("$PATH.break_axe", true)
-        val replant by fc.cBoolean("$PATH.replant", true)
-        val replantMaxIterations by fc.cInt("$PATH.replant_max_iterations", 16)
-        val destroyLeaves by fc.cBoolean("$PATH.destroy_leaves", true)
+    @Serializable
+    data class AutoCrop(
+        @SerialName("enabled")
+        val enabled: Boolean = true,
+        @SerialName("min")
+        val min: Int = 0,
+        @SerialName("max")
+        val max: Int = 0,
+        @SerialName("duping")
+        val dupeProtection: DupeProtection = DupeProtection()
+    ) {
+        @Serializable
+        data class DupeProtection(
+            @SerialName("enabled")
+            val enabled: Boolean = true,
+            @SerialName("clear_every")
+            val clearEveryMs: Long = 60_000L,
+            @SerialName("location_timeout")
+            val locationTimeoutMs: Long = 15_000L
+        )
     }
 
-    inner class AutoCrop {
-        val enabled by fc.cBoolean("core.auto_crop.enabled", true)
-        val minDrop by fc.cInt("core.auto_crop.min", 0)
-        val maxDrop by fc.cInt("core.auto_crop.max", 1)
-        val dupeProtection = DupeProtection()
+    @Serializable
+    data class Announcements(
+        @SerialName("interval")
+        val interval: Long = 1000L,
+        @SerialName("announcements")
+        val announcements: List<String> = emptyList()
+    )
 
-        inner class DupeProtection {
-            val enabled by fc.cBoolean("core.auto_crop.duping.enabled", true)
-            val clearEveryMs by fc.cInt("core.auto_crop.duping.clear_every", 60_000)
-            val locationTimeoutMs by fc.cInt("core.auto_crop.duping.location_timeout", 15_000)
-        }
-    }
-
-    @Suppress("MemberNameEqualsClassName")
-    inner class Announcements {
-        val interval = fc.cInt("announcements.interval", 10)
-        val announcements = fc.cStringList("announcements.announcements")
-    }
-
-    inner class DiscordSRVLink {
-        val moneyForLink by fc.cInt("discordsrv.on_linked.add_money", 0)
-        val discordOnLinked = Roles("on_linked.discord")
-        val luckPermsOnLinked = Roles("on_linked.luckperms")
-        val discordOnUnLinked = Roles("on_unlinked.discord")
-        val luckPermsOnUnLinked = Roles("on_unlinked.luckperms")
-
-        inner class Roles(section: String) {
-            val addRoles = fc.cStringList("discordsrv.$section.add_roles")
-            val removeRoles = fc.cStringList("discordsrv.$section.remove_roles")
+    @Serializable
+    data class DiscordSRVLink(
+        @SerialName("money_for_link")
+        val moneyForLink: Int = 0,
+        @SerialName("on_linked")
+        val onLinked: LinkConfiguration = LinkConfiguration(),
+        @SerialName("on_unlinked")
+        val onUnlinked: LinkConfiguration = LinkConfiguration()
+    ) {
+        @Serializable
+        data class LinkConfiguration(
+            @SerialName("discord")
+            val discord: RoleConfiguration = RoleConfiguration(),
+            @SerialName("luckperms")
+            val luckPerms: RoleConfiguration = RoleConfiguration()
+        ) {
+            @Serializable
+            data class RoleConfiguration(
+                @SerialName("add_roles")
+                val addRoles: List<String> = emptyList(),
+                @SerialName("remove_roles")
+                val removeRoles: List<String> = emptyList()
+            )
         }
     }
 }

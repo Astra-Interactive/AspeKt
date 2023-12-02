@@ -10,14 +10,14 @@ internal class AutoBroadcastJob(
     dependencies: AutoBroadcastDependencies
 ) : ScheduledJob("AutoBroadcast"), AutoBroadcastDependencies by dependencies {
     override val delayMillis: Long
-        get() = configuration.interval.value * 1000L
+        get() = configuration.interval * 1000L
 
     override val initialDelayMillis: Long
         get() = 0L
 
     override fun execute() {
         scope.launch(dispatchers.BukkitMain) {
-            val message = configuration.announcements.value.randomOrNull()?.hex() ?: return@launch
+            val message = configuration.announcements.randomOrNull()?.hex() ?: return@launch
             Bukkit.getOnlinePlayers().forEach {
                 it.sendMessage(message)
             }

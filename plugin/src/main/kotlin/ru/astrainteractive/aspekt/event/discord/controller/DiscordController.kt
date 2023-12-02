@@ -50,12 +50,12 @@ class DiscordController(
             logger.info("DiscordEvent", "Игрок ${e.player.name} не на нашем сервере")
             return
         }
-        mapRoles(e.user.jda, configuration.discordOnLinked.addRoles.value).forEach {
+        mapRoles(e.user.jda, configuration.onLinked.discord.addRoles).forEach {
             DiscordUtil.addRoleToMember(member, it)
             logger.info("DiscordEvent", "Игроку ${e.player.name} выдана роль ${it.id}: ${it.name}")
         }
 
-        mapRoles(e.user.jda, configuration.discordOnLinked.removeRoles.value).forEach {
+        mapRoles(e.user.jda, configuration.onLinked.discord.removeRoles).forEach {
             DiscordUtil.removeRolesFromMember(member, it)
             logger.info("DiscordEvent", "У игрока ${e.player.name} снята роль ${it.id}: ${it.name}")
         }
@@ -67,12 +67,12 @@ class DiscordController(
             logger.info("DiscordEvent", "Игрок ${e.player.name} не на нашем сервере")
             return
         }
-        mapRoles(e.discordUser.jda, configuration.discordOnUnLinked.addRoles.value).forEach {
+        mapRoles(e.discordUser.jda, configuration.onUnlinked.discord.addRoles).forEach {
             DiscordUtil.addRoleToMember(member, it)
             logger.info("DiscordEvent", "Игроку ${e.player.name} выдана роль ${it.id}: ${it.name}")
         }
 
-        mapRoles(e.discordUser.jda, configuration.discordOnUnLinked.removeRoles.value).forEach {
+        mapRoles(e.discordUser.jda, configuration.onUnlinked.discord.removeRoles).forEach {
             DiscordUtil.removeRolesFromMember(member, it)
             logger.info("DiscordEvent", "У игрока ${e.player.name} снята роль ${it.id}: ${it.name}")
         }
