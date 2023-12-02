@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.gui
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.astrainteractive.aspekt.gui.entities.EntitiesGui
+import ru.astrainteractive.aspekt.gui.entities.ui.EntitiesGui
 import ru.astrainteractive.aspekt.gui.menu.MenuGui
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
