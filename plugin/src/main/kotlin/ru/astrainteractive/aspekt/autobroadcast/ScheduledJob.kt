@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.autobroadcast
 
 import java.util.Timer
 
-abstract class ScheduledJob(val key: String) {
+internal abstract class ScheduledJob(val key: String) {
     private var scheduler: Timer? = null
     protected abstract val delayMillis: Long
     protected abstract val initialDelayMillis: Long

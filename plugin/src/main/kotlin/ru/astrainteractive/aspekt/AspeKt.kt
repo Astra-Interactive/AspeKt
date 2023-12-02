@@ -21,7 +21,7 @@ class AspeKt : JavaPlugin() {
     private val eventsModule: EventsModule by rootModule.eventsModule
     private val lifecycles: List<Lifecycle>
         get() = listOf(
-            rootModule.autoBroadcastModule,
+            rootModule.autoBroadcastModule.lifecycle,
             rootModule.commandManagerModule,
             rootModule.coreModule
         )
