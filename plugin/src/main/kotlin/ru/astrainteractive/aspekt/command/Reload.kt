@@ -15,10 +15,10 @@ import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissib
  */
 fun CommandManager.reload() = plugin.registerCommand("aesreload") {
     if (!sender.toPermissible().hasPermission(PluginPermission.Reload)) {
-        sender.sendMessage(translation.noPermission)
+        sender.sendMessage(translation.general.noPermission)
         return@registerCommand
     }
-    sender.sendMessage(translation.reload)
+    sender.sendMessage(translation.general.reload)
     plugin.reloadPlugin()
-    sender.sendMessage(translation.reloadComplete)
+    sender.sendMessage(translation.general.reloadComplete)
 }

@@ -25,7 +25,7 @@ internal class AdminPrivateCommandExecutor(
             adminPrivateController.map(5, player.chunk.adminChunk)
         }
         result.onSuccess {
-            player.sendMessage(translation.blockMap)
+            player.sendMessage(translation.adminPrivate.blockMap)
             it.forEach {
                 it.joinToString("") { if (it) "#1cba56☒".hex() else "#c91e1e☒".hex() }
                     .run(player::sendMessage)
@@ -33,7 +33,7 @@ internal class AdminPrivateCommandExecutor(
         }
         result.onFailure {
             it.printStackTrace()
-            player.sendMessage(translation.error)
+            player.sendMessage(translation.adminPrivate.error)
         }
     }
 
@@ -46,11 +46,11 @@ internal class AdminPrivateCommandExecutor(
             )
         }
         result.onSuccess {
-            input.player.sendMessage(translation.chunkFlagChanged)
+            input.player.sendMessage(translation.adminPrivate.chunkFlagChanged)
         }
         result.onFailure {
             it.printStackTrace()
-            input.player.sendMessage(translation.error)
+            input.player.sendMessage(translation.adminPrivate.error)
         }
     }
 
@@ -59,11 +59,11 @@ internal class AdminPrivateCommandExecutor(
             adminPrivateController.claim(input.player.chunk.adminChunk)
         }
         result.onSuccess {
-            input.player.sendMessage(translation.chunkClaimed)
+            input.player.sendMessage(translation.adminPrivate.chunkClaimed)
         }
         result.onFailure {
             it.printStackTrace()
-            input.player.sendMessage(translation.error)
+            input.player.sendMessage(translation.adminPrivate.error)
         }
     }
 
@@ -72,11 +72,11 @@ internal class AdminPrivateCommandExecutor(
             adminPrivateController.unclaim(input.player.chunk.adminChunk)
         }
         result.onSuccess {
-            input.player.sendMessage(translation.chunkUnClaimed)
+            input.player.sendMessage(translation.adminPrivate.chunkUnClaimed)
         }
         result.onFailure {
             it.printStackTrace()
-            input.player.sendMessage(translation.error)
+            input.player.sendMessage(translation.adminPrivate.error)
         }
     }
 

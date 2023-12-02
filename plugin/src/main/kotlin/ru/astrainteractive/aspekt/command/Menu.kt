@@ -18,7 +18,7 @@ fun CommandManager.menu() = plugin.registerCommand("menu") {
     val command = argument(0, PrimitiveArgumentType.String).resultOrNull() ?: return@registerCommand
     val menuModel = menuModels.firstOrNull { it.command == command }
     if (menuModel == null) {
-        sender.sendMessage(translation.menuNotFound)
+        sender.sendMessage(translation.general.menuNotFound)
         return@registerCommand
     }
     val route = Router.Route.Menu(

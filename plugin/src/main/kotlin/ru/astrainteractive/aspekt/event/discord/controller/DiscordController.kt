@@ -40,7 +40,7 @@ class DiscordController(
         tempFileManager.fileConfiguration.set(key, true)
         tempFileManager.save()
         economyProvider?.addMoney(uuid, configuration.moneyForLink.toDouble())
-        player.sendMessage(translation.discordLinkReward(configuration.moneyForLink))
+        player.sendMessage(translation.general.discordLinkReward(configuration.moneyForLink))
     }
 
     override suspend fun onLinked(e: AccountLinkedEvent) {
