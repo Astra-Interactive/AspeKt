@@ -26,8 +26,8 @@ import kotlin.random.Random
 class TCEvent(
     module: TCDependencies
 ) : TCDependencies by module {
-    private val tcConfig: PluginConfiguration.TC by Provider {
-        configuration.tc
+    private val treeCapitatorConfig: PluginConfiguration.TreeCapitator by Provider {
+        configuration.treeCapitator
     }
 
     @Suppress("UnusedPrivateMember")
@@ -38,17 +38,17 @@ class TCEvent(
         val tool = player.inventory.itemInMainHand
         if (!tool.type.name.contains("AXE", true)) return@DSLEvent
         if (!player.isSneaking) return@DSLEvent
-        if (!tcConfig.enabled) return@DSLEvent
+        if (!treeCapitatorConfig.enabled) return@DSLEvent
         if (!isLog(block.type)) return@DSLEvent
         breakRecursively(player, block, 0, tool)
-        if (tcConfig.replant) {
+        if (treeCapitatorConfig.replant) {
             val sapling = saplingFromBlock(material) ?: return@DSLEvent
             placeSapling(sapling, block, 0)
         }
     }
 
     private tailrec fun placeSapling(sapling: Material, block: Block, i: Int) {
-        if (i >= tcConfig.replantMaxIterations) return
+        if (i >= treeCapitatorConfig.replantMaxIterations) return
         if (!isDirt(block.type)) {
             placeSapling(sapling, block.getRelative(BlockFace.DOWN), i + 1)
             return
@@ -67,11 +67,11 @@ class TCEvent(
     }
 
     private fun breakRecursively(player: Player, block: Block, i: Int, tool: ItemStack) {
-        if (i >= tcConfig.destroyLimit) return
+        if (i >= treeCapitatorConfig.destroyLimit) return
         val isLog = isLog(block.type)
         val isLeave = isLeaves(block.type)
         if (!isLog && !isLeave) return
-        if (isLeave && tcConfig.destroyLeaves) {
+        if (isLeave && treeCapitatorConfig.destroyLeaves) {
             block.breakNaturally()
         }
         if (isLog) {
@@ -104,7 +104,7 @@ class TCEvent(
      * Damage axe item
      */
     private fun damageItem(player: Player, tool: ItemStack) {
-        if (!tcConfig.damageAxe) return
+        if (!treeCapitatorConfig.damageAxe) return
         val meta: ItemMeta = tool.itemMeta
         val damageable = meta as? Damageable ?: return
         val maxDmg: Short = tool.type.maxDurability
@@ -116,7 +116,7 @@ class TCEvent(
         }
         tool.itemMeta = damageable
         if (dmg < maxDmg) return
-        if (tcConfig.breakAxe) {
+        if (treeCapitatorConfig.breakAxe) {
             tool.amount = 0
             player.playSound(player.location, Sound.ENTITY_ITEM_BREAK, 1f, 1f)
         } else {

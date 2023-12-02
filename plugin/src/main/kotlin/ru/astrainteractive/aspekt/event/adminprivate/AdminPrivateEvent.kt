@@ -53,7 +53,7 @@ class AdminPrivateEvent(
         debounce.debounceEvent(retractKey, e) {
             val isAble = adminPrivateController.isAble(adminChunk, flag)
             val isCancelled = !isAble
-            if (isCancelled) player?.sendMessage(translation.actionIsBlockByAdminClaim(flag.name))
+            if (isCancelled) player?.sendMessage(translation.adminPrivate.actionIsBlockByAdminClaim(flag.name))
             isCancelled
         }
     }

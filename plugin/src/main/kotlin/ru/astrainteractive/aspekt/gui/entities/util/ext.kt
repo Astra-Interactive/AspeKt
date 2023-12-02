@@ -1,6 +1,6 @@
 @file:Suppress("Filename")
 
-package ru.astrainteractive.aspekt.gui.entities
+package ru.astrainteractive.aspekt.gui.entities.util
 
 import org.bukkit.Material
 import org.bukkit.entity.EntityType

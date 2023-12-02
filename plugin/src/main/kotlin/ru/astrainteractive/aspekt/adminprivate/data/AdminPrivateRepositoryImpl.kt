@@ -16,7 +16,7 @@ class AdminPrivateRepositoryImpl(
     private val limitedDispatcher = dispatchers.IO.limitedParallelism(1)
 
     override fun getConfig(): AdminPrivateConfig {
-        return YamlSerializer().toClassOrDefault(fileManager.configFile, ::AdminPrivateConfig)
+        return YamlSerializer().parseOrDefault(fileManager.configFile, ::AdminPrivateConfig)
     }
 
     override suspend fun getAllChunks(): List<AdminChunk> = withContext(limitedDispatcher) {

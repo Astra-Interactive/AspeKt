@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.di.impl.RootModuleImpl
 import ru.astrainteractive.aspekt.event.EventHandler
 import ru.astrainteractive.aspekt.event.di.EventsModule
+import ru.astrainteractive.aspekt.util.Lifecycle
 import ru.astrainteractive.klibs.kdi.getValue
 
 /**
@@ -18,19 +19,21 @@ import ru.astrainteractive.klibs.kdi.getValue
 class AspeKt : JavaPlugin() {
     private val rootModule = RootModuleImpl()
     private val eventsModule: EventsModule by rootModule.eventsModule
+    private val lifecycles: List<Lifecycle>
+        get() = listOf(
+            rootModule.autoBroadcastModule.lifecycle,
+            rootModule.commandManagerModule,
+            rootModule.coreModule
+        )
 
     /**
      * This method called when server starts or PlugMan load plugin.
      */
     override fun onEnable() {
-        rootModule.plugin.initialize(this)
+        rootModule.coreModule.plugin.initialize(this)
         EventHandler(eventsModule)
-        rootModule.commandManagerModule.commandManager
-        rootModule.inventoryClickEventListener.value.onEnable(this)
-        rootModule.eventListener.value.onEnable(this)
-        rootModule.autoBroadcastModule.autoBroadcastJob.onEnable()
+        lifecycles.forEach(Lifecycle::onEnable)
         rootModule.eventsModule.discordEvent?.onEnable()
-        rootModule.economyProvider.reload()
     }
 
     /**
@@ -38,11 +41,8 @@ class AspeKt : JavaPlugin() {
      */
     override fun onDisable() {
         rootModule.eventsModule.sitModule.sitController.onDisable()
-        rootModule.autoBroadcastModule.autoBroadcastJob.onDisable()
+        lifecycles.forEach(Lifecycle::onDisable)
         HandlerList.unregisterAll(this)
-        rootModule.inventoryClickEventListener.value.onDisable()
-        rootModule.eventListener.value.onDisable()
-        rootModule.scope.value.close()
         rootModule.eventsModule.discordEvent?.onDisable()
         Bukkit.getOnlinePlayers().forEach(Player::closeInventory)
     }
@@ -52,16 +52,8 @@ class AspeKt : JavaPlugin() {
      */
     fun reloadPlugin() {
         rootModule.eventsModule.sitModule.sitController.onDisable()
-        rootModule.pluginConfig.reload()
-        rootModule.translation.reload()
-        rootModule.menuModels.reload()
-        rootModule.economyProvider.reload()
         rootModule.adminPrivateModule.adminPrivateController.updateChunks()
-        rootModule.tempFileManager.reload()
-        rootModule.autoBroadcastModule.autoBroadcastJob.apply {
-            this.onDisable()
-            this.onEnable()
-        }
+        lifecycles.forEach(Lifecycle::onReload)
         Bukkit.getOnlinePlayers().forEach(Player::closeInventory)
     }
 }

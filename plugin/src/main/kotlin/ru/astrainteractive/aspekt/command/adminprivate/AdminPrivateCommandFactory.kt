@@ -50,15 +50,15 @@ class AdminPrivateCommandFactory(
             resultHandler = { commandSender, result ->
                 when (result) {
                     AdminPrivateCommand.Output.NoPermission -> with(translationContext) {
-                        commandSender.sendMessage(translation.noPermission)
+                        commandSender.sendMessage(translation.general.noPermission)
                     }
 
                     AdminPrivateCommand.Output.NotPlayer -> with(translationContext) {
-                        commandSender.sendMessage(translation.onlyPlayerCommand)
+                        commandSender.sendMessage(translation.general.onlyPlayerCommand)
                     }
 
                     AdminPrivateCommand.Output.WrongUsage -> with(translationContext) {
-                        commandSender.sendMessage(translation.wrongUsage)
+                        commandSender.sendMessage(translation.general.wrongUsage)
                     }
 
                     else -> Unit

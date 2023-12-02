@@ -1,7 +1,8 @@
 package ru.astrainteractive.aspekt.event.di
 
 import org.bukkit.Bukkit
-import ru.astrainteractive.aspekt.di.RootModule
+import ru.astrainteractive.aspekt.adminprivate.di.AdminPrivateModule
+import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.event.adminprivate.AdminPrivateEvent
 import ru.astrainteractive.aspekt.event.adminprivate.di.AdminPrivateDependencies
 import ru.astrainteractive.aspekt.event.crop.AutoCropEvent
@@ -27,42 +28,42 @@ interface EventsModule : Module {
     val autoCropEvent: AutoCropEvent
     val adminPrivateEvent: AdminPrivateEvent
 
-    class Default(rootModule: RootModule) : EventsModule {
+    class Default(coreModule: CoreModule, adminPrivateModule: AdminPrivateModule) : EventsModule {
 
         override val tcEvent: TCEvent by lazy {
-            val tcDependencies: TCDependencies = TCDependencies.Default(rootModule)
+            val tcDependencies: TCDependencies = TCDependencies.Default(coreModule)
             TCEvent(tcDependencies)
         }
 
         override val sortEvent: SortEvent by lazy {
-            val sortDependencies: SortDependencies = SortDependencies.Default(rootModule)
+            val sortDependencies: SortDependencies = SortDependencies.Default(coreModule)
             SortEvent(sortDependencies)
         }
         override val sitModule: SitModule by lazy {
-            SitModule.Default(rootModule)
+            SitModule.Default(coreModule)
         }
 
         override val restrictionsEvent: RestrictionsEvent by lazy {
-            val restrictionsDependencies: RestrictionsDependencies = RestrictionsDependencies.Default(rootModule)
+            val restrictionsDependencies: RestrictionsDependencies = RestrictionsDependencies.Default(coreModule)
             RestrictionsEvent(restrictionsDependencies)
         }
 
         override val discordEvent: DiscordEvent? by lazy {
             Bukkit.getPluginManager().getPlugin("DiscordSRV") ?: return@lazy null
             Bukkit.getPluginManager().getPlugin("LuckPerms") ?: return@lazy null
-            val discordEventDependencies = DiscordEventDependencies.Default(rootModule)
+            val discordEventDependencies = DiscordEventDependencies.Default(coreModule)
             DiscordEvent(discordEventDependencies)
         }
 
         override val autoCropEvent: AutoCropEvent by lazy {
-            val autoCropDependencies: AutoCropDependencies = AutoCropDependencies.Default(rootModule)
+            val autoCropDependencies: AutoCropDependencies = AutoCropDependencies.Default(coreModule)
             AutoCropEvent(autoCropDependencies)
         }
 
         override val adminPrivateEvent: AdminPrivateEvent by lazy {
             val adminPrivateDependencies: AdminPrivateDependencies = AdminPrivateDependencies.Default(
-                rootModule = rootModule,
-                adminPrivateController = rootModule.adminPrivateModule.adminPrivateController
+                coreModule = coreModule,
+                adminPrivateModule = adminPrivateModule
             )
             AdminPrivateEvent(adminPrivateDependencies)
         }

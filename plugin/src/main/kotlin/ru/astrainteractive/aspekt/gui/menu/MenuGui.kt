@@ -167,13 +167,13 @@ class MenuGui(
 
                     val hasPermission = permission?.let(playerHolder.player.toPermissible()::hasPermission) ?: true
                     if (!hasPermission) {
-                        playerHolder.player.sendMessage(translation.noPermission)
+                        playerHolder.player.sendMessage(translation.general.noPermission)
                         return@Click
                     }
 
                     if (!isMeetClickConditions(menuItem)) return@Click
                     if (!isMeetPriceCheck(menuItem)) {
-                        playerHolder.player.sendMessage(translation.notEnoughMoney)
+                        playerHolder.player.sendMessage(translation.general.notEnoughMoney)
                         return@Click
                     }
 

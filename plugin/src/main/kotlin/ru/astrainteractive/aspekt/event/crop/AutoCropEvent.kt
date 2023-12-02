@@ -32,7 +32,7 @@ class AutoCropEvent(
             Material.WHEAT -> Material.WHEAT
             else -> null
         }
-        val amount = Random.nextInt(autoCropConfig.minDrop, autoCropConfig.maxDrop)
+        val amount = Random.nextInt(autoCropConfig.min, autoCropConfig.max)
 
         val item = ItemStack(material ?: return@DSLEvent, amount)
         clickedCrop.age = 0

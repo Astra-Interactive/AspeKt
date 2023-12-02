@@ -40,7 +40,7 @@ class RestrictionsEvent(
     val bucketEmptyEvent = DSLEvent<PlayerBucketEmptyEvent>(eventListener, plugin) {
         when (it.bucket) {
             Material.LAVA_BUCKET -> {
-                if (restrictions.placeLava) it.isCancelled = true
+                if (restrictions.place.lava) it.isCancelled = true
             }
 
             else -> Unit
@@ -49,15 +49,15 @@ class RestrictionsEvent(
     val blockPlace = DSLEvent<BlockPlaceEvent>(eventListener, plugin) {
         when (it.blockPlaced.type) {
             Material.TNT -> {
-                if (restrictions.placeTnt) it.isCancelled = true
+                if (restrictions.place.tnt) it.isCancelled = true
             }
 
             Material.LAVA -> {
-                if (restrictions.placeLava) it.isCancelled = true
+                if (restrictions.place.lava) it.isCancelled = true
             }
 
             Material.LAVA_BUCKET -> {
-                if (restrictions.placeLava) it.isCancelled = true
+                if (restrictions.place.lava) it.isCancelled = true
             }
 
             else -> Unit
@@ -67,11 +67,11 @@ class RestrictionsEvent(
 
         when (it.block.type) {
             Material.LAVA -> {
-                if (restrictions.spreadLava) it.isCancelled = true
+                if (restrictions.spread.lava) it.isCancelled = true
             }
 
             Material.FIRE -> {
-                if (restrictions.spreadFire) it.isCancelled = true
+                if (restrictions.spread.fire) it.isCancelled = true
             }
 
             else -> Unit
@@ -79,20 +79,20 @@ class RestrictionsEvent(
     }
     val blockIgniteEvent = DSLEvent<BlockIgniteEvent>(eventListener, plugin) {
         if (it.cause == BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL) return@DSLEvent
-        if (restrictions.spreadFire) it.isCancelled = true
+        if (restrictions.spread.fire) it.isCancelled = true
     }
     val blockBurnEvent = DSLEvent<BlockBurnEvent>(eventListener, plugin) {
-        if (restrictions.spreadFire) it.isCancelled = true
+        if (restrictions.spread.fire) it.isCancelled = true
     }
     val blockSpread = DSLEvent<BlockSpreadEvent>(eventListener, plugin) {
 
         when (it.source.type) {
             Material.LAVA -> {
-                if (restrictions.spreadLava) it.isCancelled = true
+                if (restrictions.spread.lava) it.isCancelled = true
             }
 
             Material.FIRE -> {
-                if (restrictions.spreadFire) it.isCancelled = true
+                if (restrictions.spread.fire) it.isCancelled = true
             }
 
             else -> Unit

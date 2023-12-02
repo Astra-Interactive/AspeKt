@@ -35,19 +35,19 @@ class LuckPermsController(
     }
 
     override suspend fun onLinked(e: AccountLinkedEvent) {
-        configuration.luckPermsOnLinked.addRoles.value.forEach { group ->
+        configuration.onLinked.luckPerms.addRoles.forEach { group ->
             e.player.addGroup(group)
         }
-        configuration.luckPermsOnLinked.removeRoles.value.forEach { group ->
+        configuration.onLinked.luckPerms.removeRoles.forEach { group ->
             e.player.removeGroup(group)
         }
     }
 
     override suspend fun onUnLinked(e: AccountUnlinkedEvent) {
-        configuration.luckPermsOnUnLinked.addRoles.value.forEach { group ->
+        configuration.onUnlinked.luckPerms.addRoles.forEach { group ->
             e.player.addGroup(group)
         }
-        configuration.luckPermsOnUnLinked.removeRoles.value.forEach { group ->
+        configuration.onUnlinked.luckPerms.removeRoles.forEach { group ->
             e.player.removeGroup(group)
         }
     }

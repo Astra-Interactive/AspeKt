@@ -29,17 +29,17 @@ class SitController(
         if (!configuration.sit) return
         // Сидит ли уже игрок
         if (sitPlayers.contains(player.uniqueId.toString())) {
-            player.sendMessage(translation.sitAlready)
+            player.sendMessage(translation.sit.sitAlready)
             return
         }
         // Находится ли игрок в воздухе
         if (player.isFlying) {
-            player.sendMessage(translation.sitInAir)
+            player.sendMessage(translation.sit.sitInAir)
             return
         }
         // Находится ли игрок в воздухе
         if (player.location.block.getRelative(BlockFace.DOWN).type == Material.AIR) {
-            player.sendMessage(translation.sitInAir)
+            player.sendMessage(translation.sit.sitInAir)
             return
         }
         // Создаем стул
