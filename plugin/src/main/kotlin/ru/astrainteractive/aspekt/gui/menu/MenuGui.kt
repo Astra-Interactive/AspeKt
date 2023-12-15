@@ -114,11 +114,11 @@ class MenuGui(
     }
 
     private fun processReward(menuItem: MenuModel.MenuItem) {
-        when (menuItem.reward) {
+        when (val reward = menuItem.reward) {
             is MenuModel.Reward.ConsoleCommands -> {
                 val consoleSender = Bukkit.getConsoleSender()
                 val server = Bukkit.getServer()
-                menuItem.reward.commands.forEach { cmd ->
+                reward.commands.forEach { cmd ->
                     var command = cmd
                     PLACEHOLDERS.forEach { (k, v) ->
                         command = command.replace(k, v)
@@ -129,7 +129,7 @@ class MenuGui(
 
             is MenuModel.Reward.PlayerCommands -> {
                 val sender = playerHolder.player
-                menuItem.reward.commands.forEach { cmd ->
+                reward.commands.forEach { cmd ->
                     var command = cmd
                     PLACEHOLDERS.forEach { (k, v) ->
                         command = command.replace(k, v)
@@ -143,11 +143,11 @@ class MenuGui(
     }
 
     private fun isMeetPriceCheck(menuItem: MenuModel.MenuItem): Boolean {
-        return when (menuItem.price) {
+        return when (val price = menuItem.price) {
             is MenuModel.Price.Money -> {
                 economyProvider?.takeMoney(
                     playerHolder.player.uniqueId,
-                    menuItem.price.amount
+                    price.amount
                 ) ?: false
             }
 

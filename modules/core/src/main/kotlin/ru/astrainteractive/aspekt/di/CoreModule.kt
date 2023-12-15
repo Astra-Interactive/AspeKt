@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.di
 
 import kotlinx.serialization.encodeToString
-import ru.astrainteractive.aspekt.AspeKt
+import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.factory.MenuModelsFactory
 import ru.astrainteractive.aspekt.plugin.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
@@ -30,7 +30,7 @@ import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
 
 interface CoreModule : Lifecycle {
-    val plugin: Lateinit<AspeKt>
+    val plugin: Lateinit<JavaPlugin>
     val eventListener: Dependency<EventListener>
 
     val dispatchers: Dependency<BukkitDispatchers>
@@ -49,8 +49,7 @@ interface CoreModule : Lifecycle {
     class Default : CoreModule {
 
         // Core
-        override val plugin = Lateinit<AspeKt>(true)
-
+        override val plugin = Lateinit<JavaPlugin>(true)
         override val logger: Dependency<Logger> = Single {
             val plugin by plugin
             JUtilLogger("AspeKt", plugin.dataFolder)

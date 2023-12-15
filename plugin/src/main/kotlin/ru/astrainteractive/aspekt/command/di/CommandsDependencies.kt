@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.command.di
 
+import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.AspeKt
 import ru.astrainteractive.aspekt.adminprivate.controller.AdminPrivateController
 import ru.astrainteractive.aspekt.adminprivate.di.AdminPrivateModule
@@ -19,7 +20,7 @@ import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 
 interface CommandsDependencies : Module {
-    val plugin: AspeKt
+    val plugin: JavaPlugin
     val translation: PluginTranslation
     val dispatchers: BukkitDispatchers
     val scope: AsyncComponent
@@ -37,7 +38,7 @@ interface CommandsDependencies : Module {
         guiModule: GuiModule
     ) : CommandsDependencies {
 
-        override val plugin: AspeKt by coreModule.plugin
+        override val plugin: JavaPlugin by coreModule.plugin
         override val translation: PluginTranslation by coreModule.translation
         override val dispatchers: BukkitDispatchers by coreModule.dispatchers
         override val scope: AsyncComponent by coreModule.scope

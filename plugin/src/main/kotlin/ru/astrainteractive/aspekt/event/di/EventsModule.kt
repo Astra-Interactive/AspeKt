@@ -17,7 +17,6 @@ import ru.astrainteractive.aspekt.event.sort.di.SortDependencies
 import ru.astrainteractive.aspekt.event.tc.TCEvent
 import ru.astrainteractive.aspekt.event.tc.di.TCDependencies
 import ru.astrainteractive.klibs.kdi.Module
-import ru.astrainteractive.klibs.kdi.getValue
 
 interface EventsModule : Module {
     val tcEvent: TCEvent
