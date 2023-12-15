@@ -2,8 +2,6 @@ package ru.astrainteractive.aspekt.di
 
 import kotlinx.serialization.encodeToString
 import org.bukkit.plugin.java.JavaPlugin
-import ru.astrainteractive.aspekt.di.factory.MenuModelsFactory
-import ru.astrainteractive.aspekt.plugin.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.aspekt.util.Lifecycle
@@ -40,7 +38,6 @@ interface CoreModule : Lifecycle {
     val adminChunksYml: Reloadable<FileManager>
     val translation: Reloadable<PluginTranslation>
 
-    val menuModels: Reloadable<List<MenuModel>>
     val economyProvider: Reloadable<EconomyProvider?>
     val tempFileManager: Reloadable<SpigotFileManager>
     val translationContext: BukkitTranslationContext
@@ -92,10 +89,6 @@ interface CoreModule : Lifecycle {
             translation
         }
 
-        override val menuModels: Reloadable<List<MenuModel>> = Reloadable {
-            MenuModelsFactory(plugin.value.dataFolder, YamlSerializer()).create()
-        }
-
         override val economyProvider: Reloadable<EconomyProvider?> = Reloadable {
             runCatching {
                 AnyEconomyProvider(plugin.value)
@@ -130,7 +123,6 @@ interface CoreModule : Lifecycle {
         override fun onReload() {
             pluginConfig.reload()
             translation.reload()
-            menuModels.reload()
             economyProvider.reload()
             tempFileManager.reload()
         }

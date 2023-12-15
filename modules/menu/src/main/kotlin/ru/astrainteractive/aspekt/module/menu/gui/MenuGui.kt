@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.gui.menu
+package ru.astrainteractive.aspekt.module.menu.gui
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.ItemStack
-import ru.astrainteractive.aspekt.plugin.MenuModel
+import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.BukkitDispatchers

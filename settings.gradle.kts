@@ -46,3 +46,4 @@ include("plugin")
 include("velocity")
 // Modules
 include(":modules:core")
+include(":modules:menu")

@@ -1,7 +1,6 @@
 package ru.astrainteractive.aspekt.event.sort.di
 
 import org.bukkit.plugin.java.JavaPlugin
-import ru.astrainteractive.aspekt.AspeKt
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.event.sort.SortController
 import ru.astrainteractive.astralibs.event.EventListener

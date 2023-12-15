@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.plugin
+package ru.astrainteractive.aspekt.module.menu.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

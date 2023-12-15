@@ -1,7 +1,6 @@
 package ru.astrainteractive.aspekt.event.sit.di
 
 import org.bukkit.plugin.java.JavaPlugin
-import ru.astrainteractive.aspekt.AspeKt
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.event.sit.SitController
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration

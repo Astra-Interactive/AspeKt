@@ -1,7 +1,6 @@
 package ru.astrainteractive.aspekt.command.di
 
 import org.bukkit.plugin.java.JavaPlugin
-import ru.astrainteractive.aspekt.AspeKt
 import ru.astrainteractive.aspekt.adminprivate.controller.AdminPrivateController
 import ru.astrainteractive.aspekt.adminprivate.di.AdminPrivateModule
 import ru.astrainteractive.aspekt.di.CoreModule
@@ -9,7 +8,8 @@ import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.event.sit.SitController
 import ru.astrainteractive.aspekt.gui.Router
 import ru.astrainteractive.aspekt.gui.di.GuiModule
-import ru.astrainteractive.aspekt.plugin.MenuModel
+import ru.astrainteractive.aspekt.module.menu.di.MenuModule
+import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
@@ -35,7 +35,8 @@ interface CommandsDependencies : Module {
         coreModule: CoreModule,
         eventsModule: EventsModule,
         adminPrivateModule: AdminPrivateModule,
-        guiModule: GuiModule
+        guiModule: GuiModule,
+        menuModule: MenuModule
     ) : CommandsDependencies {
 
         override val plugin: JavaPlugin by coreModule.plugin
@@ -43,7 +44,7 @@ interface CommandsDependencies : Module {
         override val dispatchers: BukkitDispatchers by coreModule.dispatchers
         override val scope: AsyncComponent by coreModule.scope
         override val sitController: SitController by Provider { eventsModule.sitModule.sitController }
-        override val menuModels: List<MenuModel> by coreModule.menuModels
+        override val menuModels: List<MenuModel> by menuModule.menuModels
         override val economyProvider: EconomyProvider? by coreModule.economyProvider
         override val adminPrivateController: AdminPrivateController by Provider {
             adminPrivateModule.adminPrivateController

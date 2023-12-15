@@ -1,7 +1,7 @@
-package ru.astrainteractive.aspekt.di.factory
+package ru.astrainteractive.aspekt.module.menu.di.factory
 
 import kotlinx.serialization.SerializationException
-import ru.astrainteractive.aspekt.plugin.MenuModel
+import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.astralibs.serialization.YamlSerializer
 import ru.astrainteractive.klibs.kdi.Factory
 import java.io.File

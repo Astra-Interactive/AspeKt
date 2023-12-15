@@ -4,7 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.astrainteractive.aspekt.gui.entities.ui.EntitiesGui
-import ru.astrainteractive.aspekt.gui.menu.MenuGui
+import ru.astrainteractive.aspekt.module.menu.di.MenuModule
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.economy.EconomyProvider
@@ -15,7 +15,8 @@ class RouterImpl(
     private val dispatchers: BukkitDispatchers,
     private val translationContext: BukkitTranslationContext,
     private val economyProvider: EconomyProvider?,
-    private val translation: PluginTranslation
+    private val translation: PluginTranslation,
+    private val menuModule: MenuModule
 ) : Router {
     override fun open(route: Router.Route) {
         scope.launch(dispatchers.BukkitAsync) {
@@ -26,12 +27,8 @@ class RouterImpl(
                     translationContext = translationContext
                 )
 
-                is Router.Route.Menu -> MenuGui(
+                is Router.Route.Menu -> menuModule.menuGui(
                     player = route.player,
-                    economyProvider = economyProvider,
-                    translation = translation,
-                    translationContext = translationContext,
-                    dispatchers = dispatchers,
                     menuModel = route.menuModel
                 )
             }

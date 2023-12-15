@@ -7,6 +7,7 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.gui.di.GuiModule
+import ru.astrainteractive.aspekt.module.menu.di.MenuModule
 import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
 
@@ -21,8 +22,11 @@ class RootModuleImpl : RootModule {
     override val eventsModule: EventsModule by Single {
         EventsModule.Default(coreModule, adminPrivateModule)
     }
+    override val menuModule: MenuModule by lazy {
+        MenuModule.Default(coreModule)
+    }
     override val guiModule: GuiModule by Single {
-        GuiModule.Default(coreModule)
+        GuiModule.Default(coreModule, menuModule)
     }
     override val autoBroadcastModule by lazy {
         AutoBroadcastModule.Default(coreModule)
@@ -32,7 +36,8 @@ class RootModuleImpl : RootModule {
             coreModule = coreModule,
             eventsModule = eventsModule,
             adminPrivateModule = adminPrivateModule,
-            guiModule = guiModule
+            guiModule = guiModule,
+            menuModule = menuModule
         )
     }
 }

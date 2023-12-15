@@ -14,4 +14,6 @@ dependencies {
     implementation(klibs.klibs.kdi)
     implementation(libs.minecraft.astralibs.spigot.gui)
     implementation(libs.minecraft.astralibs.spigot.core)
+    // Local
+    implementation(projects.modules.core)
 }
