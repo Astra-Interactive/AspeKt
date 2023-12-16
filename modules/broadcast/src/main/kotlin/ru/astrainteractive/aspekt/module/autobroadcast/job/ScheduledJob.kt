@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.autobroadcast
+package ru.astrainteractive.aspekt.module.autobroadcast.job
 
 import java.util.Timer
 

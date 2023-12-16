@@ -1,10 +1,9 @@
-package ru.astrainteractive.aspekt.autobroadcast
+package ru.astrainteractive.aspekt.module.autobroadcast.job
 
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
-import ru.astrainteractive.aspekt.autobroadcast.di.AutoBroadcastDependencies
+import ru.astrainteractive.aspekt.module.autobroadcast.di.AutoBroadcastDependencies
 import ru.astrainteractive.astralibs.util.hex
-import ru.astrainteractive.klibs.kdi.getValue
 
 internal class AutoBroadcastJob(
     dependencies: AutoBroadcastDependencies

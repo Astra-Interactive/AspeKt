@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.di.impl
 
 import ru.astrainteractive.aspekt.adminprivate.di.AdminPrivateModule
-import ru.astrainteractive.aspekt.autobroadcast.di.AutoBroadcastModule
+import ru.astrainteractive.aspekt.module.autobroadcast.di.AutoBroadcastModule
 import ru.astrainteractive.aspekt.command.di.CommandManagerModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.di.RootModule

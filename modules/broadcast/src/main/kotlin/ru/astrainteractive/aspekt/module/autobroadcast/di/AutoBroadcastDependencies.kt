@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.autobroadcast.di
+package ru.astrainteractive.aspekt.module.autobroadcast.di
 
 import kotlinx.coroutines.CoroutineScope
 import ru.astrainteractive.aspekt.di.CoreModule
