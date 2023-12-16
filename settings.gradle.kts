@@ -44,3 +44,8 @@ rootProject.name = "AspeKt"
 // Spigot
 include("plugin")
 include("velocity")
+// Modules
+include(":modules:core")
+include(":modules:menu")
+include(":modules:broadcast")
+include(":modules:adminprivate")

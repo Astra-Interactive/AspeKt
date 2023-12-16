@@ -27,6 +27,10 @@ dependencies {
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
     testImplementation(libs.minecraft.mockbukkit)
+    implementation(projects.modules.core)
+    implementation(projects.modules.menu)
+    implementation(projects.modules.broadcast)
+    implementation(projects.modules.adminprivate)
 }
 val destination = File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\smp\\plugins")
     .takeIf(File::exists)

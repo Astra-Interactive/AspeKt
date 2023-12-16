@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.event.tc.di
 
 import kotlinx.coroutines.CoroutineScope
-import ru.astrainteractive.aspekt.AspeKt
+import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
@@ -12,7 +12,7 @@ import ru.astrainteractive.klibs.kdi.getValue
 interface TCDependencies {
     val configuration: PluginConfiguration
     val eventListener: EventListener
-    val plugin: AspeKt
+    val plugin: JavaPlugin
     val scope: CoroutineScope
     val dispatchers: BukkitDispatchers
 
@@ -25,7 +25,7 @@ interface TCDependencies {
         override val eventListener: EventListener by Provider {
             coreModule.eventListener.value
         }
-        override val plugin: AspeKt by Provider {
+        override val plugin: JavaPlugin by Provider {
             coreModule.plugin.value
         }
         override val scope: CoroutineScope by Provider {

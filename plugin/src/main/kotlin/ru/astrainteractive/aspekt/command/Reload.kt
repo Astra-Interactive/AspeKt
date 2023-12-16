@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.command
 
+import ru.astrainteractive.aspekt.AspeKt
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.registerCommand
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
@@ -19,6 +20,6 @@ fun CommandManager.reload() = plugin.registerCommand("aesreload") {
         return@registerCommand
     }
     sender.sendMessage(translation.general.reload)
-    plugin.reloadPlugin()
+    (plugin as AspeKt).reloadPlugin()
     sender.sendMessage(translation.general.reloadComplete)
 }

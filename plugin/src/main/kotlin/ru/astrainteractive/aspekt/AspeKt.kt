@@ -23,7 +23,8 @@ class AspeKt : JavaPlugin() {
         get() = listOf(
             rootModule.autoBroadcastModule.lifecycle,
             rootModule.commandManagerModule,
-            rootModule.coreModule
+            rootModule.coreModule,
+            rootModule.menuModule
         )
 
     /**

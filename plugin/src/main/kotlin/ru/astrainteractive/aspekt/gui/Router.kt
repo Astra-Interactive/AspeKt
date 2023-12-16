@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.gui
 
 import org.bukkit.entity.Player
-import ru.astrainteractive.aspekt.plugin.MenuModel
+import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 
 interface Router {
     sealed interface Route {

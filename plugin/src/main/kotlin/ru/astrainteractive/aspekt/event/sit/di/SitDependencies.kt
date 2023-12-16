@@ -1,6 +1,6 @@
 package ru.astrainteractive.aspekt.event.sit.di
 
-import ru.astrainteractive.aspekt.AspeKt
+import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.event.sit.SitController
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
@@ -10,7 +10,7 @@ import ru.astrainteractive.klibs.kdi.getValue
 
 interface SitDependencies {
     val eventListener: EventListener
-    val plugin: AspeKt
+    val plugin: JavaPlugin
     val configuration: PluginConfiguration
     val sitController: SitController
 
@@ -23,7 +23,7 @@ interface SitDependencies {
         override val eventListener: EventListener by Provider {
             coreModule.eventListener.value
         }
-        override val plugin: AspeKt by Provider {
+        override val plugin: JavaPlugin by Provider {
             coreModule.plugin.value
         }
 
