@@ -1,12 +1,12 @@
 package ru.astrainteractive.aspekt.di.impl
 
-import ru.astrainteractive.aspekt.adminprivate.di.AdminPrivateModule
-import ru.astrainteractive.aspekt.module.autobroadcast.di.AutoBroadcastModule
 import ru.astrainteractive.aspekt.command.di.CommandManagerModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.gui.di.GuiModule
+import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule
+import ru.astrainteractive.aspekt.module.autobroadcast.di.AutoBroadcastModule
 import ru.astrainteractive.aspekt.module.menu.di.MenuModule
 import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue

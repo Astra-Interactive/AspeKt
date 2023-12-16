@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.command
 
-import ru.astrainteractive.aspekt.command.adminprivate.AdminPrivateCommandFactory
 import ru.astrainteractive.aspekt.command.di.CommandsDependencies
+import ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate.AdminPrivateCommandFactory
 import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 
 class CommandManager(

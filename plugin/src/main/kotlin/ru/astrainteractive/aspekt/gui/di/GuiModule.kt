@@ -16,8 +16,6 @@ interface GuiModule {
                 scope = coreModule.scope.value,
                 dispatchers = coreModule.dispatchers.value,
                 translationContext = coreModule.translationContext,
-                economyProvider = coreModule.economyProvider.value,
-                translation = coreModule.translation.value,
                 menuModule = menuModule
             )
         }

@@ -1,10 +1,7 @@
 package ru.astrainteractive.aspekt.event.di
 
 import org.bukkit.Bukkit
-import ru.astrainteractive.aspekt.adminprivate.di.AdminPrivateModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.event.adminprivate.AdminPrivateEvent
-import ru.astrainteractive.aspekt.event.adminprivate.di.AdminPrivateDependencies
 import ru.astrainteractive.aspekt.event.crop.AutoCropEvent
 import ru.astrainteractive.aspekt.event.crop.di.AutoCropDependencies
 import ru.astrainteractive.aspekt.event.discord.DiscordEvent
@@ -16,6 +13,9 @@ import ru.astrainteractive.aspekt.event.sort.SortEvent
 import ru.astrainteractive.aspekt.event.sort.di.SortDependencies
 import ru.astrainteractive.aspekt.event.tc.TCEvent
 import ru.astrainteractive.aspekt.event.tc.di.TCDependencies
+import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule
+import ru.astrainteractive.aspekt.module.adminprivate.event.AdminPrivateEvent
+import ru.astrainteractive.aspekt.module.adminprivate.event.di.AdminPrivateDependencies
 import ru.astrainteractive.klibs.kdi.Module
 
 interface EventsModule : Module {

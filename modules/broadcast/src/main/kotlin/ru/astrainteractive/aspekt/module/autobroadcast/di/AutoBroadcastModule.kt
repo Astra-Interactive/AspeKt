@@ -1,8 +1,8 @@
 package ru.astrainteractive.aspekt.module.autobroadcast.di
 
+import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.autobroadcast.job.AutoBroadcastJob
 import ru.astrainteractive.aspekt.module.autobroadcast.job.ScheduledJob
-import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.util.Lifecycle
 
 interface AutoBroadcastModule {

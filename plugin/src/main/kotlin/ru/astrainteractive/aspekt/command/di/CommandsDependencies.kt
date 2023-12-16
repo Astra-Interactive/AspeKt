@@ -1,13 +1,13 @@
 package ru.astrainteractive.aspekt.command.di
 
 import org.bukkit.plugin.java.JavaPlugin
-import ru.astrainteractive.aspekt.adminprivate.controller.AdminPrivateController
-import ru.astrainteractive.aspekt.adminprivate.di.AdminPrivateModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.event.sit.SitController
 import ru.astrainteractive.aspekt.gui.Router
 import ru.astrainteractive.aspekt.gui.di.GuiModule
+import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateController
+import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule
 import ru.astrainteractive.aspekt.module.menu.di.MenuModule
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
