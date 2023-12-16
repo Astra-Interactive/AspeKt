@@ -16,8 +16,17 @@ data class PluginConfiguration(
     @SerialName("tree_capitator")
     val treeCapitator: TreeCapitator = TreeCapitator(),
     @SerialName("restrictions")
-    val restrictions: Restrictions = Restrictions()
+    val restrictions: Restrictions = Restrictions(),
+    @SerialName("money_drop")
+    val moneyDrop: Map<String, MoneyDropEntry> = emptyMap()
 ) {
+    @Serializable
+    data class MoneyDropEntry(
+        val from: String,
+        val chance: Double,
+        val min: Double,
+        val max: Double
+    )
 
     @Serializable
     data class Restrictions(

@@ -17,8 +17,6 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.economy.EconomyProvider
 import ru.astrainteractive.astralibs.menu.clicker.Click
-import ru.astrainteractive.astralibs.menu.clicker.ClickListener
-import ru.astrainteractive.astralibs.menu.clicker.MenuClickListener
 import ru.astrainteractive.astralibs.menu.holder.DefaultPlayerHolder
 import ru.astrainteractive.astralibs.menu.holder.PlayerHolder
 import ru.astrainteractive.astralibs.menu.menu.InventorySlot
@@ -45,7 +43,6 @@ class MenuGui(
     override val menuSize: MenuSize = menuModel.size
     override var menuTitle: Component = StringDesc.Raw(menuModel.title).toComponent()
     override val playerHolder: PlayerHolder = DefaultPlayerHolder(player)
-    private val clickListener: ClickListener = MenuClickListener()
 
     @Suppress("VariableNaming")
     private val PLACEHOLDERS by Provider {
@@ -71,7 +68,7 @@ class MenuGui(
     }
 
     override fun onInventoryClicked(e: InventoryClickEvent) {
-        clickListener.onClick(e)
+        super.onInventoryClicked(e)
         e.isCancelled = true
     }
 
@@ -156,8 +153,8 @@ class MenuGui(
     }
 
     @Suppress("CyclomaticComplexMethod") // todo
-    private fun render() {
-        clickListener.clearClickListener()
+    override fun render() {
+        super.render()
         menuModel.items.values.filter(::isMeetVisibilityConditions).forEach { menuItem ->
             InventorySlot.Builder {
                 this.itemStack = menuItem.toItemStack()
@@ -179,7 +176,7 @@ class MenuGui(
 
                     processReward(menuItem)
                 }
-            }.also(clickListener::remember).setInventorySlot()
+            }.setInventorySlot()
         }
     }
 }

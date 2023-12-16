@@ -6,6 +6,7 @@ import ru.astrainteractive.aspekt.event.crop.AutoCropEvent
 import ru.astrainteractive.aspekt.event.crop.di.AutoCropDependencies
 import ru.astrainteractive.aspekt.event.discord.DiscordEvent
 import ru.astrainteractive.aspekt.event.discord.di.DiscordEventDependencies
+import ru.astrainteractive.aspekt.event.moneydrop.di.MoneyDropModule
 import ru.astrainteractive.aspekt.event.restrictions.RestrictionsEvent
 import ru.astrainteractive.aspekt.event.restrictions.di.RestrictionsDependencies
 import ru.astrainteractive.aspekt.event.sit.di.SitModule
@@ -26,6 +27,7 @@ interface EventsModule : Module {
     val discordEvent: DiscordEvent?
     val autoCropEvent: AutoCropEvent
     val adminPrivateEvent: AdminPrivateEvent
+    val moneyDropModule: MoneyDropModule
 
     class Default(coreModule: CoreModule, adminPrivateModule: AdminPrivateModule) : EventsModule {
 
@@ -65,6 +67,9 @@ interface EventsModule : Module {
                 adminPrivateModule = adminPrivateModule
             )
             AdminPrivateEvent(adminPrivateDependencies)
+        }
+        override val moneyDropModule: MoneyDropModule by lazy {
+            MoneyDropModule.Default(coreModule)
         }
     }
 }

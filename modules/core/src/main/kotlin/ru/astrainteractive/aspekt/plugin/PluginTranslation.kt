@@ -41,10 +41,18 @@ class PluginTranslation(
         private val discordLinkReward: StringDesc.Raw = StringDesc.Raw(
             "&#42f596Вы получили {AMOUNT}$ за привязку дискорда!"
         ),
+        @SerialName("picked_up_money")
+        private val pickedUpMoney: StringDesc.Raw = StringDesc.Raw("&#42f596Вы подобрали {AMOUNT} монет"),
+        @SerialName("dropped_money")
+        val droppedMoney: StringDesc.Raw = StringDesc.Raw("&6Монетка")
     ) {
 
         fun discordLinkReward(amount: Number): StringDesc.Raw {
             return discordLinkReward.replace("{AMOUNT}", "${amount.toInt()}")
+        }
+
+        fun pickedUpMoney(amount: Number): StringDesc.Raw {
+            return pickedUpMoney.replace("{AMOUNT}", "${amount.toInt()}")
         }
     }
 

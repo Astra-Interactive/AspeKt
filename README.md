@@ -149,6 +149,22 @@ items:
       amount: 10
 ```
 
+### Money Drop
+Drop money from mobs. It's configured to be exploit-free, so it will not be dropped from same location
+```yaml
+money_drop:
+  "zombie":
+    from: "ZOMBIE"
+    chance: 100.0
+    min: 10.0
+    max: 100.0
+  "diamond_ore":
+    from: "DIAMOND_ORE"
+    chance: 100.0
+    min: 10.0
+    max: 100.0
+```
+
 | Command                            | Permission           | Description                       |
 |:-----------------------------------|:---------------------|:----------------------------------|
 | `/adminprivate map`                | `aspekt.admin_claim` | `Show map of near claimed chunks` |

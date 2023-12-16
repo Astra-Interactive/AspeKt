@@ -16,5 +16,6 @@ class EventHandler(
         module.discordEvent
         module.autoCropEvent
         module.adminPrivateEvent
+        module.moneyDropModule.moneyDropEvent
     }
 }
