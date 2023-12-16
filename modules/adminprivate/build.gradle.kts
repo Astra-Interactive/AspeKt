@@ -14,6 +14,10 @@ dependencies {
     implementation(klibs.klibs.kdi)
     implementation(libs.minecraft.astralibs.spigot.gui)
     implementation(libs.minecraft.astralibs.spigot.core)
+    // Test
+    testImplementation(libs.bundles.testing.kotlin)
+    testImplementation(libs.tests.kotlin.test)
+    testImplementation(libs.minecraft.mockbukkit)
     // Local
     implementation(projects.modules.core)
 }
