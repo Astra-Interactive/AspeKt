@@ -2,7 +2,9 @@ package ru.astrainteractive.aspekt.event.moneydrop
 
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.inventory.InventoryMoveItemEvent
@@ -14,11 +16,12 @@ class MoneyDropEvent(
     dependencies: MoneyDropDependencies
 ) : MoneyDropDependencies by dependencies {
 
-    val entityDeathEvent = DSLEvent<EntityDamageByEntityEvent>(eventListener, plugin) { e ->
+    val entityDeathEvent = DSLEvent<EntityDamageByEntityEvent>(eventListener, plugin, EventPriority.MONITOR) { e ->
         val player = e.damager as? Player ?: return@DSLEvent
         if (e.entity is Player) return@DSLEvent
         val entity = e.entity as? LivingEntity ?: return@DSLEvent
         if (entity.health > e.finalDamage) return@DSLEvent
+        if (e.isCancelled) return@DSLEvent
         moneyDropController.tryDrop(entity.location, entity.type.name)
     }
 
@@ -45,7 +48,13 @@ class MoneyDropEvent(
         if (!moneyDropController.isMoneyDropItem(e.item.itemStack)) return@DSLEvent
         e.isCancelled = true
     }
-    val blockBreakEvent = DSLEvent<BlockBreakEvent>(eventListener, plugin) { e ->
+
+    val blockBreakEvent = DSLEvent<BlockBreakEvent>(eventListener, plugin, EventPriority.MONITOR) { e ->
+        if (e.isCancelled) return@DSLEvent
         moneyDropController.tryDrop(e.block.location, e.block.type.name)
+    }
+
+    val blockPlaceEvent = DSLEvent<BlockPlaceEvent>(eventListener, plugin) { e ->
+        moneyDropController.blockPlaced(e.blockPlaced.location)
     }
 }

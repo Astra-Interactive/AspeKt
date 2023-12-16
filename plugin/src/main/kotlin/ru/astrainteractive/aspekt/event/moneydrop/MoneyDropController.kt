@@ -70,4 +70,8 @@ class MoneyDropController(
             .filter(::checkForChance)
             .forEach { entry -> drop(location, entry) }
     }
+
+    fun blockPlaced(location: Location) {
+        dropCache.put(location.toKeyLocation(), Unit)
+    }
 }
