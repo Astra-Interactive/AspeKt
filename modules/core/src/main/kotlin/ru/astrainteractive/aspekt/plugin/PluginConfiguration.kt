@@ -81,19 +81,7 @@ data class PluginConfiguration(
         val min: Int = 0,
         @SerialName("max")
         val max: Int = 0,
-        @SerialName("duping")
-        val dupeProtection: DupeProtection = DupeProtection()
-    ) {
-        @Serializable
-        data class DupeProtection(
-            @SerialName("enabled")
-            val enabled: Boolean = true,
-            @SerialName("clear_every")
-            val clearEveryMs: Long = 60_000L,
-            @SerialName("location_timeout")
-            val locationTimeoutMs: Long = 15_000L
-        )
-    }
+    )
 
     @Serializable
     data class Announcements(

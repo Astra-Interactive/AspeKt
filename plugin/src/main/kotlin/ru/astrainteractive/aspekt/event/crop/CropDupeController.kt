@@ -1,26 +1,22 @@
 package ru.astrainteractive.aspekt.event.crop
 
 import org.bukkit.Location
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.klibs.kdi.Dependency
-import ru.astrainteractive.klibs.kdi.getValue
+import org.jetbrains.kotlin.com.google.common.cache.Cache
+import org.jetbrains.kotlin.com.google.common.cache.CacheBuilder
+import java.util.concurrent.TimeUnit
 
-class CropDupeController(
-    pluginConfigDep: Dependency<PluginConfiguration>
-) {
-    private val pluginConfiguration by pluginConfigDep
+class CropDupeController {
+    private val dropCache: Cache<String, Unit> = CacheBuilder
+        .newBuilder()
+        .maximumSize(64)
+        .expireAfterWrite(30, TimeUnit.SECONDS)
+        .build()
 
-    private val locationSet = HashMap<Location, Long>()
-    private var lastClear = System.currentTimeMillis()
+    private fun Location.toKeyLocation() = "${x.toInt()}${y.toInt()}${z.toInt()}"
+
     fun isDupingAtLocation(location: Location): Boolean {
-        val dupeConfig = pluginConfiguration.autoCrop.dupeProtection
-        val lastTimeClicked = locationSet[location].also {
-            locationSet[location] = System.currentTimeMillis()
-        } ?: 0
-        if (System.currentTimeMillis() - lastClear > dupeConfig.clearEveryMs) {
-            locationSet.clear()
-            lastClear = System.currentTimeMillis()
-        }
-        return System.currentTimeMillis() - lastTimeClicked < dupeConfig.locationTimeoutMs
+        val isPresent = dropCache.getIfPresent(location.toKeyLocation()) != null
+        dropCache.put(location.toKeyLocation(), Unit)
+        return isPresent
     }
 }

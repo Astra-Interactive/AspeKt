@@ -20,10 +20,10 @@ class AutoCropEvent(
         if (e.action != Action.RIGHT_CLICK_BLOCK) return@DSLEvent
         val clickedBlock = e.clickedBlock ?: return@DSLEvent
         if (clickedBlock.type == Material.AIR) return@DSLEvent
-        if (cropDupeController.isDupingAtLocation(clickedBlock.location)) return@DSLEvent
         val clickedCrop = (clickedBlock.blockData as? Ageable) ?: return@DSLEvent
 
         if (clickedCrop.age != clickedCrop.maximumAge) return@DSLEvent
+
         val material = when (clickedCrop.material) {
             Material.POTATOES -> Material.POTATO
             Material.CARROTS -> Material.CARROT
@@ -31,10 +31,13 @@ class AutoCropEvent(
             Material.SWEET_BERRIES -> Material.SWEET_BERRIES
             Material.WHEAT -> Material.WHEAT
             else -> null
+        } ?: return@DSLEvent
+        val amount = when {
+            cropDupeController.isDupingAtLocation(clickedBlock.location) -> 1
+            else -> Random.nextInt(autoCropConfig.min, autoCropConfig.max)
         }
-        val amount = Random.nextInt(autoCropConfig.min, autoCropConfig.max)
 
-        val item = ItemStack(material ?: return@DSLEvent, amount)
+        val item = ItemStack(material, amount)
         clickedCrop.age = 0
         clickedBlock.setBlockData(clickedCrop, true)
         clickedBlock.location.let { loc ->

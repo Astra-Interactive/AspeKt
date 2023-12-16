@@ -26,9 +26,7 @@ interface AutoCropDependencies {
             coreModule.pluginConfig.value
         }
         override val cropDupeController: CropDupeController by Single {
-            CropDupeController(
-                pluginConfigDep = coreModule.pluginConfig
-            )
+            CropDupeController()
         }
     }
 }
