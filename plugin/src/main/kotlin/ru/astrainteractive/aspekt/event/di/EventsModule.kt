@@ -4,8 +4,6 @@ import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.event.crop.AutoCropEvent
 import ru.astrainteractive.aspekt.event.crop.di.AutoCropDependencies
-import ru.astrainteractive.aspekt.event.discord.DiscordEvent
-import ru.astrainteractive.aspekt.event.discord.di.DiscordEventDependencies
 import ru.astrainteractive.aspekt.event.moneydrop.di.MoneyDropModule
 import ru.astrainteractive.aspekt.event.restrictions.RestrictionsEvent
 import ru.astrainteractive.aspekt.event.restrictions.di.RestrictionsDependencies
@@ -14,6 +12,7 @@ import ru.astrainteractive.aspekt.event.sort.SortEvent
 import ru.astrainteractive.aspekt.event.sort.di.SortDependencies
 import ru.astrainteractive.aspekt.event.tc.TCEvent
 import ru.astrainteractive.aspekt.event.tc.di.TCDependencies
+import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
 import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule
 import ru.astrainteractive.aspekt.module.adminprivate.event.AdminPrivateEvent
 import ru.astrainteractive.aspekt.module.adminprivate.event.di.AdminPrivateDependencies
@@ -24,7 +23,7 @@ interface EventsModule : Module {
     val sortEvent: SortEvent
     val sitModule: SitModule
     val restrictionsEvent: RestrictionsEvent
-    val discordEvent: DiscordEvent?
+    val discordEventModule: DiscordLinkModule?
     val autoCropEvent: AutoCropEvent
     val adminPrivateEvent: AdminPrivateEvent
     val moneyDropModule: MoneyDropModule
@@ -40,6 +39,7 @@ interface EventsModule : Module {
             val sortDependencies: SortDependencies = SortDependencies.Default(coreModule)
             SortEvent(sortDependencies)
         }
+
         override val sitModule: SitModule by lazy {
             SitModule.Default(coreModule)
         }
@@ -49,11 +49,10 @@ interface EventsModule : Module {
             RestrictionsEvent(restrictionsDependencies)
         }
 
-        override val discordEvent: DiscordEvent? by lazy {
+        override val discordEventModule: DiscordLinkModule? by lazy {
             Bukkit.getPluginManager().getPlugin("DiscordSRV") ?: return@lazy null
             Bukkit.getPluginManager().getPlugin("LuckPerms") ?: return@lazy null
-            val discordEventDependencies = DiscordEventDependencies.Default(coreModule)
-            DiscordEvent(discordEventDependencies)
+            DiscordLinkModule.Default(coreModule)
         }
 
         override val autoCropEvent: AutoCropEvent by lazy {

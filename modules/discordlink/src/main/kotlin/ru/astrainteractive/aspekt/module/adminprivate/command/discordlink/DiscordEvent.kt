@@ -1,6 +1,6 @@
 @file:OptIn(UnsafeApi::class)
 
-package ru.astrainteractive.aspekt.event.discord
+package ru.astrainteractive.aspekt.module.adminprivate.command.discordlink
 
 import github.scarsz.discordsrv.DiscordSRV
 import github.scarsz.discordsrv.api.Subscribe
@@ -8,12 +8,13 @@ import github.scarsz.discordsrv.api.events.AccountLinkedEvent
 import github.scarsz.discordsrv.api.events.AccountUnlinkedEvent
 import kotlinx.coroutines.launch
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
-import ru.astrainteractive.aspekt.event.discord.di.DiscordEventDependencies
+import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordEventDependencies
+import ru.astrainteractive.aspekt.util.Lifecycle
 
 /**
  * Template event class
  */
-class DiscordEvent(module: DiscordEventDependencies) : DiscordEventDependencies by module {
+class DiscordEvent(module: DiscordEventDependencies) : DiscordEventDependencies by module, Lifecycle {
     @Subscribe
     fun onAccountLinked(e: AccountLinkedEvent) {
         scope.launch(dispatchers.IO) {
@@ -40,11 +41,11 @@ class DiscordEvent(module: DiscordEventDependencies) : DiscordEventDependencies 
 //        }
 //    }
 
-    fun onEnable() {
+    override fun onEnable() {
         DiscordSRV.api.subscribe(this)
     }
 
-    fun onDisable() {
+    override fun onDisable() {
         DiscordSRV.api.unsubscribe(this)
     }
 }

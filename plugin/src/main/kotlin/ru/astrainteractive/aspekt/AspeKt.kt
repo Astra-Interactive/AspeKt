@@ -20,11 +20,12 @@ class AspeKt : JavaPlugin() {
     private val rootModule = RootModuleImpl()
     private val eventsModule: EventsModule by rootModule.eventsModule
     private val lifecycles: List<Lifecycle>
-        get() = listOf(
+        get() = listOfNotNull(
             rootModule.autoBroadcastModule.lifecycle,
             rootModule.commandManagerModule,
             rootModule.coreModule,
-            rootModule.menuModule
+            rootModule.menuModule,
+            rootModule.eventsModule.discordEvent
         )
 
     /**

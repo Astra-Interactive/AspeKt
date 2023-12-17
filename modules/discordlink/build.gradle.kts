@@ -1,6 +1,3 @@
-import ru.astrainteractive.gradleplugin.setupSpigotProcessor
-import ru.astrainteractive.gradleplugin.setupSpigotShadow
-
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
@@ -28,14 +25,4 @@ dependencies {
     testImplementation(libs.tests.kotlin.test)
     testImplementation(libs.minecraft.mockbukkit)
     implementation(projects.modules.core)
-    implementation(projects.modules.menu)
-    implementation(projects.modules.broadcast)
-    implementation(projects.modules.adminprivate)
-    implementation(projects.modules.discordlink)
 }
-val destination = File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\smp\\plugins")
-    .takeIf(File::exists)
-    ?: File(rootDir, "jars")
-
-setupSpigotShadow(destination)
-setupSpigotProcessor()

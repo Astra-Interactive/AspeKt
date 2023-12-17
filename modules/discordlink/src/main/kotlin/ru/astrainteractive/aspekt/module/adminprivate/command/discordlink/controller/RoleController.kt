@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.event.discord.controller
+package ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller
 
 import github.scarsz.discordsrv.api.events.AccountLinkedEvent
 import github.scarsz.discordsrv.api.events.AccountUnlinkedEvent
