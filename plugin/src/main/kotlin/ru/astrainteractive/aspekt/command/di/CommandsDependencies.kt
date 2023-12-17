@@ -10,6 +10,7 @@ import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateCon
 import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule
 import ru.astrainteractive.aspekt.module.menu.di.MenuModule
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
+import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
@@ -27,6 +28,7 @@ interface CommandsDependencies : Module {
     val sitController: SitController
     val adminPrivateController: AdminPrivateController
     val menuModels: List<MenuModel>
+    val menuRouter: MenuRouter
     val economyProvider: EconomyProvider?
     val router: Router
     val translationContext: BukkitTranslationContext
@@ -45,6 +47,7 @@ interface CommandsDependencies : Module {
         override val scope: AsyncComponent by coreModule.scope
         override val sitController: SitController by Provider { eventsModule.sitModule.sitController }
         override val menuModels: List<MenuModel> by menuModule.menuModels
+        override val menuRouter: MenuRouter by menuModule.menuRouter
         override val economyProvider: EconomyProvider? by coreModule.economyProvider
         override val adminPrivateController: AdminPrivateController by Provider {
             adminPrivateModule.adminPrivateController

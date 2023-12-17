@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.command
 
 import ru.astrainteractive.aspekt.command.di.CommandsDependencies
 import ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate.AdminPrivateCommandFactory
+import ru.astrainteractive.aspekt.module.menu.command.MenuCommandFactory
 import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 
 class CommandManager(
@@ -19,8 +20,13 @@ class CommandManager(
         tellChat()
         rtp()
         rtpBypassed()
-        menuCompleter()
-        menu()
+        MenuCommandFactory(
+            plugin = plugin,
+            translationContext = translationContext,
+            menuModelProvider = { menuModels },
+            translationProvider = { translation },
+            menuRouter = { menuRouter }
+        ).create()
         AdminPrivateCommandFactory(
             plugin = plugin,
             adminPrivateController = module.adminPrivateController,

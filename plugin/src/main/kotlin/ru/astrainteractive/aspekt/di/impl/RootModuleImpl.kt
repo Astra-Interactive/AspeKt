@@ -26,7 +26,7 @@ class RootModuleImpl : RootModule {
         MenuModule.Default(coreModule)
     }
     override val guiModule: GuiModule by Single {
-        GuiModule.Default(coreModule, menuModule)
+        GuiModule.Default(coreModule)
     }
     override val autoBroadcastModule by lazy {
         AutoBroadcastModule.Default(coreModule)
