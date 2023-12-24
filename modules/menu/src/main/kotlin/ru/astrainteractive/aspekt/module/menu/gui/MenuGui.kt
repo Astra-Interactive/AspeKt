@@ -31,7 +31,7 @@ import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 
 @Suppress("TooManyFunctions")
-class MenuGui(
+internal class MenuGui(
     player: Player,
     private val economyProvider: EconomyProvider?,
     private val translation: PluginTranslation,

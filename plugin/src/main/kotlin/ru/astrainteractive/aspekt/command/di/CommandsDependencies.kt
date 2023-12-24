@@ -6,9 +6,6 @@ import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.event.sit.SitController
 import ru.astrainteractive.aspekt.gui.Router
 import ru.astrainteractive.aspekt.gui.di.GuiModule
-import ru.astrainteractive.aspekt.module.menu.di.MenuModule
-import ru.astrainteractive.aspekt.module.menu.model.MenuModel
-import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
@@ -24,8 +21,6 @@ interface CommandsDependencies : Module {
     val dispatchers: BukkitDispatchers
     val scope: AsyncComponent
     val sitController: SitController
-    val menuModels: List<MenuModel>
-    val menuRouter: MenuRouter
     val economyProvider: EconomyProvider?
     val router: Router
     val translationContext: BukkitTranslationContext
@@ -34,7 +29,6 @@ interface CommandsDependencies : Module {
         coreModule: CoreModule,
         eventsModule: EventsModule,
         guiModule: GuiModule,
-        menuModule: MenuModule
     ) : CommandsDependencies {
 
         override val plugin: JavaPlugin by coreModule.plugin
@@ -42,8 +36,6 @@ interface CommandsDependencies : Module {
         override val dispatchers: BukkitDispatchers by coreModule.dispatchers
         override val scope: AsyncComponent by coreModule.scope
         override val sitController: SitController by Provider { eventsModule.sitModule.sitController }
-        override val menuModels: List<MenuModel> by menuModule.menuModels
-        override val menuRouter: MenuRouter by menuModule.menuRouter
         override val economyProvider: EconomyProvider? by coreModule.economyProvider
         override val router: Router by Provider {
             guiModule.router

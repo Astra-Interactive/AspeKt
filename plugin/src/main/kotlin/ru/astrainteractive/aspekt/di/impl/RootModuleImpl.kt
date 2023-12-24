@@ -41,7 +41,6 @@ class RootModuleImpl : RootModule {
             coreModule = coreModule,
             eventsModule = eventsModule,
             guiModule = guiModule,
-            menuModule = menuModule
         )
     }
 }

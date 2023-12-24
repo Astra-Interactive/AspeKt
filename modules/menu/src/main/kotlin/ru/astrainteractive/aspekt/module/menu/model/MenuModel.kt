@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import ru.astrainteractive.astralibs.menu.menu.MenuSize
 
 @Serializable
-data class MenuModel(
+internal data class MenuModel(
     @SerialName("update_interval")
     val updateInterval: Long? = null,
     val size: MenuSize,

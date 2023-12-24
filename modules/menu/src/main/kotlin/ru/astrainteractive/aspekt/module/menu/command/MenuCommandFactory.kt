@@ -14,7 +14,7 @@ import ru.astrainteractive.klibs.kdi.Factory
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 
-class MenuCommandFactory(
+internal class MenuCommandFactory(
     private val plugin: JavaPlugin,
     private val translationContext: BukkitTranslationContext,
     private val menuRouter: Provider<MenuRouter>,

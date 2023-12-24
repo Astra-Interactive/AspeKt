@@ -7,7 +7,7 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.menu.gui.MenuGui
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 
-class MenuRouterImpl(private val coreModule: CoreModule) : MenuRouter {
+internal class MenuRouterImpl(private val coreModule: CoreModule) : MenuRouter {
     override fun openMenu(player: Player, menuModel: MenuModel) {
         coreModule.scope.value.launch(coreModule.dispatchers.value.IO) {
             val gui = MenuGui(
