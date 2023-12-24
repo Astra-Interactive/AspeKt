@@ -13,7 +13,6 @@ class EventHandler(
         module.sortEvent
         module.sitModule.sitEvent
         module.restrictionsEvent
-        module.discordEventModule?.discordEvent
         module.autoCropEvent
         module.moneyDropModule.moneyDropEvent
     }

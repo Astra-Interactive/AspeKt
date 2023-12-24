@@ -1,6 +1,6 @@
 @file:OptIn(UnsafeApi::class)
 
-package ru.astrainteractive.aspekt.module.adminprivate.command.discordlink
+package ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.event
 
 import github.scarsz.discordsrv.DiscordSRV
 import github.scarsz.discordsrv.api.Subscribe
@@ -14,7 +14,7 @@ import ru.astrainteractive.aspekt.util.Lifecycle
 /**
  * Template event class
  */
-class DiscordEvent(module: DiscordEventDependencies) : DiscordEventDependencies by module, Lifecycle {
+internal class DiscordEvent(module: DiscordEventDependencies) : DiscordEventDependencies by module, Lifecycle {
     @Subscribe
     fun onAccountLinked(e: AccountLinkedEvent) {
         scope.launch(dispatchers.IO) {

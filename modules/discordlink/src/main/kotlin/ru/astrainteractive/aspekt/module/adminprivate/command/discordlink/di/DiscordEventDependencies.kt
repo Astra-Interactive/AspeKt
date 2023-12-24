@@ -6,7 +6,7 @@ import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.contro
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.klibs.kdi.getValue
 
-interface DiscordEventDependencies {
+internal interface DiscordEventDependencies {
     val discordController: RoleController
     val luckPermsController: RoleController
     val scope: CoroutineScope

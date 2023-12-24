@@ -1,6 +1,5 @@
 package ru.astrainteractive.aspekt.event.di
 
-import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.event.crop.AutoCropEvent
 import ru.astrainteractive.aspekt.event.crop.di.AutoCropDependencies
@@ -12,7 +11,6 @@ import ru.astrainteractive.aspekt.event.sort.SortEvent
 import ru.astrainteractive.aspekt.event.sort.di.SortDependencies
 import ru.astrainteractive.aspekt.event.tc.TCEvent
 import ru.astrainteractive.aspekt.event.tc.di.TCDependencies
-import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
 import ru.astrainteractive.klibs.kdi.Module
 
 interface EventsModule : Module {
@@ -20,7 +18,6 @@ interface EventsModule : Module {
     val sortEvent: SortEvent
     val sitModule: SitModule
     val restrictionsEvent: RestrictionsEvent
-    val discordEventModule: DiscordLinkModule?
     val autoCropEvent: AutoCropEvent
     val moneyDropModule: MoneyDropModule
 
@@ -43,12 +40,6 @@ interface EventsModule : Module {
         override val restrictionsEvent: RestrictionsEvent by lazy {
             val restrictionsDependencies: RestrictionsDependencies = RestrictionsDependencies.Default(coreModule)
             RestrictionsEvent(restrictionsDependencies)
-        }
-
-        override val discordEventModule: DiscordLinkModule? by lazy {
-            Bukkit.getPluginManager().getPlugin("DiscordSRV") ?: return@lazy null
-            Bukkit.getPluginManager().getPlugin("LuckPerms") ?: return@lazy null
-            DiscordLinkModule.Default(coreModule)
         }
 
         override val autoCropEvent: AutoCropEvent by lazy {

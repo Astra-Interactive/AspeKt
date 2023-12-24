@@ -25,7 +25,7 @@ class AspeKt : JavaPlugin() {
             rootModule.commandManagerModule,
             rootModule.coreModule,
             rootModule.menuModule,
-            rootModule.eventsModule.discordEventModule?.discordEvent,
+            rootModule.discordLinkModule.discordLinkLifecycleFactory.create(),
             rootModule.adminPrivateModule.adminPrivateLifecycleFactory.create(),
             rootModule.eventsModule.sitModule
         )
