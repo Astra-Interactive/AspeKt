@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.adminprivate.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AdminChunk(
+internal data class AdminChunk(
     val x: Int,
     val z: Int,
     val worldName: String,

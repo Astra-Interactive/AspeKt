@@ -22,7 +22,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class AdminPrivateControllerTest {
+internal class AdminPrivateControllerTest {
     private val randomChunk: AdminChunk by Provider {
         val x = Random.nextInt(0, 100)
         val z = Random.nextInt(0, 100)

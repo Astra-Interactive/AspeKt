@@ -4,7 +4,7 @@ import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
 import ru.astrainteractive.astralibs.command.api.Command
 
-interface AdminPrivateCommand : Command<AdminPrivateCommand.Output, AdminPrivateCommand.Input> {
+internal interface AdminPrivateCommand : Command<AdminPrivateCommand.Output, AdminPrivateCommand.Input> {
     sealed interface Input {
         class ShowMap(val player: Player) : Input
         class Claim(val player: Player) : Input

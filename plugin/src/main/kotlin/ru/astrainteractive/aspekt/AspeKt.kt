@@ -25,7 +25,9 @@ class AspeKt : JavaPlugin() {
             rootModule.commandManagerModule,
             rootModule.coreModule,
             rootModule.menuModule,
-            rootModule.eventsModule.discordEvent
+            rootModule.eventsModule.discordEventModule?.discordEvent,
+            rootModule.adminPrivateModule.adminPrivateLifecycleFactory.create(),
+            rootModule.eventsModule.sitModule
         )
 
     /**
@@ -35,17 +37,14 @@ class AspeKt : JavaPlugin() {
         rootModule.coreModule.plugin.initialize(this)
         EventHandler(eventsModule)
         lifecycles.forEach(Lifecycle::onEnable)
-        rootModule.eventsModule.discordEvent?.onEnable()
     }
 
     /**
      * This method called when server is shutting down or when PlugMan disable plugin.
      */
     override fun onDisable() {
-        rootModule.eventsModule.sitModule.sitController.onDisable()
         lifecycles.forEach(Lifecycle::onDisable)
         HandlerList.unregisterAll(this)
-        rootModule.eventsModule.discordEvent?.onDisable()
         Bukkit.getOnlinePlayers().forEach(Player::closeInventory)
     }
 
@@ -53,8 +52,6 @@ class AspeKt : JavaPlugin() {
      * As it says, function for plugin reload
      */
     fun reloadPlugin() {
-        rootModule.eventsModule.sitModule.sitController.onDisable()
-        rootModule.adminPrivateModule.adminPrivateController.updateChunks()
         lifecycles.forEach(Lifecycle::onReload)
         Bukkit.getOnlinePlayers().forEach(Player::closeInventory)
     }

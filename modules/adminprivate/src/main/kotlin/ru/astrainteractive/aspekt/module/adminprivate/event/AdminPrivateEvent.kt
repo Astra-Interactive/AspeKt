@@ -35,7 +35,7 @@ import ru.astrainteractive.astralibs.event.DSLEvent
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
 import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 
-class AdminPrivateEvent(
+internal class AdminPrivateEvent(
     module: AdminPrivateDependencies,
 ) : AdminPrivateDependencies by module,
     BukkitTranslationContext by module.translationContext {

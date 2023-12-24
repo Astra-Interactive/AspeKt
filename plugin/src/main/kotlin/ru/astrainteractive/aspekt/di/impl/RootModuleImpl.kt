@@ -20,7 +20,7 @@ class RootModuleImpl : RootModule {
         AdminPrivateModule.Default(coreModule)
     }
     override val eventsModule: EventsModule by Single {
-        EventsModule.Default(coreModule, adminPrivateModule)
+        EventsModule.Default(coreModule)
     }
     override val menuModule: MenuModule by lazy {
         MenuModule.Default(coreModule)
@@ -35,7 +35,6 @@ class RootModuleImpl : RootModule {
         CommandManagerModule.Default(
             coreModule = coreModule,
             eventsModule = eventsModule,
-            adminPrivateModule = adminPrivateModule,
             guiModule = guiModule,
             menuModule = menuModule
         )

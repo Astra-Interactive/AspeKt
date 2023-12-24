@@ -13,9 +13,6 @@ import ru.astrainteractive.aspekt.event.sort.di.SortDependencies
 import ru.astrainteractive.aspekt.event.tc.TCEvent
 import ru.astrainteractive.aspekt.event.tc.di.TCDependencies
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
-import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule
-import ru.astrainteractive.aspekt.module.adminprivate.event.AdminPrivateEvent
-import ru.astrainteractive.aspekt.module.adminprivate.event.di.AdminPrivateDependencies
 import ru.astrainteractive.klibs.kdi.Module
 
 interface EventsModule : Module {
@@ -25,10 +22,9 @@ interface EventsModule : Module {
     val restrictionsEvent: RestrictionsEvent
     val discordEventModule: DiscordLinkModule?
     val autoCropEvent: AutoCropEvent
-    val adminPrivateEvent: AdminPrivateEvent
     val moneyDropModule: MoneyDropModule
 
-    class Default(coreModule: CoreModule, adminPrivateModule: AdminPrivateModule) : EventsModule {
+    class Default(coreModule: CoreModule) : EventsModule {
 
         override val tcEvent: TCEvent by lazy {
             val tcDependencies: TCDependencies = TCDependencies.Default(coreModule)
@@ -60,13 +56,6 @@ interface EventsModule : Module {
             AutoCropEvent(autoCropDependencies)
         }
 
-        override val adminPrivateEvent: AdminPrivateEvent by lazy {
-            val adminPrivateDependencies: AdminPrivateDependencies = AdminPrivateDependencies.Default(
-                coreModule = coreModule,
-                adminPrivateModule = adminPrivateModule
-            )
-            AdminPrivateEvent(adminPrivateDependencies)
-        }
         override val moneyDropModule: MoneyDropModule by lazy {
             MoneyDropModule.Default(coreModule)
         }
