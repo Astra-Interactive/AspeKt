@@ -29,6 +29,7 @@ interface AdminPrivateModule {
             dispatchers = coreModule.dispatchers.value,
             translationContext = coreModule.translationContext
         )
+
         private val adminPrivateEventFactory = Factory {
             val adminPrivateDependencies: AdminPrivateDependencies = AdminPrivateDependencies.Default(
                 coreModule = coreModule,

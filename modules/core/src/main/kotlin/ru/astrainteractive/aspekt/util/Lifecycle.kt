@@ -12,20 +12,20 @@ interface Lifecycle {
     fun onReload() = Unit
 
     class Lambda(
-        private val onEnable: () -> Unit = {},
-        private val onDisable: () -> Unit = {},
-        private val onReload: () -> Unit = {},
+        private val onEnable: Lifecycle.() -> Unit = {},
+        private val onDisable: Lifecycle.() -> Unit = {},
+        private val onReload: Lifecycle.() -> Unit = {},
     ) : Lifecycle {
         override fun onEnable() {
-            onEnable.invoke()
+            onEnable.invoke(this)
         }
 
         override fun onDisable() {
-            onDisable.invoke()
+            onDisable.invoke(this)
         }
 
         override fun onReload() {
-            onReload.invoke()
+            onReload.invoke(this)
         }
     }
 }
