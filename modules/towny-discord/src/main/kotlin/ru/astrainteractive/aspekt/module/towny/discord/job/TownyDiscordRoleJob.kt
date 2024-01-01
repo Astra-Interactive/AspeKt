@@ -7,10 +7,10 @@ import github.scarsz.discordsrv.dependencies.jda.api.entities.Guild
 import github.scarsz.discordsrv.dependencies.jda.api.entities.Member
 import github.scarsz.discordsrv.dependencies.jda.api.entities.Role
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
+import ru.astrainteractive.aspekt.module.towny.discord.util.RestActionExt.asyncResult
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.klibs.kdi.Dependency
 import ru.astrainteractive.klibs.kdi.Provider
@@ -47,13 +47,17 @@ internal class TownyDiscordRoleJob(
             null
         }
 
-    private suspend fun giveMayorDiscordRole(discordId: String) {
-        val member = guildOrNull?.getMemberById(discordId) ?: run {
-            logger.warning("User with discordId $discordId not found!")
-            return
-        }
+    private suspend fun giveMayorDiscordRole(mayorsDiscordIds: Set<String>) {
         val mayorRole = mayorRoleOrNull ?: return
-        guildOrNull?.addRoleToMember(member, mayorRole)
+        val memberIdsWithNoMayorRole = guildOrNull?.retrieveMembersByIds(*mayorsDiscordIds.toTypedArray())
+            ?.get()
+            .orEmpty()
+            .filterNot { it.roles.contains(mayorRole) }
+            .map(Member::getId)
+
+        memberIdsWithNoMayorRole
+            .mapNotNull { guildOrNull?.addRoleToMember(it, mayorRole)?.asyncResult() }
+            .awaitAll()
     }
 
     private suspend fun removeMayorRoles(mayorsDiscordIds: Set<String>) {
@@ -64,7 +68,9 @@ internal class TownyDiscordRoleJob(
             .filterNot { mayorsDiscordIds.contains(it) }
         val nonMayorDiscordIds = memberIdsWithRole - mayorsDiscordIds
 
-        nonMayorDiscordIds.forEach { guildOrNull?.removeRoleFromMember(it, mayorRole) }
+        nonMayorDiscordIds
+            .mapNotNull { guildOrNull?.removeRoleFromMember(it, mayorRole)?.asyncResult() }
+            .awaitAll()
     }
 
     override fun execute() {
@@ -79,10 +85,7 @@ internal class TownyDiscordRoleJob(
                     .toSet()
 
                 removeMayorRoles(mayorsDiscordIds)
-
-                mayorsDiscordIds
-                    .map { async { runCatching { giveMayorDiscordRole(discordId = it) } } }
-                    .awaitAll()
+                giveMayorDiscordRole(mayorsDiscordIds)
             }
         }
     }

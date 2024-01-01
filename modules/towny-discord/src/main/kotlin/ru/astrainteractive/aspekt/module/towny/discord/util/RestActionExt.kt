@@ -1,10 +1,10 @@
 package ru.astrainteractive.aspekt.module.towny.discord.util
 
+import github.scarsz.discordsrv.dependencies.jda.api.requests.RestAction
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.suspendCancellableCoroutine
-import net.dv8tion.jda.api.requests.RestAction
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
