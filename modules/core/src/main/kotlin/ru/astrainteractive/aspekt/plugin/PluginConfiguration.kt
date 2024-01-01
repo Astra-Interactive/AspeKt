@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.plugin
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.time.Duration.Companion.minutes
 
 @Serializable
 data class PluginConfiguration(
@@ -18,8 +19,24 @@ data class PluginConfiguration(
     @SerialName("restrictions")
     val restrictions: Restrictions = Restrictions(),
     @SerialName("money_drop")
-    val moneyDrop: Map<String, MoneyDropEntry> = emptyMap()
+    val moneyDrop: Map<String, MoneyDropEntry> = emptyMap(),
+    val towny: TownyConfiguration = TownyConfiguration()
 ) {
+    @Serializable
+    data class TownyConfiguration(
+        @SerialName("leader_role_configuration")
+        val leaderRoleConfiguration: LeaderRoleConfiguration = LeaderRoleConfiguration()
+    ) {
+        @Serializable
+        data class LeaderRoleConfiguration(
+            @SerialName("is_enabled")
+            val isEnabled: Boolean = false,
+            val initialDelay: Long = 0L,
+            val delay: Long = 1.minutes.inWholeMilliseconds,
+            val roleId: String = ""
+        )
+    }
+
     @Serializable
     data class MoneyDropEntry(
         val from: String,

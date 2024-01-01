@@ -1,6 +1,3 @@
-import ru.astrainteractive.gradleplugin.setupSpigotProcessor
-import ru.astrainteractive.gradleplugin.setupSpigotShadow
-
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
@@ -23,20 +20,10 @@ dependencies {
     compileOnly("net.luckperms:api:5.4")
     compileOnly("com.discordsrv:discordsrv:1.25.0")
     compileOnly("net.essentialsx:EssentialsX:2.20.1")
+    compileOnly("com.palmergames.bukkit.towny:towny:0.100.0.0")
     // Test
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
     testImplementation(libs.minecraft.mockbukkit)
     implementation(projects.modules.core)
-    implementation(projects.modules.menu)
-    implementation(projects.modules.broadcast)
-    implementation(projects.modules.adminprivate)
-    implementation(projects.modules.discordlink)
-    implementation(projects.modules.townyDiscord)
 }
-val destination = File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\smp\\plugins")
-    .takeIf(File::exists)
-    ?: File(rootDir, "jars")
-
-setupSpigotShadow(destination)
-setupSpigotProcessor()
