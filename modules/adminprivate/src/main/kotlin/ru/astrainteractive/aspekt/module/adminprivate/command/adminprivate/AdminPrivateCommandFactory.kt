@@ -13,7 +13,7 @@ import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 import ru.astrainteractive.astralibs.util.withEntry
 import ru.astrainteractive.klibs.kdi.Factory
 
-class AdminPrivateCommandFactory(
+internal class AdminPrivateCommandFactory(
     private val plugin: JavaPlugin,
     private val adminPrivateController: AdminPrivateController,
     private val scope: CoroutineScope,

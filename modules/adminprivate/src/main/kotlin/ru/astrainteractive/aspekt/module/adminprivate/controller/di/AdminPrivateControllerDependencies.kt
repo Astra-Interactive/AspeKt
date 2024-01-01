@@ -8,7 +8,7 @@ import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
-interface AdminPrivateControllerDependencies : Module {
+internal interface AdminPrivateControllerDependencies : Module {
     val repository: AdminPrivateRepository
     val dispatchers: KotlinDispatchers
 

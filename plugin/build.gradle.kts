@@ -31,6 +31,8 @@ dependencies {
     implementation(projects.modules.menu)
     implementation(projects.modules.broadcast)
     implementation(projects.modules.adminprivate)
+    implementation(projects.modules.discordlink)
+    implementation(projects.modules.townyDiscord)
 }
 val destination = File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\smp\\plugins")
     .takeIf(File::exists)

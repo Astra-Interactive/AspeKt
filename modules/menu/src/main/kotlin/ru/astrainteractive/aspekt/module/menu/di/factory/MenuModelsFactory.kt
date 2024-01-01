@@ -6,7 +6,7 @@ import ru.astrainteractive.astralibs.serialization.YamlSerializer
 import ru.astrainteractive.klibs.kdi.Factory
 import java.io.File
 
-class MenuModelsFactory(
+internal class MenuModelsFactory(
     private val dataFolder: File,
     private val yamlSerializer: YamlSerializer
 ) : Factory<List<MenuModel>> {

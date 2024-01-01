@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.event.discord.controller.di
+package ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.di
 
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
@@ -9,7 +9,7 @@ import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 import ru.astrainteractive.klibs.kdi.getValue
 
-interface RoleControllerDependencies {
+internal interface RoleControllerDependencies {
     val pluginConfiguration: PluginConfiguration
     val logger: Logger
     val economyProvider: EconomyProvider?

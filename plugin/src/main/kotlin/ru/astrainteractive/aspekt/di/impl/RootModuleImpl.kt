@@ -5,9 +5,11 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.gui.di.GuiModule
+import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
 import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule
 import ru.astrainteractive.aspekt.module.autobroadcast.di.AutoBroadcastModule
 import ru.astrainteractive.aspekt.module.menu.di.MenuModule
+import ru.astrainteractive.aspekt.module.towny.discord.di.TownyDiscordModule
 import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
 
@@ -20,24 +22,29 @@ class RootModuleImpl : RootModule {
         AdminPrivateModule.Default(coreModule)
     }
     override val eventsModule: EventsModule by Single {
-        EventsModule.Default(coreModule, adminPrivateModule)
+        EventsModule.Default(coreModule)
     }
     override val menuModule: MenuModule by lazy {
         MenuModule.Default(coreModule)
     }
     override val guiModule: GuiModule by Single {
-        GuiModule.Default(coreModule, menuModule)
+        GuiModule.Default(coreModule)
     }
     override val autoBroadcastModule by lazy {
         AutoBroadcastModule.Default(coreModule)
     }
+    override val discordLinkModule: DiscordLinkModule by lazy {
+        DiscordLinkModule.Default(coreModule)
+    }
+
     override val commandManagerModule: CommandManagerModule by lazy {
         CommandManagerModule.Default(
             coreModule = coreModule,
             eventsModule = eventsModule,
-            adminPrivateModule = adminPrivateModule,
             guiModule = guiModule,
-            menuModule = menuModule
         )
+    }
+    override val townyDiscordModule: TownyDiscordModule by lazy {
+        TownyDiscordModule.Default(coreModule)
     }
 }

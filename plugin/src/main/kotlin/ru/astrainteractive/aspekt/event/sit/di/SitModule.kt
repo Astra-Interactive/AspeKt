@@ -3,10 +3,11 @@ package ru.astrainteractive.aspekt.event.sit.di
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.event.sit.SitController
 import ru.astrainteractive.aspekt.event.sit.SitEvent
+import ru.astrainteractive.aspekt.util.Lifecycle
 import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
 
-interface SitModule {
+interface SitModule : Lifecycle {
     val sitController: SitController
     val sitEvent: SitEvent
 
@@ -25,6 +26,14 @@ interface SitModule {
                 this
             )
             SitEvent(dependencies)
+        }
+
+        override fun onDisable() {
+            sitController.onDisable()
+        }
+
+        override fun onReload() {
+            sitController.onDisable()
         }
     }
 }

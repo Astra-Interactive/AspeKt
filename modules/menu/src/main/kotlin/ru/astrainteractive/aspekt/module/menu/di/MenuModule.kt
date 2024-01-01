@@ -1,41 +1,48 @@
 package ru.astrainteractive.aspekt.module.menu.di
 
-import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.module.menu.command.MenuCommandFactory
 import ru.astrainteractive.aspekt.module.menu.di.factory.MenuModelsFactory
-import ru.astrainteractive.aspekt.module.menu.gui.MenuGui
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
+import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
+import ru.astrainteractive.aspekt.module.menu.router.MenuRouterImpl
 import ru.astrainteractive.aspekt.util.Lifecycle
 import ru.astrainteractive.astralibs.serialization.YamlSerializer
+import ru.astrainteractive.klibs.kdi.Factory
+import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.Reloadable
 
-interface MenuModule : Lifecycle {
-    val menuModels: Reloadable<List<MenuModel>>
-    fun menuGui(player: Player, menuModel: MenuModel): MenuGui
+interface MenuModule {
+    val menuModuleLifecycleFactory: Factory<Lifecycle>
 
     class Default(
         private val coreModule: CoreModule
     ) : MenuModule {
-        override val menuModels: Reloadable<List<MenuModel>> = Reloadable {
+        private val menuModels: Reloadable<List<MenuModel>> = Reloadable {
             MenuModelsFactory(coreModule.plugin.value.dataFolder, YamlSerializer()).create()
         }
 
-        override fun menuGui(
-            player: Player,
-            menuModel: MenuModel
-        ): MenuGui {
-            return MenuGui(
-                player = player,
-                menuModel = menuModel,
-                translation = coreModule.translation.value,
-                dispatchers = coreModule.dispatchers.value,
-                translationContext = coreModule.translationContext,
-                economyProvider = coreModule.economyProvider.value
-            )
+        private val menuRouter: Provider<MenuRouter> = Provider {
+            MenuRouterImpl(coreModule)
         }
 
-        override fun onReload() {
-            menuModels.reload()
+        private val menuCommandFactory = MenuCommandFactory(
+            plugin = coreModule.plugin.value,
+            translationContext = coreModule.translationContext,
+            menuModelProvider = { menuModels.value },
+            translationProvider = { coreModule.translation.value },
+            menuRouter = { menuRouter.provide() }
+        )
+
+        override val menuModuleLifecycleFactory: Factory<Lifecycle> = Factory {
+            Lifecycle.Lambda(
+                onEnable = {
+                    menuCommandFactory.create()
+                },
+                onReload = {
+                    menuModels.reload()
+                }
+            )
         }
     }
 }

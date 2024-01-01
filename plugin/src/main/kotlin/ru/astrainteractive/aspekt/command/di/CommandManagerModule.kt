@@ -4,8 +4,6 @@ import ru.astrainteractive.aspekt.command.CommandManager
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.gui.di.GuiModule
-import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule
-import ru.astrainteractive.aspekt.module.menu.di.MenuModule
 import ru.astrainteractive.aspekt.util.Lifecycle
 
 interface CommandManagerModule : Lifecycle {
@@ -14,17 +12,13 @@ interface CommandManagerModule : Lifecycle {
     class Default(
         coreModule: CoreModule,
         eventsModule: EventsModule,
-        adminPrivateModule: AdminPrivateModule,
         guiModule: GuiModule,
-        menuModule: MenuModule
     ) : CommandManagerModule {
         override val commandManager: CommandManager by lazy {
             val dependencies = CommandsDependencies.Default(
                 coreModule = coreModule,
                 eventsModule = eventsModule,
-                adminPrivateModule = adminPrivateModule,
                 guiModule = guiModule,
-                menuModule = menuModule
             )
             CommandManager(
                 module = dependencies,

@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.event.discord.controller
+package ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller
 
 import github.scarsz.discordsrv.api.events.AccountLinkedEvent
 import github.scarsz.discordsrv.api.events.AccountUnlinkedEvent
@@ -6,10 +6,10 @@ import net.luckperms.api.LuckPerms
 import net.luckperms.api.node.types.InheritanceNode
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
-import ru.astrainteractive.aspekt.event.discord.controller.di.RoleControllerDependencies
+import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.di.RoleControllerDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 
-class LuckPermsController(
+internal class LuckPermsController(
     module: RoleControllerDependencies
 ) : RoleController, RoleControllerDependencies by module {
 

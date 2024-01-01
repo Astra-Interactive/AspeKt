@@ -9,7 +9,7 @@ import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.Reloadable
 import ru.astrainteractive.klibs.kdi.getValue
 
-class AdminPrivateController(module: AdminPrivateControllerDependencies) :
+internal class AdminPrivateController(module: AdminPrivateControllerDependencies) :
     AsyncComponent(),
     AdminPrivateControllerDependencies by module {
     private val chunks = Reloadable {
