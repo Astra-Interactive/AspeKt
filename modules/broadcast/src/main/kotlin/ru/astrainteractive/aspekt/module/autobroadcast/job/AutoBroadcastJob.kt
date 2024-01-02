@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.module.autobroadcast.job
 
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
+import ru.astrainteractive.aspekt.job.ScheduledJob
 import ru.astrainteractive.aspekt.module.autobroadcast.di.AutoBroadcastDependencies
 import ru.astrainteractive.astralibs.util.hex
 
@@ -13,6 +14,9 @@ internal class AutoBroadcastJob(
 
     override val initialDelayMillis: Long
         get() = 0L
+
+    override val isEnabled: Boolean
+        get() = true
 
     override fun execute() {
         scope.launch(dispatchers.BukkitMain) {

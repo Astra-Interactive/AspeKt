@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.module.towny.discord.util
+package ru.astrainteractive.aspekt.util
 
 import github.scarsz.discordsrv.dependencies.jda.api.requests.RestAction
 import kotlinx.coroutines.Deferred

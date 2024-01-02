@@ -1,23 +1,26 @@
 package ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller
 
-import github.scarsz.discordsrv.api.events.AccountLinkedEvent
-import github.scarsz.discordsrv.api.events.AccountUnlinkedEvent
+import github.scarsz.discordsrv.dependencies.jda.api.entities.User
 import net.luckperms.api.LuckPerms
 import net.luckperms.api.node.types.InheritanceNode
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.di.RoleControllerDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
+import ru.astrainteractive.klibs.kdi.Provider
+import ru.astrainteractive.klibs.kdi.getValue
 
 internal class LuckPermsController(
     module: RoleControllerDependencies
-) : RoleController, RoleControllerDependencies by module {
+) : RoleController, RoleController.Minecraft, RoleControllerDependencies by module {
 
-    override val configuration: PluginConfiguration.DiscordSRVLink
+    private val configuration: PluginConfiguration.DiscordSRVLink
         get() = pluginConfiguration.discordSRVLink
 
-    private val luckPerms = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)!!
-    private val api = luckPerms.provider
+    private val api by Provider {
+        Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider ?: error("LuckPerms not found!")
+    }
+
     private fun OfflinePlayer.addGroup(group: String) {
         api.userManager.modifyUser(uniqueId) {
             val groupNode = InheritanceNode.builder(group).build()
@@ -34,21 +37,25 @@ internal class LuckPermsController(
         }
     }
 
-    override suspend fun onLinked(e: AccountLinkedEvent) {
+    override suspend fun onLinked(player: OfflinePlayer) {
         configuration.onLinked.luckPerms.addRoles.forEach { group ->
-            e.player.addGroup(group)
+            player.addGroup(group)
         }
         configuration.onLinked.luckPerms.removeRoles.forEach { group ->
-            e.player.removeGroup(group)
+            player.removeGroup(group)
         }
     }
 
-    override suspend fun onUnLinked(e: AccountUnlinkedEvent) {
+    override suspend fun onUnLinked(player: OfflinePlayer) {
         configuration.onUnlinked.luckPerms.addRoles.forEach { group ->
-            e.player.addGroup(group)
+            player.addGroup(group)
         }
         configuration.onUnlinked.luckPerms.removeRoles.forEach { group ->
-            e.player.removeGroup(group)
+            player.removeGroup(group)
         }
     }
+
+    override suspend fun onLinked(player: OfflinePlayer, discordUser: User) = onLinked(player)
+
+    override suspend fun onUnLinked(player: OfflinePlayer, discordUser: User) = onUnLinked(player)
 }

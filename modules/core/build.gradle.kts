@@ -8,6 +8,7 @@ dependencies {
     implementation(libs.bundles.kotlin)
     // Spigot dependencies
     compileOnly(libs.minecraft.paper.api)
+    compileOnly("com.discordsrv:discordsrv:1.25.0")
     // AstraLibs
     implementation(libs.minecraft.astralibs.ktxcore)
     implementation(libs.minecraft.astralibs.orm)

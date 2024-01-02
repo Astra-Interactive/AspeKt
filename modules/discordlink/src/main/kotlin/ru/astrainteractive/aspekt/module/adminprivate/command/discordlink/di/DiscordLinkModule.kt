@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di
 
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.AddMoneyController
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.DiscordController
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.LuckPermsController
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.RoleController
@@ -25,10 +26,14 @@ interface DiscordLinkModule {
             val discordController: RoleController by lazy {
                 DiscordController(roleControllerDependencies)
             }
+            val addMoneyController: RoleController by lazy {
+                AddMoneyController(roleControllerDependencies)
+            }
             DiscordEventDependencies.Default(
                 coreModule = coreModule,
                 discordController = discordController,
-                luckPermsController = luckPermsController
+                luckPermsController = luckPermsController,
+                addMoneyController = addMoneyController
             )
         }
 
