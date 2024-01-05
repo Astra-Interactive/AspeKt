@@ -11,6 +11,7 @@ import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
+import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
@@ -31,11 +32,12 @@ class TCEvent(
     }
 
     @Suppress("UnusedPrivateMember")
-    private val onBlockBreak = DSLEvent<BlockBreakEvent>(eventListener, plugin) { e ->
+    private val onBlockBreak = DSLEvent<BlockBreakEvent>(eventListener, plugin, EventPriority.HIGHEST) { e ->
         val block = e.block
         val material = block.type
         val player = e.player
         val tool = player.inventory.itemInMainHand
+        if (e.isCancelled) return@DSLEvent
         if (!tool.type.name.contains("AXE", true)) return@DSLEvent
         if (!player.isSneaking) return@DSLEvent
         if (!treeCapitatorConfig.enabled) return@DSLEvent
