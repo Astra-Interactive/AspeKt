@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.menu.command
 
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
@@ -46,8 +47,13 @@ internal class MenuCommandFactory(
         )
     }
 
+    private fun invClose() = plugin.registerCommand("invclose") {
+        args.getOrNull(0)?.let(Bukkit::getPlayer)?.closeInventory()
+    }
+
     override fun create() {
         menuCompleter()
         menu()
+        invClose()
     }
 }

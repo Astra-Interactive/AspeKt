@@ -8,10 +8,14 @@ import ru.astrainteractive.astralibs.util.hex
 
 fun CommandManager.tellChat() = plugin.registerCommand("tellchat") {
     if (!sender.toPermissible().hasPermission(PluginPermission.TellChat)) return@registerCommand
-    argument(0) {
-        it.let(Bukkit::getPlayer) ?: error("$it not a player")
-    }.onSuccess {
-        val message = args.slice(1 until args.size).joinToString(" ")
-        it.value.sendMessage(message.hex())
+    val argument = args.getOrNull(0) ?: error("Wrong usage")
+    val message = args.slice(1 until args.size).joinToString(" ")
+
+    when (argument) {
+        "*" -> Bukkit.getOnlinePlayers().forEach { player ->
+            player.sendMessage(message.hex())
+        }
+
+        else -> argument.let(Bukkit::getPlayer)?.sendMessage(message.hex())
     }
 }
