@@ -2,7 +2,6 @@ package ru.astrainteractive.aspekt.command
 
 import ru.astrainteractive.aspekt.AspeKt
 import ru.astrainteractive.aspekt.plugin.PluginPermission
-import ru.astrainteractive.astralibs.command.registerCommand
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
 
 /**
@@ -14,12 +13,19 @@ import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissib
  *
  * Here you should also check for permission
  */
-fun CommandManager.reload() = plugin.registerCommand("aesreload") {
+fun CommandManager.reload() = plugin.getCommand("aesreload")?.setExecutor { sender, command, label, args ->
     if (!sender.toPermissible().hasPermission(PluginPermission.Reload)) {
-        sender.sendMessage(translation.general.noPermission)
-        return@registerCommand
+        translation.general.noPermission
+            .let(kyoriComponentSerializer::toComponent)
+            .run(sender::sendMessage)
+        return@setExecutor true
     }
-    sender.sendMessage(translation.general.reload)
+    translation.general.reload
+        .let(kyoriComponentSerializer::toComponent)
+        .run(sender::sendMessage)
     (plugin as AspeKt).reloadPlugin()
-    sender.sendMessage(translation.general.reloadComplete)
+    translation.general.reloadComplete
+        .let(kyoriComponentSerializer::toComponent)
+        .run(sender::sendMessage)
+    true
 }

@@ -15,7 +15,7 @@ internal class MenuRouterImpl(private val coreModule: CoreModule) : MenuRouter {
                 menuModel = menuModel,
                 translation = coreModule.translation.value,
                 dispatchers = coreModule.dispatchers.value,
-                translationContext = coreModule.translationContext,
+                kyoriComponentSerializer = coreModule.kyoriComponentSerializer.value,
                 economyProvider = coreModule.economyProvider.value
             )
             withContext(coreModule.dispatchers.value.Main) {

@@ -7,7 +7,7 @@ import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.economy.EconomyProvider
 import ru.astrainteractive.astralibs.event.EventListener
-import ru.astrainteractive.astralibs.string.BukkitTranslationContext
+import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kdi.getValue
 
 interface MoneyDropDependencies {
@@ -16,7 +16,7 @@ interface MoneyDropDependencies {
     val configuration: PluginConfiguration
     val moneyDropController: MoneyDropController
     val economyProvider: EconomyProvider?
-    val translationContext: BukkitTranslationContext
+    val kyoriComponentSerializer: KyoriComponentSerializer
     val translation: PluginTranslation
 
     class Default(
@@ -27,7 +27,7 @@ interface MoneyDropDependencies {
         override val plugin: JavaPlugin by coreModule.plugin
         override val configuration: PluginConfiguration by coreModule.pluginConfig
         override val economyProvider: EconomyProvider? by coreModule.economyProvider
-        override val translationContext: BukkitTranslationContext = coreModule.translationContext
+        override val kyoriComponentSerializer by coreModule.kyoriComponentSerializer
         override val translation: PluginTranslation by coreModule.translation
     }
 }

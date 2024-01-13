@@ -7,14 +7,12 @@ import github.scarsz.discordsrv.util.DiscordUtil
 import org.bukkit.OfflinePlayer
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.di.RoleControllerDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 
 @Suppress("DuplicatedCode")
 internal class DiscordController(
     module: RoleControllerDependencies,
 ) : RoleController,
-    RoleControllerDependencies by module,
-    BukkitTranslationContext by module.translationContext {
+    RoleControllerDependencies by module {
 
     private val configuration: PluginConfiguration.DiscordSRVLink
         get() = pluginConfiguration.discordSRVLink

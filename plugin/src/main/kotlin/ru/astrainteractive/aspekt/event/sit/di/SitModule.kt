@@ -16,7 +16,7 @@ interface SitModule : Lifecycle {
             SitController(
                 configuration = { coreModule.pluginConfig.value },
                 translation = { coreModule.translation.value },
-                translationContext = coreModule.translationContext
+                kyoriComponentSerializer = coreModule.kyoriComponentSerializer.value
             )
         }
 

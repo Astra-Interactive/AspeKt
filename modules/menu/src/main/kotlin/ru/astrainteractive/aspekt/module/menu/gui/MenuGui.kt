@@ -16,17 +16,17 @@ import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.economy.EconomyProvider
-import ru.astrainteractive.astralibs.menu.clicker.Click
 import ru.astrainteractive.astralibs.menu.holder.DefaultPlayerHolder
 import ru.astrainteractive.astralibs.menu.holder.PlayerHolder
 import ru.astrainteractive.astralibs.menu.menu.InventorySlot
 import ru.astrainteractive.astralibs.menu.menu.Menu
 import ru.astrainteractive.astralibs.menu.menu.MenuSize
+import ru.astrainteractive.astralibs.menu.menu.setIndex
+import ru.astrainteractive.astralibs.menu.menu.setItemStack
+import ru.astrainteractive.astralibs.menu.menu.setOnClickListener
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
-import ru.astrainteractive.astralibs.string.BukkitTranslationContext
+import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.string.StringDesc
-import ru.astrainteractive.astralibs.util.convertHex
-import ru.astrainteractive.astralibs.util.hex
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 
@@ -37,11 +37,10 @@ internal class MenuGui(
     private val translation: PluginTranslation,
     private val menuModel: MenuModel,
     private val dispatchers: BukkitDispatchers,
-    translationContext: BukkitTranslationContext
-) : Menu(),
-    BukkitTranslationContext by translationContext {
+    private val kyoriComponentSerializer: KyoriComponentSerializer
+) : Menu() {
     override val menuSize: MenuSize = menuModel.size
-    override var menuTitle: Component = StringDesc.Raw(menuModel.title).toComponent()
+    override var menuTitle: Component = StringDesc.Raw(menuModel.title).let(kyoriComponentSerializer::toComponent)
     override val playerHolder: PlayerHolder = DefaultPlayerHolder(player)
 
     @Suppress("VariableNaming")
@@ -57,7 +56,7 @@ internal class MenuGui(
     }
 
     private fun startAutoUpdate(interval: Long) {
-        componentScope.launch(dispatchers.IO) {
+        menuScope.launch(dispatchers.IO) {
             while (isActive) {
                 delay(interval)
                 withContext(dispatchers.BukkitMain) {
@@ -78,9 +77,9 @@ internal class MenuGui(
         val menuItem = this
         val material = Material.getMaterial(menuItem.material) ?: error("No material found named ${menuItem.material}")
         return ItemStack(material, menuItem.amount).apply {
-            this.lore = menuItem.lore.map(::convertHex)
+            this.lore(menuItem.lore.map(kyoriComponentSerializer::toComponent))
             this.itemMeta = itemMeta.apply {
-                this.setDisplayName(menuItem.name.hex())
+                this.displayName(menuItem.name.let(kyoriComponentSerializer::toComponent))
                 this.setCustomModelData(menuItem.customModelData)
             }
         }
@@ -156,27 +155,31 @@ internal class MenuGui(
     override fun render() {
         super.render()
         menuModel.items.values.filter(::isMeetVisibilityConditions).forEach { menuItem ->
-            InventorySlot.Builder {
-                this.itemStack = menuItem.toItemStack()
-                this.index = menuItem.index
-                this.click = Click {
+            InventorySlot.Builder()
+                .setItemStack(menuItem.toItemStack())
+                .setIndex(menuItem.index)
+                .setOnClickListener {
                     val permission = menuItem.permission?.let(PluginPermission::CustomPermission)
 
                     val hasPermission = permission?.let(playerHolder.player.toPermissible()::hasPermission) ?: true
                     if (!hasPermission) {
-                        playerHolder.player.sendMessage(translation.general.noPermission)
-                        return@Click
+                        translation.general.noPermission
+                            .let(kyoriComponentSerializer::toComponent)
+                            .run(playerHolder.player::sendMessage)
+                        return@setOnClickListener
                     }
 
-                    if (!isMeetClickConditions(menuItem)) return@Click
+                    if (!isMeetClickConditions(menuItem)) return@setOnClickListener
                     if (!isMeetPriceCheck(menuItem)) {
-                        playerHolder.player.sendMessage(translation.general.notEnoughMoney)
-                        return@Click
+                        translation.general.notEnoughMoney
+                            .let(kyoriComponentSerializer::toComponent)
+                            .run(playerHolder.player::sendMessage)
+                        return@setOnClickListener
                     }
 
                     processReward(menuItem)
                 }
-            }.setInventorySlot()
+                .build().setInventorySlot()
         }
     }
 }

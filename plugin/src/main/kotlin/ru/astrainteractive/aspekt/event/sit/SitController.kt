@@ -8,15 +8,15 @@ import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.string.BukkitTranslationContext
+import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 
 class SitController(
     configuration: Provider<PluginConfiguration>,
     translation: Provider<PluginTranslation>,
-    translationContext: BukkitTranslationContext
-) : BukkitTranslationContext by translationContext {
+    kyoriComponentSerializer: KyoriComponentSerializer
+) : KyoriComponentSerializer by kyoriComponentSerializer {
     private val translation by translation
     private val configuration by configuration
 
@@ -29,17 +29,17 @@ class SitController(
         if (!configuration.sit) return
         // Сидит ли уже игрок
         if (sitPlayers.contains(player.uniqueId.toString())) {
-            player.sendMessage(translation.sit.sitAlready)
+            player.sendMessage(translation.sit.sitAlready.let(::toComponent))
             return
         }
         // Находится ли игрок в воздухе
         if (player.isFlying) {
-            player.sendMessage(translation.sit.sitInAir)
+            player.sendMessage(translation.sit.sitInAir.let(::toComponent))
             return
         }
         // Находится ли игрок в воздухе
         if (player.location.block.getRelative(BlockFace.DOWN).type == Material.AIR) {
-            player.sendMessage(translation.sit.sitInAir)
+            player.sendMessage(translation.sit.sitInAir.let(::toComponent))
             return
         }
         // Создаем стул

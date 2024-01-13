@@ -3,17 +3,17 @@ package ru.astrainteractive.aspekt.command
 import com.earth2me.essentials.Essentials
 import com.earth2me.essentials.RandomTeleport
 import org.bukkit.Bukkit
-import ru.astrainteractive.astralibs.command.registerCommand
-import ru.astrainteractive.astralibs.command.types.PrimitiveArgumentType
-import ru.astrainteractive.astralibs.util.hex
+import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
 
-fun CommandManager.rtp() = plugin.registerCommand("rtp") {
-    sender.sendMessage("#db2c18Возможно, вы хотели ввести /tpr".hex())
+fun CommandManager.rtp() = plugin.getCommand("rtp")?.setExecutor { sender, command, label, args ->
+    "#db2c18Возможно, вы хотели ввести /tpr"
+        .let(KyoriComponentSerializer.Legacy::toComponent)
+        .run(sender::sendMessage)
+    true
 }
 
-fun CommandManager.rtpBypassed() = plugin.registerCommand("rtpbypass") {
-    val playerName = argument(0, PrimitiveArgumentType.String).resultOrNull() ?: return@registerCommand
-    val player = Bukkit.getPlayer(playerName) ?: return@registerCommand
+fun CommandManager.rtpBypassed() = plugin.getCommand("rtpbypass")?.setExecutor { sender, command, label, args ->
+    val player = args.getOrNull(0)?.let(Bukkit::getPlayer) ?: return@setExecutor true
     val essentials = Bukkit.getPluginManager().getPlugin("Essentials") as Essentials
     val randomTeleport = RandomTeleport(essentials)
     val completable = randomTeleport.getRandomLocation(
@@ -24,4 +24,5 @@ fun CommandManager.rtpBypassed() = plugin.registerCommand("rtpbypass") {
     completable.whenComplete { location, _ ->
         player.teleport(location)
     }
+    true
 }

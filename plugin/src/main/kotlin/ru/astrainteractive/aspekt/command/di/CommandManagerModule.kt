@@ -20,10 +20,7 @@ interface CommandManagerModule : Lifecycle {
                 eventsModule = eventsModule,
                 guiModule = guiModule,
             )
-            CommandManager(
-                module = dependencies,
-                translationContext = dependencies.translationContext
-            )
+            CommandManager(module = dependencies)
         }
 
         override fun onEnable() {
