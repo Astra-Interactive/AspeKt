@@ -10,7 +10,7 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.persistence.Persistence.getPersistentData
 import ru.astrainteractive.astralibs.persistence.Persistence.hasPersistentData
 import ru.astrainteractive.astralibs.persistence.Persistence.setPersistentDataType
-import ru.astrainteractive.astralibs.string.BukkitTranslationContext
+import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kdi.Dependency
 import ru.astrainteractive.klibs.kdi.getValue
 import java.util.concurrent.TimeUnit
@@ -19,10 +19,11 @@ import kotlin.random.Random
 class MoneyDropController(
     pluginConfigurationDependency: Dependency<PluginConfiguration>,
     translationDependency: Dependency<PluginTranslation>,
-    private val translationContext: BukkitTranslationContext
+    private val kyoriComponentSerializerDependency: Dependency<KyoriComponentSerializer>
 ) {
     private val pluginConfiguration by pluginConfigurationDependency
     private val translation by translationDependency
+    private val kyoriComponentSerializer by kyoriComponentSerializerDependency
 
     private val dropCache: Cache<String, Unit> = CacheBuilder
         .newBuilder()
@@ -44,7 +45,7 @@ class MoneyDropController(
         val amount = Random.nextDouble(entry.min, entry.max)
         val material = Material.RAW_GOLD
         val itemStack = ItemStack(material)
-        val name = with(translationContext) { translation.general.droppedMoney.toComponent() }
+        val name = translation.general.droppedMoney.let(kyoriComponentSerializer::toComponent)
         itemStack.editMeta {
             it.displayName(name)
             it.setPersistentDataType(MoneyDropFlag.Flag, true)

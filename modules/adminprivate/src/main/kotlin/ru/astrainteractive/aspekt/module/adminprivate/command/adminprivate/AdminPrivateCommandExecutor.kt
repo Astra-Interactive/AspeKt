@@ -8,32 +8,35 @@ import ru.astrainteractive.aspekt.module.adminprivate.util.adminChunk
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.command.api.CommandExecutor
-import ru.astrainteractive.astralibs.string.BukkitTranslationContext
-import ru.astrainteractive.astralibs.util.hex
+import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
 
 internal class AdminPrivateCommandExecutor(
     private val adminPrivateController: AdminPrivateController,
     private val scope: CoroutineScope,
     private val translation: PluginTranslation,
     private val dispatchers: BukkitDispatchers,
-    translationContext: BukkitTranslationContext
-) : CommandExecutor<AdminPrivateCommand.Input>,
-    BukkitTranslationContext by translationContext {
+    private val kyoriComponentSerializer: KyoriComponentSerializer
+) : CommandExecutor<AdminPrivateCommand.Input> {
 
     private suspend fun showMap(player: Player) {
         val result = runCatching {
             adminPrivateController.map(5, player.chunk.adminChunk)
         }
         result.onSuccess {
-            player.sendMessage(translation.adminPrivate.blockMap)
+            translation.adminPrivate.blockMap
+                .let(kyoriComponentSerializer::toComponent)
+                .run(player::sendMessage)
             it.forEach {
-                it.joinToString("") { if (it) "#1cba56☒".hex() else "#c91e1e☒".hex() }
+                it.joinToString("") { if (it) "&#1cba56☒" else "&#c91e1e☒" }
+                    .let(KyoriComponentSerializer.Legacy::toComponent)
                     .run(player::sendMessage)
             }
         }
         result.onFailure {
             it.printStackTrace()
-            player.sendMessage(translation.adminPrivate.error)
+            translation.adminPrivate.error
+                .let(kyoriComponentSerializer::toComponent)
+                .run(player::sendMessage)
         }
     }
 
@@ -46,11 +49,15 @@ internal class AdminPrivateCommandExecutor(
             )
         }
         result.onSuccess {
-            input.player.sendMessage(translation.adminPrivate.chunkFlagChanged)
+            translation.adminPrivate.chunkFlagChanged
+                .let(kyoriComponentSerializer::toComponent)
+                .run(input.player::sendMessage)
         }
         result.onFailure {
             it.printStackTrace()
-            input.player.sendMessage(translation.adminPrivate.error)
+            translation.adminPrivate.error
+                .let(kyoriComponentSerializer::toComponent)
+                .run(input.player::sendMessage)
         }
     }
 
@@ -59,11 +66,15 @@ internal class AdminPrivateCommandExecutor(
             adminPrivateController.claim(input.player.chunk.adminChunk)
         }
         result.onSuccess {
-            input.player.sendMessage(translation.adminPrivate.chunkClaimed)
+            translation.adminPrivate.chunkClaimed
+                .let(kyoriComponentSerializer::toComponent)
+                .run(input.player::sendMessage)
         }
         result.onFailure {
             it.printStackTrace()
-            input.player.sendMessage(translation.adminPrivate.error)
+            translation.adminPrivate.error
+                .let(kyoriComponentSerializer::toComponent)
+                .run(input.player::sendMessage)
         }
     }
 
@@ -72,11 +83,15 @@ internal class AdminPrivateCommandExecutor(
             adminPrivateController.unclaim(input.player.chunk.adminChunk)
         }
         result.onSuccess {
-            input.player.sendMessage(translation.adminPrivate.chunkUnClaimed)
+            translation.adminPrivate.chunkUnClaimed
+                .let(kyoriComponentSerializer::toComponent)
+                .run(input.player::sendMessage)
         }
         result.onFailure {
             it.printStackTrace()
-            input.player.sendMessage(translation.adminPrivate.error)
+            translation.adminPrivate.error
+                .let(kyoriComponentSerializer::toComponent)
+                .run(input.player::sendMessage)
         }
     }
 

@@ -8,9 +8,8 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.command.api.Command
 import ru.astrainteractive.astralibs.command.api.DefaultCommandFactory
-import ru.astrainteractive.astralibs.command.registerTabCompleter
-import ru.astrainteractive.astralibs.string.BukkitTranslationContext
-import ru.astrainteractive.astralibs.util.withEntry
+import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.util.StringListExt.withEntry
 import ru.astrainteractive.klibs.kdi.Factory
 
 internal class AdminPrivateCommandFactory(
@@ -19,21 +18,22 @@ internal class AdminPrivateCommandFactory(
     private val scope: CoroutineScope,
     private val translation: PluginTranslation,
     private val dispatchers: BukkitDispatchers,
-    private val translationContext: BukkitTranslationContext
+    private val kyoriComponentSerializer: KyoriComponentSerializer
 ) : Factory<AdminPrivateCommand> {
 
-    private fun adminPrivateCompleter() = plugin.registerTabCompleter("adminprivate") {
-        when {
-            args.size <= 1 -> listOf("claim", "unclaim", "flag", "map").withEntry(args.getOrNull(0))
-            args.getOrNull(0) == "flag" -> when (args.size) {
-                2 -> ChunkFlag.values().map(ChunkFlag::toString).withEntry(args.getOrNull(1))
-                3 -> listOf("true", "false").withEntry(args.getOrNull(2))
+    private fun adminPrivateCompleter() =
+        plugin.getCommand("adminprivate")?.setTabCompleter { sender, command, label, args ->
+            when {
+                args.size <= 1 -> listOf("claim", "unclaim", "flag", "map").withEntry(args.getOrNull(0))
+                args.getOrNull(0) == "flag" -> when (args.size) {
+                    2 -> ChunkFlag.values().map(ChunkFlag::toString).withEntry(args.getOrNull(1))
+                    3 -> listOf("true", "false").withEntry(args.getOrNull(2))
+                    else -> emptyList()
+                }
+
                 else -> emptyList()
             }
-
-            else -> emptyList()
         }
-    }
 
     private inner class AdminPrivateCommandImpl :
         AdminPrivateCommand,
@@ -45,20 +45,20 @@ internal class AdminPrivateCommandFactory(
                 scope = scope,
                 translation = translation,
                 dispatchers = dispatchers,
-                translationContext = translationContext
+                kyoriComponentSerializer = kyoriComponentSerializer
             ),
             resultHandler = { commandSender, result ->
                 when (result) {
-                    AdminPrivateCommand.Output.NoPermission -> with(translationContext) {
-                        commandSender.sendMessage(translation.general.noPermission)
+                    AdminPrivateCommand.Output.NoPermission -> with(kyoriComponentSerializer) {
+                        commandSender.sendMessage(translation.general.noPermission.let(::toComponent))
                     }
 
-                    AdminPrivateCommand.Output.NotPlayer -> with(translationContext) {
-                        commandSender.sendMessage(translation.general.onlyPlayerCommand)
+                    AdminPrivateCommand.Output.NotPlayer -> with(kyoriComponentSerializer) {
+                        commandSender.sendMessage(translation.general.onlyPlayerCommand.let(::toComponent))
                     }
 
-                    AdminPrivateCommand.Output.WrongUsage -> with(translationContext) {
-                        commandSender.sendMessage(translation.general.wrongUsage)
+                    AdminPrivateCommand.Output.WrongUsage -> with(kyoriComponentSerializer) {
+                        commandSender.sendMessage(translation.general.wrongUsage.let(::toComponent))
                     }
 
                     else -> Unit

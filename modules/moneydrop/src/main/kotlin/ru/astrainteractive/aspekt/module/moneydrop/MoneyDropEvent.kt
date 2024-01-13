@@ -34,9 +34,9 @@ class MoneyDropEvent(
         e.item.remove()
         e.isCancelled = true
         economyProvider?.addMoney(player.uniqueId, money * amount)
-        with(translationContext) {
-            player.sendMessage(translation.general.pickedUpMoney(amount * money))
-        }
+        translation.general.pickedUpMoney(amount * money)
+            .let(kyoriComponentSerializer::toComponent)
+            .run(player::sendMessage)
     }
 
     val inventoryMoveEvent = DSLEvent<InventoryMoveItemEvent>(eventListener, plugin) { e ->

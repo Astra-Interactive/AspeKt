@@ -28,7 +28,7 @@ interface MenuModule {
 
         private val menuCommandFactory = MenuCommandFactory(
             plugin = coreModule.plugin.value,
-            translationContext = coreModule.translationContext,
+            kyoriComponentSerializer = coreModule.kyoriComponentSerializer,
             menuModelProvider = { menuModels.value },
             translationProvider = { coreModule.translation.value },
             menuRouter = { menuRouter.provide() }

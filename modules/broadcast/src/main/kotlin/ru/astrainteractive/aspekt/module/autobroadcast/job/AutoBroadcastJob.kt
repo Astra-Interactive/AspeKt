@@ -4,7 +4,6 @@ import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.job.ScheduledJob
 import ru.astrainteractive.aspekt.module.autobroadcast.di.AutoBroadcastDependencies
-import ru.astrainteractive.astralibs.util.hex
 
 internal class AutoBroadcastJob(
     dependencies: AutoBroadcastDependencies
@@ -20,7 +19,9 @@ internal class AutoBroadcastJob(
 
     override fun execute() {
         scope.launch(dispatchers.BukkitMain) {
-            val message = configuration.announcements.randomOrNull()?.hex() ?: return@launch
+            val message = configuration.announcements.randomOrNull()
+                ?.let(kyoriComponentSerializer::toComponent)
+                ?: return@launch
             Bukkit.getOnlinePlayers().forEach {
                 it.sendMessage(message)
             }

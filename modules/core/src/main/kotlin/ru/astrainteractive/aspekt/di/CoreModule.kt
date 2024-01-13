@@ -17,17 +17,17 @@ import ru.astrainteractive.astralibs.filemanager.FileManager
 import ru.astrainteractive.astralibs.filemanager.SpigotFileManager
 import ru.astrainteractive.astralibs.filemanager.impl.JVMFileManager
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.astralibs.logging.JUtilLogger
+import ru.astrainteractive.astralibs.logging.JUtilFileLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.menu.event.DefaultInventoryClickEvent
 import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.serialization.YamlSerializer
-import ru.astrainteractive.astralibs.string.BukkitTranslationContext
 import ru.astrainteractive.klibs.kdi.Dependency
 import ru.astrainteractive.klibs.kdi.Lateinit
 import ru.astrainteractive.klibs.kdi.Reloadable
 import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
+import java.io.File
 
 interface CoreModule : Lifecycle {
     val plugin: Lateinit<JavaPlugin>
@@ -42,7 +42,7 @@ interface CoreModule : Lifecycle {
 
     val economyProvider: Reloadable<EconomyProvider?>
     val tempFileManager: Reloadable<SpigotFileManager>
-    val translationContext: BukkitTranslationContext
+    val kyoriComponentSerializer: Reloadable<KyoriComponentSerializer>
     val inventoryClickEventListener: Single<DefaultInventoryClickEvent>
 
     class Default : CoreModule {
@@ -50,8 +50,11 @@ interface CoreModule : Lifecycle {
         // Core
         override val plugin = Lateinit<JavaPlugin>(true)
         override val logger: Dependency<Logger> = Single {
-            val plugin by plugin
-            JUtilLogger("AspeKt", plugin.dataFolder)
+            JUtilFileLogger(
+                tag = "AspeKt",
+                folder = File(plugin.value.dataFolder, "logs"),
+                logger = plugin.value.logger
+            )
         }
 
         override val eventListener: Dependency<EventListener> = Single {
@@ -105,9 +108,8 @@ interface CoreModule : Lifecycle {
             DefaultSpigotFileManager(plugin.value, "temp.yml")
         }
 
-        override val translationContext: BukkitTranslationContext by Single {
-            val serializer = KyoriComponentSerializer.Legacy
-            BukkitTranslationContext.Default { serializer }
+        override val kyoriComponentSerializer: Reloadable<KyoriComponentSerializer> = Reloadable {
+            KyoriComponentSerializer.Legacy
         }
 
         override val inventoryClickEventListener: Single<DefaultInventoryClickEvent> = Single {

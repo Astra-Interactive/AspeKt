@@ -27,7 +27,7 @@ interface AdminPrivateModule {
             scope = coreModule.scope.value,
             translation = coreModule.translation.value,
             dispatchers = coreModule.dispatchers.value,
-            translationContext = coreModule.translationContext
+            kyoriComponentSerializer = coreModule.kyoriComponentSerializer.value
         )
 
         private val adminPrivateEventFactory = Factory {

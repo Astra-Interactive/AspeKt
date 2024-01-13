@@ -6,7 +6,7 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.economy.EconomyProvider
 import ru.astrainteractive.astralibs.filemanager.SpigotFileManager
 import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.astralibs.string.BukkitTranslationContext
+import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kdi.getValue
 
 internal interface RoleControllerDependencies {
@@ -15,7 +15,7 @@ internal interface RoleControllerDependencies {
     val economyProvider: EconomyProvider?
     val tempFileManager: SpigotFileManager
     val translation: PluginTranslation
-    val translationContext: BukkitTranslationContext
+    val kyoriComponentSerializer: KyoriComponentSerializer
 
     class Default(
         coreModule: CoreModule
@@ -25,6 +25,6 @@ internal interface RoleControllerDependencies {
         override val economyProvider: EconomyProvider? by coreModule.economyProvider
         override val tempFileManager: SpigotFileManager by coreModule.tempFileManager
         override val translation: PluginTranslation by coreModule.translation
-        override val translationContext: BukkitTranslationContext = coreModule.translationContext
+        override val kyoriComponentSerializer by coreModule.kyoriComponentSerializer
     }
 }

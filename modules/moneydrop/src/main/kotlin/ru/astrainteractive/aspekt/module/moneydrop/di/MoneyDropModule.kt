@@ -12,7 +12,7 @@ interface MoneyDropModule {
         private val moneyDropController: MoneyDropController by lazy {
             MoneyDropController(
                 pluginConfigurationDependency = coreModule.pluginConfig,
-                translationContext = coreModule.translationContext,
+                kyoriComponentSerializerDependency = coreModule.kyoriComponentSerializer,
                 translationDependency = coreModule.translation
             )
         }

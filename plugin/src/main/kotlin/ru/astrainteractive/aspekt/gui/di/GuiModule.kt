@@ -14,7 +14,7 @@ interface GuiModule {
             RouterImpl(
                 scope = coreModule.scope.value,
                 dispatchers = coreModule.dispatchers.value,
-                translationContext = coreModule.translationContext,
+                kyoriComponentSerializer = coreModule.kyoriComponentSerializer.value,
             )
         }
     }

@@ -10,7 +10,7 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.economy.EconomyProvider
-import ru.astrainteractive.astralibs.string.BukkitTranslationContext
+import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kdi.Module
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
@@ -23,7 +23,7 @@ interface CommandsDependencies : Module {
     val sitController: SitController
     val economyProvider: EconomyProvider?
     val router: Router
-    val translationContext: BukkitTranslationContext
+    val kyoriComponentSerializer: KyoriComponentSerializer
 
     class Default(
         coreModule: CoreModule,
@@ -40,6 +40,6 @@ interface CommandsDependencies : Module {
         override val router: Router by Provider {
             guiModule.router
         }
-        override val translationContext: BukkitTranslationContext = coreModule.translationContext
+        override val kyoriComponentSerializer by coreModule.kyoriComponentSerializer
     }
 }

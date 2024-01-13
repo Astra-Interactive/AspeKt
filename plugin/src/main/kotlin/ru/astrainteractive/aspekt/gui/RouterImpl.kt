@@ -5,12 +5,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.astrainteractive.aspekt.gui.entities.ui.EntitiesGui
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
-import ru.astrainteractive.astralibs.string.BukkitTranslationContext
+import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
 
 class RouterImpl(
     private val scope: CoroutineScope,
     private val dispatchers: BukkitDispatchers,
-    private val translationContext: BukkitTranslationContext,
+    private val kyoriComponentSerializer: KyoriComponentSerializer,
 ) : Router {
     override fun open(route: Router.Route) {
         scope.launch(dispatchers.BukkitAsync) {
@@ -18,7 +18,7 @@ class RouterImpl(
                 is Router.Route.Entities -> EntitiesGui(
                     player = route.player,
                     bukkitDispatchers = dispatchers,
-                    translationContext = translationContext
+                    kyoriComponentSerializer = kyoriComponentSerializer
                 )
             }
             withContext(dispatchers.BukkitMain) {
