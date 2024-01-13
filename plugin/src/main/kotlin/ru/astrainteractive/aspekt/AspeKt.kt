@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.di.impl.RootModuleImpl
 import ru.astrainteractive.aspekt.event.EventHandler
 import ru.astrainteractive.aspekt.event.di.EventsModule
-import ru.astrainteractive.aspekt.util.Lifecycle
+import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kdi.getValue
 
 /**
@@ -28,7 +28,8 @@ class AspeKt : JavaPlugin() {
             rootModule.discordLinkModule.discordLinkLifecycleFactory.create(),
             rootModule.adminPrivateModule.adminPrivateLifecycleFactory.create(),
             rootModule.eventsModule.sitModule,
-            rootModule.townyDiscordModule.lifecycle
+            rootModule.townyDiscordModule.lifecycle,
+            rootModule.moneyDropModule.lifecycle
         )
 
     /**

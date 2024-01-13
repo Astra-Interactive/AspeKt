@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.autobroadcast.di
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.job.ScheduledJob
 import ru.astrainteractive.aspekt.module.autobroadcast.job.AutoBroadcastJob
-import ru.astrainteractive.aspekt.util.Lifecycle
+import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kdi.Factory
 
 interface AutoBroadcastModule {

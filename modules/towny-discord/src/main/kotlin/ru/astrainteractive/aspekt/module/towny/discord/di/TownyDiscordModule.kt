@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.towny.discord.di
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.job.ScheduledJob
 import ru.astrainteractive.aspekt.module.towny.discord.job.TownyDiscordRoleJob
-import ru.astrainteractive.aspekt.util.Lifecycle
+import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 interface TownyDiscordModule {
     val lifecycle: Lifecycle

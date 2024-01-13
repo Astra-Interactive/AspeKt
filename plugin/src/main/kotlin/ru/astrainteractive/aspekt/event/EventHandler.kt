@@ -14,6 +14,5 @@ class EventHandler(
         module.sitModule.sitEvent
         module.restrictionsEvent
         module.autoCropEvent
-        module.moneyDropModule.moneyDropEvent
     }
 }

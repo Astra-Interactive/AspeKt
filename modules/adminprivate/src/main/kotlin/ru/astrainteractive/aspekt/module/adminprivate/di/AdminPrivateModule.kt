@@ -7,7 +7,7 @@ import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateCon
 import ru.astrainteractive.aspekt.module.adminprivate.controller.di.AdminPrivateControllerDependencies
 import ru.astrainteractive.aspekt.module.adminprivate.event.AdminPrivateEvent
 import ru.astrainteractive.aspekt.module.adminprivate.event.di.AdminPrivateDependencies
-import ru.astrainteractive.aspekt.util.Lifecycle
+import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kdi.Factory
 import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue

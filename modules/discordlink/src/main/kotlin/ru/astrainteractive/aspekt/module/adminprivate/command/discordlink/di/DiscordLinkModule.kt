@@ -8,7 +8,7 @@ import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.contro
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.RoleController
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.di.RoleControllerDependencies
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.event.DiscordEvent
-import ru.astrainteractive.aspekt.util.Lifecycle
+import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kdi.Factory
 
 interface DiscordLinkModule {

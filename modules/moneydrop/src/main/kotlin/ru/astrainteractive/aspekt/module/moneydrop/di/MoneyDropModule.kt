@@ -1,27 +1,34 @@
-package ru.astrainteractive.aspekt.event.moneydrop.di
+package ru.astrainteractive.aspekt.module.moneydrop.di
 
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.event.moneydrop.MoneyDropController
-import ru.astrainteractive.aspekt.event.moneydrop.MoneyDropEvent
+import ru.astrainteractive.aspekt.module.moneydrop.MoneyDropController
+import ru.astrainteractive.aspekt.module.moneydrop.MoneyDropEvent
+import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 interface MoneyDropModule {
-    val moneyDropController: MoneyDropController
-    val moneyDropEvent: MoneyDropEvent
+    val lifecycle: Lifecycle
 
     class Default(coreModule: CoreModule) : MoneyDropModule {
-        override val moneyDropController: MoneyDropController by lazy {
+        private val moneyDropController: MoneyDropController by lazy {
             MoneyDropController(
                 pluginConfigurationDependency = coreModule.pluginConfig,
                 translationContext = coreModule.translationContext,
                 translationDependency = coreModule.translation
             )
         }
-        override val moneyDropEvent: MoneyDropEvent by lazy {
+        private val moneyDropEvent: MoneyDropEvent by lazy {
             MoneyDropEvent(
                 dependencies = MoneyDropDependencies.Default(
                     coreModule = coreModule,
                     moneyDropController = moneyDropController
                 )
+            )
+        }
+        override val lifecycle: Lifecycle by lazy {
+            Lifecycle.Lambda(
+                onEnable = {
+                    moneyDropEvent
+                }
             )
         }
     }

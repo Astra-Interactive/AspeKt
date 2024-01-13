@@ -4,7 +4,7 @@ import ru.astrainteractive.aspekt.command.CommandManager
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.gui.di.GuiModule
-import ru.astrainteractive.aspekt.util.Lifecycle
+import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 interface CommandManagerModule : Lifecycle {
     val commandManager: CommandManager
