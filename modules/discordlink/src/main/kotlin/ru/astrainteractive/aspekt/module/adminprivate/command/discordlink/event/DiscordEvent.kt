@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordEventDependencies
-import ru.astrainteractive.aspekt.util.Lifecycle
+import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 

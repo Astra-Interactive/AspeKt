@@ -3,7 +3,6 @@ package ru.astrainteractive.aspekt.event.di
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.event.crop.AutoCropEvent
 import ru.astrainteractive.aspekt.event.crop.di.AutoCropDependencies
-import ru.astrainteractive.aspekt.event.moneydrop.di.MoneyDropModule
 import ru.astrainteractive.aspekt.event.restrictions.RestrictionsEvent
 import ru.astrainteractive.aspekt.event.restrictions.di.RestrictionsDependencies
 import ru.astrainteractive.aspekt.event.sit.di.SitModule
@@ -19,7 +18,6 @@ interface EventsModule : Module {
     val sitModule: SitModule
     val restrictionsEvent: RestrictionsEvent
     val autoCropEvent: AutoCropEvent
-    val moneyDropModule: MoneyDropModule
 
     class Default(coreModule: CoreModule) : EventsModule {
 
@@ -45,10 +43,6 @@ interface EventsModule : Module {
         override val autoCropEvent: AutoCropEvent by lazy {
             val autoCropDependencies: AutoCropDependencies = AutoCropDependencies.Default(coreModule)
             AutoCropEvent(autoCropDependencies)
-        }
-
-        override val moneyDropModule: MoneyDropModule by lazy {
-            MoneyDropModule.Default(coreModule)
         }
     }
 }

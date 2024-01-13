@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.event.moneydrop
+package ru.astrainteractive.aspekt.module.moneydrop
 
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.inventory.InventoryMoveItemEvent
 import org.bukkit.event.inventory.InventoryPickupItemEvent
-import ru.astrainteractive.aspekt.event.moneydrop.di.MoneyDropDependencies
+import ru.astrainteractive.aspekt.module.moneydrop.di.MoneyDropDependencies
 import ru.astrainteractive.astralibs.event.DSLEvent
 
 class MoneyDropEvent(

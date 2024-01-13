@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.event.moneydrop
+package ru.astrainteractive.aspekt.module.moneydrop
 
 import org.bukkit.Location
 import org.bukkit.Material
