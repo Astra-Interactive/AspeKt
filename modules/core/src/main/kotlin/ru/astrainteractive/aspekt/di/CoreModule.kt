@@ -1,7 +1,6 @@
 package ru.astrainteractive.aspekt.di
 
 import kotlinx.serialization.encodeToString
-import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -9,8 +8,7 @@ import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.async.DefaultBukkitDispatchers
 import ru.astrainteractive.astralibs.economy.EconomyProvider
-import ru.astrainteractive.astralibs.economy.EssentialsEconomyProvider
-import ru.astrainteractive.astralibs.economy.VaultEconomyProvider
+import ru.astrainteractive.astralibs.economy.EconomyProviderFactory
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.filemanager.DefaultSpigotFileManager
 import ru.astrainteractive.astralibs.filemanager.FileManager
@@ -95,13 +93,7 @@ interface CoreModule : Lifecycle {
         }
 
         override val economyProvider: Reloadable<EconomyProvider?> = Reloadable {
-            runCatching {
-                val vault = Bukkit.getPluginManager().getPlugin("Vault") ?: error("Vault not found")
-                VaultEconomyProvider(plugin.value, vault)
-            }.onFailure(Throwable::printStackTrace).getOrNull() ?: runCatching {
-                val vault = Bukkit.getPluginManager().getPlugin("Essentials") ?: error("Essentials not found")
-                EssentialsEconomyProvider(plugin.value, vault)
-            }.onFailure(Throwable::printStackTrace).getOrNull()
+            kotlin.runCatching { EconomyProviderFactory(plugin.value).create() }.getOrNull()
         }
 
         override val tempFileManager: Reloadable<SpigotFileManager> = Reloadable {
