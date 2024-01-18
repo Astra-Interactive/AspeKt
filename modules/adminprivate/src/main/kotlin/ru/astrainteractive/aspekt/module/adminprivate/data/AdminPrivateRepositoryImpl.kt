@@ -1,22 +1,26 @@
 package ru.astrainteractive.aspekt.module.adminprivate.data
 
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.encodeToString
 import ru.astrainteractive.aspekt.module.adminprivate.model.AdminChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.AdminPrivateConfig
 import ru.astrainteractive.aspekt.module.adminprivate.util.uniqueWorldKey
 import ru.astrainteractive.astralibs.filemanager.FileManager
+import ru.astrainteractive.astralibs.serialization.Serializer
+import ru.astrainteractive.astralibs.serialization.SerializerExt.parseOrDefault
+import ru.astrainteractive.astralibs.serialization.SerializerExt.writeIntoFile
 import ru.astrainteractive.astralibs.serialization.YamlSerializer
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 internal class AdminPrivateRepositoryImpl(
     private val fileManager: FileManager,
-    dispatchers: KotlinDispatchers
+    dispatchers: KotlinDispatchers,
+    private val serializer: Serializer = YamlSerializer()
 ) : AdminPrivateRepository {
+
     private val limitedDispatcher = dispatchers.IO.limitedParallelism(1)
 
     override fun getConfig(): AdminPrivateConfig {
-        return YamlSerializer().parseOrDefault(fileManager.configFile, ::AdminPrivateConfig)
+        return serializer.parseOrDefault(fileManager.configFile, ::AdminPrivateConfig)
     }
 
     override suspend fun getAllChunks(): List<AdminChunk> = withContext(limitedDispatcher) {
@@ -37,7 +41,7 @@ internal class AdminPrivateRepositoryImpl(
                 this[chunk.uniqueWorldKey] = chunk
             }
         )
-        fileManager.configFile.writeText(YamlSerializer().yaml.encodeToString(newRootConfig))
+        serializer.writeIntoFile(newRootConfig, fileManager.configFile)
     }
 
     override suspend fun deleteChunk(chunk: AdminChunk) = withContext(limitedDispatcher) {
@@ -47,6 +51,6 @@ internal class AdminPrivateRepositoryImpl(
                 remove(chunk.uniqueWorldKey)
             }
         )
-        fileManager.configFile.writeText(YamlSerializer().yaml.encodeToString(newRootConfig))
+        serializer.writeIntoFile(newRootConfig, fileManager.configFile)
     }
 }

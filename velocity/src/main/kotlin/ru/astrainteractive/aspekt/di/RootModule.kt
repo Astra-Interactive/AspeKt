@@ -4,6 +4,7 @@ import com.google.inject.Injector
 import com.velocitypowered.api.proxy.ProxyServer
 import ru.astrainteractive.aspekt.plugin.Configuration
 import ru.astrainteractive.astralibs.filemanager.impl.JVMFileManager
+import ru.astrainteractive.astralibs.serialization.SerializerExt.parseOrDefault
 import ru.astrainteractive.astralibs.serialization.YamlSerializer
 import ru.astrainteractive.klibs.kdi.Lateinit
 import ru.astrainteractive.klibs.kdi.Reloadable
