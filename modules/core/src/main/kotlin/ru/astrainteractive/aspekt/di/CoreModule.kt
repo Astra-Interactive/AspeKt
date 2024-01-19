@@ -10,15 +10,16 @@ import ru.astrainteractive.astralibs.async.DefaultBukkitDispatchers
 import ru.astrainteractive.astralibs.economy.EconomyProvider
 import ru.astrainteractive.astralibs.economy.EconomyProviderFactory
 import ru.astrainteractive.astralibs.event.EventListener
-import ru.astrainteractive.astralibs.filemanager.DefaultSpigotFileManager
+import ru.astrainteractive.astralibs.filemanager.DefaultFileConfigurationManager
+import ru.astrainteractive.astralibs.filemanager.FileConfigurationManager
 import ru.astrainteractive.astralibs.filemanager.FileManager
-import ru.astrainteractive.astralibs.filemanager.SpigotFileManager
 import ru.astrainteractive.astralibs.filemanager.impl.JVMFileManager
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtilFileLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.menu.event.DefaultInventoryClickEvent
 import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.serialization.SerializerExt.parseOrDefault
 import ru.astrainteractive.astralibs.serialization.YamlSerializer
 import ru.astrainteractive.klibs.kdi.Dependency
 import ru.astrainteractive.klibs.kdi.Lateinit
@@ -39,7 +40,7 @@ interface CoreModule : Lifecycle {
     val translation: Reloadable<PluginTranslation>
 
     val economyProvider: Reloadable<EconomyProvider?>
-    val tempFileManager: Reloadable<SpigotFileManager>
+    val tempFileManager: Reloadable<FileConfigurationManager>
     val kyoriComponentSerializer: Reloadable<KyoriComponentSerializer>
     val inventoryClickEventListener: Single<DefaultInventoryClickEvent>
 
@@ -69,7 +70,7 @@ interface CoreModule : Lifecycle {
         }
 
         override val pluginConfig = Reloadable {
-            val fileManager = DefaultSpigotFileManager(plugin.value, "config.yml")
+            val fileManager = DefaultFileConfigurationManager(plugin.value, "config.yml")
             val yamlSerializer = YamlSerializer()
 
             val translation = yamlSerializer.parseOrDefault(fileManager.configFile, ::PluginConfiguration)
@@ -83,7 +84,7 @@ interface CoreModule : Lifecycle {
         }
 
         override val translation = Reloadable {
-            val fileManager = DefaultSpigotFileManager(plugin.value, "translations.yml")
+            val fileManager = DefaultFileConfigurationManager(plugin.value, "translations.yml")
             val yamlSerializer = YamlSerializer()
 
             val translation = yamlSerializer.parseOrDefault(fileManager.configFile, ::PluginTranslation)
@@ -96,8 +97,8 @@ interface CoreModule : Lifecycle {
             kotlin.runCatching { EconomyProviderFactory(plugin.value).create() }.getOrNull()
         }
 
-        override val tempFileManager: Reloadable<SpigotFileManager> = Reloadable {
-            DefaultSpigotFileManager(plugin.value, "temp.yml")
+        override val tempFileManager: Reloadable<FileConfigurationManager> = Reloadable {
+            DefaultFileConfigurationManager(plugin.value, "temp.yml")
         }
 
         override val kyoriComponentSerializer: Reloadable<KyoriComponentSerializer> = Reloadable {

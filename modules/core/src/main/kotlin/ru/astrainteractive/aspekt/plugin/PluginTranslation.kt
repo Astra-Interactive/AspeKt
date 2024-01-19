@@ -5,7 +5,7 @@ package ru.astrainteractive.aspekt.plugin
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import ru.astrainteractive.astralibs.string.StringDesc
-import ru.astrainteractive.astralibs.string.replace
+import ru.astrainteractive.astralibs.string.StringDescExt.replace
 
 /**
  * All translation stored here
