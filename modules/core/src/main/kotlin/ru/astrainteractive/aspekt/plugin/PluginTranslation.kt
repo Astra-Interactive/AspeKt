@@ -44,7 +44,9 @@ class PluginTranslation(
         @SerialName("picked_up_money")
         private val pickedUpMoney: StringDesc.Raw = StringDesc.Raw("&#42f596Вы подобрали {AMOUNT} монет"),
         @SerialName("dropped_money")
-        val droppedMoney: StringDesc.Raw = StringDesc.Raw("&6Монетка")
+        val droppedMoney: StringDesc.Raw = StringDesc.Raw("&6Монетка"),
+        @SerialName("maybe_tpr")
+        val maybeTpr: StringDesc.Raw = StringDesc.Raw("&#db2c18Возможно, вы хотели ввести /tpr")
     ) {
 
         fun discordLinkReward(amount: Number): StringDesc.Raw {

@@ -10,17 +10,17 @@ dependencies {
     compileOnly(libs.minecraft.paper.api)
     implementation(libs.minecraft.bstats)
     // AstraLibs
-    implementation(libs.minecraft.astralibs.ktxcore)
+    implementation(libs.minecraft.astralibs.core)
     implementation(libs.minecraft.astralibs.orm)
     implementation(klibs.klibs.kdi)
-    implementation(libs.minecraft.astralibs.spigot.gui)
-    implementation(libs.minecraft.astralibs.spigot.core)
+    implementation(libs.minecraft.astralibs.menu.bukkit)
+    implementation(libs.minecraft.astralibs.core.bukkit)
     implementation(libs.minecraft.vaultapi)
     // Spigot
     compileOnly("net.luckperms:api:5.4")
-    compileOnly("com.discordsrv:discordsrv:1.25.0")
+    compileOnly(libs.minecraft.discordsrv)
     compileOnly("net.essentialsx:EssentialsX:2.20.1")
-    compileOnly("com.palmergames.bukkit.towny:towny:0.100.0.0")
+    compileOnly("com.palmergames.bukkit.towny:towny:0.100.1.0")
     // Test
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
