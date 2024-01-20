@@ -6,7 +6,7 @@ import org.bukkit.Bukkit
 import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
 
 fun CommandManager.rtp() = plugin.getCommand("rtp")?.setExecutor { sender, command, label, args ->
-    "#db2c18Возможно, вы хотели ввести /tpr"
+    translation.general.maybeTpr
         .let(KyoriComponentSerializer.Legacy::toComponent)
         .run(sender::sendMessage)
     true
