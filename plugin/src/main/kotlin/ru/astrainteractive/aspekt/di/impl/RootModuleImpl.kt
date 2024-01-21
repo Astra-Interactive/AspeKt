@@ -46,7 +46,7 @@ class RootModuleImpl : RootModule {
         )
     }
     override val townyDiscordModule: TownyDiscordModule by lazy {
-        TownyDiscordModule.Default(coreModule)
+        TownyDiscordModule.Default(coreModule, discordLinkModule)
     }
     override val moneyDropModule: MoneyDropModule by lazy {
         MoneyDropModule.Default(coreModule)

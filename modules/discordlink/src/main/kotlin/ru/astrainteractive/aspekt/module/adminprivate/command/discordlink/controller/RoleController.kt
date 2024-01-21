@@ -1,14 +1,28 @@
 package ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller
 
+import github.scarsz.discordsrv.dependencies.jda.api.entities.Guild
 import github.scarsz.discordsrv.dependencies.jda.api.entities.User
 import org.bukkit.OfflinePlayer
 
-internal interface RoleController {
-    interface Discord
+interface RoleController {
 
-    interface Minecraft {
+    interface Minecraft : RoleController {
         suspend fun onLinked(player: OfflinePlayer)
         suspend fun onUnLinked(player: OfflinePlayer)
+    }
+
+    interface Discord : RoleController {
+        suspend fun removeRoleFromMembersWithRole(
+            whitelistedUserIds: Set<String>,
+            roleId: String,
+            guild: Guild
+        )
+
+        suspend fun addRoleToMembers(
+            memberIds: Set<String>,
+            roleId: String,
+            guild: Guild
+        )
     }
 
     suspend fun onLinked(player: OfflinePlayer, discordUser: User)

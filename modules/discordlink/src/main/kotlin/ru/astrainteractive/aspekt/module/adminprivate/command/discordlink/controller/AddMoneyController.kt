@@ -11,6 +11,8 @@ internal class AddMoneyController(
     module: RoleControllerDependencies,
 ) : RoleController,
     RoleControllerDependencies by module {
+    private val logger = java.util.logging.Logger.getLogger("AddMoneyController")
+
     private val configuration: PluginConfiguration.DiscordSRVLink
         get() = pluginConfiguration.discordSRVLink
 
@@ -19,13 +21,10 @@ internal class AddMoneyController(
         val key = "discord.linked.was_before.${player.uniqueId}"
         val wasLinkedBefore = tempFileManager.fileConfiguration.getBoolean(key, false)
         if (wasLinkedBefore) {
-            logger.info("DiscordEvent", "Игрок ${player.name} уже линковал аккаунт, пропускаем выдачу денег")
+            logger.info("Игрок ${player.name} уже линковал аккаунт, пропускаем выдачу денег")
             return
         }
-        logger.info(
-            "DiscordEvent",
-            "Игроку ${player.name} выдано ${configuration.moneyForLink} за линковку с дискордом"
-        )
+        logger.info("Игроку ${player.name} выдано ${configuration.moneyForLink} за линковку с дискордом")
         tempFileManager.fileConfiguration.set(key, true)
         tempFileManager.save()
         economyProvider?.addMoney(uuid, configuration.moneyForLink.toDouble())

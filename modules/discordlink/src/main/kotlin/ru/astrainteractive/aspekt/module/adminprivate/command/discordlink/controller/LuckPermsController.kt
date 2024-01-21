@@ -13,6 +13,7 @@ import ru.astrainteractive.klibs.kdi.getValue
 internal class LuckPermsController(
     module: RoleControllerDependencies
 ) : RoleController, RoleController.Minecraft, RoleControllerDependencies by module {
+    private val logger = java.util.logging.Logger.getLogger("LuckPermsController")
 
     private val configuration: PluginConfiguration.DiscordSRVLink
         get() = pluginConfiguration.discordSRVLink
@@ -21,41 +22,61 @@ internal class LuckPermsController(
         Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider ?: error("LuckPerms not found!")
     }
 
-    private fun OfflinePlayer.addGroup(group: String) {
-        api.userManager.modifyUser(uniqueId) {
-            val groupNode = InheritanceNode.builder(group).build()
+    private fun addRole(offlinePlayer: OfflinePlayer, role: String?, isSilent: Boolean) {
+        role ?: run {
+            if (!isSilent) logger.info("minecraftLinkedRole not specified")
+            return
+        }
+        api.userManager.modifyUser(offlinePlayer.uniqueId) {
+            val groupNode = InheritanceNode.builder(role).build()
+            if (it.nodes.contains(groupNode)) {
+                if (!isSilent) {
+                    logger.info("Player ${offlinePlayer.name ?: offlinePlayer.uniqueId} already have role $role")
+                }
+                return@modifyUser
+            }
             val result = it.data().add(groupNode)
-            logger.info("DiscordEvent", "Игроку $name выдана роль $group: $result")
+            if (!isSilent) {
+                logger.info("Игроку ${offlinePlayer.name ?: offlinePlayer.uniqueId} выдана роль $role: $result")
+            }
         }
     }
 
-    private fun OfflinePlayer.removeGroup(group: String) {
-        api.userManager.modifyUser(uniqueId) {
-            val groupNode = InheritanceNode.builder(group).build()
+    private fun removeRole(offlinePlayer: OfflinePlayer, role: String?, isSilent: Boolean) {
+        role ?: run {
+            if (!isSilent) logger.info("minecraftLinkedRole not specified")
+            return
+        }
+        api.userManager.modifyUser(offlinePlayer.uniqueId) {
+            val groupNode = InheritanceNode.builder(role).build()
+            if (!it.nodes.contains(groupNode)) {
+                if (!isSilent) {
+                    logger.info(
+                        "Player ${offlinePlayer.name ?: offlinePlayer.uniqueId} already doesn't have role $role"
+                    )
+                }
+                return@modifyUser
+            }
             val result = it.data().remove(groupNode)
-            logger.info("DiscordEvent", "У игрока $name убрана роль $group: $result")
+            if (!isSilent) {
+                logger.info("У игрока ${offlinePlayer.name ?: offlinePlayer.uniqueId} убрана роль $role: $result")
+            }
         }
     }
 
     override suspend fun onLinked(player: OfflinePlayer) {
-        configuration.onLinked.luckPerms.addRoles.forEach { group ->
-            player.addGroup(group)
-        }
-        configuration.onLinked.luckPerms.removeRoles.forEach { group ->
-            player.removeGroup(group)
-        }
+        addRole(player, configuration.minecraftLinkedRole, true)
     }
 
     override suspend fun onUnLinked(player: OfflinePlayer) {
-        configuration.onUnlinked.luckPerms.addRoles.forEach { group ->
-            player.addGroup(group)
-        }
-        configuration.onUnlinked.luckPerms.removeRoles.forEach { group ->
-            player.removeGroup(group)
-        }
+        removeRole(player, configuration.minecraftLinkedRole, true)
     }
 
-    override suspend fun onLinked(player: OfflinePlayer, discordUser: User) = onLinked(player)
+    override suspend fun onLinked(player: OfflinePlayer, discordUser: User) {
+        addRole(player, configuration.minecraftLinkedRole, false)
+    }
 
-    override suspend fun onUnLinked(player: OfflinePlayer, discordUser: User) = onUnLinked(player)
+    override suspend fun onUnLinked(player: OfflinePlayer, discordUser: User) {
+        removeRole(player, configuration.minecraftLinkedRole, false)
+    }
 }

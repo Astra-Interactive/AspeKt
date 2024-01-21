@@ -26,4 +26,6 @@ dependencies {
     testImplementation(libs.tests.kotlin.test)
     testImplementation(libs.minecraft.mockbukkit)
     implementation(projects.modules.core)
+    // Local
+    implementation(projects.modules.discordlink)
 }

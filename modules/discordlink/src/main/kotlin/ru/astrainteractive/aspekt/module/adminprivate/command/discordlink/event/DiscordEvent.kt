@@ -1,16 +1,10 @@
-@file:OptIn(UnsafeApi::class)
-
 package ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.event
 
 import github.scarsz.discordsrv.DiscordSRV
 import github.scarsz.discordsrv.api.Subscribe
 import github.scarsz.discordsrv.api.events.AccountLinkedEvent
 import github.scarsz.discordsrv.api.events.AccountUnlinkedEvent
-import github.scarsz.discordsrv.dependencies.jda.api.events.guild.member.GuildMemberRemoveEvent
-import github.scarsz.discordsrv.dependencies.jda.api.hooks.ListenerAdapter
 import kotlinx.coroutines.launch
-import org.bukkit.Bukkit
-import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordEventDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kdi.Provider
@@ -38,22 +32,11 @@ internal class DiscordEvent(module: DiscordEventDependencies) : DiscordEventDepe
         }
     }
 
-    private val rawJdaListener = object : ListenerAdapter() {
-        override fun onGuildMemberRemove(event: GuildMemberRemoveEvent) {
-            scope.launch(dispatchers.IO) {
-                val player = Bukkit.getOfflinePlayer(DiscordSRV.getPlugin().accountLinkManager.getUuid(event.user.id))
-                controllers.forEach { it.onUnLinked(player, event.user) }
-            }
-        }
-    }
-
     override fun onEnable() {
         DiscordSRV.api.subscribe(this)
-        DiscordSRV.getPlugin().jda.addEventListener(rawJdaListener)
     }
 
     override fun onDisable() {
         DiscordSRV.api.unsubscribe(this)
-        DiscordSRV.getPlugin().jda.removeEventListener(rawJdaListener)
     }
 }
