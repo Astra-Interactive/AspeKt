@@ -1,9 +1,9 @@
 package ru.astrainteractive.aspekt.module.autocrop.presentation
 
-import java.util.concurrent.TimeUnit
 import org.bukkit.Location
 import org.jetbrains.kotlin.com.google.common.cache.Cache
 import org.jetbrains.kotlin.com.google.common.cache.CacheBuilder
+import java.util.concurrent.TimeUnit
 
 internal class CropDupeController {
     // Worst size for 1 item is 2b(1 char)*5(Max map size is 10000)*3(X,Y,Z) = 30
