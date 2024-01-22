@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.event.crop
+package ru.astrainteractive.aspekt.module.autocrop
 
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -6,11 +6,11 @@ import org.bukkit.block.data.Ageable
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
-import ru.astrainteractive.aspekt.event.crop.di.AutoCropDependencies
+import ru.astrainteractive.aspekt.module.autocrop.di.AutoCropDependencies
 import ru.astrainteractive.astralibs.event.DSLEvent
 import kotlin.random.Random
 
-class AutoCropEvent(
+internal class AutoCropEvent(
     module: AutoCropDependencies
 ) : AutoCropDependencies by module {
 

@@ -1,13 +1,13 @@
-package ru.astrainteractive.aspekt.event.crop.domain
+package ru.astrainteractive.aspekt.module.autocrop.domain
 
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 
-interface HoeRadiusFactory {
+internal interface HoeRadiusFactory {
     fun create(hoeMaybe: ItemStack): Int
 }
 
-class HoeRadiusFactoryImpl : HoeRadiusFactory {
+internal class HoeRadiusFactoryImpl : HoeRadiusFactory {
     override fun create(hoeMaybe: ItemStack): Int {
         return when (hoeMaybe.type) {
             Material.WOODEN_HOE -> 2

@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.event.crop.domain
+package ru.astrainteractive.aspekt.module.autocrop.domain
 
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
@@ -6,7 +6,7 @@ import org.bukkit.block.BlockFace
 /**
  * This class is required to (almost) fast get relative blocks
  */
-class RelativeBlockProvider {
+internal class RelativeBlockProvider {
     private val map = HashSet<Block>()
 
     private fun fillWithRelativeBlocks(block: Block, radius: Int) {

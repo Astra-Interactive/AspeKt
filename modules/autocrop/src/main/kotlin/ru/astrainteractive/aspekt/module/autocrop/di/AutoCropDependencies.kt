@@ -1,15 +1,15 @@
-package ru.astrainteractive.aspekt.event.crop.di
+package ru.astrainteractive.aspekt.module.autocrop.di
 
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.event.crop.domain.HoeDamager
-import ru.astrainteractive.aspekt.event.crop.domain.HoeDamagerImpl
-import ru.astrainteractive.aspekt.event.crop.domain.HoeRadiusFactory
-import ru.astrainteractive.aspekt.event.crop.domain.HoeRadiusFactoryImpl
-import ru.astrainteractive.aspekt.event.crop.domain.RelativeBlockProvider
-import ru.astrainteractive.aspekt.event.crop.mapping.CropMaterialMapper
-import ru.astrainteractive.aspekt.event.crop.mapping.CropMaterialMapperImpl
-import ru.astrainteractive.aspekt.event.crop.presentation.CropDupeController
+import ru.astrainteractive.aspekt.module.autocrop.domain.HoeDamager
+import ru.astrainteractive.aspekt.module.autocrop.domain.HoeDamagerImpl
+import ru.astrainteractive.aspekt.module.autocrop.domain.HoeRadiusFactory
+import ru.astrainteractive.aspekt.module.autocrop.domain.HoeRadiusFactoryImpl
+import ru.astrainteractive.aspekt.module.autocrop.domain.RelativeBlockProvider
+import ru.astrainteractive.aspekt.module.autocrop.mapping.CropMaterialMapper
+import ru.astrainteractive.aspekt.module.autocrop.mapping.CropMaterialMapperImpl
+import ru.astrainteractive.aspekt.module.autocrop.presentation.CropDupeController
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kdi.Factory
@@ -17,7 +17,7 @@ import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
 
-interface AutoCropDependencies {
+internal interface AutoCropDependencies {
     val eventListener: EventListener
     val plugin: JavaPlugin
     val configuration: PluginConfiguration

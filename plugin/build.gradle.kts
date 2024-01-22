@@ -34,6 +34,7 @@ dependencies {
     implementation(projects.modules.discordlink)
     implementation(projects.modules.townyDiscord)
     implementation(projects.modules.moneydrop)
+    implementation(projects.modules.autocrop)
 }
 val destination = File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\smp\\plugins")
     .takeIf(File::exists)

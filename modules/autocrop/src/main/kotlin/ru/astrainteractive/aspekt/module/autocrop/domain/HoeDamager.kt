@@ -1,13 +1,13 @@
-package ru.astrainteractive.aspekt.event.crop.domain
+package ru.astrainteractive.aspekt.module.autocrop.domain
 
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 
-interface HoeDamager {
+internal interface HoeDamager {
     fun applyDamage(hoeItemStack: ItemStack): Result<Unit>
 }
 
-class HoeDamagerImpl : HoeDamager {
+internal class HoeDamagerImpl : HoeDamager {
     override fun applyDamage(hoeItemStack: ItemStack): Result<Unit> {
         val damageable = hoeItemStack.itemMeta as? Damageable ?: return Result.success(Unit)
         if (damageable.damage > hoeItemStack.type.maxDurability) return Result.failure(Error())
