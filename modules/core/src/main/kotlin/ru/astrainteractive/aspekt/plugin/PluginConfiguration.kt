@@ -112,25 +112,14 @@ data class PluginConfiguration(
     data class DiscordSRVLink(
         @SerialName("money_for_link")
         val moneyForLink: Int = 0,
-        @SerialName("on_linked")
-        val onLinked: LinkConfiguration = LinkConfiguration(),
-        @SerialName("on_unlinked")
-        val onUnlinked: LinkConfiguration = LinkConfiguration()
-    ) {
-        @Serializable
-        data class LinkConfiguration(
-            @SerialName("discord")
-            val discord: RoleConfiguration = RoleConfiguration(),
-            @SerialName("luckperms")
-            val luckPerms: RoleConfiguration = RoleConfiguration()
-        ) {
-            @Serializable
-            data class RoleConfiguration(
-                @SerialName("add_roles")
-                val addRoles: List<String> = emptyList(),
-                @SerialName("remove_roles")
-                val removeRoles: List<String> = emptyList()
-            )
-        }
-    }
+        @SerialName("discord_linked_role")
+        val discordLinkedRole: String? = null,
+        @SerialName("minecraft_linked_role")
+        val minecraftLinkedRole: String? = null,
+        @SerialName("is_enabled")
+        val isEnabled: Boolean = false,
+        @SerialName("initial_delay")
+        val initialDelay: Long = 0L,
+        val delay: Long = 1.minutes.inWholeMilliseconds,
+    )
 }

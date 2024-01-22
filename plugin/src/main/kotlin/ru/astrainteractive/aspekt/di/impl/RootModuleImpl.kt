@@ -8,6 +8,7 @@ import ru.astrainteractive.aspekt.gui.di.GuiModule
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
 import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule
 import ru.astrainteractive.aspekt.module.autobroadcast.di.AutoBroadcastModule
+import ru.astrainteractive.aspekt.module.autocrop.di.AutoCropModule
 import ru.astrainteractive.aspekt.module.menu.di.MenuModule
 import ru.astrainteractive.aspekt.module.moneydrop.di.MoneyDropModule
 import ru.astrainteractive.aspekt.module.towny.discord.di.TownyDiscordModule
@@ -15,7 +16,6 @@ import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
 
 class RootModuleImpl : RootModule {
-
     override val coreModule: CoreModule by lazy {
         CoreModule.Default()
     }
@@ -46,9 +46,12 @@ class RootModuleImpl : RootModule {
         )
     }
     override val townyDiscordModule: TownyDiscordModule by lazy {
-        TownyDiscordModule.Default(coreModule)
+        TownyDiscordModule.Default(coreModule, discordLinkModule)
     }
     override val moneyDropModule: MoneyDropModule by lazy {
         MoneyDropModule.Default(coreModule)
+    }
+    override val autoCropModule: AutoCropModule by lazy {
+        AutoCropModule.Default(coreModule)
     }
 }

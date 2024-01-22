@@ -8,27 +8,34 @@ import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.contro
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.RoleController
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.di.RoleControllerDependencies
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.event.DiscordEvent
+import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.job.DiscordLinkJob
+import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.job.di.DiscordLinkJobDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kdi.Factory
 
 interface DiscordLinkModule {
     val discordLinkLifecycleFactory: Factory<Lifecycle>
 
+    val discordController: RoleController.Discord
+
     class Default(coreModule: CoreModule) : DiscordLinkModule {
+        private val luckPermsController: RoleController.Minecraft by lazy {
+            LuckPermsController(roleControllerDependencies)
+        }
+
+        private val addMoneyController: RoleController by lazy {
+            AddMoneyController(roleControllerDependencies)
+        }
+
+        private val roleControllerDependencies by lazy {
+            RoleControllerDependencies.Default(coreModule)
+        }
+
+        override val discordController: RoleController.Discord by lazy {
+            DiscordController(roleControllerDependencies)
+        }
 
         private val dependencies by lazy {
-            val roleControllerDependencies by lazy {
-                RoleControllerDependencies.Default(coreModule)
-            }
-            val luckPermsController: RoleController by lazy {
-                LuckPermsController(roleControllerDependencies)
-            }
-            val discordController: RoleController by lazy {
-                DiscordController(roleControllerDependencies)
-            }
-            val addMoneyController: RoleController by lazy {
-                AddMoneyController(roleControllerDependencies)
-            }
             DiscordEventDependencies.Default(
                 coreModule = coreModule,
                 discordController = discordController,
@@ -42,13 +49,32 @@ interface DiscordLinkModule {
             Bukkit.getPluginManager().getPlugin("LuckPerms") ?: return@lazy null
             DiscordEvent(dependencies)
         }
+
+        private val discordLinkJob by lazy {
+            Bukkit.getPluginManager().getPlugin("DiscordSRV") ?: return@lazy null
+            Bukkit.getPluginManager().getPlugin("LuckPerms") ?: return@lazy null
+            DiscordLinkJob(
+                dependencies = DiscordLinkJobDependencies.Default(
+                    coreModule = coreModule,
+                    luckPermsRoleController = luckPermsController,
+                    discordRoleController = discordController
+                )
+            )
+        }
+
         override val discordLinkLifecycleFactory: Factory<Lifecycle> = Factory {
             Lifecycle.Lambda(
                 onEnable = {
                     discordEvent?.onEnable()
+                    discordLinkJob?.onEnable()
                 },
                 onDisable = {
                     discordEvent?.onDisable()
+                    discordLinkJob?.onDisable()
+                },
+                onReload = {
+                    discordLinkJob?.onDisable()
+                    discordLinkJob?.onEnable()
                 }
             )
         }

@@ -13,6 +13,5 @@ class EventHandler(
         module.sortEvent
         module.sitModule.sitEvent
         module.restrictionsEvent
-        module.autoCropEvent
     }
 }

@@ -1,0 +1,18 @@
+plugins {
+    kotlin("jvm")
+    kotlin("plugin.serialization")
+}
+
+dependencies {
+    // Kotlin
+    implementation(libs.bundles.kotlin)
+    // Spigot dependencies
+    compileOnly(libs.minecraft.paper.api)
+    implementation(libs.minecraft.bstats)
+    // AstraLibs
+    implementation(libs.minecraft.astralibs.core)
+    implementation(klibs.klibs.kdi)
+    implementation(libs.minecraft.astralibs.core.bukkit)
+    // Test
+    implementation(projects.modules.core)
+}
