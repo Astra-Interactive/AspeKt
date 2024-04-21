@@ -7,8 +7,8 @@ import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateCon
 import ru.astrainteractive.aspekt.module.adminprivate.util.adminChunk
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
-import ru.astrainteractive.astralibs.command.api.CommandExecutor
-import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
+import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 
 internal class AdminPrivateCommandExecutor(
     private val adminPrivateController: AdminPrivateController,

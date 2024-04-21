@@ -12,27 +12,30 @@ import ru.astrainteractive.aspekt.gui.entities.presentation.DefaultEntitiesCompo
 import ru.astrainteractive.aspekt.gui.entities.presentation.EntitiesComponent
 import ru.astrainteractive.aspekt.gui.entities.util.toMaterial
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
+import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.menu.holder.DefaultPlayerHolder
 import ru.astrainteractive.astralibs.menu.holder.PlayerHolder
-import ru.astrainteractive.astralibs.menu.menu.InventorySlot
-import ru.astrainteractive.astralibs.menu.menu.MenuSize
-import ru.astrainteractive.astralibs.menu.menu.PaginatedMenu
-import ru.astrainteractive.astralibs.menu.menu.editMeta
-import ru.astrainteractive.astralibs.menu.menu.setIndex
-import ru.astrainteractive.astralibs.menu.menu.setItemStack
-import ru.astrainteractive.astralibs.menu.menu.setOnClickListener
-import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.menu.inventory.PaginatedInventoryMenu
+import ru.astrainteractive.astralibs.menu.inventory.model.InventorySize
+import ru.astrainteractive.astralibs.menu.inventory.model.PageContext
+import ru.astrainteractive.astralibs.menu.inventory.util.PaginatedInventoryMenuExt.showNextPage
+import ru.astrainteractive.astralibs.menu.inventory.util.PaginatedInventoryMenuExt.showPrevPage
+import ru.astrainteractive.astralibs.menu.slot.InventorySlot
+import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.editMeta
+import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setIndex
+import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setItemStack
+import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setOnClickListener
 import ru.astrainteractive.astralibs.string.StringDesc
 
 class EntitiesGui(
     player: Player,
     private val bukkitDispatchers: BukkitDispatchers,
     kyoriComponentSerializer: KyoriComponentSerializer
-) : PaginatedMenu(), KyoriComponentSerializer by kyoriComponentSerializer {
+) : PaginatedInventoryMenu(), KyoriComponentSerializer by kyoriComponentSerializer {
     private val viewModel by lazy {
         DefaultEntitiesComponent()
     }
-    override val backPageButton: InventorySlot
+    private val backPageButton: InventorySlot
         get() = InventorySlot.Builder()
             .setIndex(49)
             .setItemStack(ItemStack(Material.END_CRYSTAL))
@@ -58,7 +61,7 @@ class EntitiesGui(
             .editMeta {
                 setDisplayName("Next")
             }
-            .setOnClickListener { showPage(page + 1) }
+            .setOnClickListener { showNextPage() }
             .build()
 
     override val prevPageButton: InventorySlot
@@ -68,7 +71,7 @@ class EntitiesGui(
             .editMeta {
                 setDisplayName("Prev")
             }
-            .setOnClickListener { showPage(page - 1) }
+            .setOnClickListener { showPrevPage() }
             .build()
 
     private val worldButton: InventorySlot
@@ -97,20 +100,30 @@ class EntitiesGui(
             .setOnClickListener { viewModel.onSortClicked() }
             .build()
 
-    override val maxItemsAmount: Int
-        get() = when (val state = viewModel.model.value) {
-            is EntitiesComponent.Model.AllEntities -> state.list.size
-            is EntitiesComponent.Model.ExactEntity -> state.list.size
-            EntitiesComponent.Model.Loading -> 0
-        }
-    override val menuSize: MenuSize = MenuSize.XL
-    override var menuTitle: Component = StringDesc.Raw("Entities").let(kyoriComponentSerializer::toComponent)
+    override val inventorySize: InventorySize = InventorySize.XL
 
-    override var page: Int = 0
+    override var title: Component = StringDesc.Raw("Entities").let(kyoriComponentSerializer::toComponent)
+
+    override var pageContext: PageContext = PageContext(
+        page = 0,
+        maxItems = 0,
+        maxItemsPerPage = inventorySize.size - InventorySize.XXS.size
+    )
+
     override val playerHolder: PlayerHolder = DefaultPlayerHolder(player)
 
-    override fun onCreated() {
-        viewModel.model.onEach { render() }
+    override fun onInventoryCreated() {
+        viewModel.model
+            .onEach {
+                pageContext = pageContext.copy(
+                    maxItems = when (val state = viewModel.model.value) {
+                        is EntitiesComponent.Model.AllEntities -> state.list.size
+                        is EntitiesComponent.Model.ExactEntity -> state.list.size
+                        EntitiesComponent.Model.Loading -> 0
+                    }
+                )
+            }
+            .onEach { render() }
             .flowOn(bukkitDispatchers.BukkitMain)
             .launchIn(menuScope)
         viewModel.loadData()
@@ -124,8 +137,8 @@ class EntitiesGui(
             is EntitiesComponent.Model.AllEntities -> {
                 filterButton.setInventorySlot()
                 worldButton.setInventorySlot()
-                for (i in 0 until maxItemsPerPage) {
-                    val index = maxItemsPerPage * page + i
+                for (i in 0 until pageContext.maxItemsPerPage) {
+                    val index = pageContext.maxItemsPerPage * pageContext.page + i
                     val entity = state.list.getOrNull(index) ?: continue
                     InventorySlot.Builder()
                         .setIndex(i)
@@ -140,8 +153,8 @@ class EntitiesGui(
             }
 
             is EntitiesComponent.Model.ExactEntity -> {
-                for (i in 0 until maxItemsPerPage) {
-                    val index = maxItemsPerPage * page + i
+                for (i in 0 until pageContext.maxItemsPerPage) {
+                    val index = pageContext.maxItemsPerPage * pageContext.page + i
                     val entity = state.list.getOrNull(index) ?: continue
                     InventorySlot.Builder()
                         .setIndex(i)
@@ -168,9 +181,5 @@ class EntitiesGui(
     override fun onInventoryClicked(e: InventoryClickEvent) {
         super.onInventoryClicked(e)
         e.isCancelled = true
-    }
-
-    override fun onPageChanged() {
-        render()
     }
 }

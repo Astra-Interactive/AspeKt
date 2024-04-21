@@ -132,4 +132,6 @@ fun EntityType.toMaterial() = when (this) {
     EntityType.ITEM_DISPLAY -> Material.BARRIER
     EntityType.SNIFFER -> Material.SNIFFER_SPAWN_EGG
     EntityType.TEXT_DISPLAY -> Material.BARRIER
+    EntityType.BREEZE -> Material.BARRIER
+    EntityType.WIND_CHARGE -> Material.BARRIER
 }

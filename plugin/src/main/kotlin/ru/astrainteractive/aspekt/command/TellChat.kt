@@ -2,8 +2,8 @@ package ru.astrainteractive.aspekt.command
 
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.plugin.PluginPermission
+import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
-import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
 
 fun CommandManager.tellChat() = plugin.getCommand("tellchat")?.setExecutor { sender, command, label, args ->
     if (!sender.toPermissible().hasPermission(PluginPermission.TellChat)) return@setExecutor true

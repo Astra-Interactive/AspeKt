@@ -1,8 +1,7 @@
 package ru.astrainteractive.aspekt.module.adminprivate.di
 
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate.AdminPrivateCommand
-import ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate.AdminPrivateCommandFactory
+import ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate.AdminPrivateCommandRegister
 import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateController
 import ru.astrainteractive.aspekt.module.adminprivate.controller.di.AdminPrivateControllerDependencies
 import ru.astrainteractive.aspekt.module.adminprivate.event.AdminPrivateEvent
@@ -21,7 +20,7 @@ interface AdminPrivateModule {
             AdminPrivateController(dependencies)
         }
 
-        private val adminPrivateCommandFactory: Factory<AdminPrivateCommand> = AdminPrivateCommandFactory(
+        private val adminPrivateCommandRegistry = AdminPrivateCommandRegister(
             plugin = coreModule.plugin.value,
             adminPrivateController = adminPrivateController,
             scope = coreModule.scope.value,
@@ -41,7 +40,7 @@ interface AdminPrivateModule {
         override val adminPrivateLifecycleFactory: Factory<Lifecycle> = Factory {
             Lifecycle.Lambda(
                 onEnable = {
-                    adminPrivateCommandFactory.create()
+                    adminPrivateCommandRegistry.register()
                     adminPrivateEventFactory.create()
                 },
                 onReload = {

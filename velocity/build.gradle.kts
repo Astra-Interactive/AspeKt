@@ -1,6 +1,6 @@
 
+import ru.astrainteractive.gradleplugin.property.extension.ModelPropertyValueExt.requireProjectInfo
 import ru.astrainteractive.gradleplugin.setupVelocityProcessor
-import ru.astrainteractive.gradleplugin.util.ProjectProperties.projectInfo
 
 plugins {
     kotlin("jvm")
@@ -16,7 +16,7 @@ dependencies {
     // AstraLibs
     implementation(libs.minecraft.astralibs.core)
     implementation(libs.minecraft.astralibs.orm)
-    implementation(klibs.klibs.kdi)
+    implementation(libs.klibs.kdi)
     // Test
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
@@ -24,18 +24,18 @@ dependencies {
 }
 
 buildConfig {
-    val projectInfo = projectInfo
+    val requireProjectInfo = requireProjectInfo
     className("BuildKonfig")
-    packageName(projectInfo.group)
+    packageName(requireProjectInfo.group)
     fun buildConfigStringField(name: String, value: String) {
         buildConfigField("String", name, "\"${value}\"")
     }
-    buildConfigStringField("id", projectInfo.name.toLowerCase())
-    buildConfigStringField("name", projectInfo.name)
-    buildConfigStringField("version", projectInfo.versionString)
-    buildConfigStringField("url", projectInfo.url)
-    buildConfigStringField("description", projectInfo.description)
-    buildConfigStringField("author", projectInfo.developersList.first().id)
+    buildConfigStringField("id", requireProjectInfo.name.toLowerCase())
+    buildConfigStringField("name", requireProjectInfo.name)
+    buildConfigStringField("version", requireProjectInfo.versionString)
+    buildConfigStringField("url", requireProjectInfo.url)
+    buildConfigStringField("description", requireProjectInfo.description)
+    buildConfigStringField("author", requireProjectInfo.developersList.first().id)
 }
 
 setupVelocityProcessor()

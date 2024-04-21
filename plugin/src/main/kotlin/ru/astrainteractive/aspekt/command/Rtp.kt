@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.command
 import com.earth2me.essentials.Essentials
 import com.earth2me.essentials.RandomTeleport
 import org.bukkit.Bukkit
-import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 
 fun CommandManager.rtp() = plugin.getCommand("rtp")?.setExecutor { sender, command, label, args ->
     translation.general.maybeTpr
