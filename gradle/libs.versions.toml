@@ -34,6 +34,9 @@ gradle-buildconfig = "3.1.0" # https://github.com/gmazzo/gradle-buildconfig-plug
 # Exposed
 exposed = "0.44.0" # https://github.com/JetBrains/Exposed
 
+# DisordSrv
+discordsrv = "1.27.0" # https://github.com/DiscordSRV/DiscordSRV
+
 [libraries]
 # Kotlin
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
@@ -71,8 +74,7 @@ minecraft-vaultapi = { module = "com.github.MilkBowl:VaultAPI", version.ref = "m
 minecraft-bstats = { module = "org.bstats:bstats-bukkit", version.ref = "minecraft-bstats" }
 minecraft-mockbukkit = { module = "com.github.MockBukkit:MockBukkit", version.ref = "minecraft-mockbukkit" }
 
-# todo
-minecraft-discordsrv = { module = "com.discordsrv:discordsrv", version.strictly = "1.27.0" }
+minecraft-discordsrv = { module = "com.discordsrv:discordsrv", version.ref = "discordsrv" }
 
 # klibs
 klibs-mikro-core = { module = "ru.astrainteractive.klibs:mikro-core", version.ref = "klibs-mikro" }
