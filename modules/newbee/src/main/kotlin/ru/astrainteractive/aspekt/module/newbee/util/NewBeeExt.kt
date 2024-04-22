@@ -1,9 +1,9 @@
 package ru.astrainteractive.aspekt.module.newbee.util
 
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 import org.bukkit.Statistic
 import org.bukkit.entity.Player
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 internal object NewBeeExt {
     /**

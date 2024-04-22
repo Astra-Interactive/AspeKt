@@ -1,7 +1,5 @@
 package ru.astrainteractive.aspekt.module.newbee.event
 
-import kotlin.time.Duration.Companion.seconds
-import kotlin.time.toJavaDuration
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,6 +15,8 @@ import ru.astrainteractive.aspekt.module.newbee.event.di.EventDependencies
 import ru.astrainteractive.aspekt.module.newbee.util.NewBeeConstants
 import ru.astrainteractive.aspekt.module.newbee.util.NewBeeExt.isNewBee
 import ru.astrainteractive.astralibs.event.EventListener
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.toJavaDuration
 
 internal class NewBeeEventListener(
     dependencies: EventDependencies
