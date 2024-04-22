@@ -17,7 +17,9 @@ class PluginTranslation(
     @SerialName("sit")
     val sit: Sit = Sit(),
     @SerialName("adminprivate")
-    val adminPrivate: AdminPrivate = AdminPrivate()
+    val adminPrivate: AdminPrivate = AdminPrivate(),
+    @SerialName("newbee")
+    val newBee: NewBee = NewBee()
 ) {
     @Serializable
     class General(
@@ -87,5 +89,14 @@ class PluginTranslation(
         val sitAlready: StringDesc.Raw = StringDesc.Raw("&#dbbb18Вы уже сидите"),
         @SerialName("air")
         val sitInAir: StringDesc.Raw = StringDesc.Raw("&#dbbb18Нельзя сидеть в воздухе")
+    )
+
+    @Serializable
+    class NewBee(
+        val youAreNewBee: StringDesc.Raw = StringDesc.Raw(
+            "&7[&#DBB72BЗАЩИТА&7] &#1D72F2Вы новичок! &6Поэтому в ближайшие 50 минут вам будет играть легче! Наслаждайтесь игрой!"
+        ),
+        val newBeeTitle: StringDesc.Raw = StringDesc.Raw("&#DBB72BЗащита новичка"),
+        val newBeeSubtitle: StringDesc.Raw = StringDesc.Raw("&#db2c18Включена")
     )
 }

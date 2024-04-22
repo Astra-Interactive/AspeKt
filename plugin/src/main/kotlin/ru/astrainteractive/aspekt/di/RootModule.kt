@@ -9,6 +9,7 @@ import ru.astrainteractive.aspekt.module.autobroadcast.di.AutoBroadcastModule
 import ru.astrainteractive.aspekt.module.autocrop.di.AutoCropModule
 import ru.astrainteractive.aspekt.module.menu.di.MenuModule
 import ru.astrainteractive.aspekt.module.moneydrop.di.MoneyDropModule
+import ru.astrainteractive.aspekt.module.newbee.di.NewBeeModule
 import ru.astrainteractive.aspekt.module.towny.discord.di.TownyDiscordModule
 import ru.astrainteractive.klibs.kdi.Module
 
@@ -24,4 +25,5 @@ interface RootModule : Module {
     val townyDiscordModule: TownyDiscordModule
     val moneyDropModule: MoneyDropModule
     val autoCropModule: AutoCropModule
+    val newBeeModule: NewBeeModule
 }
