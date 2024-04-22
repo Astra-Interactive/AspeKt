@@ -30,7 +30,8 @@ class AspeKt : JavaPlugin() {
             rootModule.eventsModule.sitModule,
             rootModule.townyDiscordModule.lifecycle,
             rootModule.moneyDropModule.lifecycle,
-            rootModule.autoCropModule.lifecycle
+            rootModule.autoCropModule.lifecycle,
+            rootModule.newBeeModule.lifecycle
         )
 
     /**

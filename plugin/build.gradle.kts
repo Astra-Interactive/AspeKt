@@ -36,8 +36,9 @@ dependencies {
     implementation(projects.modules.townyDiscord)
     implementation(projects.modules.moneydrop)
     implementation(projects.modules.autocrop)
+    implementation(projects.modules.newbee)
 }
-val destination = File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\smp\\plugins")
+val destination = File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\test\\plugins")
     .takeIf(File::exists)
     ?: File(rootDir, "jars")
 
