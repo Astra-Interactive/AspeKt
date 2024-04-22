@@ -14,11 +14,11 @@ import ru.astrainteractive.astralibs.filemanager.DefaultFileConfigurationManager
 import ru.astrainteractive.astralibs.filemanager.FileConfigurationManager
 import ru.astrainteractive.astralibs.filemanager.FileManager
 import ru.astrainteractive.astralibs.filemanager.impl.JVMFileManager
+import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtilFileLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.menu.event.DefaultInventoryClickEvent
-import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.serialization.SerializerExt.parseOrDefault
 import ru.astrainteractive.astralibs.serialization.YamlSerializer
 import ru.astrainteractive.klibs.kdi.Dependency

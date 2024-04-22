@@ -7,10 +7,10 @@ import org.jetbrains.kotlin.com.google.common.cache.Cache
 import org.jetbrains.kotlin.com.google.common.cache.CacheBuilder
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.persistence.Persistence.getPersistentData
 import ru.astrainteractive.astralibs.persistence.Persistence.hasPersistentData
 import ru.astrainteractive.astralibs.persistence.Persistence.setPersistentDataType
-import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kdi.Dependency
 import ru.astrainteractive.klibs.kdi.getValue
 import java.util.concurrent.TimeUnit

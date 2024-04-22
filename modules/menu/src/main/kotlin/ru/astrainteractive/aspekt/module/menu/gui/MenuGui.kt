@@ -16,16 +16,16 @@ import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.economy.EconomyProvider
+import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.menu.holder.DefaultPlayerHolder
 import ru.astrainteractive.astralibs.menu.holder.PlayerHolder
-import ru.astrainteractive.astralibs.menu.menu.InventorySlot
-import ru.astrainteractive.astralibs.menu.menu.Menu
-import ru.astrainteractive.astralibs.menu.menu.MenuSize
-import ru.astrainteractive.astralibs.menu.menu.setIndex
-import ru.astrainteractive.astralibs.menu.menu.setItemStack
-import ru.astrainteractive.astralibs.menu.menu.setOnClickListener
+import ru.astrainteractive.astralibs.menu.inventory.InventoryMenu
+import ru.astrainteractive.astralibs.menu.inventory.model.InventorySize
+import ru.astrainteractive.astralibs.menu.slot.InventorySlot
+import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setIndex
+import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setItemStack
+import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setOnClickListener
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
-import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
@@ -38,9 +38,9 @@ internal class MenuGui(
     private val menuModel: MenuModel,
     private val dispatchers: BukkitDispatchers,
     private val kyoriComponentSerializer: KyoriComponentSerializer
-) : Menu() {
-    override val menuSize: MenuSize = menuModel.size
-    override var menuTitle: Component = StringDesc.Raw(menuModel.title).let(kyoriComponentSerializer::toComponent)
+) : InventoryMenu() {
+    override val inventorySize: InventorySize = menuModel.size
+    override val title: Component = StringDesc.Raw(menuModel.title).let(kyoriComponentSerializer::toComponent)
     override val playerHolder: PlayerHolder = DefaultPlayerHolder(player)
 
     @Suppress("VariableNaming")
@@ -50,7 +50,7 @@ internal class MenuGui(
         )
     }
 
-    override fun onCreated() {
+    override fun onInventoryCreated() {
         render()
         menuModel.updateInterval?.let(::startAutoUpdate)
     }
@@ -71,7 +71,7 @@ internal class MenuGui(
         e.isCancelled = true
     }
 
-    override fun onInventoryClose(it: InventoryCloseEvent) = Unit
+    override fun onInventoryClosed(it: InventoryCloseEvent) = Unit
 
     private fun MenuModel.MenuItem.toItemStack(): ItemStack {
         val menuItem = this
@@ -178,8 +178,7 @@ internal class MenuGui(
                     }
 
                     processReward(menuItem)
-                }
-                .build().setInventorySlot()
+                }.build().setInventorySlot()
         }
     }
 }

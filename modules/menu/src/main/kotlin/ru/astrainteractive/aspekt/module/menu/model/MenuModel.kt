@@ -2,13 +2,13 @@ package ru.astrainteractive.aspekt.module.menu.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import ru.astrainteractive.astralibs.menu.menu.MenuSize
+import ru.astrainteractive.astralibs.menu.inventory.model.InventorySize
 
 @Serializable
 internal data class MenuModel(
     @SerialName("update_interval")
     val updateInterval: Long? = null,
-    val size: MenuSize,
+    val size: InventorySize,
     val command: String,
     val title: String,
     val items: Map<String, MenuItem> = emptyMap()

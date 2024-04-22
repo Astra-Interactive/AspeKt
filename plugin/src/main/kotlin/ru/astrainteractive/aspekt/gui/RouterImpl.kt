@@ -5,7 +5,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.astrainteractive.aspekt.gui.entities.ui.EntitiesGui
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
-import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 
 class RouterImpl(
     private val scope: CoroutineScope,

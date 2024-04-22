@@ -6,20 +6,20 @@ import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateCon
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
-import ru.astrainteractive.astralibs.command.api.Command
-import ru.astrainteractive.astralibs.command.api.DefaultCommandFactory
-import ru.astrainteractive.astralibs.serialization.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.command.api.commandfactory.BukkitCommandFactory
+import ru.astrainteractive.astralibs.command.api.registry.BukkitCommandRegistry
+import ru.astrainteractive.astralibs.command.api.registry.BukkitCommandRegistryContext.Companion.toCommandRegistryContext
+import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.util.StringListExt.withEntry
-import ru.astrainteractive.klibs.kdi.Factory
 
-internal class AdminPrivateCommandFactory(
+internal class AdminPrivateCommandRegister(
     private val plugin: JavaPlugin,
     private val adminPrivateController: AdminPrivateController,
     private val scope: CoroutineScope,
     private val translation: PluginTranslation,
     private val dispatchers: BukkitDispatchers,
     private val kyoriComponentSerializer: KyoriComponentSerializer
-) : Factory<AdminPrivateCommand> {
+) {
 
     private fun adminPrivateCompleter() =
         plugin.getCommand("adminprivate")?.setTabCompleter { sender, command, label, args ->
@@ -35,9 +35,9 @@ internal class AdminPrivateCommandFactory(
             }
         }
 
-    private inner class AdminPrivateCommandImpl :
-        AdminPrivateCommand,
-        Command<AdminPrivateCommand.Output, AdminPrivateCommand.Input> by DefaultCommandFactory.create(
+    fun register() {
+        adminPrivateCompleter()
+        val command = BukkitCommandFactory.create(
             alias = "adminprivate",
             commandParser = AdminPrivateCommandParser(),
             commandExecutor = AdminPrivateCommandExecutor(
@@ -47,18 +47,18 @@ internal class AdminPrivateCommandFactory(
                 dispatchers = dispatchers,
                 kyoriComponentSerializer = kyoriComponentSerializer
             ),
-            resultHandler = { commandSender, result ->
+            commandSideEffect = { context, result ->
                 when (result) {
                     AdminPrivateCommand.Output.NoPermission -> with(kyoriComponentSerializer) {
-                        commandSender.sendMessage(translation.general.noPermission.let(::toComponent))
+                        context.sender.sendMessage(translation.general.noPermission.let(::toComponent))
                     }
 
                     AdminPrivateCommand.Output.NotPlayer -> with(kyoriComponentSerializer) {
-                        commandSender.sendMessage(translation.general.onlyPlayerCommand.let(::toComponent))
+                        context.sender.sendMessage(translation.general.onlyPlayerCommand.let(::toComponent))
                     }
 
                     AdminPrivateCommand.Output.WrongUsage -> with(kyoriComponentSerializer) {
-                        commandSender.sendMessage(translation.general.wrongUsage.let(::toComponent))
+                        context.sender.sendMessage(translation.general.wrongUsage.let(::toComponent))
                     }
 
                     else -> Unit
@@ -98,11 +98,6 @@ internal class AdminPrivateCommandFactory(
                 }
             }
         )
-
-    override fun create(): AdminPrivateCommand {
-        adminPrivateCompleter()
-        return AdminPrivateCommandImpl().also {
-            it.register(plugin)
-        }
+        BukkitCommandRegistry.register(command, plugin.toCommandRegistryContext())
     }
 }
