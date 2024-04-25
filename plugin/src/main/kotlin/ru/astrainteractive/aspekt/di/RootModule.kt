@@ -5,6 +5,7 @@ import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.aspekt.gui.di.GuiModule
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
 import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule
+import ru.astrainteractive.aspekt.module.antiswear.di.AntiSwearModule
 import ru.astrainteractive.aspekt.module.autobroadcast.di.AutoBroadcastModule
 import ru.astrainteractive.aspekt.module.autocrop.di.AutoCropModule
 import ru.astrainteractive.aspekt.module.menu.di.MenuModule
@@ -26,4 +27,5 @@ interface RootModule : Module {
     val moneyDropModule: MoneyDropModule
     val autoCropModule: AutoCropModule
     val newBeeModule: NewBeeModule
+    val antiSwearModule: AntiSwearModule
 }
