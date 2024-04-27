@@ -5,32 +5,19 @@ import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextReplacementConfig
 import org.bukkit.entity.Player
+import ru.astrainteractive.aspekt.module.antiswear.data.SwearRepository
 import ru.astrainteractive.aspekt.module.antiswear.util.SwearRuRegex
 
-internal class SwearRenderer(private val renderer: ChatRenderer) : ChatRenderer {
+internal class SwearRenderer(
+    private val renderer: ChatRenderer,
+    private val swearRepository: SwearRepository
+) : ChatRenderer {
     private fun Component.replaceSwears(): Component {
         val config = TextReplacementConfig.builder()
             .match(SwearRuRegex.regex.pattern)
             .replacement("****")
             .build()
         return replaceText(config)
-        return replaceText { builder ->
-            builder
-                .match(SwearRuRegex.regex.pattern)
-                .replacement("****")
-//                .replacement { _, u ->
-//                    val content = u.content()
-//                    when {
-//                        content.length <= 2 -> u.content("***")
-//                        else -> {
-//                            val length = content.length / 2
-//                            val asterString = (0 until length).joinToString("") { "*" }
-//                            val newContent = content.replaceRange(0, length, asterString)
-//                            u.content(newContent)
-//                        }
-//                    }
-//                }
-        }
     }
 
     override fun render(
@@ -41,8 +28,7 @@ internal class SwearRenderer(private val renderer: ChatRenderer) : ChatRenderer 
     ): Component {
         val originalMessage = renderer.render(source, sourceDisplayName, message, viewer)
         val player = viewer as? Player ?: return originalMessage
-        val restrictedPlayers = listOf("Tumka").map(String::lowercase)
-        if (!restrictedPlayers.contains(player.name.lowercase())) return originalMessage
+        if (!swearRepository.isSwearFilterEnabled(player)) return originalMessage
         return originalMessage.replaceSwears()
     }
 }

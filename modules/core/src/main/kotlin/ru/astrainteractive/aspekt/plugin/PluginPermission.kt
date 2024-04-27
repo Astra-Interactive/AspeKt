@@ -9,5 +9,6 @@ sealed class PluginPermission(override val value: String) : Permission {
     data object AtemFrame : PluginPermission("aspekt.atemframe")
     data object Entities : PluginPermission("aspekt.entities")
     data object AdminClaim : PluginPermission("aspekt.admin_claim")
+    data object ForcePlayerSwear : PluginPermission("aspekt.set_swear.admin")
     class CustomPermission(value: String) : PluginPermission(value)
 }

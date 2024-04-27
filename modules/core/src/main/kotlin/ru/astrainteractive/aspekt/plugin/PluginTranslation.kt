@@ -19,7 +19,9 @@ class PluginTranslation(
     @SerialName("adminprivate")
     val adminPrivate: AdminPrivate = AdminPrivate(),
     @SerialName("newbee")
-    val newBee: NewBee = NewBee()
+    val newBee: NewBee = NewBee(),
+    @SerialName("swear")
+    val swear: Swear = Swear()
 ) {
     @Serializable
     class General(
@@ -99,4 +101,20 @@ class PluginTranslation(
         val newBeeTitle: StringDesc.Raw = StringDesc.Raw("&#DBB72BЗащита новичка"),
         val newBeeSubtitle: StringDesc.Raw = StringDesc.Raw("&#db2c18Включена")
     )
+
+    @Serializable
+    class Swear(
+        val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BSF&7] "),
+        val swearFilterEnabled: StringDesc.Raw = StringDesc.Raw("${prefix.raw}&#db2c18Фильтр плохих слов включен"),
+        val swearFilterDisabled: StringDesc.Raw = StringDesc.Raw("${prefix.raw}&#db2c18Фильтр плохих слов выключен"),
+        private val swearFilterEnabledFor: StringDesc.Raw = StringDesc.Raw(
+            "${prefix.raw}&#db2c18Фильтр плохих слов включен для {player}"
+        ),
+        private val swearFilterDisabledFor: StringDesc.Raw = StringDesc.Raw(
+            "${prefix.raw}&#db2c18Фильтр плохих слов выключен для {player}"
+        ),
+    ) {
+        fun swearFilterEnabledFor(name: String) = swearFilterEnabledFor.replace("{player}", name)
+        fun swearFilterDisabledFor(name: String) = swearFilterDisabledFor.replace("{player}", name)
+    }
 }

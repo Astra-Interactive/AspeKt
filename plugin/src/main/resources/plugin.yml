@@ -12,6 +12,7 @@ depend: [ ]
 loadbefore: [ ]
 #libraries: [ "${libraries}" ]
 commands:
+  swearfilter:
   rtpbypass:
   sit:
   tellchat:
