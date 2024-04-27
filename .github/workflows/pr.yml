@@ -17,5 +17,5 @@ jobs:
     uses: ./.github/workflows/tests-validation.yml
   build:
     name: Build project
-    needs: [ gradle_validation, detekt_validation ]
+    needs: [ gradle_validation, detekt_validation, tests_validation ]
     uses: ./.github/workflows/build-project.yml
