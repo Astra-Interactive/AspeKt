@@ -150,7 +150,9 @@ items:
 ```
 
 ### Money Drop
+
 Drop money from mobs. It's configured to be exploit-free, so it will not be dropped from same location
+
 ```yaml
 money_drop:
   "zombie":
@@ -178,10 +180,12 @@ AspeKt allows players to sort their inventories by pressing Shift+MiddleMouseBut
 
 ## Commands
 
-| Command                                 | Permission         | Description                                          |
-|:----------------------------------------|:-------------------|:-----------------------------------------------------|
-| `/maxonline <int>`                      | `aspekt.maxonline` | `Set server max online to new value`                 |
-| `/atemframe <visible> <fixed> <radius>` | `aspekt.atemframe` | `Makes itemFrames in <radius> <visible> and <fixed>` |
-| `/aesreload`                            | `aspekt.reload`    | `Reloads plugin`                                     |
-| `/sit`                                  | `-`                | `Sit a player`                                       |
-| `/tellchat <player> [message]`          | `aspekt.tellchat`  | `Sends player a message like /tellraw command`       |
+| Command                                 | Permission               | Description                                          |
+|:----------------------------------------|:-------------------------|:-----------------------------------------------------|
+| `/maxonline <int>`                      | `aspekt.maxonline`       | `Set server max online to new value`                 |
+| `/atemframe <visible> <fixed> <radius>` | `aspekt.atemframe`       | `Makes itemFrames in <radius> <visible> and <fixed>` |
+| `/aesreload`                            | `aspekt.reload`          | `Reloads plugin`                                     |
+| `/sit`                                  | `-`                      | `Sit a player`                                       |
+| `/tellchat <player> [message]`          | `aspekt.tellchat`        | `Sends player a message like /tellraw command`       |
+| `/swearfilter <on\| off> [PLAYER]`      | `aspekt.set_swear.admin` | `Set swear filter for player`                        |
+| `/swearfilter <on\| off>`               | `-`                      | `Set swear filter for yourself`                      |
