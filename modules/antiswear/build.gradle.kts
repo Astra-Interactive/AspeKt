@@ -10,11 +10,9 @@ dependencies {
     compileOnly(libs.minecraft.paper.api)
     // AstraLibs
     implementation(libs.minecraft.astralibs.core)
-    implementation(libs.minecraft.astralibs.orm)
     implementation(libs.klibs.kdi)
     implementation(libs.klibs.mikro.core)
     implementation(libs.klibs.kstorage)
-    implementation(libs.minecraft.astralibs.menu.bukkit)
     implementation(libs.minecraft.astralibs.core.bukkit)
     implementation(libs.minecraft.astralibs.command)
     implementation(libs.minecraft.astralibs.command.bukkit)

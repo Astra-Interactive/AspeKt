@@ -7,7 +7,7 @@ import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouterImpl
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.astralibs.serialization.YamlSerializer
+import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import ru.astrainteractive.klibs.kdi.Factory
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.Reloadable
@@ -19,7 +19,7 @@ interface MenuModule {
         private val coreModule: CoreModule
     ) : MenuModule {
         private val menuModels: Reloadable<List<MenuModel>> = Reloadable {
-            MenuModelsFactory(coreModule.plugin.value.dataFolder, YamlSerializer()).create()
+            MenuModelsFactory(coreModule.plugin.value.dataFolder, YamlStringFormat()).create()
         }
 
         private val menuRouter: Provider<MenuRouter> = Provider {
