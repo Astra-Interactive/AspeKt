@@ -21,10 +21,7 @@ internal object NewBeeExt {
         }
 
     val Player.newBeeShieldDurationLeft: Duration
-        get() {
-            println("MAX_DURATION_FOR_NEW_BEE: $MAX_DURATION_FOR_NEW_BEE; playDuration: $playDuration")
-            return MAX_DURATION_FOR_NEW_BEE - playDuration
-        }
+        get() = MAX_DURATION_FOR_NEW_BEE - playDuration
 
     val Player.isNewBee: Boolean
         get() = playDuration < MAX_DURATION_FOR_NEW_BEE
