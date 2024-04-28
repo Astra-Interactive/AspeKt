@@ -14,6 +14,8 @@ import org.bukkit.potion.PotionEffectType
 import ru.astrainteractive.aspekt.module.newbee.event.di.EventDependencies
 import ru.astrainteractive.aspekt.module.newbee.util.NewBeeConstants
 import ru.astrainteractive.aspekt.module.newbee.util.NewBeeExt.isNewBee
+import ru.astrainteractive.aspekt.module.newbee.util.NewBeeExt.newBeeShieldDurationLeft
+import ru.astrainteractive.aspekt.module.newbee.util.NewBeeExt.ticks
 import ru.astrainteractive.astralibs.event.EventListener
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
@@ -22,10 +24,10 @@ internal class NewBeeEventListener(
     dependencies: EventDependencies
 ) : EventListener, EventDependencies by dependencies {
 
-    private fun createInfinitePotionEffect(type: PotionEffectType, amplifier: Int): PotionEffect {
+    private fun createInfinitePotionEffect(player: Player, type: PotionEffectType, amplifier: Int): PotionEffect {
         return PotionEffect(
             type,
-            PotionEffect.INFINITE_DURATION,
+            player.newBeeShieldDurationLeft.ticks,
             amplifier,
             false,
             false,
@@ -33,25 +35,30 @@ internal class NewBeeEventListener(
         )
     }
 
-    private fun getNewBeeEffects(): List<PotionEffect> {
+    private fun getNewBeeEffects(player: Player): List<PotionEffect> {
         return buildList {
             createInfinitePotionEffect(
+                player,
                 PotionEffectType.HEAL,
                 5,
             ).run(::add)
             createInfinitePotionEffect(
+                player,
                 PotionEffectType.ABSORPTION,
                 2,
             ).run(::add)
             createInfinitePotionEffect(
+                player,
                 PotionEffectType.FAST_DIGGING,
                 3,
             ).run(::add)
             createInfinitePotionEffect(
+                player,
                 PotionEffectType.REGENERATION,
                 4,
             ).run(::add)
             createInfinitePotionEffect(
+                player,
                 PotionEffectType.FIRE_RESISTANCE,
                 4,
             ).run(::add)
@@ -60,7 +67,7 @@ internal class NewBeeEventListener(
 
     private fun Player.giveNewBeeEffects() = scope.launch(dispatcher.Main) {
         withContext(dispatcher.IO) { delay(5.seconds) }
-        val effects = getNewBeeEffects()
+        val effects = getNewBeeEffects(this@giveNewBeeEffects)
         addPotionEffects(effects)
         val message = kyoriComponentSerializer.toComponent(translation.newBee.youAreNewBee)
         sendMessage(message)
@@ -78,7 +85,7 @@ internal class NewBeeEventListener(
     }
 
     private fun Player.clearNewBeeEffects() {
-        getNewBeeEffects().map(PotionEffect::getType).forEach(::removePotionEffect)
+        getNewBeeEffects(this).map(PotionEffect::getType).forEach(::removePotionEffect)
     }
 
     @EventHandler
