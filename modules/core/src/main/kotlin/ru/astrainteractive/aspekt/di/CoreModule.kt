@@ -19,8 +19,8 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtilFileLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.menu.event.DefaultInventoryClickEvent
-import ru.astrainteractive.astralibs.serialization.SerializerExt.parseOrDefault
-import ru.astrainteractive.astralibs.serialization.YamlSerializer
+import ru.astrainteractive.astralibs.serialization.StringFormatExt.parseOrDefault
+import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import ru.astrainteractive.klibs.kdi.Dependency
 import ru.astrainteractive.klibs.kdi.Lateinit
 import ru.astrainteractive.klibs.kdi.Reloadable
@@ -71,7 +71,7 @@ interface CoreModule : Lifecycle {
 
         override val pluginConfig = Reloadable {
             val fileManager = DefaultFileConfigurationManager(plugin.value, "config.yml")
-            val yamlSerializer = YamlSerializer()
+            val yamlSerializer = YamlStringFormat()
 
             val translation = yamlSerializer.parseOrDefault(fileManager.configFile, ::PluginConfiguration)
             val yamlString = yamlSerializer.yaml.encodeToString(translation)
@@ -85,7 +85,7 @@ interface CoreModule : Lifecycle {
 
         override val translation = Reloadable {
             val fileManager = DefaultFileConfigurationManager(plugin.value, "translations.yml")
-            val yamlSerializer = YamlSerializer()
+            val yamlSerializer = YamlStringFormat()
 
             val translation = yamlSerializer.parseOrDefault(fileManager.configFile, ::PluginTranslation)
             val yamlString = yamlSerializer.yaml.encodeToString(translation)

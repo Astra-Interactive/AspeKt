@@ -1,20 +1,20 @@
 package ru.astrainteractive.aspekt.module.adminprivate.data
 
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.StringFormat
 import ru.astrainteractive.aspekt.module.adminprivate.model.AdminChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.AdminPrivateConfig
 import ru.astrainteractive.aspekt.module.adminprivate.util.uniqueWorldKey
 import ru.astrainteractive.astralibs.filemanager.FileManager
-import ru.astrainteractive.astralibs.serialization.Serializer
-import ru.astrainteractive.astralibs.serialization.SerializerExt.parseOrDefault
-import ru.astrainteractive.astralibs.serialization.SerializerExt.writeIntoFile
-import ru.astrainteractive.astralibs.serialization.YamlSerializer
+import ru.astrainteractive.astralibs.serialization.StringFormatExt.parseOrDefault
+import ru.astrainteractive.astralibs.serialization.StringFormatExt.writeIntoFile
+import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 internal class AdminPrivateRepositoryImpl(
     private val fileManager: FileManager,
     dispatchers: KotlinDispatchers,
-    private val serializer: Serializer = YamlSerializer()
+    private val serializer: StringFormat = YamlStringFormat()
 ) : AdminPrivateRepository {
 
     private val limitedDispatcher = dispatchers.IO.limitedParallelism(1)

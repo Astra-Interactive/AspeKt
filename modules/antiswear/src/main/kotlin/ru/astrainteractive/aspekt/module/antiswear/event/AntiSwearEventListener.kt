@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.module.antiswear.event
 import io.papermc.paper.event.player.AsyncChatEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
@@ -25,19 +26,23 @@ internal class AntiSwearEventListener(
     }
 
     @EventHandler
-    fun onJoin(e: PlayerJoinEvent) = scope.launch {
-        swearRepository.rememberPlayer(e.player)
+    fun onJoin(e: PlayerJoinEvent) {
+        scope.launch {
+            swearRepository.rememberPlayer(e.player)
+        }
     }
 
     @EventHandler
-    fun onLeave(e: PlayerQuitEvent) = scope.launch {
-        swearRepository.forgetPlayer(e.player)
+    fun onLeave(e: PlayerQuitEvent) {
+        scope.launch {
+            swearRepository.forgetPlayer(e.player)
+        }
     }
 
     private fun preHeatPlayers() = scope.launch {
-        Bukkit.getOnlinePlayers().forEach { player ->
+        Bukkit.getOnlinePlayers().map { player ->
             async { swearRepository.rememberPlayer(player) }
-        }
+        }.awaitAll()
     }
 
     init {

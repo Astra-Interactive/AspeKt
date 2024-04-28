@@ -3,23 +3,20 @@ package ru.astrainteractive.aspekt.module.antiswear.data
 import kotlinx.coroutines.withContext
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.module.antiswear.model.AntiSwearStorage
-import ru.astrainteractive.astralibs.filestorage.FileStorageExt.provide
-import ru.astrainteractive.astralibs.filestorage.FileStorageValue
-import ru.astrainteractive.astralibs.filestorage.FileStorageValueProvider
-import ru.astrainteractive.astralibs.filestorage.YamlFileStorageValueProvider
+import ru.astrainteractive.astralibs.krate.Krate
+import ru.astrainteractive.astralibs.krate.KrateExt.create
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import java.util.UUID
 
 internal class SwearRepositoryImpl(
     private val dispatchers: KotlinDispatchers,
-    private val fileStorageProvider: FileStorageValueProvider = YamlFileStorageValueProvider
 ) : SwearRepository {
     private val swearFilterMap = mutableMapOf<UUID, Boolean>()
 
     private suspend fun getAntiSwearStorageValue(
         player: Player
-    ): FileStorageValue<AntiSwearStorage> = withContext(dispatchers.IO) {
-        fileStorageProvider.provide(
+    ): Krate<AntiSwearStorage> = withContext(dispatchers.IO) {
+        AntiSwearKrateFactory.create(
             key = player.uniqueId.toString(),
             default = {
                 AntiSwearStorage(
