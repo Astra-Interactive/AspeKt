@@ -3,6 +3,7 @@
 package ru.astrainteractive.aspekt.event.restrictions
 
 import org.bukkit.Material
+import org.bukkit.entity.EnderCrystal
 import org.bukkit.event.block.BlockBurnEvent
 import org.bukkit.event.block.BlockExplodeEvent
 import org.bukkit.event.block.BlockFromToEvent
@@ -29,11 +30,19 @@ class RestrictionsEvent(
     val onBlockExplode = DSLEvent<BlockExplodeEvent>(eventListener, plugin) {
         if (restrictions.explode) it.isCancelled = true
     }
+
     val onEntityExplode = DSLEvent<BlockExplodeEvent>(eventListener, plugin) {
         if (restrictions.explode) it.isCancelled = true
     }
+
     val onPrimeExplosion = DSLEvent<ExplosionPrimeEvent>(eventListener, plugin) {
-        if (restrictions.explode) it.isCancelled = true
+        when {
+            it.entity is EnderCrystal -> {
+                if (it.isCancelled) return@DSLEvent
+                it.radius = 0f
+            }
+            restrictions.explode -> it.isCancelled = true
+        }
     }
 
     // Placing
@@ -46,6 +55,7 @@ class RestrictionsEvent(
             else -> Unit
         }
     }
+
     val blockPlace = DSLEvent<BlockPlaceEvent>(eventListener, plugin) {
         when (it.blockPlaced.type) {
             Material.TNT -> {
@@ -63,8 +73,8 @@ class RestrictionsEvent(
             else -> Unit
         }
     }
-    val blockFromTo = DSLEvent<BlockFromToEvent>(eventListener, plugin) {
 
+    val blockFromTo = DSLEvent<BlockFromToEvent>(eventListener, plugin) {
         when (it.block.type) {
             Material.LAVA -> {
                 if (restrictions.spread.lava) it.isCancelled = true
@@ -77,15 +87,17 @@ class RestrictionsEvent(
             else -> Unit
         }
     }
+
     val blockIgniteEvent = DSLEvent<BlockIgniteEvent>(eventListener, plugin) {
         if (it.cause == BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL) return@DSLEvent
         if (restrictions.spread.fire) it.isCancelled = true
     }
+
     val blockBurnEvent = DSLEvent<BlockBurnEvent>(eventListener, plugin) {
         if (restrictions.spread.fire) it.isCancelled = true
     }
-    val blockSpread = DSLEvent<BlockSpreadEvent>(eventListener, plugin) {
 
+    val blockSpread = DSLEvent<BlockSpreadEvent>(eventListener, plugin) {
         when (it.source.type) {
             Material.LAVA -> {
                 if (restrictions.spread.lava) it.isCancelled = true
