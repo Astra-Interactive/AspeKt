@@ -90,7 +90,11 @@ class PluginTranslation(
         @SerialName("already")
         val sitAlready: StringDesc.Raw = StringDesc.Raw("&#dbbb18Вы уже сидите"),
         @SerialName("air")
-        val sitInAir: StringDesc.Raw = StringDesc.Raw("&#dbbb18Нельзя сидеть в воздухе")
+        val sitInAir: StringDesc.Raw = StringDesc.Raw("&#dbbb18Нельзя сидеть в воздухе"),
+        @SerialName("too_far")
+        val tooFar: StringDesc.Raw = StringDesc.Raw("&#dbbb18Слишком далеко"),
+        @SerialName("cant_sit_in_block")
+        val cantSitInBlock: StringDesc.Raw = StringDesc.Raw("&#dbbb18Нельзя сидеть в блоке")
     )
 
     @Serializable
