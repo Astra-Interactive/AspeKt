@@ -22,11 +22,26 @@ class SitController(
 
     private val sitPlayers = mutableMapOf<String, ArmorStand>()
 
+    private fun isFilledWithSolidBlocks(location: Location): Boolean {
+        val sitBlock = location.block
+        val aboveSitBlock = sitBlock.getRelative(BlockFace.UP)
+        val aboveAboveSitBlock = aboveSitBlock.getRelative(BlockFace.UP)
+        return aboveSitBlock.isSolid && aboveAboveSitBlock.isSolid
+    }
+
     /**
      * Заставляет игрока сесть
      */
     fun toggleSitPlayer(player: Player, location: Location = player.location) {
         if (!configuration.sit) return
+        if (isFilledWithSolidBlocks(location)) {
+            player.sendMessage(translation.sit.cantSitInBlock.let(::toComponent))
+            return
+        }
+        if (player.location.distance(location) > MAX_DISTANCE) {
+            player.sendMessage(translation.sit.tooFar.let(::toComponent))
+            return
+        }
         // Сидит ли уже игрок
         if (sitPlayers.contains(player.uniqueId.toString())) {
             player.sendMessage(translation.sit.sitAlready.let(::toComponent))
@@ -70,5 +85,9 @@ class SitController(
         for (player in sitPlayers.keys)
             sitPlayers[player]!!.remove()
         sitPlayers.clear()
+    }
+
+    companion object {
+        private const val MAX_DISTANCE = 2
     }
 }

@@ -3,11 +3,12 @@ package ru.astrainteractive.aspekt.event.sit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.block.Action
+import org.bukkit.event.entity.EntityDismountEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerTeleportEvent
-import org.spigotmc.event.entity.EntityDismountEvent
+import org.bukkit.inventory.EquipmentSlot
 import ru.astrainteractive.aspekt.event.sit.di.SitDependencies
 import ru.astrainteractive.astralibs.event.DSLEvent
 
@@ -24,12 +25,10 @@ class SitEvent(
 
     val playerInteractEvent = DSLEvent<PlayerInteractEvent>(eventListener, plugin) { e ->
         if (!configuration.sit) return@DSLEvent
-        if (e.action != Action.RIGHT_CLICK_BLOCK) {
-            return@DSLEvent
-        }
-        if (e.player.inventory.itemInMainHand.type != Material.AIR) {
-            return@DSLEvent
-        }
+        if (e.hand != EquipmentSlot.HAND) return@DSLEvent
+        if (e.player.isSneaking) return@DSLEvent
+        if (e.action != Action.RIGHT_CLICK_BLOCK) return@DSLEvent
+        if (e.player.inventory.itemInMainHand.type != Material.AIR) return@DSLEvent
         if (e.clickedBlock?.type?.name?.contains("stairs", ignoreCase = true) == true) {
             sitController.toggleSitPlayer(
                 e.player,
@@ -41,6 +40,7 @@ class SitEvent(
     val onDisconnect = DSLEvent<PlayerQuitEvent>(eventListener, plugin) { e ->
         sitController.stopSitPlayer(e.player)
     }
+
     val onDismount = DSLEvent<EntityDismountEvent>(eventListener, plugin) { e ->
         if (e.entity !is Player) return@DSLEvent
         sitController.stopSitPlayer(e.entity as Player)
