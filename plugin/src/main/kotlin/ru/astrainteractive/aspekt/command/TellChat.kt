@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.command
 
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.plugin.PluginPermission
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.aspekt.util.FixedLegacySerializer
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
 
 fun CommandManager.tellChat() = plugin.getCommand("tellchat")?.setExecutor { sender, command, label, args ->
@@ -13,11 +13,11 @@ fun CommandManager.tellChat() = plugin.getCommand("tellchat")?.setExecutor { sen
     when (argument) {
         "*" -> Bukkit.getOnlinePlayers().forEach { player ->
             message
-                .let(KyoriComponentSerializer.Legacy::toComponent)
+                .let(FixedLegacySerializer::toComponent)
                 .run(player::sendMessage)
         }
 
-        else -> argument.let(Bukkit::getPlayer)?.sendMessage(KyoriComponentSerializer.Legacy.toComponent(message))
+        else -> argument.let(Bukkit::getPlayer)?.sendMessage(FixedLegacySerializer.toComponent(message))
     }
     true
 }

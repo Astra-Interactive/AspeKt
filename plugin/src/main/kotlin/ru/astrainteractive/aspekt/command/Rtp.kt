@@ -3,11 +3,11 @@ package ru.astrainteractive.aspekt.command
 import com.earth2me.essentials.Essentials
 import com.earth2me.essentials.RandomTeleport
 import org.bukkit.Bukkit
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.aspekt.util.FixedLegacySerializer
 
 fun CommandManager.rtp() = plugin.getCommand("rtp")?.setExecutor { sender, command, label, args ->
     translation.general.maybeTpr
-        .let(KyoriComponentSerializer.Legacy::toComponent)
+        .let(FixedLegacySerializer::toComponent)
         .run(sender::sendMessage)
     true
 }

@@ -6,6 +6,7 @@ import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateController
 import ru.astrainteractive.aspekt.module.adminprivate.util.adminChunk
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.aspekt.util.FixedLegacySerializer
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
@@ -28,7 +29,7 @@ internal class AdminPrivateCommandExecutor(
                 .run(player::sendMessage)
             it.forEach {
                 it.joinToString("") { if (it) "&#1cba56☒" else "&#c91e1e☒" }
-                    .let(KyoriComponentSerializer.Legacy::toComponent)
+                    .let(FixedLegacySerializer::toComponent)
                     .run(player::sendMessage)
             }
         }
