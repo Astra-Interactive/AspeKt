@@ -4,7 +4,6 @@ import kotlinx.serialization.encodeToString
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.aspekt.util.FixedLegacySerializer
 import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.async.DefaultBukkitDispatchers
@@ -103,7 +102,7 @@ interface CoreModule : Lifecycle {
         }
 
         override val kyoriComponentSerializer: Reloadable<KyoriComponentSerializer> = Reloadable {
-            FixedLegacySerializer
+            KyoriComponentSerializer.Legacy
         }
 
         override val inventoryClickEventListener: Single<DefaultInventoryClickEvent> = Single {
