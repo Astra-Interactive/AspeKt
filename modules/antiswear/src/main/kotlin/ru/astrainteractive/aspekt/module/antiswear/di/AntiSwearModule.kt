@@ -11,7 +11,8 @@ interface AntiSwearModule {
 
     class Default(coreModule: CoreModule) : AntiSwearModule {
         private val swearRepository = SwearRepositoryImpl(
-            dispatchers = coreModule.dispatchers.value
+            dispatchers = coreModule.dispatchers.value,
+            tempFileStringFormat = coreModule.tempFileStringFormat
         )
         private val antiSwearEventListener = AntiSwearEventListener(
             swearRepository = swearRepository,

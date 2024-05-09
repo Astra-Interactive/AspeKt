@@ -1,6 +1,7 @@
 [versions]
 # Kotlin
 kotlin-version = "1.9.23" # https://github.com/JetBrains/kotlin
+kotlin-benchmark = "0.4.10" # https://github.com/Kotlin/kotlinx-benchmark
 kotlin-coroutines = "1.8.0" # https://github.com/Kotlin/kotlinx.coroutines
 kotlin-json = "1.6.3" # https://github.com/Kotlin/kotlinx.serialization
 kotlin-kaml = "0.58.0" # https://github.com/charleskorn/kaml
@@ -21,7 +22,7 @@ minecraft-spigot = "1.20.4-R0.1-SNAPSHOT" # https://github.com/PaperMC/Paper
 minecraft-papi = "2.11.5" # https://github.com/PlaceholderAPI/PlaceholderAPI
 minecraft-protocollib = "4.8.0" # https://github.com/dmulloy2/ProtocolLib
 minecraft-vault = "1.7" # https://github.com/MilkBowl/VaultAPI
-minecraft-astralibs = "3.3.1-alpha" # https://github.com/Astra-Interactive/AstraLibs
+minecraft-astralibs = "3.3.2-alpha" # https://github.com/Astra-Interactive/AstraLibs
 minecraft-bstats = "3.0.0" # https://github.com/Bastian/bStats
 minecraft-mockbukkit = "v1.19-SNAPSHOT" #https://github.com/MockBukkit/MockBukkit
 
@@ -31,21 +32,26 @@ gradle-shadow = "7.1.2" # https://github.com/johnrengelman/shadow
 # BuildConfig
 gradle-buildconfig = "3.1.0" # https://github.com/gmazzo/gradle-buildconfig-plugin
 
-
 # Exposed
 exposed = "0.44.0" # https://github.com/JetBrains/Exposed
 
 # DisordSrv
 discordsrv = "1.27.0" # https://github.com/DiscordSRV/DiscordSRV
 
+# Mockito
+mockito = "5.11.0" # https://github.com/mockito/mockito
+
 [libraries]
 # Kotlin
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
+kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
 kotlin-coroutines-coreJvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", version.ref = "kotlin-coroutines" }
 kotlin-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin-version" }
+kotlin-serialization-protobuf = { module = "org.jetbrains.kotlinx:kotlinx-serialization-protobuf", version.ref = "kotlin-json" }
 kotlin-serializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-json" }
 kotlin-serializationKaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kotlin-kaml" }
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-version" }
+kotlin-benchmark-runtime = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-runtime", version.ref = "kotlin-benchmark" }
 
 # Shadow
 gradle-shadow = { module = "gradle.plugin.com.github.johnrengelman:shadow", version.ref = "gradle-shadow" }
@@ -56,6 +62,7 @@ driver-mysql = { module = "mysql:mysql-connector-java", version.ref = "driver-my
 
 # Testing
 tests-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 
 # Exposed
 exposed-java-time = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
@@ -103,6 +110,8 @@ kotlin = ["kotlin-coroutines-core", "kotlin-coroutines-coreJvm", "kotlin-seriali
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
 kotlin-gradle = { id = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-version" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version" }
+kotlin-benchmark = { id = "org.jetbrains.kotlinx.benchmark", version.ref = "kotlin-benchmark" }
+kotlin-allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin-version" }
 
 # Gradle
 gradle-shadow = { id = "com.github.johnrengelman.shadow", version.ref = "gradle-shadow" }

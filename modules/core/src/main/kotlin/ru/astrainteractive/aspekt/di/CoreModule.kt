@@ -1,6 +1,8 @@
 package ru.astrainteractive.aspekt.di
 
+import kotlinx.serialization.StringFormat
 import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -43,6 +45,8 @@ interface CoreModule : Lifecycle {
     val tempFileManager: Reloadable<FileConfigurationManager>
     val kyoriComponentSerializer: Reloadable<KyoriComponentSerializer>
     val inventoryClickEventListener: Single<DefaultInventoryClickEvent>
+
+    val tempFileStringFormat: StringFormat
 
     class Default : CoreModule {
 
@@ -107,6 +111,14 @@ interface CoreModule : Lifecycle {
 
         override val inventoryClickEventListener: Single<DefaultInventoryClickEvent> = Single {
             DefaultInventoryClickEvent()
+        }
+
+        override val tempFileStringFormat: StringFormat by lazy {
+            Json {
+                isLenient = true
+                ignoreUnknownKeys = true
+                prettyPrint = false
+            }
         }
 
         override fun onDisable() {
