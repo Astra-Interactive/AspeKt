@@ -6,6 +6,7 @@ import kotlinx.coroutines.withContext
 import net.kyori.adventure.title.Title
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerRespawnEvent
@@ -71,17 +72,22 @@ internal class NewBeeEventListener(
         addPotionEffects(effects)
         val message = kyoriComponentSerializer.toComponent(translation.newBee.youAreNewBee)
         sendMessage(message)
-        showTitle(
-            Title.title(
-                kyoriComponentSerializer.toComponent(translation.newBee.newBeeTitle),
-                kyoriComponentSerializer.toComponent(translation.newBee.newBeeSubtitle),
-                Title.Times.times(
-                    1.seconds.toJavaDuration(),
-                    3.seconds.toJavaDuration(),
-                    1.seconds.toJavaDuration()
-                )
+        Title.title(
+            kyoriComponentSerializer.toComponent(translation.newBee.newBeeTitle),
+            kyoriComponentSerializer.toComponent(translation.newBee.newBeeSubtitle),
+            Title.Times.times(
+                1.seconds.toJavaDuration(),
+                3.seconds.toJavaDuration(),
+                1.seconds.toJavaDuration()
             )
-        )
+        ).run(::showTitle)
+    }
+
+    private fun Player.takeNewBeeEffects() = scope.launch(dispatcher.Main) {
+        val effects = getNewBeeEffects(this@takeNewBeeEffects)
+        addPotionEffects(effects)
+        val message = kyoriComponentSerializer.toComponent(translation.newBee.newBeeShieldForceDisabled)
+        sendMessage(message)
     }
 
     private fun Player.clearNewBeeEffects() {
@@ -93,6 +99,22 @@ internal class NewBeeEventListener(
         val player = e.entity as? Player ?: return
         if (!player.isNewBee) return
         e.damage *= NewBeeConstants.NEW_BEE_DAMAGED_PERCENT
+    }
+
+    @EventHandler
+    fun onNewBeeAttackPlayer(e: EntityDamageByEntityEvent) {
+        if (e.entity !is Player) return
+        val newBeeAttacker = e.damager as? Player ?: return
+        if (!newBeeAttacker.isNewBee) return
+        newBeeAttacker.takeNewBeeEffects()
+    }
+
+    @EventHandler
+    fun onPlayerAttackNewBee(e: EntityDamageByEntityEvent) {
+        if (e.damager !is Player) return
+        val newBee = e.entity as? Player ?: return
+        if (!newBee.isNewBee) return
+        newBee.takeNewBeeEffects()
     }
 
     @EventHandler
