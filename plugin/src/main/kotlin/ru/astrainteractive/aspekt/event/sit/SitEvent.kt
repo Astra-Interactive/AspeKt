@@ -23,18 +23,24 @@ class SitEvent(
         sitController.stopSitPlayer(e.player)
     }
 
+    private fun canSit(type: Material): Boolean {
+        if (type.name.contains(other = "stairs", ignoreCase = true)) return true
+        if (type.name.contains(other = "slab", ignoreCase = true)) return true
+        return false
+    }
+
     val playerInteractEvent = DSLEvent<PlayerInteractEvent>(eventListener, plugin) { e ->
         if (!configuration.sit) return@DSLEvent
         if (e.hand != EquipmentSlot.HAND) return@DSLEvent
         if (e.player.isSneaking) return@DSLEvent
         if (e.action != Action.RIGHT_CLICK_BLOCK) return@DSLEvent
         if (e.player.inventory.itemInMainHand.type != Material.AIR) return@DSLEvent
-        if (e.clickedBlock?.type?.name?.contains("stairs", ignoreCase = true) == true) {
-            sitController.toggleSitPlayer(
-                e.player,
-                e.clickedBlock?.location?.clone()?.add(0.5, 0.5, 0.5) ?: return@DSLEvent
-            )
-        }
+        val material = e.clickedBlock?.type ?: return@DSLEvent
+        if (!canSit(material)) return@DSLEvent
+        sitController.toggleSitPlayer(
+            e.player,
+            e.clickedBlock?.location?.clone()?.add(0.5, 0.5, 0.5) ?: return@DSLEvent
+        )
     }
 
     val onDisconnect = DSLEvent<PlayerQuitEvent>(eventListener, plugin) { e ->
