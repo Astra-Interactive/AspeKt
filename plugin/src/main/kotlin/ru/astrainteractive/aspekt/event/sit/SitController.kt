@@ -32,7 +32,11 @@ class SitController(
     /**
      * Заставляет игрока сесть
      */
-    fun toggleSitPlayer(player: Player, location: Location = player.location) {
+    fun toggleSitPlayer(
+        player: Player,
+        location: Location = player.location.clone(),
+        locationWithOffset: Location = location.clone().add(0.0, -SIT_STAIR_OFFSET, 0.0)
+    ) {
         if (!configuration.sit) return
         if (isFilledWithSolidBlocks(location)) {
             player.sendMessage(translation.sit.cantSitInBlock.let(::toComponent))
@@ -58,7 +62,7 @@ class SitController(
             return
         }
         // Создаем стул
-        val chair = location.world?.spawnEntity(location.add(0.0, -1.6, 0.0), EntityType.ARMOR_STAND) as ArmorStand
+        val chair = location.world?.spawnEntity(locationWithOffset, EntityType.ARMOR_STAND) as ArmorStand
         chair.setGravity(false)
         chair.isVisible = false
         chair.isInvulnerable = false
@@ -78,7 +82,7 @@ class SitController(
         armorStand.remove()
         sitPlayers.remove(player.uniqueId.toString())
         // Телепортируем чуть повыше
-        player.teleport(player.location.add(0.0, 1.6, 0.0))
+        player.teleport(player.location.add(0.0, SIT_STAIR_OFFSET, 0.0))
     }
 
     fun onDisable() {
@@ -89,5 +93,6 @@ class SitController(
 
     companion object {
         private const val MAX_DISTANCE = 2
+        private const val SIT_STAIR_OFFSET = 1.6
     }
 }

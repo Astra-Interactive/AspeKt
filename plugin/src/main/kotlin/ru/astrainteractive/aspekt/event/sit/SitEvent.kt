@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.util.Vector
 import ru.astrainteractive.aspekt.event.sit.di.SitDependencies
 import ru.astrainteractive.astralibs.event.DSLEvent
 
@@ -23,10 +24,14 @@ class SitEvent(
         sitController.stopSitPlayer(e.player)
     }
 
-    private fun canSit(type: Material): Boolean {
-        if (type.name.contains(other = "stairs", ignoreCase = true)) return true
-        if (type.name.contains(other = "slab", ignoreCase = true)) return true
-        return false
+    private enum class SitBlockEnum {
+        STAIRS, SLAB
+    }
+
+    private fun sitBlockType(type: Material): SitBlockEnum? {
+        if (type.name.contains(other = "stairs", ignoreCase = true)) return SitBlockEnum.STAIRS
+        if (type.name.contains(other = "slab", ignoreCase = true)) return SitBlockEnum.SLAB
+        return null
     }
 
     val playerInteractEvent = DSLEvent<PlayerInteractEvent>(eventListener, plugin) { e ->
@@ -36,10 +41,15 @@ class SitEvent(
         if (e.action != Action.RIGHT_CLICK_BLOCK) return@DSLEvent
         if (e.player.inventory.itemInMainHand.type != Material.AIR) return@DSLEvent
         val material = e.clickedBlock?.type ?: return@DSLEvent
-        if (!canSit(material)) return@DSLEvent
+        val sitBlockType = sitBlockType(material) ?: return@DSLEvent
+        val blockLocation = e.clickedBlock?.location?.clone() ?: return@DSLEvent
+        val offset = when (sitBlockType) {
+            SitBlockEnum.STAIRS -> Vector(0.5, 0.2, 0.5)
+            SitBlockEnum.SLAB -> Vector(0.5, 0.2, 0.5)
+        }
         sitController.toggleSitPlayer(
             e.player,
-            e.clickedBlock?.location?.clone()?.add(0.5, 0.5, 0.5) ?: return@DSLEvent
+            blockLocation.add(offset)
         )
     }
 
