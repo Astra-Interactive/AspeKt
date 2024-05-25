@@ -112,7 +112,7 @@ class TCEvent(
         val maxDmg: Short = tool.type.maxDurability
         var dmg: Int = damageable.damage
         // Check for durability enchantment
-        val unbLevel: Int = tool.getEnchantmentLevel(Enchantment.DURABILITY)
+        val unbLevel: Int = tool.getEnchantmentLevel(Enchantment.UNBREAKING)
         if (Random.nextInt(unbLevel + 1) == 0) {
             damageable.damage = ++dmg
         }

@@ -7,28 +7,21 @@ import org.bukkit.entity.EntityType
 
 @Suppress("CyclomaticComplexMethod", "LongMethod")
 fun EntityType.toMaterial() = when (this) {
-    EntityType.DROPPED_ITEM -> Material.DIRT
     EntityType.EXPERIENCE_ORB -> Material.EXPERIENCE_BOTTLE
     EntityType.AREA_EFFECT_CLOUD -> Material.DIRT
     EntityType.ELDER_GUARDIAN -> Material.ELDER_GUARDIAN_SPAWN_EGG
     EntityType.WITHER_SKELETON -> Material.WITHER_SKELETON_SPAWN_EGG
     EntityType.STRAY -> Material.STRAY_SPAWN_EGG
     EntityType.EGG -> Material.EGG
-    EntityType.LEASH_HITCH -> Material.LEAD
     EntityType.PAINTING -> Material.PAINTING
     EntityType.ARROW -> Material.ARROW
     EntityType.SNOWBALL -> Material.SNOWBALL
     EntityType.FIREBALL -> Material.FIRE_CHARGE
     EntityType.SMALL_FIREBALL -> Material.FIRE_CHARGE
     EntityType.ENDER_PEARL -> Material.ENDER_PEARL
-    EntityType.ENDER_SIGNAL -> Material.BARRIER
-    EntityType.SPLASH_POTION -> Material.SPLASH_POTION
-    EntityType.THROWN_EXP_BOTTLE -> Material.EXPERIENCE_BOTTLE
     EntityType.ITEM_FRAME -> Material.ITEM_FRAME
     EntityType.WITHER_SKULL -> Material.WITHER_SKELETON_SKULL
-    EntityType.PRIMED_TNT -> Material.TNT
     EntityType.FALLING_BLOCK -> Material.SAND
-    EntityType.FIREWORK -> Material.FIREWORK_ROCKET
     EntityType.HUSK -> Material.HUSK_SPAWN_EGG
     EntityType.SPECTRAL_ARROW -> Material.SPECTRAL_ARROW
     EntityType.SHULKER_BULLET -> Material.SHULKER_BOX
@@ -44,14 +37,8 @@ fun EntityType.toMaterial() = when (this) {
     EntityType.VEX -> Material.VEX_SPAWN_EGG
     EntityType.VINDICATOR -> Material.VINDICATOR_SPAWN_EGG
     EntityType.ILLUSIONER -> Material.BARRIER
-    EntityType.MINECART_COMMAND -> Material.COMMAND_BLOCK_MINECART
     EntityType.BOAT -> Material.BIRCH_BOAT
     EntityType.MINECART -> Material.MINECART
-    EntityType.MINECART_CHEST -> Material.CHEST_MINECART
-    EntityType.MINECART_FURNACE -> Material.FURNACE_MINECART
-    EntityType.MINECART_TNT -> Material.TNT
-    EntityType.MINECART_HOPPER -> Material.HOPPER_MINECART
-    EntityType.MINECART_MOB_SPAWNER -> Material.SPAWNER
     EntityType.CREEPER -> Material.CREEPER_SPAWN_EGG
     EntityType.SKELETON -> Material.SKELETON_SPAWN_EGG
     EntityType.SPIDER -> Material.SPIDER_SPAWN_EGG
@@ -78,8 +65,6 @@ fun EntityType.toMaterial() = when (this) {
     EntityType.CHICKEN -> Material.CHICKEN_SPAWN_EGG
     EntityType.SQUID -> Material.SQUID_SPAWN_EGG
     EntityType.WOLF -> Material.WOLF_SPAWN_EGG
-    EntityType.MUSHROOM_COW -> Material.COW_SPAWN_EGG
-    EntityType.SNOWMAN -> Material.BARRIER
     EntityType.OCELOT -> Material.OCELOT_SPAWN_EGG
     EntityType.IRON_GOLEM -> Material.IRON_BLOCK
     EntityType.HORSE -> Material.HORSE_SPAWN_EGG
@@ -89,7 +74,6 @@ fun EntityType.toMaterial() = when (this) {
     EntityType.LLAMA_SPIT -> Material.BARRIER
     EntityType.PARROT -> Material.PARROT_SPAWN_EGG
     EntityType.VILLAGER -> Material.VILLAGER_SPAWN_EGG
-    EntityType.ENDER_CRYSTAL -> Material.END_CRYSTAL
     EntityType.TURTLE -> Material.TURTLE_SPAWN_EGG
     EntityType.PHANTOM -> Material.PHANTOM_SPAWN_EGG
     EntityType.TRIDENT -> Material.TRIDENT
@@ -122,8 +106,6 @@ fun EntityType.toMaterial() = when (this) {
     EntityType.FROG -> Material.FROG_SPAWN_EGG
     EntityType.TADPOLE -> Material.TADPOLE_SPAWN_EGG
     EntityType.WARDEN -> Material.WARDEN_SPAWN_EGG
-    EntityType.FISHING_HOOK -> Material.FISHING_ROD
-    EntityType.LIGHTNING -> Material.BARRIER
     EntityType.PLAYER -> Material.PLAYER_HEAD
     EntityType.UNKNOWN -> Material.BARRIER
     EntityType.CAMEL -> Material.CAMEL_SPAWN_EGG
@@ -134,4 +116,26 @@ fun EntityType.toMaterial() = when (this) {
     EntityType.TEXT_DISPLAY -> Material.BARRIER
     EntityType.BREEZE -> Material.BARRIER
     EntityType.WIND_CHARGE -> Material.BARRIER
+    EntityType.ITEM -> Material.BARRIER
+    EntityType.LEASH_KNOT -> Material.BARRIER
+    EntityType.EYE_OF_ENDER -> Material.ENDER_EYE
+    EntityType.POTION -> Material.POTION
+    EntityType.EXPERIENCE_BOTTLE -> Material.EXPERIENCE_BOTTLE
+    EntityType.TNT -> Material.TNT
+    EntityType.FIREWORK_ROCKET -> Material.FIREWORK_ROCKET
+    EntityType.COMMAND_BLOCK_MINECART -> Material.COMMAND_BLOCK_MINECART
+    EntityType.CHEST_MINECART -> Material.BARRIER
+    EntityType.FURNACE_MINECART -> Material.FURNACE_MINECART
+    EntityType.TNT_MINECART -> Material.TNT_MINECART
+    EntityType.HOPPER_MINECART -> Material.HOPPER_MINECART
+    EntityType.SPAWNER_MINECART -> Material.SPAWNER
+    EntityType.MOOSHROOM -> Material.MOOSHROOM_SPAWN_EGG
+    EntityType.SNOW_GOLEM -> Material.SNOW_GOLEM_SPAWN_EGG
+    EntityType.END_CRYSTAL -> Material.END_CRYSTAL
+    EntityType.BREEZE_WIND_CHARGE -> Material.BREEZE_SPAWN_EGG
+    EntityType.ARMADILLO -> Material.BARRIER
+    EntityType.BOGGED -> Material.BOGGED_SPAWN_EGG
+    EntityType.OMINOUS_ITEM_SPAWNER -> Material.OMINOUS_BOTTLE
+    EntityType.FISHING_BOBBER -> Material.FISHING_ROD
+    EntityType.LIGHTNING_BOLT -> Material.LIGHT
 }

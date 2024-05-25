@@ -5,6 +5,7 @@ import kotlinx.serialization.StringFormat
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.module.antiswear.model.AntiSwearStorage
 import ru.astrainteractive.klibs.kstorage.api.MutableStorageValue
+import ru.astrainteractive.klibs.kstorage.update
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import java.util.UUID
 

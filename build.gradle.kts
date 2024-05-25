@@ -27,6 +27,11 @@ apply(plugin = "ru.astrainteractive.gradleplugin.root.info")
 subprojects.forEach {
     it.apply(plugin = "ru.astrainteractive.gradleplugin.dokka.module")
     it.plugins.withId("org.jetbrains.kotlin.jvm") {
-        it.apply(plugin = "ru.astrainteractive.gradleplugin.java.core")
+//        it.apply(plugin = "ru.astrainteractive.gradleplugin.java.core")
+    }
+    if (it.extensions.findByType<JavaPluginExtension>() != null) {
+        it.extensions.configure<JavaPluginExtension> {
+            toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+        }
     }
 }
