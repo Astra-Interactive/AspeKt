@@ -34,8 +34,8 @@ class SitController(
      */
     fun toggleSitPlayer(
         player: Player,
-        location: Location = player.location,
-        offset: Location = location.add(0.0, -SIT_STAIR_OFFSET, 0.0)
+        location: Location = player.location.clone(),
+        locationWithOffset: Location = location.clone().add(0.0, -SIT_STAIR_OFFSET, 0.0)
     ) {
         if (!configuration.sit) return
         if (isFilledWithSolidBlocks(location)) {
@@ -62,7 +62,7 @@ class SitController(
             return
         }
         // Создаем стул
-        val chair = location.world?.spawnEntity(offset, EntityType.ARMOR_STAND) as ArmorStand
+        val chair = location.world?.spawnEntity(locationWithOffset, EntityType.ARMOR_STAND) as ArmorStand
         chair.setGravity(false)
         chair.isVisible = false
         chair.isInvulnerable = false
