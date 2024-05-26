@@ -1,9 +1,9 @@
 package ru.astrainteractive.aspekt.module.antiswear.util
 
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 import net.kyori.adventure.text.Component
 import org.junit.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class SwearRuRegexTest {
     @Test
