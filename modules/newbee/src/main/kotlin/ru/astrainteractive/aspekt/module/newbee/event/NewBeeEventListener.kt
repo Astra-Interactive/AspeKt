@@ -40,7 +40,7 @@ internal class NewBeeEventListener(
         return buildList {
             createInfinitePotionEffect(
                 player,
-                PotionEffectType.HEAL,
+                PotionEffectType.REGENERATION,
                 5,
             ).run(::add)
             createInfinitePotionEffect(
@@ -50,7 +50,7 @@ internal class NewBeeEventListener(
             ).run(::add)
             createInfinitePotionEffect(
                 player,
-                PotionEffectType.FAST_DIGGING,
+                PotionEffectType.HASTE,
                 3,
             ).run(::add)
             createInfinitePotionEffect(

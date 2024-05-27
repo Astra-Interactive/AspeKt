@@ -11,10 +11,12 @@ internal class AntiSwearKrate(
     player: Player,
     stringFormat: StringFormat,
 ) : FileKrate<AntiSwearStorage> by StringFormatKrate(
-    default = AntiSwearStorage(
-        playerName = player.name,
-        uuid = player.uniqueId.toString()
-    ),
+    factory = {
+        AntiSwearStorage(
+            playerName = player.name,
+            uuid = player.uniqueId.toString()
+        )
+    },
     fileName = "${player.uniqueId}.json",
     stringFormat = stringFormat,
     kSerializer = AntiSwearStorage.serializer(),
