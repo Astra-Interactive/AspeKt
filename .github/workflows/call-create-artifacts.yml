@@ -16,17 +16,17 @@ jobs:
         with:
           path: './gradle.properties'
           properties: 'makeevrserg.project.name makeevrserg.project.version.string'
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'adopt'
-          java-version: 17
+          java-version: 21
       - name: Give gradle permission
         run: chmod +x gradlew
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v3
         with:
-          arguments: shadowJar --stacktrace
+          arguments: :plugin:shadowJar --stacktrace
       - name: Create release
         id: create_internal_release
         uses: softprops/action-gh-release@v2
@@ -34,7 +34,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
         with:
           files: |
-            ./jars/${{ steps.properties.outputs.makeevrserg-project-name }}-${{ steps.properties.outputs.makeevrserg-project-version-string }}.jar
+            ./jars/*.jar
           tag_name: ${{ steps.properties.outputs.makeevrserg-project-version-string }}
           name: ${{ steps.properties.outputs.makeevrserg-project-name }} - ${{ steps.properties.outputs.makeevrserg-project-version-string }}
           draft: false
