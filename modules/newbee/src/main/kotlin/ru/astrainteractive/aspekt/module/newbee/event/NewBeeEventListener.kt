@@ -84,14 +84,10 @@ internal class NewBeeEventListener(
     }
 
     private fun Player.takeNewBeeEffects() = scope.launch(dispatcher.Main) {
-        val effects = getNewBeeEffects(this@takeNewBeeEffects)
-        addPotionEffects(effects)
+        if (this@takeNewBeeEffects.activePotionEffects.isEmpty()) return@launch
+        getNewBeeEffects(this@takeNewBeeEffects).map(PotionEffect::getType).forEach(::removePotionEffect)
         val message = kyoriComponentSerializer.toComponent(translation.newBee.newBeeShieldForceDisabled)
         sendMessage(message)
-    }
-
-    private fun Player.clearNewBeeEffects() {
-        getNewBeeEffects(this).map(PotionEffect::getType).forEach(::removePotionEffect)
     }
 
     @EventHandler
@@ -104,9 +100,9 @@ internal class NewBeeEventListener(
     @EventHandler
     fun onNewBeeAttackPlayer(e: EntityDamageByEntityEvent) {
         if (e.entity !is Player) return
-        val newBeeAttacker = e.damager as? Player ?: return
-        if (!newBeeAttacker.isNewBee) return
-        newBeeAttacker.takeNewBeeEffects()
+        val attacker = e.damager as? Player ?: return
+        if (!attacker.isNewBee) return
+        attacker.takeNewBeeEffects()
     }
 
     @EventHandler
@@ -128,7 +124,7 @@ internal class NewBeeEventListener(
     fun onPlayerJoin(e: PlayerJoinEvent) {
         val player = e.player
         if (!player.isNewBee) {
-            player.clearNewBeeEffects()
+            player.takeNewBeeEffects()
         } else {
             player.giveNewBeeEffects()
         }
