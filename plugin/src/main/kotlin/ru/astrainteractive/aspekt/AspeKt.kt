@@ -1,12 +1,9 @@
-@file:OptIn(UnsafeApi::class)
-
 package ru.astrainteractive.aspekt
 
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
-import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.di.impl.RootModuleImpl
 import ru.astrainteractive.aspekt.event.EventHandler
 import ru.astrainteractive.aspekt.event.di.EventsModule
@@ -18,7 +15,8 @@ import ru.astrainteractive.klibs.kdi.getValue
  */
 class AspeKt : JavaPlugin() {
     private val rootModule = RootModuleImpl()
-    private val eventsModule: EventsModule by rootModule.eventsModule
+    private val eventsModule: EventsModule
+        get() = rootModule.eventsModule
     private val lifecycles: List<Lifecycle>
         get() = listOfNotNull(
             rootModule.autoBroadcastModule.autoBroadcastLifecycleFactory.create(),

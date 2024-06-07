@@ -11,11 +11,10 @@ import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.economy.EconomyProvider
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.klibs.kdi.Module
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 
-interface CommandsDependencies : Module {
+interface CommandsDependencies {
     val plugin: JavaPlugin
     val translation: PluginTranslation
     val dispatchers: BukkitDispatchers

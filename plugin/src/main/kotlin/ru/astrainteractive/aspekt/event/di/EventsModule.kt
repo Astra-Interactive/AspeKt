@@ -8,9 +8,8 @@ import ru.astrainteractive.aspekt.event.sort.SortEvent
 import ru.astrainteractive.aspekt.event.sort.di.SortDependencies
 import ru.astrainteractive.aspekt.event.tc.TCEvent
 import ru.astrainteractive.aspekt.event.tc.di.TCDependencies
-import ru.astrainteractive.klibs.kdi.Module
 
-interface EventsModule : Module {
+interface EventsModule {
     val tcEvent: TCEvent
     val sortEvent: SortEvent
     val sitModule: SitModule
