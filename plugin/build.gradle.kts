@@ -39,7 +39,7 @@ dependencies {
     implementation(projects.modules.newbee)
     implementation(projects.modules.antiswear)
 }
-val destination = File("D:\\Minecraft Servers\\Servers\\esmp-configuration\\test\\plugins")
+val destination = File("/Users/romanmakeev/Desktop/Server/SMP/smp/plugins")
     .takeIf(File::exists)
     ?: File(rootDir, "jars")
 
