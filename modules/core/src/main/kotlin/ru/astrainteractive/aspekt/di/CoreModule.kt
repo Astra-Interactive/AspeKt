@@ -18,8 +18,6 @@ import ru.astrainteractive.astralibs.filemanager.FileManager
 import ru.astrainteractive.astralibs.filemanager.impl.JVMFileManager
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.astralibs.logging.JUtilFileLogger
-import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.menu.event.DefaultInventoryClickEvent
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.parseOrDefault
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
@@ -28,7 +26,6 @@ import ru.astrainteractive.klibs.kdi.Lateinit
 import ru.astrainteractive.klibs.kdi.Reloadable
 import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
-import java.io.File
 
 interface CoreModule : Lifecycle {
     val plugin: Lateinit<JavaPlugin>
@@ -36,7 +33,6 @@ interface CoreModule : Lifecycle {
 
     val dispatchers: Dependency<BukkitDispatchers>
     val scope: Dependency<AsyncComponent>
-    val logger: Dependency<Logger>
     val pluginConfig: Reloadable<PluginConfiguration>
     val adminChunksYml: Reloadable<FileManager>
     val translation: Reloadable<PluginTranslation>
@@ -52,13 +48,6 @@ interface CoreModule : Lifecycle {
 
         // Core
         override val plugin = Lateinit<JavaPlugin>(true)
-        override val logger: Dependency<Logger> = Single {
-            JUtilFileLogger(
-                tag = "AspeKt",
-                folder = File(plugin.value.dataFolder, "logs"),
-                logger = plugin.value.logger
-            )
-        }
 
         override val eventListener: Dependency<EventListener> = Single {
             object : EventListener {} // todo DefaultEventListener
