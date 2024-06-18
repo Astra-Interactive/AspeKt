@@ -15,5 +15,6 @@ internal class AdminPrivateKrate(
 ) : MutableKrate<AdminPrivateConfig> by DefaultMutableKrate(
     factory = { AdminPrivateConfig() },
     saver = { value -> stringFormat.writeIntoFile(value, file) },
-    loader = { stringFormat.parse<AdminPrivateConfig>(file).getOrNull() }
+    loader = { stringFormat.parse<AdminPrivateConfig>(file).getOrNull() },
+    requireInstantLoading = false
 )
