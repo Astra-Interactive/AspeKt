@@ -44,7 +44,7 @@ interface AdminPrivateModule {
                     adminPrivateEventFactory.create()
                 },
                 onReload = {
-                    adminPrivateController.updateChunks()
+                    adminPrivateController.reloadKrate()
                 }
             )
         }
