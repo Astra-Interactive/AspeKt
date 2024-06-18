@@ -10,6 +10,7 @@ import java.io.File
 internal class AntiSwearKrate(
     player: Player,
     stringFormat: StringFormat,
+    folder: File
 ) : FileKrate<AntiSwearStorage> by StringFormatKrate(
     factory = {
         AntiSwearStorage(
@@ -20,5 +21,5 @@ internal class AntiSwearKrate(
     fileName = "${player.uniqueId}.json",
     stringFormat = stringFormat,
     kSerializer = AntiSwearStorage.serializer(),
-    folder = File("./.temp/antiswear")
+    folder = folder
 )

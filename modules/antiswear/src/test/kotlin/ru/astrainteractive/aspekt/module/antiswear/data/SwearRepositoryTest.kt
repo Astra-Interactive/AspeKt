@@ -5,17 +5,29 @@ import kotlinx.serialization.json.Json
 import org.bukkit.entity.Player
 import org.mockito.Mockito
 import ru.astrainteractive.klibs.mikro.core.dispatchers.DefaultKotlinDispatchers
+import java.io.File
+import java.nio.file.Files
 import java.util.UUID
+import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class SwearRepositoryTest {
+    private val tempFolder: File
+        get() = Files.createTempDirectory("swear_test").toFile()
+
+    @AfterTest
+    fun cleanup() {
+        tempFolder.delete()
+    }
+
     @Test
     fun test(): Unit = runTest {
         val repository = SwearRepositoryImpl(
             dispatchers = DefaultKotlinDispatchers,
-            tempFileStringFormat = Json
+            tempFileStringFormat = Json,
+            folder = tempFolder
         )
         val player = Mockito.mock(Player::class.java)
         val uuid = UUID.randomUUID()
