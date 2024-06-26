@@ -9,6 +9,7 @@ import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import org.bukkit.plugin.Plugin
 import ru.astrainteractive.aspekt.module.antiswear.data.SwearRepository
 import ru.astrainteractive.astralibs.event.EventListener
 
@@ -45,7 +46,8 @@ internal class AntiSwearEventListener(
         }.awaitAll()
     }
 
-    init {
+    override fun onEnable(plugin: Plugin) {
+        super.onEnable(plugin)
         preHeatPlayers()
     }
 }

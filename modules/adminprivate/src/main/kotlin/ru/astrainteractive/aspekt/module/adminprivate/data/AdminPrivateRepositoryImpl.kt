@@ -7,7 +7,6 @@ import ru.astrainteractive.aspekt.module.adminprivate.model.AdminChunk
 import ru.astrainteractive.aspekt.module.adminprivate.util.uniqueWorldKey
 import ru.astrainteractive.astralibs.filemanager.FileManager
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
-import ru.astrainteractive.klibs.kstorage.util.KrateExt.update
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 internal class AdminPrivateRepositoryImpl(
@@ -35,22 +34,20 @@ internal class AdminPrivateRepositoryImpl(
     }
 
     override suspend fun saveChunk(chunk: AdminChunk) = withContext(limitedDispatcher) {
-        krate.update { value ->
-            value.copy(
-                chunks = value.chunks.toMutableMap().apply {
-                    this[chunk.uniqueWorldKey] = chunk
-                }
-            )
-        }
+        val newValue = krate.cachedValue.copy(
+            chunks = krate.cachedValue.chunks.toMutableMap().apply {
+                this[chunk.uniqueWorldKey] = chunk
+            }
+        )
+        krate.save(newValue)
     }
 
     override suspend fun deleteChunk(chunk: AdminChunk) = withContext(limitedDispatcher) {
-        krate.update { value ->
-            value.copy(
-                chunks = value.chunks.toMutableMap().apply {
-                    remove(chunk.uniqueWorldKey)
-                }
-            )
-        }
+        val newValue = krate.cachedValue.copy(
+            chunks = krate.cachedValue.chunks.toMutableMap().apply {
+                remove(chunk.uniqueWorldKey)
+            }
+        )
+        krate.save(newValue)
     }
 }
