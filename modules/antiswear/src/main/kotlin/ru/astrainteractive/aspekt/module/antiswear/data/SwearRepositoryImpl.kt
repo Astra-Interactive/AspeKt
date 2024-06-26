@@ -4,7 +4,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.StringFormat
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.module.antiswear.model.AntiSwearStorage
-import ru.astrainteractive.klibs.kstorage.api.MutableKrate
+import ru.astrainteractive.klibs.kstorage.suspend.SuspendKrate
 import ru.astrainteractive.klibs.kstorage.util.KrateExt.update
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import java.io.File
@@ -17,18 +17,16 @@ internal class SwearRepositoryImpl(
 ) : SwearRepository {
     private val swearFilterMap = mutableMapOf<UUID, Boolean>()
 
-    private suspend fun getAntiSwearKrate(
+    private fun getAntiSwearKrate(
         player: Player
-    ): MutableKrate<AntiSwearStorage> = withContext(dispatchers.IO) {
-        AntiSwearKrate(
-            player = player,
-            stringFormat = tempFileStringFormat,
-            folder = folder
-        )
-    }
+    ): SuspendKrate.Mutable<AntiSwearStorage> = AntiSwearKrate(
+        player = player,
+        stringFormat = tempFileStringFormat,
+        folder = folder
+    )
 
     override suspend fun rememberPlayer(player: Player) = withContext(dispatchers.IO) {
-        swearFilterMap[player.uniqueId] = getAntiSwearKrate(player).cachedValue.isSwearFilterEnabled
+        swearFilterMap[player.uniqueId] = getAntiSwearKrate(player).loadAndGet().isSwearFilterEnabled
     }
 
     override suspend fun forgetPlayer(player: Player): Unit = withContext(dispatchers.IO) {

@@ -5,16 +5,15 @@ import ru.astrainteractive.aspekt.module.adminprivate.model.AdminPrivateConfig
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.parse
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.writeIntoFile
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
-import ru.astrainteractive.klibs.kstorage.api.MutableKrate
-import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
+import ru.astrainteractive.klibs.kstorage.suspend.StateFlowSuspendKrate
+import ru.astrainteractive.klibs.kstorage.suspend.impl.DefaultSuspendMutableKrate
 import java.io.File
 
 internal class AdminPrivateKrate(
     file: File,
     stringFormat: StringFormat = YamlStringFormat()
-) : MutableKrate<AdminPrivateConfig> by DefaultMutableKrate(
+) : StateFlowSuspendKrate.Mutable<AdminPrivateConfig> by DefaultSuspendMutableKrate(
     factory = { AdminPrivateConfig() },
     saver = { value -> stringFormat.writeIntoFile(value, file) },
-    loader = { stringFormat.parse<AdminPrivateConfig>(file).getOrNull() },
-    requireInstantLoading = false
+    loader = { stringFormat.parse<AdminPrivateConfig>(file).onFailure(Throwable::printStackTrace).getOrNull() },
 )

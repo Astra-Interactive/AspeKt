@@ -42,6 +42,7 @@ interface AdminPrivateModule {
                 onEnable = {
                     adminPrivateCommandRegistry.register()
                     adminPrivateEventFactory.create()
+                    adminPrivateController.reloadKrate()
                 },
                 onReload = {
                     adminPrivateController.reloadKrate()

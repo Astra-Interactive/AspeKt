@@ -5,15 +5,15 @@ import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.module.antiswear.model.AntiSwearStorage
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.parse
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.writeIntoFile
-import ru.astrainteractive.klibs.kstorage.api.MutableKrate
-import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
+import ru.astrainteractive.klibs.kstorage.suspend.SuspendKrate
+import ru.astrainteractive.klibs.kstorage.suspend.impl.DefaultSuspendMutableKrate
 import java.io.File
 
 internal class AntiSwearKrate(
     player: Player,
     stringFormat: StringFormat,
     folder: File
-) : MutableKrate<AntiSwearStorage> by DefaultMutableKrate(
+) : SuspendKrate.Mutable<AntiSwearStorage> by DefaultSuspendMutableKrate(
     factory = {
         AntiSwearStorage(
             playerName = player.name,
@@ -22,6 +22,10 @@ internal class AntiSwearKrate(
     },
     saver = { value ->
         val file = File(folder, "${player.uniqueId}.json")
+        if (!file.exists()) {
+            file.parentFile.mkdirs()
+            file.createNewFile()
+        }
         stringFormat.writeIntoFile(value, file)
     },
     loader = {
