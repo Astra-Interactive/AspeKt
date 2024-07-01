@@ -21,7 +21,7 @@ dependencies {
     compileOnly("net.luckperms:api:5.4")
     compileOnly(libs.minecraft.discordsrv)
     compileOnly("net.essentialsx:EssentialsX:2.20.1")
-    compileOnly("com.palmergames.bukkit.towny:towny:0.100.3.0")
+    compileOnly("com.palmergames.bukkit.towny:towny:0.100.3.3")
     // Test
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
