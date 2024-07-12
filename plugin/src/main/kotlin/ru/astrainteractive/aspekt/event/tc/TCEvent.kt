@@ -80,16 +80,16 @@ class TCEvent(
             block.breakNaturally()
             damageItem(player, tool)
         }
-        BlockFace.values().forEach {
+        BlockFace.entries.forEach {
             breakRecursively(player, block.getRelative(it), i + 1, tool)
         }
     }
 
     private fun isDirt(mat: Material): Boolean {
         return mat == Material.GRASS_BLOCK ||
-            mat == Material.DIRT ||
-            mat == Material.ROOTED_DIRT ||
-            mat == Material.COARSE_DIRT
+                mat == Material.DIRT ||
+                mat == Material.ROOTED_DIRT ||
+                mat == Material.COARSE_DIRT
     }
 
     /**
@@ -97,9 +97,9 @@ class TCEvent(
      */
     private fun isLog(mat: Material): Boolean {
         return mat.name.contains("STRIPPED_") ||
-            mat.name.contains("_LOG") ||
-            mat == Material.CRIMSON_STEM ||
-            mat == Material.WARPED_STEM
+                mat.name.contains("_LOG") ||
+                mat == Material.CRIMSON_STEM ||
+                mat == Material.WARPED_STEM
     }
 
     /**
@@ -107,7 +107,7 @@ class TCEvent(
      */
     private fun damageItem(player: Player, tool: ItemStack) {
         if (!treeCapitatorConfig.damageAxe) return
-        val meta: ItemMeta = tool.itemMeta
+        val meta: ItemMeta = tool.itemMeta ?: return
         val damageable = meta as? Damageable ?: return
         val maxDmg: Short = tool.type.maxDurability
         var dmg: Int = damageable.damage
@@ -132,9 +132,9 @@ class TCEvent(
      */
     private fun isLeaves(mat: Material): Boolean {
         return mat.name.contains("LEAVES") ||
-            mat == Material.NETHER_WART_BLOCK ||
-            mat == Material.WARPED_WART_BLOCK ||
-            mat == Material.SHROOMLIGHT
+                mat == Material.NETHER_WART_BLOCK ||
+                mat == Material.WARPED_WART_BLOCK ||
+                mat == Material.SHROOMLIGHT
     }
 
     /**
