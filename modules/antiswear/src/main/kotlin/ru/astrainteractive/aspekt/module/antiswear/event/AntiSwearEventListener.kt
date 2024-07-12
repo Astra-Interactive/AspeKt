@@ -7,6 +7,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.Plugin
@@ -17,7 +18,7 @@ internal class AntiSwearEventListener(
     private val swearRepository: SwearRepository,
     private val scope: CoroutineScope
 ) : EventListener {
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     fun onMessage(e: AsyncChatEvent) {
         val swearRenderer = SwearRenderer(
             renderer = e.renderer(),
