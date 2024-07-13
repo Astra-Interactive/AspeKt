@@ -87,9 +87,9 @@ class TCEvent(
 
     private fun isDirt(mat: Material): Boolean {
         return mat == Material.GRASS_BLOCK ||
-                mat == Material.DIRT ||
-                mat == Material.ROOTED_DIRT ||
-                mat == Material.COARSE_DIRT
+            mat == Material.DIRT ||
+            mat == Material.ROOTED_DIRT ||
+            mat == Material.COARSE_DIRT
     }
 
     /**
@@ -97,9 +97,9 @@ class TCEvent(
      */
     private fun isLog(mat: Material): Boolean {
         return mat.name.contains("STRIPPED_") ||
-                mat.name.contains("_LOG") ||
-                mat == Material.CRIMSON_STEM ||
-                mat == Material.WARPED_STEM
+            mat.name.contains("_LOG") ||
+            mat == Material.CRIMSON_STEM ||
+            mat == Material.WARPED_STEM
     }
 
     /**
@@ -132,9 +132,9 @@ class TCEvent(
      */
     private fun isLeaves(mat: Material): Boolean {
         return mat.name.contains("LEAVES") ||
-                mat == Material.NETHER_WART_BLOCK ||
-                mat == Material.WARPED_WART_BLOCK ||
-                mat == Material.SHROOMLIGHT
+            mat == Material.NETHER_WART_BLOCK ||
+            mat == Material.WARPED_WART_BLOCK ||
+            mat == Material.SHROOMLIGHT
     }
 
     /**
