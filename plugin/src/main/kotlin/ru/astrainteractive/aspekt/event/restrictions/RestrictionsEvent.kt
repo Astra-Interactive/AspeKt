@@ -10,6 +10,7 @@ import org.bukkit.event.block.BlockFromToEvent
 import org.bukkit.event.block.BlockIgniteEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.block.BlockSpreadEvent
+import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.entity.ExplosionPrimeEvent
 import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
@@ -31,18 +32,12 @@ class RestrictionsEvent(
         if (restrictions.explode) it.isCancelled = true
     }
 
-    val onEntityExplode = DSLEvent<BlockExplodeEvent>(eventListener, plugin) {
+    val onEntityExplode = DSLEvent<EntityExplodeEvent>(eventListener, plugin) {
         if (restrictions.explode) it.isCancelled = true
     }
 
     val onPrimeExplosion = DSLEvent<ExplosionPrimeEvent>(eventListener, plugin) {
-        when {
-            it.entity is EnderCrystal -> {
-                if (it.isCancelled) return@DSLEvent
-                it.radius = 0f
-            }
-            restrictions.explode -> it.isCancelled = true
-        }
+        it.fire = false
     }
 
     // Placing
