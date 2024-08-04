@@ -10,7 +10,7 @@ interface GuiModule {
     val router: Router
 
     class Default(coreModule: CoreModule) : GuiModule {
-        override val router: Router by Single {
+        override val router: Router by lazy {
             RouterImpl(
                 scope = coreModule.scope,
                 dispatchers = coreModule.dispatchers,

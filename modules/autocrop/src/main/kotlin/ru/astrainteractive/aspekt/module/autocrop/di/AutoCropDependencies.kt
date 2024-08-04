@@ -35,7 +35,7 @@ internal interface AutoCropDependencies {
         override val configuration: PluginConfiguration by Provider {
             coreModule.pluginConfig.value
         }
-        override val cropDupeController: CropDupeController by Single {
+        override val cropDupeController: CropDupeController by lazy {
             CropDupeController()
         }
         override val cropMaterialMapper: CropMaterialMapper by lazy {

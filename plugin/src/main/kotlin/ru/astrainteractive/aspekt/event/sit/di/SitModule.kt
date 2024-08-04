@@ -12,7 +12,7 @@ interface SitModule : Lifecycle {
     val sitEvent: SitEvent
 
     class Default(coreModule: CoreModule) : SitModule {
-        override val sitController: SitController by Single {
+        override val sitController: SitController by lazy {
             SitController(
                 configuration = { coreModule.pluginConfig.value },
                 translation = { coreModule.translation.value },

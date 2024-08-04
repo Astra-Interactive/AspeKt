@@ -20,7 +20,7 @@ interface SortDependencies {
         override val plugin: JavaPlugin by Provider {
             coreModule.plugin.value
         }
-        override val sortController: SortController by Single {
+        override val sortController: SortController by lazy {
             SortController()
         }
     }

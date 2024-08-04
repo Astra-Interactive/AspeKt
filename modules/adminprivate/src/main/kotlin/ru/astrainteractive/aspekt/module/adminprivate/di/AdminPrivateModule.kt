@@ -15,7 +15,7 @@ interface AdminPrivateModule {
     val adminPrivateLifecycleFactory: Factory<Lifecycle>
 
     class Default(coreModule: CoreModule) : AdminPrivateModule {
-        private val adminPrivateController: AdminPrivateController by Single {
+        private val adminPrivateController: AdminPrivateController by lazy {
             val dependencies = AdminPrivateControllerDependencies.Default(coreModule)
             AdminPrivateController(dependencies)
         }

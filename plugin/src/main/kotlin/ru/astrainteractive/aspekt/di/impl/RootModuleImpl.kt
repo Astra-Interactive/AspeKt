@@ -24,13 +24,13 @@ class RootModuleImpl : RootModule {
     override val adminPrivateModule: AdminPrivateModule by lazy {
         AdminPrivateModule.Default(coreModule)
     }
-    override val eventsModule: EventsModule by Single {
+    override val eventsModule: EventsModule by lazy {
         EventsModule.Default(coreModule)
     }
     override val menuModule: MenuModule by lazy {
         MenuModule.Default(coreModule)
     }
-    override val guiModule: GuiModule by Single {
+    override val guiModule: GuiModule by lazy {
         GuiModule.Default(coreModule)
     }
     override val autoBroadcastModule by lazy {
