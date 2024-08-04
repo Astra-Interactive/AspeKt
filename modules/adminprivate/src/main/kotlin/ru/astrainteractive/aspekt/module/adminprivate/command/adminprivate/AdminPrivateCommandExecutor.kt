@@ -16,7 +16,7 @@ internal class AdminPrivateCommandExecutor(
     private val translation: PluginTranslation,
     private val dispatchers: BukkitDispatchers,
     private val kyoriComponentSerializer: KyoriComponentSerializer
-) : CommandExecutor<AdminPrivateCommand.Input> {
+) : CommandExecutor<AdminPrivateCommand.Model> {
 
     private suspend fun showMap(player: Player) {
         val result = runCatching {
@@ -40,7 +40,7 @@ internal class AdminPrivateCommandExecutor(
         }
     }
 
-    private suspend fun setFlag(input: AdminPrivateCommand.Input.SetFlag) {
+    private suspend fun setFlag(input: AdminPrivateCommand.Model.SetFlag) {
         val result = runCatching {
             adminPrivateController.setFlag(
                 flag = input.flag,
@@ -61,7 +61,7 @@ internal class AdminPrivateCommandExecutor(
         }
     }
 
-    private suspend fun claim(input: AdminPrivateCommand.Input.Claim) {
+    private suspend fun claim(input: AdminPrivateCommand.Model.Claim) {
         val result = runCatching {
             adminPrivateController.claim(input.player.chunk.adminChunk)
         }
@@ -78,7 +78,7 @@ internal class AdminPrivateCommandExecutor(
         }
     }
 
-    private suspend fun unclaim(input: AdminPrivateCommand.Input.UnClaim) {
+    private suspend fun unclaim(input: AdminPrivateCommand.Model.UnClaim) {
         val result = runCatching {
             adminPrivateController.unclaim(input.player.chunk.adminChunk)
         }
@@ -95,21 +95,21 @@ internal class AdminPrivateCommandExecutor(
         }
     }
 
-    override fun execute(input: AdminPrivateCommand.Input) {
+    override fun execute(input: AdminPrivateCommand.Model) {
         when (input) {
-            is AdminPrivateCommand.Input.Claim -> scope.launch(dispatchers.IO) {
+            is AdminPrivateCommand.Model.Claim -> scope.launch(dispatchers.IO) {
                 claim(input)
             }
 
-            is AdminPrivateCommand.Input.SetFlag -> scope.launch(dispatchers.IO) {
+            is AdminPrivateCommand.Model.SetFlag -> scope.launch(dispatchers.IO) {
                 setFlag(input)
             }
 
-            is AdminPrivateCommand.Input.ShowMap -> scope.launch(dispatchers.IO) {
+            is AdminPrivateCommand.Model.ShowMap -> scope.launch(dispatchers.IO) {
                 showMap(input.player)
             }
 
-            is AdminPrivateCommand.Input.UnClaim -> scope.launch(dispatchers.IO) {
+            is AdminPrivateCommand.Model.UnClaim -> scope.launch(dispatchers.IO) {
                 unclaim(input)
             }
         }

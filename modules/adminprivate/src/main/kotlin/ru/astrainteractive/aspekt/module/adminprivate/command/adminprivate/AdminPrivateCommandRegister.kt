@@ -6,9 +6,9 @@ import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateCon
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
-import ru.astrainteractive.astralibs.command.api.commandfactory.BukkitCommandFactory
-import ru.astrainteractive.astralibs.command.api.registry.BukkitCommandRegistry
-import ru.astrainteractive.astralibs.command.api.registry.BukkitCommandRegistryContext.Companion.toCommandRegistryContext
+import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
+import ru.astrainteractive.astralibs.command.api.exception.NoPermissionException
+import ru.astrainteractive.astralibs.command.api.util.PluginExt.registerCommand
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.util.StringListExt.withEntry
 
@@ -26,7 +26,7 @@ internal class AdminPrivateCommandRegister(
             when {
                 args.size <= 1 -> listOf("claim", "unclaim", "flag", "map").withEntry(args.getOrNull(0))
                 args.getOrNull(0) == "flag" -> when (args.size) {
-                    2 -> ChunkFlag.values().map(ChunkFlag::toString).withEntry(args.getOrNull(1))
+                    2 -> ChunkFlag.entries.map(ChunkFlag::toString).withEntry(args.getOrNull(1))
                     3 -> listOf("true", "false").withEntry(args.getOrNull(2))
                     else -> emptyList()
                 }
@@ -37,7 +37,7 @@ internal class AdminPrivateCommandRegister(
 
     fun register() {
         adminPrivateCompleter()
-        val command = BukkitCommandFactory.create(
+        plugin.registerCommand(
             alias = "adminprivate",
             commandParser = AdminPrivateCommandParser(),
             commandExecutor = AdminPrivateCommandExecutor(
@@ -47,57 +47,21 @@ internal class AdminPrivateCommandRegister(
                 dispatchers = dispatchers,
                 kyoriComponentSerializer = kyoriComponentSerializer
             ),
-            commandSideEffect = { context, result ->
-                when (result) {
-                    AdminPrivateCommand.Output.NoPermission -> with(kyoriComponentSerializer) {
-                        context.sender.sendMessage(translation.general.noPermission.let(::toComponent))
+            errorHandler = { context, throwable ->
+                when (throwable) {
+                    is AdminPrivateCommand.Error.NotPlayer -> with(kyoriComponentSerializer) {
+                        context.sender.sendMessage(translation.general.onlyPlayerCommand.component)
                     }
 
-                    AdminPrivateCommand.Output.NotPlayer -> with(kyoriComponentSerializer) {
-                        context.sender.sendMessage(translation.general.onlyPlayerCommand.let(::toComponent))
+                    is BadArgumentException -> with(kyoriComponentSerializer) {
+                        context.sender.sendMessage(translation.general.wrongUsage.component)
                     }
 
-                    AdminPrivateCommand.Output.WrongUsage -> with(kyoriComponentSerializer) {
-                        context.sender.sendMessage(translation.general.wrongUsage.let(::toComponent))
+                    is NoPermissionException -> with(kyoriComponentSerializer) {
+                        context.sender.sendMessage(translation.general.noPermission.component)
                     }
-
-                    else -> Unit
-                }
-            },
-            mapper = {
-                when (it) {
-                    is AdminPrivateCommand.Output.Claim -> {
-                        AdminPrivateCommand.Input.Claim(
-                            player = it.player
-                        )
-                    }
-
-                    is AdminPrivateCommand.Output.SetFlag -> {
-                        AdminPrivateCommand.Input.SetFlag(
-                            player = it.player,
-                            flag = it.flag,
-                            value = it.value
-                        )
-                    }
-
-                    is AdminPrivateCommand.Output.ShowMap -> {
-                        AdminPrivateCommand.Input.ShowMap(
-                            player = it.player
-                        )
-                    }
-
-                    is AdminPrivateCommand.Output.UnClaim -> {
-                        AdminPrivateCommand.Input.UnClaim(
-                            player = it.player
-                        )
-                    }
-
-                    AdminPrivateCommand.Output.NoPermission,
-                    AdminPrivateCommand.Output.NotPlayer,
-                    AdminPrivateCommand.Output.WrongUsage -> null
                 }
             }
         )
-        BukkitCommandRegistry.register(command, plugin.toCommandRegistryContext())
     }
 }

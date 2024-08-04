@@ -6,7 +6,6 @@ import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.command.api.argumenttype.PrimitiveArgumentType
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.util.StringListExt.withEntry
 import ru.astrainteractive.klibs.kdi.Dependency
@@ -32,8 +31,7 @@ internal class MenuCommandFactory(
     }
 
     private fun menu() = plugin.getCommand("menu")?.setExecutor { sender, command, label, args ->
-
-        val command = PrimitiveArgumentType.String.transform(args.getOrNull(0)) ?: return@setExecutor true
+        val command = args.getOrNull(0).orEmpty()
         val menuModel = menuModels.firstOrNull { it.command == command }
         if (menuModel == null) {
             kyoriComponentSerializer.value.toComponent(translation.general.menuNotFound)

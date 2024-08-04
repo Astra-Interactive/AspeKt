@@ -19,14 +19,14 @@ internal class AddMoneyController(
     private fun tryAddMoney(uuid: UUID) {
         val player = Bukkit.getPlayer(uuid) ?: return
         val key = "discord.linked.was_before.${player.uniqueId}"
-        val wasLinkedBefore = tempFileManager.fileConfiguration.getBoolean(key, false)
+        val wasLinkedBefore = tempFileConfiguration.getBoolean(key, false)
         if (wasLinkedBefore) {
             logger.info("Игрок ${player.name} уже линковал аккаунт, пропускаем выдачу денег")
             return
         }
         logger.info("Игроку ${player.name} выдано ${configuration.moneyForLink} за линковку с дискордом")
-        tempFileManager.fileConfiguration.set(key, true)
-        tempFileManager.save()
+        tempFileConfiguration.set(key, true)
+        tempFileConfiguration.save(tempFile)
         economyProvider?.addMoney(uuid, configuration.moneyForLink.toDouble())
         translation.general.discordLinkReward(configuration.moneyForLink)
             .let(kyoriComponentSerializer::toComponent)

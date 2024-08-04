@@ -5,20 +5,19 @@ import kotlinx.serialization.StringFormat
 import ru.astrainteractive.aspekt.module.adminprivate.data.krate.AdminPrivateKrate
 import ru.astrainteractive.aspekt.module.adminprivate.model.AdminChunk
 import ru.astrainteractive.aspekt.module.adminprivate.util.uniqueWorldKey
-import ru.astrainteractive.astralibs.filemanager.FileManager
-import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
+import java.io.File
 
 internal class AdminPrivateRepositoryImpl(
-    fileManager: FileManager,
+    file: File,
     dispatchers: KotlinDispatchers,
-    stringFormat: StringFormat = YamlStringFormat()
+    stringFormat: StringFormat
 ) : AdminPrivateRepository {
 
     private val limitedDispatcher = dispatchers.IO.limitedParallelism(1)
 
     override val krate = AdminPrivateKrate(
-        file = fileManager.configFile,
+        file = file,
         stringFormat = stringFormat
     )
 
