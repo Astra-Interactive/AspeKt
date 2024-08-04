@@ -32,8 +32,8 @@ interface CommandsDependencies {
 
         override val plugin: JavaPlugin by coreModule.plugin
         override val translation: PluginTranslation by coreModule.translation
-        override val dispatchers: BukkitDispatchers by coreModule.dispatchers
-        override val scope: AsyncComponent by coreModule.scope
+        override val dispatchers: BukkitDispatchers = coreModule.dispatchers
+        override val scope: AsyncComponent = coreModule.scope
         override val sitController: SitController by Provider { eventsModule.sitModule.sitController }
         override val economyProvider: EconomyProvider? by coreModule.economyProvider
         override val router: Router by Provider {

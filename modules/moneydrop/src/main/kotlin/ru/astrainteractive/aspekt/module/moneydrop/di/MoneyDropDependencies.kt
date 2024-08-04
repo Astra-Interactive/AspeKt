@@ -23,7 +23,7 @@ interface MoneyDropDependencies {
         coreModule: CoreModule,
         override val moneyDropController: MoneyDropController
     ) : MoneyDropDependencies {
-        override val eventListener: EventListener by coreModule.eventListener
+        override val eventListener: EventListener = coreModule.eventListener
         override val plugin: JavaPlugin by coreModule.plugin
         override val configuration: PluginConfiguration by coreModule.pluginConfig
         override val economyProvider: EconomyProvider? by coreModule.economyProvider

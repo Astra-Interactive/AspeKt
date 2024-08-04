@@ -5,7 +5,6 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.event.sit.SitController
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
-import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 
 interface SitDependencies {
@@ -20,15 +19,9 @@ interface SitDependencies {
     ) : SitDependencies {
         override val sitController: SitController = sitModule.sitController
 
-        override val eventListener: EventListener by Provider {
-            coreModule.eventListener.value
-        }
-        override val plugin: JavaPlugin by Provider {
-            coreModule.plugin.value
-        }
+        override val eventListener: EventListener = coreModule.eventListener
+        override val plugin: JavaPlugin by coreModule.plugin
 
-        override val configuration: PluginConfiguration by Provider {
-            coreModule.pluginConfig.value
-        }
+        override val configuration: PluginConfiguration by coreModule.pluginConfig
     }
 }

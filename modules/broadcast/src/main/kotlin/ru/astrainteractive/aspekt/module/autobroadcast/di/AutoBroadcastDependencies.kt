@@ -15,8 +15,8 @@ internal interface AutoBroadcastDependencies {
     val kyoriComponentSerializer: KyoriComponentSerializer
 
     class Default(coreModule: CoreModule) : AutoBroadcastDependencies {
-        override val scope: CoroutineScope by coreModule.scope
-        override val dispatchers: BukkitDispatchers by coreModule.dispatchers
+        override val scope: CoroutineScope = coreModule.scope
+        override val dispatchers: BukkitDispatchers = coreModule.dispatchers
         override val kyoriComponentSerializer: KyoriComponentSerializer by coreModule.kyoriComponentSerializer
         override val configuration: PluginConfiguration.Announcements by Provider {
             coreModule.pluginConfig.value.announcements

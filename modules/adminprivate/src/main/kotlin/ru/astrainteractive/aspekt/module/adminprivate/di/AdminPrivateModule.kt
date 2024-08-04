@@ -23,9 +23,9 @@ interface AdminPrivateModule {
         private val adminPrivateCommandRegistry = AdminPrivateCommandRegister(
             plugin = coreModule.plugin.value,
             adminPrivateController = adminPrivateController,
-            scope = coreModule.scope.value,
+            scope = coreModule.scope,
             translation = coreModule.translation.value,
-            dispatchers = coreModule.dispatchers.value,
+            dispatchers = coreModule.dispatchers,
             kyoriComponentSerializer = coreModule.kyoriComponentSerializer.value
         )
 

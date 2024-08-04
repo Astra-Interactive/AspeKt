@@ -15,8 +15,8 @@ interface NewBeeModule {
             EventDependencies.Default(
                 translation = coreModule.translation.value,
                 kyoriComponentSerializer = coreModule.kyoriComponentSerializer.value,
-                scope = coreModule.scope.value,
-                dispatcher = coreModule.dispatchers.value
+                scope = coreModule.scope,
+                dispatcher = coreModule.dispatchers
             )
         }
 

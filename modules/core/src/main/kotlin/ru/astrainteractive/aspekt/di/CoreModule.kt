@@ -19,19 +19,17 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.menu.event.DefaultInventoryClickEvent
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.parseOrDefault
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
-import ru.astrainteractive.klibs.kdi.Dependency
 import ru.astrainteractive.klibs.kdi.Lateinit
 import ru.astrainteractive.klibs.kdi.Reloadable
-import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
 import java.io.File
 
 interface CoreModule : Lifecycle {
     val plugin: Lateinit<JavaPlugin>
-    val eventListener: Dependency<EventListener>
+    val eventListener: EventListener
 
-    val dispatchers: Dependency<BukkitDispatchers>
-    val scope: Dependency<AsyncComponent>
+    val dispatchers: BukkitDispatchers
+    val scope: AsyncComponent
     val pluginConfig: Reloadable<PluginConfiguration>
     val adminChunksYml: Reloadable<File>
     val translation: Reloadable<PluginTranslation>
@@ -41,7 +39,7 @@ interface CoreModule : Lifecycle {
     val tempFile: File
     val tempFileConfiguration: Reloadable<FileConfiguration>
     val kyoriComponentSerializer: Reloadable<KyoriComponentSerializer>
-    val inventoryClickEventListener: Single<DefaultInventoryClickEvent>
+    val inventoryClickEventListener: DefaultInventoryClickEvent
 
     val tempFileStringFormat: StringFormat
 
@@ -50,16 +48,16 @@ interface CoreModule : Lifecycle {
         // Core
         override val plugin = Lateinit<JavaPlugin>(true)
 
-        override val eventListener: Dependency<EventListener> = Single {
+        override val eventListener by lazy {
             object : EventListener {} // todo DefaultEventListener
         }
 
-        override val dispatchers = Single {
+        override val dispatchers by lazy {
             val plugin by plugin
             DefaultBukkitDispatchers(plugin)
         }
 
-        override val scope: Dependency<AsyncComponent> = Single {
+        override val scope by lazy {
             AsyncComponent.Default()
         }
 
@@ -103,7 +101,7 @@ interface CoreModule : Lifecycle {
             KyoriComponentSerializer.Legacy
         }
 
-        override val inventoryClickEventListener: Single<DefaultInventoryClickEvent> = Single {
+        override val inventoryClickEventListener by lazy {
             DefaultInventoryClickEvent()
         }
 
@@ -116,14 +114,14 @@ interface CoreModule : Lifecycle {
         }
 
         override fun onDisable() {
-            inventoryClickEventListener.value.onDisable()
-            eventListener.value.onDisable()
-            scope.value.close()
+            inventoryClickEventListener.onDisable()
+            eventListener.onDisable()
+            scope.close()
         }
 
         override fun onEnable() {
-            inventoryClickEventListener.value.onEnable(plugin.value)
-            eventListener.value.onEnable(plugin.value)
+            inventoryClickEventListener.onEnable(plugin.value)
+            eventListener.onEnable(plugin.value)
             economyProvider.reload()
         }
 

@@ -13,9 +13,7 @@ interface RestrictionsDependencies {
     val configuration: PluginConfiguration
 
     class Default(coreModule: CoreModule) : RestrictionsDependencies {
-        override val eventListener: EventListener by Provider {
-            coreModule.eventListener.value
-        }
+        override val eventListener: EventListener = coreModule.eventListener
         override val plugin: JavaPlugin by Provider {
             coreModule.plugin.value
         }

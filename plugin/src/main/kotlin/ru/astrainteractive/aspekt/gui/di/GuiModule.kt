@@ -12,8 +12,8 @@ interface GuiModule {
     class Default(coreModule: CoreModule) : GuiModule {
         override val router: Router by Single {
             RouterImpl(
-                scope = coreModule.scope.value,
-                dispatchers = coreModule.dispatchers.value,
+                scope = coreModule.scope,
+                dispatchers = coreModule.dispatchers,
                 kyoriComponentSerializer = coreModule.kyoriComponentSerializer.value,
             )
         }

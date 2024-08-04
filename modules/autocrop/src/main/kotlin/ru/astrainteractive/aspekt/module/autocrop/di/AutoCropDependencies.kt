@@ -28,9 +28,7 @@ internal interface AutoCropDependencies {
     val relativeBlockProviderFactory: Factory<RelativeBlockProvider>
 
     class Default(coreModule: CoreModule) : AutoCropDependencies {
-        override val eventListener: EventListener by Provider {
-            coreModule.eventListener.value
-        }
+        override val eventListener: EventListener = coreModule.eventListener
         override val plugin: JavaPlugin by Provider {
             coreModule.plugin.value
         }

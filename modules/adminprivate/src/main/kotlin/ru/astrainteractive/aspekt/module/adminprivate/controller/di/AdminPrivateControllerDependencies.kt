@@ -14,10 +14,10 @@ internal interface AdminPrivateControllerDependencies {
         override val repository: AdminPrivateRepository by lazy {
             AdminPrivateRepositoryImpl(
                 file = coreModule.adminChunksYml.value,
-                dispatchers = coreModule.dispatchers.value,
+                dispatchers = coreModule.dispatchers,
                 stringFormat = coreModule.yamlFormat
             )
         }
-        override val dispatchers: KotlinDispatchers by coreModule.dispatchers
+        override val dispatchers: KotlinDispatchers = coreModule.dispatchers
     }
 }
