@@ -19,7 +19,7 @@ internal interface DiscordEventDependencies {
         override val discordController: RoleController,
         override val addMoneyController: RoleController
     ) : DiscordEventDependencies {
-        override val scope: CoroutineScope by coreModule.scope
-        override val dispatchers: BukkitDispatchers by coreModule.dispatchers
+        override val scope: CoroutineScope = coreModule.scope
+        override val dispatchers: BukkitDispatchers = coreModule.dispatchers
     }
 }

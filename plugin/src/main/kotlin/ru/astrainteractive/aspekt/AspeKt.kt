@@ -8,7 +8,6 @@ import ru.astrainteractive.aspekt.di.impl.RootModuleImpl
 import ru.astrainteractive.aspekt.event.EventHandler
 import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.klibs.kdi.getValue
 
 /**
  * Initial class for your plugin
@@ -19,12 +18,12 @@ class AspeKt : JavaPlugin() {
         get() = rootModule.eventsModule
     private val lifecycles: List<Lifecycle>
         get() = listOfNotNull(
-            rootModule.autoBroadcastModule.autoBroadcastLifecycleFactory.create(),
+            rootModule.autoBroadcastModule.lifecycle,
             rootModule.commandManagerModule,
             rootModule.coreModule,
-            rootModule.menuModule.menuModuleLifecycleFactory.create(),
-            rootModule.discordLinkModule.discordLinkLifecycleFactory.create(),
-            rootModule.adminPrivateModule.adminPrivateLifecycleFactory.create(),
+            rootModule.menuModule.lifecycle,
+            rootModule.discordLinkModule.lifecycle,
+            rootModule.adminPrivateModule.lifecycle,
             rootModule.eventsModule.sitModule,
             rootModule.townyDiscordModule.lifecycle,
             rootModule.moneyDropModule.lifecycle,

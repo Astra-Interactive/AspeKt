@@ -7,15 +7,12 @@ import ru.astrainteractive.aspekt.module.adminprivate.controller.di.AdminPrivate
 import ru.astrainteractive.aspekt.module.adminprivate.event.AdminPrivateEvent
 import ru.astrainteractive.aspekt.module.adminprivate.event.di.AdminPrivateDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.klibs.kdi.Factory
-import ru.astrainteractive.klibs.kdi.Single
-import ru.astrainteractive.klibs.kdi.getValue
 
 interface AdminPrivateModule {
-    val adminPrivateLifecycleFactory: Factory<Lifecycle>
+    val lifecycle: Lifecycle
 
-    class Default(coreModule: CoreModule) : AdminPrivateModule {
-        private val adminPrivateController: AdminPrivateController by Single {
+    class Default(private val coreModule: CoreModule) : AdminPrivateModule {
+        private val adminPrivateController: AdminPrivateController by lazy {
             val dependencies = AdminPrivateControllerDependencies.Default(coreModule)
             AdminPrivateController(dependencies)
         }
@@ -23,13 +20,13 @@ interface AdminPrivateModule {
         private val adminPrivateCommandRegistry = AdminPrivateCommandRegister(
             plugin = coreModule.plugin.value,
             adminPrivateController = adminPrivateController,
-            scope = coreModule.scope.value,
+            scope = coreModule.scope,
             translation = coreModule.translation.value,
-            dispatchers = coreModule.dispatchers.value,
+            dispatchers = coreModule.dispatchers,
             kyoriComponentSerializer = coreModule.kyoriComponentSerializer.value
         )
 
-        private val adminPrivateEventFactory = Factory {
+        private fun createAdminPrivateEvent() {
             val adminPrivateDependencies: AdminPrivateDependencies = AdminPrivateDependencies.Default(
                 coreModule = coreModule,
                 adminPrivateController = adminPrivateController
@@ -37,11 +34,11 @@ interface AdminPrivateModule {
             AdminPrivateEvent(adminPrivateDependencies)
         }
 
-        override val adminPrivateLifecycleFactory: Factory<Lifecycle> = Factory {
+        override val lifecycle: Lifecycle by lazy {
             Lifecycle.Lambda(
                 onEnable = {
                     adminPrivateCommandRegistry.register()
-                    adminPrivateEventFactory.create()
+                    createAdminPrivateEvent()
                     adminPrivateController.reloadKrate()
                 },
                 onReload = {

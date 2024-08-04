@@ -11,18 +11,18 @@ interface AntiSwearModule {
 
     class Default(coreModule: CoreModule) : AntiSwearModule {
         private val swearRepository = SwearRepositoryImpl(
-            dispatchers = coreModule.dispatchers.value,
+            dispatchers = coreModule.dispatchers,
             tempFileStringFormat = coreModule.tempFileStringFormat
         )
         private val antiSwearEventListener = AntiSwearEventListener(
             swearRepository = swearRepository,
-            scope = coreModule.scope.value
+            scope = coreModule.scope
         )
         private val swearCommandRegistry = SwearCommandRegistry(
             plugin = coreModule.plugin.value,
             translation = coreModule.translation.value,
             kyoriComponentSerializer = coreModule.kyoriComponentSerializer.value,
-            scope = coreModule.scope.value,
+            scope = coreModule.scope,
             swearRepository = swearRepository
         )
         override val lifecycle: Lifecycle = Lifecycle.Lambda(

@@ -19,8 +19,8 @@ internal interface DiscordLinkJobDependencies {
         override val luckPermsRoleController: RoleController.Minecraft,
         override val discordRoleController: RoleController.Discord
     ) : DiscordLinkJobDependencies {
-        override val scope: CoroutineScope by coreModule.scope
-        override val dispatchers: KotlinDispatchers by coreModule.dispatchers
+        override val scope: CoroutineScope = coreModule.scope
+        override val dispatchers: KotlinDispatchers = coreModule.dispatchers
         override val configuration: PluginConfiguration by coreModule.pluginConfig
     }
 }

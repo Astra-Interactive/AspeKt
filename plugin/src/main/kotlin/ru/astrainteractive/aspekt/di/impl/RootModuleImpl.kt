@@ -14,7 +14,6 @@ import ru.astrainteractive.aspekt.module.menu.di.MenuModule
 import ru.astrainteractive.aspekt.module.moneydrop.di.MoneyDropModule
 import ru.astrainteractive.aspekt.module.newbee.di.NewBeeModule
 import ru.astrainteractive.aspekt.module.towny.discord.di.TownyDiscordModule
-import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
 
 class RootModuleImpl : RootModule {
@@ -24,13 +23,13 @@ class RootModuleImpl : RootModule {
     override val adminPrivateModule: AdminPrivateModule by lazy {
         AdminPrivateModule.Default(coreModule)
     }
-    override val eventsModule: EventsModule by Single {
+    override val eventsModule: EventsModule by lazy {
         EventsModule.Default(coreModule)
     }
     override val menuModule: MenuModule by lazy {
         MenuModule.Default(coreModule)
     }
-    override val guiModule: GuiModule by Single {
+    override val guiModule: GuiModule by lazy {
         GuiModule.Default(coreModule)
     }
     override val autoBroadcastModule by lazy {

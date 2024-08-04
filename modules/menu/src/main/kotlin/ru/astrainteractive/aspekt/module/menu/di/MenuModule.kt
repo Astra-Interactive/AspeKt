@@ -8,12 +8,11 @@ import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouterImpl
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
-import ru.astrainteractive.klibs.kdi.Factory
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.Reloadable
 
 interface MenuModule {
-    val menuModuleLifecycleFactory: Factory<Lifecycle>
+    val lifecycle: Lifecycle
 
     class Default(
         private val coreModule: CoreModule
@@ -34,7 +33,7 @@ interface MenuModule {
             menuRouter = { menuRouter.provide() }
         )
 
-        override val menuModuleLifecycleFactory: Factory<Lifecycle> = Factory {
+        override val lifecycle: Lifecycle by lazy {
             Lifecycle.Lambda(
                 onEnable = {
                     menuCommandFactory.create()

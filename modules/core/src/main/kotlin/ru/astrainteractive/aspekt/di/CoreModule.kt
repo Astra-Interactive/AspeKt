@@ -3,6 +3,8 @@ package ru.astrainteractive.aspekt.di
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.bukkit.configuration.file.FileConfiguration
+import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -12,35 +14,32 @@ import ru.astrainteractive.astralibs.async.DefaultBukkitDispatchers
 import ru.astrainteractive.astralibs.economy.EconomyProvider
 import ru.astrainteractive.astralibs.economy.EconomyProviderFactory
 import ru.astrainteractive.astralibs.event.EventListener
-import ru.astrainteractive.astralibs.filemanager.DefaultFileConfigurationManager
-import ru.astrainteractive.astralibs.filemanager.FileConfigurationManager
-import ru.astrainteractive.astralibs.filemanager.FileManager
-import ru.astrainteractive.astralibs.filemanager.impl.JVMFileManager
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.menu.event.DefaultInventoryClickEvent
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.parseOrDefault
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
-import ru.astrainteractive.klibs.kdi.Dependency
 import ru.astrainteractive.klibs.kdi.Lateinit
 import ru.astrainteractive.klibs.kdi.Reloadable
-import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
+import java.io.File
 
 interface CoreModule : Lifecycle {
     val plugin: Lateinit<JavaPlugin>
-    val eventListener: Dependency<EventListener>
+    val eventListener: EventListener
 
-    val dispatchers: Dependency<BukkitDispatchers>
-    val scope: Dependency<AsyncComponent>
+    val dispatchers: BukkitDispatchers
+    val scope: AsyncComponent
     val pluginConfig: Reloadable<PluginConfiguration>
-    val adminChunksYml: Reloadable<FileManager>
+    val adminChunksYml: Reloadable<File>
     val translation: Reloadable<PluginTranslation>
+    val yamlFormat: StringFormat
 
     val economyProvider: Reloadable<EconomyProvider?>
-    val tempFileManager: Reloadable<FileConfigurationManager>
+    val tempFile: File
+    val tempFileConfiguration: Reloadable<FileConfiguration>
     val kyoriComponentSerializer: Reloadable<KyoriComponentSerializer>
-    val inventoryClickEventListener: Single<DefaultInventoryClickEvent>
+    val inventoryClickEventListener: DefaultInventoryClickEvent
 
     val tempFileStringFormat: StringFormat
 
@@ -49,40 +48,41 @@ interface CoreModule : Lifecycle {
         // Core
         override val plugin = Lateinit<JavaPlugin>(true)
 
-        override val eventListener: Dependency<EventListener> = Single {
+        override val eventListener by lazy {
             object : EventListener {} // todo DefaultEventListener
         }
 
-        override val dispatchers = Single {
+        override val dispatchers by lazy {
             val plugin by plugin
             DefaultBukkitDispatchers(plugin)
         }
 
-        override val scope: Dependency<AsyncComponent> = Single {
+        override val scope by lazy {
             AsyncComponent.Default()
         }
 
-        override val pluginConfig = Reloadable {
-            val fileManager = DefaultFileConfigurationManager(plugin.value, "config.yml")
-            val yamlSerializer = YamlStringFormat()
+        override val yamlFormat: StringFormat by lazy {
+            YamlStringFormat()
+        }
 
-            val translation = yamlSerializer.parseOrDefault(fileManager.configFile, ::PluginConfiguration)
-            val yamlString = yamlSerializer.yaml.encodeToString(translation)
-            fileManager.configFile.writeText(yamlString)
+        override val pluginConfig = Reloadable {
+            val file = plugin.value.dataFolder.resolve("config.yml")
+            val translation = yamlFormat.parseOrDefault(file, ::PluginConfiguration)
+            val yamlString = yamlFormat.encodeToString(translation)
+            file.writeText(yamlString)
             translation
         }
 
-        override val adminChunksYml: Reloadable<FileManager> = Reloadable {
-            JVMFileManager("adminchunks.yml", plugin.value.dataFolder)
+        override val adminChunksYml: Reloadable<File> = Reloadable {
+            plugin.value.dataFolder.resolve("adminchunks.yml")
         }
 
         override val translation = Reloadable {
-            val fileManager = DefaultFileConfigurationManager(plugin.value, "translations.yml")
-            val yamlSerializer = YamlStringFormat()
+            val file = plugin.value.dataFolder.resolve("translations.yml")
 
-            val translation = yamlSerializer.parseOrDefault(fileManager.configFile, ::PluginTranslation)
-            val yamlString = yamlSerializer.yaml.encodeToString(translation)
-            fileManager.configFile.writeText(yamlString)
+            val translation = yamlFormat.parseOrDefault(file, ::PluginTranslation)
+            val yamlString = yamlFormat.encodeToString(translation)
+            file.writeText(yamlString)
             translation
         }
 
@@ -90,15 +90,18 @@ interface CoreModule : Lifecycle {
             kotlin.runCatching { EconomyProviderFactory(plugin.value).create() }.getOrNull()
         }
 
-        override val tempFileManager: Reloadable<FileConfigurationManager> = Reloadable {
-            DefaultFileConfigurationManager(plugin.value, "temp.yml")
+        override val tempFile by lazy {
+            plugin.value.dataFolder.resolve("temp.yml")
+        }
+        override val tempFileConfiguration: Reloadable<FileConfiguration> = Reloadable {
+            YamlConfiguration.loadConfiguration(tempFile)
         }
 
         override val kyoriComponentSerializer: Reloadable<KyoriComponentSerializer> = Reloadable {
             KyoriComponentSerializer.Legacy
         }
 
-        override val inventoryClickEventListener: Single<DefaultInventoryClickEvent> = Single {
+        override val inventoryClickEventListener by lazy {
             DefaultInventoryClickEvent()
         }
 
@@ -111,14 +114,14 @@ interface CoreModule : Lifecycle {
         }
 
         override fun onDisable() {
-            inventoryClickEventListener.value.onDisable()
-            eventListener.value.onDisable()
-            scope.value.close()
+            inventoryClickEventListener.onDisable()
+            eventListener.onDisable()
+            scope.close()
         }
 
         override fun onEnable() {
-            inventoryClickEventListener.value.onEnable(plugin.value)
-            eventListener.value.onEnable(plugin.value)
+            inventoryClickEventListener.onEnable(plugin.value)
+            eventListener.onEnable(plugin.value)
             economyProvider.reload()
         }
 
@@ -126,7 +129,7 @@ interface CoreModule : Lifecycle {
             pluginConfig.reload()
             translation.reload()
             economyProvider.reload()
-            tempFileManager.reload()
+            tempFileConfiguration.reload()
         }
     }
 }

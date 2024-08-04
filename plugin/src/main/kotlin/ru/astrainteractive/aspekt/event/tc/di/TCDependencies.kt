@@ -22,17 +22,9 @@ interface TCDependencies {
         override val configuration: PluginConfiguration by Provider {
             coreModule.pluginConfig.value
         }
-        override val eventListener: EventListener by Provider {
-            coreModule.eventListener.value
-        }
-        override val plugin: JavaPlugin by Provider {
-            coreModule.plugin.value
-        }
-        override val scope: CoroutineScope by Provider {
-            coreModule.scope.value
-        }
-        override val dispatchers: BukkitDispatchers by Provider {
-            coreModule.dispatchers.value
-        }
+        override val eventListener: EventListener = coreModule.eventListener
+        override val plugin: JavaPlugin by coreModule.plugin
+        override val scope: CoroutineScope = coreModule.scope
+        override val dispatchers: BukkitDispatchers = coreModule.dispatchers
     }
 }
