@@ -12,9 +12,7 @@ import ru.astrainteractive.aspekt.module.autocrop.mapping.CropMaterialMapperImpl
 import ru.astrainteractive.aspekt.module.autocrop.presentation.CropDupeController
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
-import ru.astrainteractive.klibs.kdi.Factory
 import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
 
 internal interface AutoCropDependencies {
@@ -25,7 +23,7 @@ internal interface AutoCropDependencies {
     val cropMaterialMapper: CropMaterialMapper
     val hoeRadiusFactory: HoeRadiusFactory
     val hoeDamager: HoeDamager
-    val relativeBlockProviderFactory: Factory<RelativeBlockProvider>
+    fun createRelativeBlockProvider(): RelativeBlockProvider
 
     class Default(coreModule: CoreModule) : AutoCropDependencies {
         override val eventListener: EventListener = coreModule.eventListener
@@ -44,9 +42,11 @@ internal interface AutoCropDependencies {
         override val hoeRadiusFactory: HoeRadiusFactory by lazy {
             HoeRadiusFactoryImpl()
         }
-        override val relativeBlockProviderFactory: Factory<RelativeBlockProvider> = Factory {
-            RelativeBlockProvider()
+
+        override fun createRelativeBlockProvider(): RelativeBlockProvider {
+            return RelativeBlockProvider()
         }
+
         override val hoeDamager: HoeDamager by lazy {
             HoeDamagerImpl()
         }

@@ -9,7 +9,6 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.util.StringListExt.withEntry
 import ru.astrainteractive.klibs.kdi.Dependency
-import ru.astrainteractive.klibs.kdi.Factory
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 
@@ -19,7 +18,7 @@ internal class MenuCommandFactory(
     private val kyoriComponentSerializer: Dependency<KyoriComponentSerializer>,
     menuModelProvider: Provider<List<MenuModel>>,
     translationProvider: Provider<PluginTranslation>,
-) : Factory<Unit> {
+) {
     private val menuModels by menuModelProvider
     private val translation by translationProvider
 
@@ -50,7 +49,7 @@ internal class MenuCommandFactory(
         true
     }
 
-    override fun create() {
+    fun create() {
         menuCompleter()
         menu()
         invClose()

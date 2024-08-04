@@ -46,7 +46,7 @@ internal class AutoCropEvent(
         val hoeMaybe = e.player.inventory.itemInMainHand
         val radius = hoeRadiusFactory.create(hoeMaybe)
         val hoeItemStack = hoeMaybe.takeIf { radius > 1 }
-        relativeBlockProviderFactory.create()
+        createRelativeBlockProvider()
             .provide(clickedBlock, radius)
             .forEach { block ->
                 processBlock(block, hoeItemStack)

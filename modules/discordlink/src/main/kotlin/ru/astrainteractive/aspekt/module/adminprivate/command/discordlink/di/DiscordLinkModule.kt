@@ -11,10 +11,9 @@ import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.event.
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.job.DiscordLinkJob
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.job.di.DiscordLinkJobDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.klibs.kdi.Factory
 
 interface DiscordLinkModule {
-    val discordLinkLifecycleFactory: Factory<Lifecycle>
+    val lifecycle: Lifecycle
 
     val discordController: RoleController.Discord
 
@@ -62,7 +61,7 @@ interface DiscordLinkModule {
             )
         }
 
-        override val discordLinkLifecycleFactory: Factory<Lifecycle> = Factory {
+        override val lifecycle by lazy {
             Lifecycle.Lambda(
                 onEnable = {
                     discordEvent?.onEnable()

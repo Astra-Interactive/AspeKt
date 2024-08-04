@@ -5,7 +5,6 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.event.sort.SortController
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.Single
 import ru.astrainteractive.klibs.kdi.getValue
 
 interface SortDependencies {
