@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bukkit.entity.Player
+import ru.astrainteractive.aspekt.module.adminprivate.command.di.AdminPrivateCommandDependencies
 import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateController
 import ru.astrainteractive.aspekt.module.adminprivate.util.adminChunk
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -11,12 +12,9 @@ import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 
 internal class AdminPrivateCommandExecutor(
-    private val adminPrivateController: AdminPrivateController,
-    private val scope: CoroutineScope,
-    private val translation: PluginTranslation,
-    private val dispatchers: BukkitDispatchers,
-    private val kyoriComponentSerializer: KyoriComponentSerializer
-) : CommandExecutor<AdminPrivateCommand.Model> {
+    dependencies: AdminPrivateCommandDependencies
+) : AdminPrivateCommandDependencies by dependencies,
+    CommandExecutor<AdminPrivateCommand.Model> {
 
     private suspend fun showMap(player: Player) {
         val result = runCatching {

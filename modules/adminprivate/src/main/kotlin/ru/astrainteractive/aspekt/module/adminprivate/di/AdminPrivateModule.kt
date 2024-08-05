@@ -1,7 +1,8 @@
 package ru.astrainteractive.aspekt.module.adminprivate.di
 
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate.AdminPrivateCommandRegister
+import ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate.AdminPrivateCommandRegistry
+import ru.astrainteractive.aspekt.module.adminprivate.command.di.AdminPrivateCommandDependencies
 import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateController
 import ru.astrainteractive.aspekt.module.adminprivate.controller.di.AdminPrivateControllerDependencies
 import ru.astrainteractive.aspekt.module.adminprivate.event.AdminPrivateEvent
@@ -17,13 +18,11 @@ interface AdminPrivateModule {
             AdminPrivateController(dependencies)
         }
 
-        private val adminPrivateCommandRegistry = AdminPrivateCommandRegister(
-            plugin = coreModule.plugin.value,
-            adminPrivateController = adminPrivateController,
-            scope = coreModule.scope,
-            translation = coreModule.translation.value,
-            dispatchers = coreModule.dispatchers,
-            kyoriComponentSerializer = coreModule.kyoriComponentSerializer.value
+        private val adminPrivateCommandRegistry = AdminPrivateCommandRegistry(
+            dependencies = AdminPrivateCommandDependencies.Default(
+                coreModule = coreModule,
+                adminPrivateController = adminPrivateController
+            )
         )
 
         private fun createAdminPrivateEvent() {

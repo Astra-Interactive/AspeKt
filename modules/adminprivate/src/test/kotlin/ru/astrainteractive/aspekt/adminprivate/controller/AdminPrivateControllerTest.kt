@@ -39,9 +39,12 @@ internal class AdminPrivateControllerTest {
     }
 
     inner class Dependencies : AdminPrivateControllerDependencies {
-        override val dispatchers: KotlinDispatchers = DefaultKotlinDispatchers
         override val repository: AdminPrivateRepository =
-            AdminPrivateRepositoryImpl(tempFile.resolve(UUID.randomUUID().toString()), dispatchers, YamlStringFormat())
+            AdminPrivateRepositoryImpl(
+                file = tempFile.resolve(UUID.randomUUID().toString()),
+                dispatchers = DefaultKotlinDispatchers,
+                stringFormat = YamlStringFormat()
+            )
     }
 
     @Test

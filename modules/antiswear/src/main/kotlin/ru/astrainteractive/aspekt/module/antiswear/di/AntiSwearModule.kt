@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.module.antiswear.di
 
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.antiswear.command.SwearCommandRegistry
+import ru.astrainteractive.aspekt.module.antiswear.command.di.SwearCommandDependencies
 import ru.astrainteractive.aspekt.module.antiswear.data.SwearRepositoryImpl
 import ru.astrainteractive.aspekt.module.antiswear.event.AntiSwearEventListener
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
@@ -19,11 +20,10 @@ interface AntiSwearModule {
             scope = coreModule.scope
         )
         private val swearCommandRegistry = SwearCommandRegistry(
-            plugin = coreModule.plugin.value,
-            translation = coreModule.translation.value,
-            kyoriComponentSerializer = coreModule.kyoriComponentSerializer.value,
-            scope = coreModule.scope,
-            swearRepository = swearRepository
+            dependencies = SwearCommandDependencies.Default(
+                coreModule = coreModule,
+                swearRepository = swearRepository
+            )
         )
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onEnable = {

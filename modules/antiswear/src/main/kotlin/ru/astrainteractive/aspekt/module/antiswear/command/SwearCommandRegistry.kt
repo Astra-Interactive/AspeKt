@@ -5,6 +5,7 @@ import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
+import ru.astrainteractive.aspekt.module.antiswear.command.di.SwearCommandDependencies
 import ru.astrainteractive.aspekt.module.antiswear.data.SwearRepository
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -12,12 +13,8 @@ import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
 
 internal class SwearCommandRegistry(
-    private val plugin: JavaPlugin,
-    private val translation: PluginTranslation,
-    private val kyoriComponentSerializer: KyoriComponentSerializer,
-    private val scope: CoroutineScope,
-    private val swearRepository: SwearRepository
-) {
+    dependencies: SwearCommandDependencies
+) : SwearCommandDependencies by dependencies {
     private fun createSwearTabCompleter() = plugin.getCommand("swearfilter")?.setTabCompleter { _, _, _, args ->
         when (args.size) {
             1 -> listOf("on", "off")

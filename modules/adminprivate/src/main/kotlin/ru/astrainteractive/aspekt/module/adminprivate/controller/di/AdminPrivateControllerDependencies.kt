@@ -8,7 +8,6 @@ import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 internal interface AdminPrivateControllerDependencies {
     val repository: AdminPrivateRepository
-    val dispatchers: KotlinDispatchers
 
     class Default(coreModule: CoreModule) : AdminPrivateControllerDependencies {
         override val repository: AdminPrivateRepository by lazy {
@@ -18,6 +17,5 @@ internal interface AdminPrivateControllerDependencies {
                 stringFormat = coreModule.yamlFormat
             )
         }
-        override val dispatchers: KotlinDispatchers = coreModule.dispatchers
     }
 }
