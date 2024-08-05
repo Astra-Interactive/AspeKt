@@ -12,7 +12,6 @@ import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.DefaultKotlinDispatchers
-import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import java.io.File
 import java.util.UUID
 import kotlin.random.Random
