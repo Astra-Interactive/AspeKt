@@ -1,25 +1,15 @@
 package ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate
 
-import kotlinx.coroutines.CoroutineScope
-import org.bukkit.plugin.java.JavaPlugin
-import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateController
+import ru.astrainteractive.aspekt.module.adminprivate.command.di.AdminPrivateCommandDependencies
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
-import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
 import ru.astrainteractive.astralibs.command.api.exception.NoPermissionException
 import ru.astrainteractive.astralibs.command.api.util.PluginExt.registerCommand
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.util.StringListExt.withEntry
 
-internal class AdminPrivateCommandRegister(
-    private val plugin: JavaPlugin,
-    private val adminPrivateController: AdminPrivateController,
-    private val scope: CoroutineScope,
-    private val translation: PluginTranslation,
-    private val dispatchers: BukkitDispatchers,
-    private val kyoriComponentSerializer: KyoriComponentSerializer
-) {
+internal class AdminPrivateCommandRegistry(
+    dependencies: AdminPrivateCommandDependencies
+) : AdminPrivateCommandDependencies by dependencies {
 
     private fun adminPrivateCompleter() =
         plugin.getCommand("adminprivate")?.setTabCompleter { sender, command, label, args ->
@@ -40,13 +30,7 @@ internal class AdminPrivateCommandRegister(
         plugin.registerCommand(
             alias = "adminprivate",
             commandParser = AdminPrivateCommandParser(),
-            commandExecutor = AdminPrivateCommandExecutor(
-                adminPrivateController = adminPrivateController,
-                scope = scope,
-                translation = translation,
-                dispatchers = dispatchers,
-                kyoriComponentSerializer = kyoriComponentSerializer
-            ),
+            commandExecutor = AdminPrivateCommandExecutor(dependencies = this),
             errorHandler = { context, throwable ->
                 when (throwable) {
                     is AdminPrivateCommand.Error.NotPlayer -> with(kyoriComponentSerializer) {

@@ -13,7 +13,7 @@ internal class RelativeBlockProvider {
         if (radius <= 1) return
         if (map.contains(block)) return
         map.add(block)
-        BlockFace.values().forEach { blockFace -> fillWithRelativeBlocks(block.getRelative(blockFace), radius - 1) }
+        BlockFace.entries.forEach { blockFace -> fillWithRelativeBlocks(block.getRelative(blockFace), radius - 1) }
     }
 
     /**

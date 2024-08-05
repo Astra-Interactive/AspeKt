@@ -12,7 +12,6 @@ import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.DefaultKotlinDispatchers
-import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import java.io.File
 import java.util.UUID
 import kotlin.random.Random
@@ -39,9 +38,12 @@ internal class AdminPrivateControllerTest {
     }
 
     inner class Dependencies : AdminPrivateControllerDependencies {
-        override val dispatchers: KotlinDispatchers = DefaultKotlinDispatchers
         override val repository: AdminPrivateRepository =
-            AdminPrivateRepositoryImpl(tempFile.resolve(UUID.randomUUID().toString()), dispatchers, YamlStringFormat())
+            AdminPrivateRepositoryImpl(
+                file = tempFile.resolve(UUID.randomUUID().toString()),
+                dispatchers = DefaultKotlinDispatchers,
+                stringFormat = YamlStringFormat()
+            )
     }
 
     @Test

@@ -19,7 +19,7 @@ import kotlin.random.Random
 class MoneyDropController(
     pluginConfigurationDependency: Dependency<PluginConfiguration>,
     translationDependency: Dependency<PluginTranslation>,
-    private val kyoriComponentSerializerDependency: Dependency<KyoriComponentSerializer>
+    kyoriComponentSerializerDependency: Dependency<KyoriComponentSerializer>
 ) {
     private val pluginConfiguration by pluginConfigurationDependency
     private val translation by translationDependency

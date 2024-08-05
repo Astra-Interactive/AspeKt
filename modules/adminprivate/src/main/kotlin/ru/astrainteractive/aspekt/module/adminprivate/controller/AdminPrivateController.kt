@@ -7,9 +7,10 @@ import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.adminprivate.util.uniqueWorldKey
 import ru.astrainteractive.astralibs.async.AsyncComponent
 
-internal class AdminPrivateController(module: AdminPrivateControllerDependencies) :
-    AsyncComponent(),
-    AdminPrivateControllerDependencies by module {
+internal class AdminPrivateController(
+    dependencies: AdminPrivateControllerDependencies
+) : AsyncComponent(),
+    AdminPrivateControllerDependencies by dependencies {
 
     val isEnabled: Boolean
         get() = repository.krate.cachedValue.isEnabled

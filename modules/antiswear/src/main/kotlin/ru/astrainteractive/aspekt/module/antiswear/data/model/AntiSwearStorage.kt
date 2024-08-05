@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.module.antiswear.model
+package ru.astrainteractive.aspekt.module.antiswear.data.model
 
 import kotlinx.serialization.Serializable
 

@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.contr
 
 import org.bukkit.configuration.file.FileConfiguration
 import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.economy.EconomyProvider
@@ -18,12 +19,13 @@ internal interface RoleControllerDependencies {
     val kyoriComponentSerializer: KyoriComponentSerializer
 
     class Default(
-        coreModule: CoreModule
+        coreModule: CoreModule,
+        discordLinkModule: DiscordLinkModule
     ) : RoleControllerDependencies {
         override val pluginConfiguration: PluginConfiguration by coreModule.pluginConfig
         override val economyProvider: EconomyProvider? by coreModule.economyProvider
-        override val tempFile: File = coreModule.tempFile
-        override val tempFileConfiguration: FileConfiguration by coreModule.tempFileConfiguration
+        override val tempFile: File = discordLinkModule.tempFile
+        override val tempFileConfiguration: FileConfiguration by discordLinkModule.tempFileConfiguration
         override val translation: PluginTranslation by coreModule.translation
         override val kyoriComponentSerializer by coreModule.kyoriComponentSerializer
     }

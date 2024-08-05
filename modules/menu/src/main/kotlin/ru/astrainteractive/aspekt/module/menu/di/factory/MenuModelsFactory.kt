@@ -1,14 +1,14 @@
 package ru.astrainteractive.aspekt.module.menu.di.factory
 
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.StringFormat
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.parse
-import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import java.io.File
 
 internal class MenuModelsFactory(
     private val dataFolder: File,
-    private val yamlSerializer: YamlStringFormat
+    private val yamlSerializer: StringFormat
 ) {
     /**
      * @throws SerializationException in case of any decoding-specific error
@@ -24,8 +24,6 @@ internal class MenuModelsFactory(
             .filterNotNull()
             .filter(File::exists)
             .filter(File::isFile)
-            .mapNotNull {
-                yamlSerializer.parse<MenuModel>(it).getOrNull()
-            }
+            .mapNotNull { yamlSerializer.parse<MenuModel>(it).getOrNull() }
     }
 }

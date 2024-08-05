@@ -1,8 +1,8 @@
-package ru.astrainteractive.aspekt.module.antiswear.data
+package ru.astrainteractive.aspekt.module.antiswear.data.krate
 
 import kotlinx.serialization.StringFormat
 import org.bukkit.entity.Player
-import ru.astrainteractive.aspekt.module.antiswear.model.AntiSwearStorage
+import ru.astrainteractive.aspekt.module.antiswear.data.model.AntiSwearStorage
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.parse
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.writeIntoFile
 import ru.astrainteractive.klibs.kstorage.suspend.SuspendMutableKrate

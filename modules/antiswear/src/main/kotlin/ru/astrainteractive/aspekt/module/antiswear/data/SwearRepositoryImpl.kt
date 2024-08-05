@@ -3,7 +3,8 @@ package ru.astrainteractive.aspekt.module.antiswear.data
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.StringFormat
 import org.bukkit.entity.Player
-import ru.astrainteractive.aspekt.module.antiswear.model.AntiSwearStorage
+import ru.astrainteractive.aspekt.module.antiswear.data.krate.AntiSwearKrate
+import ru.astrainteractive.aspekt.module.antiswear.data.model.AntiSwearStorage
 import ru.astrainteractive.klibs.kstorage.suspend.SuspendMutableKrate
 import ru.astrainteractive.klibs.kstorage.util.KrateExt.update
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers

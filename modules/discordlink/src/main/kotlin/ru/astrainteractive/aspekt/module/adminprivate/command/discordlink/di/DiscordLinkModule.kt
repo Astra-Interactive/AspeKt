@@ -1,6 +1,8 @@
 package ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di
 
 import org.bukkit.Bukkit
+import org.bukkit.configuration.file.FileConfiguration
+import org.bukkit.configuration.file.YamlConfiguration
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.AddMoneyController
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.DiscordController
@@ -11,10 +13,14 @@ import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.event.
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.job.DiscordLinkJob
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.job.di.DiscordLinkJobDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.klibs.kdi.Reloadable
+import java.io.File
 
 interface DiscordLinkModule {
     val lifecycle: Lifecycle
 
+    val tempFile: File
+    val tempFileConfiguration: Reloadable<FileConfiguration>
     val discordController: RoleController.Discord
 
     class Default(coreModule: CoreModule) : DiscordLinkModule {
@@ -27,7 +33,10 @@ interface DiscordLinkModule {
         }
 
         private val roleControllerDependencies by lazy {
-            RoleControllerDependencies.Default(coreModule)
+            RoleControllerDependencies.Default(
+                coreModule,
+                this
+            )
         }
 
         override val discordController: RoleController.Discord by lazy {
@@ -41,6 +50,14 @@ interface DiscordLinkModule {
                 luckPermsController = luckPermsController,
                 addMoneyController = addMoneyController
             )
+        }
+
+        override val tempFile by lazy {
+            coreModule.plugin.value.dataFolder.resolve("temp.yml")
+        }
+
+        override val tempFileConfiguration: Reloadable<FileConfiguration> = Reloadable {
+            YamlConfiguration.loadConfiguration(tempFile)
         }
 
         private val discordEvent: DiscordEvent? by lazy {
@@ -74,6 +91,7 @@ interface DiscordLinkModule {
                 onReload = {
                     discordLinkJob?.onDisable()
                     discordLinkJob?.onEnable()
+                    tempFileConfiguration.reload()
                 }
             )
         }
