@@ -13,7 +13,7 @@ interface AntiSwearModule {
     class Default(coreModule: CoreModule) : AntiSwearModule {
         private val swearRepository = SwearRepositoryImpl(
             dispatchers = coreModule.dispatchers,
-            tempFileStringFormat = coreModule.tempFileStringFormat
+            tempFileStringFormat = coreModule.jsonStringFormat
         )
         private val antiSwearEventListener = AntiSwearEventListener(
             swearRepository = swearRepository,

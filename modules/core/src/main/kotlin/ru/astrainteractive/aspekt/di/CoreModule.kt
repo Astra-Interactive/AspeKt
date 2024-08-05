@@ -3,8 +3,6 @@ package ru.astrainteractive.aspekt.di
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.bukkit.configuration.file.FileConfiguration
-import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -22,7 +20,6 @@ import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import ru.astrainteractive.klibs.kdi.Lateinit
 import ru.astrainteractive.klibs.kdi.Reloadable
 import ru.astrainteractive.klibs.kdi.getValue
-import java.io.File
 
 interface CoreModule : Lifecycle {
     val plugin: Lateinit<JavaPlugin>
@@ -31,17 +28,14 @@ interface CoreModule : Lifecycle {
     val dispatchers: BukkitDispatchers
     val scope: AsyncComponent
     val pluginConfig: Reloadable<PluginConfiguration>
-    val adminChunksYml: Reloadable<File>
     val translation: Reloadable<PluginTranslation>
     val yamlFormat: StringFormat
 
     val economyProvider: Reloadable<EconomyProvider?>
-    val tempFile: File
-    val tempFileConfiguration: Reloadable<FileConfiguration>
     val kyoriComponentSerializer: Reloadable<KyoriComponentSerializer>
     val inventoryClickEventListener: DefaultInventoryClickEvent
 
-    val tempFileStringFormat: StringFormat
+    val jsonStringFormat: StringFormat
 
     class Default : CoreModule {
 
@@ -73,10 +67,6 @@ interface CoreModule : Lifecycle {
             translation
         }
 
-        override val adminChunksYml: Reloadable<File> = Reloadable {
-            plugin.value.dataFolder.resolve("adminchunks.yml")
-        }
-
         override val translation = Reloadable {
             val file = plugin.value.dataFolder.resolve("translations.yml")
 
@@ -90,13 +80,6 @@ interface CoreModule : Lifecycle {
             kotlin.runCatching { EconomyProviderFactory(plugin.value).create() }.getOrNull()
         }
 
-        override val tempFile by lazy {
-            plugin.value.dataFolder.resolve("temp.yml")
-        }
-        override val tempFileConfiguration: Reloadable<FileConfiguration> = Reloadable {
-            YamlConfiguration.loadConfiguration(tempFile)
-        }
-
         override val kyoriComponentSerializer: Reloadable<KyoriComponentSerializer> = Reloadable {
             KyoriComponentSerializer.Legacy
         }
@@ -105,11 +88,11 @@ interface CoreModule : Lifecycle {
             DefaultInventoryClickEvent()
         }
 
-        override val tempFileStringFormat: StringFormat by lazy {
+        override val jsonStringFormat: StringFormat by lazy {
             Json {
                 isLenient = true
                 ignoreUnknownKeys = true
-                prettyPrint = false
+                prettyPrint = true
             }
         }
 
@@ -129,7 +112,6 @@ interface CoreModule : Lifecycle {
             pluginConfig.reload()
             translation.reload()
             economyProvider.reload()
-            tempFileConfiguration.reload()
         }
     }
 }

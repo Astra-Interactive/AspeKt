@@ -8,13 +8,19 @@ import ru.astrainteractive.aspekt.module.adminprivate.controller.di.AdminPrivate
 import ru.astrainteractive.aspekt.module.adminprivate.event.AdminPrivateEvent
 import ru.astrainteractive.aspekt.module.adminprivate.event.di.AdminPrivateDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.klibs.kdi.Reloadable
+import java.io.File
 
 interface AdminPrivateModule {
     val lifecycle: Lifecycle
+    val adminChunksYml: Reloadable<File>
 
     class Default(private val coreModule: CoreModule) : AdminPrivateModule {
         private val adminPrivateController: AdminPrivateController by lazy {
-            val dependencies = AdminPrivateControllerDependencies.Default(coreModule)
+            val dependencies = AdminPrivateControllerDependencies.Default(
+                coreModule = coreModule,
+                adminPrivateModule = this
+            )
             AdminPrivateController(dependencies)
         }
 
@@ -24,6 +30,10 @@ interface AdminPrivateModule {
                 adminPrivateController = adminPrivateController
             )
         )
+
+        override val adminChunksYml: Reloadable<File> = Reloadable {
+            coreModule.plugin.value.dataFolder.resolve("adminchunks.yml")
+        }
 
         private fun createAdminPrivateEvent() {
             val adminPrivateDependencies: AdminPrivateDependencies = AdminPrivateDependencies.Default(
