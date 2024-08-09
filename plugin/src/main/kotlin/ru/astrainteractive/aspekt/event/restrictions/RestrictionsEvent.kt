@@ -3,6 +3,7 @@
 package ru.astrainteractive.aspekt.event.restrictions
 
 import org.bukkit.Material
+import org.bukkit.entity.EntityType
 import org.bukkit.event.block.BlockBurnEvent
 import org.bukkit.event.block.BlockExplodeEvent
 import org.bukkit.event.block.BlockFromToEvent
@@ -28,15 +29,17 @@ class RestrictionsEvent(
 
     // Explosions
     val onBlockExplode = DSLEvent<BlockExplodeEvent>(eventListener, plugin) {
-        if (restrictions.explode) it.isCancelled = true
+        if (restrictions.explosion.destroy) it.isCancelled = true
     }
 
     val onEntityExplode = DSLEvent<EntityExplodeEvent>(eventListener, plugin) {
-        if (restrictions.explode) it.isCancelled = true
+        if (restrictions.explosion.destroy) it.isCancelled = true
     }
 
     val onPrimeExplosion = DSLEvent<ExplosionPrimeEvent>(eventListener, plugin) {
         it.fire = false
+        if (!restrictions.explosion.creeperDamage) return@DSLEvent
+        if (it.entity.type == EntityType.CREEPER) it.radius = 0f
     }
 
     // Placing
