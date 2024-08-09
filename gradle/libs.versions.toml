@@ -25,6 +25,9 @@ minecraft-vault = "1.7.1" # https://github.com/MilkBowl/VaultAPI
 minecraft-astralibs = "3.12.0" # https://github.com/Astra-Interactive/AstraLibs
 minecraft-bstats = "3.0.2" # https://github.com/Bastian/bStats
 minecraft-mockbukkit = "3.96.1" #https://github.com/MockBukkit/MockBukkit
+minecraft-luckperms = "5.4" # https://github.com/LuckPerms/LuckPerms
+minecraft-essentialsx = "2.20.1" # https://github.com/EssentialsX/Essentials
+minecraft-towny = "0.100.3.11" # https://github.com/TownyAdvanced/Towny
 
 # Shadow
 gradle-shadow = "8.0.0" # https://github.com/johnrengelman/shadow
@@ -83,6 +86,10 @@ minecraft-bstats = { module = "org.bstats:bstats-bukkit", version.ref = "minecra
 minecraft-mockbukkit = { module = "com.github.MockBukkit:MockBukkit", version.ref = "minecraft-mockbukkit" }
 
 minecraft-discordsrv = { module = "com.discordsrv:discordsrv", version.ref = "discordsrv" }
+
+minecraft-luckperms = { module = "net.luckperms:api", version.ref = "minecraft-luckperms" }
+minecraft-essentialsx = { module = "net.essentialsx:EssentialsX", version.ref = "minecraft-essentialsx" }
+minecraft-towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "minecraft-towny" }
 
 # klibs
 klibs-mikro-core = { module = "ru.astrainteractive.klibs:mikro-core", version.ref = "klibs-mikro" }

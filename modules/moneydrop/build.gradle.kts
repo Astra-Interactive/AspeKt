@@ -17,7 +17,7 @@ dependencies {
     implementation(libs.minecraft.astralibs.core.bukkit)
     implementation(libs.minecraft.vaultapi)
     // Spigot
-    compileOnly("net.essentialsx:EssentialsX:2.20.1")
+    compileOnly(libs.minecraft.essentialsx)
     // Test
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
