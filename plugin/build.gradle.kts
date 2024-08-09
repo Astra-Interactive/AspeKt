@@ -35,6 +35,7 @@ dependencies {
     implementation(projects.modules.discordlink)
     implementation(projects.modules.townyDiscord)
     implementation(projects.modules.moneydrop)
+    implementation(projects.modules.moneyAdvancements)
     implementation(projects.modules.autocrop)
     implementation(projects.modules.newbee)
     implementation(projects.modules.antiswear)

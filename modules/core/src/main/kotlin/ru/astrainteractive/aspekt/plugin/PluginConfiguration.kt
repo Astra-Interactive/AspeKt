@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.plugin
 
+import com.charleskorn.kaml.YamlComment
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration.Companion.minutes
@@ -20,8 +21,23 @@ data class PluginConfiguration(
     val restrictions: Restrictions = Restrictions(),
     @SerialName("money_drop")
     val moneyDrop: Map<String, MoneyDropEntry> = emptyMap(),
-    val towny: TownyConfiguration = TownyConfiguration()
+    val towny: TownyConfiguration = TownyConfiguration(),
+    @SerialName("advancement_money")
+    val advancementMoney: AdvancementMoney = AdvancementMoney()
 ) {
+    @Serializable
+    data class AdvancementMoney(
+        @SerialName("challenge")
+        @YamlComment("Money given for challenge advancemetn")
+        val challenge: Int = 5000,
+        @SerialName("goal")
+        @YamlComment("Money given long-road advancement")
+        val goal: Int = 1000,
+        @SerialName("task")
+        @YamlComment("Money given for default task")
+        val task: Int = 1000,
+    )
+
     @Serializable
     data class TownyConfiguration(
         @SerialName("leader_role_configuration")
