@@ -18,11 +18,33 @@ class PluginTranslation(
     val sit: Sit = Sit(),
     @SerialName("adminprivate")
     val adminPrivate: AdminPrivate = AdminPrivate(),
+    @SerialName("money_advancement")
+    val moneyAdvancement: MoneyAdvancement = MoneyAdvancement(),
     @SerialName("newbee")
     val newBee: NewBee = NewBee(),
     @SerialName("swear")
     val swear: Swear = Swear()
 ) {
+    @Serializable
+    class MoneyAdvancement(
+        @SerialName("reload_complete")
+        private val challengeCompleted: StringDesc.Raw = StringDesc.Raw(
+            "&7[&#DBB72BДОСТИЖЕНИЕ&7] Вы выполднили достижение-челлендж и получили нагруда: %money% монет"
+        ),
+        @SerialName("goal_completed")
+        private val goalCompleted: StringDesc.Raw = StringDesc.Raw(
+            "&7[&#DBB72BДОСТИЖЕНИЕ&7] Вы выполднили целевое достижение и получили нагруда: %money% монет"
+        ),
+        @SerialName("task_completed")
+        private val taskCompleted: StringDesc.Raw = StringDesc.Raw(
+            "&7[&#DBB72BДОСТИЖЕНИЕ&7] Вы выполднили достижение и получили нагруда: %money% монет"
+        ),
+    ) {
+        fun challengeCompleted(money: Number) = challengeCompleted.replace("%money%", money.toString())
+        fun goalCompleted(money: Number) = goalCompleted.replace("%money%", money.toString())
+        fun taskCompleted(money: Number) = taskCompleted.replace("%money%", money.toString())
+    }
+
     @Serializable
     class General(
         @SerialName("prefix")
