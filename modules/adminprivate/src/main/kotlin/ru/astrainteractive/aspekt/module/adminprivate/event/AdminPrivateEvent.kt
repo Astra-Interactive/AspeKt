@@ -1,7 +1,9 @@
 package ru.astrainteractive.aspekt.module.adminprivate.event
 
 import io.papermc.paper.event.player.PlayerItemFrameChangeEvent
+import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.block.BlockState
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.Enemy
 import org.bukkit.entity.Monster
@@ -24,6 +26,7 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent
 import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.world.PortalCreateEvent
 import ru.astrainteractive.aspekt.module.adminprivate.debounce.EventDebounce
 import ru.astrainteractive.aspekt.module.adminprivate.debounce.RetractKey
 import ru.astrainteractive.aspekt.module.adminprivate.event.di.AdminPrivateDependencies
@@ -46,8 +49,9 @@ internal class AdminPrivateEvent(
         flag: ChunkFlag
     ) where T : Event, T : Cancellable {
         if (!adminPrivateController.isEnabled) return
-
         if (player?.toPermissible()?.hasPermission(PluginPermission.AdminClaim) == true) return
+        if (e.isCancelled) return
+
         debounce.debounceEvent(retractKey, e) {
             val isAble = adminPrivateController.isAble(adminChunk, flag)
             val isCancelled = !isAble
@@ -240,5 +244,23 @@ internal class AdminPrivateEvent(
             player = null,
             flag = ChunkFlag.HOSTILE_MOB_SPAWN
         )
+    }
+    val portalCreateEvent = DSLEvent<PortalCreateEvent>(eventListener, plugin) { e ->
+        val chunks = e.blocks
+            .map(BlockState::getLocation)
+            .distinctBy(Location::getChunk)
+            .map(Location::getChunk)
+        chunks.forEach { chunk ->
+            handleDefault(
+                retractKey = RetractKey.Vararg(
+                    chunks,
+                    "portalCreateEvent"
+                ),
+                e = e,
+                adminChunk = chunk.adminChunk,
+                player = null,
+                flag = ChunkFlag.PLACE
+            )
+        }
     }
 }
