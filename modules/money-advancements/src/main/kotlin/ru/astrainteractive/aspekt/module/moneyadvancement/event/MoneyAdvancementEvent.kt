@@ -8,6 +8,8 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.economy.EconomyProvider
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.logging.JUtiltLogger
+import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 
@@ -16,7 +18,7 @@ class MoneyAdvancementEvent(
     economyProvider: Provider<EconomyProvider?>,
     kyoriComponentSerializerProvider: Provider<KyoriComponentSerializer>,
     translationProvider: Provider<PluginTranslation>
-) : EventListener {
+) : EventListener, Logger by JUtiltLogger("MoneyAdvancementEvent") {
     private val configuration by configurationProvider
     private val economy by economyProvider
     private val kyoriComponentSerializer by kyoriComponentSerializerProvider
@@ -24,8 +26,12 @@ class MoneyAdvancementEvent(
 
     @EventHandler
     fun onAdvancement(e: PlayerAdvancementDoneEvent) {
-        val economy = economy ?: return
-        val frame = e.advancement.display?.frame() ?: AdvancementDisplay.Frame.TASK
+        val economy = economy ?: run {
+            error { "#onAdvancement economy not found" }
+            return
+        }
+        val frame = e.advancement.display?.frame() ?: return
+        info { "#onAdvancement ${e.advancement.key} ${e.advancement.display?.title()}" }
         when (frame) {
             AdvancementDisplay.Frame.CHALLENGE -> with(kyoriComponentSerializer) {
                 val amount = configuration.advancementMoney.challenge.toDouble()

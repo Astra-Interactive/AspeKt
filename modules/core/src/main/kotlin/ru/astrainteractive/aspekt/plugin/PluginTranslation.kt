@@ -29,15 +29,15 @@ class PluginTranslation(
     class MoneyAdvancement(
         @SerialName("reload_complete")
         private val challengeCompleted: StringDesc.Raw = StringDesc.Raw(
-            "&7[&#DBB72BДОСТИЖЕНИЕ&7] Вы выполднили достижение-челлендж и получили нагруда: %money% монет"
+            "&7[&#DBB72BДОСТИЖЕНИЕ&7] Вы выполднили достижение-челлендж и получили награду: %money% монет"
         ),
         @SerialName("goal_completed")
         private val goalCompleted: StringDesc.Raw = StringDesc.Raw(
-            "&7[&#DBB72BДОСТИЖЕНИЕ&7] Вы выполднили целевое достижение и получили нагруда: %money% монет"
+            "&7[&#DBB72BДОСТИЖЕНИЕ&7] Вы выполднили целевое достижение и получили награду: %money% монет"
         ),
         @SerialName("task_completed")
         private val taskCompleted: StringDesc.Raw = StringDesc.Raw(
-            "&7[&#DBB72BДОСТИЖЕНИЕ&7] Вы выполднили достижение и получили нагруда: %money% монет"
+            "&7[&#DBB72BДОСТИЖЕНИЕ&7] Вы выполднили достижение и получили награду: %money% монет"
         ),
     ) {
         fun challengeCompleted(money: Number) = challengeCompleted.replace("%money%", money.toString())
