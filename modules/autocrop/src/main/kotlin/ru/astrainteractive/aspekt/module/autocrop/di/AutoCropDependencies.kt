@@ -9,6 +9,8 @@ import ru.astrainteractive.aspekt.module.autocrop.domain.HoeRadiusFactoryImpl
 import ru.astrainteractive.aspekt.module.autocrop.domain.RelativeBlockProvider
 import ru.astrainteractive.aspekt.module.autocrop.mapping.CropMaterialMapper
 import ru.astrainteractive.aspekt.module.autocrop.mapping.CropMaterialMapperImpl
+import ru.astrainteractive.aspekt.module.autocrop.mapping.CropSeedMaterialMapper
+import ru.astrainteractive.aspekt.module.autocrop.mapping.CropSeedMaterialMapperImpl
 import ru.astrainteractive.aspekt.module.autocrop.presentation.CropDupeController
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
@@ -21,6 +23,7 @@ internal interface AutoCropDependencies {
     val configuration: PluginConfiguration
     val cropDupeController: CropDupeController
     val cropMaterialMapper: CropMaterialMapper
+    val cropSeedMaterialMapper: CropSeedMaterialMapper
     val hoeRadiusFactory: HoeRadiusFactory
     val hoeDamager: HoeDamager
     fun createRelativeBlockProvider(): RelativeBlockProvider
@@ -38,6 +41,9 @@ internal interface AutoCropDependencies {
         }
         override val cropMaterialMapper: CropMaterialMapper by lazy {
             CropMaterialMapperImpl()
+        }
+        override val cropSeedMaterialMapper: CropSeedMaterialMapper by lazy {
+            CropSeedMaterialMapperImpl()
         }
         override val hoeRadiusFactory: HoeRadiusFactory by lazy {
             HoeRadiusFactoryImpl()
