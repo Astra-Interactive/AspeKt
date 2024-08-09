@@ -22,18 +22,23 @@ internal class AutoCropEvent(
         if (clickedCrop.age != clickedCrop.maximumAge) return
         hoeItemStack?.let(hoeDamager::applyDamage)?.onFailure { return }
 
-        val material = cropMaterialMapper.toMaterial(clickedCrop.material) ?: return
+        val cropMaterial = cropMaterialMapper.toMaterial(clickedCrop.material) ?: return
+        val cropSeedMaterial = cropSeedMaterialMapper.toMaterial(clickedCrop.material)
 
         val amount = when {
             cropDupeController.isDupingAtLocation(block.location) -> 1
             else -> Random.nextInt(autoCropConfig.min, autoCropConfig.max)
         }
 
-        val item = ItemStack(material, amount)
         clickedCrop.age = 0
         block.setBlockData(clickedCrop, true)
-        block.location.let { loc ->
-            loc.world.dropItemNaturally(loc, item)
+        val location = block.location
+        val cropItemStack = ItemStack(cropMaterial, amount)
+        location.world.dropItemNaturally(location, cropItemStack)
+
+        if (cropSeedMaterial != null) {
+            val seedItemStack = ItemStack(cropSeedMaterial, amount)
+            location.world.dropItemNaturally(location, seedItemStack)
         }
     }
 
