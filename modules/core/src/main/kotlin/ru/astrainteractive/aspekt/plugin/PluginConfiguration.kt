@@ -47,13 +47,23 @@ data class PluginConfiguration(
 
     @Serializable
     data class Restrictions(
-        @SerialName("explode")
-        val explode: Boolean = true,
+        @SerialName("explosion")
+        val explosion: Explosion = Explosion(),
         @SerialName("place")
         val place: Place = Place(),
         @SerialName("spread")
         val spread: Spread = Spread()
     ) {
+        @Serializable
+        data class Explosion(
+            @SerialName("damage_creeper")
+            val creeperDamage: Boolean = true,
+            @SerialName("damage_other")
+            val otherDamage: Boolean = true,
+            @SerialName("destroy")
+            val destroy: Boolean = true
+        )
+
         @Serializable
         data class Place(
             @SerialName("tnt")
