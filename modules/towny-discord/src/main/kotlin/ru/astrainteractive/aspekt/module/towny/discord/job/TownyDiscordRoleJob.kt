@@ -41,16 +41,20 @@ internal class TownyDiscordRoleJob(
                     .map { entry -> entry.value }
                     .toSet()
 
+                val mayorsDiscordIdsChunked = mayorsDiscordIds.chunked(32)
+
                 discordRoleController.removeRoleFromMembersWithRole(
                     whitelistedUserIds = mayorsDiscordIds,
                     roleId = configuration.towny.leaderRoleConfiguration.roleId,
                     guild = guild
                 )
-                discordRoleController.addRoleToMembers(
-                    memberIds = mayorsDiscordIds,
-                    roleId = configuration.towny.leaderRoleConfiguration.roleId,
-                    guild = guild
-                )
+                mayorsDiscordIdsChunked.forEach { chunk ->
+                    discordRoleController.addRoleToMembers(
+                        memberIds = chunk.toSet(),
+                        roleId = configuration.towny.leaderRoleConfiguration.roleId,
+                        guild = guild
+                    )
+                }
             }
         }
     }

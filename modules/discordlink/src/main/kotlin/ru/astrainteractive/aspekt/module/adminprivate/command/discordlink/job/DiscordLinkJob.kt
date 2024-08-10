@@ -38,6 +38,7 @@ internal class DiscordLinkJob(
             .linkedAccounts
             .keys
             .toSet()
+        val verifiedDiscordUsersChunks = verifiedDiscordUsers.chunked(32)
         if (verifiedDiscordUsers.isEmpty()) return
 
         discordRoleController.removeRoleFromMembersWithRole(
@@ -45,12 +46,13 @@ internal class DiscordLinkJob(
             roleId = discordRoleId,
             guild = guild
         )
-
-        discordRoleController.addRoleToMembers(
-            memberIds = verifiedDiscordUsers,
-            roleId = discordRoleId,
-            guild = guild
-        )
+        verifiedDiscordUsersChunks.forEach { chunk ->
+            discordRoleController.addRoleToMembers(
+                memberIds = chunk.toSet(),
+                roleId = discordRoleId,
+                guild = guild
+            )
+        }
     }
 
     private suspend fun processLuckPermsRoles() {
