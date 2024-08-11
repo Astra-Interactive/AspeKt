@@ -18,7 +18,8 @@ internal object RiddleGenerator {
                             false -> "x-$second=-$first"
                         }
                     ),
-                    answer = "${second - first}"
+                    answer = "${second - first}",
+                    reward = instance.reward
                 )
             }
 
@@ -28,7 +29,8 @@ internal object RiddleGenerator {
                 val second = Random.nextInt(0, 200)
                 return Riddle(
                     question = StringDesc.Raw("$first+$second"),
-                    answer = "${first + second}"
+                    answer = "${first + second}",
+                    reward = instance.reward
                 )
             }
 
@@ -37,7 +39,8 @@ internal object RiddleGenerator {
                 val second = Random.nextInt(0, 30)
                 return Riddle(
                     question = StringDesc.Raw("$first*$second"),
-                    answer = "${first * second}"
+                    answer = "${first * second}",
+                    reward = instance.reward
                 )
             }
         }
