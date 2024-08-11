@@ -32,7 +32,7 @@ internal class ChatGameStoreImpl(
 
     override fun isAnswerCorrect(answer: String): Boolean {
         val currentGame = state.value as? ChatGameStore.State.Started ?: return false
-        return answer == currentGame.chatGame.answer
+        return answer.equals(currentGame.chatGame.answer, true)
     }
 
     override fun isGameStarted(): Boolean {

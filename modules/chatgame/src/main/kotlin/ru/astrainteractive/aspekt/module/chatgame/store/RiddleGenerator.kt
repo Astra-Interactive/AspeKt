@@ -1,9 +1,9 @@
 package ru.astrainteractive.aspekt.module.chatgame.store
 
-import kotlin.random.Random
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGame
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGame.Riddle
 import ru.astrainteractive.astralibs.string.StringDesc
+import kotlin.random.Random
 
 internal object RiddleGenerator {
     fun generate(instance: ChatGame): ChatGame.Riddle {
