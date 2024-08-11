@@ -23,8 +23,31 @@ class PluginTranslation(
     @SerialName("newbee")
     val newBee: NewBee = NewBee(),
     @SerialName("swear")
-    val swear: Swear = Swear()
+    val swear: Swear = Swear(),
+    @SerialName("chat_game")
+    val chatGame: ChatGame = ChatGame()
 ) {
+    @Serializable
+    class ChatGame(
+        @SerialName("game_started")
+        private val gameStarted: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BКВИЗ&7] %quiz% → &2/quiz ОТВЕТ"),
+        @SerialName("no_quiz_available")
+        val noQuizAvailable: StringDesc.Raw = StringDesc.Raw(
+            "&7[&#DBB72BКВИЗ&7] &#db2c18В данный момент нет активного квиза!"
+        ),
+        @SerialName("wrong_answer")
+        val wrongAnswer: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BКВИЗ&7] &#db2c18Ответ неверный!"),
+        @SerialName("game_ended")
+        val gameEndedMoneyReward: StringDesc.Raw = StringDesc.Raw(
+            "&7[&#DBB72BКВИЗ&7] &6%player% &7угадал верный ответ! И получил &6%amount% &7монет!"
+        ),
+    ) {
+        fun gameStarted(quiz: String) = gameStarted.replace("%quiz%", quiz)
+        fun gameEndedMoneyReward(player: String, amount: Number) = gameEndedMoneyReward
+            .replace("%player%", player)
+            .replace("%amount%", amount.toString())
+    }
+
     @Serializable
     class MoneyAdvancement(
         @SerialName("reload_complete")

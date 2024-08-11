@@ -1,9 +1,10 @@
 package ru.astrainteractive.aspekt.di
 
+import com.charleskorn.kaml.PolymorphismStyle
+import com.charleskorn.kaml.Yaml
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -11,8 +12,7 @@ import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.async.DefaultBukkitDispatchers
 import ru.astrainteractive.astralibs.economy.EconomyProvider
-import ru.astrainteractive.astralibs.economy.EssentialsEconomyProvider
-import ru.astrainteractive.astralibs.economy.VaultEconomyProvider
+import ru.astrainteractive.astralibs.economy.EconomyProviderFactory
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
@@ -22,7 +22,6 @@ import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import ru.astrainteractive.klibs.kdi.Lateinit
 import ru.astrainteractive.klibs.kdi.Reloadable
 import ru.astrainteractive.klibs.kdi.getValue
-import java.util.UUID
 
 interface CoreModule : Lifecycle {
     val plugin: Lateinit<JavaPlugin>
@@ -59,7 +58,13 @@ interface CoreModule : Lifecycle {
         }
 
         override val yamlFormat: StringFormat by lazy {
-            YamlStringFormat()
+            YamlStringFormat(
+                configuration = Yaml.default.configuration.copy(
+                    encodeDefaults = true,
+                    strictMode = false,
+                    polymorphismStyle = PolymorphismStyle.Property
+                ),
+            )
         }
 
         override val pluginConfig = Reloadable {
@@ -80,15 +85,9 @@ interface CoreModule : Lifecycle {
         }
 
         override val economyProvider: Reloadable<EconomyProvider?> = Reloadable {
-            val pluginManager = Bukkit.getServer().pluginManager
-            // todo temp fix without astralibs
-            runCatching {
-                val vault = pluginManager.getPlugin("Vault") ?: error("Vault is not installed")
-                VaultEconomyProvider(plugin.value, vault).also { it.getBalance(UUID.randomUUID()) }
-            }.getOrNull() ?: kotlin.runCatching {
-                val essentials = pluginManager.getPlugin("Essentials") ?: error("Essentials is not installed")
-                EssentialsEconomyProvider(plugin.value, essentials).also { it.getBalance(UUID.randomUUID()) }
-            }.getOrNull()
+            kotlin.runCatching { EconomyProviderFactory(plugin.value).create() }
+                .onFailure(Throwable::printStackTrace)
+                .getOrNull()
         }
 
         override val kyoriComponentSerializer: Reloadable<KyoriComponentSerializer> = Reloadable {

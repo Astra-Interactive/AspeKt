@@ -39,8 +39,9 @@ dependencies {
     implementation(projects.modules.autocrop)
     implementation(projects.modules.newbee)
     implementation(projects.modules.antiswear)
+    implementation(projects.modules.chatgame)
 }
-val destination = File("/Users/romanmakeev/Desktop/Server/SMP/smp/plugins")
+val destination = File("D:\\Minecraft Servers\\Servers\\conf.smp\\smp\\plugins")
     .takeIf(File::exists)
     ?: File(rootDir, "jars")
 

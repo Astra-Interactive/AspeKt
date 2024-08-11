@@ -14,6 +14,7 @@ loadbefore: [ ]
 commands:
   swearfilter:
   rtpbypass:
+  quiz:
   sit:
   tellchat:
   rtp:
