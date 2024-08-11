@@ -2,8 +2,8 @@ package ru.astrainteractive.aspekt.module.chatgame.model
 
 import ru.astrainteractive.astralibs.string.StringDesc
 
-internal class ChatGameData(
+internal data class ChatGameData(
     val question: StringDesc.Raw,
-    val answer: String,
+    val answers: List<String>,
     val reward: Reward
 )

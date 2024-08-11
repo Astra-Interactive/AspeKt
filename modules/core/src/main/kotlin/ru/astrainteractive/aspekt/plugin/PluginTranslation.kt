@@ -34,7 +34,13 @@ class PluginTranslation(
         @SerialName("solve_example")
         private val solveExample: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BКВИЗ&7] Пример: %quiz% → &2/quiz ОТВЕТ"),
         @SerialName("solve_anagram")
-        private val solveAnagram: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BКВИЗ&7] Анаграмма: %quiz% → &2/quiz ОТВЕТ"),
+        private val solveAnagram: StringDesc.Raw = StringDesc.Raw(
+            "&7[&#DBB72BКВИЗ&7] Анаграмма: %quiz% → &2/quiz ОТВЕТ"
+        ),
+        @SerialName("solve_quadratic")
+        private val solveQuadratic: StringDesc.Raw = StringDesc.Raw(
+            "&7[&#DBB72BКВИЗ&7] Квадратное уравнение: %quiz% → &2/quiz ОТВЕТ &7Любой вариант ответа с точностью до сотой. Например: 0.02, 0.3, 1.0"
+        ),
         @SerialName("no_quiz_available")
         val noQuizAvailable: StringDesc.Raw = StringDesc.Raw(
             "&7[&#DBB72BКВИЗ&7] &#db2c18В данный момент нет активного квиза!"
@@ -49,6 +55,7 @@ class PluginTranslation(
         fun solveRiddle(quiz: String) = solveRiddle.replace("%quiz%", quiz)
         fun solveExample(quiz: String) = solveExample.replace("%quiz%", quiz)
         fun solveAnagram(quiz: String) = solveAnagram.replace("%quiz%", quiz)
+        fun solveQuadratic(quiz: String) = solveQuadratic.replace("%quiz%", quiz)
 
         fun gameEndedMoneyReward(player: String, amount: Number) = gameEndedMoneyReward
             .replace("%player%", player)

@@ -4,7 +4,6 @@ import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.job.ScheduledJob
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStore
-import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
@@ -13,9 +12,7 @@ internal class ChatGameJob(
     private val chatGameStore: ChatGameStore,
     chatGameConfigProvider: Provider<ChatGameConfig>,
     kyoriComponentSerializerProvider: Provider<KyoriComponentSerializer>,
-    translationProvider: Provider<PluginTranslation>
 ) : ScheduledJob("ChatGameJob") {
-    private val translation by translationProvider
     private val kyoriComponentSerializer by kyoriComponentSerializerProvider
     private val chatGameConfig by chatGameConfigProvider
     override val delayMillis: Long

@@ -35,7 +35,6 @@ interface ChatGameModule {
                 chatGameStore = chatGameStore,
                 chatGameConfigProvider = { config.value },
                 kyoriComponentSerializerProvider = { coreModule.kyoriComponentSerializer.value },
-                translationProvider = { coreModule.translation.value }
             )
         }
         private val command by lazy {
