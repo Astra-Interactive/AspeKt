@@ -189,3 +189,34 @@ AspeKt allows players to sort their inventories by pressing Shift+MiddleMouseBut
 | `/tellchat <player> [message]`          | `aspekt.tellchat`        | `Sends player a message like /tellraw command`       |
 | `/swearfilter <on\| off> [PLAYER]`      | `aspekt.set_swear.admin` | `Set swear filter for player`                        |
 | `/swearfilter <on\| off>`               | `-`                      | `Set swear filter for yourself`                      |
+
+### ChatGames
+
+Chat games will randomly appear in chat after specified time amount
+
+After entering `/quiz ANSWER` chat game will end and player who won will be rewarded with specified reward
+
+## Commands
+
+| Command          | Permission | Description       |
+|:-----------------|:-----------|:------------------|
+| `/quiz <ANSWER>` | `-`        | `Say quiz answer` |
+
+#### Rewards
+
+```yaml
+reward:
+  type: "MONEY"
+  amount: 400.0
+```
+
+#### Riddles
+
+```yaml
+- type: "RIDDLE"
+  question: "Висит груша нельзя скушать"
+  answer: "Лампа"
+- type: "SUM_OF_TWO"
+- type: "TIMES_OF_TWO"
+- type: "EQUATION_EASY"
+```
