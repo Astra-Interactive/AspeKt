@@ -18,6 +18,7 @@ import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
+import kotlin.random.Random
 
 @Suppress("LongParameterList")
 internal class ChatGameCommand(
@@ -63,11 +64,12 @@ internal class ChatGameCommand(
                             with(kyoriComponentSerializer) {
                                 when (val reward = reward) {
                                     is Reward.Money -> {
-                                        economy?.addMoney(player.uniqueId, reward.amount)
+                                        val amount = Random.nextInt(reward.minAmount.toInt(), reward.maxAmount.toInt())
+                                        economy?.addMoney(player.uniqueId, amount.toDouble())
                                         Bukkit.broadcast(
                                             translation.chatGame.gameEndedMoneyReward(
                                                 player.name,
-                                                reward.amount
+                                                amount
                                             ).component
                                         )
                                     }

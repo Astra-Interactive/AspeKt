@@ -8,5 +8,5 @@ import kotlinx.serialization.Serializable
 internal sealed interface Reward {
     @SerialName("MONEY")
     @Serializable
-    class Money(val amount: Double) : Reward
+    class Money(val minAmount: Double, val maxAmount: Double) : Reward
 }
