@@ -10,7 +10,8 @@ import ru.astrainteractive.klibs.kdi.Provider
 import ru.astrainteractive.klibs.kdi.getValue
 
 internal class ChatGameStoreImpl(
-    chatGameConfigProvider: Provider<ChatGameConfig>
+    chatGameConfigProvider: Provider<ChatGameConfig>,
+    private val riddleGenerator: RiddleGenerator
 ) : ChatGameStore, Logger by JUtiltLogger("ChatGameStore") {
     private val chatGameConfig by chatGameConfigProvider
 
@@ -26,7 +27,7 @@ internal class ChatGameStoreImpl(
             error { "#startNextGame could not start chat game" }
             return
         }
-        val game = RiddleGenerator.generate(nextGame)
+        val game = riddleGenerator.generate(nextGame)
         _state.value = ChatGameStore.State.Started(game)
     }
 

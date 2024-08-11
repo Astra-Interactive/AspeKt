@@ -29,8 +29,12 @@ class PluginTranslation(
 ) {
     @Serializable
     class ChatGame(
-        @SerialName("game_started")
-        private val gameStarted: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BКВИЗ&7] %quiz% → &2/quiz ОТВЕТ"),
+        @SerialName("solve_riddle")
+        private val solveRiddle: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BКВИЗ&7] Загадка: %quiz% → &2/quiz ОТВЕТ"),
+        @SerialName("solve_example")
+        private val solveExample: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BКВИЗ&7] Пример: %quiz% → &2/quiz ОТВЕТ"),
+        @SerialName("solve_anagram")
+        private val solveAnagram: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BКВИЗ&7] Анаграмма: %quiz% → &2/quiz ОТВЕТ"),
         @SerialName("no_quiz_available")
         val noQuizAvailable: StringDesc.Raw = StringDesc.Raw(
             "&7[&#DBB72BКВИЗ&7] &#db2c18В данный момент нет активного квиза!"
@@ -42,7 +46,10 @@ class PluginTranslation(
             "&7[&#DBB72BКВИЗ&7] &6%player% &7угадал верный ответ! И получил &6%amount% &7монет!"
         ),
     ) {
-        fun gameStarted(quiz: String) = gameStarted.replace("%quiz%", quiz)
+        fun solveRiddle(quiz: String) = solveRiddle.replace("%quiz%", quiz)
+        fun solveExample(quiz: String) = solveExample.replace("%quiz%", quiz)
+        fun solveAnagram(quiz: String) = solveAnagram.replace("%quiz%", quiz)
+
         fun gameEndedMoneyReward(player: String, amount: Number) = gameEndedMoneyReward
             .replace("%player%", player)
             .replace("%amount%", amount.toString())

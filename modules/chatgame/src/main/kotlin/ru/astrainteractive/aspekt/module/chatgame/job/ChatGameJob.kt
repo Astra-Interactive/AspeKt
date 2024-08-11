@@ -29,7 +29,7 @@ internal class ChatGameJob(
         chatGameStore.startNextGame()
         val state = chatGameStore.state.value as? ChatGameStore.State.Started ?: return
         with(kyoriComponentSerializer) {
-            translation.chatGame.gameStarted(state.chatGame.question.raw)
+            state.chatGame.question
                 .component
                 .run(Bukkit::broadcast)
         }
