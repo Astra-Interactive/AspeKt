@@ -30,7 +30,7 @@ class PluginTranslation(
     @Serializable
     class ChatGame(
         @SerialName("game_started")
-        private val gameStarted: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BКВИЗ&7] %quiz% -> &2/quiz ОТВЕТ"),
+        private val gameStarted: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BКВИЗ&7] %quiz% → &2/quiz ОТВЕТ"),
         @SerialName("no_quiz_available")
         val noQuizAvailable: StringDesc.Raw = StringDesc.Raw(
             "&7[&#DBB72BКВИЗ&7] &#db2c18В данный момент нет активного квиза!"
