@@ -28,4 +28,15 @@ internal sealed interface ChatGame {
     @SerialName("EQUATION_EASY")
     @Serializable
     class EquationEasy(override val reward: Reward? = null) : ChatGame
+
+    @SerialName("EQUATION_QUADRATIC")
+    @Serializable
+    class QuadraticEquation(override val reward: Reward? = null) : ChatGame
+
+    @SerialName("ANAGRAM")
+    @Serializable
+    class Anagram(
+        val words: List<String>,
+        override val reward: Reward? = null
+    ) : ChatGame
 }

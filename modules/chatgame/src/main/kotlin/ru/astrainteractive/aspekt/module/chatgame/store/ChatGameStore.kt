@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.module.chatgame.store
 
 import kotlinx.coroutines.flow.StateFlow
-import ru.astrainteractive.aspekt.module.chatgame.model.ChatGame
+import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameData
 
 internal interface ChatGameStore {
     val state: StateFlow<State>
@@ -13,6 +13,6 @@ internal interface ChatGameStore {
 
     sealed interface State {
         data object Pending : State
-        data class Started(val chatGame: ChatGame.Riddle) : State
+        data class Started(val chatGame: ChatGameData) : State
     }
 }

@@ -5,6 +5,7 @@ import ru.astrainteractive.aspekt.module.chatgame.command.ChatGameCommand
 import ru.astrainteractive.aspekt.module.chatgame.job.ChatGameJob
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStoreImpl
+import ru.astrainteractive.aspekt.module.chatgame.store.RiddleGenerator
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.parseOrDefault
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.writeIntoFile
@@ -22,7 +23,11 @@ interface ChatGameModule {
         }
         private val chatGameStore by lazy {
             ChatGameStoreImpl(
-                chatGameConfigProvider = { config.value }
+                chatGameConfigProvider = { config.value },
+                riddleGenerator = RiddleGenerator(
+                    configProvider = { config.value },
+                    translationProvider = { coreModule.translation.value }
+                )
             )
         }
         private val chatGameJob by lazy {
@@ -30,7 +35,6 @@ interface ChatGameModule {
                 chatGameStore = chatGameStore,
                 chatGameConfigProvider = { config.value },
                 kyoriComponentSerializerProvider = { coreModule.kyoriComponentSerializer.value },
-                translationProvider = { coreModule.translation.value }
             )
         }
         private val command by lazy {
