@@ -24,10 +24,10 @@ minecraft-protocollib = "5.1.0" # https://github.com/dmulloy2/ProtocolLib
 minecraft-vault = "1.7.1" # https://github.com/MilkBowl/VaultAPI
 minecraft-astralibs = "3.12.1" # https://github.com/Astra-Interactive/AstraLibs
 minecraft-bstats = "3.0.2" # https://github.com/Bastian/bStats
-minecraft-mockbukkit = "3.96.1" #https://github.com/MockBukkit/MockBukkit
+minecraft-mockbukkit = "v3.98.0" #https://github.com/MockBukkit/MockBukkit
 minecraft-luckperms = "5.4" # https://github.com/LuckPerms/LuckPerms
 minecraft-essentialsx = "2.20.1" # https://github.com/EssentialsX/Essentials
-minecraft-towny = "0.100.3.11" # https://github.com/TownyAdvanced/Towny
+minecraft-towny = "0.100.3.12" # https://github.com/TownyAdvanced/Towny
 
 # Shadow
 gradle-shadow = "8.0.0" # https://github.com/johnrengelman/shadow
