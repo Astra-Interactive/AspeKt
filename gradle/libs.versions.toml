@@ -1,7 +1,7 @@
 [versions]
 # Kotlin
 kotlin-version = "2.0.0" # https://github.com/JetBrains/kotlin
-kotlin-benchmark = "0.4.11" # https://github.com/Kotlin/kotlinx-benchmark
+kotlin-benchmark = "0.4.12" # https://github.com/Kotlin/kotlinx-benchmark
 kotlin-coroutines = "1.8.1" # https://github.com/Kotlin/kotlinx.coroutines
 kotlin-json = "1.7.1" # https://github.com/Kotlin/kotlinx.serialization
 kotlin-kaml = "0.61.0" # https://github.com/charleskorn/kaml
@@ -23,8 +23,8 @@ minecraft-papi = "2.11.6" # https://github.com/PlaceholderAPI/PlaceholderAPI
 minecraft-protocollib = "5.1.0" # https://github.com/dmulloy2/ProtocolLib
 minecraft-vault = "1.7.1" # https://github.com/MilkBowl/VaultAPI
 minecraft-astralibs = "3.12.2" # https://github.com/Astra-Interactive/AstraLibs
-minecraft-bstats = "3.0.2" # https://github.com/Bastian/bStats
-minecraft-mockbukkit = "3.108.0" #https://github.com/MockBukkit/MockBukkit
+minecraft-bstats = "3.0.3" # https://github.com/Bastian/bStats
+minecraft-mockbukkit = "3.113.0" #https://github.com/MockBukkit/MockBukkit
 minecraft-luckperms = "5.4" # https://github.com/LuckPerms/LuckPerms
 minecraft-essentialsx = "2.20.1" # https://github.com/EssentialsX/Essentials
 minecraft-towny = "0.100.3.12" # https://github.com/TownyAdvanced/Towny
