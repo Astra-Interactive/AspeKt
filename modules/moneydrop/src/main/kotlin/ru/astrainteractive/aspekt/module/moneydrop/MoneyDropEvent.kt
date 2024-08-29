@@ -12,7 +12,7 @@ import org.bukkit.event.inventory.InventoryPickupItemEvent
 import ru.astrainteractive.aspekt.module.moneydrop.di.MoneyDropDependencies
 import ru.astrainteractive.astralibs.event.DSLEvent
 
-class MoneyDropEvent(
+internal class MoneyDropEvent(
     dependencies: MoneyDropDependencies
 ) : MoneyDropDependencies by dependencies {
 
@@ -55,6 +55,6 @@ class MoneyDropEvent(
     }
 
     val blockPlaceEvent = DSLEvent<BlockPlaceEvent>(eventListener, plugin) { e ->
-        moneyDropController.blockPlaced(e.blockPlaced.location)
+        moneyDropController.rememberLocation(e.blockPlaced.location)
     }
 }
