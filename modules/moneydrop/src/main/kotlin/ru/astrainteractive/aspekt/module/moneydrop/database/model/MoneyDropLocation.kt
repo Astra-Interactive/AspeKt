@@ -7,5 +7,6 @@ internal data class MoneyDropLocation(
     val x: Int,
     val y: Int,
     val z: Int,
-    val world: String
+    val world: String,
+    val additionalConstraint: String? = null
 )

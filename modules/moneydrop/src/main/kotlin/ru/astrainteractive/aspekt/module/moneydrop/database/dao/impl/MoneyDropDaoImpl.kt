@@ -27,6 +27,7 @@ internal class MoneyDropDaoImpl(
                         it[MoneyDropLocationTable.y] = location.y
                         it[MoneyDropLocationTable.z] = location.z
                         it[MoneyDropLocationTable.world] = location.world
+                        it[MoneyDropLocationTable.additionalConstraint] = location.additionalConstraint
                     }
                 }
             }
@@ -44,6 +45,7 @@ internal class MoneyDropDaoImpl(
                                 .and(MoneyDropLocationTable.y.eq(location.y))
                                 .and(MoneyDropLocationTable.z.eq(location.z))
                                 .and(MoneyDropLocationTable.world.eq(location.world))
+                                .and(MoneyDropLocationTable.additionalConstraint.eq(location.additionalConstraint))
                         }.count() > 0
                 }
             }

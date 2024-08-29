@@ -30,11 +30,12 @@ internal class MoneyDropController(
     private val translation by translationDependency
     private val kyoriComponentSerializer by kyoriComponentSerializerDependency
 
-    private fun Location.toMoneyDropLocation() = MoneyDropLocation(
+    private fun Location.toMoneyDropLocation(additionalConstraint: String?) = MoneyDropLocation(
         x = this.x.toInt(),
         y = this.y.toInt(),
         z = this.z.toInt(),
-        world = this.world.name
+        world = this.world.name,
+        additionalConstraint = additionalConstraint
     )
 
     private fun checkForChance(entry: PluginConfiguration.MoneyDropEntry): Boolean {
@@ -43,8 +44,8 @@ internal class MoneyDropController(
     }
 
     private suspend fun drop(location: Location, entry: PluginConfiguration.MoneyDropEntry) {
-        if (dao.isLocationExists(location.toMoneyDropLocation())) return
-        rememberLocation(location)
+        if (dao.isLocationExists(location.toMoneyDropLocation(entry.from))) return
+        rememberLocation(location, entry.from)
 
         val amount = Random.nextDouble(entry.min, entry.max)
         val material = Material.RAW_GOLD
@@ -76,7 +77,7 @@ internal class MoneyDropController(
             .forEach { entry -> drop(location, entry) }
     }
 
-    fun rememberLocation(location: Location) {
-        launch { dao.addLocation(location.toMoneyDropLocation()) }
+    fun rememberLocation(location: Location, additionalConstraint: String? = null) {
+        launch { dao.addLocation(location.toMoneyDropLocation(additionalConstraint)) }
     }
 }
