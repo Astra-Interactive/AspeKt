@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.moneydrop
 import org.bukkit.persistence.PersistentDataType
 import ru.astrainteractive.astralibs.persistence.BukkitConstant
 
-object MoneyDropFlag {
+internal object MoneyDropFlag {
     /**
      * Amount of money will be added
      */

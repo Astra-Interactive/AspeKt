@@ -6,6 +6,7 @@ plugins {
 dependencies {
     // Kotlin
     implementation(libs.bundles.kotlin)
+    implementation(libs.bundles.exposed)
     // Spigot dependencies
     compileOnly(libs.minecraft.paper.api)
     implementation(libs.minecraft.bstats)
@@ -13,6 +14,7 @@ dependencies {
     implementation(libs.minecraft.astralibs.core)
     implementation(libs.minecraft.astralibs.orm)
     implementation(libs.klibs.kdi)
+    implementation(libs.klibs.mikro.core)
     implementation(libs.minecraft.astralibs.menu.bukkit)
     implementation(libs.minecraft.astralibs.core.bukkit)
     implementation(libs.minecraft.vaultapi)
