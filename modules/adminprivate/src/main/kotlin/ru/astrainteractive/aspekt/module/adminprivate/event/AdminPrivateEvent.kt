@@ -16,6 +16,7 @@ import org.bukkit.event.block.BlockBurnEvent
 import org.bukkit.event.block.BlockExplodeEvent
 import org.bukkit.event.block.BlockFromToEvent
 import org.bukkit.event.block.BlockIgniteEvent
+import org.bukkit.event.block.BlockPistonEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.block.BlockSpreadEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -262,5 +263,15 @@ internal class AdminPrivateEvent(
                 flag = ChunkFlag.PLACE
             )
         }
+    }
+
+    val pistonEvent = DSLEvent<BlockPistonEvent>(eventListener, plugin) { e ->
+        handleDefault(
+            retractKey = RetractKey.Vararg(e.block.location.chunk, "BlockPistonEvent"),
+            e = e,
+            adminChunk = e.block.location.chunk.adminChunk,
+            player = null,
+            flag = ChunkFlag.PLACE
+        )
     }
 }
