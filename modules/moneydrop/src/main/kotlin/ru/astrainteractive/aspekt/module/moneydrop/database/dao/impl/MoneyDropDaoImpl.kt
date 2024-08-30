@@ -1,5 +1,7 @@
 package ru.astrainteractive.aspekt.module.moneydrop.database.dao.impl
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.and
@@ -14,14 +16,14 @@ import ru.astrainteractive.astralibs.logging.Logger
 import kotlin.coroutines.CoroutineContext
 
 internal class MoneyDropDaoImpl(
-    private val database: Database,
+    private val databaseFlow: Flow<Database>,
     private val ioDispatcher: CoroutineContext
 ) : MoneyDropDao, Logger by JUtiltLogger("MoneyDropDao") {
     override suspend fun addLocation(location: MoneyDropLocation) {
         if (isLocationExists(location)) return
         runCatching {
             withContext(ioDispatcher) {
-                transaction(database) {
+                transaction(databaseFlow.first()) {
                     MoneyDropLocationTable.insert {
                         it[MoneyDropLocationTable.x] = location.x
                         it[MoneyDropLocationTable.y] = location.y
@@ -37,7 +39,7 @@ internal class MoneyDropDaoImpl(
     override suspend fun isLocationExists(location: MoneyDropLocation): Boolean {
         return runCatching {
             withContext(ioDispatcher) {
-                transaction(database) {
+                transaction(databaseFlow.first()) {
                     MoneyDropLocationTable
                         .selectAll()
                         .where {

@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.moneydrop.database.di
 
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -20,7 +21,7 @@ internal interface MoneyDropDaoModule {
         dataFolder: File,
         ioDispatcher: CoroutineContext
     ) : MoneyDropDaoModule {
-        private val database by lazy {
+        private val database = flow {
             val path = dataFolder.resolve("moneydrops.db").absolutePath
             val database = Database.connect(
                 url = "jdbc:sqlite:$path",
@@ -35,10 +36,10 @@ internal interface MoneyDropDaoModule {
                     )
                 }
             }
-            database
+            emit(database)
         }
         override val dao: MoneyDropDao = MoneyDropDaoImpl(
-            database = database,
+            databaseFlow = database,
             ioDispatcher = ioDispatcher
         )
     }
