@@ -7,12 +7,15 @@ import org.jetbrains.exposed.sql.Slf4jSqlDebugLogger
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
+import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
+import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDaoImpl
 import ru.astrainteractive.aspekt.module.economy.database.table.CurrencyTable
 import ru.astrainteractive.aspekt.module.economy.database.table.PlayerCurrencyTable
 import ru.astrainteractive.aspekt.module.economy.model.DatabaseConfiguration
 import java.io.File
 
 interface EconomyDatabaseModule {
+    val economyDao: EconomyDao
 
     class Default(dbConfig: DatabaseConfiguration, dataFolder: File) : EconomyDatabaseModule {
         private val database by lazy {
@@ -41,5 +44,6 @@ interface EconomyDatabaseModule {
             }
             database
         }
+        override val economyDao: EconomyDao = EconomyDaoImpl(database)
     }
 }

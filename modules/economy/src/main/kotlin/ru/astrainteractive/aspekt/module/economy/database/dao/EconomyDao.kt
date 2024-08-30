@@ -41,7 +41,7 @@ interface EconomyDao {
     suspend fun topCurrency(id: String, page: Int, size: Int): List<PlayerCurrency>
 
     /**
-     * Transfer money in transaction from player [fromUuid] to player [toUuid]
+     * Transfer money in transaction from player [from] to player [to]
      * @return true if success false if not
      */
     suspend fun transfer(from: PlayerModel, to: PlayerModel, amount: Double, currencyId: String): Boolean

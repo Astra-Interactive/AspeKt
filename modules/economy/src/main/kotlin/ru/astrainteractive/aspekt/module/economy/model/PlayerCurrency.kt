@@ -5,10 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PlayerCurrency(
-    @SerialName("name")
-    val name: String,
-    @SerialName("uuid")
-    val uuid: String,
+    @SerialName("player_model")
+    val playerModel: PlayerModel,
     @SerialName("amount")
     val amount: Double,
     @SerialName("currency_model")

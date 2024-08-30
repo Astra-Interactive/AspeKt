@@ -10,16 +10,17 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import ru.astrainteractive.aspekt.module.economy.database.table.CurrencyTable
 import ru.astrainteractive.aspekt.module.economy.database.table.PlayerCurrencyTable
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
+import ru.astrainteractive.astralibs.logging.JUtiltLogger
+import ru.astrainteractive.astralibs.logging.Logger
 
 @Suppress("TooManyFunctions")
-class EconomyDaoImpl(private val database: Database) : EconomyDao {
+class EconomyDaoImpl(private val database: Database) : EconomyDao, Logger by JUtiltLogger("EconomyDao") {
     private fun ResultRow.toCurrency() = CurrencyModel(
         id = this[CurrencyTable.id].value,
         name = this[CurrencyTable.name],
@@ -27,8 +28,10 @@ class EconomyDaoImpl(private val database: Database) : EconomyDao {
     )
 
     private fun ResultRow.toPlayerCurrency() = PlayerCurrency(
-        name = this[PlayerCurrencyTable.lastUsername],
-        uuid = this[PlayerCurrencyTable.id].value,
+        playerModel = PlayerModel(
+            name = this[PlayerCurrencyTable.lastUsername],
+            uuid = this[PlayerCurrencyTable.id].value,
+        ),
         amount = this[PlayerCurrencyTable.amount],
         currencyModel = CurrencyModel(
             id = this[CurrencyTable.id].value,
@@ -38,7 +41,7 @@ class EconomyDaoImpl(private val database: Database) : EconomyDao {
     )
 
     override suspend fun getAllCurrencies(): List<CurrencyModel> {
-        return transaction(database) {
+        return newSuspendedTransaction(db = database) {
             CurrencyTable.selectAll()
                 .map { it.toCurrency() }
         }
@@ -50,30 +53,38 @@ class EconomyDaoImpl(private val database: Database) : EconomyDao {
             .map(CurrencyModel::id)
             .toSet()
             .minus(currencies.map(CurrencyModel::id).toSet())
+        val primaryCurrencyCount = currencies.filter(CurrencyModel::isPrimary).size
+        if (primaryCurrencyCount == 0) {
+            error { "#updateCurrencies you didn't select primary currency! Economy may break!" }
+        } else if (primaryCurrencyCount > 1) {
+            error { "#updateCurrencies you have selected multiple primary currencies! Economy may break!" }
+        }
         if (nonExistingCurrencies.isNotEmpty()) {
-            transaction(database) {
+            newSuspendedTransaction(db = database) {
                 CurrencyTable.deleteWhere { CurrencyTable.id inList nonExistingCurrencies }
-                PlayerCurrencyTable.deleteWhere { CurrencyTable.id inList nonExistingCurrencies }
+                PlayerCurrencyTable.deleteWhere { PlayerCurrencyTable.currencyId inList nonExistingCurrencies }
             }
         }
-        currencies.forEach { currency ->
-            if (existingCurrencies.all { currency.id == it.id }) {
-                CurrencyTable.update(where = { CurrencyTable.id eq currency.id }) {
-                    it[CurrencyTable.name] = currency.name
-                    it[CurrencyTable.isPrimary] = currency.isPrimary
-                }
-            } else {
-                CurrencyTable.insert {
-                    it[CurrencyTable.id] = currency.id
-                    it[CurrencyTable.name] = currency.name
-                    it[CurrencyTable.isPrimary] = currency.isPrimary
+        newSuspendedTransaction(db = database) {
+            currencies.forEach { currency ->
+                if (existingCurrencies.find { currency.id == it.id } != null) {
+                    CurrencyTable.update(where = { CurrencyTable.id eq currency.id }) {
+                        it[CurrencyTable.name] = currency.name
+                        it[CurrencyTable.isPrimary] = currency.isPrimary
+                    }
+                } else {
+                    CurrencyTable.insert {
+                        it[CurrencyTable.id] = currency.id
+                        it[CurrencyTable.name] = currency.name
+                        it[CurrencyTable.isPrimary] = currency.isPrimary
+                    }
                 }
             }
         }
     }
 
     override suspend fun findCurrency(id: String): CurrencyModel? {
-        return transaction(database) {
+        return newSuspendedTransaction(db = database) {
             CurrencyTable.selectAll()
                 .where { CurrencyTable.id eq id }
                 .map { it.toCurrency() }
@@ -82,7 +93,7 @@ class EconomyDaoImpl(private val database: Database) : EconomyDao {
     }
 
     override suspend fun findPlayerCurrency(playerUuid: String, currencyId: String): PlayerCurrency? {
-        return transaction(database) {
+        return newSuspendedTransaction(db = database) {
             CurrencyTable.join(
                 otherTable = PlayerCurrencyTable,
                 joinType = JoinType.LEFT,
@@ -98,7 +109,7 @@ class EconomyDaoImpl(private val database: Database) : EconomyDao {
     }
 
     override suspend fun playerCurrencies(playerUuid: String): List<PlayerCurrency> {
-        return transaction(database) {
+        return newSuspendedTransaction(db = database) {
             CurrencyTable.join(
                 otherTable = PlayerCurrencyTable,
                 joinType = JoinType.LEFT,
@@ -112,7 +123,7 @@ class EconomyDaoImpl(private val database: Database) : EconomyDao {
     }
 
     override suspend fun topCurrency(id: String, page: Int, size: Int): List<PlayerCurrency> {
-        return transaction(database) {
+        return newSuspendedTransaction(db = database) {
             CurrencyTable.join(
                 otherTable = PlayerCurrencyTable,
                 joinType = JoinType.LEFT,
@@ -130,18 +141,19 @@ class EconomyDaoImpl(private val database: Database) : EconomyDao {
     private suspend fun updatePlayerCurrencyWithoutTransaction(currency: PlayerCurrency) {
         val isPlayerCurrencyExists = PlayerCurrencyTable.selectAll()
             .where { PlayerCurrencyTable.currencyId eq currency.currencyModel.id }
-            .andWhere { PlayerCurrencyTable.id eq currency.uuid }
+            .andWhere { PlayerCurrencyTable.id eq currency.playerModel.uuid }
             .firstOrNull()
         if (isPlayerCurrencyExists == null) {
             PlayerCurrencyTable.insert {
                 it[PlayerCurrencyTable.amount] = currency.amount
-                it[PlayerCurrencyTable.lastUsername] = currency.name
-                it[PlayerCurrencyTable.id] = currency.uuid
+                it[PlayerCurrencyTable.lastUsername] = currency.playerModel.name
+                it[PlayerCurrencyTable.id] = currency.playerModel.uuid
+                it[PlayerCurrencyTable.currencyId] = currency.currencyModel.id
             }
         } else {
             PlayerCurrencyTable.update(where = { PlayerCurrencyTable.currencyId eq currency.currencyModel.id }) {
                 it[PlayerCurrencyTable.amount] = currency.amount
-                it[PlayerCurrencyTable.lastUsername] = currency.name
+                it[PlayerCurrencyTable.lastUsername] = currency.playerModel.name
             }
         }
     }
@@ -151,13 +163,15 @@ class EconomyDaoImpl(private val database: Database) : EconomyDao {
             val fromPlayerCurrency = findPlayerCurrency(from.uuid, currencyId) ?: return@newSuspendedTransaction false
             if (fromPlayerCurrency.amount - amount < 0) return@newSuspendedTransaction false
             val toPlayerCurrency = PlayerCurrency(
-                name = to.name,
+                playerModel = PlayerModel(
+                    name = to.name,
+                    uuid = to.uuid,
+                ),
                 amount = amount,
-                uuid = to.uuid,
                 currencyModel = fromPlayerCurrency.currencyModel
             )
-            updatePlayerCurrency(fromPlayerCurrency.copy(amount = fromPlayerCurrency.amount - amount))
-            updatePlayerCurrency(toPlayerCurrency)
+            updatePlayerCurrencyWithoutTransaction(fromPlayerCurrency.copy(amount = fromPlayerCurrency.amount - amount))
+            updatePlayerCurrencyWithoutTransaction(toPlayerCurrency)
             true
         }
     }
