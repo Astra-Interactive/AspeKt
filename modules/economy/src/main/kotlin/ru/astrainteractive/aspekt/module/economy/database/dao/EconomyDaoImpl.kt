@@ -54,6 +54,9 @@ internal class EconomyDaoImpl(private val database: Database) : EconomyDao, Logg
             .toSet()
             .minus(currencies.map(CurrencyModel::id).toSet())
         val primaryCurrencyCount = currencies.filter(CurrencyModel::isPrimary).size
+        if (currencies.isEmpty()) {
+            error { "#updateCurrencies you didn't setup any currencies! Economy may break!" }
+        }
         if (primaryCurrencyCount == 0) {
             error { "#updateCurrencies you didn't select primary currency! Economy may break!" }
         } else if (primaryCurrencyCount > 1) {

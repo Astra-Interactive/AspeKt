@@ -14,6 +14,7 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.parse
+import ru.astrainteractive.astralibs.serialization.StringFormatExt.writeIntoFile
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 
 interface EconomyModule {
@@ -25,7 +26,12 @@ interface EconomyModule {
             factory = { DatabaseConfiguration.H2 },
             loader = {
                 folder.mkdirs()
-                coreModule.yamlFormat.parse<DatabaseConfiguration>(folder.resolve("db.yml"))
+                val file = folder.resolve("db.yml")
+                if (!file.exists()) {
+                    file.createNewFile()
+                    coreModule.yamlFormat.writeIntoFile(DatabaseConfiguration.H2, file)
+                }
+                coreModule.yamlFormat.parse<DatabaseConfiguration>(file)
                     .onFailure { error { "#databaseConfiguration could not read db.yml: ${it.message}" } }
                     .getOrNull()
             }
@@ -34,8 +40,13 @@ interface EconomyModule {
             factory = { null },
             loader = {
                 folder.mkdirs()
+                val file = folder.resolve("currencies.yml")
+                if (!file.exists()) {
+                    file.createNewFile()
+                    coreModule.yamlFormat.writeIntoFile(emptyMap<String, CurrencyModel>(), file)
+                }
                 coreModule.yamlFormat
-                    .parse<Map<String, CurrencyModel>>(folder.resolve("currencies.yml"))
+                    .parse<Map<String, CurrencyModel>>(file)
                     .onFailure { error { "#currencyConfiguration could not read currencies.yml: ${it.message}" } }
                     .getOrNull()
             }
