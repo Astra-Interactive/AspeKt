@@ -21,7 +21,7 @@ internal interface EconomyDatabaseModule {
         private val database by lazy {
             val database = when (dbConfig) {
                 DatabaseConfiguration.H2 -> Database.connect(
-                    url = "jdbc:sqlite:${dataFolder.resolve("moneydrops.db").absolutePath}",
+                    url = "jdbc:sqlite:${dataFolder.resolve("economy.db").absolutePath}",
                     driver = "org.sqlite.JDBC"
                 )
 

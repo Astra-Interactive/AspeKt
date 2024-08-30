@@ -41,6 +41,8 @@ class PluginTranslation(
         val topsTitle: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#42f596Топ игроков по балансу:"),
         val topsEmpty: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#42f596Топ игроков пуст!"),
         private val topItem: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#42f596%index%. %name% → %balance%"),
+        @SerialName("currency_not_found")
+        val currencyNotFound: StringDesc.Raw = StringDesc.Raw("&#db2c18Валюта не найдена!"),
     ) {
         fun playerBalance(amount: Number) = playerBalance.replace("%balance%", amount.toString())
         fun currencies(value: String) = currencies.replace("%currencies%", value)

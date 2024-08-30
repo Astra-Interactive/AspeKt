@@ -35,12 +35,13 @@ import ru.astrainteractive.aspekt.module.adminprivate.model.AdminChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.adminprivate.util.adminChunk
 import ru.astrainteractive.aspekt.plugin.PluginPermission
-import ru.astrainteractive.astralibs.event.DSLEvent
+import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
 
+@Suppress("TooManyFunctions")
 internal class AdminPrivateEvent(
     dependencies: AdminPrivateDependencies,
-) : AdminPrivateDependencies by dependencies {
+) : AdminPrivateDependencies by dependencies, EventListener {
     private val debounce = EventDebounce<RetractKey>(5000L)
     private fun <T> handleDefault(
         retractKey: RetractKey,
@@ -65,7 +66,7 @@ internal class AdminPrivateEvent(
         }
     }
 
-    val blockBreakEvent = DSLEvent<BlockBreakEvent>(eventListener, plugin) { e ->
+    fun blockBreakEvent(e: BlockBreakEvent) {
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.chunk, e.player, "blockBreakEvent"),
             e = e,
@@ -74,7 +75,8 @@ internal class AdminPrivateEvent(
             flag = ChunkFlag.BREAK
         )
     }
-    val blockPlaceEvent = DSLEvent<BlockPlaceEvent>(eventListener, plugin) { e ->
+
+    fun blockPlaceEvent(e: BlockPlaceEvent) {
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.chunk, e.player, "blockPlaceEvent"),
             e = e,
@@ -83,10 +85,11 @@ internal class AdminPrivateEvent(
             flag = ChunkFlag.PLACE
         )
     }
-    val interactEvent = DSLEvent<PlayerInteractEvent>(eventListener, plugin) { e ->
+
+    fun interactEvent(e: PlayerInteractEvent) {
         val location = e.interactionPoint ?: e.player.location
-        if (e.action == Action.LEFT_CLICK_AIR) return@DSLEvent
-        if (e.action == Action.RIGHT_CLICK_AIR) return@DSLEvent
+        if (e.action == Action.LEFT_CLICK_AIR) return
+        if (e.action == Action.RIGHT_CLICK_AIR) return
         handleDefault(
             retractKey = RetractKey.Vararg(location, e.player, "interactEvent"),
             e = e,
@@ -95,7 +98,8 @@ internal class AdminPrivateEvent(
             flag = ChunkFlag.INTERACT
         )
     }
-    val itemFrameEvent = DSLEvent<PlayerItemFrameChangeEvent>(eventListener, plugin) { e ->
+
+    fun itemFrameEvent(e: PlayerItemFrameChangeEvent) {
         handleDefault(
             retractKey = RetractKey.Vararg(e.player.location, e.player, "itemFrameEvent"),
             e = e,
@@ -104,7 +108,8 @@ internal class AdminPrivateEvent(
             flag = ChunkFlag.INTERACT
         )
     }
-    val breakItemFrameEvent = DSLEvent<HangingBreakByEntityEvent>(eventListener, plugin) { e ->
+
+    fun breakItemFrameEvent(e: HangingBreakByEntityEvent) {
         handleDefault(
             retractKey = RetractKey.Vararg(e.entity.location, e.entity, "breakItemFrameEvent"),
             e = e,
@@ -113,7 +118,8 @@ internal class AdminPrivateEvent(
             flag = ChunkFlag.INTERACT
         )
     }
-    val armorStandEvent = DSLEvent<PlayerArmorStandManipulateEvent>(eventListener, plugin) { e ->
+
+    fun armorStandEvent(e: PlayerArmorStandManipulateEvent) {
         handleDefault(
             retractKey = RetractKey.Vararg(e.player.location, e.player, "armorStandEvent"),
             e = e,
@@ -122,8 +128,9 @@ internal class AdminPrivateEvent(
             flag = ChunkFlag.INTERACT
         )
     }
-    val armorStandBreakEvent = DSLEvent<EntityDamageByEntityEvent>(eventListener, plugin) { e ->
-        val armorStand = e.entity as? ArmorStand ?: return@DSLEvent
+
+    fun armorStandBreakEvent(e: EntityDamageByEntityEvent) {
+        val armorStand = e.entity as? ArmorStand ?: return
         handleDefault(
             retractKey = RetractKey.Vararg(armorStand.location, armorStand, "armorStandBreakEvent"),
             e = e,
@@ -134,7 +141,7 @@ internal class AdminPrivateEvent(
     }
 
     // Explosions
-    val onBlockExplode = DSLEvent<BlockExplodeEvent>(eventListener, plugin) { e ->
+    fun onBlockExplode(e: BlockExplodeEvent) {
         e.blockList().forEach { block ->
             handleDefault(
                 retractKey = RetractKey.Vararg(block.chunk, "onBlockExplode"),
@@ -145,7 +152,8 @@ internal class AdminPrivateEvent(
             )
         }
     }
-    val onEntityExplode = DSLEvent<BlockExplodeEvent>(eventListener, plugin) { e ->
+
+    fun onEntityExplode(e: BlockExplodeEvent) {
         e.blockList().forEach { block ->
             handleDefault(
                 retractKey = RetractKey.Vararg(block.chunk, "onEntityExplode"),
@@ -156,7 +164,8 @@ internal class AdminPrivateEvent(
             )
         }
     }
-    val onPrimeExplosion = DSLEvent<ExplosionPrimeEvent>(eventListener, plugin) { e ->
+
+    fun onPrimeExplosion(e: ExplosionPrimeEvent) {
         handleDefault(
             retractKey = RetractKey.Vararg(e.entity.location.chunk, "onPrimeExplosion"),
             e = e,
@@ -167,7 +176,7 @@ internal class AdminPrivateEvent(
     }
 
     // Placing
-    val onBucketEmptyEvent = DSLEvent<PlayerBucketEmptyEvent>(eventListener, plugin) { e ->
+    fun onBucketEmptyEvent(e: PlayerBucketEmptyEvent) {
         handleDefault(
             retractKey = RetractKey.Vararg(e.blockClicked.location.chunk, "onBucketEmptyEvent"),
             e = e,
@@ -176,8 +185,9 @@ internal class AdminPrivateEvent(
             flag = ChunkFlag.EMPTY_BUCKET
         )
     }
-    val onTntLavaPlace = DSLEvent<BlockPlaceEvent>(eventListener, plugin) { e ->
-        if (!listOf(Material.TNT, Material.LAVA, Material.LAVA_BUCKET).contains(e.blockPlaced.type)) return@DSLEvent
+
+    fun onTntLavaPlace(e: BlockPlaceEvent) {
+        if (!listOf(Material.TNT, Material.LAVA, Material.LAVA_BUCKET).contains(e.blockPlaced.type)) return
         handleDefault(
             retractKey = RetractKey.Vararg(e.blockPlaced.location.chunk, "onTntLavaPlace"),
             e = e,
@@ -186,8 +196,9 @@ internal class AdminPrivateEvent(
             flag = ChunkFlag.EXPLODE
         )
     }
-    val onBlockFromTo = DSLEvent<BlockFromToEvent>(eventListener, plugin) { e ->
-        if (!listOf(Material.LAVA, Material.LAVA_BUCKET).contains(e.block.type)) return@DSLEvent
+
+    fun onBlockFromTo(e: BlockFromToEvent) {
+        if (!listOf(Material.LAVA, Material.LAVA_BUCKET).contains(e.block.type)) return
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.location.chunk, "onBlockFromTo"),
             e = e,
@@ -196,7 +207,8 @@ internal class AdminPrivateEvent(
             flag = ChunkFlag.SPREAD
         )
     }
-    val onBlockIgniteEvent = DSLEvent<BlockIgniteEvent>(eventListener, plugin) { e ->
+
+    fun onBlockIgniteEvent(e: BlockIgniteEvent) {
         val location = (e.ignitingBlock ?: e.block).location
         handleDefault(
             retractKey = RetractKey.Vararg(location.chunk, "onBlockIgniteEvent"),
@@ -206,7 +218,8 @@ internal class AdminPrivateEvent(
             flag = ChunkFlag.SPREAD
         )
     }
-    val onBlockBurnEvent = DSLEvent<BlockBurnEvent>(eventListener, plugin) { e ->
+
+    fun onBlockBurnEvent(e: BlockBurnEvent) {
         val location = (e.ignitingBlock ?: e.block).location
         handleDefault(
             retractKey = RetractKey.Vararg(location.chunk, "onBlockBurnEvent"),
@@ -216,8 +229,9 @@ internal class AdminPrivateEvent(
             flag = ChunkFlag.SPREAD
         )
     }
-    val onBlockSpread = DSLEvent<BlockSpreadEvent>(eventListener, plugin) { e ->
-        if (!listOf(Material.LAVA, Material.FIRE).contains(e.block.type)) return@DSLEvent
+
+    fun onBlockSpread(e: BlockSpreadEvent) {
+        if (!listOf(Material.LAVA, Material.FIRE).contains(e.block.type)) return
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.location.chunk, "onBlockSpread"),
             e = e,
@@ -226,8 +240,9 @@ internal class AdminPrivateEvent(
             flag = ChunkFlag.SPREAD
         )
     }
-    val playerDamageEvent = DSLEvent<EntityDamageEvent>(eventListener, plugin) { e ->
-        val player = e.entity as? Player ?: return@DSLEvent
+
+    fun playerDamageEvent(e: EntityDamageEvent) {
+        val player = e.entity as? Player ?: return
         handleDefault(
             retractKey = RetractKey.Vararg(e.entity.location.chunk, player, "playerDamageEvent"),
             e = e,
@@ -236,8 +251,9 @@ internal class AdminPrivateEvent(
             flag = ChunkFlag.RECEIVE_DAMAGE
         )
     }
-    val entitySpawnEvent = DSLEvent<EntitySpawnEvent>(eventListener, plugin) { e ->
-        if (e.entity !is Monster || e.entity !is Enemy) return@DSLEvent
+
+    fun entitySpawnEvent(e: EntitySpawnEvent) {
+        if (e.entity !is Monster || e.entity !is Enemy) return
         handleDefault(
             retractKey = RetractKey.Vararg(e.entity.location.chunk, e.entity, "entitySpawnEvent"),
             e = e,
@@ -246,7 +262,8 @@ internal class AdminPrivateEvent(
             flag = ChunkFlag.HOSTILE_MOB_SPAWN
         )
     }
-    val portalCreateEvent = DSLEvent<PortalCreateEvent>(eventListener, plugin) { e ->
+
+    fun portalCreateEvent(e: PortalCreateEvent) {
         val chunks = e.blocks
             .map(BlockState::getLocation)
             .distinctBy(Location::getChunk)
@@ -265,7 +282,7 @@ internal class AdminPrivateEvent(
         }
     }
 
-    val pistonEvent = DSLEvent<BlockPistonEvent>(eventListener, plugin) { e ->
+    fun pistonEvent(e: BlockPistonEvent) {
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.location.chunk, "BlockPistonEvent"),
             e = e,

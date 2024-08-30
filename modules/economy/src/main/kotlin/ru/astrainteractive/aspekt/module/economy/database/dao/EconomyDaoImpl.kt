@@ -129,7 +129,7 @@ internal class EconomyDaoImpl(private val database: Database) : EconomyDao, Logg
         return newSuspendedTransaction(db = database) {
             CurrencyTable.join(
                 otherTable = PlayerCurrencyTable,
-                joinType = JoinType.LEFT,
+                joinType = JoinType.INNER,
                 onColumn = CurrencyTable.id,
                 otherColumn = PlayerCurrencyTable.currencyId
             )

@@ -28,32 +28,42 @@ internal class EkonCommandRegistry(
     private val kyori get() = getKyori.invoke()
     private val translation get() = getTranslation.invoke()
 
+    @Suppress("CyclomaticComplexMethod")
     private fun adminPrivateCompleter() =
         plugin.getCommand(EkonCommand.ALIAS)?.setTabCompleter { sender, command, label, args ->
             when {
-                args.size <= 1 -> listOf("list", "top", "balance", "set").withEntry(args.getOrNull(0))
+                args.size <= 1 -> listOf("list", "top", "balance", "set", "add").withEntry(args.getOrNull(0))
 
                 else -> {
-                    when (val arg0 = args.getOrNull(0)) {
+                    when (args.getOrNull(0)) {
                         "list" -> emptyList()
-                        "top" -> currencies.map(CurrencyModel::name).withEntry(arg0)
+                        "top" -> {
+                            when (args.size) {
+                                2 -> currencies.map(CurrencyModel::name).withEntry(args.getOrNull(1))
+
+                                else -> emptyList()
+                            }
+                        }
 
                         "balance" -> {
-                            when (val arg1 = args.getOrNull(1)) {
-                                null -> currencies.map(CurrencyModel::name).withEntry(arg0)
-                                else -> Bukkit.getOnlinePlayers().map(Player::getName).withEntry(arg1)
+                            when (args.size) {
+                                2 -> currencies.map(CurrencyModel::name).withEntry(args.getOrNull(1))
+
+                                3 -> Bukkit.getOnlinePlayers().map(Player::getName).withEntry(args.getOrNull(2))
+
+                                else -> emptyList()
                             }
                         }
 
                         "set", "add" -> {
-                            when (val arg1 = args.getOrNull(1)) {
-                                null -> currencies.map(CurrencyModel::name).withEntry(arg0)
-                                else -> {
-                                    when (arg1.getOrNull(2)) {
-                                        null -> Bukkit.getOnlinePlayers().map(Player::getName).withEntry(arg1)
-                                        else -> listOf("123")
-                                    }
-                                }
+                            when (args.size) {
+                                2 -> currencies.map(CurrencyModel::name).withEntry(args.getOrNull(1))
+
+                                3 -> Bukkit.getOnlinePlayers().map(Player::getName).withEntry(args.getOrNull(2))
+
+                                4 -> listOf("123")
+
+                                else -> emptyList()
                             }
                         }
 
@@ -86,11 +96,11 @@ internal class EkonCommandRegistry(
                     }
 
                     is CurrencyArgument.CurrencyNotFoundException -> with(kyori) {
-                        context.sender.sendMessage(translation.general.wrongUsage.component)
+                        context.sender.sendMessage(translation.economy.currencyNotFound.component)
                     }
 
                     is OfflinePlayerArgument.PlayerNotFound -> with(kyori) {
-                        context.sender.sendMessage(translation.general.wrongUsage.component)
+                        context.sender.sendMessage(translation.economy.playerNotFound.component)
                     }
 
                     is NoPermissionException -> with(kyori) {

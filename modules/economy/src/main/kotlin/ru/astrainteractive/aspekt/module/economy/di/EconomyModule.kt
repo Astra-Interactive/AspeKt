@@ -27,7 +27,7 @@ interface EconomyModule {
             loader = {
                 folder.mkdirs()
                 val file = folder.resolve("db.yml")
-                if (!file.exists()) {
+                if (!file.exists() || file.length() == 0L) {
                     file.createNewFile()
                     coreModule.yamlFormat.writeIntoFile(DatabaseConfiguration.H2, file)
                 }
@@ -41,7 +41,7 @@ interface EconomyModule {
             loader = {
                 folder.mkdirs()
                 val file = folder.resolve("currencies.yml")
-                if (!file.exists()) {
+                if (!file.exists() || file.length() == 0L) {
                     file.createNewFile()
                     coreModule.yamlFormat.writeIntoFile(emptyMap<String, CurrencyModel>(), file)
                 }

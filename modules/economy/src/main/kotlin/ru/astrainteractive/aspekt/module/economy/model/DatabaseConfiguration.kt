@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 internal sealed class DatabaseConfiguration(val driver: String) {
 
     @SerialName("MySql")
+    @Serializable
     class MySql(
         val host: String,
         val port: Int,
@@ -16,5 +17,6 @@ internal sealed class DatabaseConfiguration(val driver: String) {
     ) : DatabaseConfiguration("com.mysql.cj.jdbc.Driver")
 
     @SerialName("H2")
+    @Serializable
     data object H2 : DatabaseConfiguration("org.h2.Driver")
 }

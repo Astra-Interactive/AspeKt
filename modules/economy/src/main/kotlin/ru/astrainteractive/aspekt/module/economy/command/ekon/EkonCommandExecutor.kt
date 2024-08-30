@@ -84,7 +84,7 @@ internal class EkonCommandExecutor(
             top5.forEachIndexed { i, topItem ->
                 input.sender.sendMessage(
                     translation.economy.topItem(
-                        index = i,
+                        index = i + 1,
                         name = topItem.playerModel.name,
                         balance = topItem.balance
                     ).component
