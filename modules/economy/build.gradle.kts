@@ -6,6 +6,7 @@ plugins {
 dependencies {
     // Kotlin
     implementation(libs.bundles.kotlin)
+    implementation(libs.bundles.exposed)
     // Spigot dependencies
     compileOnly(libs.minecraft.paper.api)
     // AstraLibs
