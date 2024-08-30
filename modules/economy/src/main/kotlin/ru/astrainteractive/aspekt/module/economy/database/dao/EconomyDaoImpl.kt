@@ -1,5 +1,7 @@
 package ru.astrainteractive.aspekt.module.economy.database.dao
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.ResultRow
@@ -20,7 +22,12 @@ import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 
 @Suppress("TooManyFunctions")
-internal class EconomyDaoImpl(private val database: Database) : EconomyDao, Logger by JUtiltLogger("EconomyDao") {
+internal class EconomyDaoImpl(
+    private val databaseFlow: Flow<Database>
+) : EconomyDao,
+    Logger by JUtiltLogger("EconomyDao") {
+
+    private suspend fun currentDatabase() = databaseFlow.first()
     private fun ResultRow.toCurrency() = CurrencyModel(
         id = this[CurrencyTable.id].value,
         name = this[CurrencyTable.name],
@@ -41,7 +48,7 @@ internal class EconomyDaoImpl(private val database: Database) : EconomyDao, Logg
     )
 
     override suspend fun getAllCurrencies(): List<CurrencyModel> {
-        return newSuspendedTransaction(db = database) {
+        return newSuspendedTransaction(db = currentDatabase()) {
             CurrencyTable.selectAll()
                 .map { it.toCurrency() }
         }
@@ -63,12 +70,12 @@ internal class EconomyDaoImpl(private val database: Database) : EconomyDao, Logg
             error { "#updateCurrencies you have selected multiple primary currencies! Economy may break!" }
         }
         if (nonExistingCurrencies.isNotEmpty()) {
-            newSuspendedTransaction(db = database) {
+            newSuspendedTransaction(db = currentDatabase()) {
                 CurrencyTable.deleteWhere { CurrencyTable.id inList nonExistingCurrencies }
                 PlayerCurrencyTable.deleteWhere { PlayerCurrencyTable.currencyId inList nonExistingCurrencies }
             }
         }
-        newSuspendedTransaction(db = database) {
+        newSuspendedTransaction(db = currentDatabase()) {
             currencies.forEach { currency ->
                 if (existingCurrencies.find { currency.id == it.id } != null) {
                     CurrencyTable.update(where = { CurrencyTable.id eq currency.id }) {
@@ -87,7 +94,7 @@ internal class EconomyDaoImpl(private val database: Database) : EconomyDao, Logg
     }
 
     override suspend fun findCurrency(id: String): CurrencyModel? {
-        return newSuspendedTransaction(db = database) {
+        return newSuspendedTransaction(db = currentDatabase()) {
             CurrencyTable.selectAll()
                 .where { CurrencyTable.id eq id }
                 .map { it.toCurrency() }
@@ -96,7 +103,7 @@ internal class EconomyDaoImpl(private val database: Database) : EconomyDao, Logg
     }
 
     override suspend fun findPlayerCurrency(playerUuid: String, currencyId: String): PlayerCurrency? {
-        return newSuspendedTransaction(db = database) {
+        return newSuspendedTransaction(db = currentDatabase()) {
             CurrencyTable.join(
                 otherTable = PlayerCurrencyTable,
                 joinType = JoinType.LEFT,
@@ -112,7 +119,7 @@ internal class EconomyDaoImpl(private val database: Database) : EconomyDao, Logg
     }
 
     override suspend fun playerCurrencies(playerUuid: String): List<PlayerCurrency> {
-        return newSuspendedTransaction(db = database) {
+        return newSuspendedTransaction(db = currentDatabase()) {
             CurrencyTable.join(
                 otherTable = PlayerCurrencyTable,
                 joinType = JoinType.LEFT,
@@ -126,7 +133,7 @@ internal class EconomyDaoImpl(private val database: Database) : EconomyDao, Logg
     }
 
     override suspend fun topCurrency(id: String, page: Int, size: Int): List<PlayerCurrency> {
-        return newSuspendedTransaction(db = database) {
+        return newSuspendedTransaction(db = currentDatabase()) {
             CurrencyTable.join(
                 otherTable = PlayerCurrencyTable,
                 joinType = JoinType.INNER,
@@ -162,7 +169,7 @@ internal class EconomyDaoImpl(private val database: Database) : EconomyDao, Logg
     }
 
     override suspend fun transfer(from: PlayerModel, to: PlayerModel, amount: Double, currencyId: String): Boolean {
-        return newSuspendedTransaction(db = database) {
+        return newSuspendedTransaction(db = currentDatabase()) {
             val fromPlayerCurrency = findPlayerCurrency(from.uuid, currencyId) ?: return@newSuspendedTransaction false
             if (fromPlayerCurrency.balance - amount < 0) return@newSuspendedTransaction false
             val toPlayerCurrency = PlayerCurrency(
@@ -182,7 +189,7 @@ internal class EconomyDaoImpl(private val database: Database) : EconomyDao, Logg
     }
 
     override suspend fun updatePlayerCurrency(currency: PlayerCurrency) {
-        return newSuspendedTransaction(db = database) {
+        return newSuspendedTransaction(db = currentDatabase()) {
             updatePlayerCurrencyWithoutTransaction(currency)
         }
     }

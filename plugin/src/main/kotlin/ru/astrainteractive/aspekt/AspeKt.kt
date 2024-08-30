@@ -5,17 +5,15 @@ import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.impl.RootModuleImpl
-import ru.astrainteractive.aspekt.event.EventHandler
-import ru.astrainteractive.aspekt.event.di.EventsModule
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.astralibs.logging.JUtiltLogger
+import ru.astrainteractive.astralibs.logging.Logger
 
 /**
  * Initial class for your plugin
  */
-class AspeKt : JavaPlugin() {
+class AspeKt : JavaPlugin(), Logger by JUtiltLogger("AspeKt") {
     private val rootModule = RootModuleImpl()
-    private val eventsModule: EventsModule
-        get() = rootModule.eventsModule
     private val lifecycles: List<Lifecycle>
         get() = listOfNotNull(
             rootModule.autoBroadcastModule.lifecycle,
@@ -24,7 +22,6 @@ class AspeKt : JavaPlugin() {
             rootModule.menuModule.lifecycle,
             rootModule.discordLinkModule.lifecycle,
             rootModule.adminPrivateModule.lifecycle,
-            rootModule.eventsModule.sitModule,
             rootModule.townyDiscordModule.lifecycle,
             rootModule.moneyDropModule.lifecycle,
             rootModule.autoCropModule.lifecycle,
@@ -32,7 +29,8 @@ class AspeKt : JavaPlugin() {
             rootModule.antiSwearModule.lifecycle,
             rootModule.moneyAdvancementModule.lifecycle,
             rootModule.chatGameModule.lifecycle,
-            rootModule.economyModule.lifecycle
+            rootModule.economyModule.lifecycle,
+            rootModule.eventsModule.lifecycle
         )
 
     /**
@@ -40,7 +38,6 @@ class AspeKt : JavaPlugin() {
      */
     override fun onEnable() {
         rootModule.coreModule.plugin.initialize(this)
-        EventHandler(eventsModule)
         lifecycles.forEach(Lifecycle::onEnable)
     }
 

@@ -27,6 +27,10 @@ interface SitModule : Lifecycle {
             SitEvent(dependencies)
         }
 
+        override fun onEnable() {
+            sitEvent
+        }
+
         override fun onDisable() {
             sitController.onDisable()
         }

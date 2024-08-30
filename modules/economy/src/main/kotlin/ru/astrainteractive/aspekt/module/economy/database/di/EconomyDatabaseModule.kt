@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.economy.database.di
 
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -18,7 +19,7 @@ internal interface EconomyDatabaseModule {
     val economyDao: EconomyDao
 
     class Default(dbConfig: DatabaseConfiguration, dataFolder: File) : EconomyDatabaseModule {
-        private val database by lazy {
+        private val databaseFlow = flow {
             val database = when (dbConfig) {
                 DatabaseConfiguration.H2 -> Database.connect(
                     url = "jdbc:sqlite:${dataFolder.resolve("economy.db").absolutePath}",
@@ -42,8 +43,9 @@ internal interface EconomyDatabaseModule {
                     )
                 }
             }
-            database
+            emit(database)
         }
-        override val economyDao: EconomyDao = EconomyDaoImpl(database)
+
+        override val economyDao: EconomyDao = EconomyDaoImpl(databaseFlow)
     }
 }
