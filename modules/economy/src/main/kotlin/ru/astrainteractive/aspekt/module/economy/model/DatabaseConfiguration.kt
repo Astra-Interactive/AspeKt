@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class DatabaseConfiguration(val driver: String) {
+internal sealed class DatabaseConfiguration(val driver: String) {
 
     @SerialName("MySql")
     class MySql(

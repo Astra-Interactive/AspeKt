@@ -20,7 +20,7 @@ import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 
 @Suppress("TooManyFunctions")
-class EconomyDaoImpl(private val database: Database) : EconomyDao, Logger by JUtiltLogger("EconomyDao") {
+internal class EconomyDaoImpl(private val database: Database) : EconomyDao, Logger by JUtiltLogger("EconomyDao") {
     private fun ResultRow.toCurrency() = CurrencyModel(
         id = this[CurrencyTable.id].value,
         name = this[CurrencyTable.name],
@@ -32,7 +32,7 @@ class EconomyDaoImpl(private val database: Database) : EconomyDao, Logger by JUt
             name = this[PlayerCurrencyTable.lastUsername],
             uuid = this[PlayerCurrencyTable.id].value,
         ),
-        amount = this[PlayerCurrencyTable.amount],
+        balance = this[PlayerCurrencyTable.amount],
         currencyModel = CurrencyModel(
             id = this[CurrencyTable.id].value,
             name = this[CurrencyTable.name],
@@ -145,14 +145,14 @@ class EconomyDaoImpl(private val database: Database) : EconomyDao, Logger by JUt
             .firstOrNull()
         if (isPlayerCurrencyExists == null) {
             PlayerCurrencyTable.insert {
-                it[PlayerCurrencyTable.amount] = currency.amount
+                it[PlayerCurrencyTable.amount] = currency.balance
                 it[PlayerCurrencyTable.lastUsername] = currency.playerModel.name
                 it[PlayerCurrencyTable.id] = currency.playerModel.uuid
                 it[PlayerCurrencyTable.currencyId] = currency.currencyModel.id
             }
         } else {
             PlayerCurrencyTable.update(where = { PlayerCurrencyTable.currencyId eq currency.currencyModel.id }) {
-                it[PlayerCurrencyTable.amount] = currency.amount
+                it[PlayerCurrencyTable.amount] = currency.balance
                 it[PlayerCurrencyTable.lastUsername] = currency.playerModel.name
             }
         }
@@ -161,16 +161,18 @@ class EconomyDaoImpl(private val database: Database) : EconomyDao, Logger by JUt
     override suspend fun transfer(from: PlayerModel, to: PlayerModel, amount: Double, currencyId: String): Boolean {
         return newSuspendedTransaction(db = database) {
             val fromPlayerCurrency = findPlayerCurrency(from.uuid, currencyId) ?: return@newSuspendedTransaction false
-            if (fromPlayerCurrency.amount - amount < 0) return@newSuspendedTransaction false
+            if (fromPlayerCurrency.balance - amount < 0) return@newSuspendedTransaction false
             val toPlayerCurrency = PlayerCurrency(
                 playerModel = PlayerModel(
                     name = to.name,
                     uuid = to.uuid,
                 ),
-                amount = amount,
+                balance = amount,
                 currencyModel = fromPlayerCurrency.currencyModel
             )
-            updatePlayerCurrencyWithoutTransaction(fromPlayerCurrency.copy(amount = fromPlayerCurrency.amount - amount))
+            updatePlayerCurrencyWithoutTransaction(
+                fromPlayerCurrency.copy(balance = fromPlayerCurrency.balance - amount)
+            )
             updatePlayerCurrencyWithoutTransaction(toPlayerCurrency)
             true
         }

@@ -70,6 +70,6 @@ class RootModuleImpl : RootModule {
         ChatGameModule.Default(coreModule = coreModule)
     }
     override val economyModule: EconomyModule by lazy {
-        EconomyModule.Default()
+        EconomyModule.Default(coreModule)
     }
 }

@@ -71,7 +71,7 @@ class EconomyDaoTest {
                 name = "player1",
                 uuid = "uuid1",
             ),
-            amount = 0.0,
+            balance = 0.0,
             currencyModel = currencies.first()
         )
         assertEquals(0, requireModule.economyDao.playerCurrencies(playerCurrency.playerModel.uuid).size)
@@ -96,7 +96,7 @@ class EconomyDaoTest {
                 name = "player1",
                 uuid = "uuid1",
             ),
-            amount = 100.0,
+            balance = 100.0,
             currencyModel = currencies.first()
         )
         val otherPlayerModel = PlayerModel(
@@ -108,7 +108,7 @@ class EconomyDaoTest {
             requireModule.economyDao.transfer(
                 from = playerCurrency.playerModel,
                 to = otherPlayerModel,
-                amount = playerCurrency.amount,
+                amount = playerCurrency.balance,
                 currencyId = playerCurrency.currencyModel.id
             )
         )
@@ -117,7 +117,7 @@ class EconomyDaoTest {
             requireModule.economyDao.findPlayerCurrency(
                 playerCurrency.playerModel.uuid,
                 currencies.first().id
-            )?.amount
+            )?.balance
         )
         assertNull(
             requireModule.economyDao.findPlayerCurrency(
@@ -131,7 +131,7 @@ class EconomyDaoTest {
             requireModule.economyDao.findPlayerCurrency(
                 otherPlayerModel.uuid,
                 currencies.first().id
-            )?.amount
+            )?.balance
         )
         assertNull(
             requireModule.economyDao.findPlayerCurrency(

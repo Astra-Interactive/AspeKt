@@ -14,7 +14,7 @@ import ru.astrainteractive.aspekt.module.economy.database.table.PlayerCurrencyTa
 import ru.astrainteractive.aspekt.module.economy.model.DatabaseConfiguration
 import java.io.File
 
-interface EconomyDatabaseModule {
+internal interface EconomyDatabaseModule {
     val economyDao: EconomyDao
 
     class Default(dbConfig: DatabaseConfiguration, dataFolder: File) : EconomyDatabaseModule {

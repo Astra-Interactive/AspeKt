@@ -4,7 +4,7 @@ import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
 
-interface EconomyDao {
+internal interface EconomyDao {
     /**
      * Fetch all available currencies from database
      */

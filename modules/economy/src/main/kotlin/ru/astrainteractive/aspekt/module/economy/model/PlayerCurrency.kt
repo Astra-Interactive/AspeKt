@@ -4,11 +4,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PlayerCurrency(
+internal data class PlayerCurrency(
     @SerialName("player_model")
     val playerModel: PlayerModel,
     @SerialName("amount")
-    val amount: Double,
+    val balance: Double,
     @SerialName("currency_model")
     val currencyModel: CurrencyModel
 )
