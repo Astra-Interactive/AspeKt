@@ -9,8 +9,8 @@ internal object OfflinePlayerArgument : ArgumentType<OfflinePlayer> {
     override val key: String = "OfflinePlayerArgument"
 
     override fun transform(value: String): OfflinePlayer {
-        val offlinePlayer = Bukkit.getPlayer(value) ?: throw PlayerNotFound(value)
-        if (offlinePlayer.playerTime <= 0) throw PlayerNotFound(value)
+        val offlinePlayer = Bukkit.getOfflinePlayer(value)
+        if (offlinePlayer.name == null) throw PlayerNotFound(value)
         return offlinePlayer
     }
 

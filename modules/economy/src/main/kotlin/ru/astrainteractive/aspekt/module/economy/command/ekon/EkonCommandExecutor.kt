@@ -24,10 +24,14 @@ internal class EkonCommandExecutor(
         val playerCurrency = dao.findPlayerCurrency(
             playerUuid = input.otherPlayer.uniqueId.toString(),
             currencyId = input.currency.id
-        ) ?: run {
-            input.sender.sendMessage(translation.economy.playerNotFound.component)
-            return@with
-        }
+        ) ?: PlayerCurrency(
+            playerModel = PlayerModel(
+                name = input.otherPlayer.name.orEmpty(),
+                uuid = input.otherPlayer.uniqueId.toString()
+            ),
+            balance = 0.0,
+            currencyModel = input.currency
+        )
 
         kotlin.runCatching {
             val updatedCurrency = playerCurrency.copy(balance = playerCurrency.balance + input.amount)
