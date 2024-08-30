@@ -9,6 +9,7 @@ import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModu
 import ru.astrainteractive.aspekt.module.economy.integration.vault.VaultEconomyProvider
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.module.economy.model.DatabaseConfiguration
+import ru.astrainteractive.aspekt.module.economy.service.PreHeatService
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
@@ -40,7 +41,7 @@ interface EconomyModule {
             }
         )
         private val databaseModule = EconomyDatabaseModule.Default(
-            dbConfig = databaseConfiguration.loadAndGet(),
+            dbConfig = databaseConfiguration.cachedValue,
             dataFolder = folder
         )
 
@@ -48,7 +49,7 @@ interface EconomyModule {
             Bukkit.getServer().servicesManager.getRegistrations(coreModule.plugin.value)
                 .filter { it.service == Economy::class.java }
                 .onEach { Bukkit.getServer().servicesManager.unregister(it.provider) }
-            currencyConfiguration.loadAndGet().orEmpty().values.forEach { currency ->
+            currencyConfiguration.cachedValue.orEmpty().values.forEach { currency ->
                 Bukkit.getServer().servicesManager.register(
                     Economy::class.java,
                     VaultEconomyProvider(
@@ -63,9 +64,14 @@ interface EconomyModule {
 
         private val econCommandRegistry = EkonCommandRegistry(
             plugin = coreModule.plugin.value,
-            getCurrencies = { currencyConfiguration.loadAndGet()?.values.orEmpty().toList() },
+            getCurrencies = { currencyConfiguration.cachedValue?.values.orEmpty().toList() },
             getTranslation = { coreModule.translation.value },
             getKyori = { coreModule.kyoriComponentSerializer.value },
+            dao = databaseModule.economyDao
+        )
+
+        private val preHeatService = PreHeatService(
+            getCurrencies = { currencyConfiguration.cachedValue?.values.orEmpty().toList() },
             dao = databaseModule.economyDao
         )
 
@@ -73,10 +79,12 @@ interface EconomyModule {
             onEnable = {
                 reloadBukkitServiceManager()
                 econCommandRegistry.register()
+                preHeatService.preHeat()
             },
             onReload = {
                 reloadBukkitServiceManager()
                 currencyConfiguration.loadAndGet()
+                preHeatService.preHeat()
             },
             onDisable = {
             }
