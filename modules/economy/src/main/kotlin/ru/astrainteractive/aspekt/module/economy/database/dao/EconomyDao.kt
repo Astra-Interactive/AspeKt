@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.module.economy.database.dao
 
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
+import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
 
 interface EconomyDao {
     /**
@@ -43,11 +44,11 @@ interface EconomyDao {
      * Transfer money in transaction from player [fromUuid] to player [toUuid]
      * @return true if success false if not
      */
-    suspend fun transfer(fromUuid: String, toUuid: String, amount: Double, currencyId: String): Boolean
+    suspend fun transfer(from: PlayerModel, to: PlayerModel, amount: Double, currencyId: String): Boolean
 
     /**
      * Updates player currency amount
      * @return updated player currency
      */
-    suspend fun updatePlayerCurrency(currency: PlayerCurrency): PlayerCurrency
+    suspend fun updatePlayerCurrency(currency: PlayerCurrency)
 }

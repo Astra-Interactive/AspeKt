@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class PlayerCurrency(
+data class PlayerCurrency(
     @SerialName("name")
     val name: String,
     @SerialName("uuid")
