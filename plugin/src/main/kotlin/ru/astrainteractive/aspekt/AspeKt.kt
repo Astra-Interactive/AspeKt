@@ -16,6 +16,7 @@ class AspeKt : JavaPlugin(), Logger by JUtiltLogger("AspeKt") {
     private val rootModule = RootModuleImpl()
     private val lifecycles: List<Lifecycle>
         get() = listOfNotNull(
+            rootModule.economyModule.lifecycle,
             rootModule.autoBroadcastModule.lifecycle,
             rootModule.commandManagerModule,
             rootModule.coreModule,
@@ -29,7 +30,6 @@ class AspeKt : JavaPlugin(), Logger by JUtiltLogger("AspeKt") {
             rootModule.antiSwearModule.lifecycle,
             rootModule.moneyAdvancementModule.lifecycle,
             rootModule.chatGameModule.lifecycle,
-            rootModule.economyModule.lifecycle,
             rootModule.eventsModule.lifecycle
         )
 

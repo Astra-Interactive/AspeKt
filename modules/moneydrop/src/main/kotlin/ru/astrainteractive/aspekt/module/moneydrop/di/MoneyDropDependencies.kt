@@ -23,7 +23,7 @@ internal interface MoneyDropDependencies {
     ) : MoneyDropDependencies {
         override val eventListener: EventListener = coreModule.eventListener
         override val plugin: JavaPlugin by coreModule.plugin
-        override val economyProvider: EconomyProvider? by coreModule.economyProvider
+        override val economyProvider: EconomyProvider? by coreModule.defaultEconomyProvider
         override val kyoriComponentSerializer by coreModule.kyoriComponentSerializer
         override val translation: PluginTranslation by coreModule.translation
     }

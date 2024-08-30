@@ -35,7 +35,7 @@ interface CommandsDependencies {
         override val dispatchers: BukkitDispatchers = coreModule.dispatchers
         override val scope: AsyncComponent = coreModule.scope
         override val sitController: SitController by Provider { eventsModule.sitModule.sitController }
-        override val economyProvider: EconomyProvider? by coreModule.economyProvider
+        override val economyProvider: EconomyProvider? by coreModule.defaultEconomyProvider
         override val router: Router by Provider {
             guiModule.router
         }

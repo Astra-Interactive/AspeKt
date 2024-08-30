@@ -36,6 +36,8 @@ data class PluginConfiguration(
         @SerialName("task")
         @YamlComment("Money given for default task")
         val task: Int = 1000,
+        @SerialName("currency_name")
+        val currencyName: String? = null
     )
 
     @Serializable
