@@ -23,16 +23,31 @@ interface EconomyDao {
 
     /**
      * Find player currency amount
+     * @return amount of [currencyId]
      */
     suspend fun findPlayerCurrency(playerUuid: String, currencyId: String): PlayerCurrency?
 
     /**
      * Find all existing currencies for player
+     * @return amount of all currencies for player
      */
     suspend fun playerCurrencies(playerUuid: String): List<PlayerCurrency>
 
     /**
      * List top players by currency
+     * @return list of top players by currency
      */
     suspend fun topCurrency(id: String, page: Int, size: Int): List<PlayerCurrency>
+
+    /**
+     * Transfer money in transaction from player [fromUuid] to player [toUuid]
+     * @return true if success false if not
+     */
+    suspend fun transfer(fromUuid: String, toUuid: String, amount: Double, currencyId: String): Boolean
+
+    /**
+     * Updates player currency amount
+     * @return updated player currency
+     */
+    suspend fun updatePlayerCurrency(currency: PlayerCurrency): PlayerCurrency
 }
