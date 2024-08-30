@@ -4,6 +4,7 @@ import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.plugin.ServicePriority
 import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.module.economy.command.ekon.EkonCommandRegistry
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
 import ru.astrainteractive.aspekt.module.economy.integration.vault.VaultEconomyProvider
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
@@ -60,12 +61,22 @@ interface EconomyModule {
             }
         }
 
+        private val econCommandRegistry = EkonCommandRegistry(
+            plugin = coreModule.plugin.value,
+            getCurrencies = { currencyConfiguration.loadAndGet()?.values.orEmpty().toList() },
+            getTranslation = { coreModule.translation.value },
+            getKyori = { coreModule.kyoriComponentSerializer.value },
+            dao = databaseModule.economyDao
+        )
+
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onEnable = {
                 reloadBukkitServiceManager()
+                econCommandRegistry.register()
             },
             onReload = {
                 reloadBukkitServiceManager()
+                currencyConfiguration.loadAndGet()
             },
             onDisable = {
             }

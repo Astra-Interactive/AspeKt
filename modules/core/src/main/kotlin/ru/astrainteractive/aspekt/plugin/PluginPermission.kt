@@ -11,4 +11,7 @@ sealed class PluginPermission(override val value: String) : Permission {
     data object AdminClaim : PluginPermission("aspekt.admin_claim")
     data object ForcePlayerSwear : PluginPermission("aspekt.set_swear.admin")
     class CustomPermission(value: String) : PluginPermission(value)
+    sealed class Economy(value: String) : PluginPermission(value) {
+        data object SetBalance : Economy("aspekt.economy.set")
+    }
 }
