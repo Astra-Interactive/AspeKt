@@ -40,6 +40,7 @@ dependencies {
     implementation(projects.modules.newbee)
     implementation(projects.modules.antiswear)
     implementation(projects.modules.chatgame)
+    implementation(projects.modules.economy)
 }
 val destination = File("D:\\Minecraft Servers\\Servers\\conf.smp\\smp\\plugins")
     .takeIf(File::exists)
