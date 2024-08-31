@@ -17,11 +17,13 @@ import ru.astrainteractive.aspekt.module.economy.database.table.CurrencyTable
 import ru.astrainteractive.aspekt.module.economy.database.table.PlayerCurrencyTable
 import ru.astrainteractive.aspekt.module.economy.model.DatabaseConfiguration
 import ru.astrainteractive.aspekt.util.FlowExt.mapHistory
+import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.flow.StateFlowKrate
 import java.io.File
 import kotlin.coroutines.CoroutineContext
 
 internal interface EconomyDatabaseModule {
+    val lifecycle: Lifecycle
     val economyDao: EconomyDao
     val cachedDao: CachedDao
 
@@ -66,6 +68,10 @@ internal interface EconomyDatabaseModule {
             economyDao = economyDao,
             scope = coroutineScope,
             ioDispatcher = ioDispatcher
+        )
+
+        override val lifecycle: Lifecycle = Lifecycle.Lambda(
+            onReload = { cachedDao.reset() }
         )
     }
 }

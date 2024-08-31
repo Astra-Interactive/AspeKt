@@ -11,7 +11,7 @@ import ru.astrainteractive.astralibs.async.AsyncComponent
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 
-internal class BukkitService(
+internal class BukkitVaultService(
     private val plugin: JavaPlugin,
     private val dao: EconomyDao
 ) : AsyncComponent(), Logger by JUtiltLogger("BukkitService") {

@@ -8,8 +8,8 @@ import ru.astrainteractive.aspekt.module.economy.integration.papi.placeholder.Ba
 import ru.astrainteractive.astralibs.expansion.KPlaceholderExpansion
 
 internal class EconomyPlaceholderExtension(
-    private val dao: EconomyDao,
-    private val scope: CoroutineScope
+    dao: EconomyDao,
+    scope: CoroutineScope
 ) : KPlaceholderExpansion(
     "aspekt",
     "RomanMakeev",
