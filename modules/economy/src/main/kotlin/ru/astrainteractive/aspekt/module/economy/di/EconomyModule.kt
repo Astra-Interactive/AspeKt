@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.module.economy.di
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.economy.command.ekon.EkonCommandRegistry
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
+import ru.astrainteractive.aspekt.module.economy.integration.papi.di.PapiIntegrationModule
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyConfiguration
 import ru.astrainteractive.aspekt.module.economy.model.DatabaseConfiguration
 import ru.astrainteractive.aspekt.module.economy.service.BukkitService
@@ -34,6 +35,7 @@ interface EconomyModule {
                     .getOrNull()
             }
         )
+
         private val currencyConfiguration = DefaultMutableKrate(
             factory = { null },
             loader = {
@@ -74,6 +76,11 @@ interface EconomyModule {
             dao = databaseModule.economyDao
         )
 
+        private val papiIntegrationModule: PapiIntegrationModule = PapiIntegrationModule.Default(
+            databaseModule = databaseModule,
+            coreModule = coreModule
+        )
+
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onEnable = {
                 bukkitService.prepare()
@@ -81,6 +88,7 @@ interface EconomyModule {
                 if (currencyConfiguration.cachedValue?.shouldSync == true) {
                     preHeatService.preHeat()
                 }
+                papiIntegrationModule.lifecycle.onEnable()
             },
             onReload = {
                 bukkitService.prepare()
@@ -88,8 +96,10 @@ interface EconomyModule {
                 if (currencyConfiguration.cachedValue?.shouldSync == true) {
                     preHeatService.preHeat()
                 }
+                papiIntegrationModule.lifecycle.onReload()
             },
             onDisable = {
+                papiIntegrationModule.lifecycle.onDisable()
             }
         )
     }

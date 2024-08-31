@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.minecraft.astralibs.menu.bukkit)
     implementation(libs.minecraft.astralibs.core.bukkit)
     implementation(libs.minecraft.vaultapi)
+    implementation(libs.minecraft.papi)
     implementation(libs.cache4k)
     // Test
     testImplementation(libs.bundles.testing.kotlin)
