@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.economy.command.ekon
 
 import ru.astrainteractive.aspekt.module.economy.command.ekon.argument.CurrencyArgument
 import ru.astrainteractive.aspekt.module.economy.command.ekon.argument.OfflinePlayerArgument
-import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
+import ru.astrainteractive.aspekt.module.economy.database.dao.CachedDao
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.api.argumenttype.PrimitiveArgumentType
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContext
@@ -13,9 +13,8 @@ import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
 import ru.astrainteractive.astralibs.command.api.parser.CommandParser
 
 internal class EkonCommandParser(
-    private val getCurrencies: () -> List<CurrencyModel>
+    private val cachedDao: CachedDao
 ) : CommandParser<EkonCommand.Model, BukkitCommandContext> {
-    private val currencies get() = getCurrencies.invoke()
 
     override fun parse(commandContext: BukkitCommandContext): EkonCommand.Model {
         val sender = commandContext.sender
@@ -30,7 +29,7 @@ internal class EkonCommandParser(
             "top" -> {
                 val currency = commandContext.requireArgument(
                     index = 1,
-                    type = CurrencyArgument(currencies)
+                    type = CurrencyArgument(cachedDao.getAllCurrencies())
                 )
                 val page = commandContext.argumentOrElse(
                     index = 2,
@@ -43,7 +42,7 @@ internal class EkonCommandParser(
             "balance" -> {
                 val currency = commandContext.requireArgument(
                     index = 1,
-                    type = CurrencyArgument(currencies)
+                    type = CurrencyArgument(cachedDao.getAllCurrencies())
                 )
                 val otherPlayer = commandContext.requireArgument(
                     index = 2,
@@ -56,7 +55,7 @@ internal class EkonCommandParser(
                 commandContext.requirePermission(PluginPermission.Economy.SetBalance)
                 val currency = commandContext.requireArgument(
                     index = 1,
-                    type = CurrencyArgument(currencies)
+                    type = CurrencyArgument(cachedDao.getAllCurrencies())
                 )
                 val otherPlayer = commandContext.requireArgument(
                     index = 2,

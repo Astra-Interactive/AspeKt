@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.economy.database.dao
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.runTest
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
@@ -39,7 +40,9 @@ class EconomyDaoTest {
         requireFolder.deleteOnExit()
         _module = EconomyDatabaseModule.Default(
             dataFolder = requireFolder,
-            dbConfig = dbConfig
+            dbConfig = dbConfig,
+            coroutineScope = CoroutineScope(scheduler),
+            ioDispatcher = scheduler
         )
     }
 

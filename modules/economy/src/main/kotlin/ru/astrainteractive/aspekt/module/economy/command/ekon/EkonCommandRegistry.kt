@@ -5,6 +5,7 @@ import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.module.economy.command.ekon.argument.CurrencyArgument
 import ru.astrainteractive.aspekt.module.economy.command.ekon.argument.OfflinePlayerArgument
+import ru.astrainteractive.aspekt.module.economy.database.dao.CachedDao
 import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -19,12 +20,11 @@ import ru.astrainteractive.astralibs.util.StringListExt.withEntry
 
 internal class EkonCommandRegistry(
     private val plugin: JavaPlugin,
-    private val getCurrencies: () -> List<CurrencyModel>,
     private val getKyori: () -> KyoriComponentSerializer,
     private val getTranslation: () -> PluginTranslation,
-    private val dao: EconomyDao
+    private val dao: EconomyDao,
+    private val cachedDao: CachedDao
 ) : Logger by JUtiltLogger("EkonCommandRegistry") {
-    private val currencies get() = getCurrencies.invoke()
     private val kyori get() = getKyori.invoke()
     private val translation get() = getTranslation.invoke()
 
@@ -39,7 +39,9 @@ internal class EkonCommandRegistry(
                         "list" -> emptyList()
                         "top" -> {
                             when (args.size) {
-                                2 -> currencies.map(CurrencyModel::name).withEntry(args.getOrNull(1))
+                                2 -> cachedDao.getAllCurrencies()
+                                    .map(CurrencyModel::name)
+                                    .withEntry(args.getOrNull(1))
 
                                 else -> emptyList()
                             }
@@ -47,7 +49,9 @@ internal class EkonCommandRegistry(
 
                         "balance" -> {
                             when (args.size) {
-                                2 -> currencies.map(CurrencyModel::name).withEntry(args.getOrNull(1))
+                                2 -> cachedDao.getAllCurrencies()
+                                    .map(CurrencyModel::name)
+                                    .withEntry(args.getOrNull(1))
 
                                 3 -> Bukkit.getOnlinePlayers().map(Player::getName).withEntry(args.getOrNull(2))
 
@@ -57,7 +61,9 @@ internal class EkonCommandRegistry(
 
                         "set", "add" -> {
                             when (args.size) {
-                                2 -> currencies.map(CurrencyModel::name).withEntry(args.getOrNull(1))
+                                2 -> cachedDao.getAllCurrencies()
+                                    .map(CurrencyModel::name)
+                                    .withEntry(args.getOrNull(1))
 
                                 3 -> Bukkit.getOnlinePlayers().map(Player::getName).withEntry(args.getOrNull(2))
 
@@ -78,7 +84,7 @@ internal class EkonCommandRegistry(
         plugin.registerCommand(
             alias = EkonCommand.ALIAS,
             commandParser = EkonCommandParser(
-                getCurrencies = getCurrencies
+                cachedDao = cachedDao
             ),
             commandExecutor = EkonCommandExecutor(
                 getKyori = getKyori,

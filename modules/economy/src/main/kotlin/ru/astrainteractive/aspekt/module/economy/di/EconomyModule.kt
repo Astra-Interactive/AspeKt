@@ -1,14 +1,11 @@
 package ru.astrainteractive.aspekt.module.economy.di
 
-import net.milkbowl.vault.economy.Economy
-import org.bukkit.Bukkit
-import org.bukkit.plugin.ServicePriority
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.economy.command.ekon.EkonCommandRegistry
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
-import ru.astrainteractive.aspekt.module.economy.integration.vault.VaultEconomyProvider
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyConfiguration
 import ru.astrainteractive.aspekt.module.economy.model.DatabaseConfiguration
+import ru.astrainteractive.aspekt.module.economy.service.BukkitService
 import ru.astrainteractive.aspekt.module.economy.service.PreHeatService
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
@@ -54,32 +51,22 @@ interface EconomyModule {
         )
         private val databaseModule = EconomyDatabaseModule.Default(
             dbConfig = databaseConfiguration,
-            dataFolder = folder
+            dataFolder = folder,
+            coroutineScope = coreModule.scope,
+            ioDispatcher = coreModule.dispatchers.IO
         )
 
-        private fun reloadBukkitServiceManager() {
-            Bukkit.getServer().servicesManager.getRegistrations(coreModule.plugin.value)
-                .filter { it.service == Economy::class.java }
-                .onEach { Bukkit.getServer().servicesManager.unregister(it.provider) }
-            currencyConfiguration.cachedValue?.currencies.orEmpty().values.forEach { currency ->
-                Bukkit.getServer().servicesManager.register(
-                    Economy::class.java,
-                    VaultEconomyProvider(
-                        primaryCurrencyModel = currency,
-                        dao = databaseModule.economyDao
-                    ),
-                    coreModule.plugin.value,
-                    ServicePriority.Normal
-                )
-            }
-        }
+        private val bukkitService = BukkitService(
+            plugin = coreModule.plugin.value,
+            dao = databaseModule.economyDao
+        )
 
         private val econCommandRegistry = EkonCommandRegistry(
             plugin = coreModule.plugin.value,
-            getCurrencies = { currencyConfiguration.cachedValue?.currencies?.values.orEmpty().toList() },
             getTranslation = { coreModule.translation.value },
             getKyori = { coreModule.kyoriComponentSerializer.value },
-            dao = databaseModule.economyDao
+            dao = databaseModule.economyDao,
+            cachedDao = databaseModule.cachedDao
         )
 
         private val preHeatService = PreHeatService(
@@ -89,14 +76,14 @@ interface EconomyModule {
 
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onEnable = {
-                reloadBukkitServiceManager()
+                bukkitService.prepare()
                 econCommandRegistry.register()
                 if (currencyConfiguration.cachedValue?.shouldSync == true) {
                     preHeatService.preHeat()
                 }
             },
             onReload = {
-                reloadBukkitServiceManager()
+                bukkitService.prepare()
                 currencyConfiguration.loadAndGet()
                 if (currencyConfiguration.cachedValue?.shouldSync == true) {
                     preHeatService.preHeat()

@@ -43,6 +43,8 @@ discordsrv = "1.28.1" # https://github.com/DiscordSRV/DiscordSRV
 
 # Mockito
 mockito = "5.12.0" # https://github.com/mockito/mockito
+cache4k = "0.13.0" # https://github.com/ReactiveCircus/cache4k
+
 
 [libraries]
 # Kotlin
@@ -103,6 +105,8 @@ minecraft-astralibs-menu-bukkit = { module = "ru.astrainteractive.astralibs:menu
 minecraft-astralibs-core-bukkit = { module = "ru.astrainteractive.astralibs:core-bukkit", version.ref = "minecraft-astralibs" }
 minecraft-astralibs-command = { module = "ru.astrainteractive.astralibs:command", version.ref = "minecraft-astralibs" }
 minecraft-astralibs-command-bukkit = { module = "ru.astrainteractive.astralibs:command-bukkit", version.ref = "minecraft-astralibs" }
+
+cache4k = { module = "io.github.reactivecircus.cache4k:cache4k", version.ref = "cache4k" }
 
 [bundles]
 exposed = ["exposed-java-time", "exposed-jdbc", "exposed-dao", "exposed-core"]
