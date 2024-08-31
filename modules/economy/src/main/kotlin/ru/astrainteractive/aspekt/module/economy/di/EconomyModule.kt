@@ -7,7 +7,7 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.economy.command.ekon.EkonCommandRegistry
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
 import ru.astrainteractive.aspekt.module.economy.integration.vault.VaultEconomyProvider
-import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
+import ru.astrainteractive.aspekt.module.economy.model.CurrencyConfiguration
 import ru.astrainteractive.aspekt.module.economy.model.DatabaseConfiguration
 import ru.astrainteractive.aspekt.module.economy.service.PreHeatService
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
@@ -43,10 +43,10 @@ interface EconomyModule {
                 val file = folder.resolve("currencies.yml")
                 if (!file.exists() || file.length() == 0L) {
                     file.createNewFile()
-                    coreModule.yamlFormat.writeIntoFile(emptyMap<String, CurrencyModel>(), file)
+                    coreModule.yamlFormat.writeIntoFile(::CurrencyConfiguration, file)
                 }
                 coreModule.yamlFormat
-                    .parse<Map<String, CurrencyModel>>(file)
+                    .parse<CurrencyConfiguration>(file)
                     .onFailure { error { "#currencyConfiguration could not read currencies.yml: ${it.message}" } }
                     .getOrNull()
             }
@@ -60,7 +60,7 @@ interface EconomyModule {
             Bukkit.getServer().servicesManager.getRegistrations(coreModule.plugin.value)
                 .filter { it.service == Economy::class.java }
                 .onEach { Bukkit.getServer().servicesManager.unregister(it.provider) }
-            currencyConfiguration.cachedValue.orEmpty().values.forEach { currency ->
+            currencyConfiguration.cachedValue?.currencies.orEmpty().values.forEach { currency ->
                 Bukkit.getServer().servicesManager.register(
                     Economy::class.java,
                     VaultEconomyProvider(
@@ -75,14 +75,14 @@ interface EconomyModule {
 
         private val econCommandRegistry = EkonCommandRegistry(
             plugin = coreModule.plugin.value,
-            getCurrencies = { currencyConfiguration.cachedValue?.values.orEmpty().toList() },
+            getCurrencies = { currencyConfiguration.cachedValue?.currencies?.values.orEmpty().toList() },
             getTranslation = { coreModule.translation.value },
             getKyori = { coreModule.kyoriComponentSerializer.value },
             dao = databaseModule.economyDao
         )
 
         private val preHeatService = PreHeatService(
-            getCurrencies = { currencyConfiguration.cachedValue?.values.orEmpty().toList() },
+            getCurrencies = { currencyConfiguration.cachedValue?.currencies?.values.orEmpty().toList() },
             dao = databaseModule.economyDao
         )
 
@@ -90,12 +90,16 @@ interface EconomyModule {
             onEnable = {
                 reloadBukkitServiceManager()
                 econCommandRegistry.register()
-                preHeatService.preHeat()
+                if (currencyConfiguration.cachedValue?.shouldSync == true) {
+                    preHeatService.preHeat()
+                }
             },
             onReload = {
                 reloadBukkitServiceManager()
                 currencyConfiguration.loadAndGet()
-                preHeatService.preHeat()
+                if (currencyConfiguration.cachedValue?.shouldSync == true) {
+                    preHeatService.preHeat()
+                }
             },
             onDisable = {
             }
