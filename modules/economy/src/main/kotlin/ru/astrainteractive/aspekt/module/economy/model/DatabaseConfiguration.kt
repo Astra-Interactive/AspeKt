@@ -18,5 +18,5 @@ internal sealed class DatabaseConfiguration(val driver: String) {
 
     @SerialName("H2")
     @Serializable
-    data object H2 : DatabaseConfiguration("org.h2.Driver")
+    data class H2(val name: String = "economy") : DatabaseConfiguration("org.h2.Driver")
 }

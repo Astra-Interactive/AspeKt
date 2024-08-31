@@ -7,6 +7,8 @@ import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.module.economy.model.DatabaseConfiguration
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
+import ru.astrainteractive.klibs.kstorage.api.impl.DefaultStateFlowMutableKrate
+import ru.astrainteractive.klibs.kstorage.util.KrateExt.update
 import java.io.File
 import kotlin.random.Random
 import kotlin.test.AfterTest
@@ -25,6 +27,10 @@ class EconomyDaoTest {
         get() = _folder ?: error("Folder not set")
     private val requireModule: EconomyDatabaseModule
         get() = _module ?: error("Module not set")
+    private val dbConfig = DefaultStateFlowMutableKrate<DatabaseConfiguration>(
+        factory = { DatabaseConfiguration.H2("test") },
+        loader = { DatabaseConfiguration.H2("test") }
+    )
 
     @BeforeTest
     fun setup() {
@@ -33,13 +39,25 @@ class EconomyDaoTest {
         requireFolder.deleteOnExit()
         _module = EconomyDatabaseModule.Default(
             dataFolder = requireFolder,
-            dbConfig = DatabaseConfiguration.H2
+            dbConfig = dbConfig
         )
     }
 
     @AfterTest
     fun tearDown() {
         requireFolder.deleteRecursively()
+    }
+
+    @Test
+    fun `GIVEN_different_db_configs_WHEN_try_THEN_db_changed`() = runTest {
+        dbConfig.update { DatabaseConfiguration.H2("test") }
+        val currencies = listOf(CurrencyModel(id = "0", name = "name", isPrimary = false))
+        requireModule.economyDao.updateCurrencies(currencies)
+        assertEquals(1, requireModule.economyDao.getAllCurrencies().size)
+        dbConfig.update { DatabaseConfiguration.H2("test2") }
+        assertEquals(0, requireModule.economyDao.getAllCurrencies().size)
+        dbConfig.update { DatabaseConfiguration.H2("test") }
+        assertEquals(1, requireModule.economyDao.getAllCurrencies().size)
     }
 
     @Test

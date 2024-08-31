@@ -1,6 +1,6 @@
 package ru.astrainteractive.aspekt.module.economy.database.di
 
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -13,16 +13,20 @@ import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDaoImpl
 import ru.astrainteractive.aspekt.module.economy.database.table.CurrencyTable
 import ru.astrainteractive.aspekt.module.economy.database.table.PlayerCurrencyTable
 import ru.astrainteractive.aspekt.module.economy.model.DatabaseConfiguration
+import ru.astrainteractive.aspekt.util.FlowExt.mapHistory
+import ru.astrainteractive.klibs.kstorage.api.flow.StateFlowKrate
 import java.io.File
 
 internal interface EconomyDatabaseModule {
     val economyDao: EconomyDao
 
-    class Default(dbConfig: DatabaseConfiguration, dataFolder: File) : EconomyDatabaseModule {
-        private val databaseFlow = flow {
+    class Default(dbConfig: StateFlowKrate<DatabaseConfiguration>, dataFolder: File) : EconomyDatabaseModule {
+        private val databaseFlow: Flow<Database> = dbConfig.cachedStateFlow.mapHistory { dbConfig, previous ->
+            previous?.connector?.invoke()?.close()
+
             val database = when (dbConfig) {
-                DatabaseConfiguration.H2 -> Database.connect(
-                    url = "jdbc:sqlite:${dataFolder.resolve("economy.db").absolutePath}",
+                is DatabaseConfiguration.H2 -> Database.connect(
+                    url = "jdbc:sqlite:${dataFolder.resolve("${dbConfig.name}.db").absolutePath}",
                     driver = "org.sqlite.JDBC"
                 )
 
@@ -43,7 +47,7 @@ internal interface EconomyDatabaseModule {
                     )
                 }
             }
-            emit(database)
+            database
         }
 
         override val economyDao: EconomyDao = EconomyDaoImpl(databaseFlow)

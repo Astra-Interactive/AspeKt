@@ -16,20 +16,21 @@ import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.parse
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.writeIntoFile
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
+import ru.astrainteractive.klibs.kstorage.api.impl.DefaultStateFlowMutableKrate
 
 interface EconomyModule {
     val lifecycle: Lifecycle
 
     class Default(private val coreModule: CoreModule) : EconomyModule, Logger by JUtiltLogger("EconomyModule") {
         private val folder = coreModule.plugin.value.dataFolder.resolve("economy")
-        private val databaseConfiguration = DefaultMutableKrate(
-            factory = { DatabaseConfiguration.H2 },
+        private val databaseConfiguration = DefaultStateFlowMutableKrate(
+            factory = { DatabaseConfiguration.H2() },
             loader = {
                 folder.mkdirs()
                 val file = folder.resolve("db.yml")
                 if (!file.exists() || file.length() == 0L) {
                     file.createNewFile()
-                    coreModule.yamlFormat.writeIntoFile(DatabaseConfiguration.H2, file)
+                    coreModule.yamlFormat.writeIntoFile(DatabaseConfiguration.H2(), file)
                 }
                 coreModule.yamlFormat.parse<DatabaseConfiguration>(file)
                     .onFailure { error { "#databaseConfiguration could not read db.yml: ${it.message}" } }
@@ -43,7 +44,7 @@ interface EconomyModule {
                 val file = folder.resolve("currencies.yml")
                 if (!file.exists() || file.length() == 0L) {
                     file.createNewFile()
-                    coreModule.yamlFormat.writeIntoFile(::CurrencyConfiguration, file)
+                    coreModule.yamlFormat.writeIntoFile(CurrencyConfiguration(), file)
                 }
                 coreModule.yamlFormat
                     .parse<CurrencyConfiguration>(file)
@@ -52,7 +53,7 @@ interface EconomyModule {
             }
         )
         private val databaseModule = EconomyDatabaseModule.Default(
-            dbConfig = databaseConfiguration.cachedValue,
+            dbConfig = databaseConfiguration,
             dataFolder = folder
         )
 
