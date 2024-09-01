@@ -9,6 +9,8 @@ dependencies {
     implementation(libs.bundles.exposed)
     // Spigot dependencies
     compileOnly(libs.minecraft.paper.api)
+    compileOnly(libs.minecraft.vaultapi)
+    compileOnly(libs.minecraft.papi)
     // AstraLibs
     implementation(libs.minecraft.astralibs.core)
     implementation(libs.minecraft.astralibs.orm)
@@ -19,8 +21,6 @@ dependencies {
     implementation(libs.klibs.mikro.core)
     implementation(libs.minecraft.astralibs.menu.bukkit)
     implementation(libs.minecraft.astralibs.core.bukkit)
-    implementation(libs.minecraft.vaultapi)
-    implementation(libs.minecraft.papi)
     implementation(libs.cache4k)
     // Test
     testImplementation(libs.bundles.testing.kotlin)

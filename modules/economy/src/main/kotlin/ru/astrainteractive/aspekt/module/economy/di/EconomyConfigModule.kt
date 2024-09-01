@@ -4,6 +4,8 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyConfiguration
 import ru.astrainteractive.aspekt.module.economy.model.DatabaseConfiguration
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.astralibs.logging.JUtiltLogger
+import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.parse
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.writeIntoFile
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
@@ -16,7 +18,7 @@ internal interface EconomyConfigModule {
     val databaseConfiguration: DefaultStateFlowMutableKrate<DatabaseConfiguration>
     val currencyConfiguration: DefaultMutableKrate<CurrencyConfiguration?>
 
-    class Default(coreModule: CoreModule) : EconomyConfigModule {
+    class Default(coreModule: CoreModule) : EconomyConfigModule, Logger by JUtiltLogger("EconomyConfigModule") {
         override val folder = coreModule.plugin.value.dataFolder.resolve("economy")
 
         override val databaseConfiguration = DefaultStateFlowMutableKrate(
@@ -26,7 +28,7 @@ internal interface EconomyConfigModule {
                 val file = folder.resolve("db.yml")
                 if (!file.exists() || file.length() == 0L) {
                     file.createNewFile()
-                    coreModule.yamlFormat.writeIntoFile(DatabaseConfiguration.H2(), file)
+                    coreModule.yamlFormat.writeIntoFile<DatabaseConfiguration>(DatabaseConfiguration.H2(), file)
                 }
                 coreModule.yamlFormat.parse<DatabaseConfiguration>(file)
                     .onFailure { error { "#databaseConfiguration could not read db.yml: ${it.message}" } }

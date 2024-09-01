@@ -19,6 +19,8 @@ import ru.astrainteractive.astralibs.economy.VaultEconomyProvider
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.astralibs.logging.JUtiltLogger
+import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.menu.event.DefaultInventoryClickEvent
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.parseOrDefault
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
@@ -43,7 +45,7 @@ interface CoreModule : Lifecycle {
 
     val jsonStringFormat: StringFormat
 
-    class Default : CoreModule {
+    class Default : CoreModule, Logger by JUtiltLogger("CoreModule") {
 
         // Core
         override val plugin = Lateinit<JavaPlugin>(true)

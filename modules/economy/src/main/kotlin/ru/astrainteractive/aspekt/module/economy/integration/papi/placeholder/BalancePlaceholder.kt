@@ -13,7 +13,7 @@ import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
 
 /**
- * ekon_balance_<currency>_<player>
+ * aspekt_balance_<currency>_<player>
  */
 internal class BalancePlaceholder(
     private val dao: EconomyDao,
@@ -32,11 +32,12 @@ internal class BalancePlaceholder(
         .expireAfterAccess(30.seconds)
         .build()
 
-    override fun asPlaceholder(executor: OfflinePlayer, params: List<String>): String {
+    override fun asPlaceholder(executor: OfflinePlayer?, params: List<String>): String {
         val currencyId = params.getOrNull(2) ?: return null.orEmpty()
         val offlinePlayer = params.getOrNull(3)
             ?.let(Bukkit::getOfflinePlayer)
             ?: executor
+            ?: return null.orEmpty()
         val playerInfo = PlayerInfo(
             currencyId = currencyId,
             uuid = offlinePlayer.uniqueId

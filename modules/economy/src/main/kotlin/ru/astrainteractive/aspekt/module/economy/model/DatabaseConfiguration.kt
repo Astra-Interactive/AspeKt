@@ -2,9 +2,12 @@ package ru.astrainteractive.aspekt.module.economy.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
-internal sealed class DatabaseConfiguration(val driver: String) {
+internal sealed interface DatabaseConfiguration {
+    @Transient
+    val driver: String
 
     @SerialName("MySql")
     @Serializable
@@ -14,9 +17,15 @@ internal sealed class DatabaseConfiguration(val driver: String) {
         val user: String,
         val password: String,
         val name: String
-    ) : DatabaseConfiguration("com.mysql.cj.jdbc.Driver")
+    ) : DatabaseConfiguration {
+        @Transient
+        override val driver: String = "com.mysql.cj.jdbc.Driver"
+    }
 
     @SerialName("H2")
     @Serializable
-    data class H2(val name: String = "economy") : DatabaseConfiguration("org.h2.Driver")
+    data class H2(val name: String = "economy") : DatabaseConfiguration {
+        @Transient
+        override val driver: String = "org.h2.Driver"
+    }
 }
