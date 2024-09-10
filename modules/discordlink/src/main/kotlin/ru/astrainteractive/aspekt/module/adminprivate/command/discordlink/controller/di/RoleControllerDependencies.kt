@@ -23,7 +23,7 @@ internal interface RoleControllerDependencies {
         discordLinkModule: DiscordLinkModule
     ) : RoleControllerDependencies {
         override val pluginConfiguration: PluginConfiguration by coreModule.pluginConfig
-        override val economyProvider: EconomyProvider? by coreModule.economyProvider
+        override val economyProvider: EconomyProvider? by coreModule.defaultEconomyProvider
         override val tempFile: File = discordLinkModule.tempFile
         override val tempFileConfiguration: FileConfiguration by discordLinkModule.tempFileConfiguration
         override val translation: PluginTranslation by coreModule.translation

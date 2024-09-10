@@ -35,7 +35,7 @@ interface AdminPrivateModule {
             coreModule.plugin.value.dataFolder.resolve("adminchunks.yml")
         }
 
-        private fun createAdminPrivateEvent() {
+        private val adminPrivateEvent by lazy {
             val adminPrivateDependencies: AdminPrivateDependencies = AdminPrivateDependencies.Default(
                 coreModule = coreModule,
                 adminPrivateController = adminPrivateController
@@ -47,11 +47,14 @@ interface AdminPrivateModule {
             Lifecycle.Lambda(
                 onEnable = {
                     adminPrivateCommandRegistry.register()
-                    createAdminPrivateEvent()
+                    adminPrivateEvent.onEnable(coreModule.plugin.value)
                     adminPrivateController.reloadKrate()
                 },
                 onReload = {
                     adminPrivateController.reloadKrate()
+                },
+                onDisable = {
+                    adminPrivateEvent.onDisable()
                 }
             )
         }

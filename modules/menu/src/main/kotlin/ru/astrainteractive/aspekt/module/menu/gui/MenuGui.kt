@@ -138,7 +138,7 @@ internal class MenuGui(
         }
     }
 
-    private fun isMeetPriceCheck(menuItem: MenuModel.MenuItem): Boolean {
+    private suspend fun isMeetPriceCheck(menuItem: MenuModel.MenuItem): Boolean {
         return when (val price = menuItem.price) {
             is MenuModel.Price.Money -> {
                 economyProvider?.takeMoney(
@@ -170,14 +170,16 @@ internal class MenuGui(
                     }
 
                     if (!isMeetClickConditions(menuItem)) return@setOnClickListener
-                    if (!isMeetPriceCheck(menuItem)) {
-                        translation.general.notEnoughMoney
-                            .let(kyoriComponentSerializer::toComponent)
-                            .run(playerHolder.player::sendMessage)
-                        return@setOnClickListener
-                    }
+                    menuScope.launch {
+                        if (!isMeetPriceCheck(menuItem)) {
+                            translation.general.notEnoughMoney
+                                .let(kyoriComponentSerializer::toComponent)
+                                .run(playerHolder.player::sendMessage)
+                            return@launch
+                        }
 
-                    processReward(menuItem)
+                        processReward(menuItem)
+                    }
                 }.build().setInventorySlot()
         }
     }

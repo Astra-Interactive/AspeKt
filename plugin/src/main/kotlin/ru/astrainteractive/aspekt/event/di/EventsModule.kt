@@ -8,21 +8,20 @@ import ru.astrainteractive.aspekt.event.sort.SortEvent
 import ru.astrainteractive.aspekt.event.sort.di.SortDependencies
 import ru.astrainteractive.aspekt.event.tc.TCEvent
 import ru.astrainteractive.aspekt.event.tc.di.TCDependencies
+import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 interface EventsModule {
-    val tcEvent: TCEvent
-    val sortEvent: SortEvent
+    val lifecycle: Lifecycle
     val sitModule: SitModule
-    val restrictionsEvent: RestrictionsEvent
 
     class Default(coreModule: CoreModule) : EventsModule {
 
-        override val tcEvent: TCEvent by lazy {
+        private val tcEvent: TCEvent by lazy {
             val tcDependencies: TCDependencies = TCDependencies.Default(coreModule)
             TCEvent(tcDependencies)
         }
 
-        override val sortEvent: SortEvent by lazy {
+        private val sortEvent: SortEvent by lazy {
             val sortDependencies: SortDependencies = SortDependencies.Default(coreModule)
             SortEvent(sortDependencies)
         }
@@ -31,9 +30,24 @@ interface EventsModule {
             SitModule.Default(coreModule)
         }
 
-        override val restrictionsEvent: RestrictionsEvent by lazy {
+        private val restrictionsEvent: RestrictionsEvent by lazy {
             val restrictionsDependencies: RestrictionsDependencies = RestrictionsDependencies.Default(coreModule)
             RestrictionsEvent(restrictionsDependencies)
         }
+
+        override val lifecycle: Lifecycle = Lifecycle.Lambda(
+            onEnable = {
+                sitModule.onEnable()
+                tcEvent
+                sortEvent
+                restrictionsEvent
+            },
+            onReload = {
+                sitModule.onReload()
+            },
+            onDisable = {
+                sitModule.onDisable()
+            }
+        )
     }
 }

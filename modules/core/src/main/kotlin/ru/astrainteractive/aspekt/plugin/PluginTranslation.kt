@@ -25,8 +25,33 @@ class PluginTranslation(
     @SerialName("swear")
     val swear: Swear = Swear(),
     @SerialName("chat_game")
-    val chatGame: ChatGame = ChatGame()
+    val chatGame: ChatGame = ChatGame(),
+    @SerialName("economy")
+    val economy: Economy = Economy()
 ) {
+
+    @Serializable
+    class Economy(
+        val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BECO&7]"),
+        val playerNotFound: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#db2c18Игрок не найден"),
+        val errorTransferMoney: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#db2c18Не удалось выдать валюту"),
+        val moneyTransferred: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#42f596Валюта успешно выдана игроку"),
+        private val playerBalance: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#42f596Баланс игрока %balance%"),
+        private val currencies: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#42f596Доступные валюту: %currencies%"),
+        val topsTitle: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#42f596Топ игроков по балансу:"),
+        val topsEmpty: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#42f596Топ игроков пуст!"),
+        private val topItem: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#42f596%index%. %name% → %balance%"),
+        @SerialName("currency_not_found")
+        val currencyNotFound: StringDesc.Raw = StringDesc.Raw("&#db2c18Валюта не найдена!"),
+    ) {
+        fun playerBalance(amount: Number) = playerBalance.replace("%balance%", amount.toString())
+        fun currencies(value: String) = currencies.replace("%currencies%", value)
+        fun topItem(index: Int, name: String, balance: Number) = topItem
+            .replace("%index%", "$index")
+            .replace("%name%", "$name")
+            .replace("%balance%", "$balance")
+    }
+
     @Serializable
     class ChatGame(
         @SerialName("solve_riddle")

@@ -15,12 +15,20 @@ interface ChatGameModule {
     val lifecycle: Lifecycle
 
     class Default(coreModule: CoreModule) : ChatGameModule {
+
         private val config = Reloadable {
             val file = coreModule.plugin.value.dataFolder.resolve("chat_game.yml")
             val config = coreModule.yamlFormat.parseOrDefault(file, ::ChatGameConfig)
             coreModule.yamlFormat.writeIntoFile(config, file)
             config
         }
+
+        private val economyProvider = Reloadable {
+            config.value.currencyName
+                ?.let(coreModule::findEconomyProviderByCurrency)
+                ?: coreModule.defaultEconomyProvider.value
+        }
+
         private val chatGameStore by lazy {
             ChatGameStoreImpl(
                 chatGameConfigProvider = { config.value },
@@ -30,6 +38,7 @@ interface ChatGameModule {
                 )
             )
         }
+
         private val chatGameJob by lazy {
             ChatGameJob(
                 chatGameStore = chatGameStore,
@@ -37,13 +46,14 @@ interface ChatGameModule {
                 kyoriComponentSerializerProvider = { coreModule.kyoriComponentSerializer.value },
             )
         }
+
         private val command by lazy {
             ChatGameCommand(
                 plugin = coreModule.plugin.value,
                 chatGameStore = chatGameStore,
                 kyoriComponentSerializerProvider = { coreModule.kyoriComponentSerializer.value },
                 translationProvider = { coreModule.translation.value },
-                economyProvider = { coreModule.economyProvider.value },
+                economyProvider = { economyProvider.value },
                 scope = coreModule.scope,
                 chatGameConfigProvider = { config.value }
             )
@@ -60,6 +70,7 @@ interface ChatGameModule {
                 config.reload()
                 chatGameJob.onDisable()
                 chatGameJob.onEnable()
+                economyProvider.reload()
             }
         )
     }

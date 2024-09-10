@@ -9,6 +9,7 @@ import ru.astrainteractive.aspekt.module.antiswear.di.AntiSwearModule
 import ru.astrainteractive.aspekt.module.autobroadcast.di.AutoBroadcastModule
 import ru.astrainteractive.aspekt.module.autocrop.di.AutoCropModule
 import ru.astrainteractive.aspekt.module.chatgame.di.ChatGameModule
+import ru.astrainteractive.aspekt.module.economy.di.EconomyModule
 import ru.astrainteractive.aspekt.module.menu.di.MenuModule
 import ru.astrainteractive.aspekt.module.moneyadvancement.di.MoneyAdvancementModule
 import ru.astrainteractive.aspekt.module.moneydrop.di.MoneyDropModule
@@ -31,4 +32,5 @@ interface RootModule {
     val antiSwearModule: AntiSwearModule
     val moneyAdvancementModule: MoneyAdvancementModule
     val chatGameModule: ChatGameModule
+    val economyModule: EconomyModule
 }

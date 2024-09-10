@@ -11,6 +11,7 @@ import ru.astrainteractive.aspekt.module.antiswear.di.AntiSwearModule
 import ru.astrainteractive.aspekt.module.autobroadcast.di.AutoBroadcastModule
 import ru.astrainteractive.aspekt.module.autocrop.di.AutoCropModule
 import ru.astrainteractive.aspekt.module.chatgame.di.ChatGameModule
+import ru.astrainteractive.aspekt.module.economy.di.EconomyModule
 import ru.astrainteractive.aspekt.module.menu.di.MenuModule
 import ru.astrainteractive.aspekt.module.moneyadvancement.di.MoneyAdvancementModule
 import ru.astrainteractive.aspekt.module.moneydrop.di.MoneyDropModule
@@ -67,5 +68,8 @@ class RootModuleImpl : RootModule {
     }
     override val chatGameModule: ChatGameModule by lazy {
         ChatGameModule.Default(coreModule = coreModule)
+    }
+    override val economyModule: EconomyModule by lazy {
+        EconomyModule.Default(coreModule)
     }
 }
