@@ -9,7 +9,7 @@ import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContext
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.argumentOrElse
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.requireArgument
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.requirePermission
-import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
+import ru.astrainteractive.astralibs.command.api.exception.DefaultCommandException
 import ru.astrainteractive.astralibs.command.api.parser.CommandParser
 
 internal class EkonCommandParser(
@@ -72,7 +72,7 @@ internal class EkonCommandParser(
                 }
             }
 
-            else -> throw BadArgumentException(args.getOrNull(0), PrimitiveArgumentType.String)
+            else -> throw DefaultCommandException.BadArgumentException(args.getOrNull(0), PrimitiveArgumentType.String)
         }
     }
 }

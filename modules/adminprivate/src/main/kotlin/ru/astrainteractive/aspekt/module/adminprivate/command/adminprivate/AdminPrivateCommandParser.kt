@@ -8,7 +8,7 @@ import ru.astrainteractive.astralibs.command.api.argumenttype.PrimitiveArgumentT
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContext
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.requireArgument
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.requirePermission
-import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
+import ru.astrainteractive.astralibs.command.api.exception.DefaultCommandException
 import ru.astrainteractive.astralibs.command.api.parser.CommandParser
 
 internal class AdminPrivateCommandParser : CommandParser<AdminPrivateCommand.Model, BukkitCommandContext> {
@@ -47,7 +47,7 @@ internal class AdminPrivateCommandParser : CommandParser<AdminPrivateCommand.Mod
                 )
             }
 
-            else -> throw BadArgumentException(args.getOrNull(0), PrimitiveArgumentType.String)
+            else -> throw DefaultCommandException.BadArgumentException(args.getOrNull(0), PrimitiveArgumentType.String)
         }
     }
 }
