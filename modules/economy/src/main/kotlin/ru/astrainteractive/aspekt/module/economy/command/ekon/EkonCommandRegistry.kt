@@ -9,9 +9,7 @@ import ru.astrainteractive.aspekt.module.economy.database.dao.CachedDao
 import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.command.api.exception.ArgumentTypeException
-import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
-import ru.astrainteractive.astralibs.command.api.exception.NoPermissionException
+import ru.astrainteractive.astralibs.command.api.exception.DefaultCommandException
 import ru.astrainteractive.astralibs.command.api.util.PluginExt.registerCommand
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
@@ -93,12 +91,20 @@ internal class EkonCommandRegistry(
             ),
             errorHandler = { context, throwable ->
                 when (throwable) {
-                    is BadArgumentException -> with(kyori) {
-                        context.sender.sendMessage(translation.general.wrongUsage.component)
-                    }
+                    is DefaultCommandException -> with(kyori) {
+                        when (throwable) {
+                            is DefaultCommandException.ArgumentTypeException -> {
+                                context.sender.sendMessage(translation.general.wrongUsage.component)
+                            }
 
-                    is ArgumentTypeException -> with(kyori) {
-                        context.sender.sendMessage(translation.general.wrongUsage.component)
+                            is DefaultCommandException.BadArgumentException -> {
+                                context.sender.sendMessage(translation.general.wrongUsage.component)
+                            }
+
+                            is DefaultCommandException.NoPermissionException -> {
+                                context.sender.sendMessage(translation.general.noPermission.component)
+                            }
+                        }
                     }
 
                     is CurrencyArgument.CurrencyNotFoundException -> with(kyori) {
@@ -107,10 +113,6 @@ internal class EkonCommandRegistry(
 
                     is OfflinePlayerArgument.PlayerNotFound -> with(kyori) {
                         context.sender.sendMessage(translation.economy.playerNotFound.component)
-                    }
-
-                    is NoPermissionException -> with(kyori) {
-                        context.sender.sendMessage(translation.general.noPermission.component)
                     }
 
                     else -> with(kyori) {

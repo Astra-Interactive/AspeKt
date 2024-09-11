@@ -15,9 +15,10 @@ import ru.astrainteractive.aspekt.module.economy.database.dao.impl.CachedDaoImpl
 import ru.astrainteractive.aspekt.module.economy.database.dao.impl.EconomyDaoImpl
 import ru.astrainteractive.aspekt.module.economy.database.table.CurrencyTable
 import ru.astrainteractive.aspekt.module.economy.database.table.PlayerCurrencyTable
-import ru.astrainteractive.aspekt.module.economy.model.DatabaseConfiguration
-import ru.astrainteractive.aspekt.util.FlowExt.mapHistory
+import ru.astrainteractive.astralibs.exposed.factory.DatabaseFactory
+import ru.astrainteractive.astralibs.exposed.model.DatabaseConfiguration
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.astralibs.util.FlowExt.mapCached
 import ru.astrainteractive.klibs.kstorage.api.flow.StateFlowKrate
 import java.io.File
 import kotlin.coroutines.CoroutineContext
@@ -33,22 +34,9 @@ internal interface EconomyDatabaseModule {
         coroutineScope: CoroutineScope,
         ioDispatcher: CoroutineContext
     ) : EconomyDatabaseModule {
-        private val databaseFlow: Flow<Database> = dbConfig.cachedStateFlow.mapHistory { dbConfig, previous ->
+        private val databaseFlow: Flow<Database> = dbConfig.cachedStateFlow.mapCached { dbConfig, previous ->
             previous?.connector?.invoke()?.close()
-
-            val database = when (dbConfig) {
-                is DatabaseConfiguration.H2 -> Database.connect(
-                    url = "jdbc:sqlite:${dataFolder.resolve("${dbConfig.name}.db").absolutePath}",
-                    driver = "org.sqlite.JDBC"
-                )
-
-                is DatabaseConfiguration.MySql -> Database.connect(
-                    url = "jdbc:mysql://${dbConfig.host}:${dbConfig.port}/${dbConfig.name}",
-                    driver = dbConfig.driver,
-                    user = dbConfig.user,
-                    password = dbConfig.password
-                )
-            }
+            val database = DatabaseFactory(dataFolder).create(dbConfig)
             TransactionManager.manager.defaultIsolationLevel = java.sql.Connection.TRANSACTION_SERIALIZABLE
             runBlocking {
                 transaction(database) {

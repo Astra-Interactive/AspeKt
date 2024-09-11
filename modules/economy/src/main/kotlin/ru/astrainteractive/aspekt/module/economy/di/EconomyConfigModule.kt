@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.economy.di
 
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyConfiguration
-import ru.astrainteractive.aspekt.module.economy.model.DatabaseConfiguration
+import ru.astrainteractive.astralibs.exposed.model.DatabaseConfiguration
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
@@ -22,13 +22,19 @@ internal interface EconomyConfigModule {
         override val folder = coreModule.plugin.value.dataFolder.resolve("economy")
 
         override val databaseConfiguration = DefaultStateFlowMutableKrate(
-            factory = { DatabaseConfiguration.H2() },
+            factory = { DatabaseConfiguration.H2(name = "db", arguments = emptyList()) },
             loader = {
                 folder.mkdirs()
                 val file = folder.resolve("db.yml")
                 if (!file.exists() || file.length() == 0L) {
                     file.createNewFile()
-                    coreModule.yamlFormat.writeIntoFile<DatabaseConfiguration>(DatabaseConfiguration.H2(), file)
+                    coreModule.yamlFormat.writeIntoFile<DatabaseConfiguration>(
+                        value = DatabaseConfiguration.H2(
+                            name = "db",
+                            arguments = emptyList()
+                        ),
+                        file = file
+                    )
                 }
                 coreModule.yamlFormat.parse<DatabaseConfiguration>(file)
                     .onFailure { error { "#databaseConfiguration could not read db.yml: ${it.message}" } }
