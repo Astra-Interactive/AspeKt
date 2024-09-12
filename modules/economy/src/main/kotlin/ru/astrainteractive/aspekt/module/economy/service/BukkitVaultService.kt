@@ -32,7 +32,10 @@ internal class BukkitVaultService(
                     dao = dao
                 ),
                 plugin,
-                ServicePriority.Normal
+                ServicePriority.entries.getOrElse(
+                    index = currency.priority,
+                    defaultValue = { ServicePriority.Normal }
+                )
             )
         }
     }
