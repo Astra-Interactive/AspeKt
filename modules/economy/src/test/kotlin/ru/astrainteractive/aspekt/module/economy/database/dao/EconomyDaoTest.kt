@@ -54,7 +54,7 @@ class EconomyDaoTest {
     @Test
     fun `GIVEN_different_db_configs_WHEN_try_THEN_db_changed`() = runTest {
         dbConfig.update { DatabaseConfiguration.H2("test") }
-        val currencies = listOf(CurrencyModel(id = "0", name = "name", isPrimary = false))
+        val currencies = listOf(CurrencyModel(id = "0", name = "name", priority = 0))
         requireModule.economyDao.updateCurrencies(currencies)
         assertEquals(1, requireModule.economyDao.getAllCurrencies().size)
         dbConfig.update { DatabaseConfiguration.H2("test2") }
@@ -65,7 +65,7 @@ class EconomyDaoTest {
 
     @Test
     fun `GIVEN_currency_WHEN_try_find_THEN_found`() = runTest(scheduler) {
-        val currencies = listOf(CurrencyModel(id = "0", name = "name", isPrimary = false))
+        val currencies = listOf(CurrencyModel(id = "0", name = "name", priority = 0))
         requireModule.economyDao.updateCurrencies(currencies)
         assertEquals(1, requireModule.economyDao.getAllCurrencies().size)
         assertEquals(currencies.first(), requireModule.economyDao.findCurrency(currencies.first().id))
@@ -73,9 +73,9 @@ class EconomyDaoTest {
 
     @Test
     fun `GIVEN_multiple_currencies_WHEN_change_list_THEN_changed`() = runTest(scheduler) {
-        val currencies = listOf(CurrencyModel(id = "0", name = "name", isPrimary = false))
+        val currencies = listOf(CurrencyModel(id = "0", name = "name", priority = 0))
         requireModule.economyDao.updateCurrencies(currencies)
-        val newCurrencies = List(2) { CurrencyModel(id = "$it", name = "name$it", isPrimary = false) }
+        val newCurrencies = List(2) { CurrencyModel(id = "$it", name = "name$it", priority = 0) }
         requireModule.economyDao.updateCurrencies(newCurrencies)
         assertContentEquals(newCurrencies, requireModule.economyDao.getAllCurrencies())
         newCurrencies.forEach {
@@ -85,7 +85,7 @@ class EconomyDaoTest {
 
     @Test
     fun `GIVEN_currency_WHEN_add_to_player_THEN_added`() = runTest(scheduler) {
-        val currencies = List(2) { CurrencyModel(id = "$it", name = "name$it", isPrimary = false) }
+        val currencies = List(2) { CurrencyModel(id = "$it", name = "name$it", priority = 0) }
         requireModule.economyDao.updateCurrencies(currencies)
         val playerCurrency = PlayerCurrency(
             playerModel = PlayerModel(
@@ -110,7 +110,7 @@ class EconomyDaoTest {
 
     @Test
     fun `GIVEN_currency_WHEN_transfer_to_player_THEN_transfered`() = runTest(scheduler) {
-        val currencies = List(2) { CurrencyModel(id = "$it", name = "name$it", isPrimary = false) }
+        val currencies = List(2) { CurrencyModel(id = "$it", name = "name$it", priority = 0) }
         requireModule.economyDao.updateCurrencies(currencies)
         val playerCurrency = PlayerCurrency(
             playerModel = PlayerModel(

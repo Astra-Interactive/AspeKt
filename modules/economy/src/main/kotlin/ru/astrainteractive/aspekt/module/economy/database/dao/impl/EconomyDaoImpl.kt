@@ -32,7 +32,7 @@ internal class EconomyDaoImpl(
     private fun ResultRow.toCurrency() = CurrencyModel(
         id = this[CurrencyTable.id].value,
         name = this[CurrencyTable.name],
-        isPrimary = this[CurrencyTable.isPrimary],
+        priority = this[CurrencyTable.priority],
     )
 
     private fun ResultRow.toPlayerCurrency() = PlayerCurrency(
@@ -44,7 +44,7 @@ internal class EconomyDaoImpl(
         currencyModel = CurrencyModel(
             id = this[CurrencyTable.id].value,
             name = this[CurrencyTable.name],
-            isPrimary = this[CurrencyTable.isPrimary],
+            priority = this[CurrencyTable.priority],
         )
     )
 
@@ -61,14 +61,8 @@ internal class EconomyDaoImpl(
             .map(CurrencyModel::id)
             .toSet()
             .minus(currencies.map(CurrencyModel::id).toSet())
-        val primaryCurrencyCount = currencies.filter(CurrencyModel::isPrimary).size
         if (currencies.isEmpty()) {
             error { "#updateCurrencies you didn't setup any currencies! Economy may break!" }
-        }
-        if (primaryCurrencyCount == 0) {
-            error { "#updateCurrencies you didn't select primary currency! Economy may break!" }
-        } else if (primaryCurrencyCount > 1) {
-            error { "#updateCurrencies you have selected multiple primary currencies! Economy may break!" }
         }
         if (nonExistingCurrencies.isNotEmpty()) {
             newSuspendedTransaction(db = currentDatabase()) {
@@ -81,13 +75,13 @@ internal class EconomyDaoImpl(
                 if (existingCurrencies.find { currency.id == it.id } != null) {
                     CurrencyTable.update(where = { CurrencyTable.id eq currency.id }) {
                         it[CurrencyTable.name] = currency.name
-                        it[CurrencyTable.isPrimary] = currency.isPrimary
+                        it[CurrencyTable.priority] = currency.priority
                     }
                 } else {
                     CurrencyTable.insert {
                         it[CurrencyTable.id] = currency.id
                         it[CurrencyTable.name] = currency.name
-                        it[CurrencyTable.isPrimary] = currency.isPrimary
+                        it[CurrencyTable.priority] = currency.priority
                     }
                 }
             }
