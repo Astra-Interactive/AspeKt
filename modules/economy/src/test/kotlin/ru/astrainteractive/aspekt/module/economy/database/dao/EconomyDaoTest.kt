@@ -1,6 +1,8 @@
 package ru.astrainteractive.aspekt.module.economy.database.dao
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.runTest
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
@@ -53,13 +55,27 @@ class EconomyDaoTest {
 
     @Test
     fun `GIVEN_different_db_configs_WHEN_try_THEN_db_changed`() = runTest {
-        dbConfig.update { DatabaseConfiguration.H2("test") }
+        val initialUrl = requireModule.databaseFlow.first().url
+        dbConfig.update { DatabaseConfiguration.H2("test1") }
+        requireModule.databaseFlow
+            .filter { it.url != initialUrl }
+            .first()
+        val test1Url = requireModule.databaseFlow.first().url
+
         val currencies = listOf(CurrencyModel(id = "0", name = "name", priority = 0))
         requireModule.economyDao.updateCurrencies(currencies)
         assertEquals(1, requireModule.economyDao.getAllCurrencies().size)
+
         dbConfig.update { DatabaseConfiguration.H2("test2") }
+        requireModule.databaseFlow
+            .filter { it.url != test1Url }
+            .first()
+
         assertEquals(0, requireModule.economyDao.getAllCurrencies().size)
-        dbConfig.update { DatabaseConfiguration.H2("test") }
+        dbConfig.update { DatabaseConfiguration.H2("test1") }
+        requireModule.databaseFlow
+            .filter { it.url == test1Url }
+            .first()
         assertEquals(1, requireModule.economyDao.getAllCurrencies().size)
     }
 

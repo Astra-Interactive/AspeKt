@@ -2,11 +2,14 @@ package ru.astrainteractive.aspekt.module.economy.database.dao.impl
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
@@ -27,8 +30,16 @@ internal class EconomyDaoImpl(
     private val databaseFlow: Flow<Database>
 ) : EconomyDao,
     Logger by JUtiltLogger("EconomyDao") {
+    private val mutex = Mutex()
 
-    private suspend fun currentDatabase() = databaseFlow.first()
+    private suspend fun <T> withMutex(block: suspend () -> T): T {
+        return mutex.withLock { block.invoke() }
+    }
+
+    private suspend fun currentDatabase(): Database {
+        return databaseFlow.first()
+    }
+
     private fun ResultRow.toCurrency() = CurrencyModel(
         id = this[CurrencyTable.id].value,
         name = this[CurrencyTable.name],
@@ -55,7 +66,7 @@ internal class EconomyDaoImpl(
         }
     }
 
-    override suspend fun updateCurrencies(currencies: List<CurrencyModel>) {
+    override suspend fun updateCurrencies(currencies: List<CurrencyModel>) = withMutex {
         val existingCurrencies = getAllCurrencies()
         val nonExistingCurrencies = existingCurrencies
             .map(CurrencyModel::id)
@@ -156,16 +167,29 @@ internal class EconomyDaoImpl(
                 it[PlayerCurrencyTable.currencyId] = currency.currencyModel.id
             }
         } else {
-            PlayerCurrencyTable.update(where = { PlayerCurrencyTable.currencyId eq currency.currencyModel.id }) {
-                it[PlayerCurrencyTable.amount] = currency.balance
-                it[PlayerCurrencyTable.lastUsername] = currency.playerModel.name
-            }
+            PlayerCurrencyTable.update(
+                where = {
+                    PlayerCurrencyTable.currencyId.eq(currency.currencyModel.id).and {
+                        PlayerCurrencyTable.uuid.eq(currency.playerModel.uuid)
+                    }
+                },
+                body = {
+                    it[PlayerCurrencyTable.amount] = currency.balance
+                    it[PlayerCurrencyTable.lastUsername] = currency.playerModel.name
+                }
+            )
         }
     }
 
-    override suspend fun transfer(from: PlayerModel, to: PlayerModel, amount: Double, currencyId: String): Boolean {
-        return newSuspendedTransaction(db = currentDatabase()) {
-            val fromPlayerCurrency = findPlayerCurrency(from.uuid, currencyId) ?: return@newSuspendedTransaction false
+    override suspend fun transfer(
+        from: PlayerModel,
+        to: PlayerModel,
+        amount: Double,
+        currencyId: String
+    ): Boolean = withMutex {
+        newSuspendedTransaction(db = currentDatabase()) {
+            val fromPlayerCurrency =
+                findPlayerCurrency(from.uuid, currencyId) ?: return@newSuspendedTransaction false
             if (fromPlayerCurrency.balance - amount < 0) return@newSuspendedTransaction false
             val toPlayerCurrency = PlayerCurrency(
                 playerModel = PlayerModel(
@@ -183,8 +207,8 @@ internal class EconomyDaoImpl(
         }
     }
 
-    override suspend fun updatePlayerCurrency(currency: PlayerCurrency) {
-        return newSuspendedTransaction(db = currentDatabase()) {
+    override suspend fun updatePlayerCurrency(currency: PlayerCurrency) = withMutex {
+        newSuspendedTransaction(db = currentDatabase()) {
             updatePlayerCurrencyWithoutTransaction(currency)
         }
     }
