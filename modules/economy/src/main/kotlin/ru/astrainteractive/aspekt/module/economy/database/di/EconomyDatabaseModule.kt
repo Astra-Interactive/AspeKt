@@ -2,6 +2,8 @@ package ru.astrainteractive.aspekt.module.economy.database.di
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.shareIn
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Slf4jSqlDebugLogger
@@ -17,6 +19,8 @@ import ru.astrainteractive.aspekt.module.economy.database.table.PlayerCurrencyTa
 import ru.astrainteractive.astralibs.exposed.factory.DatabaseFactory
 import ru.astrainteractive.astralibs.exposed.model.DatabaseConfiguration
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.astralibs.logging.JUtiltLogger
+import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.util.FlowExt.mapCached
 import ru.astrainteractive.klibs.kstorage.api.flow.StateFlowKrate
 import java.io.File
@@ -24,6 +28,7 @@ import kotlin.coroutines.CoroutineContext
 
 internal interface EconomyDatabaseModule {
     val lifecycle: Lifecycle
+    val databaseFlow: Flow<Database>
     val economyDao: EconomyDao
     val cachedDao: CachedDao
 
@@ -32,20 +37,23 @@ internal interface EconomyDatabaseModule {
         dataFolder: File,
         coroutineScope: CoroutineScope,
         ioDispatcher: CoroutineContext
-    ) : EconomyDatabaseModule {
-        private val databaseFlow: Flow<Database> = dbConfig.cachedStateFlow.mapCached { dbConfig, previous ->
-            previous?.connector?.invoke()?.close()
-            val database = DatabaseFactory(dataFolder).create(dbConfig)
-            TransactionManager.manager.defaultIsolationLevel = java.sql.Connection.TRANSACTION_SERIALIZABLE
-            transaction(database) {
-                addLogger(Slf4jSqlDebugLogger)
-                SchemaUtils.create(
-                    CurrencyTable,
-                    PlayerCurrencyTable
-                )
-            }
-            database
-        }
+    ) : EconomyDatabaseModule, Logger by JUtiltLogger("EconomyDatabaseModule") {
+
+        override val databaseFlow: Flow<Database> = dbConfig.cachedStateFlow
+            .mapCached<DatabaseConfiguration, Database> { dbConfig, previous ->
+                previous?.connector?.invoke()?.close()
+                previous?.run(TransactionManager::closeAndUnregister)
+                val database = DatabaseFactory(dataFolder).create(dbConfig)
+                TransactionManager.manager.defaultIsolationLevel = java.sql.Connection.TRANSACTION_SERIALIZABLE
+                transaction(database) {
+                    addLogger(Slf4jSqlDebugLogger)
+                    SchemaUtils.create(
+                        CurrencyTable,
+                        PlayerCurrencyTable
+                    )
+                }
+                database
+            }.shareIn(coroutineScope, SharingStarted.Eagerly, 1)
 
         override val economyDao: EconomyDao = EconomyDaoImpl(databaseFlow)
 

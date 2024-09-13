@@ -1,6 +1,8 @@
 package ru.astrainteractive.aspekt.module.economy.database.dao
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.runTest
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
@@ -11,7 +13,6 @@ import ru.astrainteractive.astralibs.exposed.model.DatabaseConfiguration
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultStateFlowMutableKrate
 import ru.astrainteractive.klibs.kstorage.util.KrateExt.update
 import java.io.File
-import kotlin.random.Random
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -22,12 +23,14 @@ import kotlin.test.assertTrue
 
 class EconomyDaoTest {
     private val scheduler = TestCoroutineScheduler()
-    private var _module: EconomyDatabaseModule? = null
     private var _folder: File? = null
     private val requireFolder: File
         get() = _folder ?: error("Folder not set")
+
+    private var _module: EconomyDatabaseModule? = null
     private val requireModule: EconomyDatabaseModule
         get() = _module ?: error("Module not set")
+
     private val dbConfig = DefaultStateFlowMutableKrate<DatabaseConfiguration>(
         factory = { DatabaseConfiguration.H2("test") },
         loader = { DatabaseConfiguration.H2("test") }
@@ -35,9 +38,8 @@ class EconomyDaoTest {
 
     @BeforeTest
     fun setup() {
-        _folder = File("./temp${Random.nextInt()}")
+        _folder = File("temp-folder")
         requireFolder.mkdirs()
-        requireFolder.deleteOnExit()
         _module = EconomyDatabaseModule.Default(
             dataFolder = requireFolder,
             dbConfig = dbConfig,
@@ -53,13 +55,27 @@ class EconomyDaoTest {
 
     @Test
     fun `GIVEN_different_db_configs_WHEN_try_THEN_db_changed`() = runTest {
-        dbConfig.update { DatabaseConfiguration.H2("test") }
+        val initialUrl = requireModule.databaseFlow.first().url
+        dbConfig.update { DatabaseConfiguration.H2("test1") }
+        requireModule.databaseFlow
+            .filter { it.url != initialUrl }
+            .first()
+        val test1Url = requireModule.databaseFlow.first().url
+
         val currencies = listOf(CurrencyModel(id = "0", name = "name", priority = 0))
         requireModule.economyDao.updateCurrencies(currencies)
         assertEquals(1, requireModule.economyDao.getAllCurrencies().size)
+
         dbConfig.update { DatabaseConfiguration.H2("test2") }
+        requireModule.databaseFlow
+            .filter { it.url != test1Url }
+            .first()
+
         assertEquals(0, requireModule.economyDao.getAllCurrencies().size)
-        dbConfig.update { DatabaseConfiguration.H2("test") }
+        dbConfig.update { DatabaseConfiguration.H2("test1") }
+        requireModule.databaseFlow
+            .filter { it.url == test1Url }
+            .first()
         assertEquals(1, requireModule.economyDao.getAllCurrencies().size)
     }
 

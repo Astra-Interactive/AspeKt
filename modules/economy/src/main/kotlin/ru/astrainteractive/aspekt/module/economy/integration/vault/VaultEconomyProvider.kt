@@ -14,6 +14,8 @@ import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
+import ru.astrainteractive.astralibs.logging.JUtiltLogger
+import ru.astrainteractive.astralibs.logging.Logger
 import java.text.DecimalFormat
 import kotlin.time.Duration.Companion.seconds
 
@@ -21,20 +23,30 @@ import kotlin.time.Duration.Companion.seconds
 internal class VaultEconomyProvider(
     private val primaryCurrencyModel: CurrencyModel,
     private val dao: EconomyDao
-) : Economy {
+) : Economy, Logger by JUtiltLogger("Economy-${primaryCurrencyModel.id}") {
     /**
      * Run blocking function but try not to block main thread
      */
     private fun <T> runIoBlocking(block: suspend CoroutineScope.() -> T): T {
         return if (Bukkit.isPrimaryThread()) {
             runBlocking(Dispatchers.IO) {
-                flow<T> { block.invoke(this@runBlocking) }
+                flow<T> { emit(block.invoke(this@runBlocking)) }
                     .timeout(timeout = 15.seconds)
                     .first()
             }
         } else {
             runBlocking(block = block)
         }
+    }
+
+    private fun notImplemented(message: String): EconomyResponse {
+        return EconomyResponse(0.0, 0.0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, message)
+    }
+
+    private fun requireOfflinePlayer(name: String?): OfflinePlayer {
+        name ?: error("The requested name is null")
+        val offlinePlayer = Bukkit.getOfflinePlayer(name)
+        return offlinePlayer
     }
 
     override fun isEnabled(): Boolean = true
@@ -53,38 +65,48 @@ internal class VaultEconomyProvider(
 
     override fun currencyNameSingular(): String = primaryCurrencyModel.name
 
-    override fun hasAccount(p0: String?): Boolean = error("Method with player name is not supported")
+    override fun hasAccount(playerName: String?): Boolean = hasAccount(requireOfflinePlayer(playerName))
 
     override fun hasAccount(player: OfflinePlayer?): Boolean = runIoBlocking {
         player ?: return@runIoBlocking false
         dao.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id) != null
     }
 
-    override fun hasAccount(p0: String?, p1: String?): Boolean = error("Method with player name is not supported")
+    override fun hasAccount(playerName: String?, worldName: String?): Boolean {
+        return hasAccount(requireOfflinePlayer(playerName), worldName)
+    }
 
     override fun hasAccount(player: OfflinePlayer?, p1: String?): Boolean = hasAccount(player)
 
-    override fun getBalance(p0: String?): Double = error("Method with player name is not supported")
+    override fun getBalance(playerName: String?): Double = getBalance(requireOfflinePlayer(playerName))
 
     override fun getBalance(player: OfflinePlayer?): Double = runIoBlocking {
         player ?: return@runIoBlocking 0.0
         dao.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id)?.balance ?: 0.0
     }
 
-    override fun getBalance(p0: String?, p1: String?): Double = error("Method with player name is not supported")
+    override fun getBalance(playerName: String?, world: String?): Double {
+        return getBalance(requireOfflinePlayer(playerName), world)
+    }
 
     override fun getBalance(player: OfflinePlayer?, p1: String?): Double = getBalance(player)
 
-    override fun has(p0: String?, p1: Double): Boolean = error("Method with player name is not supported")
+    override fun has(playerName: String?, amount: Double): Boolean {
+        return has(requireOfflinePlayer(playerName), amount)
+    }
 
     override fun has(p0: OfflinePlayer?, amount: Double): Boolean = getBalance(p0) >= amount
 
-    override fun has(p0: String?, p1: String?, p2: Double): Boolean = error("Method with player name is not supported")
+    override fun has(playerName: String?, worldName: String?, amount: Double): Boolean {
+        return has(requireOfflinePlayer(playerName), worldName, amount)
+    }
 
-    override fun has(p0: OfflinePlayer?, p1: String?, amount: Double): Boolean = getBalance(p0) >= amount
+    override fun has(p0: OfflinePlayer?, p1: String?, amount: Double): Boolean {
+        return getBalance(p0) >= amount
+    }
 
-    override fun withdrawPlayer(p0: String?, p1: Double): EconomyResponse {
-        error("Method with player name is not supported")
+    override fun withdrawPlayer(playerName: String?, amount: Double): EconomyResponse {
+        return withdrawPlayer(requireOfflinePlayer(playerName), amount)
     }
 
     override fun withdrawPlayer(player: OfflinePlayer?, amount: Double): EconomyResponse {
@@ -115,14 +137,14 @@ internal class VaultEconomyProvider(
         )
     }
 
-    override fun withdrawPlayer(p0: String?, p1: String?, p2: Double): EconomyResponse {
-        error("Method with player name is not supported")
+    override fun withdrawPlayer(playerName: String?, worldName: String?, amount: Double): EconomyResponse {
+        return withdrawPlayer(requireOfflinePlayer(playerName), worldName, amount)
     }
 
     override fun withdrawPlayer(p0: OfflinePlayer?, p1: String?, p2: Double): EconomyResponse = withdrawPlayer(p0, p2)
 
-    override fun depositPlayer(p0: String?, p1: Double): EconomyResponse {
-        error("Method with player name is not supported")
+    override fun depositPlayer(playerName: String?, amount: Double): EconomyResponse {
+        return depositPlayer(requireOfflinePlayer(playerName), amount)
     }
 
     override fun depositPlayer(player: OfflinePlayer?, amount: Double): EconomyResponse {
@@ -149,44 +171,55 @@ internal class VaultEconomyProvider(
         )
     }
 
-    override fun depositPlayer(p0: String?, p1: String?, p2: Double): EconomyResponse {
-        error("Method with player name is not supported")
+    override fun depositPlayer(playerName: String?, worldName: String?, amount: Double): EconomyResponse {
+        return depositPlayer(requireOfflinePlayer(playerName), worldName, amount)
     }
 
-    override fun depositPlayer(player: OfflinePlayer?, p1: String?, amount: Double): EconomyResponse =
-        depositPlayer(player, amount)
+    override fun depositPlayer(player: OfflinePlayer?, p1: String?, amount: Double): EconomyResponse {
+        return depositPlayer(player, amount)
+    }
 
-    override fun createBank(p0: String?, p1: String?): EconomyResponse = error("Banks not implemented")
+    override fun createBank(p0: String?, p1: String?): EconomyResponse = notImplemented("Banks not implemented")
 
-    override fun createBank(p0: String?, p1: OfflinePlayer?): EconomyResponse = error("Banks not implemented")
+    override fun createBank(p0: String?, p1: OfflinePlayer?): EconomyResponse = notImplemented("Banks not implemented")
 
-    override fun deleteBank(p0: String?): EconomyResponse = error("Banks not implemented")
+    override fun deleteBank(p0: String?): EconomyResponse = notImplemented("Banks not implemented")
 
-    override fun bankBalance(p0: String?): EconomyResponse = error("Banks not implemented")
+    override fun bankBalance(p0: String?): EconomyResponse = notImplemented("Banks not implemented")
 
-    override fun bankHas(p0: String?, p1: Double): EconomyResponse = error("Banks not implemented")
+    override fun bankHas(p0: String?, p1: Double): EconomyResponse = notImplemented("Banks not implemented")
 
-    override fun bankWithdraw(p0: String?, p1: Double): EconomyResponse = error("Banks not implemented")
+    override fun bankWithdraw(p0: String?, p1: Double): EconomyResponse = notImplemented("Banks not implemented")
 
-    override fun bankDeposit(p0: String?, p1: Double): EconomyResponse = error("Banks not implemented")
+    override fun bankDeposit(p0: String?, p1: Double): EconomyResponse = notImplemented("Banks not implemented")
 
-    override fun isBankOwner(p0: String?, p1: String?): EconomyResponse = error("Banks not implemented")
+    override fun isBankOwner(p0: String?, p1: String?): EconomyResponse = notImplemented("Banks not implemented")
 
-    override fun isBankOwner(p0: String?, p1: OfflinePlayer?): EconomyResponse = error("Banks not implemented")
+    override fun isBankOwner(p0: String?, p1: OfflinePlayer?): EconomyResponse = notImplemented("Banks not implemented")
 
-    override fun isBankMember(p0: String?, p1: String?): EconomyResponse = error("Banks not implemented")
+    override fun isBankMember(p0: String?, p1: String?): EconomyResponse = notImplemented("Banks not implemented")
 
-    override fun isBankMember(p0: String?, p1: OfflinePlayer?): EconomyResponse = error("Banks not implemented")
+    override fun isBankMember(p0: String?, p1: OfflinePlayer?): EconomyResponse {
+        return notImplemented("Banks not implemented")
+    }
 
-    override fun getBanks(): MutableList<String> = error("Banks not implemented")
+    override fun getBanks(): MutableList<String> = mutableListOf()
 
-    override fun createPlayerAccount(p0: String?): Boolean = error("Creating accounts not implemented")
+    override fun createPlayerAccount(playerName: String?): Boolean {
+        return createPlayerAccount(requireOfflinePlayer(playerName))
+    }
 
-    override fun createPlayerAccount(p0: OfflinePlayer?): Boolean = error("Creating accounts not implemented")
+    override fun createPlayerAccount(player: OfflinePlayer?): Boolean {
+        player ?: return false
+        if (hasAccount(player)) return false
+        return depositPlayer(player, 0.0).transactionSuccess()
+    }
 
-    override fun createPlayerAccount(p0: String?, p1: String?): Boolean = error("Creating accounts not implemented")
+    override fun createPlayerAccount(playerName: String?, worldName: String?): Boolean {
+        return createPlayerAccount(requireOfflinePlayer(playerName), worldName)
+    }
 
-    override fun createPlayerAccount(p0: OfflinePlayer?, p1: String?): Boolean {
-        error("Creating accounts not implemented")
+    override fun createPlayerAccount(player: OfflinePlayer?, worldName: String?): Boolean {
+        return createPlayerAccount(player)
     }
 }

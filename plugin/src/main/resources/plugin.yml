@@ -9,7 +9,7 @@ website: "${url}"
 api-version: 1.18
 softdepend: [ DiscordSRV, LuckPerms, Vault, Esssentials, Towny, PlaceholderAPI ]
 depend: [ ]
-loadbefore: [ ]
+loadbefore: [ Towny ]
 libraries:
   - "org.xerial:sqlite-jdbc:3.46.1.0"
   - "mysql:mysql-connector-java:8.0.33"
