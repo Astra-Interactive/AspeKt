@@ -52,7 +52,9 @@ interface EconomyModule {
 
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onEnable = { lifecycles.forEach(Lifecycle::onEnable) },
-            onReload = { lifecycles.forEach(Lifecycle::onReload) },
+            onReload = {
+                error { "#onReload - reload of economy module is not supported! Consider full server reload." }
+            },
             onDisable = { lifecycles.forEach(Lifecycle::onDisable) }
         )
     }

@@ -38,7 +38,7 @@ internal class EconomyDaoImpl(
     private fun ResultRow.toPlayerCurrency() = PlayerCurrency(
         playerModel = PlayerModel(
             name = this[PlayerCurrencyTable.lastUsername],
-            uuid = this[PlayerCurrencyTable.id].value,
+            uuid = this[PlayerCurrencyTable.uuid],
         ),
         balance = this[PlayerCurrencyTable.amount],
         currencyModel = CurrencyModel(
@@ -106,7 +106,7 @@ internal class EconomyDaoImpl(
                 otherColumn = PlayerCurrencyTable.currencyId
             )
                 .selectAll()
-                .where { PlayerCurrencyTable.id eq playerUuid }
+                .where { PlayerCurrencyTable.uuid eq playerUuid }
                 .andWhere { PlayerCurrencyTable.currencyId eq currencyId }
                 .map { it.toPlayerCurrency() }
                 .firstOrNull()
@@ -122,7 +122,7 @@ internal class EconomyDaoImpl(
                 otherColumn = PlayerCurrencyTable.currencyId
             )
                 .selectAll()
-                .where { PlayerCurrencyTable.id eq playerUuid }
+                .where { PlayerCurrencyTable.uuid eq playerUuid }
                 .map { it.toPlayerCurrency() }
         }
     }
@@ -146,13 +146,13 @@ internal class EconomyDaoImpl(
     private suspend fun updatePlayerCurrencyWithoutTransaction(currency: PlayerCurrency) {
         val isPlayerCurrencyExists = PlayerCurrencyTable.selectAll()
             .where { PlayerCurrencyTable.currencyId eq currency.currencyModel.id }
-            .andWhere { PlayerCurrencyTable.id eq currency.playerModel.uuid }
+            .andWhere { PlayerCurrencyTable.uuid eq currency.playerModel.uuid }
             .firstOrNull()
         if (isPlayerCurrencyExists == null) {
             PlayerCurrencyTable.insert {
                 it[PlayerCurrencyTable.amount] = currency.balance
                 it[PlayerCurrencyTable.lastUsername] = currency.playerModel.name
-                it[PlayerCurrencyTable.id] = currency.playerModel.uuid
+                it[PlayerCurrencyTable.uuid] = currency.playerModel.uuid
                 it[PlayerCurrencyTable.currencyId] = currency.currencyModel.id
             }
         } else {

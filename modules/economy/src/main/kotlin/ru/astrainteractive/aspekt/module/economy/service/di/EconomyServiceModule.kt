@@ -19,7 +19,13 @@ internal interface EconomyServiceModule {
 
         private val bukkitVaultService = BukkitVaultService(
             plugin = coreModule.plugin.value,
-            dao = databaseModule.economyDao
+            dao = databaseModule.economyDao,
+            getCurrencies = {
+                economyConfigModule.currencyConfiguration.cachedValue?.currencies
+                    ?.values
+                    .orEmpty()
+                    .toList()
+            },
         )
 
         private val preHeatService = PreHeatService(
@@ -34,18 +40,9 @@ internal interface EconomyServiceModule {
 
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onEnable = {
-                bukkitVaultService.prepare()
-
-                if (shouldSync) {
-                    preHeatService.preHeat()
-                }
+                bukkitVaultService.tryPrepare()
+                if (shouldSync) preHeatService.tryPreHeat()
             },
-            onReload = {
-                bukkitVaultService.prepare()
-                if (shouldSync) {
-                    preHeatService.preHeat()
-                }
-            }
         )
     }
 }
