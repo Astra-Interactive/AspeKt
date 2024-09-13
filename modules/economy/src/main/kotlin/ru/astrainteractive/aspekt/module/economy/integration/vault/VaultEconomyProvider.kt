@@ -1,20 +1,42 @@
 package ru.astrainteractive.aspekt.module.economy.integration.vault
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.runBlocking
 import net.milkbowl.vault.economy.Economy
 import net.milkbowl.vault.economy.EconomyResponse
+import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
 import java.text.DecimalFormat
+import kotlin.time.Duration.Companion.seconds
 
 @Suppress("TooManyFunctions")
 internal class VaultEconomyProvider(
     private val primaryCurrencyModel: CurrencyModel,
     private val dao: EconomyDao
 ) : Economy {
+    /**
+     * Run blocking function but try not to block main thread
+     */
+    private fun <T> runIoBlocking(block: suspend CoroutineScope.() -> T): T {
+        return if (Bukkit.isPrimaryThread()) {
+            runBlocking(Dispatchers.IO) {
+                flow<T> { block.invoke(this@runBlocking) }
+                    .timeout(timeout = 15.seconds)
+                    .first()
+            }
+        } else {
+            runBlocking(block = block)
+        }
+    }
+
     override fun isEnabled(): Boolean = true
 
     override fun getName(): String = "AspeKt Economy of ${primaryCurrencyModel.id} currency"
@@ -33,8 +55,8 @@ internal class VaultEconomyProvider(
 
     override fun hasAccount(p0: String?): Boolean = error("Method with player name is not supported")
 
-    override fun hasAccount(player: OfflinePlayer?): Boolean = runBlocking {
-        player ?: return@runBlocking false
+    override fun hasAccount(player: OfflinePlayer?): Boolean = runIoBlocking {
+        player ?: return@runIoBlocking false
         dao.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id) != null
     }
 
@@ -44,8 +66,8 @@ internal class VaultEconomyProvider(
 
     override fun getBalance(p0: String?): Double = error("Method with player name is not supported")
 
-    override fun getBalance(player: OfflinePlayer?): Double = runBlocking {
-        player ?: return@runBlocking 0.0
+    override fun getBalance(player: OfflinePlayer?): Double = runIoBlocking {
+        player ?: return@runIoBlocking 0.0
         dao.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id)?.balance ?: 0.0
     }
 
@@ -70,7 +92,7 @@ internal class VaultEconomyProvider(
         if (player == null || playerName.isNullOrBlank()) {
             return EconomyResponse(0.0, 0.0, EconomyResponse.ResponseType.FAILURE, "Player is null")
         }
-        val playerCurrency = runBlocking {
+        val playerCurrency = runIoBlocking {
             dao.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id)
         }
         if (playerCurrency == null) {
@@ -84,7 +106,7 @@ internal class VaultEconomyProvider(
                 "Player doesn't have enough amount to withdraw"
             )
         }
-        runBlocking { dao.updatePlayerCurrency(playerCurrency.copy(balance = playerCurrency.balance - amount)) }
+        runIoBlocking { dao.updatePlayerCurrency(playerCurrency.copy(balance = playerCurrency.balance - amount)) }
         return EconomyResponse(
             amount,
             playerCurrency.balance - amount,
@@ -108,7 +130,7 @@ internal class VaultEconomyProvider(
         if (player == null || playerName.isNullOrBlank()) {
             return EconomyResponse(0.0, 0.0, EconomyResponse.ResponseType.FAILURE, "Player is null")
         }
-        val playerCurrency = runBlocking {
+        val playerCurrency = runIoBlocking {
             dao.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id) ?: PlayerCurrency(
                 playerModel = PlayerModel(
                     name = playerName,
@@ -118,7 +140,7 @@ internal class VaultEconomyProvider(
                 currencyModel = primaryCurrencyModel
             )
         }
-        runBlocking { dao.updatePlayerCurrency(playerCurrency.copy(balance = playerCurrency.balance + amount)) }
+        runIoBlocking { dao.updatePlayerCurrency(playerCurrency.copy(balance = playerCurrency.balance + amount)) }
         return EconomyResponse(
             amount,
             playerCurrency.balance + amount,

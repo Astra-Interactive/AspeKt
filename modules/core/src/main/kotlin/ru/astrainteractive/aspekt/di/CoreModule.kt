@@ -97,7 +97,8 @@ interface CoreModule : Lifecycle {
         }
 
         override fun findEconomyProviderByCurrency(currency: String): EconomyProvider? {
-            val specificEconomyProvider = Bukkit.getServer().servicesManager.getRegistrations(Economy::class.java)
+            val registrations = Bukkit.getServer().servicesManager.getRegistrations(Economy::class.java)
+            val specificEconomyProvider = registrations
                 .firstOrNull { it.provider.currencyNameSingular() == currency }
                 ?.provider
                 ?.let(::VaultEconomyProvider)

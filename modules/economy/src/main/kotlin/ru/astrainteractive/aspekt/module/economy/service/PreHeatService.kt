@@ -15,7 +15,7 @@ internal class PreHeatService(
 ) : AsyncComponent(), Logger by JUtiltLogger("PreHeatService") {
     private var lastJob: Job? = null
 
-    fun preHeat() = launch {
+    fun tryPreHeat() = launch {
         lastJob?.join()
         lastJob = coroutineContext.job
         dao.updateCurrencies(getCurrencies.invoke())

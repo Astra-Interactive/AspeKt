@@ -32,7 +32,9 @@ interface AdminPrivateModule {
         )
 
         override val adminChunksYml: Reloadable<File> = Reloadable {
-            coreModule.plugin.value.dataFolder.resolve("adminchunks.yml")
+            val file = coreModule.plugin.value.dataFolder.resolve("adminchunks.yml")
+            if (!file.exists()) file.createNewFile()
+            file
         }
 
         private val adminPrivateEvent by lazy {

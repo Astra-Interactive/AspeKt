@@ -2,7 +2,6 @@ package ru.astrainteractive.aspekt.module.economy.database.di
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Slf4jSqlDebugLogger
@@ -38,14 +37,12 @@ internal interface EconomyDatabaseModule {
             previous?.connector?.invoke()?.close()
             val database = DatabaseFactory(dataFolder).create(dbConfig)
             TransactionManager.manager.defaultIsolationLevel = java.sql.Connection.TRANSACTION_SERIALIZABLE
-            runBlocking {
-                transaction(database) {
-                    addLogger(Slf4jSqlDebugLogger)
-                    SchemaUtils.create(
-                        CurrencyTable,
-                        PlayerCurrencyTable
-                    )
-                }
+            transaction(database) {
+                addLogger(Slf4jSqlDebugLogger)
+                SchemaUtils.create(
+                    CurrencyTable,
+                    PlayerCurrencyTable
+                )
             }
             database
         }

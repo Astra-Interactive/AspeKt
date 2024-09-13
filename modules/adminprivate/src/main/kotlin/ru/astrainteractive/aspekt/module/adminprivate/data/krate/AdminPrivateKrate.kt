@@ -14,5 +14,13 @@ internal class AdminPrivateKrate(
 ) : StateFlowSuspendMutableKrate<AdminPrivateConfig> by DefaultSuspendMutableKrate(
     factory = { AdminPrivateConfig() },
     saver = { value -> stringFormat.writeIntoFile(value, file) },
-    loader = { stringFormat.parse<AdminPrivateConfig>(file).onFailure(Throwable::printStackTrace).getOrNull() },
+    loader = {
+        if (file.length() == 0L) {
+            null
+        } else {
+            stringFormat.parse<AdminPrivateConfig>(file)
+                .onFailure(Throwable::printStackTrace)
+                .getOrNull()
+        }
+    },
 )

@@ -16,7 +16,7 @@ dependencies {
     implementation(libs.klibs.mikro.core)
     implementation(libs.minecraft.astralibs.menu.bukkit)
     implementation(libs.minecraft.astralibs.core.bukkit)
-    implementation(libs.minecraft.vaultapi)
+    compileOnly(libs.minecraft.vaultapi)
     // Spigot
     compileOnly(libs.minecraft.discordsrv)
     compileOnly(libs.minecraft.luckperms)

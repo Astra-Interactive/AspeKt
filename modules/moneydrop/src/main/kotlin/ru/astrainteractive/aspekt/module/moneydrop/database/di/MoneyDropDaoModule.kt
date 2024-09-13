@@ -1,7 +1,6 @@
 package ru.astrainteractive.aspekt.module.moneydrop.database.di
 
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Slf4jSqlDebugLogger
@@ -28,13 +27,11 @@ internal interface MoneyDropDaoModule {
                 driver = "org.sqlite.JDBC"
             )
             TransactionManager.manager.defaultIsolationLevel = java.sql.Connection.TRANSACTION_SERIALIZABLE
-            runBlocking {
-                transaction(database) {
-                    addLogger(Slf4jSqlDebugLogger)
-                    SchemaUtils.create(
-                        MoneyDropLocationTable,
-                    )
-                }
+            transaction(database) {
+                addLogger(Slf4jSqlDebugLogger)
+                SchemaUtils.create(
+                    MoneyDropLocationTable,
+                )
             }
             emit(database)
         }

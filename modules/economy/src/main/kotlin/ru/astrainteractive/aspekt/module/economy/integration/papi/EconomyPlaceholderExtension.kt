@@ -10,7 +10,7 @@ import ru.astrainteractive.astralibs.expansion.KPlaceholderExpansion
 internal class EconomyPlaceholderExtension(
     dao: EconomyDao,
     scope: CoroutineScope
-) : KPlaceholderExpansion(
+) : PlaceholderExpansionApi, KPlaceholderExpansion(
     "aspekt",
     "RomanMakeev",
     "1.0.0"
