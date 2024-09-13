@@ -11,7 +11,6 @@ import ru.astrainteractive.astralibs.exposed.model.DatabaseConfiguration
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultStateFlowMutableKrate
 import ru.astrainteractive.klibs.kstorage.util.KrateExt.update
 import java.io.File
-import kotlin.random.Random
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -22,12 +21,14 @@ import kotlin.test.assertTrue
 
 class EconomyDaoTest {
     private val scheduler = TestCoroutineScheduler()
-    private var _module: EconomyDatabaseModule? = null
     private var _folder: File? = null
     private val requireFolder: File
         get() = _folder ?: error("Folder not set")
+
+    private var _module: EconomyDatabaseModule? = null
     private val requireModule: EconomyDatabaseModule
         get() = _module ?: error("Module not set")
+
     private val dbConfig = DefaultStateFlowMutableKrate<DatabaseConfiguration>(
         factory = { DatabaseConfiguration.H2("test") },
         loader = { DatabaseConfiguration.H2("test") }
@@ -35,9 +36,8 @@ class EconomyDaoTest {
 
     @BeforeTest
     fun setup() {
-        _folder = File("./temp${Random.nextInt()}")
+        _folder = File("temp-folder")
         requireFolder.mkdirs()
-        requireFolder.deleteOnExit()
         _module = EconomyDatabaseModule.Default(
             dataFolder = requireFolder,
             dbConfig = dbConfig,
