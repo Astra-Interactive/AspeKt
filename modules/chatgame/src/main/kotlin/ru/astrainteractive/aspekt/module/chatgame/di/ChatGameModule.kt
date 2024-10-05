@@ -6,7 +6,7 @@ import ru.astrainteractive.aspekt.module.chatgame.command.ChatGameCommand
 import ru.astrainteractive.aspekt.module.chatgame.job.ChatGameJob
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStoreImpl
-import ru.astrainteractive.aspekt.module.chatgame.store.RiddleGenerator
+import ru.astrainteractive.aspekt.module.chatgame.store.generator.RiddleGenerator
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 interface ChatGameModule {
@@ -24,8 +24,8 @@ interface ChatGameModule {
         private val chatGameStore = ChatGameStoreImpl(
             chatGameConfigProvider = config,
             riddleGenerator = RiddleGenerator(
-                configProvider = config,
-                translationProvider = coreModule.translation
+                configKrate = config,
+                translationKrate = coreModule.translation
             )
         )
 

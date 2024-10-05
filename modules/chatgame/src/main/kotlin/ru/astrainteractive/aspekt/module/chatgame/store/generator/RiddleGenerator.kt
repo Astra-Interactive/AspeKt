@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.module.chatgame.store
+package ru.astrainteractive.aspekt.module.chatgame.store.generator
 
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGame
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
@@ -12,11 +12,15 @@ import kotlin.math.sqrt
 import kotlin.random.Random
 
 internal class RiddleGenerator(
-    configProvider: Krate<ChatGameConfig>,
-    translationProvider: Krate<PluginTranslation>
+    configKrate: Krate<ChatGameConfig>,
+    translationKrate: Krate<PluginTranslation>
 ) {
-    private val config by configProvider
-    private val translation by translationProvider
+    private val config by configKrate
+    private val translation by translationKrate
+    private val anagramRiddleGenerator = AnagramRiddleGenerator(
+        configKrate = configKrate,
+        translationKrate = translationKrate
+    )
 
     @Suppress("LongMethod", "CyclomaticComplexMethod")
     fun generate(instance: ChatGame): ChatGameData {
@@ -63,17 +67,7 @@ internal class RiddleGenerator(
             }
 
             is ChatGame.Anagram -> {
-                val word = instance.words.random()
-                val anagram: String = buildString {
-                    word.indices.shuffled().forEach { i ->
-                        this.append(word[i])
-                    }
-                }
-                ChatGameData(
-                    question = translation.chatGame.solveAnagram(anagram),
-                    answers = listOf(word),
-                    reward = instance.reward ?: config.defaultReward
-                )
+                anagramRiddleGenerator.generate(instance)
             }
 
             is ChatGame.QuadraticEquation -> {
