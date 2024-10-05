@@ -9,8 +9,6 @@ import ru.astrainteractive.aspekt.module.adminprivate.data.AdminPrivateRepositor
 import ru.astrainteractive.aspekt.module.adminprivate.model.AdminChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
-import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.DefaultKotlinDispatchers
 import java.io.File
 import java.util.UUID

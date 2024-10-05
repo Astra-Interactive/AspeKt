@@ -8,12 +8,14 @@ import ru.astrainteractive.aspekt.module.adminprivate.controller.di.AdminPrivate
 import ru.astrainteractive.aspekt.module.adminprivate.event.AdminPrivateEvent
 import ru.astrainteractive.aspekt.module.adminprivate.event.di.AdminPrivateDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.klibs.kdi.Reloadable
+import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.MutableKrate
+import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 import java.io.File
 
 interface AdminPrivateModule {
     val lifecycle: Lifecycle
-    val adminChunksYml: Reloadable<File>
+    val adminChunksYml: Krate<File>
 
     class Default(private val coreModule: CoreModule) : AdminPrivateModule {
         private val adminPrivateController: AdminPrivateController by lazy {
@@ -31,11 +33,14 @@ interface AdminPrivateModule {
             )
         )
 
-        override val adminChunksYml: Reloadable<File> = Reloadable {
-            val file = coreModule.plugin.value.dataFolder.resolve("adminchunks.yml")
-            if (!file.exists()) file.createNewFile()
-            file
-        }
+        override val adminChunksYml: MutableKrate<File> = DefaultMutableKrate(
+            factory = {
+                val file = coreModule.plugin.dataFolder.resolve("adminchunks.yml")
+                if (!file.exists()) file.createNewFile()
+                file
+            },
+            loader = { null }
+        )
 
         private val adminPrivateEvent by lazy {
             val adminPrivateDependencies: AdminPrivateDependencies = AdminPrivateDependencies.Default(
@@ -49,7 +54,7 @@ interface AdminPrivateModule {
             Lifecycle.Lambda(
                 onEnable = {
                     adminPrivateCommandRegistry.register()
-                    adminPrivateEvent.onEnable(coreModule.plugin.value)
+                    adminPrivateEvent.onEnable(coreModule.plugin)
                     adminPrivateController.reloadKrate()
                 },
                 onReload = {

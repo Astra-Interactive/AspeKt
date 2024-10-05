@@ -13,8 +13,8 @@ interface NewBeeModule {
     ) : NewBeeModule {
         private val dependencies: EventDependencies by lazy {
             EventDependencies.Default(
-                translation = coreModule.translation.value,
-                kyoriComponentSerializer = coreModule.kyoriComponentSerializer.value,
+                translation = coreModule.translation.cachedValue,
+                kyoriComponentSerializer = coreModule.kyoriComponentSerializer.cachedValue,
                 scope = coreModule.scope,
                 dispatcher = coreModule.dispatchers
             )
@@ -26,7 +26,7 @@ interface NewBeeModule {
 
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onEnable = {
-                newBeeEventListener.onEnable(coreModule.plugin.value)
+                newBeeEventListener.onEnable(coreModule.plugin)
             },
             onDisable = {
                 newBeeEventListener.onDisable()

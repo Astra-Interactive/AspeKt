@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.di.impl
 
+import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.command.di.CommandManagerModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.di.RootModule
@@ -18,9 +19,9 @@ import ru.astrainteractive.aspekt.module.moneydrop.di.MoneyDropModule
 import ru.astrainteractive.aspekt.module.newbee.di.NewBeeModule
 import ru.astrainteractive.aspekt.module.towny.discord.di.TownyDiscordModule
 
-class RootModuleImpl : RootModule {
+class RootModuleImpl(plugin: JavaPlugin) : RootModule {
     override val coreModule: CoreModule by lazy {
-        CoreModule.Default()
+        CoreModule.Default(plugin)
     }
     override val adminPrivateModule: AdminPrivateModule by lazy {
         AdminPrivateModule.Default(coreModule)

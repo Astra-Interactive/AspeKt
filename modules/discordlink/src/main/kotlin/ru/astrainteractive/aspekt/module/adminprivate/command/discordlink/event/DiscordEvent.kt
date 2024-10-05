@@ -7,16 +7,12 @@ import github.scarsz.discordsrv.api.events.AccountUnlinkedEvent
 import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordEventDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.getValue
 
 /**
  * Template event class
  */
 internal class DiscordEvent(module: DiscordEventDependencies) : DiscordEventDependencies by module, Lifecycle {
-    private val controllers by Provider {
-        listOf(discordController, luckPermsController, addMoneyController)
-    }
+    private val controllers get() = listOf(discordController, luckPermsController, addMoneyController)
 
     @Subscribe
     fun onAccountLinked(e: AccountLinkedEvent) {

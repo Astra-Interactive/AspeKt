@@ -20,16 +20,13 @@ import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.event.tc.di.TCDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.DSLEvent
-import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.getValue
 import kotlin.random.Random
 
 class TCEvent(
     module: TCDependencies
 ) : TCDependencies by module {
-    private val treeCapitatorConfig: PluginConfiguration.TreeCapitator by Provider {
-        configuration.treeCapitator
-    }
+    private val treeCapitatorConfig: PluginConfiguration.TreeCapitator
+        get() = configuration.treeCapitator
 
     @Suppress("UnusedPrivateMember")
     private val onBlockBreak = DSLEvent<BlockBreakEvent>(eventListener, plugin, EventPriority.HIGHEST) { e ->

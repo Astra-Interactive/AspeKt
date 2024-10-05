@@ -17,15 +17,12 @@ import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.event.restrictions.di.RestrictionsDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.DSLEvent
-import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.getValue
 
 class RestrictionsEvent(
     module: RestrictionsDependencies
 ) : RestrictionsDependencies by module {
-    private val restrictions: PluginConfiguration.Restrictions by Provider {
-        configuration.restrictions
-    }
+    private val restrictions: PluginConfiguration.Restrictions
+        get() = configuration.restrictions
 
     // Explosions
     val onBlockExplode = DSLEvent<BlockExplodeEvent>(eventListener, plugin) {

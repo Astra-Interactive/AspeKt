@@ -1,12 +1,13 @@
 package ru.astrainteractive.aspekt.module.economy.command.ekon
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.async.AsyncComponent
+import ru.astrainteractive.astralibs.async.CoroutineFeature
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
@@ -16,7 +17,11 @@ internal class EkonCommandExecutor(
     private val getKyori: () -> KyoriComponentSerializer,
     private val getTranslation: () -> PluginTranslation,
     private val dao: EconomyDao
-) : CommandExecutor<EkonCommand.Model>, AsyncComponent(), Logger by JUtiltLogger("EkonCommandExecutor") {
+) : CommandExecutor<EkonCommand.Model>,
+    CoroutineFeature by CoroutineFeature.Default(
+        Dispatchers.IO
+    ),
+    Logger by JUtiltLogger("EkonCommandExecutor") {
     private val kyori get() = getKyori.invoke()
     private val translation get() = getTranslation.invoke()
 

@@ -12,7 +12,7 @@ interface MoneyDropModule {
     class Default(coreModule: CoreModule) : MoneyDropModule {
         private val moneyDropDaoModule by lazy {
             MoneyDropDaoModule.Default(
-                dataFolder = coreModule.plugin.value.dataFolder,
+                dataFolder = coreModule.plugin.dataFolder,
                 ioDispatcher = coreModule.dispatchers.IO,
                 coroutineScope = coreModule.scope
             )

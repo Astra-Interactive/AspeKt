@@ -4,7 +4,6 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.event.sit.SitController
 import ru.astrainteractive.aspekt.event.sit.SitEvent
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.klibs.kdi.getValue
 
 interface SitModule : Lifecycle {
     val sitController: SitController
@@ -13,9 +12,9 @@ interface SitModule : Lifecycle {
     class Default(coreModule: CoreModule) : SitModule {
         override val sitController: SitController by lazy {
             SitController(
-                configuration = { coreModule.pluginConfig.value },
-                translation = { coreModule.translation.value },
-                kyoriComponentSerializer = coreModule.kyoriComponentSerializer.value
+                configuration = coreModule.pluginConfig,
+                translation = coreModule.translation,
+                kyoriComponentSerializer = coreModule.kyoriComponentSerializer.cachedValue
             )
         }
 

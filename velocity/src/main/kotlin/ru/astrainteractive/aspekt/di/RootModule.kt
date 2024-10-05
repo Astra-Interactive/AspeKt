@@ -5,9 +5,7 @@ import com.velocitypowered.api.proxy.ProxyServer
 import ru.astrainteractive.aspekt.plugin.Configuration
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.parseOrDefault
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
-import ru.astrainteractive.klibs.kdi.Lateinit
-import ru.astrainteractive.klibs.kdi.Reloadable
-import ru.astrainteractive.klibs.kdi.getValue
+    .Lateinit
 import java.nio.file.Path
 import java.util.logging.Logger
 

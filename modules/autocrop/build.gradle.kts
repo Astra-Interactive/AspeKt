@@ -11,7 +11,6 @@ dependencies {
     implementation(libs.minecraft.bstats)
     // AstraLibs
     implementation(libs.minecraft.astralibs.core)
-    implementation(libs.klibs.kdi)
     implementation(libs.minecraft.astralibs.core.bukkit)
     // Test
     implementation(projects.modules.core)

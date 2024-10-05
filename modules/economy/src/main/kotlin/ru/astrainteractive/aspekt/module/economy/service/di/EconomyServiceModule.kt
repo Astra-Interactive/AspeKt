@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.economy.service.di
 
+import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
 import ru.astrainteractive.aspekt.module.economy.di.EconomyConfigModule
@@ -17,8 +18,11 @@ internal interface EconomyServiceModule {
     ) : EconomyServiceModule {
         private val shouldSync get() = economyConfigModule.currencyConfiguration.cachedValue?.shouldSync == true
 
+        private val isVaultEnabled: Boolean
+            get() = Bukkit.getPluginManager().isPluginEnabled("Vault")
+
         private val bukkitVaultService = BukkitVaultService(
-            plugin = coreModule.plugin.value,
+            plugin = coreModule.plugin,
             dao = databaseModule.economyDao,
             getCurrencies = {
                 economyConfigModule.currencyConfiguration.cachedValue?.currencies
@@ -40,7 +44,9 @@ internal interface EconomyServiceModule {
 
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onEnable = {
-                bukkitVaultService.tryPrepare()
+                if (isVaultEnabled) {
+                    bukkitVaultService.tryPrepare()
+                }
                 if (shouldSync) preHeatService.tryPreHeat()
             },
         )

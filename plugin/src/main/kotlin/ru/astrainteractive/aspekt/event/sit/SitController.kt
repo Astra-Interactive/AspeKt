@@ -8,13 +8,13 @@ import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.getValue
+import ru.astrainteractive.klibs.kstorage.api.Krate
 
 class SitController(
-    configuration: Provider<PluginConfiguration>,
-    translation: Provider<PluginTranslation>,
+    configuration: Krate<PluginConfiguration>,
+    translation: Krate<PluginTranslation>,
     kyoriComponentSerializer: KyoriComponentSerializer
 ) : KyoriComponentSerializer by kyoriComponentSerializer {
     private val translation by translation

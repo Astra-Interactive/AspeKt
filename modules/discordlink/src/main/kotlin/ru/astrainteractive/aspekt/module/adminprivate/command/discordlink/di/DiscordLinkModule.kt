@@ -13,14 +13,15 @@ import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.event.
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.job.DiscordLinkJob
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.job.di.DiscordLinkJobDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.klibs.kdi.Reloadable
+import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 import java.io.File
 
 interface DiscordLinkModule {
     val lifecycle: Lifecycle
 
     val tempFile: File
-    val tempFileConfiguration: Reloadable<FileConfiguration>
+    val tempFileConfiguration: Krate<FileConfiguration>
     val discordController: RoleController.Discord
 
     class Default(coreModule: CoreModule) : DiscordLinkModule {
@@ -53,12 +54,13 @@ interface DiscordLinkModule {
         }
 
         override val tempFile by lazy {
-            coreModule.plugin.value.dataFolder.resolve("temp.yml")
+            coreModule.plugin.dataFolder.resolve("temp.yml")
         }
 
-        override val tempFileConfiguration: Reloadable<FileConfiguration> = Reloadable {
-            YamlConfiguration.loadConfiguration(tempFile)
-        }
+        override val tempFileConfiguration: Krate<FileConfiguration> = DefaultMutableKrate(
+            factory = { YamlConfiguration() },
+            loader = { YamlConfiguration.loadConfiguration(tempFile) }
+        )
 
         private val discordEvent: DiscordEvent? by lazy {
             Bukkit.getPluginManager().getPlugin("DiscordSRV") ?: return@lazy null
@@ -91,7 +93,7 @@ interface DiscordLinkModule {
                 onReload = {
                     discordLinkJob?.onDisable()
                     discordLinkJob?.onEnable()
-                    tempFileConfiguration.reload()
+                    tempFileConfiguration.loadAndGet()
                 }
             )
         }

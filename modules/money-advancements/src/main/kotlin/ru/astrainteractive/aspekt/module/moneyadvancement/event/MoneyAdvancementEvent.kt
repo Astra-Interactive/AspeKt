@@ -1,26 +1,31 @@
 package ru.astrainteractive.aspekt.module.moneyadvancement.event
 
 import io.papermc.paper.advancement.AdvancementDisplay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
 import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.async.AsyncComponent
+import ru.astrainteractive.aspekt.util.getValue
+import ru.astrainteractive.astralibs.async.CoroutineFeature
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.getValue
+import ru.astrainteractive.klibs.kstorage.api.Krate
 
 class MoneyAdvancementEvent(
-    configurationProvider: Provider<PluginConfiguration>,
+    configurationProvider: Krate<PluginConfiguration>,
     private val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory,
-    kyoriComponentSerializerProvider: Provider<KyoriComponentSerializer>,
-    translationProvider: Provider<PluginTranslation>
-) : EventListener, Logger by JUtiltLogger("MoneyAdvancementEvent"), AsyncComponent() {
+    kyoriComponentSerializerProvider: Krate<KyoriComponentSerializer>,
+    translationProvider: Krate<PluginTranslation>
+) : EventListener,
+    Logger by JUtiltLogger("MoneyAdvancementEvent"),
+    CoroutineFeature by CoroutineFeature.Default(
+        Dispatchers.IO
+    ) {
     private val configuration by configurationProvider
     private val kyoriComponentSerializer by kyoriComponentSerializerProvider
     private val translation by translationProvider

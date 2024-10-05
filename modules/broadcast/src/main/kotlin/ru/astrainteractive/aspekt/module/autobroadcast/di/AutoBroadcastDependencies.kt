@@ -5,8 +5,6 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.getValue
 
 internal interface AutoBroadcastDependencies {
     val scope: CoroutineScope
@@ -14,12 +12,12 @@ internal interface AutoBroadcastDependencies {
     val configuration: PluginConfiguration.Announcements
     val kyoriComponentSerializer: KyoriComponentSerializer
 
-    class Default(coreModule: CoreModule) : AutoBroadcastDependencies {
+    class Default(private val coreModule: CoreModule) : AutoBroadcastDependencies {
         override val scope: CoroutineScope = coreModule.scope
         override val dispatchers: BukkitDispatchers = coreModule.dispatchers
-        override val kyoriComponentSerializer: KyoriComponentSerializer by coreModule.kyoriComponentSerializer
-        override val configuration: PluginConfiguration.Announcements by Provider {
-            coreModule.pluginConfig.value.announcements
-        }
+        override val kyoriComponentSerializer: KyoriComponentSerializer
+            get() = coreModule.kyoriComponentSerializer.cachedValue
+        override val configuration: PluginConfiguration.Announcements
+            get() = coreModule.pluginConfig.cachedValue.announcements
     }
 }

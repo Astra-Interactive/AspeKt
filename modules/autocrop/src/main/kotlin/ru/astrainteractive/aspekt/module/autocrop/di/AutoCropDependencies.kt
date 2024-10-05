@@ -13,9 +13,8 @@ import ru.astrainteractive.aspekt.module.autocrop.mapping.CropSeedMaterialMapper
 import ru.astrainteractive.aspekt.module.autocrop.mapping.CropSeedMaterialMapperImpl
 import ru.astrainteractive.aspekt.module.autocrop.presentation.CropDupeController
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
+import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.event.EventListener
-import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.getValue
 
 internal interface AutoCropDependencies {
     val eventListener: EventListener
@@ -30,12 +29,8 @@ internal interface AutoCropDependencies {
 
     class Default(coreModule: CoreModule) : AutoCropDependencies {
         override val eventListener: EventListener = coreModule.eventListener
-        override val plugin: JavaPlugin by Provider {
-            coreModule.plugin.value
-        }
-        override val configuration: PluginConfiguration by Provider {
-            coreModule.pluginConfig.value
-        }
+        override val plugin: JavaPlugin = coreModule.plugin
+        override val configuration: PluginConfiguration by coreModule.pluginConfig
         override val cropDupeController: CropDupeController by lazy {
             CropDupeController()
         }

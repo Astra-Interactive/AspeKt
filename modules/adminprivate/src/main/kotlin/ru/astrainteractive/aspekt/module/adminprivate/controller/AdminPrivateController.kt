@@ -1,15 +1,16 @@
 package ru.astrainteractive.aspekt.module.adminprivate.controller
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.module.adminprivate.controller.di.AdminPrivateControllerDependencies
 import ru.astrainteractive.aspekt.module.adminprivate.model.AdminChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.adminprivate.util.uniqueWorldKey
-import ru.astrainteractive.astralibs.async.AsyncComponent
+import ru.astrainteractive.astralibs.async.CoroutineFeature
 
 internal class AdminPrivateController(
     dependencies: AdminPrivateControllerDependencies
-) : AsyncComponent(),
+) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO),
     AdminPrivateControllerDependencies by dependencies {
 
     val isEnabled: Boolean

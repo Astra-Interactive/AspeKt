@@ -13,13 +13,13 @@ import ru.astrainteractive.astralibs.logging.Logger
  * Initial class for your plugin
  */
 class AspeKt : JavaPlugin(), Logger by JUtiltLogger("AspeKt") {
-    private val rootModule = RootModuleImpl()
+    private val rootModule = RootModuleImpl(this)
     private val lifecycles: List<Lifecycle>
         get() = listOfNotNull(
             rootModule.economyModule.lifecycle,
             rootModule.autoBroadcastModule.lifecycle,
             rootModule.commandManagerModule,
-            rootModule.coreModule,
+            rootModule.coreModule.lifecycle,
             rootModule.menuModule.lifecycle,
             rootModule.discordLinkModule.lifecycle,
             rootModule.adminPrivateModule.lifecycle,
@@ -37,7 +37,6 @@ class AspeKt : JavaPlugin(), Logger by JUtiltLogger("AspeKt") {
      * This method called when server starts or PlugMan load plugin.
      */
     override fun onEnable() {
-        rootModule.coreModule.plugin.initialize(this)
         lifecycles.forEach(Lifecycle::onEnable)
     }
 

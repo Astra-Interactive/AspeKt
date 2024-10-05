@@ -3,7 +3,6 @@ package ru.astrainteractive.aspekt.gui.di
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.gui.Router
 import ru.astrainteractive.aspekt.gui.RouterImpl
-import ru.astrainteractive.klibs.kdi.getValue
 
 interface GuiModule {
     val router: Router
@@ -13,7 +12,7 @@ interface GuiModule {
             RouterImpl(
                 scope = coreModule.scope,
                 dispatchers = coreModule.dispatchers,
-                kyoriComponentSerializer = coreModule.kyoriComponentSerializer.value,
+                kyoriComponentSerializer = coreModule.kyoriComponentSerializer.cachedValue,
             )
         }
     }

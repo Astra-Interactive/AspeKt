@@ -4,7 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.RoleController
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.klibs.kdi.getValue
+import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 internal interface DiscordLinkJobDependencies {

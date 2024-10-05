@@ -1,34 +1,32 @@
 package ru.astrainteractive.aspekt.module.chatgame.di
 
 import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.di.factory.ConfigKrateFactory
 import ru.astrainteractive.aspekt.module.chatgame.command.ChatGameCommand
 import ru.astrainteractive.aspekt.module.chatgame.job.ChatGameJob
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStoreImpl
 import ru.astrainteractive.aspekt.module.chatgame.store.RiddleGenerator
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.astralibs.serialization.StringFormatExt.parseOrDefault
-import ru.astrainteractive.astralibs.serialization.StringFormatExt.writeIntoFile
-import ru.astrainteractive.klibs.kdi.Reloadable
 
 interface ChatGameModule {
     val lifecycle: Lifecycle
 
     class Default(coreModule: CoreModule) : ChatGameModule {
 
-        private val config = Reloadable {
-            val file = coreModule.plugin.value.dataFolder.resolve("chat_game.yml")
-            val config = coreModule.yamlFormat.parseOrDefault(file, ::ChatGameConfig)
-            coreModule.yamlFormat.writeIntoFile(config, file)
-            config
-        }
+        private val config = ConfigKrateFactory.create(
+            fileNameWithoutExtension = "chat_game",
+            stringFormat = coreModule.yamlFormat,
+            dataFolder = coreModule.plugin.dataFolder,
+            factory = ::ChatGameConfig
+        )
 
         private val chatGameStore by lazy {
             ChatGameStoreImpl(
-                chatGameConfigProvider = { config.value },
+                chatGameConfigProvider = config,
                 riddleGenerator = RiddleGenerator(
-                    configProvider = { config.value },
-                    translationProvider = { coreModule.translation.value }
+                    configProvider = config,
+                    translationProvider = coreModule.translation
                 )
             )
         }
@@ -36,19 +34,19 @@ interface ChatGameModule {
         private val chatGameJob by lazy {
             ChatGameJob(
                 chatGameStore = chatGameStore,
-                chatGameConfigProvider = { config.value },
-                kyoriComponentSerializerProvider = { coreModule.kyoriComponentSerializer.value },
+                chatGameConfigProvider = config,
+                kyoriComponentSerializerProvider = coreModule.kyoriComponentSerializer,
             )
         }
 
         private val command by lazy {
             ChatGameCommand(
-                plugin = coreModule.plugin.value,
+                plugin = coreModule.plugin,
                 chatGameStore = chatGameStore,
-                kyoriComponentSerializerProvider = { coreModule.kyoriComponentSerializer.value },
-                translationProvider = { coreModule.translation.value },
+                kyoriComponentSerializerProvider = coreModule.kyoriComponentSerializer,
+                translationProvider = coreModule.translation,
                 scope = coreModule.scope,
-                chatGameConfigProvider = { config.value },
+                chatGameConfigProvider = config,
                 currencyEconomyProviderFactory = coreModule.currencyEconomyProviderFactory
             )
         }
@@ -61,7 +59,7 @@ interface ChatGameModule {
                 chatGameJob.onDisable()
             },
             onReload = {
-                config.reload()
+                config.loadAndGet()
                 chatGameJob.onDisable()
                 chatGameJob.onEnable()
             }

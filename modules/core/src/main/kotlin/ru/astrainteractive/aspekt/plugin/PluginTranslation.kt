@@ -2,11 +2,11 @@
 
 package ru.astrainteractive.aspekt.plugin
 
-import java.text.DecimalFormat
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.astralibs.string.StringDescExt.replace
+import java.text.DecimalFormat
 
 /**
  * All translation stored here
@@ -103,7 +103,10 @@ class PluginTranslation(
             "&7[&#DBB72BДОСТИЖЕНИЕ&7] Вы выполднили достижение и получили награду: %money% монет"
         ),
     ) {
-        fun challengeCompleted(money: Number) = challengeCompleted.replace("%money%", DecimalFormat("0.00").format(money))
+        fun challengeCompleted(money: Number) = challengeCompleted.replace(
+            "%money%",
+            DecimalFormat("0.00").format(money)
+        )
         fun goalCompleted(money: Number) = goalCompleted.replace("%money%", DecimalFormat("0.00").format(money))
         fun taskCompleted(money: Number) = taskCompleted.replace("%money%", DecimalFormat("0.00").format(money))
     }

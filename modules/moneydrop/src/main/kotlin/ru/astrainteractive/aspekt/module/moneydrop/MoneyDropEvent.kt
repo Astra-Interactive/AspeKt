@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.moneydrop
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -11,12 +12,12 @@ import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.inventory.InventoryMoveItemEvent
 import org.bukkit.event.inventory.InventoryPickupItemEvent
 import ru.astrainteractive.aspekt.module.moneydrop.di.MoneyDropDependencies
-import ru.astrainteractive.astralibs.async.AsyncComponent
+import ru.astrainteractive.astralibs.async.CoroutineFeature
 import ru.astrainteractive.astralibs.event.DSLEvent
 
 internal class MoneyDropEvent(
     dependencies: MoneyDropDependencies
-) : MoneyDropDependencies by dependencies, AsyncComponent() {
+) : MoneyDropDependencies by dependencies, CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO) {
 
     val entityDeathEvent = DSLEvent<EntityDamageByEntityEvent>(eventListener, plugin, EventPriority.MONITOR) { e ->
         val player = e.damager as? Player ?: return@DSLEvent
