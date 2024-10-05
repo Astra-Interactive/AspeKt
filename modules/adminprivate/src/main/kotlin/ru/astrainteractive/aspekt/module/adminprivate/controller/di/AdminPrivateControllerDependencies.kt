@@ -14,8 +14,7 @@ internal interface AdminPrivateControllerDependencies {
     ) : AdminPrivateControllerDependencies {
         override val repository: AdminPrivateRepository by lazy {
             AdminPrivateRepositoryImpl(
-                file = adminPrivateModule.adminChunksYml.cachedValue,
-                dispatchers = coreModule.dispatchers,
+                file = adminPrivateModule.adminChunksFile,
                 stringFormat = coreModule.yamlFormat
             )
         }

@@ -23,9 +23,7 @@ class MoneyAdvancementEvent(
     translationProvider: Krate<PluginTranslation>
 ) : EventListener,
     Logger by JUtiltLogger("MoneyAdvancementEvent"),
-    CoroutineFeature by CoroutineFeature.Default(
-        Dispatchers.IO
-    ) {
+    CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO) {
     private val configuration by configurationProvider
     private val kyoriComponentSerializer by kyoriComponentSerializerProvider
     private val translation by translationProvider

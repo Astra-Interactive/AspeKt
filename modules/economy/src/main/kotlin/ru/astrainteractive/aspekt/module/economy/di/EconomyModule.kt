@@ -12,7 +12,10 @@ import ru.astrainteractive.astralibs.logging.Logger
 interface EconomyModule {
     val lifecycle: Lifecycle
 
-    class Default(coreModule: CoreModule) : EconomyModule, Logger by JUtiltLogger("EconomyModule") {
+    class Default(
+        coreModule: CoreModule
+    ) : EconomyModule,
+        Logger by JUtiltLogger("EconomyModule") {
 
         private val economyConfigModule = EconomyConfigModule.Default(
             coreModule = coreModule

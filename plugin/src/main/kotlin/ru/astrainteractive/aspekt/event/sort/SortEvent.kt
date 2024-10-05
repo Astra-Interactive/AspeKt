@@ -1,26 +1,33 @@
 package ru.astrainteractive.aspekt.event.sort
 
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import ru.astrainteractive.aspekt.event.sort.di.SortDependencies
-import ru.astrainteractive.astralibs.event.DSLEvent
+import ru.astrainteractive.astralibs.event.EventListener
 
 class SortEvent(
     module: SortDependencies
-) : SortDependencies by module {
-    val playerQuit = DSLEvent<PlayerQuitEvent>(eventListener, plugin) { e ->
+) : SortDependencies by module, EventListener {
+
+    @EventHandler
+    fun playerQuitEvent(e: PlayerQuitEvent) {
         sortController.rememberPlayer(e.player)
     }
-    val playerJoin = DSLEvent<PlayerJoinEvent>(eventListener, plugin) { e ->
+
+    @EventHandler
+    fun playerJoin(e: PlayerJoinEvent) {
         sortController.removePlayer(e.player)
     }
-    val inventoryClick = DSLEvent<InventoryClickEvent>(eventListener, plugin) { e ->
-        if (e.click != ClickType.SHIFT_RIGHT) return@DSLEvent
-        val clickedInventory = e.clickedInventory ?: return@DSLEvent
-        val player = e.whoClicked as? Player ?: return@DSLEvent
+
+    @EventHandler
+    fun inventoryClick(e: InventoryClickEvent) {
+        if (e.click != ClickType.SHIFT_RIGHT) return
+        val clickedInventory = e.clickedInventory ?: return
+        val player = e.whoClicked as? Player ?: return
         e.isCancelled = true
         sortController.trySortInventory(clickedInventory, player)
     }

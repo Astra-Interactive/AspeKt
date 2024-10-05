@@ -15,9 +15,8 @@ interface SitDependencies {
 
     class Default(
         coreModule: CoreModule,
-        sitModule: SitModule,
+        override val sitController: SitController
     ) : SitDependencies {
-        override val sitController: SitController = sitModule.sitController
 
         override val eventListener: EventListener = coreModule.eventListener
         override val plugin: JavaPlugin = coreModule.plugin

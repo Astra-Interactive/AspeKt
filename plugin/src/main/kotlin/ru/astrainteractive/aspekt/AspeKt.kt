@@ -18,6 +18,7 @@ class AspeKt : JavaPlugin(), Logger by JUtiltLogger("AspeKt") {
         get() = listOfNotNull(
             rootModule.economyModule.lifecycle,
             rootModule.autoBroadcastModule.lifecycle,
+            rootModule.sitModule.lifecycle,
             rootModule.commandManagerModule,
             rootModule.coreModule.lifecycle,
             rootModule.menuModule.lifecycle,

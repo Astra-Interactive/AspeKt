@@ -8,12 +8,10 @@ interface GuiModule {
     val router: Router
 
     class Default(coreModule: CoreModule) : GuiModule {
-        override val router: Router by lazy {
-            RouterImpl(
-                scope = coreModule.scope,
-                dispatchers = coreModule.dispatchers,
-                kyoriComponentSerializer = coreModule.kyoriComponentSerializer.cachedValue,
-            )
-        }
+        override val router: Router = RouterImpl(
+            scope = coreModule.scope,
+            dispatchers = coreModule.dispatchers,
+            kyoriComponentSerializerKrate = coreModule.kyoriComponentSerializer,
+        )
     }
 }

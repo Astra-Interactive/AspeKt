@@ -44,4 +44,8 @@ internal class SwearRepositoryImpl(
             value.copy(isSwearFilterEnabled = isEnabled)
         }
     }
+
+    override fun clear() {
+        swearFilterMap.clear()
+    }
 }

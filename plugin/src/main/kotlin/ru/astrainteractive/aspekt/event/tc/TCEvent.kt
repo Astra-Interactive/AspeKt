@@ -11,6 +11,7 @@ import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.inventory.ItemStack
@@ -19,29 +20,30 @@ import org.bukkit.inventory.meta.ItemMeta
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.event.tc.di.TCDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.astralibs.event.DSLEvent
+import ru.astrainteractive.astralibs.event.EventListener
 import kotlin.random.Random
 
 class TCEvent(
-    module: TCDependencies
-) : TCDependencies by module {
+    dependencies: TCDependencies
+) : TCDependencies by dependencies, EventListener {
     private val treeCapitatorConfig: PluginConfiguration.TreeCapitator
         get() = configuration.treeCapitator
 
     @Suppress("UnusedPrivateMember")
-    private val onBlockBreak = DSLEvent<BlockBreakEvent>(eventListener, plugin, EventPriority.HIGHEST) { e ->
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private fun onBlockBreak(e: BlockBreakEvent) {
         val block = e.block
         val material = block.type
         val player = e.player
         val tool = player.inventory.itemInMainHand
-        if (e.isCancelled) return@DSLEvent
-        if (!tool.type.name.contains("AXE", true)) return@DSLEvent
-        if (!player.isSneaking) return@DSLEvent
-        if (!treeCapitatorConfig.enabled) return@DSLEvent
-        if (!isLog(block.type)) return@DSLEvent
+        if (e.isCancelled) return
+        if (!tool.type.name.contains("AXE", true)) return
+        if (!player.isSneaking) return
+        if (!treeCapitatorConfig.enabled) return
+        if (!isLog(block.type)) return
         breakRecursively(player, block, 0, tool)
         if (treeCapitatorConfig.replant) {
-            val sapling = saplingFromBlock(material) ?: return@DSLEvent
+            val sapling = saplingFromBlock(material) ?: return
             placeSapling(sapling, block, 0)
         }
     }

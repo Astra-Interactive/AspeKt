@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.di
 
 import ru.astrainteractive.aspekt.command.di.CommandManagerModule
 import ru.astrainteractive.aspekt.event.di.EventsModule
+import ru.astrainteractive.aspekt.event.sit.di.SitModule
 import ru.astrainteractive.aspekt.gui.di.GuiModule
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
 import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule
@@ -20,6 +21,7 @@ interface RootModule {
     val coreModule: CoreModule
     val adminPrivateModule: AdminPrivateModule
     val eventsModule: EventsModule
+    val sitModule: SitModule
     val menuModule: MenuModule
     val guiModule: GuiModule
     val autoBroadcastModule: AutoBroadcastModule

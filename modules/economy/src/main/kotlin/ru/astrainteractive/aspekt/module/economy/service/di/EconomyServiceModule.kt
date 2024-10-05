@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.economy.service.di
 
+import kotlinx.coroutines.cancel
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
@@ -49,6 +50,12 @@ internal interface EconomyServiceModule {
                 }
                 if (shouldSync) preHeatService.tryPreHeat()
             },
+            onDisable = {
+                if (isVaultEnabled) {
+                    bukkitVaultService.clear()
+                }
+                preHeatService.cancel()
+            }
         )
     }
 }

@@ -5,37 +5,34 @@ import ru.astrainteractive.aspekt.event.sit.SitController
 import ru.astrainteractive.aspekt.event.sit.SitEvent
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
-interface SitModule : Lifecycle {
+interface SitModule {
+    val lifecycle: Lifecycle
+
     val sitController: SitController
-    val sitEvent: SitEvent
 
     class Default(coreModule: CoreModule) : SitModule {
-        override val sitController: SitController by lazy {
-            SitController(
-                configuration = coreModule.pluginConfig,
-                translation = coreModule.translation,
-                kyoriComponentSerializer = coreModule.kyoriComponentSerializer.cachedValue
+        override val sitController: SitController = SitController(
+            configuration = coreModule.pluginConfig,
+            translation = coreModule.translation,
+            kyoriComponentSerializer = coreModule.kyoriComponentSerializer.cachedValue
+        )
+
+        private val sitEvent: SitEvent = SitEvent(
+            dependencies = SitDependencies.Default(
+                coreModule = coreModule,
+                sitController = sitController
             )
-        }
+        )
 
-        override val sitEvent: SitEvent by lazy {
-            val dependencies = SitDependencies.Default(
-                coreModule,
-                this
-            )
-            SitEvent(dependencies)
-        }
-
-        override fun onEnable() {
-            sitEvent
-        }
-
-        override fun onDisable() {
-            sitController.onDisable()
-        }
-
-        override fun onReload() {
-            sitController.onDisable()
-        }
+        override val lifecycle: Lifecycle = Lifecycle.Lambda(
+            onDisable = {
+                sitController.onDisable()
+                sitEvent.onDisable()
+            },
+            onReload = { sitController.onDisable() },
+            onEnable = {
+                sitEvent.onEnable(coreModule.plugin)
+            }
+        )
     }
 }

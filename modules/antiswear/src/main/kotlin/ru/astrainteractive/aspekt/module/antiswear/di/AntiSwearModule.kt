@@ -32,6 +32,7 @@ interface AntiSwearModule {
             },
             onDisable = {
                 antiSwearEventListener.onDisable()
+                swearRepository.clear()
             }
         )
     }

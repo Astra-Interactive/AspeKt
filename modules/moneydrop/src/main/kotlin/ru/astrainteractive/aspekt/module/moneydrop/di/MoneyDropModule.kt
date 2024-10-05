@@ -17,6 +17,7 @@ interface MoneyDropModule {
                 coroutineScope = coreModule.scope
             )
         }
+
         private val moneyDropController: MoneyDropController by lazy {
             MoneyDropController(
                 pluginConfigurationDependency = coreModule.pluginConfig,
@@ -26,18 +27,26 @@ interface MoneyDropModule {
                 dao = moneyDropDaoModule.dao
             )
         }
-        private val moneyDropEvent: MoneyDropEvent by lazy {
-            MoneyDropEvent(
-                dependencies = MoneyDropDependencies.Default(
-                    coreModule = coreModule,
-                    moneyDropController = moneyDropController,
-                )
+
+        private val moneyDropEvent: MoneyDropEvent = MoneyDropEvent(
+            dependencies = MoneyDropDependencies.Default(
+                coreModule = coreModule,
+                moneyDropController = moneyDropController,
             )
-        }
+        )
+
         override val lifecycle: Lifecycle by lazy {
             Lifecycle.Lambda(
                 onEnable = {
-                    moneyDropEvent
+                    moneyDropEvent.onEnable(coreModule.plugin)
+                    moneyDropDaoModule.lifecycle.onEnable()
+                },
+                onDisable = {
+                    moneyDropDaoModule.lifecycle.onDisable()
+                    moneyDropEvent.onDisable()
+                },
+                onReload = {
+                    moneyDropDaoModule.lifecycle.onReload()
                 }
             )
         }

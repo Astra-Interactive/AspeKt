@@ -46,28 +46,19 @@ interface CoreModule {
 
     class Default(override val plugin: JavaPlugin) : CoreModule, Logger by JUtiltLogger("CoreModule") {
         // Core
+        override val eventListener = EventListener.Default()
 
-        override val eventListener by lazy {
-            EventListener.Default()
-        }
+        override val dispatchers = DefaultBukkitDispatchers(plugin)
 
-        override val dispatchers by lazy {
-            DefaultBukkitDispatchers(plugin)
-        }
+        override val scope = CoroutineFeature.Default(Dispatchers.IO)
 
-        override val scope by lazy {
-            CoroutineFeature.Default(Dispatchers.IO)
-        }
-
-        override val yamlFormat: StringFormat by lazy {
-            YamlStringFormat(
-                configuration = Yaml.default.configuration.copy(
-                    encodeDefaults = true,
-                    strictMode = false,
-                    polymorphismStyle = PolymorphismStyle.Property
-                ),
-            )
-        }
+        override val yamlFormat: StringFormat = YamlStringFormat(
+            configuration = Yaml.default.configuration.copy(
+                encodeDefaults = true,
+                strictMode = false,
+                polymorphismStyle = PolymorphismStyle.Property
+            ),
+        )
 
         override val pluginConfig = ConfigKrateFactory.create(
             fileNameWithoutExtension = "config",
@@ -83,24 +74,19 @@ interface CoreModule {
             factory = ::PluginTranslation
         )
 
-        override val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory by lazy {
+        override val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory =
             CurrencyEconomyProviderFactoryImpl()
-        }
 
         override val kyoriComponentSerializer = DefaultMutableKrate<KyoriComponentSerializer>(
             loader = { null },
             factory = { KyoriComponentSerializer.Legacy }
         )
-        override val inventoryClickEventListener by lazy {
-            DefaultInventoryClickEvent()
-        }
+        override val inventoryClickEventListener = DefaultInventoryClickEvent()
 
-        override val jsonStringFormat: StringFormat by lazy {
-            Json {
-                isLenient = true
-                ignoreUnknownKeys = true
-                prettyPrint = true
-            }
+        override val jsonStringFormat: StringFormat = Json {
+            isLenient = true
+            ignoreUnknownKeys = true
+            prettyPrint = true
         }
 
         override val lifecycle: Lifecycle = Lifecycle.Lambda(

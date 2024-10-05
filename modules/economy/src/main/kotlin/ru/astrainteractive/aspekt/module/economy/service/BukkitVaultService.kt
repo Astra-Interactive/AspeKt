@@ -17,9 +17,8 @@ internal class BukkitVaultService(
 ) : Logger by JUtiltLogger("BukkitService") {
 
     fun tryPrepare() {
-        plugin.server.servicesManager.getRegistrations(plugin)
-            .filter { it.service == Economy::class.java }
-            .onEach { Bukkit.getServer().servicesManager.unregister(it.provider) }
+        clear()
+
         val currencies = getCurrencies.invoke()
         if (currencies.isEmpty()) {
             error { "#prepare currency list is empty!" }
@@ -39,5 +38,11 @@ internal class BukkitVaultService(
                 )
             )
         }
+    }
+
+    fun clear() {
+        plugin.server.servicesManager.getRegistrations(plugin)
+            .filter { it.service == Economy::class.java }
+            .onEach { Bukkit.getServer().servicesManager.unregister(it.provider) }
     }
 }

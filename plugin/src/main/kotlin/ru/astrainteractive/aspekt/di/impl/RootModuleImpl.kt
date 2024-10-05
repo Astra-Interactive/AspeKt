@@ -5,6 +5,7 @@ import ru.astrainteractive.aspekt.command.di.CommandManagerModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.aspekt.event.di.EventsModule
+import ru.astrainteractive.aspekt.event.sit.di.SitModule
 import ru.astrainteractive.aspekt.gui.di.GuiModule
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
 import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule
@@ -32,6 +33,9 @@ class RootModuleImpl(plugin: JavaPlugin) : RootModule {
     override val menuModule: MenuModule by lazy {
         MenuModule.Default(coreModule)
     }
+    override val sitModule: SitModule by lazy {
+        SitModule.Default(coreModule)
+    }
     override val guiModule: GuiModule by lazy {
         GuiModule.Default(coreModule)
     }
@@ -45,8 +49,8 @@ class RootModuleImpl(plugin: JavaPlugin) : RootModule {
     override val commandManagerModule: CommandManagerModule by lazy {
         CommandManagerModule.Default(
             coreModule = coreModule,
-            eventsModule = eventsModule,
             guiModule = guiModule,
+            sitModule = sitModule
         )
     }
     override val townyDiscordModule: TownyDiscordModule by lazy {

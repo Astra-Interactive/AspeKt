@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.gui.entities.ui
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -11,6 +12,7 @@ import org.bukkit.inventory.ItemStack
 import ru.astrainteractive.aspekt.gui.entities.presentation.DefaultEntitiesComponent
 import ru.astrainteractive.aspekt.gui.entities.presentation.EntitiesComponent
 import ru.astrainteractive.aspekt.gui.entities.util.toMaterial
+import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.menu.holder.DefaultPlayerHolder
@@ -26,15 +28,19 @@ import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setI
 import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setItemStack
 import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setOnClickListener
 import ru.astrainteractive.astralibs.string.StringDesc
+import ru.astrainteractive.klibs.kstorage.api.Krate
 
 class EntitiesGui(
     player: Player,
     private val bukkitDispatchers: BukkitDispatchers,
-    kyoriComponentSerializer: KyoriComponentSerializer
-) : PaginatedInventoryMenu(), KyoriComponentSerializer by kyoriComponentSerializer {
-    private val viewModel by lazy {
-        DefaultEntitiesComponent()
-    }
+    kyoriComponentSerializerKrate: Krate<KyoriComponentSerializer>
+) : PaginatedInventoryMenu() {
+    private val kyoriComponentSerializer by kyoriComponentSerializerKrate
+    private val viewModel = DefaultEntitiesComponent()
+
+    override val childComponents: List<CoroutineScope>
+        get() = listOf(viewModel)
+
     private val backPageButton: InventorySlot
         get() = InventorySlot.Builder()
             .setIndex(49)
@@ -102,7 +108,9 @@ class EntitiesGui(
 
     override val inventorySize: InventorySize = InventorySize.XL
 
-    override var title: Component = StringDesc.Raw("Entities").let(kyoriComponentSerializer::toComponent)
+    override var title: Component = with(kyoriComponentSerializer) {
+        StringDesc.Raw("Entities").component
+    }
 
     override var pageContext: PageContext = PageContext(
         page = 0,

@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.moneydrop.di
 
+import kotlinx.coroutines.CoroutineScope
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
@@ -16,6 +17,7 @@ internal interface MoneyDropDependencies {
     val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory
     val kyoriComponentSerializer: KyoriComponentSerializer
     val translation: PluginTranslation
+    val scope: CoroutineScope
 
     class Default(
         coreModule: CoreModule,
@@ -26,5 +28,6 @@ internal interface MoneyDropDependencies {
         override val kyoriComponentSerializer by coreModule.kyoriComponentSerializer
         override val translation: PluginTranslation by coreModule.translation
         override val currencyEconomyProviderFactory = coreModule.currencyEconomyProviderFactory
+        override val scope: CoroutineScope = coreModule.scope
     }
 }

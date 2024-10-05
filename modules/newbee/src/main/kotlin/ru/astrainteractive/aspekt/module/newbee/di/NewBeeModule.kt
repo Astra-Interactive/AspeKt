@@ -11,18 +11,14 @@ interface NewBeeModule {
     class Default(
         coreModule: CoreModule
     ) : NewBeeModule {
-        private val dependencies: EventDependencies by lazy {
-            EventDependencies.Default(
-                translation = coreModule.translation.cachedValue,
-                kyoriComponentSerializer = coreModule.kyoriComponentSerializer.cachedValue,
+        private val newBeeEventListener = NewBeeEventListener(
+            dependencies = EventDependencies.Default(
+                translationKrate = coreModule.translation,
+                kyoriComponentSerializerKrate = coreModule.kyoriComponentSerializer,
                 scope = coreModule.scope,
                 dispatcher = coreModule.dispatchers
             )
-        }
-
-        private val newBeeEventListener: NewBeeEventListener by lazy {
-            NewBeeEventListener(dependencies)
-        }
+        )
 
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onEnable = {

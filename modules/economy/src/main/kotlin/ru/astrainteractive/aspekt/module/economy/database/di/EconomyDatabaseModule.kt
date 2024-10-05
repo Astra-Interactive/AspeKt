@@ -2,6 +2,8 @@ package ru.astrainteractive.aspekt.module.economy.database.di
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Slf4jSqlDebugLogger
@@ -26,6 +28,7 @@ import kotlin.coroutines.CoroutineContext
 
 internal interface EconomyDatabaseModule {
     val lifecycle: Lifecycle
+
     val databaseFlow: Flow<Database>
     val economyDao: EconomyDao
     val cachedDao: CachedDao
@@ -62,7 +65,11 @@ internal interface EconomyDatabaseModule {
         )
 
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
-            onReload = { cachedDao.reset() }
+            onReload = { cachedDao.reset() },
+            onDisable = {
+                runBlocking { TransactionManager.closeAndUnregister(databaseFlow.first()) }
+                cachedDao.reset()
+            }
         )
     }
 }

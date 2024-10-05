@@ -7,4 +7,5 @@ internal interface SwearRepository {
     suspend fun forgetPlayer(player: Player)
     suspend fun setSwearFilterEnabled(player: Player, isEnabled: Boolean)
     fun isSwearFilterEnabled(player: Player): Boolean
+    fun clear()
 }

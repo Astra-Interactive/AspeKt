@@ -21,35 +21,30 @@ interface ChatGameModule {
             factory = ::ChatGameConfig
         )
 
-        private val chatGameStore by lazy {
-            ChatGameStoreImpl(
-                chatGameConfigProvider = config,
-                riddleGenerator = RiddleGenerator(
-                    configProvider = config,
-                    translationProvider = coreModule.translation
-                )
+        private val chatGameStore = ChatGameStoreImpl(
+            chatGameConfigProvider = config,
+            riddleGenerator = RiddleGenerator(
+                configProvider = config,
+                translationProvider = coreModule.translation
             )
-        }
+        )
 
-        private val chatGameJob by lazy {
-            ChatGameJob(
-                chatGameStore = chatGameStore,
-                chatGameConfigProvider = config,
-                kyoriComponentSerializerProvider = coreModule.kyoriComponentSerializer,
-            )
-        }
+        private val chatGameJob = ChatGameJob(
+            chatGameStore = chatGameStore,
+            chatGameConfigProvider = config,
+            kyoriComponentSerializerProvider = coreModule.kyoriComponentSerializer,
+        )
 
-        private val command by lazy {
-            ChatGameCommand(
-                plugin = coreModule.plugin,
-                chatGameStore = chatGameStore,
-                kyoriComponentSerializerProvider = coreModule.kyoriComponentSerializer,
-                translationProvider = coreModule.translation,
-                scope = coreModule.scope,
-                chatGameConfigProvider = config,
-                currencyEconomyProviderFactory = coreModule.currencyEconomyProviderFactory
-            )
-        }
+        private val command = ChatGameCommand(
+            plugin = coreModule.plugin,
+            chatGameStore = chatGameStore,
+            kyoriComponentSerializerProvider = coreModule.kyoriComponentSerializer,
+            translationProvider = coreModule.translation,
+            scope = coreModule.scope,
+            chatGameConfigProvider = config,
+            currencyEconomyProviderFactory = coreModule.currencyEconomyProviderFactory
+        )
+
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onEnable = {
                 chatGameJob.onEnable()

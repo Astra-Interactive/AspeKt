@@ -5,13 +5,17 @@ import github.scarsz.discordsrv.api.Subscribe
 import github.scarsz.discordsrv.api.events.AccountLinkedEvent
 import github.scarsz.discordsrv.api.events.AccountUnlinkedEvent
 import kotlinx.coroutines.launch
+import org.bukkit.plugin.Plugin
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordEventDependencies
-import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.astralibs.event.EventListener
 
 /**
  * Template event class
  */
-internal class DiscordEvent(module: DiscordEventDependencies) : DiscordEventDependencies by module, Lifecycle {
+internal class DiscordEvent(
+    dependencies: DiscordEventDependencies
+) : DiscordEventDependencies by dependencies,
+    EventListener {
     private val controllers get() = listOf(discordController, luckPermsController, addMoneyController)
 
     @Subscribe
@@ -28,7 +32,7 @@ internal class DiscordEvent(module: DiscordEventDependencies) : DiscordEventDepe
         }
     }
 
-    override fun onEnable() {
+    override fun onEnable(plugin: Plugin) {
         DiscordSRV.api.subscribe(this)
     }
 

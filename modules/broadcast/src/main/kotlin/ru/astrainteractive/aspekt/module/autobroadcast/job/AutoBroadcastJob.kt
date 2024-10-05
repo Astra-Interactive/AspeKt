@@ -9,7 +9,7 @@ internal class AutoBroadcastJob(
     dependencies: AutoBroadcastDependencies
 ) : ScheduledJob("AutoBroadcast"), AutoBroadcastDependencies by dependencies {
     override val delayMillis: Long
-        get() = configuration.interval * 1000L
+        get() = announcements.interval * 1000L
 
     override val initialDelayMillis: Long
         get() = 0L
@@ -19,7 +19,7 @@ internal class AutoBroadcastJob(
 
     override fun execute() {
         scope.launch(dispatchers.BukkitMain) {
-            val message = configuration.announcements.randomOrNull()
+            val message = announcements.announcements.randomOrNull()
                 ?.let(kyoriComponentSerializer::toComponent)
                 ?: return@launch
             Bukkit.getOnlinePlayers().forEach {

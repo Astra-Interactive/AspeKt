@@ -3,16 +3,17 @@ package ru.astrainteractive.aspekt.module.autocrop
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.data.Ageable
+import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import ru.astrainteractive.aspekt.module.autocrop.di.AutoCropDependencies
-import ru.astrainteractive.astralibs.event.DSLEvent
+import ru.astrainteractive.astralibs.event.EventListener
 import kotlin.random.Random
 
 internal class AutoCropEvent(
     module: AutoCropDependencies
-) : AutoCropDependencies by module {
+) : AutoCropDependencies by module, EventListener {
 
     private fun processBlock(block: Block, hoeItemStack: ItemStack?) {
         val autoCropConfig = configuration.autoCrop
@@ -42,12 +43,13 @@ internal class AutoCropEvent(
         }
     }
 
-    val onCropInteract = DSLEvent<PlayerInteractEvent>(eventListener, plugin) { e ->
+    @EventHandler
+    fun onCropInteract(e: PlayerInteractEvent) {
         val autoCropConfig = configuration.autoCrop
-        if (!autoCropConfig.enabled) return@DSLEvent
+        if (!autoCropConfig.enabled) return
 
-        if (e.action != Action.RIGHT_CLICK_BLOCK) return@DSLEvent
-        val clickedBlock = e.clickedBlock ?: return@DSLEvent
+        if (e.action != Action.RIGHT_CLICK_BLOCK) return
+        val clickedBlock = e.clickedBlock ?: return
         val hoeMaybe = e.player.inventory.itemInMainHand
         val radius = hoeRadiusFactory.create(hoeMaybe)
         val hoeItemStack = hoeMaybe.takeIf { radius > 1 }

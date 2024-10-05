@@ -25,13 +25,6 @@ interface DiscordLinkModule {
     val discordController: RoleController.Discord
 
     class Default(coreModule: CoreModule) : DiscordLinkModule {
-        private val luckPermsController: RoleController.Minecraft by lazy {
-            LuckPermsController(roleControllerDependencies)
-        }
-
-        private val addMoneyController: RoleController by lazy {
-            AddMoneyController(roleControllerDependencies)
-        }
 
         private val roleControllerDependencies by lazy {
             RoleControllerDependencies.Default(
@@ -40,22 +33,19 @@ interface DiscordLinkModule {
             )
         }
 
+        private val luckPermsController: RoleController.Minecraft by lazy {
+            LuckPermsController(roleControllerDependencies)
+        }
+
+        private val addMoneyController: RoleController by lazy {
+            AddMoneyController(roleControllerDependencies)
+        }
+
         override val discordController: RoleController.Discord by lazy {
             DiscordController(roleControllerDependencies)
         }
 
-        private val dependencies by lazy {
-            DiscordEventDependencies.Default(
-                coreModule = coreModule,
-                discordController = discordController,
-                luckPermsController = luckPermsController,
-                addMoneyController = addMoneyController
-            )
-        }
-
-        override val tempFile by lazy {
-            coreModule.plugin.dataFolder.resolve("temp.yml")
-        }
+        override val tempFile = coreModule.plugin.dataFolder.resolve("temp.yml")
 
         override val tempFileConfiguration: Krate<FileConfiguration> = DefaultMutableKrate(
             factory = { YamlConfiguration() },
@@ -65,7 +55,14 @@ interface DiscordLinkModule {
         private val discordEvent: DiscordEvent? by lazy {
             Bukkit.getPluginManager().getPlugin("DiscordSRV") ?: return@lazy null
             Bukkit.getPluginManager().getPlugin("LuckPerms") ?: return@lazy null
-            DiscordEvent(dependencies)
+            DiscordEvent(
+                dependencies = DiscordEventDependencies.Default(
+                    coreModule = coreModule,
+                    discordController = discordController,
+                    luckPermsController = luckPermsController,
+                    addMoneyController = addMoneyController
+                )
+            )
         }
 
         private val discordLinkJob by lazy {
@@ -83,7 +80,7 @@ interface DiscordLinkModule {
         override val lifecycle by lazy {
             Lifecycle.Lambda(
                 onEnable = {
-                    discordEvent?.onEnable()
+                    discordEvent?.onEnable(coreModule.plugin)
                     discordLinkJob?.onEnable()
                 },
                 onDisable = {
@@ -91,8 +88,6 @@ interface DiscordLinkModule {
                     discordLinkJob?.onDisable()
                 },
                 onReload = {
-                    discordLinkJob?.onDisable()
-                    discordLinkJob?.onEnable()
                     tempFileConfiguration.loadAndGet()
                 }
             )
