@@ -8,7 +8,6 @@ import com.velocitypowered.api.plugin.Plugin
 import com.velocitypowered.api.plugin.annotation.DataDirectory
 import com.velocitypowered.api.proxy.ProxyServer
 import org.slf4j.Logger
-import ru.astrainteractive.aspekt.di.RootModule
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 
@@ -20,6 +19,7 @@ import kotlin.io.path.absolutePathString
     description = BuildKonfig.description,
     authors = [BuildKonfig.author]
 )
+@Suppress("UnusedPrivateProperty")
 class AspeKt @Inject constructor(
     injector: Injector,
     server: ProxyServer,
@@ -31,12 +31,12 @@ class AspeKt @Inject constructor(
 
         @Suppress("UnusedPrivateMember")
         val logsFolderPath = dataDirectory.absolutePathString()
-        RootModule.injector.initialize(injector)
-        RootModule.server.initialize(server)
-        RootModule.logger.initialize(logger)
-        RootModule.dataDirectory.initialize(dataDirectory)
+//        RootModule.injector.initialize(injector)
+//        RootModule.server.initialize(server)
+//        RootModule.logger.initialize(logger)
+//        RootModule.dataDirectory.initialize(dataDirectory)
         logger.info("Hello there! I made my first plugin with Velocity.")
-        logger.info("Here's your configuration: ${RootModule.configuration.value}.")
+//        logger.info("Here's your configuration: ${RootModule.configuration.value}.")
     }
 
     @Suppress("UnusedPrivateMember")
@@ -48,8 +48,8 @@ class AspeKt @Inject constructor(
     }
 
     fun reload() {
-        with(RootModule) {
-            configuration.reload()
-        }
+//        with(RootModule) {
+//            configuration.reload()
+//        }
     }
 }

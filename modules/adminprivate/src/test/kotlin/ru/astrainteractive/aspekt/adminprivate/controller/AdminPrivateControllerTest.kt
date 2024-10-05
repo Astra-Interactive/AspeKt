@@ -20,20 +20,20 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 internal class AdminPrivateControllerTest {
-    private val randomChunk: AdminChunk by Provider {
-        val x = Random.nextInt(0, 100)
-        val z = Random.nextInt(0, 100)
-        AdminChunk(
-            x = x,
-            z = z,
-            worldName = UUID.randomUUID().toString(),
-            flags = emptyMap(),
-            chunkKey = "$x$z".toLong()
-        )
-    }
-    private val tempFile by Provider {
-        File(System.getProperty("java.io.tmpdir"))
-    }
+    private val randomChunk: AdminChunk
+        get() {
+            val x = Random.nextInt(0, 100)
+            val z = Random.nextInt(0, 100)
+            return AdminChunk(
+                x = x,
+                z = z,
+                worldName = UUID.randomUUID().toString(),
+                flags = emptyMap(),
+                chunkKey = "$x$z".toLong()
+            )
+        }
+    private val tempFile: File
+        get() = File(System.getProperty("java.io.tmpdir"))
 
     inner class Dependencies : AdminPrivateControllerDependencies {
         override val repository: AdminPrivateRepository =
