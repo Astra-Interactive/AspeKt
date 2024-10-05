@@ -1,6 +1,9 @@
 package ru.astrainteractive.aspekt.module.moneydrop.database.di
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.shareIn
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Slf4jSqlDebugLogger
@@ -17,6 +20,7 @@ internal interface MoneyDropDaoModule {
     val dao: MoneyDropDao
 
     class Default(
+        coroutineScope: CoroutineScope,
         dataFolder: File,
         ioDispatcher: CoroutineContext
     ) : MoneyDropDaoModule {
@@ -34,7 +38,8 @@ internal interface MoneyDropDaoModule {
                 )
             }
             emit(database)
-        }
+        }.shareIn(coroutineScope, SharingStarted.Eagerly, 1)
+
         override val dao: MoneyDropDao = MoneyDropDaoImpl(
             databaseFlow = database,
             ioDispatcher = ioDispatcher

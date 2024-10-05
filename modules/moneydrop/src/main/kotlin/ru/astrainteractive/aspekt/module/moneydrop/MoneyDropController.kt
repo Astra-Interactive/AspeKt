@@ -55,6 +55,7 @@ internal class MoneyDropController(
             it.displayName(name)
             it.setPersistentDataType(MoneyDropFlag.Flag, true)
             it.setPersistentDataType(MoneyDropFlag.Amount, amount)
+            it.setPersistentDataType(MoneyDropFlag.CurrencyId, entry.currencyId)
         }
         val item = withContext(dispatchers.Main) { location.world.dropItemNaturally(location, itemStack) }
         item.customName(name)
@@ -68,6 +69,10 @@ internal class MoneyDropController(
 
     fun getMoneyAmount(itemStack: ItemStack): Double? {
         return itemStack.itemMeta.getPersistentData(MoneyDropFlag.Amount)
+    }
+
+    fun getMoneyCurrency(itemStack: ItemStack): String? {
+        return itemStack.itemMeta.getPersistentData(MoneyDropFlag.CurrencyId)
     }
 
     fun tryDrop(location: Location, from: String) = launch {

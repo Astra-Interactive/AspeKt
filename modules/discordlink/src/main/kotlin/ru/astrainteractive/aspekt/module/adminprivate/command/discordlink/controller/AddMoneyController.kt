@@ -30,7 +30,13 @@ internal class AddMoneyController(
         logger.info("Игроку ${player.name} выдано ${configuration.moneyForLink} за линковку с дискордом")
         tempFileConfiguration.set(key, true)
         tempFileConfiguration.save(tempFile)
-        launch { economyProvider?.addMoney(uuid, configuration.moneyForLink.toDouble()) }
+        launch {
+            val economyProvider = when (val currencyId = configuration.currencyId) {
+                null -> currencyEconomyProviderFactory.findDefault()
+                else -> currencyEconomyProviderFactory.findByCurrencyId(currencyId)
+            }
+            economyProvider?.addMoney(uuid, configuration.moneyForLink.toDouble())
+        }
         translation.general.discordLinkReward(configuration.moneyForLink)
             .let(kyoriComponentSerializer::toComponent)
             .run(player::sendMessage)

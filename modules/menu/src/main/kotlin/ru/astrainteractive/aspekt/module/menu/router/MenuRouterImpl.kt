@@ -16,7 +16,7 @@ internal class MenuRouterImpl(private val coreModule: CoreModule) : MenuRouter {
                 translation = coreModule.translation.value,
                 dispatchers = coreModule.dispatchers,
                 kyoriComponentSerializer = coreModule.kyoriComponentSerializer.value,
-                economyProvider = coreModule.defaultEconomyProvider.value
+                economyProvider = coreModule.currencyEconomyProviderFactory.findDefault()
             )
             withContext(coreModule.dispatchers.Main) {
                 gui.open()

@@ -67,9 +67,6 @@ shadowJar.configure {
     minimize {
         exclude(dependency(libs.exposed.jdbc.get()))
         exclude(dependency(libs.exposed.dao.get()))
-//        exclude(dependency(libs.driver.h2.get()))
-//        exclude(dependency(libs.driver.jdbc.get()))
-//        exclude(dependency(libs.driver.mysql.get()))
         exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib:${libs.versions.kotlin.version.get()}"))
     }
     archiveVersion.set(projectInfo.versionString)

@@ -35,7 +35,13 @@ internal class MoneyDropEvent(
         val money = moneyDropController.getMoneyAmount(item) ?: return@DSLEvent
         e.item.remove()
         e.isCancelled = true
-        launch { economyProvider?.addMoney(player.uniqueId, money * amount) }
+        launch {
+            val economyProvider = when (val currencyId = moneyDropController.getMoneyCurrency(item)) {
+                null -> currencyEconomyProviderFactory.findDefault()
+                else -> currencyEconomyProviderFactory.findByCurrencyId(currencyId)
+            }
+            economyProvider?.addMoney(player.uniqueId, money * amount)
+        }
         translation.general.pickedUpMoney(amount * money)
             .let(kyoriComponentSerializer::toComponent)
             .run(player::sendMessage)

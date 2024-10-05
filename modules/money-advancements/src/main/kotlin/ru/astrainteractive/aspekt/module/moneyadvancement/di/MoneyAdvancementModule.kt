@@ -13,15 +13,9 @@ interface MoneyAdvancementModule {
     class Default(
         coreModule: CoreModule
     ) : MoneyAdvancementModule, Logger by JUtiltLogger("MoneyAdvancementModule") {
-        private val economyProvider = Reloadable {
-            coreModule.pluginConfig.value.advancementMoney.currencyName
-                ?.let(coreModule::findEconomyProviderByCurrency)
-                ?: coreModule.defaultEconomyProvider.value
-        }
-
         private val moneyAdvancementEvent = MoneyAdvancementEvent(
             configurationProvider = { coreModule.pluginConfig.value },
-            economyProvider = { economyProvider.value },
+            currencyEconomyProviderFactory = coreModule.currencyEconomyProviderFactory,
             kyoriComponentSerializerProvider = { coreModule.kyoriComponentSerializer.value },
             translationProvider = { coreModule.translation.value }
         )
@@ -34,9 +28,6 @@ interface MoneyAdvancementModule {
                 onDisable = {
                     moneyAdvancementEvent.onDisable()
                 },
-                onReload = {
-                    economyProvider.reload()
-                }
             )
         }
     }

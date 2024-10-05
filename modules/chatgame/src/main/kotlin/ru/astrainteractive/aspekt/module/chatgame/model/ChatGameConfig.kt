@@ -23,8 +23,6 @@ internal data class ChatGameConfig(
     val timer: Timer = Timer(),
     val isEnabled: Boolean = false,
     val defaultReward: Reward = Reward.Money(0.0, 100.0),
-    @SerialName("currency_name")
-    val currencyName: String? = null
 ) {
     @Serializable
     data class Timer(

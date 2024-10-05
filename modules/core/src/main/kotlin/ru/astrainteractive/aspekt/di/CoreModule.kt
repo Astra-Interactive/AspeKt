@@ -5,9 +5,9 @@ import com.charleskorn.kaml.Yaml
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import net.milkbowl.vault.economy.Economy
-import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
+import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
+import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactoryImpl
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.AsyncComponent
@@ -15,7 +15,6 @@ import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.async.DefaultBukkitDispatchers
 import ru.astrainteractive.astralibs.economy.EconomyProvider
 import ru.astrainteractive.astralibs.economy.EssentialsEconomyProvider
-import ru.astrainteractive.astralibs.economy.VaultEconomyProvider
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
@@ -38,8 +37,7 @@ interface CoreModule : Lifecycle {
     val translation: Reloadable<PluginTranslation>
     val yamlFormat: StringFormat
 
-    val defaultEconomyProvider: Reloadable<EconomyProvider?>
-    fun findEconomyProviderByCurrency(currency: String): EconomyProvider?
+    val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory
     val kyoriComponentSerializer: Reloadable<KyoriComponentSerializer>
     val inventoryClickEventListener: DefaultInventoryClickEvent
 
@@ -90,22 +88,8 @@ interface CoreModule : Lifecycle {
             translation
         }
 
-        override val defaultEconomyProvider: Reloadable<EconomyProvider?> = Reloadable {
-            kotlin.runCatching { EssentialsEconomyProvider }
-                .onFailure(Throwable::printStackTrace)
-                .getOrNull()
-        }
-
-        override fun findEconomyProviderByCurrency(currency: String): EconomyProvider? {
-            val registrations = Bukkit.getServer().servicesManager.getRegistrations(Economy::class.java)
-            val specificEconomyProvider = registrations
-                .firstOrNull { it.provider.currencyNameSingular() == currency }
-                ?.provider
-                ?.let(::VaultEconomyProvider)
-            if (specificEconomyProvider == null) {
-                error { "#economyProvider could not find economy with currency: $currency" }
-            }
-            return specificEconomyProvider
+        override val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory by lazy {
+            CurrencyEconomyProviderFactoryImpl(plugin.value)
         }
 
         override val kyoriComponentSerializer: Reloadable<KyoriComponentSerializer> = Reloadable {

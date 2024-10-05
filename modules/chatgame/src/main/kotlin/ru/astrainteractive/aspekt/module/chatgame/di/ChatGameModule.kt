@@ -23,12 +23,6 @@ interface ChatGameModule {
             config
         }
 
-        private val economyProvider = Reloadable {
-            config.value.currencyName
-                ?.let(coreModule::findEconomyProviderByCurrency)
-                ?: coreModule.defaultEconomyProvider.value
-        }
-
         private val chatGameStore by lazy {
             ChatGameStoreImpl(
                 chatGameConfigProvider = { config.value },
@@ -53,9 +47,9 @@ interface ChatGameModule {
                 chatGameStore = chatGameStore,
                 kyoriComponentSerializerProvider = { coreModule.kyoriComponentSerializer.value },
                 translationProvider = { coreModule.translation.value },
-                economyProvider = { economyProvider.value },
                 scope = coreModule.scope,
-                chatGameConfigProvider = { config.value }
+                chatGameConfigProvider = { config.value },
+                currencyEconomyProviderFactory = coreModule.currencyEconomyProviderFactory
             )
         }
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
@@ -70,7 +64,6 @@ interface ChatGameModule {
                 config.reload()
                 chatGameJob.onDisable()
                 chatGameJob.onEnable()
-                economyProvider.reload()
             }
         )
     }
