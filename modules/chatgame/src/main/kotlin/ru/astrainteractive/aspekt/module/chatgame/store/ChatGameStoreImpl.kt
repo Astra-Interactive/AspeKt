@@ -4,13 +4,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
+import ru.astrainteractive.aspekt.module.chatgame.store.generator.RiddleGenerator
+import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.getValue
+import ru.astrainteractive.klibs.kstorage.api.Krate
 
 internal class ChatGameStoreImpl(
-    chatGameConfigProvider: Provider<ChatGameConfig>,
+    chatGameConfigProvider: Krate<ChatGameConfig>,
     private val riddleGenerator: RiddleGenerator
 ) : ChatGameStore, Logger by JUtiltLogger("ChatGameStore") {
     private val chatGameConfig by chatGameConfigProvider

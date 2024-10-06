@@ -36,8 +36,8 @@ data class PluginConfiguration(
         @SerialName("task")
         @YamlComment("Money given for default task")
         val task: Int = 1000,
-        @SerialName("currency_name")
-        val currencyName: String? = null
+        @SerialName("currency_id")
+        val currencyId: String? = null
     )
 
     @Serializable
@@ -60,7 +60,8 @@ data class PluginConfiguration(
         val from: String,
         val chance: Double,
         val min: Double,
-        val max: Double
+        val max: Double,
+        val currencyId: String? = null
     )
 
     @Serializable
@@ -140,6 +141,8 @@ data class PluginConfiguration(
     data class DiscordSRVLink(
         @SerialName("money_for_link")
         val moneyForLink: Int = 0,
+        @SerialName("currency_id")
+        val currencyId: String? = null,
         @SerialName("discord_linked_role")
         val discordLinkedRole: String? = null,
         @SerialName("minecraft_linked_role")

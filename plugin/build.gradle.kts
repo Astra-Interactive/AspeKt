@@ -17,7 +17,6 @@ dependencies {
     // AstraLibs
     implementation(libs.minecraft.astralibs.core)
     implementation(libs.minecraft.astralibs.orm)
-    implementation(libs.klibs.kdi)
     implementation(libs.klibs.mikro.core)
     implementation(libs.minecraft.astralibs.menu.bukkit)
     implementation(libs.minecraft.astralibs.core.bukkit)
@@ -67,9 +66,6 @@ shadowJar.configure {
     minimize {
         exclude(dependency(libs.exposed.jdbc.get()))
         exclude(dependency(libs.exposed.dao.get()))
-//        exclude(dependency(libs.driver.h2.get()))
-//        exclude(dependency(libs.driver.jdbc.get()))
-//        exclude(dependency(libs.driver.mysql.get()))
         exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib:${libs.versions.kotlin.version.get()}"))
     }
     archiveVersion.set(projectInfo.versionString)

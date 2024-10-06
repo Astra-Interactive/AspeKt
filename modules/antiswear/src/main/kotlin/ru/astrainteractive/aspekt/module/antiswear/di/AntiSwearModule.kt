@@ -27,11 +27,12 @@ interface AntiSwearModule {
         )
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onEnable = {
-                antiSwearEventListener.onEnable(plugin = coreModule.plugin.value)
+                antiSwearEventListener.onEnable(plugin = coreModule.plugin)
                 swearCommandRegistry.register()
             },
             onDisable = {
                 antiSwearEventListener.onDisable()
+                swearRepository.clear()
             }
         )
     }

@@ -7,8 +7,6 @@ import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.di.RoleControllerDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.getValue
 
 internal class LuckPermsController(
     module: RoleControllerDependencies
@@ -18,9 +16,11 @@ internal class LuckPermsController(
     private val configuration: PluginConfiguration.DiscordSRVLink
         get() = pluginConfiguration.discordSRVLink
 
-    private val api by Provider {
-        Bukkit.getServicesManager().getRegistration(LuckPerms::class.java)?.provider ?: error("LuckPerms not found!")
-    }
+    private val api: LuckPerms
+        get() = Bukkit.getServicesManager()
+            .getRegistration(LuckPerms::class.java)
+            ?.provider
+            ?: error("LuckPerms not found!")
 
     private fun addRole(offlinePlayer: OfflinePlayer, role: String?, isSilent: Boolean) {
         role ?: run {

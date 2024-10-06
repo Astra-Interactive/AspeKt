@@ -23,7 +23,8 @@ import kotlin.time.toJavaDuration
 
 internal class NewBeeEventListener(
     dependencies: EventDependencies
-) : EventListener, EventDependencies by dependencies {
+) : EventListener,
+    EventDependencies by dependencies {
 
     private fun createInfinitePotionEffect(player: Player, type: PotionEffectType, amplifier: Int): PotionEffect {
         return PotionEffect(

@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.moneydrop
 import kotlinx.coroutines.launch
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
-import org.bukkit.event.EventPriority
+import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
@@ -11,52 +11,63 @@ import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.inventory.InventoryMoveItemEvent
 import org.bukkit.event.inventory.InventoryPickupItemEvent
 import ru.astrainteractive.aspekt.module.moneydrop.di.MoneyDropDependencies
-import ru.astrainteractive.astralibs.async.AsyncComponent
-import ru.astrainteractive.astralibs.event.DSLEvent
+import ru.astrainteractive.astralibs.event.EventListener
 
 internal class MoneyDropEvent(
     dependencies: MoneyDropDependencies
-) : MoneyDropDependencies by dependencies, AsyncComponent() {
+) : MoneyDropDependencies by dependencies, EventListener {
 
-    val entityDeathEvent = DSLEvent<EntityDamageByEntityEvent>(eventListener, plugin, EventPriority.MONITOR) { e ->
-        val player = e.damager as? Player ?: return@DSLEvent
-        if (e.entity is Player) return@DSLEvent
-        val entity = e.entity as? LivingEntity ?: return@DSLEvent
-        if (entity.health > e.finalDamage) return@DSLEvent
-        if (e.isCancelled) return@DSLEvent
+    @EventHandler
+    fun entityDeathEvent(e: EntityDamageByEntityEvent) {
+        val player = e.damager as? Player ?: return
+        if (e.entity is Player) return
+        val entity = e.entity as? LivingEntity ?: return
+        if (entity.health > e.finalDamage) return
+        if (e.isCancelled) return
         moneyDropController.tryDrop(entity.location, entity.type.name)
     }
 
-    val playerPickUpEvent = DSLEvent<EntityPickupItemEvent>(eventListener, plugin) { e ->
-        val player = e.entity as? Player ?: return@DSLEvent
+    @EventHandler
+    fun playerPickUpEvent(e: EntityPickupItemEvent) {
+        val player = e.entity as? Player ?: return
         val item = e.item.itemStack
         val amount = e.item.itemStack.amount
-        if (!moneyDropController.isMoneyDropItem(item)) return@DSLEvent
-        val money = moneyDropController.getMoneyAmount(item) ?: return@DSLEvent
+        if (!moneyDropController.isMoneyDropItem(item)) return
+        val money = moneyDropController.getMoneyAmount(item) ?: return
         e.item.remove()
         e.isCancelled = true
-        launch { economyProvider?.addMoney(player.uniqueId, money * amount) }
+        scope.launch {
+            val economyProvider = when (val currencyId = moneyDropController.getMoneyCurrency(item)) {
+                null -> currencyEconomyProviderFactory.findDefault()
+                else -> currencyEconomyProviderFactory.findByCurrencyId(currencyId)
+            }
+            economyProvider?.addMoney(player.uniqueId, money * amount)
+        }
         translation.general.pickedUpMoney(amount * money)
             .let(kyoriComponentSerializer::toComponent)
             .run(player::sendMessage)
     }
 
-    val inventoryMoveEvent = DSLEvent<InventoryMoveItemEvent>(eventListener, plugin) { e ->
-        if (!moneyDropController.isMoneyDropItem(e.item)) return@DSLEvent
+    @EventHandler
+    fun inventoryMoveEvent(e: InventoryMoveItemEvent) {
+        if (!moneyDropController.isMoneyDropItem(e.item)) return
         e.isCancelled = true
     }
 
-    val inventoryPickupItemEvent = DSLEvent<InventoryPickupItemEvent>(eventListener, plugin) { e ->
-        if (!moneyDropController.isMoneyDropItem(e.item.itemStack)) return@DSLEvent
+    @EventHandler
+    fun inventoryPickupItemEvent(e: InventoryPickupItemEvent) {
+        if (!moneyDropController.isMoneyDropItem(e.item.itemStack)) return
         e.isCancelled = true
     }
 
-    val blockBreakEvent = DSLEvent<BlockBreakEvent>(eventListener, plugin, EventPriority.MONITOR) { e ->
-        if (e.isCancelled) return@DSLEvent
+    @EventHandler
+    fun blockBreakEvent(e: BlockBreakEvent) {
+        if (e.isCancelled) return
         moneyDropController.tryDrop(e.block.location, e.block.type.name)
     }
 
-    val blockPlaceEvent = DSLEvent<BlockPlaceEvent>(eventListener, plugin) { e ->
+    @EventHandler
+    fun blockPlaceEvent(e: BlockPlaceEvent) {
         moneyDropController.rememberLocation(e.blockPlaced.location)
     }
 }

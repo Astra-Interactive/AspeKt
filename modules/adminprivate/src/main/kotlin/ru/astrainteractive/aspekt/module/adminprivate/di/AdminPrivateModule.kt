@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.adminprivate.di
 
+import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate.AdminPrivateCommandRegistry
 import ru.astrainteractive.aspekt.module.adminprivate.command.di.AdminPrivateCommandDependencies
@@ -8,21 +9,19 @@ import ru.astrainteractive.aspekt.module.adminprivate.controller.di.AdminPrivate
 import ru.astrainteractive.aspekt.module.adminprivate.event.AdminPrivateEvent
 import ru.astrainteractive.aspekt.module.adminprivate.event.di.AdminPrivateDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.klibs.kdi.Reloadable
 import java.io.File
 
 interface AdminPrivateModule {
     val lifecycle: Lifecycle
-    val adminChunksYml: Reloadable<File>
+    val adminChunksFile: File
 
     class Default(private val coreModule: CoreModule) : AdminPrivateModule {
-        private val adminPrivateController: AdminPrivateController by lazy {
-            val dependencies = AdminPrivateControllerDependencies.Default(
+        private val adminPrivateController = AdminPrivateController(
+            dependencies = AdminPrivateControllerDependencies.Default(
                 coreModule = coreModule,
                 adminPrivateModule = this
             )
-            AdminPrivateController(dependencies)
-        }
+        )
 
         private val adminPrivateCommandRegistry = AdminPrivateCommandRegistry(
             dependencies = AdminPrivateCommandDependencies.Default(
@@ -31,34 +30,28 @@ interface AdminPrivateModule {
             )
         )
 
-        override val adminChunksYml: Reloadable<File> = Reloadable {
-            val file = coreModule.plugin.value.dataFolder.resolve("adminchunks.yml")
-            if (!file.exists()) file.createNewFile()
-            file
-        }
+        override val adminChunksFile: File = coreModule.plugin.dataFolder.resolve("adminchunks.yml")
 
-        private val adminPrivateEvent by lazy {
-            val adminPrivateDependencies: AdminPrivateDependencies = AdminPrivateDependencies.Default(
+        private val adminPrivateEvent = AdminPrivateEvent(
+            dependencies = AdminPrivateDependencies.Default(
                 coreModule = coreModule,
                 adminPrivateController = adminPrivateController
             )
-            AdminPrivateEvent(adminPrivateDependencies)
-        }
+        )
 
-        override val lifecycle: Lifecycle by lazy {
-            Lifecycle.Lambda(
-                onEnable = {
-                    adminPrivateCommandRegistry.register()
-                    adminPrivateEvent.onEnable(coreModule.plugin.value)
-                    adminPrivateController.reloadKrate()
-                },
-                onReload = {
-                    adminPrivateController.reloadKrate()
-                },
-                onDisable = {
-                    adminPrivateEvent.onDisable()
-                }
-            )
-        }
+        override val lifecycle: Lifecycle = Lifecycle.Lambda(
+            onEnable = {
+                adminPrivateCommandRegistry.register()
+                adminPrivateEvent.onEnable(coreModule.plugin)
+                adminPrivateController.reloadKrate()
+            },
+            onReload = {
+                adminPrivateController.reloadKrate()
+            },
+            onDisable = {
+                adminPrivateEvent.onDisable()
+                adminPrivateController.cancel()
+            }
+        )
     }
 }

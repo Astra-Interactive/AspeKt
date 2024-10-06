@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.moneydrop.database.dao
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.runTest
 import ru.astrainteractive.aspekt.module.moneydrop.database.di.MoneyDropDaoModule
@@ -24,7 +25,8 @@ internal class MoneyDropDaoTest {
         folder.deleteOnExit()
         _module = MoneyDropDaoModule.Default(
             dataFolder = folder,
-            ioDispatcher = scheduler
+            ioDispatcher = scheduler,
+            coroutineScope = CoroutineScope(scheduler),
         )
     }
 

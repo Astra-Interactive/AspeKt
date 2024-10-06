@@ -17,7 +17,6 @@ dependencies {
     implementation(libs.minecraft.astralibs.exposed)
     implementation(libs.minecraft.astralibs.command)
     implementation(libs.minecraft.astralibs.command.bukkit)
-    implementation(libs.klibs.kdi)
     implementation(libs.klibs.kstorage)
     implementation(libs.klibs.mikro.core)
     implementation(libs.minecraft.astralibs.menu.bukkit)

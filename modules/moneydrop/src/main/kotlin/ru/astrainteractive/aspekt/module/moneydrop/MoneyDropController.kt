@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.moneydrop
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.bukkit.Location
@@ -9,23 +10,23 @@ import ru.astrainteractive.aspekt.module.moneydrop.database.dao.MoneyDropDao
 import ru.astrainteractive.aspekt.module.moneydrop.database.model.MoneyDropLocation
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.async.AsyncComponent
+import ru.astrainteractive.aspekt.util.getValue
+import ru.astrainteractive.astralibs.async.CoroutineFeature
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.persistence.Persistence.getPersistentData
 import ru.astrainteractive.astralibs.persistence.Persistence.hasPersistentData
 import ru.astrainteractive.astralibs.persistence.Persistence.setPersistentDataType
-import ru.astrainteractive.klibs.kdi.Dependency
-import ru.astrainteractive.klibs.kdi.getValue
+import ru.astrainteractive.klibs.kstorage.api.Krate
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import kotlin.random.Random
 
 internal class MoneyDropController(
-    pluginConfigurationDependency: Dependency<PluginConfiguration>,
-    translationDependency: Dependency<PluginTranslation>,
-    kyoriComponentSerializerDependency: Dependency<KyoriComponentSerializer>,
+    pluginConfigurationDependency: Krate<PluginConfiguration>,
+    translationDependency: Krate<PluginTranslation>,
+    kyoriComponentSerializerDependency: Krate<KyoriComponentSerializer>,
     private val dao: MoneyDropDao,
     private val dispatchers: KotlinDispatchers
-) : AsyncComponent() {
+) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO) {
     private val pluginConfiguration by pluginConfigurationDependency
     private val translation by translationDependency
     private val kyoriComponentSerializer by kyoriComponentSerializerDependency
@@ -55,6 +56,7 @@ internal class MoneyDropController(
             it.displayName(name)
             it.setPersistentDataType(MoneyDropFlag.Flag, true)
             it.setPersistentDataType(MoneyDropFlag.Amount, amount)
+            it.setPersistentDataType(MoneyDropFlag.CurrencyId, entry.currencyId)
         }
         val item = withContext(dispatchers.Main) { location.world.dropItemNaturally(location, itemStack) }
         item.customName(name)
@@ -68,6 +70,10 @@ internal class MoneyDropController(
 
     fun getMoneyAmount(itemStack: ItemStack): Double? {
         return itemStack.itemMeta.getPersistentData(MoneyDropFlag.Amount)
+    }
+
+    fun getMoneyCurrency(itemStack: ItemStack): String? {
+        return itemStack.itemMeta.getPersistentData(MoneyDropFlag.CurrencyId)
     }
 
     fun tryDrop(location: Location, from: String) = launch {

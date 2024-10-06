@@ -16,7 +16,10 @@ interface AutoCropModule {
         override val lifecycle: Lifecycle by lazy {
             Lifecycle.Lambda(
                 onEnable = {
-                    autoCropEvent
+                    autoCropEvent.onEnable(coreModule.plugin)
+                },
+                onDisable = {
+                    autoCropEvent.onDisable()
                 }
             )
         }

@@ -1,9 +1,11 @@
 package ru.astrainteractive.aspekt.di.impl
 
+import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.command.di.CommandManagerModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.aspekt.event.di.EventsModule
+import ru.astrainteractive.aspekt.event.sit.di.SitModule
 import ru.astrainteractive.aspekt.gui.di.GuiModule
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
 import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule
@@ -18,9 +20,9 @@ import ru.astrainteractive.aspekt.module.moneydrop.di.MoneyDropModule
 import ru.astrainteractive.aspekt.module.newbee.di.NewBeeModule
 import ru.astrainteractive.aspekt.module.towny.discord.di.TownyDiscordModule
 
-class RootModuleImpl : RootModule {
+class RootModuleImpl(plugin: JavaPlugin) : RootModule {
     override val coreModule: CoreModule by lazy {
-        CoreModule.Default()
+        CoreModule.Default(plugin)
     }
     override val adminPrivateModule: AdminPrivateModule by lazy {
         AdminPrivateModule.Default(coreModule)
@@ -30,6 +32,9 @@ class RootModuleImpl : RootModule {
     }
     override val menuModule: MenuModule by lazy {
         MenuModule.Default(coreModule)
+    }
+    override val sitModule: SitModule by lazy {
+        SitModule.Default(coreModule)
     }
     override val guiModule: GuiModule by lazy {
         GuiModule.Default(coreModule)
@@ -44,8 +49,8 @@ class RootModuleImpl : RootModule {
     override val commandManagerModule: CommandManagerModule by lazy {
         CommandManagerModule.Default(
             coreModule = coreModule,
-            eventsModule = eventsModule,
             guiModule = guiModule,
+            sitModule = sitModule
         )
     }
     override val townyDiscordModule: TownyDiscordModule by lazy {

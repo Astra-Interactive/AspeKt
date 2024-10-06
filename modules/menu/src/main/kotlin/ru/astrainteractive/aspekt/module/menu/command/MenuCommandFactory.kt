@@ -6,18 +6,17 @@ import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.util.StringListExt.withEntry
-import ru.astrainteractive.klibs.kdi.Dependency
-import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.getValue
+import ru.astrainteractive.klibs.kstorage.api.Krate
 
 internal class MenuCommandFactory(
     private val plugin: JavaPlugin,
-    private val menuRouter: Provider<MenuRouter>,
-    private val kyoriComponentSerializer: Dependency<KyoriComponentSerializer>,
-    menuModelProvider: Provider<List<MenuModel>>,
-    translationProvider: Provider<PluginTranslation>,
+    private val menuRouterProvider: () -> MenuRouter,
+    private val kyoriComponentSerializer: Krate<KyoriComponentSerializer>,
+    menuModelProvider: Krate<List<MenuModel>>,
+    translationProvider: Krate<PluginTranslation>,
 ) {
     private val menuModels by menuModelProvider
     private val translation by translationProvider
@@ -33,11 +32,11 @@ internal class MenuCommandFactory(
         val command = args.getOrNull(0).orEmpty()
         val menuModel = menuModels.firstOrNull { it.command == command }
         if (menuModel == null) {
-            kyoriComponentSerializer.value.toComponent(translation.general.menuNotFound)
+            kyoriComponentSerializer.cachedValue.toComponent(translation.general.menuNotFound)
                 .run(sender::sendMessage)
             return@setExecutor true
         }
-        menuRouter.provide().openMenu(
+        menuRouterProvider.invoke().openMenu(
             player = sender as Player,
             menuModel = menuModel
         )

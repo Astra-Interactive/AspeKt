@@ -1,15 +1,16 @@
 package ru.astrainteractive.aspekt.gui.entities.presentation
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.bukkit.Bukkit
 import org.bukkit.entity.EntityType
 import ru.astrainteractive.aspekt.gui.entities.model.EntityData
 import ru.astrainteractive.aspekt.gui.entities.model.SortType
 import ru.astrainteractive.aspekt.gui.entities.presentation.EntitiesComponent.Model
-import ru.astrainteractive.astralibs.async.AsyncComponent
+import ru.astrainteractive.astralibs.async.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.util.next
 
-class DefaultEntitiesComponent : AsyncComponent(), EntitiesComponent {
+class DefaultEntitiesComponent : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO), EntitiesComponent {
     override val model = MutableStateFlow<Model>(Model.Loading)
     override fun loadData() {
         val world = Bukkit.getWorlds().first()

@@ -4,7 +4,6 @@ import kotlinx.coroutines.CoroutineScope
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.RoleController
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
-import ru.astrainteractive.klibs.kdi.getValue
 
 internal interface DiscordEventDependencies {
     val discordController: RoleController

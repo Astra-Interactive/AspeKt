@@ -9,9 +9,6 @@ import ru.astrainteractive.aspekt.module.adminprivate.data.AdminPrivateRepositor
 import ru.astrainteractive.aspekt.module.adminprivate.model.AdminChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
-import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.getValue
-import ru.astrainteractive.klibs.mikro.core.dispatchers.DefaultKotlinDispatchers
 import java.io.File
 import java.util.UUID
 import kotlin.random.Random
@@ -22,26 +19,25 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 internal class AdminPrivateControllerTest {
-    private val randomChunk: AdminChunk by Provider {
-        val x = Random.nextInt(0, 100)
-        val z = Random.nextInt(0, 100)
-        AdminChunk(
-            x = x,
-            z = z,
-            worldName = UUID.randomUUID().toString(),
-            flags = emptyMap(),
-            chunkKey = "$x$z".toLong()
-        )
-    }
-    private val tempFile by Provider {
-        File(System.getProperty("java.io.tmpdir"))
-    }
+    private val randomChunk: AdminChunk
+        get() {
+            val x = Random.nextInt(0, 100)
+            val z = Random.nextInt(0, 100)
+            return AdminChunk(
+                x = x,
+                z = z,
+                worldName = UUID.randomUUID().toString(),
+                flags = emptyMap(),
+                chunkKey = "$x$z".toLong()
+            )
+        }
+    private val tempFile: File
+        get() = File(System.getProperty("java.io.tmpdir"))
 
     inner class Dependencies : AdminPrivateControllerDependencies {
         override val repository: AdminPrivateRepository =
             AdminPrivateRepositoryImpl(
                 file = tempFile.resolve(UUID.randomUUID().toString()),
-                dispatchers = DefaultKotlinDispatchers,
                 stringFormat = YamlStringFormat()
             )
     }

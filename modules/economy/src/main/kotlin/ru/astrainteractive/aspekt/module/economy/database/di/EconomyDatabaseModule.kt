@@ -2,8 +2,8 @@ package ru.astrainteractive.aspekt.module.economy.database.di
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Slf4jSqlDebugLogger
@@ -28,6 +28,7 @@ import kotlin.coroutines.CoroutineContext
 
 internal interface EconomyDatabaseModule {
     val lifecycle: Lifecycle
+
     val databaseFlow: Flow<Database>
     val economyDao: EconomyDao
     val cachedDao: CachedDao
@@ -40,7 +41,7 @@ internal interface EconomyDatabaseModule {
     ) : EconomyDatabaseModule, Logger by JUtiltLogger("EconomyDatabaseModule") {
 
         override val databaseFlow: Flow<Database> = dbConfig.cachedStateFlow
-            .mapCached<DatabaseConfiguration, Database> { dbConfig, previous ->
+            .mapCached(coroutineScope) { dbConfig, previous ->
                 previous?.connector?.invoke()?.close()
                 previous?.run(TransactionManager::closeAndUnregister)
                 val database = DatabaseFactory(dataFolder).create(dbConfig)
@@ -53,7 +54,7 @@ internal interface EconomyDatabaseModule {
                     )
                 }
                 database
-            }.shareIn(coroutineScope, SharingStarted.Eagerly, 1)
+            }
 
         override val economyDao: EconomyDao = EconomyDaoImpl(databaseFlow)
 
@@ -64,7 +65,11 @@ internal interface EconomyDatabaseModule {
         )
 
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
-            onReload = { cachedDao.reset() }
+            onReload = { cachedDao.reset() },
+            onDisable = {
+                runBlocking { TransactionManager.closeAndUnregister(databaseFlow.first()) }
+                cachedDao.reset()
+            }
         )
     }
 }

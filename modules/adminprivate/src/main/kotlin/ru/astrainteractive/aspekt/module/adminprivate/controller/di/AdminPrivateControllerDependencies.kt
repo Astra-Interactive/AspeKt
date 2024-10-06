@@ -4,7 +4,6 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.adminprivate.data.AdminPrivateRepository
 import ru.astrainteractive.aspekt.module.adminprivate.data.AdminPrivateRepositoryImpl
 import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule
-import ru.astrainteractive.klibs.kdi.getValue
 
 internal interface AdminPrivateControllerDependencies {
     val repository: AdminPrivateRepository
@@ -15,8 +14,7 @@ internal interface AdminPrivateControllerDependencies {
     ) : AdminPrivateControllerDependencies {
         override val repository: AdminPrivateRepository by lazy {
             AdminPrivateRepositoryImpl(
-                file = adminPrivateModule.adminChunksYml.value,
-                dispatchers = coreModule.dispatchers,
+                file = adminPrivateModule.adminChunksFile,
                 stringFormat = coreModule.yamlFormat
             )
         }

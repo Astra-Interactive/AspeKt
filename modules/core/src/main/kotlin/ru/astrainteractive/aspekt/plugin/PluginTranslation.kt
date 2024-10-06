@@ -6,6 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.astralibs.string.StringDescExt.replace
+import java.text.DecimalFormat
 
 /**
  * All translation stored here
@@ -44,12 +45,12 @@ class PluginTranslation(
         @SerialName("currency_not_found")
         val currencyNotFound: StringDesc.Raw = StringDesc.Raw("&#db2c18Валюта не найдена!"),
     ) {
-        fun playerBalance(amount: Number) = playerBalance.replace("%balance%", amount.toString())
+        fun playerBalance(amount: Number) = playerBalance.replace("%balance%", DecimalFormat("0.00").format(amount))
         fun currencies(value: String) = currencies.replace("%currencies%", value)
         fun topItem(index: Int, name: String, balance: Number) = topItem
             .replace("%index%", "$index")
             .replace("%name%", "$name")
-            .replace("%balance%", "$balance")
+            .replace("%balance%", DecimalFormat("0.00").format(balance))
     }
 
     @Serializable
@@ -84,7 +85,7 @@ class PluginTranslation(
 
         fun gameEndedMoneyReward(player: String, amount: Number) = gameEndedMoneyReward
             .replace("%player%", player)
-            .replace("%amount%", amount.toString())
+            .replace("%amount%", DecimalFormat("0.00").format(amount))
     }
 
     @Serializable
@@ -102,9 +103,12 @@ class PluginTranslation(
             "&7[&#DBB72BДОСТИЖЕНИЕ&7] Вы выполднили достижение и получили награду: %money% монет"
         ),
     ) {
-        fun challengeCompleted(money: Number) = challengeCompleted.replace("%money%", money.toString())
-        fun goalCompleted(money: Number) = goalCompleted.replace("%money%", money.toString())
-        fun taskCompleted(money: Number) = taskCompleted.replace("%money%", money.toString())
+        fun challengeCompleted(money: Number) = challengeCompleted.replace(
+            "%money%",
+            DecimalFormat("0.00").format(money)
+        )
+        fun goalCompleted(money: Number) = goalCompleted.replace("%money%", DecimalFormat("0.00").format(money))
+        fun taskCompleted(money: Number) = taskCompleted.replace("%money%", DecimalFormat("0.00").format(money))
     }
 
     @Serializable
@@ -130,7 +134,7 @@ class PluginTranslation(
             "&#42f596Вы получили {AMOUNT}$ за привязку дискорда!"
         ),
         @SerialName("picked_up_money")
-        private val pickedUpMoney: StringDesc.Raw = StringDesc.Raw("&#42f596Вы подобрали {AMOUNT} монет"),
+        private val pickedUpMoney: StringDesc.Raw = StringDesc.Raw("&#42f596Вы подобрали {AMOUNT} загадочных монет"),
         @SerialName("dropped_money")
         val droppedMoney: StringDesc.Raw = StringDesc.Raw("&6Монетка"),
         @SerialName("maybe_tpr")
@@ -138,11 +142,12 @@ class PluginTranslation(
     ) {
 
         fun discordLinkReward(amount: Number): StringDesc.Raw {
-            return discordLinkReward.replace("{AMOUNT}", "${amount.toInt()}")
+            return discordLinkReward.replace("{AMOUNT}", DecimalFormat("0.00").format(amount))
         }
 
         fun pickedUpMoney(amount: Number): StringDesc.Raw {
-            return pickedUpMoney.replace("{AMOUNT}", "${amount.toInt()}")
+            return pickedUpMoney
+                .replace("{AMOUNT}", DecimalFormat("0.00").format(amount))
         }
     }
 

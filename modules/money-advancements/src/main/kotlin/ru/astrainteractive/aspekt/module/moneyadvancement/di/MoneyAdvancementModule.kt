@@ -5,7 +5,6 @@ import ru.astrainteractive.aspekt.module.moneyadvancement.event.MoneyAdvancement
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.klibs.kdi.Reloadable
 
 interface MoneyAdvancementModule {
     val lifecycle: Lifecycle
@@ -13,30 +12,21 @@ interface MoneyAdvancementModule {
     class Default(
         coreModule: CoreModule
     ) : MoneyAdvancementModule, Logger by JUtiltLogger("MoneyAdvancementModule") {
-        private val economyProvider = Reloadable {
-            coreModule.pluginConfig.value.advancementMoney.currencyName
-                ?.let(coreModule::findEconomyProviderByCurrency)
-                ?: coreModule.defaultEconomyProvider.value
-        }
-
         private val moneyAdvancementEvent = MoneyAdvancementEvent(
-            configurationProvider = { coreModule.pluginConfig.value },
-            economyProvider = { economyProvider.value },
-            kyoriComponentSerializerProvider = { coreModule.kyoriComponentSerializer.value },
-            translationProvider = { coreModule.translation.value }
+            configurationProvider = coreModule.pluginConfig,
+            currencyEconomyProviderFactory = coreModule.currencyEconomyProviderFactory,
+            kyoriComponentSerializerProvider = coreModule.kyoriComponentSerializer,
+            translationProvider = coreModule.translation
         )
 
         override val lifecycle: Lifecycle by lazy {
             Lifecycle.Lambda(
                 onEnable = {
-                    moneyAdvancementEvent.onEnable(coreModule.plugin.value)
+                    moneyAdvancementEvent.onEnable(coreModule.plugin)
                 },
                 onDisable = {
                     moneyAdvancementEvent.onDisable()
                 },
-                onReload = {
-                    economyProvider.reload()
-                }
             )
         }
     }

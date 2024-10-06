@@ -13,10 +13,10 @@ internal class MenuRouterImpl(private val coreModule: CoreModule) : MenuRouter {
             val gui = MenuGui(
                 player = player,
                 menuModel = menuModel,
-                translation = coreModule.translation.value,
+                translation = coreModule.translation.cachedValue,
                 dispatchers = coreModule.dispatchers,
-                kyoriComponentSerializer = coreModule.kyoriComponentSerializer.value,
-                economyProvider = coreModule.defaultEconomyProvider.value
+                kyoriComponentSerializer = coreModule.kyoriComponentSerializer.cachedValue,
+                economyProvider = coreModule.currencyEconomyProviderFactory.findDefault()
             )
             withContext(coreModule.dispatchers.Main) {
                 gui.open()

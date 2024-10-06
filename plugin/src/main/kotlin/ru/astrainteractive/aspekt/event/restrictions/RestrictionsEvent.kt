@@ -4,6 +4,7 @@ package ru.astrainteractive.aspekt.event.restrictions
 
 import org.bukkit.Material
 import org.bukkit.entity.EntityType
+import org.bukkit.event.EventHandler
 import org.bukkit.event.block.BlockBurnEvent
 import org.bukkit.event.block.BlockExplodeEvent
 import org.bukkit.event.block.BlockFromToEvent
@@ -16,34 +17,35 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.event.restrictions.di.RestrictionsDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.astralibs.event.DSLEvent
-import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.getValue
+import ru.astrainteractive.astralibs.event.EventListener
 
 class RestrictionsEvent(
-    module: RestrictionsDependencies
-) : RestrictionsDependencies by module {
-    private val restrictions: PluginConfiguration.Restrictions by Provider {
-        configuration.restrictions
-    }
+    dependencies: RestrictionsDependencies
+) : RestrictionsDependencies by dependencies, EventListener {
+    private val restrictions: PluginConfiguration.Restrictions
+        get() = configuration.restrictions
 
     // Explosions
-    val onBlockExplode = DSLEvent<BlockExplodeEvent>(eventListener, plugin) {
+    @EventHandler
+    fun onBlockExplode(it: BlockExplodeEvent) {
         if (restrictions.explosion.destroy) it.isCancelled = true
     }
 
-    val onEntityExplode = DSLEvent<EntityExplodeEvent>(eventListener, plugin) {
+    @EventHandler
+    fun onEntityExplode(it: EntityExplodeEvent) {
         if (restrictions.explosion.destroy) it.isCancelled = true
     }
 
-    val onPrimeExplosion = DSLEvent<ExplosionPrimeEvent>(eventListener, plugin) {
+    @EventHandler
+    fun onPrimeExplosion(it: ExplosionPrimeEvent) {
         it.fire = false
-        if (!restrictions.explosion.creeperDamage) return@DSLEvent
+        if (!restrictions.explosion.creeperDamage) return
         if (it.entity.type == EntityType.CREEPER) it.radius = 0f
     }
 
     // Placing
-    val bucketEmptyEvent = DSLEvent<PlayerBucketEmptyEvent>(eventListener, plugin) {
+    @EventHandler
+    fun bucketEmptyEvent(it: PlayerBucketEmptyEvent) {
         when (it.bucket) {
             Material.LAVA_BUCKET -> {
                 if (restrictions.place.lava) it.isCancelled = true
@@ -53,7 +55,8 @@ class RestrictionsEvent(
         }
     }
 
-    val blockPlace = DSLEvent<BlockPlaceEvent>(eventListener, plugin) {
+    @EventHandler
+    fun blockPlace(it: BlockPlaceEvent) {
         when (it.blockPlaced.type) {
             Material.TNT -> {
                 if (restrictions.place.tnt) it.isCancelled = true
@@ -71,7 +74,8 @@ class RestrictionsEvent(
         }
     }
 
-    val blockFromTo = DSLEvent<BlockFromToEvent>(eventListener, plugin) {
+    @EventHandler
+    fun blockFromTo(it: BlockFromToEvent) {
         when (it.block.type) {
             Material.LAVA -> {
                 if (restrictions.spread.lava) it.isCancelled = true
@@ -85,16 +89,19 @@ class RestrictionsEvent(
         }
     }
 
-    val blockIgniteEvent = DSLEvent<BlockIgniteEvent>(eventListener, plugin) {
-        if (it.cause == BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL) return@DSLEvent
+    @EventHandler
+    fun blockIgniteEvent(it: BlockIgniteEvent) {
+        if (it.cause == BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL) return
         if (restrictions.spread.fire) it.isCancelled = true
     }
 
-    val blockBurnEvent = DSLEvent<BlockBurnEvent>(eventListener, plugin) {
+    @EventHandler
+    fun blockBurnEvent(it: BlockBurnEvent) {
         if (restrictions.spread.fire) it.isCancelled = true
     }
 
-    val blockSpread = DSLEvent<BlockSpreadEvent>(eventListener, plugin) {
+    @EventHandler
+    fun blockSpread(it: BlockSpreadEvent) {
         when (it.source.type) {
             Material.LAVA -> {
                 if (restrictions.spread.lava) it.isCancelled = true

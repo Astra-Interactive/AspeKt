@@ -1,19 +1,20 @@
 package ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller
 
 import github.scarsz.discordsrv.dependencies.jda.api.entities.User
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.di.RoleControllerDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.astralibs.async.AsyncComponent
+import ru.astrainteractive.astralibs.async.CoroutineFeature
 import java.util.UUID
 
 internal class AddMoneyController(
     module: RoleControllerDependencies,
 ) : RoleController,
     RoleControllerDependencies by module,
-    AsyncComponent() {
+    CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO) {
     private val logger = java.util.logging.Logger.getLogger("AddMoneyController")
 
     private val configuration: PluginConfiguration.DiscordSRVLink
@@ -30,7 +31,13 @@ internal class AddMoneyController(
         logger.info("Игроку ${player.name} выдано ${configuration.moneyForLink} за линковку с дискордом")
         tempFileConfiguration.set(key, true)
         tempFileConfiguration.save(tempFile)
-        launch { economyProvider?.addMoney(uuid, configuration.moneyForLink.toDouble()) }
+        launch {
+            val economyProvider = when (val currencyId = configuration.currencyId) {
+                null -> currencyEconomyProviderFactory.findDefault()
+                else -> currencyEconomyProviderFactory.findByCurrencyId(currencyId)
+            }
+            economyProvider?.addMoney(uuid, configuration.moneyForLink.toDouble())
+        }
         translation.general.discordLinkReward(configuration.moneyForLink)
             .let(kyoriComponentSerializer::toComponent)
             .run(player::sendMessage)

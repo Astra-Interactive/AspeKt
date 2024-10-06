@@ -15,7 +15,7 @@ import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
-import ru.astrainteractive.astralibs.economy.EconomyProvider
+import ru.astrainteractive.astralibs.economy.EconomyFacade
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.menu.holder.DefaultPlayerHolder
 import ru.astrainteractive.astralibs.menu.holder.PlayerHolder
@@ -27,13 +27,11 @@ import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setI
 import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setOnClickListener
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
 import ru.astrainteractive.astralibs.string.StringDesc
-import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.getValue
 
 @Suppress("TooManyFunctions")
 internal class MenuGui(
     player: Player,
-    private val economyProvider: EconomyProvider?,
+    private val economyProvider: EconomyFacade?,
     private val translation: PluginTranslation,
     private val menuModel: MenuModel,
     private val dispatchers: BukkitDispatchers,
@@ -44,11 +42,10 @@ internal class MenuGui(
     override val playerHolder: PlayerHolder = DefaultPlayerHolder(player)
 
     @Suppress("VariableNaming")
-    private val PLACEHOLDERS by Provider {
-        mapOf(
+    private val PLACEHOLDERS: Map<String, String>
+        get() = mapOf(
             "{PLAYER}" to playerHolder.player.name
         )
-    }
 
     override fun onInventoryCreated() {
         render()

@@ -4,10 +4,9 @@ import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateController
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.getValue
 
 internal interface AdminPrivateDependencies {
     val eventListener: EventListener
@@ -22,9 +21,7 @@ internal interface AdminPrivateDependencies {
     ) : AdminPrivateDependencies {
 
         override val eventListener: EventListener = coreModule.eventListener
-        override val plugin: JavaPlugin by Provider {
-            coreModule.plugin.value
-        }
+        override val plugin: JavaPlugin = coreModule.plugin
         override val translation: PluginTranslation by coreModule.translation
         override val kyoriComponentSerializer by coreModule.kyoriComponentSerializer
     }

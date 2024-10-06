@@ -7,8 +7,8 @@ import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouterImpl
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.klibs.kdi.Provider
-import ru.astrainteractive.klibs.kdi.Reloadable
+import ru.astrainteractive.klibs.kstorage.api.MutableKrate
+import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 
 interface MenuModule {
     val lifecycle: Lifecycle
@@ -16,23 +16,25 @@ interface MenuModule {
     class Default(
         private val coreModule: CoreModule
     ) : MenuModule {
-        private val menuModels: Reloadable<List<MenuModel>> = Reloadable {
-            MenuModelsFactory(
-                coreModule.plugin.value.dataFolder,
-                coreModule.yamlFormat
-            ).create()
-        }
+        private val menuModels: MutableKrate<List<MenuModel>> = DefaultMutableKrate(
+            loader = {
+                MenuModelsFactory(
+                    coreModule.plugin.dataFolder,
+                    coreModule.yamlFormat
+                ).create()
+            },
+            factory = { emptyList() }
+        )
 
-        private val menuRouter: Provider<MenuRouter> = Provider {
-            MenuRouterImpl(coreModule)
-        }
+        private val menuRouter: MenuRouter
+            get() = MenuRouterImpl(coreModule)
 
         private val menuCommandFactory = MenuCommandFactory(
-            plugin = coreModule.plugin.value,
+            plugin = coreModule.plugin,
             kyoriComponentSerializer = coreModule.kyoriComponentSerializer,
-            menuModelProvider = { menuModels.value },
-            translationProvider = { coreModule.translation.value },
-            menuRouter = { menuRouter.provide() }
+            menuModelProvider = menuModels,
+            translationProvider = coreModule.translation,
+            menuRouterProvider = { menuRouter }
         )
 
         override val lifecycle: Lifecycle by lazy {
@@ -41,7 +43,7 @@ interface MenuModule {
                     menuCommandFactory.create()
                 },
                 onReload = {
-                    menuModels.reload()
+                    menuModels.loadAndGet()
                 }
             )
         }

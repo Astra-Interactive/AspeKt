@@ -5,9 +5,9 @@ import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateController
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.klibs.kdi.getValue
 
 internal interface AdminPrivateCommandDependencies {
     val plugin: JavaPlugin
@@ -21,7 +21,7 @@ internal interface AdminPrivateCommandDependencies {
         coreModule: CoreModule,
         override val adminPrivateController: AdminPrivateController
     ) : AdminPrivateCommandDependencies {
-        override val plugin: JavaPlugin by coreModule.plugin
+        override val plugin: JavaPlugin = coreModule.plugin
         override val scope: CoroutineScope = coreModule.scope
         override val translation: PluginTranslation by coreModule.translation
         override val dispatchers: BukkitDispatchers = coreModule.dispatchers

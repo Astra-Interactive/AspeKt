@@ -13,9 +13,9 @@ internal interface EconomyCommandModule {
         databaseModule: EconomyDatabaseModule
     ) : EconomyCommandModule {
         private val econCommandRegistry = EkonCommandRegistry(
-            plugin = coreModule.plugin.value,
-            getTranslation = { coreModule.translation.value },
-            getKyori = { coreModule.kyoriComponentSerializer.value },
+            plugin = coreModule.plugin,
+            getTranslation = { coreModule.translation.cachedValue },
+            getKyori = { coreModule.kyoriComponentSerializer.cachedValue },
             dao = databaseModule.economyDao,
             cachedDao = databaseModule.cachedDao
         )
