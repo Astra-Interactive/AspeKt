@@ -20,9 +20,9 @@ internal class AdminPrivateRepositoryImpl(
         stringFormat = stringFormat
     )
 
-    override suspend fun getAllChunks(): List<AdminChunk> = mutex.withLock {
+    override suspend fun getAllChunks(): List<AdminChunk> {
         val rootConfig = krate.cachedValue
-        rootConfig.chunks.map { it.value }
+        return rootConfig.chunks.map { it.value }
     }
 
     override suspend fun getChunk(chunk: AdminChunk): AdminChunk = mutex.withLock {

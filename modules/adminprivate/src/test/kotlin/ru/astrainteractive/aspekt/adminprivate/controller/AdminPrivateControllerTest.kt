@@ -9,7 +9,6 @@ import ru.astrainteractive.aspekt.module.adminprivate.data.AdminPrivateRepositor
 import ru.astrainteractive.aspekt.module.adminprivate.model.AdminChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
-import ru.astrainteractive.klibs.mikro.core.dispatchers.DefaultKotlinDispatchers
 import java.io.File
 import java.util.UUID
 import kotlin.random.Random
@@ -39,7 +38,6 @@ internal class AdminPrivateControllerTest {
         override val repository: AdminPrivateRepository =
             AdminPrivateRepositoryImpl(
                 file = tempFile.resolve(UUID.randomUUID().toString()),
-                dispatchers = DefaultKotlinDispatchers,
                 stringFormat = YamlStringFormat()
             )
     }
