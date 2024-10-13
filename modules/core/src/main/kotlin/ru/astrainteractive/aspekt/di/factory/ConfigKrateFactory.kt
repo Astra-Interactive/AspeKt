@@ -9,7 +9,7 @@ import ru.astrainteractive.klibs.kstorage.api.impl.DefaultStateFlowMutableKrate
 import ru.astrainteractive.klibs.kstorage.api.value.ValueFactory
 import java.io.File
 
-object ConfigKrateFactory : Logger by JUtiltLogger("AstraRating-ConfigKrateFactory") {
+object ConfigKrateFactory : Logger by JUtiltLogger("AstraMarket-ConfigKrateFactory") {
     inline fun <reified T> create(
         fileNameWithoutExtension: String,
         stringFormat: StringFormat,
@@ -20,16 +20,18 @@ object ConfigKrateFactory : Logger by JUtiltLogger("AstraRating-ConfigKrateFacto
             factory = factory,
             loader = {
                 val file = dataFolder.resolve("$fileNameWithoutExtension.yml")
-                val defaultFile = dataFolder.resolve("$fileNameWithoutExtension.default.yml")
                 stringFormat.parse<T>(file)
                     .onFailure {
-                        defaultFile.createNewFile()
-                        stringFormat.writeIntoFile(factory.create(), defaultFile)
+                        stringFormat.writeIntoFile(
+                            value = factory.create(),
+                            file = when {
+                                !file.exists() || file.length() == 0L -> file
+                                else -> dataFolder.resolve("$fileNameWithoutExtension.default.yml")
+                            }
+                        )
                         error { "Could not read $fileNameWithoutExtension.yml! Loaded default. Error -> ${it.message}" }
                     }
-                    .onSuccess {
-                        stringFormat.writeIntoFile(it, file)
-                    }
+                    .onSuccess { stringFormat.writeIntoFile(it, file) }
                     .getOrElse { factory.create() }
             }
         )

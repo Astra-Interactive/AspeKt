@@ -9,14 +9,14 @@ abstract class ScheduledJob(val key: String) {
     protected abstract val isEnabled: Boolean
     protected abstract fun execute()
 
-    fun onEnable() {
+    open fun onEnable() {
         if (!isEnabled) return
         scheduler = kotlin.concurrent.timer(key, false, initialDelayMillis, delayMillis) {
             execute()
         }
     }
 
-    fun onDisable() {
+    open fun onDisable() {
         scheduler?.cancel()
         scheduler = null
     }

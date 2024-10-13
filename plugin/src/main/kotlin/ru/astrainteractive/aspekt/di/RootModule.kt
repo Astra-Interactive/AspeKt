@@ -15,6 +15,7 @@ import ru.astrainteractive.aspekt.module.menu.di.MenuModule
 import ru.astrainteractive.aspekt.module.moneyadvancement.di.MoneyAdvancementModule
 import ru.astrainteractive.aspekt.module.moneydrop.di.MoneyDropModule
 import ru.astrainteractive.aspekt.module.newbee.di.NewBeeModule
+import ru.astrainteractive.aspekt.module.souls.di.SoulsModule
 import ru.astrainteractive.aspekt.module.towny.discord.di.TownyDiscordModule
 
 interface RootModule {
@@ -35,4 +36,5 @@ interface RootModule {
     val moneyAdvancementModule: MoneyAdvancementModule
     val chatGameModule: ChatGameModule
     val economyModule: EconomyModule
+    val soulsModule: SoulsModule
 }
