@@ -45,6 +45,7 @@ dependencies {
     implementation(projects.modules.antiswear)
     implementation(projects.modules.chatgame)
     implementation(projects.modules.economy)
+    implementation(projects.modules.souls)
 }
 val destination = File(")/home/makeevrserg/Desktop/server/data/plugins")
     .takeIf(File::exists)
