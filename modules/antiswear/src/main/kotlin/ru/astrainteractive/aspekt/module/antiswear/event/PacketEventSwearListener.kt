@@ -19,8 +19,8 @@ internal class PacketEventSwearListener(
     Logger by JUtiltLogger("AspeKt-PacketEventSwearListener") {
 
     override fun onPacketReceive(event: PacketReceiveEvent?) {
-        val user = event?.user ?: return
-        val player = Bukkit.getPlayer(user.uuid) ?: return
+        val uuid = event?.user?.uuid ?: return
+        val player = Bukkit.getPlayer(uuid) ?: return
 
         if (event.packetType == PacketType.Play.Client.CHAT_MESSAGE) {
             if (!swearRepository.isSwearFilterEnabled(player)) return
@@ -33,8 +33,8 @@ internal class PacketEventSwearListener(
     }
 
     override fun onPacketSend(event: PacketSendEvent?) {
-        val user = event?.user ?: return
-        val player = Bukkit.getPlayer(user.uuid) ?: return
+        val uuid = event?.user?.uuid ?: return
+        val player = Bukkit.getPlayer(uuid) ?: return
 
         when (event.packetType) {
             PacketType.Play.Server.SYSTEM_CHAT_MESSAGE -> {
@@ -42,6 +42,7 @@ internal class PacketEventSwearListener(
                 val wrapper = WrapperPlayServerSystemChatMessage(event)
                 wrapper.message = wrapper.message.replaceText(SwearRuRegex.REPLACEMENT_CONFIG)
             }
+
             PacketType.Play.Server.CHAT_MESSAGE -> {
                 if (!swearRepository.isSwearFilterEnabled(player)) return
                 val wrapper = WrapperPlayServerChatMessage(event)
