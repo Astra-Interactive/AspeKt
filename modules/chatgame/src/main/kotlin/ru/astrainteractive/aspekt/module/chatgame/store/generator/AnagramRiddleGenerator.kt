@@ -22,7 +22,7 @@ internal class AnagramRiddleGenerator(
         }
 
     fun generate(instance: ChatGame.Anagram): ChatGameData {
-        val word = instance.words[lastAnagramIndex % instance.words.size]
+        val word = instance.words[++lastAnagramIndex % instance.words.size]
         val anagram: String = buildString {
             word.indices.shuffled().forEach { i ->
                 this.append(word[i])

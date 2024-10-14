@@ -1,6 +1,7 @@
 package ru.astrainteractive.aspekt.module.antiswear.event
 
 import io.papermc.paper.event.player.AsyncChatEvent
+import io.papermc.paper.event.player.ChatEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -22,7 +23,16 @@ internal class AntiSwearEventListener(
 ) : EventListener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    fun onMessage(e: AsyncChatEvent) {
+    fun onAsyncChatEvent(e: AsyncChatEvent) {
+        val swearRenderer = SwearRenderer(
+            renderer = e.renderer(),
+            swearRepository = swearRepository
+        )
+        e.renderer(swearRenderer)
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    fun onChatEvent(e: ChatEvent) {
         val swearRenderer = SwearRenderer(
             renderer = e.renderer(),
             swearRepository = swearRepository
