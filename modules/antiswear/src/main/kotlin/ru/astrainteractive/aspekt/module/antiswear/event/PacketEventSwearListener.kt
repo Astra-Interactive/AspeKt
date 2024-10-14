@@ -21,9 +21,9 @@ internal class PacketEventSwearListener(
     override fun onPacketReceive(event: PacketReceiveEvent?) {
         val uuid = event?.user?.uuid ?: return
         val player = Bukkit.getPlayer(uuid) ?: return
+        if (!swearRepository.isSwearFilterEnabled(player)) return
 
         if (event.packetType == PacketType.Play.Client.CHAT_MESSAGE) {
-            if (!swearRepository.isSwearFilterEnabled(player)) return
             val wrapper = WrapperPlayClientChatMessage(event)
             wrapper.message = wrapper.message.replace(
                 regex = SwearRuRegex.SWEAR_REGEX,
@@ -35,16 +35,15 @@ internal class PacketEventSwearListener(
     override fun onPacketSend(event: PacketSendEvent?) {
         val uuid = event?.user?.uuid ?: return
         val player = Bukkit.getPlayer(uuid) ?: return
+        if (!swearRepository.isSwearFilterEnabled(player)) return
 
         when (event.packetType) {
             PacketType.Play.Server.SYSTEM_CHAT_MESSAGE -> {
-                if (!swearRepository.isSwearFilterEnabled(player)) return
                 val wrapper = WrapperPlayServerSystemChatMessage(event)
                 wrapper.message = wrapper.message.replaceText(SwearRuRegex.REPLACEMENT_CONFIG)
             }
 
             PacketType.Play.Server.CHAT_MESSAGE -> {
-                if (!swearRepository.isSwearFilterEnabled(player)) return
                 val wrapper = WrapperPlayServerChatMessage(event)
                 wrapper.message.chatContent = wrapper.message.chatContent.replaceText(SwearRuRegex.REPLACEMENT_CONFIG)
             }
