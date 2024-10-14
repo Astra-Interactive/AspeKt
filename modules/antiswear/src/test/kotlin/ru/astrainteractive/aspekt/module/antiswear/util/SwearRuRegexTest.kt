@@ -12,9 +12,9 @@ class SwearRuRegexTest {
 
     @Test
     fun GIVEN_swear_WHEN_regex_THEN_match() {
-        assert(SwearRuRegex.SWEAR_REGEX.toRegex().matches("бля"))
-        assert(SwearRuRegex.SWEAR_REGEX.toRegex().matches("еблан"))
-        assert(!SwearRuRegex.SWEAR_REGEX.toRegex().matches("Привет друг"))
+        assert(SwearRuRegex.SWEAR_REGEX.matches("бля"))
+        assert(SwearRuRegex.SWEAR_REGEX.matches("еблан"))
+        assert(!SwearRuRegex.SWEAR_REGEX.matches("Привет друг"))
     }
 
     @Test
