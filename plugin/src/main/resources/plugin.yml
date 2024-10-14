@@ -7,7 +7,7 @@ authors: [ "${authors}" ]
 author: "${author}"
 website: "${url}"
 api-version: 1.18
-softdepend: [ DiscordSRV, LuckPerms, Vault, Esssentials, Towny, PlaceholderAPI ]
+softdepend: [ DiscordSRV, LuckPerms, Vault, Esssentials, Towny, PlaceholderAPI, packetevents ]
 depend: [ ]
 loadbefore: [ Towny ]
 libraries:

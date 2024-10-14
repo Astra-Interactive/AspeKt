@@ -29,6 +29,7 @@ minecraft-mockbukkit = "3.129.1" #https://github.com/MockBukkit/MockBukkit
 minecraft-luckperms = "5.4" # https://github.com/LuckPerms/LuckPerms
 minecraft-essentialsx = "2.20.1" # https://github.com/EssentialsX/Essentials
 minecraft-towny = "0.100.4.3" # https://github.com/TownyAdvanced/Towny
+minecraft-packetevents = "2.5.0" # https://github.com/retrooper/packetevents
 
 # Shadow
 gradle-shadow = "8.0.0" # https://github.com/johnrengelman/shadow
@@ -88,7 +89,7 @@ minecraft-papi = { module = "me.clip:placeholderapi", version.ref = "minecraft-p
 minecraft-vaultapi = { module = "com.github.MilkBowl:VaultAPI", version.ref = "minecraft-vault" }
 minecraft-bstats = { module = "org.bstats:bstats-bukkit", version.ref = "minecraft-bstats" }
 minecraft-mockbukkit = { module = "com.github.MockBukkit:MockBukkit", version.ref = "minecraft-mockbukkit" }
-
+minecraft-packetevents = { module = "com.github.retrooper:packetevents-spigot", version.ref = "minecraft-packetevents" }
 minecraft-discordsrv = { module = "com.discordsrv:discordsrv", version.ref = "discordsrv" }
 
 minecraft-luckperms = { module = "net.luckperms:api", version.ref = "minecraft-luckperms" }
