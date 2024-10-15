@@ -18,10 +18,13 @@ import org.bukkit.event.block.BlockExplodeEvent
 import org.bukkit.event.block.BlockFromToEvent
 import org.bukkit.event.block.BlockIgniteEvent
 import org.bukkit.event.block.BlockPistonEvent
+import org.bukkit.event.block.BlockPistonExtendEvent
+import org.bukkit.event.block.BlockPistonRetractEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.block.BlockSpreadEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.entity.EntitySpawnEvent
 import org.bukkit.event.entity.ExplosionPrimeEvent
 import org.bukkit.event.hanging.HangingBreakByEntityEvent
@@ -163,7 +166,7 @@ internal class AdminPrivateEvent(
     }
 
     @EventHandler
-    fun onEntityExplode(e: BlockExplodeEvent) {
+    fun onEntityExplode(e: EntityExplodeEvent) {
         e.blockList().forEach { block ->
             handleDefault(
                 retractKey = RetractKey.Vararg(block.chunk, "onEntityExplode"),
@@ -302,8 +305,7 @@ internal class AdminPrivateEvent(
         }
     }
 
-    @EventHandler
-    fun pistonEvent(e: BlockPistonEvent) {
+    private fun pistonEvent(e: BlockPistonEvent) {
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.location.chunk, "BlockPistonEvent"),
             e = e,
@@ -311,5 +313,15 @@ internal class AdminPrivateEvent(
             player = null,
             flag = ChunkFlag.PLACE
         )
+    }
+
+    @EventHandler
+    fun onBlockPistonExtendEvent(e: BlockPistonExtendEvent) {
+        pistonEvent(e)
+    }
+
+    @EventHandler
+    fun onBlockPistonRetractEvent(e: BlockPistonRetractEvent) {
+        pistonEvent(e)
     }
 }
