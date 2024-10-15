@@ -10,6 +10,7 @@ import org.bukkit.entity.Monster
 import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
+import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockBurnEvent
@@ -66,6 +67,7 @@ internal class AdminPrivateEvent(
         }
     }
 
+    @EventHandler
     fun blockBreakEvent(e: BlockBreakEvent) {
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.chunk, e.player, "blockBreakEvent"),
@@ -76,6 +78,7 @@ internal class AdminPrivateEvent(
         )
     }
 
+    @EventHandler
     fun blockPlaceEvent(e: BlockPlaceEvent) {
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.chunk, e.player, "blockPlaceEvent"),
@@ -86,6 +89,7 @@ internal class AdminPrivateEvent(
         )
     }
 
+    @EventHandler
     fun interactEvent(e: PlayerInteractEvent) {
         val location = e.interactionPoint ?: e.player.location
         if (e.action == Action.LEFT_CLICK_AIR) return
@@ -99,6 +103,7 @@ internal class AdminPrivateEvent(
         )
     }
 
+    @EventHandler
     fun itemFrameEvent(e: PlayerItemFrameChangeEvent) {
         handleDefault(
             retractKey = RetractKey.Vararg(e.player.location, e.player, "itemFrameEvent"),
@@ -109,6 +114,7 @@ internal class AdminPrivateEvent(
         )
     }
 
+    @EventHandler
     fun breakItemFrameEvent(e: HangingBreakByEntityEvent) {
         handleDefault(
             retractKey = RetractKey.Vararg(e.entity.location, e.entity, "breakItemFrameEvent"),
@@ -119,6 +125,7 @@ internal class AdminPrivateEvent(
         )
     }
 
+    @EventHandler
     fun armorStandEvent(e: PlayerArmorStandManipulateEvent) {
         handleDefault(
             retractKey = RetractKey.Vararg(e.player.location, e.player, "armorStandEvent"),
@@ -129,6 +136,7 @@ internal class AdminPrivateEvent(
         )
     }
 
+    @EventHandler
     fun armorStandBreakEvent(e: EntityDamageByEntityEvent) {
         val armorStand = e.entity as? ArmorStand ?: return
         handleDefault(
@@ -141,6 +149,7 @@ internal class AdminPrivateEvent(
     }
 
     // Explosions
+    @EventHandler
     fun onBlockExplode(e: BlockExplodeEvent) {
         e.blockList().forEach { block ->
             handleDefault(
@@ -153,6 +162,7 @@ internal class AdminPrivateEvent(
         }
     }
 
+    @EventHandler
     fun onEntityExplode(e: BlockExplodeEvent) {
         e.blockList().forEach { block ->
             handleDefault(
@@ -165,6 +175,7 @@ internal class AdminPrivateEvent(
         }
     }
 
+    @EventHandler
     fun onPrimeExplosion(e: ExplosionPrimeEvent) {
         handleDefault(
             retractKey = RetractKey.Vararg(e.entity.location.chunk, "onPrimeExplosion"),
@@ -176,6 +187,7 @@ internal class AdminPrivateEvent(
     }
 
     // Placing
+    @EventHandler
     fun onBucketEmptyEvent(e: PlayerBucketEmptyEvent) {
         handleDefault(
             retractKey = RetractKey.Vararg(e.blockClicked.location.chunk, "onBucketEmptyEvent"),
@@ -186,6 +198,7 @@ internal class AdminPrivateEvent(
         )
     }
 
+    @EventHandler
     fun onTntLavaPlace(e: BlockPlaceEvent) {
         if (!listOf(Material.TNT, Material.LAVA, Material.LAVA_BUCKET).contains(e.blockPlaced.type)) return
         handleDefault(
@@ -197,6 +210,7 @@ internal class AdminPrivateEvent(
         )
     }
 
+    @EventHandler
     fun onBlockFromTo(e: BlockFromToEvent) {
         if (!listOf(Material.LAVA, Material.LAVA_BUCKET).contains(e.block.type)) return
         handleDefault(
@@ -208,6 +222,7 @@ internal class AdminPrivateEvent(
         )
     }
 
+    @EventHandler
     fun onBlockIgniteEvent(e: BlockIgniteEvent) {
         val location = (e.ignitingBlock ?: e.block).location
         handleDefault(
@@ -219,6 +234,7 @@ internal class AdminPrivateEvent(
         )
     }
 
+    @EventHandler
     fun onBlockBurnEvent(e: BlockBurnEvent) {
         val location = (e.ignitingBlock ?: e.block).location
         handleDefault(
@@ -230,6 +246,7 @@ internal class AdminPrivateEvent(
         )
     }
 
+    @EventHandler
     fun onBlockSpread(e: BlockSpreadEvent) {
         if (!listOf(Material.LAVA, Material.FIRE).contains(e.block.type)) return
         handleDefault(
@@ -241,6 +258,7 @@ internal class AdminPrivateEvent(
         )
     }
 
+    @EventHandler
     fun playerDamageEvent(e: EntityDamageEvent) {
         val player = e.entity as? Player ?: return
         handleDefault(
@@ -252,6 +270,7 @@ internal class AdminPrivateEvent(
         )
     }
 
+    @EventHandler
     fun entitySpawnEvent(e: EntitySpawnEvent) {
         if (e.entity !is Monster || e.entity !is Enemy) return
         handleDefault(
@@ -263,6 +282,7 @@ internal class AdminPrivateEvent(
         )
     }
 
+    @EventHandler
     fun portalCreateEvent(e: PortalCreateEvent) {
         val chunks = e.blocks
             .map(BlockState::getLocation)
@@ -282,6 +302,7 @@ internal class AdminPrivateEvent(
         }
     }
 
+    @EventHandler
     fun pistonEvent(e: BlockPistonEvent) {
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.location.chunk, "BlockPistonEvent"),
