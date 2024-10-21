@@ -15,11 +15,9 @@ dependencies {
     annotationProcessor(libs.minecraft.velocity.api)
     // AstraLibs
     implementation(libs.minecraft.astralibs.core)
-    implementation(libs.minecraft.astralibs.orm)
     // Test
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
-    testImplementation(libs.minecraft.mockbukkit)
 }
 
 buildConfig {

@@ -12,7 +12,6 @@ dependencies {
     compileOnly(libs.minecraft.vaultapi)
     // AstraLibs
     implementation(libs.minecraft.astralibs.core)
-    implementation(libs.minecraft.astralibs.orm)
     api(libs.klibs.kstorage)
     implementation(libs.klibs.mikro.core)
     implementation(libs.klibs.mikro.core)
