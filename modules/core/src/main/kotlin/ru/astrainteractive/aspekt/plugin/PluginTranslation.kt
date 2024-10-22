@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.astralibs.string.StringDescExt.replace
 import java.text.DecimalFormat
+import kotlin.time.Duration
 
 /**
  * All translation stored here
@@ -28,8 +29,60 @@ class PluginTranslation(
     @SerialName("chat_game")
     val chatGame: ChatGame = ChatGame(),
     @SerialName("economy")
-    val economy: Economy = Economy()
+    val economy: Economy = Economy(),
+    @SerialName("souls")
+    val souls: Souls = Souls()
 ) {
+    @Serializable
+    data class Souls(
+        private val daysAgoFormat: StringDesc.Raw = StringDesc.Raw("%time% дней назад"),
+        private val hoursAgoFormat: StringDesc.Raw = StringDesc.Raw("%time% часов назад"),
+        private val minutesAgoFormat: StringDesc.Raw = StringDesc.Raw("%time% минут назад"),
+        private val monthsAgoFormat: StringDesc.Raw = StringDesc.Raw("%time% месяцеев назад"),
+        private val secondsAgoFormat: StringDesc.Raw = StringDesc.Raw("%time% секунд назад"),
+        private val noSoulsOnPage: StringDesc.Raw = StringDesc.Raw("&#db2c18Нет душ на странице %page%"),
+        private val listingFormat: StringDesc.Raw = StringDesc.Raw(
+            "&#b8b8b8%index%. &#d1a71d%owner% &#b8b8b8(%time_ago%) &#b8b8b8(%x%; %y%; %z%)"
+        ),
+        val listSoulsTitle: StringDesc.Raw = StringDesc.Raw("&#42f596Список видимых вам душ:"),
+        val freeSoul: StringDesc.Raw = StringDesc.Raw("&#b50b05[ОСВОБОДИТЬ]"),
+        val teleportToSoul: StringDesc.Raw = StringDesc.Raw("&#1db2b8[ТЕЛЕПОРТИРОВАТЬСЯ]"),
+        val soulFreed: StringDesc.Raw = StringDesc.Raw("&#42f596Душа теперь свободна!"),
+        val couldNotFreeSoul: StringDesc.Raw = StringDesc.Raw("&#db2c18Не удалось освободить душу!")
+    ) {
+        fun listingFormat(
+            index: Int,
+            owner: String,
+            timeAgo: String,
+            x: Int,
+            y: Int,
+            z: Int
+        ) = listingFormat
+            .replace("%index%", "$index")
+            .replace("%owner%", owner)
+            .replace("%time_ago%", timeAgo)
+            .replace("%x%", "$x")
+            .replace("%y%", "$y")
+            .replace("%z%", "$z")
+
+        fun noSoulsOnPage(page: Int) = noSoulsOnPage
+            .replace("%page%", page.toString())
+
+        fun daysAgoFormat(time: Duration) = daysAgoFormat
+            .replace("%time%", time.inWholeDays.toString())
+
+        fun hoursAgoFormat(time: Duration) = hoursAgoFormat
+            .replace("%time%", time.inWholeHours.toString())
+
+        fun minutesAgoFormat(time: Duration) = minutesAgoFormat
+            .replace("%time%", time.inWholeMinutes.toString())
+
+        fun monthsAgoFormat(time: Duration) = monthsAgoFormat
+            .replace("%time%", time.inWholeDays.div(30).toString())
+
+        fun secondsAgoFormat(time: Duration) = secondsAgoFormat
+            .replace("%time%", time.inWholeSeconds.toString())
+    }
 
     @Serializable
     class Economy(
@@ -107,6 +160,7 @@ class PluginTranslation(
             "%money%",
             DecimalFormat("0.00").format(money)
         )
+
         fun goalCompleted(money: Number) = goalCompleted.replace("%money%", DecimalFormat("0.00").format(money))
         fun taskCompleted(money: Number) = taskCompleted.replace("%money%", DecimalFormat("0.00").format(money))
     }
