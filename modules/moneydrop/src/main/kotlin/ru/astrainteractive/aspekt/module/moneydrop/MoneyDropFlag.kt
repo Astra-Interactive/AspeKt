@@ -13,7 +13,7 @@ internal object MoneyDropFlag {
         PersistentDataType.DOUBLE
     )
 
-    data object CurrencyId : BukkitConstant<String?, String?> by BukkitConstant(
+    data object CurrencyId : BukkitConstant<String, String> by BukkitConstant(
         "esmp",
         "currency_id",
         PersistentDataType.STRING

@@ -13,7 +13,7 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.async.CoroutineFeature
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.persistence.Persistence.getPersistentData
+import ru.astrainteractive.astralibs.persistence.Persistence.getPersistentDataOrNull
 import ru.astrainteractive.astralibs.persistence.Persistence.hasPersistentData
 import ru.astrainteractive.astralibs.persistence.Persistence.setPersistentDataType
 import ru.astrainteractive.klibs.kstorage.api.Krate
@@ -56,7 +56,9 @@ internal class MoneyDropController(
             it.displayName(name)
             it.setPersistentDataType(MoneyDropFlag.Flag, true)
             it.setPersistentDataType(MoneyDropFlag.Amount, amount)
-            it.setPersistentDataType(MoneyDropFlag.CurrencyId, entry.currencyId)
+            entry.currencyId?.let { currencyId ->
+                it.setPersistentDataType(MoneyDropFlag.CurrencyId, currencyId)
+            }
         }
         val item = withContext(dispatchers.Main) { location.world.dropItemNaturally(location, itemStack) }
         item.customName(name)
@@ -65,15 +67,15 @@ internal class MoneyDropController(
 
     fun isMoneyDropItem(itemStack: ItemStack): Boolean {
         if (!itemStack.itemMeta.hasPersistentData(MoneyDropFlag.Flag)) return false
-        return itemStack.itemMeta.getPersistentData(MoneyDropFlag.Flag) ?: false
+        return itemStack.itemMeta.getPersistentDataOrNull(MoneyDropFlag.Flag) ?: false
     }
 
     fun getMoneyAmount(itemStack: ItemStack): Double? {
-        return itemStack.itemMeta.getPersistentData(MoneyDropFlag.Amount)
+        return itemStack.itemMeta.getPersistentDataOrNull(MoneyDropFlag.Amount)
     }
 
     fun getMoneyCurrency(itemStack: ItemStack): String? {
-        return itemStack.itemMeta.getPersistentData(MoneyDropFlag.CurrencyId)
+        return itemStack.itemMeta.getPersistentDataOrNull(MoneyDropFlag.CurrencyId)
     }
 
     fun tryDrop(location: Location, from: String) = launch {

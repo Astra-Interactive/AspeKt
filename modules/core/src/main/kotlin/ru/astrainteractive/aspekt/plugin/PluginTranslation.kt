@@ -141,11 +141,11 @@ class PluginTranslation(
         val maybeTpr: StringDesc.Raw = StringDesc.Raw("&#db2c18Возможно, вы хотели ввести /tpr")
     ) {
 
-        fun discordLinkReward(amount: Number): StringDesc.Raw {
+        fun discordLinkReward(amount: Number): StringDesc {
             return discordLinkReward.replace("{AMOUNT}", DecimalFormat("0.00").format(amount))
         }
 
-        fun pickedUpMoney(amount: Number): StringDesc.Raw {
+        fun pickedUpMoney(amount: Number): StringDesc {
             return pickedUpMoney
                 .replace("{AMOUNT}", DecimalFormat("0.00").format(amount))
         }
@@ -169,7 +169,7 @@ class PluginTranslation(
             "&#db2c18Ошибка! Действией %action% заблокировано на этом чанке!"
         ),
     ) {
-        fun actionIsBlockByAdminClaim(action: String): StringDesc.Raw {
+        fun actionIsBlockByAdminClaim(action: String): StringDesc {
             return actionIsBlockByAdminClaim.replace("%action%", action)
         }
     }

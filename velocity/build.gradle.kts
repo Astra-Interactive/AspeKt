@@ -1,10 +1,11 @@
 
 import ru.astrainteractive.gradleplugin.property.extension.ModelPropertyValueExt.requireProjectInfo
-import ru.astrainteractive.gradleplugin.setupVelocityProcessor
 
 plugins {
     kotlin("jvm")
     alias(libs.plugins.gradle.buildconfig)
+    alias(libs.plugins.klibs.minecraft.shadow)
+    alias(libs.plugins.klibs.minecraft.resource.processor)
 }
 
 dependencies {
@@ -15,7 +16,6 @@ dependencies {
     annotationProcessor(libs.minecraft.velocity.api)
     // AstraLibs
     implementation(libs.minecraft.astralibs.core)
-    implementation(libs.minecraft.astralibs.orm)
     // Test
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
@@ -37,4 +37,6 @@ buildConfig {
     buildConfigStringField("author", requireProjectInfo.developersList.first().id)
 }
 
-setupVelocityProcessor()
+minecraftProcessResource {
+    velocity()
+}
