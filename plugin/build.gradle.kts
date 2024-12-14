@@ -46,7 +46,7 @@ dependencies {
     implementation(projects.modules.chatgame)
     implementation(projects.modules.economy)
 }
-val destination = File(")/home/makeevrserg/Desktop/server/data/plugins")
+val destination = File("/run/media/makeevrserg/WDGOLD2TB/MinecraftServers/Servers/conf.smp/smp/plugins")
     .takeIf(File::exists)
     ?: File(rootDir, "jars")
 
