@@ -68,6 +68,6 @@ internal class MoneyDropEvent(
 
     @EventHandler
     fun blockPlaceEvent(e: BlockPlaceEvent) {
-        moneyDropController.rememberLocation(e.blockPlaced.location)
+        moneyDropController.rememberLocation(e.blockPlaced.location, e.blockPlaced.type.name)
     }
 }
