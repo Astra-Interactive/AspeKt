@@ -16,7 +16,7 @@ abstract class ScheduledJob(val key: String) {
         }
     }
 
-    fun onDisable() {
+    open fun onDisable() {
         scheduler?.cancel()
         scheduler = null
     }

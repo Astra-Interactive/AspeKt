@@ -4,12 +4,14 @@ import ru.astrainteractive.aspekt.module.economy.command.ekon.argument.CurrencyA
 import ru.astrainteractive.aspekt.module.economy.command.ekon.argument.OfflinePlayerArgument
 import ru.astrainteractive.aspekt.module.economy.database.dao.CachedDao
 import ru.astrainteractive.aspekt.plugin.PluginPermission
-import ru.astrainteractive.astralibs.command.api.argumenttype.PrimitiveArgumentType
+import ru.astrainteractive.astralibs.command.api.argumenttype.DoubleArgumentType
+import ru.astrainteractive.astralibs.command.api.argumenttype.IntArgumentType
+import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContext
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.argumentOrElse
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.requireArgument
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.requirePermission
-import ru.astrainteractive.astralibs.command.api.exception.DefaultCommandException
+import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
 import ru.astrainteractive.astralibs.command.api.parser.CommandParser
 
 internal class EkonCommandParser(
@@ -33,7 +35,7 @@ internal class EkonCommandParser(
                 )
                 val page = commandContext.argumentOrElse(
                     index = 2,
-                    type = PrimitiveArgumentType.Int,
+                    type = IntArgumentType,
                     default = { 0 }
                 )
                 EkonCommand.Model.Top(sender, currency, page)
@@ -63,7 +65,7 @@ internal class EkonCommandParser(
                 )
                 val amount = commandContext.requireArgument(
                     index = 3,
-                    type = PrimitiveArgumentType.Double
+                    type = DoubleArgumentType
                 )
                 if (arg == "set") {
                     EkonCommand.Model.Set(sender, otherPlayer, currency, amount)
@@ -72,7 +74,7 @@ internal class EkonCommandParser(
                 }
             }
 
-            else -> throw DefaultCommandException.BadArgumentException(args.getOrNull(0), PrimitiveArgumentType.String)
+            else -> throw BadArgumentException(args.getOrNull(0), StringArgumentType)
         }
     }
 }

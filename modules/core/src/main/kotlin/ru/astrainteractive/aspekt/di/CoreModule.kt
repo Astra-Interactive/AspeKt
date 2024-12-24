@@ -23,6 +23,7 @@ import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.menu.event.DefaultInventoryClickEvent
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
+import ru.astrainteractive.astralibs.util.fileConfigKrate
 import ru.astrainteractive.klibs.kstorage.api.Krate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 
@@ -60,10 +61,9 @@ interface CoreModule {
             ),
         )
 
-        override val pluginConfig = ConfigKrateFactory.create(
-            fileNameWithoutExtension = "config",
+        override val pluginConfig = fileConfigKrate(
+            file = plugin.dataFolder.resolve("config.yml"),
             stringFormat = yamlFormat,
-            dataFolder = plugin.dataFolder,
             factory = ::PluginConfiguration
         )
 
