@@ -8,7 +8,6 @@ import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.job.ScheduledJob
 import ru.astrainteractive.aspekt.module.autobroadcast.di.AutoBroadcastDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration.Announcements.Announcement.BossBar.*
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.milliseconds
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration.Announcements.Announcement.BossBar.BarColor as AspektBarColor
