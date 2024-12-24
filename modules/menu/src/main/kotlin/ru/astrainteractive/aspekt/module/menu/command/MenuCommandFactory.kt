@@ -30,7 +30,9 @@ internal class MenuCommandFactory(
 
     private fun menu() = plugin.getCommand("menu")?.setExecutor { sender, command, label, args ->
         val command = args.getOrNull(0).orEmpty()
-        val menuModel = menuModels.firstOrNull { it.command == command }
+        val menuModel = menuModels
+            .firstOrNull { it.command == command }
+            ?: menuModels.firstOrNull()
         if (menuModel == null) {
             kyoriComponentSerializer.cachedValue.toComponent(translation.general.menuNotFound)
                 .run(sender::sendMessage)

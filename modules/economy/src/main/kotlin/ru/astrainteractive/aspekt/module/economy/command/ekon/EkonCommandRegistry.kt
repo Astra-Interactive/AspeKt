@@ -9,8 +9,11 @@ import ru.astrainteractive.aspekt.module.economy.database.dao.CachedDao
 import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.astralibs.command.api.exception.ArgumentTypeException
+import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
 import ru.astrainteractive.astralibs.command.api.exception.DefaultCommandException
-import ru.astrainteractive.astralibs.command.api.util.PluginExt.registerCommand
+import ru.astrainteractive.astralibs.command.api.exception.NoPermissionException
+import ru.astrainteractive.astralibs.command.api.util.PluginExt.setCommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
@@ -79,7 +82,7 @@ internal class EkonCommandRegistry(
 
     fun register() {
         adminPrivateCompleter()
-        plugin.registerCommand(
+        plugin.setCommandExecutor(
             alias = EkonCommand.ALIAS,
             commandParser = EkonCommandParser(
                 cachedDao = cachedDao
@@ -93,16 +96,20 @@ internal class EkonCommandRegistry(
                 when (throwable) {
                     is DefaultCommandException -> with(kyori) {
                         when (throwable) {
-                            is DefaultCommandException.ArgumentTypeException -> {
+                            is ArgumentTypeException -> {
                                 context.sender.sendMessage(translation.general.wrongUsage.component)
                             }
 
-                            is DefaultCommandException.BadArgumentException -> {
+                            is BadArgumentException -> {
                                 context.sender.sendMessage(translation.general.wrongUsage.component)
                             }
 
-                            is DefaultCommandException.NoPermissionException -> {
+                            is NoPermissionException -> {
                                 context.sender.sendMessage(translation.general.noPermission.component)
+                            }
+
+                            else -> {
+                                error { "#errorHandler handler for ${throwable::class} not found" }
                             }
                         }
                     }

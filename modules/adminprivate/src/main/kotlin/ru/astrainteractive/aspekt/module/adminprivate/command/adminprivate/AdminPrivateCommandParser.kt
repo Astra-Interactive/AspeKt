@@ -4,11 +4,12 @@ import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.api.argumenttype.ArgumentType
-import ru.astrainteractive.astralibs.command.api.argumenttype.PrimitiveArgumentType
+import ru.astrainteractive.astralibs.command.api.argumenttype.BooleanArgumentType
+import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContext
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.requireArgument
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.requirePermission
-import ru.astrainteractive.astralibs.command.api.exception.DefaultCommandException
+import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
 import ru.astrainteractive.astralibs.command.api.parser.CommandParser
 
 internal class AdminPrivateCommandParser : CommandParser<AdminPrivateCommand.Model, BukkitCommandContext> {
@@ -39,7 +40,7 @@ internal class AdminPrivateCommandParser : CommandParser<AdminPrivateCommand.Mod
                     index = 1,
                     type = ArgumentType.Lambda("ChunkFlag", ChunkFlag::valueOf)
                 )
-                val value = commandContext.requireArgument(2, PrimitiveArgumentType.Boolean)
+                val value = commandContext.requireArgument(2, BooleanArgumentType)
                 AdminPrivateCommand.Model.SetFlag(
                     player = player,
                     flag = flag,
@@ -47,7 +48,7 @@ internal class AdminPrivateCommandParser : CommandParser<AdminPrivateCommand.Mod
                 )
             }
 
-            else -> throw DefaultCommandException.BadArgumentException(args.getOrNull(0), PrimitiveArgumentType.String)
+            else -> throw BadArgumentException(args.getOrNull(0), StringArgumentType)
         }
     }
 }
