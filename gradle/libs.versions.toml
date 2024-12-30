@@ -28,7 +28,7 @@ minecraft-bstats = "3.1.0" # https://github.com/Bastian/bStats
 minecraft-mockbukkit = "4.21.0" #https://github.com/MockBukkit/MockBukkit
 minecraft-luckperms = "5.4" # https://github.com/LuckPerms/LuckPerms
 minecraft-essentialsx = "2.20.1" # https://github.com/EssentialsX/Essentials
-minecraft-towny = "0.101.0.1" # https://github.com/TownyAdvanced/Towny
+minecraft-towny = "0.101.0.4" # https://github.com/TownyAdvanced/Towny
 minecraft-packetevents = "2.7.0" # https://github.com/retrooper/packetevents
 
 # Shadow
