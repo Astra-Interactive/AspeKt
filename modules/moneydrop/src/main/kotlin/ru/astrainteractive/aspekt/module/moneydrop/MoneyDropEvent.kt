@@ -17,7 +17,7 @@ internal class MoneyDropEvent(
     dependencies: MoneyDropDependencies
 ) : MoneyDropDependencies by dependencies, EventListener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun entityDeathEvent(e: EntityDamageByEntityEvent) {
         val player = e.damager as? Player ?: return
         if (e.entity is Player) return
@@ -27,7 +27,7 @@ internal class MoneyDropEvent(
         moneyDropController.tryDrop(entity.location, entity.type.name)
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun playerPickUpEvent(e: EntityPickupItemEvent) {
         val player = e.entity as? Player ?: return
         val item = e.item.itemStack
@@ -48,25 +48,25 @@ internal class MoneyDropEvent(
             .run(player::sendMessage)
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun inventoryMoveEvent(e: InventoryMoveItemEvent) {
         if (!moneyDropController.isMoneyDropItem(e.item)) return
         e.isCancelled = true
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun inventoryPickupItemEvent(e: InventoryPickupItemEvent) {
         if (!moneyDropController.isMoneyDropItem(e.item.itemStack)) return
         e.isCancelled = true
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun blockBreakEvent(e: BlockBreakEvent) {
         if (e.isCancelled) return
         moneyDropController.tryDrop(e.block.location, e.block.type.name)
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun blockPlaceEvent(e: BlockPlaceEvent) {
         moneyDropController.rememberLocation(e.blockPlaced.location, e.blockPlaced.type.name)
     }

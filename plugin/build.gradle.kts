@@ -46,7 +46,7 @@ dependencies {
     implementation(projects.modules.chatgame)
     implementation(projects.modules.economy)
 }
-val destination = File("/Users/makeevrserg/Desktop/Server/build/bukkit/plugins")
+val destination = File("_/Users/makeevrserg/Desktop/Server/build/bukkit/plugins")
     .takeIf(File::exists)
     ?: File(rootDir, "jars")
 
