@@ -24,7 +24,6 @@ dependencies {
     // Test
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
-    testImplementation(libs.minecraft.mockbukkit)
     // Local
     implementation(projects.modules.core)
 }

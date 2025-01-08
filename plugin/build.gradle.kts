@@ -31,7 +31,6 @@ dependencies {
     // Test
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
-    testImplementation(libs.minecraft.mockbukkit)
     implementation(projects.modules.core)
     implementation(projects.modules.menu)
     implementation(projects.modules.broadcast)
@@ -46,7 +45,7 @@ dependencies {
     implementation(projects.modules.chatgame)
     implementation(projects.modules.economy)
 }
-val destination = File("/Users/makeevrserg/Desktop/Server/build/bukkit/plugins")
+val destination = File("_/Users/makeevrserg/Desktop/Server/build/bukkit/plugins")
     .takeIf(File::exists)
     ?: File(rootDir, "jars")
 
