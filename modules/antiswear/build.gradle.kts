@@ -19,7 +19,6 @@ dependencies {
     // Test
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
-    testImplementation(libs.minecraft.mockbukkit)
     testImplementation(libs.mockito.core)
     testImplementation(libs.minecraft.paper.api)
     testImplementation(libs.kotlin.coroutines.test)
