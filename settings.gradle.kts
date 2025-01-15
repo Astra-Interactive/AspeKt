@@ -42,8 +42,8 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "AspeKt"
 
 // Spigot
-include("plugin")
-include("velocity")
+include(":instances:bukkit")
+include(":instances:velocity")
 // Modules
 include(":modules:core")
 include(":modules:menu")

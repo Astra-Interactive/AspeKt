@@ -33,7 +33,10 @@ class RestrictionsEvent(
 
     @EventHandler
     fun onEntityExplode(it: EntityExplodeEvent) {
-        if (restrictions.explosion.destroy) it.isCancelled = true
+        if (!restrictions.explosion.destroy) return
+        if (it.entityType == EntityType.WIND_CHARGE) return
+        if (it.entityType == EntityType.BREEZE_WIND_CHARGE) return
+        it.isCancelled = true
     }
 
     @EventHandler
