@@ -70,6 +70,6 @@ shadowJar.configure {
         exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib:${libs.versions.kotlin.version.get()}"))
     }
     archiveVersion.set(projectInfo.versionString)
-    archiveBaseName.set(projectInfo.name)
+    archiveBaseName.set("${projectInfo.name}-bukkit")
     destination.also(destinationDirectory::set)
 }
