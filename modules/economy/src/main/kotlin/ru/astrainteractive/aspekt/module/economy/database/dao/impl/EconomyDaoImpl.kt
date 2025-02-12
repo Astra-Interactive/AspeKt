@@ -149,7 +149,8 @@ internal class EconomyDaoImpl(
                 .selectAll()
                 .orderBy(PlayerCurrencyTable.amount to SortOrder.DESC)
                 .where { CurrencyTable.id eq id }
-                .limit(n = size, offset = (page * size).toLong())
+                .limit(size)
+                .offset((page * size).toLong())
                 .map { it.toPlayerCurrency() }
         }
     }
