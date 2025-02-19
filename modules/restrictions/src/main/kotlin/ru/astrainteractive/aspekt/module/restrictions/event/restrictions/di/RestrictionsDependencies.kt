@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.event.restrictions.di
+package ru.astrainteractive.aspekt.module.restrictions.event.restrictions.di
 
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.CoreModule

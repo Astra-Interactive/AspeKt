@@ -1,8 +1,8 @@
 package ru.astrainteractive.aspekt.event.di
 
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.event.restrictions.RestrictionsEvent
-import ru.astrainteractive.aspekt.event.restrictions.di.RestrictionsDependencies
+import ru.astrainteractive.aspekt.module.restrictions.event.restrictions.RestrictionsEvent
+import ru.astrainteractive.aspekt.module.restrictions.event.restrictions.di.RestrictionsDependencies
 import ru.astrainteractive.aspekt.inventorysort.event.sort.SortEvent
 import ru.astrainteractive.aspekt.inventorysort.event.sort.di.SortDependencies
 import ru.astrainteractive.aspekt.module.treecapitator.event.tc.TCEvent
