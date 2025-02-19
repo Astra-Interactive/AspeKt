@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.event.sort
+package ru.astrainteractive.aspekt.inventorysort.event.sort
 
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -6,7 +6,7 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
-import ru.astrainteractive.aspekt.event.sort.di.SortDependencies
+import ru.astrainteractive.aspekt.inventorysort.event.sort.di.SortDependencies
 import ru.astrainteractive.astralibs.event.EventListener
 
 class SortEvent(

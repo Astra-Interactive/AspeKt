@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.event.sort
+package ru.astrainteractive.aspekt.inventorysort.event.sort
 
 enum class Sort(val desc: Boolean) {
     TYPE_ASC(false), TYPE_DESC(true),

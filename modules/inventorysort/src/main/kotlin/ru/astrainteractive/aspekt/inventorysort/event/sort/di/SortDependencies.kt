@@ -1,8 +1,8 @@
-package ru.astrainteractive.aspekt.event.sort.di
+package ru.astrainteractive.aspekt.inventorysort.event.sort.di
 
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.event.sort.SortController
+import ru.astrainteractive.aspekt.inventorysort.event.sort.SortController
 import ru.astrainteractive.astralibs.event.EventListener
 
 interface SortDependencies {

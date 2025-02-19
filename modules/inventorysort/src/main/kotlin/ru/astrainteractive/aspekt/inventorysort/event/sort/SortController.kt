@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.event.sort
+package ru.astrainteractive.aspekt.inventorysort.event.sort
 
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
