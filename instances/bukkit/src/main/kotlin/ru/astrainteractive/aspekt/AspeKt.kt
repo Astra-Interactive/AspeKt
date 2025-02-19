@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
-import ru.astrainteractive.aspekt.di.impl.RootModuleImpl
+import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.lifecycle.LifecyclePlugin
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
@@ -13,7 +13,7 @@ import ru.astrainteractive.astralibs.logging.Logger
  * Initial class for your plugin
  */
 class AspeKt : LifecyclePlugin(), Logger by JUtiltLogger("AspeKt") {
-    private val rootModule = RootModuleImpl(this)
+    private val rootModule = RootModule(this)
     private val lifecycles: List<Lifecycle>
         get() = listOfNotNull(
             rootModule.economyModule.lifecycle,

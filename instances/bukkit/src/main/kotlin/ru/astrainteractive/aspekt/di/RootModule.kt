@@ -18,25 +18,65 @@ import ru.astrainteractive.aspekt.module.restrictions.di.RestrictionModule
 import ru.astrainteractive.aspekt.module.sit.di.SitModule
 import ru.astrainteractive.aspekt.module.towny.discord.di.TownyDiscordModule
 import ru.astrainteractive.aspekt.module.treecapitator.di.TreeCapitatorModule
+import ru.astrainteractive.astralibs.lifecycle.LifecyclePlugin
 
-interface RootModule {
-    val coreModule: CoreModule
-    val adminPrivateModule: AdminPrivateModule
-    val sitModule: SitModule
-    val menuModule: MenuModule
-    val entitiesModule: EntitiesModule
-    val autoBroadcastModule: AutoBroadcastModule
-    val discordLinkModule: DiscordLinkModule
-    val commandManagerModule: CommandManagerModule
-    val townyDiscordModule: TownyDiscordModule
-    val moneyDropModule: MoneyDropModule
-    val autoCropModule: AutoCropModule
-    val newBeeModule: NewBeeModule
-    val antiSwearModule: AntiSwearModule
-    val moneyAdvancementModule: MoneyAdvancementModule
-    val chatGameModule: ChatGameModule
-    val economyModule: EconomyModule
-    val treeCapitatorModule: TreeCapitatorModule
-    val restrictionModule: RestrictionModule
-    val inventorySortModule: InventorySortModule
+class RootModule(plugin: LifecyclePlugin) {
+    val coreModule: CoreModule by lazy {
+        CoreModule.Default(plugin)
+    }
+    val adminPrivateModule: AdminPrivateModule by lazy {
+        AdminPrivateModule.Default(coreModule)
+    }
+    val menuModule: MenuModule by lazy {
+        MenuModule.Default(coreModule)
+    }
+    val sitModule: SitModule by lazy {
+        SitModule.Default(coreModule)
+    }
+    val entitiesModule: EntitiesModule by lazy {
+        EntitiesModule(coreModule)
+    }
+    val autoBroadcastModule by lazy {
+        AutoBroadcastModule.Default(coreModule)
+    }
+    val discordLinkModule: DiscordLinkModule by lazy {
+        DiscordLinkModule.Default(coreModule)
+    }
+
+    val commandManagerModule: CommandManagerModule by lazy {
+        CommandManagerModule.Default(coreModule = coreModule)
+    }
+    val townyDiscordModule: TownyDiscordModule by lazy {
+        TownyDiscordModule.Default(coreModule, discordLinkModule)
+    }
+    val moneyDropModule: MoneyDropModule by lazy {
+        MoneyDropModule.Default(coreModule)
+    }
+    val autoCropModule: AutoCropModule by lazy {
+        AutoCropModule.Default(coreModule)
+    }
+    val newBeeModule: NewBeeModule by lazy {
+        NewBeeModule.Default(coreModule = coreModule)
+    }
+    val antiSwearModule: AntiSwearModule by lazy {
+        AntiSwearModule.Default(coreModule = coreModule)
+    }
+    val moneyAdvancementModule: MoneyAdvancementModule by lazy {
+        MoneyAdvancementModule.Default(coreModule)
+    }
+    val chatGameModule: ChatGameModule by lazy {
+        ChatGameModule.Default(coreModule = coreModule)
+    }
+    val economyModule: EconomyModule by lazy {
+        EconomyModule.Default(coreModule)
+    }
+    val restrictionModule: RestrictionModule by lazy {
+        RestrictionModule(coreModule)
+    }
+    val treeCapitatorModule: TreeCapitatorModule by lazy {
+        TreeCapitatorModule(coreModule)
+    }
+    val inventorySortModule: InventorySortModule by lazy {
+        InventorySortModule(coreModule)
+    }
 }
