@@ -30,7 +30,7 @@ import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setO
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.kstorage.api.Krate
 
-class EntitiesGui(
+internal class EntitiesGui(
     player: Player,
     private val bukkitDispatchers: BukkitDispatchers,
     kyoriComponentSerializerKrate: Krate<KyoriComponentSerializer>

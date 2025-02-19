@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.entities.gui
 
 import org.bukkit.entity.Player
 
-interface Router {
+internal interface Router {
     sealed interface Route {
         class Entities(val player: Player) : Route
     }

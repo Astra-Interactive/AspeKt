@@ -6,7 +6,7 @@ import org.bukkit.Material
 import org.bukkit.entity.EntityType
 
 @Suppress("CyclomaticComplexMethod", "LongMethod")
-fun EntityType.toMaterial() = when (this) {
+internal fun EntityType.toMaterial() = when (this) {
     EntityType.EXPERIENCE_ORB -> Material.EXPERIENCE_BOTTLE
     EntityType.AREA_EFFECT_CLOUD -> Material.DIRT
     EntityType.ELDER_GUARDIAN -> Material.ELDER_GUARDIAN_SPAWN_EGG

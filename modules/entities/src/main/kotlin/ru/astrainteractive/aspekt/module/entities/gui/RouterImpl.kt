@@ -8,7 +8,7 @@ import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kstorage.api.Krate
 
-class RouterImpl(
+internal class RouterImpl(
     private val scope: CoroutineScope,
     private val dispatchers: BukkitDispatchers,
     private val kyoriComponentSerializerKrate: Krate<KyoriComponentSerializer>,

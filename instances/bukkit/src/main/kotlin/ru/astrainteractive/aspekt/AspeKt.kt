@@ -3,16 +3,16 @@ package ru.astrainteractive.aspekt
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
-import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.impl.RootModuleImpl
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.astralibs.lifecycle.LifecyclePlugin
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 
 /**
  * Initial class for your plugin
  */
-class AspeKt : JavaPlugin(), Logger by JUtiltLogger("AspeKt") {
+class AspeKt : LifecyclePlugin(), Logger by JUtiltLogger("AspeKt") {
     private val rootModule = RootModuleImpl(this)
     private val lifecycles: List<Lifecycle>
         get() = listOfNotNull(
@@ -31,7 +31,7 @@ class AspeKt : JavaPlugin(), Logger by JUtiltLogger("AspeKt") {
             rootModule.antiSwearModule.lifecycle,
             rootModule.moneyAdvancementModule.lifecycle,
             rootModule.chatGameModule.lifecycle,
-            rootModule.eventsModule.lifecycle,
+            rootModule.entitiesModule.lifecycle,
             rootModule.treeCapitatorModule.lifecycle,
             rootModule.restrictionModule.lifecycle,
             rootModule.inventorySortModule.lifecycle,
@@ -53,10 +53,7 @@ class AspeKt : JavaPlugin(), Logger by JUtiltLogger("AspeKt") {
         Bukkit.getOnlinePlayers().forEach(Player::closeInventory)
     }
 
-    /**
-     * As it says, function for plugin reload
-     */
-    fun reloadPlugin() {
+    override fun onReload() {
         lifecycles.forEach(Lifecycle::onReload)
         Bukkit.getOnlinePlayers().forEach(Player::closeInventory)
     }

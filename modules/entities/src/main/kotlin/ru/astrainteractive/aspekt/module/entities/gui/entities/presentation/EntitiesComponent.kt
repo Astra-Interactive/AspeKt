@@ -7,7 +7,7 @@ import org.bukkit.entity.EntityType
 import ru.astrainteractive.aspekt.module.entities.gui.entities.model.EntityData
 import ru.astrainteractive.aspekt.module.entities.gui.entities.model.SortType
 
-interface EntitiesComponent {
+internal interface EntitiesComponent {
     val model: StateFlow<Model>
 
     fun loadData()

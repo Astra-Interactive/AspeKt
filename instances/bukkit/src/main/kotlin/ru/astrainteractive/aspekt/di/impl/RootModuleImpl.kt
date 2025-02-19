@@ -1,12 +1,9 @@
 package ru.astrainteractive.aspekt.di.impl
 
-import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.command.di.CommandManagerModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.aspekt.inventorysort.di.InventorySortModule
-import ru.astrainteractive.aspekt.module.sit.di.SitModule
-import ru.astrainteractive.aspekt.module.entities.gui.di.GuiModule
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
 import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule
 import ru.astrainteractive.aspekt.module.antiswear.di.AntiSwearModule
@@ -14,15 +11,18 @@ import ru.astrainteractive.aspekt.module.autobroadcast.di.AutoBroadcastModule
 import ru.astrainteractive.aspekt.module.autocrop.di.AutoCropModule
 import ru.astrainteractive.aspekt.module.chatgame.di.ChatGameModule
 import ru.astrainteractive.aspekt.module.economy.di.EconomyModule
+import ru.astrainteractive.aspekt.module.entities.di.EntitiesModule
 import ru.astrainteractive.aspekt.module.menu.di.MenuModule
 import ru.astrainteractive.aspekt.module.moneyadvancement.di.MoneyAdvancementModule
 import ru.astrainteractive.aspekt.module.moneydrop.di.MoneyDropModule
 import ru.astrainteractive.aspekt.module.newbee.di.NewBeeModule
 import ru.astrainteractive.aspekt.module.restrictions.di.RestrictionModule
+import ru.astrainteractive.aspekt.module.sit.di.SitModule
 import ru.astrainteractive.aspekt.module.towny.discord.di.TownyDiscordModule
 import ru.astrainteractive.aspekt.module.treecapitator.di.TreeCapitatorModule
+import ru.astrainteractive.astralibs.lifecycle.LifecyclePlugin
 
-class RootModuleImpl(plugin: JavaPlugin) : RootModule {
+class RootModuleImpl(plugin: LifecyclePlugin) : RootModule {
     override val coreModule: CoreModule by lazy {
         CoreModule.Default(plugin)
     }
@@ -35,8 +35,8 @@ class RootModuleImpl(plugin: JavaPlugin) : RootModule {
     override val sitModule: SitModule by lazy {
         SitModule.Default(coreModule)
     }
-    override val guiModule: GuiModule by lazy {
-        GuiModule.Default(coreModule)
+    override val entitiesModule: EntitiesModule by lazy {
+        EntitiesModule(coreModule)
     }
     override val autoBroadcastModule by lazy {
         AutoBroadcastModule.Default(coreModule)
@@ -46,11 +46,7 @@ class RootModuleImpl(plugin: JavaPlugin) : RootModule {
     }
 
     override val commandManagerModule: CommandManagerModule by lazy {
-        CommandManagerModule.Default(
-            coreModule = coreModule,
-            guiModule = guiModule,
-            sitModule = sitModule
-        )
+        CommandManagerModule.Default(coreModule = coreModule)
     }
     override val townyDiscordModule: TownyDiscordModule by lazy {
         TownyDiscordModule.Default(coreModule, discordLinkModule)

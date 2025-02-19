@@ -10,7 +10,11 @@ import ru.astrainteractive.aspekt.module.entities.gui.entities.presentation.Enti
 import ru.astrainteractive.astralibs.async.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.util.next
 
-class DefaultEntitiesComponent : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO), EntitiesComponent {
+internal class DefaultEntitiesComponent :
+    CoroutineFeature by CoroutineFeature.Default(
+        Dispatchers.IO
+    ),
+    EntitiesComponent {
     override val model = MutableStateFlow<Model>(Model.Loading)
     override fun loadData() {
         val world = Bukkit.getWorlds().first()

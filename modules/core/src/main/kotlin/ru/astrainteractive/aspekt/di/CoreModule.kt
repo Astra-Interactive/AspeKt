@@ -7,7 +7,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
-import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.factory.ConfigKrateFactory
 import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactoryImpl
@@ -19,6 +18,7 @@ import ru.astrainteractive.astralibs.async.DefaultBukkitDispatchers
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.astralibs.lifecycle.LifecyclePlugin
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.menu.event.DefaultInventoryClickEvent
@@ -30,7 +30,7 @@ import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 interface CoreModule {
     val lifecycle: Lifecycle
 
-    val plugin: JavaPlugin
+    val plugin: LifecyclePlugin
     val eventListener: EventListener
 
     val dispatchers: BukkitDispatchers
@@ -45,7 +45,7 @@ interface CoreModule {
 
     val jsonStringFormat: StringFormat
 
-    class Default(override val plugin: JavaPlugin) : CoreModule, Logger by JUtiltLogger("CoreModule") {
+    class Default(override val plugin: LifecyclePlugin) : CoreModule, Logger by JUtiltLogger("CoreModule") {
         // Core
         override val eventListener = EventListener.Default()
 
