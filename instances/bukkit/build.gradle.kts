@@ -19,6 +19,8 @@ dependencies {
     implementation(libs.minecraft.astralibs.core)
     implementation(libs.klibs.mikro.core)
     implementation(libs.minecraft.astralibs.menu.bukkit)
+    implementation(libs.minecraft.astralibs.command)
+    implementation(libs.minecraft.astralibs.command.bukkit)
     implementation(libs.minecraft.astralibs.core.bukkit)
     compileOnly(libs.minecraft.vaultapi)
     compileOnly(libs.driver.h2)
