@@ -8,7 +8,6 @@ import ru.astrainteractive.astralibs.command.api.argumenttype.DoubleArgumentType
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.findArgument
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.requirePermission
 import ru.astrainteractive.astralibs.command.api.util.PluginExt.setCommandExecutor
-import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
 
 // atemframe isVisible isFixed radius
 fun CommandManager.atemFrameTabCompleter() =
