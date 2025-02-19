@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.event.tc.di
+package ru.astrainteractive.aspekt.module.treecapitator.event.tc.di
 
 import kotlinx.coroutines.CoroutineScope
 import org.bukkit.plugin.java.JavaPlugin

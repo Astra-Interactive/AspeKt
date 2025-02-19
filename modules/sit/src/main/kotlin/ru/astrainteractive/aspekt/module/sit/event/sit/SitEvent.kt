@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.event.sit
+package ru.astrainteractive.aspekt.module.sit.event.sit
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.util.Vector
-import ru.astrainteractive.aspekt.event.sit.di.SitDependencies
+import ru.astrainteractive.aspekt.module.sit.event.sit.di.SitDependencies
 import ru.astrainteractive.astralibs.event.EventListener
 
 class SitEvent(

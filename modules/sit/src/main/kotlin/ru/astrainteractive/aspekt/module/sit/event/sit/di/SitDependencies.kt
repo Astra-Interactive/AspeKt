@@ -1,8 +1,8 @@
-package ru.astrainteractive.aspekt.event.sit.di
+package ru.astrainteractive.aspekt.module.sit.event.sit.di
 
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.event.sit.SitController
+import ru.astrainteractive.aspekt.module.sit.event.sit.SitController
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.event.EventListener

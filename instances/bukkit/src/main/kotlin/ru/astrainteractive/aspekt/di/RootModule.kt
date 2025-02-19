@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.di
 
 import ru.astrainteractive.aspekt.command.di.CommandManagerModule
 import ru.astrainteractive.aspekt.event.di.EventsModule
-import ru.astrainteractive.aspekt.event.sit.di.SitModule
+import ru.astrainteractive.aspekt.module.sit.event.sit.di.SitModule
 import ru.astrainteractive.aspekt.module.entities.gui.di.GuiModule
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
 import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule

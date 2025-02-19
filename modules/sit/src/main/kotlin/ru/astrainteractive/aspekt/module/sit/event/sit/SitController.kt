@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.event.sit
+package ru.astrainteractive.aspekt.module.sit.event.sit
 
 import org.bukkit.Location
 import org.bukkit.Material

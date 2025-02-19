@@ -5,8 +5,8 @@ import ru.astrainteractive.aspekt.event.restrictions.RestrictionsEvent
 import ru.astrainteractive.aspekt.event.restrictions.di.RestrictionsDependencies
 import ru.astrainteractive.aspekt.event.sort.SortEvent
 import ru.astrainteractive.aspekt.event.sort.di.SortDependencies
-import ru.astrainteractive.aspekt.event.tc.TCEvent
-import ru.astrainteractive.aspekt.event.tc.di.TCDependencies
+import ru.astrainteractive.aspekt.module.treecapitator.event.tc.TCEvent
+import ru.astrainteractive.aspekt.module.treecapitator.event.tc.di.TCDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 interface EventsModule {
