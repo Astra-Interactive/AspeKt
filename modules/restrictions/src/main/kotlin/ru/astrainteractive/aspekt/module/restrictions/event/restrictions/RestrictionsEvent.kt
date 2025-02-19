@@ -19,7 +19,7 @@ import ru.astrainteractive.aspekt.module.restrictions.event.restrictions.di.Rest
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
 
-class RestrictionsEvent(
+internal class RestrictionsEvent(
     dependencies: RestrictionsDependencies
 ) : RestrictionsDependencies by dependencies, EventListener {
     private val restrictions: PluginConfiguration.Restrictions

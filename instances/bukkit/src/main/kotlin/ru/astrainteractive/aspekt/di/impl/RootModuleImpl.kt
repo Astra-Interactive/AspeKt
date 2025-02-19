@@ -18,7 +18,9 @@ import ru.astrainteractive.aspekt.module.menu.di.MenuModule
 import ru.astrainteractive.aspekt.module.moneyadvancement.di.MoneyAdvancementModule
 import ru.astrainteractive.aspekt.module.moneydrop.di.MoneyDropModule
 import ru.astrainteractive.aspekt.module.newbee.di.NewBeeModule
+import ru.astrainteractive.aspekt.module.restrictions.di.RestrictionModule
 import ru.astrainteractive.aspekt.module.towny.discord.di.TownyDiscordModule
+import ru.astrainteractive.aspekt.module.treecapitator.di.TreeCapitatorModule
 
 class RootModuleImpl(plugin: JavaPlugin) : RootModule {
     override val coreModule: CoreModule by lazy {
@@ -76,5 +78,11 @@ class RootModuleImpl(plugin: JavaPlugin) : RootModule {
     }
     override val economyModule: EconomyModule by lazy {
         EconomyModule.Default(coreModule)
+    }
+    override val restrictionModule: RestrictionModule by lazy {
+        RestrictionModule(coreModule)
+    }
+    override val treeCapitatorModule: TreeCapitatorModule by lazy {
+        TreeCapitatorModule(coreModule)
     }
 }

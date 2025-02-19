@@ -6,7 +6,7 @@ import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.event.EventListener
 
-interface RestrictionsDependencies {
+internal interface RestrictionsDependencies {
     val eventListener: EventListener
     val plugin: JavaPlugin
     val configuration: PluginConfiguration
