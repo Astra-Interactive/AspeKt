@@ -4,7 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.command.di.CommandManagerModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.di.RootModule
-import ru.astrainteractive.aspekt.event.di.EventsModule
+import ru.astrainteractive.aspekt.inventorysort.di.InventorySortModule
 import ru.astrainteractive.aspekt.module.sit.di.SitModule
 import ru.astrainteractive.aspekt.module.entities.gui.di.GuiModule
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
@@ -28,9 +28,6 @@ class RootModuleImpl(plugin: JavaPlugin) : RootModule {
     }
     override val adminPrivateModule: AdminPrivateModule by lazy {
         AdminPrivateModule.Default(coreModule)
-    }
-    override val eventsModule: EventsModule by lazy {
-        EventsModule.Default(coreModule)
     }
     override val menuModule: MenuModule by lazy {
         MenuModule.Default(coreModule)
@@ -84,5 +81,8 @@ class RootModuleImpl(plugin: JavaPlugin) : RootModule {
     }
     override val treeCapitatorModule: TreeCapitatorModule by lazy {
         TreeCapitatorModule(coreModule)
+    }
+    override val inventorySortModule: InventorySortModule by lazy {
+        InventorySortModule(coreModule)
     }
 }

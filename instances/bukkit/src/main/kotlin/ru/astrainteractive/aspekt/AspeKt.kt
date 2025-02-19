@@ -33,7 +33,8 @@ class AspeKt : JavaPlugin(), Logger by JUtiltLogger("AspeKt") {
             rootModule.chatGameModule.lifecycle,
             rootModule.eventsModule.lifecycle,
             rootModule.treeCapitatorModule.lifecycle,
-            rootModule.restrictionModule.lifecycle
+            rootModule.restrictionModule.lifecycle,
+            rootModule.inventorySortModule.lifecycle,
         )
 
     /**

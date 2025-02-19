@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack
 import ru.astrainteractive.klibs.mikro.core.util.next
 import java.util.UUID
 
-class SortController {
+internal class SortController {
 
     private val sortTypes = mutableMapOf<UUID, Sort>()
 

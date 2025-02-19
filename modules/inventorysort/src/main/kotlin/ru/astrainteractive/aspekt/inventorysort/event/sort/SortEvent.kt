@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerQuitEvent
 import ru.astrainteractive.aspekt.inventorysort.event.sort.di.SortDependencies
 import ru.astrainteractive.astralibs.event.EventListener
 
-class SortEvent(
+internal class SortEvent(
     module: SortDependencies
 ) : SortDependencies by module, EventListener {
 

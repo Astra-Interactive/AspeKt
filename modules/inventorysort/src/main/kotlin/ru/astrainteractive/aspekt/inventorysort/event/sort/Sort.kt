@@ -1,6 +1,6 @@
 package ru.astrainteractive.aspekt.inventorysort.event.sort
 
-enum class Sort(val desc: Boolean) {
+internal enum class Sort(val desc: Boolean) {
     TYPE_ASC(false), TYPE_DESC(true),
     NAME_ASC(false), NAME_DESC(true),
     WOOL_ASC(false), WOOL_DESC(true),

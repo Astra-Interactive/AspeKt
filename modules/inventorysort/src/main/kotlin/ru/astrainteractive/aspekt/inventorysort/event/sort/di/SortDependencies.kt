@@ -5,7 +5,7 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.inventorysort.event.sort.SortController
 import ru.astrainteractive.astralibs.event.EventListener
 
-interface SortDependencies {
+internal interface SortDependencies {
     val eventListener: EventListener
     val plugin: JavaPlugin
     val sortController: SortController
