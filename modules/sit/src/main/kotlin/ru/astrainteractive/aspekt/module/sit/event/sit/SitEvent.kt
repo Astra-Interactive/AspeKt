@@ -14,7 +14,7 @@ import org.bukkit.util.Vector
 import ru.astrainteractive.aspekt.module.sit.event.sit.di.SitDependencies
 import ru.astrainteractive.astralibs.event.EventListener
 
-class SitEvent(
+internal class SitEvent(
     dependencies: SitDependencies
 ) : SitDependencies by dependencies, EventListener {
 

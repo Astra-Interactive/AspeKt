@@ -4,12 +4,12 @@ import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.module.sit.event.sit.SitController
 
-interface SitCommandDependencies {
+internal interface SitCommandDependencies {
     val plugin: JavaPlugin
     val sitController: SitController
 }
 
-fun SitCommandDependencies.sit() = plugin.getCommand("sit")?.setExecutor { sender, command, label, args ->
+internal fun SitCommandDependencies.sit() = plugin.getCommand("sit")?.setExecutor { sender, command, label, args ->
     val player = (sender as? Player) ?: return@setExecutor true
     sitController.toggleSitPlayer(
         player = player,

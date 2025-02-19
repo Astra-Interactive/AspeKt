@@ -1,17 +1,19 @@
-package ru.astrainteractive.aspekt.module.sit.event.sit.di
+package ru.astrainteractive.aspekt.module.sit.di
 
+import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.module.sit.command.SitCommandDependencies
+import ru.astrainteractive.aspekt.module.sit.command.sit
 import ru.astrainteractive.aspekt.module.sit.event.sit.SitController
 import ru.astrainteractive.aspekt.module.sit.event.sit.SitEvent
+import ru.astrainteractive.aspekt.module.sit.event.sit.di.SitDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 interface SitModule {
     val lifecycle: Lifecycle
 
-    val sitController: SitController
-
     class Default(coreModule: CoreModule) : SitModule {
-        override val sitController: SitController = SitController(
+        private val sitController: SitController = SitController(
             configuration = coreModule.pluginConfig,
             translation = coreModule.translation,
             kyoriComponentSerializer = coreModule.kyoriComponentSerializer.cachedValue
@@ -23,6 +25,10 @@ interface SitModule {
                 sitController = sitController
             )
         )
+        private val sitCommandDependencies = object : SitCommandDependencies {
+            override val plugin: JavaPlugin = coreModule.plugin
+            override val sitController: SitController = this@Default.sitController
+        }
 
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onDisable = {
@@ -32,6 +38,7 @@ interface SitModule {
             onReload = { sitController.onDisable() },
             onEnable = {
                 sitEvent.onEnable(coreModule.plugin)
+                sitCommandDependencies.sit()
             }
         )
     }

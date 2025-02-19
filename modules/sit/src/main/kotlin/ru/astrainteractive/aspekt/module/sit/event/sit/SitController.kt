@@ -12,7 +12,7 @@ import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kstorage.api.Krate
 
-class SitController(
+internal class SitController(
     configuration: Krate<PluginConfiguration>,
     translation: Krate<PluginTranslation>,
     kyoriComponentSerializer: KyoriComponentSerializer

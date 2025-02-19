@@ -8,7 +8,7 @@ import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.event.EventListener
 
-interface TCDependencies {
+internal interface TCDependencies {
     val configuration: PluginConfiguration
     val eventListener: EventListener
     val plugin: JavaPlugin

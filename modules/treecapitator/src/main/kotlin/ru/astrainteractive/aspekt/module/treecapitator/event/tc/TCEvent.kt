@@ -23,7 +23,7 @@ import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
 import kotlin.random.Random
 
-class TCEvent(
+internal class TCEvent(
     dependencies: TCDependencies
 ) : TCDependencies by dependencies, EventListener {
     private val treeCapitatorConfig: PluginConfiguration.TreeCapitator
