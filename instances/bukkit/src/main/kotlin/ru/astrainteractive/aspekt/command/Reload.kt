@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.command
 
-import ru.astrainteractive.aspekt.AspeKt
 import ru.astrainteractive.aspekt.plugin.PluginPermission
+import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
 
 /**
@@ -23,7 +23,7 @@ fun CommandManager.reload() = plugin.getCommand("aesreload")?.setExecutor { send
     translation.general.reload
         .let(kyoriComponentSerializer::toComponent)
         .run(sender::sendMessage)
-    (plugin as AspeKt).reloadPlugin()
+    (plugin as Lifecycle).onReload()
     translation.general.reloadComplete
         .let(kyoriComponentSerializer::toComponent)
         .run(sender::sendMessage)

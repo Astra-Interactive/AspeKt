@@ -7,8 +7,6 @@ class CommandManager(
 ) : CommandsDependencies by module {
     init {
         reload()
-        sit()
-        entities()
         atemFrameTabCompleter()
         atemFrame()
         maxOnline()
