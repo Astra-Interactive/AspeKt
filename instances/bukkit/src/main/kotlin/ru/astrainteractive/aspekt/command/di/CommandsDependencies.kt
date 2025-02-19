@@ -2,25 +2,26 @@ package ru.astrainteractive.aspekt.command.di
 
 import kotlinx.coroutines.CoroutineScope
 import org.bukkit.plugin.java.JavaPlugin
+import ru.astrainteractive.aspekt.module.entities.command.EntitiesCommandDependencies
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.event.sit.SitController
 import ru.astrainteractive.aspekt.event.sit.di.SitModule
-import ru.astrainteractive.aspekt.gui.Router
-import ru.astrainteractive.aspekt.gui.di.GuiModule
+import ru.astrainteractive.aspekt.module.entities.gui.Router
+import ru.astrainteractive.aspekt.module.entities.gui.di.GuiModule
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.economy.EconomyFacade
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 
-interface CommandsDependencies {
-    val plugin: JavaPlugin
+interface CommandsDependencies: EntitiesCommandDependencies {
+    override val plugin: JavaPlugin
     val translation: PluginTranslation
     val dispatchers: BukkitDispatchers
     val scope: CoroutineScope
     val sitController: SitController
     val economyProvider: EconomyFacade?
-    val router: Router
+    override val router: Router
     val kyoriComponentSerializer: KyoriComponentSerializer
 
     class Default(

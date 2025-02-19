@@ -44,6 +44,11 @@ dependencies {
     implementation(projects.modules.antiswear)
     implementation(projects.modules.chatgame)
     implementation(projects.modules.economy)
+    implementation(projects.modules.treecapitator)
+    implementation(projects.modules.inventorysort)
+    implementation(projects.modules.sit)
+    implementation(projects.modules.restrictions)
+    implementation(projects.modules.entities)
 }
 val destination = File("_/Users/makeevrserg/Desktop/Server/build/bukkit/plugins")
     .takeIf(File::exists)

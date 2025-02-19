@@ -1,6 +1,7 @@
 package ru.astrainteractive.aspekt.command
 
 import ru.astrainteractive.aspekt.command.di.CommandsDependencies
+import ru.astrainteractive.aspekt.module.entities.command.entities
 
 class CommandManager(
     module: CommandsDependencies,

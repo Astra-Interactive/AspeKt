@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.command.di
 import ru.astrainteractive.aspekt.command.CommandManager
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.event.sit.di.SitModule
-import ru.astrainteractive.aspekt.gui.di.GuiModule
+import ru.astrainteractive.aspekt.module.entities.gui.di.GuiModule
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 interface CommandManagerModule : Lifecycle {
