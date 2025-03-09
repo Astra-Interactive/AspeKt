@@ -52,7 +52,7 @@ dependencies {
     implementation(projects.modules.restrictions)
     implementation(projects.modules.entities)
 }
-val destination = File("_/Users/makeevrserg/Desktop/Server/build/bukkit/plugins")
+val destination = File("/home/makeevrserg/Desktop/git/conf/conf.smp/smp/plugins/")
     .takeIf(File::exists)
     ?: File(rootDir, "jars")
 

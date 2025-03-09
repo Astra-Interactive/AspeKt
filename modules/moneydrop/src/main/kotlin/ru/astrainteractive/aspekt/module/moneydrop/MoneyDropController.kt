@@ -18,6 +18,7 @@ import ru.astrainteractive.astralibs.persistence.Persistence.hasPersistentData
 import ru.astrainteractive.astralibs.persistence.Persistence.setPersistentDataType
 import ru.astrainteractive.klibs.kstorage.api.Krate
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 internal class MoneyDropController(
@@ -32,9 +33,9 @@ internal class MoneyDropController(
     private val kyoriComponentSerializer by kyoriComponentSerializerDependency
 
     private fun Location.toMoneyDropLocation(additionalConstraint: String?) = MoneyDropLocation(
-        x = this.x.toInt(),
-        y = this.y.toInt(),
-        z = this.z.toInt(),
+        x = this.x.roundToInt(),
+        y = this.y.roundToInt(),
+        z = this.z.roundToInt(),
         world = this.world.name,
         additionalConstraint = additionalConstraint
     )
