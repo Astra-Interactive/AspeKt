@@ -6,6 +6,7 @@ import kotlinx.coroutines.test.runTest
 import ru.astrainteractive.aspekt.module.moneydrop.database.di.MoneyDropDaoModule
 import ru.astrainteractive.aspekt.module.moneydrop.database.model.MoneyDropLocation
 import java.io.File
+import java.time.Instant
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -41,7 +42,8 @@ internal class MoneyDropDaoTest {
             x = 0,
             y = 0,
             z = 0,
-            world = "world"
+            world = "world",
+            instant = Instant.now()
         )
         assertFalse(requireModule.dao.isLocationExists(location))
         requireModule.dao.addLocation(location)

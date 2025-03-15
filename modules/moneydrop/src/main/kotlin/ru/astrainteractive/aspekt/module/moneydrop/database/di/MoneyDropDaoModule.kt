@@ -30,7 +30,7 @@ internal interface MoneyDropDaoModule {
         ioDispatcher: CoroutineContext
     ) : MoneyDropDaoModule {
         private val database = flow {
-            val path = dataFolder.resolve("moneydrops.db").absolutePath
+            val path = dataFolder.resolve("moneydrop_v2.db").absolutePath
             val database = Database.connect(
                 url = "jdbc:sqlite:$path",
                 driver = "org.sqlite.JDBC"

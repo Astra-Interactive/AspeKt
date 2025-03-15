@@ -18,6 +18,7 @@ import ru.astrainteractive.astralibs.persistence.Persistence.hasPersistentData
 import ru.astrainteractive.astralibs.persistence.Persistence.setPersistentDataType
 import ru.astrainteractive.klibs.kstorage.api.Krate
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
+import java.time.Instant
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
@@ -37,7 +38,8 @@ internal class MoneyDropController(
         y = this.y.roundToInt(),
         z = this.z.roundToInt(),
         world = this.world.name,
-        additionalConstraint = additionalConstraint
+        additionalConstraint = additionalConstraint,
+        instant = Instant.now()
     )
 
     private fun checkForChance(entry: PluginConfiguration.MoneyDropEntry): Boolean {
