@@ -44,6 +44,7 @@ internal class AutoBroadcastJob(
             i++
             if (i >= Int.MAX_VALUE) i = 0
             val announcements = announcements.announcements.values.toList()
+            if (announcements.isEmpty()) return@launch
             val announcement = announcements.getOrNull(i % announcements.size) ?: return@launch
             when (announcement) {
                 is PluginConfiguration.Announcements.Announcement.ActionBar -> {
