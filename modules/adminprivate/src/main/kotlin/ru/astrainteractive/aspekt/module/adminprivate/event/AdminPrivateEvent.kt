@@ -15,6 +15,7 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockBurnEvent
 import org.bukkit.event.block.BlockExplodeEvent
+import org.bukkit.event.block.BlockFadeEvent
 import org.bukkit.event.block.BlockFromToEvent
 import org.bukkit.event.block.BlockIgniteEvent
 import org.bukkit.event.block.BlockPistonEvent
@@ -323,5 +324,16 @@ internal class AdminPrivateEvent(
     @EventHandler
     fun onBlockPistonRetractEvent(e: BlockPistonRetractEvent) {
         pistonEvent(e)
+    }
+
+    @EventHandler
+    fun onBlockPistonRetractEvent(e: BlockFadeEvent) {
+        handleDefault(
+            retractKey = RetractKey.Vararg(e.block.location.chunk, "BlockFadeEvent"),
+            e = e,
+            adminChunk = e.block.location.chunk.adminChunk,
+            player = null,
+            flag = ChunkFlag.ICE_MELT
+        )
     }
 }
