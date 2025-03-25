@@ -6,5 +6,4 @@ import kotlinx.serialization.Serializable
 internal data class Jail(
     val name: String,
     val location: JailLocation,
-) {
-}
+)

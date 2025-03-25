@@ -5,9 +5,9 @@ package ru.astrainteractive.aspekt.plugin
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import ru.astrainteractive.astralibs.string.StringDesc
+import ru.astrainteractive.astralibs.string.StringDescExt.plus
 import ru.astrainteractive.astralibs.string.StringDescExt.replace
 import java.text.DecimalFormat
-import ru.astrainteractive.astralibs.string.StringDescExt.plus
 
 /**
  * All translation stored here
@@ -45,7 +45,10 @@ class PluginTranslation(
         private val inmateAddSuccess: StringDesc = prefix.plus("Заключенный %name% посажен в %jail%"),
         val inmateAddFail: StringDesc = prefix.plus("Не удалось посадить в тюрьму. Смотрите консоль для подробностей."),
         private val inmateFreeSuccess: StringDesc = prefix.plus("Заключенный %name% освобожден"),
-        val inmateFreeFail: StringDesc = prefix.plus("Не удалось освободить bp тюрьмы. Смотрите консоль для подробностей."),
+        val inmateFreeFail: StringDesc = prefix.plus(
+            "Не удалось освободить bp тюрьмы. Смотрите консоль для подробностей."
+        ),
+        private val jailHasInmates: StringDesc = prefix.plus("Тюрьма %jail% содержит в себе заключенных!"),
     ) {
         fun jailsList(jails: String) = jailsList.replace("%jails%", jails)
         fun jailCreatedSuccess(name: String) = jailCreatedSuccess.replace("%jail%", name)
@@ -55,6 +58,7 @@ class PluginTranslation(
             .replace("%name%", name)
 
         fun inmateFreeSuccess(name: String) = inmateFreeSuccess.replace("%name%", name)
+        fun jailHasInmates(name: String) = jailHasInmates.replace("%jail%", name)
     }
 
     @Serializable

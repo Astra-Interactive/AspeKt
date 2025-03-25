@@ -1,6 +1,5 @@
 package ru.astrainteractive.aspekt.module.jail.data
 
-import kotlin.uuid.Uuid
 import ru.astrainteractive.aspekt.module.jail.model.Jail
 import ru.astrainteractive.aspekt.module.jail.model.JailInmate
 
@@ -21,6 +20,11 @@ internal interface JailApi {
     suspend fun getJails(): Result<List<Jail>>
 
     /**
+     * get specific jail
+     */
+    suspend fun getJail(name: String): Result<Jail>
+
+    /**
      * Get current jail inmates
      */
     suspend fun getJailInmates(jailName: String): Result<List<JailInmate>>
@@ -29,6 +33,11 @@ internal interface JailApi {
      * Add player into jail cell
      */
     suspend fun addInmate(inmate: JailInmate): Result<Unit>
+
+    /**
+     * Find jail inmate
+     */
+    suspend fun getInmate(uuid: String): Result<JailInmate>
 
     /**
      * Free inmate from jail

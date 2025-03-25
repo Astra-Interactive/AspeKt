@@ -1,11 +1,11 @@
 package ru.astrainteractive.aspekt.module.jail.command
 
+import ru.astrainteractive.astralibs.command.api.argumenttype.PrimitiveArgumentType
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-import ru.astrainteractive.astralibs.command.api.argumenttype.PrimitiveArgumentType
 
 internal data object DurationArgumentType : PrimitiveArgumentType<Duration> {
     override val key: String = "DURATION"
@@ -15,7 +15,7 @@ internal data object DurationArgumentType : PrimitiveArgumentType<Duration> {
         D("d"),
         H("h"),
         M("m"),
-        S("s");
+        S("s")
     }
 
     private inline fun <T> Iterable<T>.sumOf(selector: (T) -> Duration): Duration {

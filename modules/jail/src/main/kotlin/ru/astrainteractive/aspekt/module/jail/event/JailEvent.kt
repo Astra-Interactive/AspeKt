@@ -8,6 +8,7 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.event.server.ServerCommandEvent
+import ru.astrainteractive.aspekt.module.jail.controller.JailController
 import ru.astrainteractive.aspekt.module.jail.data.CachedJailApi
 import ru.astrainteractive.aspekt.module.jail.data.cache
 import ru.astrainteractive.aspekt.module.jail.data.forget
@@ -15,7 +16,8 @@ import ru.astrainteractive.aspekt.module.jail.data.isInJail
 import ru.astrainteractive.astralibs.event.EventListener
 
 internal class JailEvent(
-    private val cachedJailApi: CachedJailApi
+    private val cachedJailApi: CachedJailApi,
+    private val jailController: JailController
 ) : EventListener {
     @EventHandler(priority = EventPriority.HIGHEST)
     fun serverCommandEvent(e: ServerCommandEvent) {
@@ -34,6 +36,7 @@ internal class JailEvent(
     fun onJoin(e: PlayerJoinEvent) {
         cachedJailApi.cache(e.player)
         if (!cachedJailApi.isInJail(e.player)) return
+        jailController.tryTeleportToJail(e.player.uniqueId)
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -45,5 +48,6 @@ internal class JailEvent(
     fun onRespawn(e: PlayerRespawnEvent) {
         cachedJailApi.cache(e.player)
         if (!cachedJailApi.isInJail(e.player)) return
+        jailController.tryTeleportToJail(e.player.uniqueId)
     }
 }

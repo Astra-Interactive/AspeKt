@@ -1,16 +1,16 @@
 package ru.astrainteractive.aspekt.module.jail.command
 
-import java.time.Instant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
+import ru.astrainteractive.aspekt.module.jail.controller.JailController
 import ru.astrainteractive.aspekt.module.jail.data.CachedJailApi
 import ru.astrainteractive.aspekt.module.jail.data.JailApi
 import ru.astrainteractive.aspekt.module.jail.model.Jail
 import ru.astrainteractive.aspekt.module.jail.model.JailInmate
-import ru.astrainteractive.aspekt.module.jail.model.JailLocation
+import ru.astrainteractive.aspekt.module.jail.util.toJailLocation
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.argumenttype.EnumArgument
@@ -18,7 +18,6 @@ import ru.astrainteractive.astralibs.command.api.argumenttype.EnumArgumentType
 import ru.astrainteractive.astralibs.command.api.argumenttype.OfflinePlayerArgument
 import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContext
-import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.requireArgument
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.requirePermission
 import ru.astrainteractive.astralibs.command.api.exception.StringDescException
@@ -27,6 +26,7 @@ import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.kstorage.api.Krate
+import java.time.Instant
 
 internal interface JailCommandManager : Logger {
     val scope: CoroutineScope
@@ -37,7 +37,7 @@ internal interface JailCommandManager : Logger {
 
     val jailApi: JailApi
     val cachedJailApi: CachedJailApi
-
+    val jailController: JailController
 }
 
 internal enum class JailArg(override val value: String) : EnumArgument {
@@ -66,12 +66,7 @@ private fun JailCommandManager.createJail(ctx: BukkitCommandContext) {
     player ?: throw StringDescException(StringDesc.Plain("Executor should be player"))
     val jail = Jail(
         name = ctx.requireArgument(1, StringArgumentType),
-        location = JailLocation(
-            world = player.location.world.name,
-            x = player.location.x,
-            y = player.location.y,
-            z = player.location.z
-        )
+        location = player.location.toJailLocation()
     )
     val translation = translationKrate.cachedValue
     scope.launch {
@@ -96,16 +91,19 @@ private fun JailCommandManager.deleteJail(ctx: BukkitCommandContext) {
     scope.launch {
         val jailName = ctx.requireArgument(1, StringArgumentType)
         with(kyoriKrate.cachedValue) {
-            jailApi.deleteJail(jailName)
-                .onFailure {
-                    error(it) { "#JailArg.CREATE" }
-                    ctx.sender.sendMessage(translation.jails.jailDeleteFail.component)
-                }
-                .onSuccess {
-                    scope.launch {
-                        ctx.sender.sendMessage(translation.jails.jailDeleteSuccess(jailName).component)
+            if (jailApi.getJailInmates(jailName).getOrNull().orEmpty().isNotEmpty()) {
+                ctx.sender.sendMessage(translation.jails.jailHasInmates(jailName).component)
+            } else {
+                jailApi.deleteJail(jailName)
+                    .onFailure {
+                        ctx.sender.sendMessage(translation.jails.jailDeleteFail.component)
                     }
-                }
+                    .onSuccess {
+                        scope.launch {
+                            ctx.sender.sendMessage(translation.jails.jailDeleteSuccess(jailName).component)
+                        }
+                    }
+            }
         }
     }
 }
@@ -122,14 +120,17 @@ private fun JailCommandManager.inmateIntoJail(ctx: BukkitCommandContext) {
                 uuid = jailOfflinePlayer.uniqueId.toString(),
                 jailName = jailName,
                 start = Instant.now(),
-                duration = jailDuration
+                duration = jailDuration,
+                lastLocation = jailOfflinePlayer.location
+                    ?.toJailLocation()
+                    ?: Bukkit.getWorlds().first().spawnLocation.toJailLocation()
             )
             jailApi.addInmate(inmate)
                 .onFailure {
-                    error(it) { "#JailArg.CREATE" }
                     ctx.sender.sendMessage(translation.jails.inmateAddFail.component)
                 }
                 .onSuccess {
+                    jailController.onJailed(inmate)
                     scope.launch {
                         ctx.sender.sendMessage(
                             translation.jails.inmateAddSuccess(
@@ -148,6 +149,9 @@ private fun JailCommandManager.freeFromJail(ctx: BukkitCommandContext) {
     val translation = translationKrate.cachedValue
     scope.launch {
         val jailOfflinePlayer = ctx.requireArgument(1, OfflinePlayerArgument)
+        val inmate = jailApi.getInmate(jailOfflinePlayer.uniqueId.toString())
+            .getOrNull()
+            ?: error("Could not find jail inmate!")
         with(kyoriKrate.cachedValue) {
             jailApi.free(jailOfflinePlayer.uniqueId.toString())
                 .onFailure {
@@ -155,6 +159,7 @@ private fun JailCommandManager.freeFromJail(ctx: BukkitCommandContext) {
                     ctx.sender.sendMessage(translation.jails.inmateFreeFail.component)
                 }
                 .onSuccess {
+                    jailController.free(inmate)
                     scope.launch {
                         ctx.sender.sendMessage(
                             translation.jails.inmateFreeSuccess(
