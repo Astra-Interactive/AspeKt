@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.astralibs.string.StringDescExt.replace
 import java.text.DecimalFormat
+import ru.astrainteractive.astralibs.string.StringDescExt.plus
 
 /**
  * All translation stored here
@@ -28,8 +29,33 @@ class PluginTranslation(
     @SerialName("chat_game")
     val chatGame: ChatGame = ChatGame(),
     @SerialName("economy")
-    val economy: Economy = Economy()
+    val economy: Economy = Economy(),
+    @SerialName("jails")
+    val jails: Jails = Jails()
 ) {
+
+    @Serializable
+    data class Jails(
+        val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72JAIL&7] "),
+        private val jailsList: StringDesc = prefix.plus("Список: %jails%"),
+        private val jailCreatedSuccess: StringDesc = prefix.plus("Тюрьма создана: %jail%"),
+        val jailCreatedFail: StringDesc = prefix.plus("Не удалось создать тюрьму. Смотрите консоль для подробностей."),
+        private val jailDeleteSuccess: StringDesc = prefix.plus("Тюрьма удалена: %jail%"),
+        val jailDeleteFail: StringDesc = prefix.plus("Не удалось удалить тюрьму. Смотрите консоль для подробностей."),
+        private val inmateAddSuccess: StringDesc = prefix.plus("Заключенный %name% посажен в %jail%"),
+        val inmateAddFail: StringDesc = prefix.plus("Не удалось посадить в тюрьму. Смотрите консоль для подробностей."),
+        private val inmateFreeSuccess: StringDesc = prefix.plus("Заключенный %name% освобожден"),
+        val inmateFreeFail: StringDesc = prefix.plus("Не удалось освободить bp тюрьмы. Смотрите консоль для подробностей."),
+    ) {
+        fun jailsList(jails: String) = jailsList.replace("%jails%", jails)
+        fun jailCreatedSuccess(name: String) = jailCreatedSuccess.replace("%jail%", name)
+        fun jailDeleteSuccess(name: String) = jailDeleteSuccess.replace("%jail%", name)
+        fun inmateAddSuccess(name: String, jail: String) = inmateAddSuccess
+            .replace("%jail%", jail)
+            .replace("%name%", name)
+
+        fun inmateFreeSuccess(name: String) = inmateFreeSuccess.replace("%name%", name)
+    }
 
     @Serializable
     class Economy(
@@ -107,6 +133,7 @@ class PluginTranslation(
             "%money%",
             DecimalFormat("0.00").format(money)
         )
+
         fun goalCompleted(money: Number) = goalCompleted.replace("%money%", DecimalFormat("0.00").format(money))
         fun taskCompleted(money: Number) = taskCompleted.replace("%money%", DecimalFormat("0.00").format(money))
     }
