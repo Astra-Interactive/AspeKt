@@ -37,18 +37,24 @@ class PluginTranslation(
     @Serializable
     data class Jails(
         val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72JAIL&7] "),
-        private val jailsList: StringDesc = prefix.plus("Список: %jails%"),
-        private val jailCreatedSuccess: StringDesc = prefix.plus("Тюрьма создана: %jail%"),
-        val jailCreatedFail: StringDesc = prefix.plus("Не удалось создать тюрьму. Смотрите консоль для подробностей."),
-        private val jailDeleteSuccess: StringDesc = prefix.plus("Тюрьма удалена: %jail%"),
-        val jailDeleteFail: StringDesc = prefix.plus("Не удалось удалить тюрьму. Смотрите консоль для подробностей."),
-        private val inmateAddSuccess: StringDesc = prefix.plus("Заключенный %name% посажен в %jail%"),
-        val inmateAddFail: StringDesc = prefix.plus("Не удалось посадить в тюрьму. Смотрите консоль для подробностей."),
-        private val inmateFreeSuccess: StringDesc = prefix.plus("Заключенный %name% освобожден"),
-        val inmateFreeFail: StringDesc = prefix.plus(
+        private val jailsList: StringDesc.Raw = prefix.plus("Список: %jails%").toRaw(),
+        private val jailCreatedSuccess: StringDesc.Raw = prefix.plus("Тюрьма создана: %jail%").toRaw(),
+        val jailCreatedFail: StringDesc.Raw = prefix.plus(
+            "Не удалось создать тюрьму. Смотрите консоль для подробностей."
+        ).toRaw(),
+        private val jailDeleteSuccess: StringDesc.Raw = prefix.plus("Тюрьма удалена: %jail%").toRaw(),
+        val jailDeleteFail: StringDesc.Raw = prefix.plus(
+            "Не удалось удалить тюрьму. Смотрите консоль для подробностей."
+        ).toRaw(),
+        private val inmateAddSuccess: StringDesc.Raw = prefix.plus("Заключенный %name% посажен в %jail%").toRaw(),
+        val inmateAddFail: StringDesc.Raw = prefix.plus(
+            "Не удалось посадить в тюрьму. Смотрите консоль для подробностей."
+        ).toRaw(),
+        private val inmateFreeSuccess: StringDesc.Raw = prefix.plus("Заключенный %name% освобожден").toRaw(),
+        val inmateFreeFail: StringDesc.Raw = prefix.plus(
             "Не удалось освободить bp тюрьмы. Смотрите консоль для подробностей."
-        ),
-        private val jailHasInmates: StringDesc = prefix.plus("Тюрьма %jail% содержит в себе заключенных!"),
+        ).toRaw(),
+        private val jailHasInmates: StringDesc.Raw = prefix.plus("Тюрьма %jail% содержит в себе заключенных!").toRaw(),
     ) {
         fun jailsList(jails: String) = jailsList.replace("%jails%", jails)
         fun jailCreatedSuccess(name: String) = jailCreatedSuccess.replace("%jail%", name)
@@ -244,4 +250,8 @@ class PluginTranslation(
         fun swearFilterEnabledFor(name: String) = swearFilterEnabledFor.replace("{player}", name)
         fun swearFilterDisabledFor(name: String) = swearFilterDisabledFor.replace("{player}", name)
     }
+}
+
+private fun StringDesc.toRaw(): StringDesc.Raw {
+    return StringDesc.Raw(this.raw)
 }

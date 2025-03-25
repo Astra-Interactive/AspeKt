@@ -15,7 +15,7 @@ internal class UnJailJob(
     private val jailApi: JailApi,
     private val jailController: JailController
 ) : ScheduledJob("AspeKt-UnJail") {
-    override val delayMillis: Long = 30.seconds.inWholeMilliseconds
+    override val delayMillis: Long = 10.seconds.inWholeMilliseconds
 
     override val initialDelayMillis: Long = 0.seconds.inWholeMilliseconds
 

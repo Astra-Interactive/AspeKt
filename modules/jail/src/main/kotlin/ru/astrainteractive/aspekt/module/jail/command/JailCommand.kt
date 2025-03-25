@@ -91,8 +91,8 @@ private fun JailCommandManager.inmateIntoJail(ctx: BukkitCommandContext) {
     ctx.requirePermission(PluginPermission.Jail.JailInmate)
     val translation = translationKrate.cachedValue
     scope.launch {
-        val jailOfflinePlayer = ctx.requireArgument(1, OfflinePlayerArgument)
-        val jailName = ctx.requireArgument(2, StringArgumentType)
+        val jailName = ctx.requireArgument(1, StringArgumentType)
+        val jailOfflinePlayer = ctx.requireArgument(2, OfflinePlayerArgument)
         val jailDuration = ctx.requireArgument(3, DurationArgumentType)
         with(kyoriKrate.cachedValue) {
             val inmate = JailInmate(
@@ -109,7 +109,6 @@ private fun JailCommandManager.inmateIntoJail(ctx: BukkitCommandContext) {
                     ctx.sender.sendMessage(translation.jails.inmateAddFail.component)
                 }
                 .onSuccess {
-                    jailController.onJailed(inmate)
                     scope.launch {
                         ctx.sender.sendMessage(
                             translation.jails.inmateAddSuccess(
@@ -117,8 +116,9 @@ private fun JailCommandManager.inmateIntoJail(ctx: BukkitCommandContext) {
                                 jail = jailName
                             ).component
                         )
+                        cachedJailApi.cache(inmate.uuid)
+                        jailController.onJailed(inmate)
                     }
-                    cachedJailApi.cache(inmate.uuid)
                 }
         }
     }
@@ -163,6 +163,7 @@ internal fun JailCommandManager.jail() = plugin.setCommandExecutor(
     alias = "jail",
     commandExecutor = commandExecutor@{ ctx ->
         val jailArg = ctx.requireArgument(0, EnumArgumentType(JailArg.entries))
+        println("Executing jail $jailArg")
         when (jailArg) {
             JailArg.LIST -> listJails(ctx)
 

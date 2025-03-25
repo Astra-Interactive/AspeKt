@@ -14,21 +14,26 @@ import ru.astrainteractive.aspekt.module.jail.data.cache
 import ru.astrainteractive.aspekt.module.jail.data.forget
 import ru.astrainteractive.aspekt.module.jail.data.isInJail
 import ru.astrainteractive.astralibs.event.EventListener
+import ru.astrainteractive.astralibs.logging.JUtiltLogger
+import ru.astrainteractive.astralibs.logging.Logger
 
 internal class JailEvent(
     private val cachedJailApi: CachedJailApi,
     private val jailController: JailController
-) : EventListener {
+) : EventListener, Logger by JUtiltLogger("AspeKt-JailEvent") {
     @EventHandler(priority = EventPriority.HIGHEST)
     fun serverCommandEvent(e: ServerCommandEvent) {
         val player = e.sender as? Player ?: return
         if (!cachedJailApi.isInJail(player)) return
+        info { "#serverCommandEvent cancelled" }
         e.isCancelled = true
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun playerCommandPreprocessEvent(e: PlayerCommandPreprocessEvent) {
         if (!cachedJailApi.isInJail(e.player)) return
+        info { "#playerCommandPreprocessEvent cancelled" }
+        // todo add message of jail
         e.isCancelled = true
     }
 

@@ -10,7 +10,7 @@ internal class CachedJailApiImpl(
     private val cache = mutableMapOf<String, Boolean>()
 
     override fun isInJail(uuid: String): Boolean {
-        return cache.contains(uuid)
+        return cache.getOrDefault(uuid, false)
     }
 
     override fun cache(uuid: String) {
