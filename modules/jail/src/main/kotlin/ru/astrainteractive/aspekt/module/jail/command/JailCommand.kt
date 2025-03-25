@@ -1,18 +1,12 @@
 package ru.astrainteractive.aspekt.module.jail.command
 
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import org.bukkit.plugin.java.JavaPlugin
-import ru.astrainteractive.aspekt.module.jail.controller.JailController
-import ru.astrainteractive.aspekt.module.jail.data.CachedJailApi
-import ru.astrainteractive.aspekt.module.jail.data.JailApi
 import ru.astrainteractive.aspekt.module.jail.model.Jail
 import ru.astrainteractive.aspekt.module.jail.model.JailInmate
 import ru.astrainteractive.aspekt.module.jail.util.toJailLocation
 import ru.astrainteractive.aspekt.plugin.PluginPermission
-import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.argumenttype.EnumArgument
 import ru.astrainteractive.astralibs.command.api.argumenttype.EnumArgumentType
 import ru.astrainteractive.astralibs.command.api.argumenttype.OfflinePlayerArgument
@@ -22,23 +16,8 @@ import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.requirePermission
 import ru.astrainteractive.astralibs.command.api.exception.StringDescException
 import ru.astrainteractive.astralibs.command.api.util.PluginExt.setCommandExecutor
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.string.StringDesc
-import ru.astrainteractive.klibs.kstorage.api.Krate
 import java.time.Instant
-
-internal interface JailCommandManager : Logger {
-    val scope: CoroutineScope
-
-    val plugin: JavaPlugin
-    val translationKrate: Krate<PluginTranslation>
-    val kyoriKrate: Krate<KyoriComponentSerializer>
-
-    val jailApi: JailApi
-    val cachedJailApi: CachedJailApi
-    val jailController: JailController
-}
 
 internal enum class JailArg(override val value: String) : EnumArgument {
     LIST("list"),
