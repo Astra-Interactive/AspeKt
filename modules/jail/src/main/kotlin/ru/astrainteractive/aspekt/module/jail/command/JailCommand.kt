@@ -3,20 +3,26 @@ package ru.astrainteractive.aspekt.module.jail.command
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import ru.astrainteractive.aspekt.module.jail.command.argumenttype.DurationArgumentType
 import ru.astrainteractive.aspekt.module.jail.model.Jail
 import ru.astrainteractive.aspekt.module.jail.model.JailInmate
+import ru.astrainteractive.aspekt.module.jail.util.sendMessage
 import ru.astrainteractive.aspekt.module.jail.util.toJailLocation
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.api.argumenttype.EnumArgument
 import ru.astrainteractive.astralibs.command.api.argumenttype.EnumArgumentType
 import ru.astrainteractive.astralibs.command.api.argumenttype.OfflinePlayerArgument
 import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
+import ru.astrainteractive.astralibs.command.api.command.BukkitTabCompleter
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContext
+import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.argumentOrElse
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.requireArgument
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.requirePermission
 import ru.astrainteractive.astralibs.command.api.exception.StringDescException
 import ru.astrainteractive.astralibs.command.api.util.PluginExt.setCommandExecutor
+import ru.astrainteractive.astralibs.command.api.util.PluginExt.setCommandTabCompleter
 import ru.astrainteractive.astralibs.string.StringDesc
+import ru.astrainteractive.astralibs.util.StringListExt.withEntry
 import java.time.Instant
 
 internal enum class JailArg(override val value: String) : EnumArgument {
@@ -32,7 +38,7 @@ private fun JailCommandManager.listJails(ctx: BukkitCommandContext) {
     val translation = translationKrate.cachedValue
     scope.launch {
         with(kyoriKrate.cachedValue) {
-            val jails = jailApi.getJails().getOrNull().orEmpty()
+            val jails = jailApi.getJails().getOrNull().orEmpty().map(Jail::name)
             val jailsString = jails.joinToString()
             ctx.sender.sendMessage(translation.jails.jailsList(jailsString).component)
         }
@@ -94,6 +100,7 @@ private fun JailCommandManager.inmateIntoJail(ctx: BukkitCommandContext) {
         val jailName = ctx.requireArgument(1, StringArgumentType)
         val jailOfflinePlayer = ctx.requireArgument(2, OfflinePlayerArgument)
         val jailDuration = ctx.requireArgument(3, DurationArgumentType)
+
         with(kyoriKrate.cachedValue) {
             val inmate = JailInmate(
                 uuid = jailOfflinePlayer.uniqueId.toString(),
@@ -110,12 +117,16 @@ private fun JailCommandManager.inmateIntoJail(ctx: BukkitCommandContext) {
                 }
                 .onSuccess {
                     scope.launch {
+                        jailOfflinePlayer.sendMessage(
+                            translation.jails.youVeBeenJailed(jailDuration.toString()).component
+                        )
                         ctx.sender.sendMessage(
                             translation.jails.inmateAddSuccess(
                                 name = jailOfflinePlayer.name.orEmpty(),
                                 jail = jailName
                             ).component
                         )
+
                         cachedJailApi.cache(inmate.uuid)
                         jailController.onJailed(inmate)
                     }
@@ -128,30 +139,95 @@ private fun JailCommandManager.freeFromJail(ctx: BukkitCommandContext) {
     ctx.requirePermission(PluginPermission.Jail.JailFree)
     val translation = translationKrate.cachedValue
     scope.launch {
-        val jailOfflinePlayer = ctx.requireArgument(1, OfflinePlayerArgument)
-        val inmate = jailApi.getInmate(jailOfflinePlayer.uniqueId.toString())
-            .getOrNull()
-            ?: error("Could not find jail inmate!")
         with(kyoriKrate.cachedValue) {
-            jailApi.free(jailOfflinePlayer.uniqueId.toString())
+            val offlinePlayerToFree = ctx.requireArgument(1, OfflinePlayerArgument)
+            jailApi.free(offlinePlayerToFree.uniqueId.toString())
                 .onFailure {
                     error(it) { "#JailArg.CREATE" }
                     ctx.sender.sendMessage(translation.jails.inmateFreeFail.component)
                 }
                 .onSuccess {
+                    val inmate = jailApi.getInmate(offlinePlayerToFree.uniqueId.toString())
+                        .getOrNull()
+                        ?: error("Could not find jail inmate!")
                     jailController.free(inmate)
-                    scope.launch {
-                        ctx.sender.sendMessage(
-                            translation.jails.inmateFreeSuccess(
-                                name = jailOfflinePlayer.name.orEmpty(),
-                            ).component
-                        )
-                    }
                     cachedJailApi.cache(inmate.uuid)
+
+                    offlinePlayerToFree.sendMessage(translation.jails.youVeBeenFreed.component)
+                    ctx.sender.sendMessage(
+                        translation.jails.inmateFreeSuccess(
+                            name = offlinePlayerToFree.name.orEmpty(),
+                        ).component
+                    )
                 }
         }
     }
 }
+
+private fun BukkitCommandContext.withArgument(
+    index: Int,
+    hints: List<String>,
+    block: () -> List<String>? = { null }
+): List<String>? {
+    return block.invoke() ?: args.getOrNull(index)?.let { entry -> hints.withEntry(entry) }
+}
+
+private fun BukkitCommandContext.runArgument(
+    index: Int,
+    value: String,
+    block: () -> Unit
+) {
+    if (args.getOrNull(index) != value) return
+    block.invoke()
+}
+
+internal fun JailCommandManager.jailTabCompleter() = plugin.setCommandTabCompleter(
+    alias = "jail",
+    tabCompleter = BukkitTabCompleter { ctx ->
+        ctx.withArgument(
+            index = 0,
+            hints = JailArg.entries.map(JailArg::value),
+            block = {
+                val arg = ctx.argumentOrElse(
+                    index = 0,
+                    type = EnumArgumentType(JailArg.entries),
+                    default = { JailArg.LIST }
+                )
+                when (arg) {
+                    JailArg.LIST -> ctx.withArgument(
+                        index = 1,
+                        hints = listOf()
+                    )
+
+                    JailArg.CREATE -> ctx.withArgument(
+                        index = 1,
+                        hints = listOf("JAIL_NAME")
+                    )
+
+                    JailArg.DELETE -> listOf("JAIL_NAME")
+                    JailArg.INMATE -> ctx.withArgument(
+                        index = 1,
+                        hints = listOf("JAIL_NAME"),
+                        block = {
+                            ctx.withArgument(
+                                index = 2,
+                                hints = listOf("USER_NAME"),
+                                block = {
+                                    ctx.withArgument(
+                                        index = 3,
+                                        hints = listOf("TIME:1s,1m,1h10m")
+                                    )
+                                }
+                            )
+                        }
+                    )
+
+                    JailArg.FREE -> listOf("USER_NAME")
+                }
+            }
+        ).orEmpty()
+    }
+)
 
 /**
  * /jail list

@@ -6,6 +6,12 @@ import ru.astrainteractive.aspekt.job.ScheduledJob
 import ru.astrainteractive.aspekt.module.jail.controller.JailController
 import ru.astrainteractive.aspekt.module.jail.data.CachedJailApi
 import ru.astrainteractive.aspekt.module.jail.data.JailApi
+import ru.astrainteractive.aspekt.module.jail.util.offlinePlayer
+import ru.astrainteractive.aspekt.module.jail.util.sendMessage
+import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.aspekt.util.getValue
+import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.klibs.kstorage.api.Krate
 import java.time.Instant
 import kotlin.time.Duration.Companion.seconds
 
@@ -13,25 +19,30 @@ internal class UnJailJob(
     private val scope: CoroutineScope,
     private val cachedJailApi: CachedJailApi,
     private val jailApi: JailApi,
-    private val jailController: JailController
+    private val jailController: JailController,
+    kyoriKrate: Krate<KyoriComponentSerializer>,
+    translationKrate: Krate<PluginTranslation>
 ) : ScheduledJob("AspeKt-UnJail") {
     override val delayMillis: Long = 10.seconds.inWholeMilliseconds
-
     override val initialDelayMillis: Long = 0.seconds.inWholeMilliseconds
-
     override val isEnabled: Boolean = true
+    private val kyori by kyoriKrate
+    private val translation by translationKrate
 
     override fun execute() {
         scope.launch {
             val inmatesToFree = jailApi.getInmates()
                 .getOrNull()
                 .orEmpty()
-                .filter { inmate -> Instant.now() < inmate.start.plusMillis(inmate.duration.inWholeMilliseconds) }
+                .filter { inmate -> Instant.now().epochSecond.minus(inmate.start.epochSecond) > inmate.duration.inWholeSeconds }
 
             inmatesToFree.forEach { inmate ->
                 jailApi.free(inmate.uuid)
                 cachedJailApi.cache(inmate.uuid)
                 jailController.free(inmate)
+                with(kyori) {
+                    inmate.offlinePlayer.sendMessage(translation.jails.youVeBeenFreed.component)
+                }
             }
         }
     }

@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.module.jail.command
+package ru.astrainteractive.aspekt.module.jail.command.argumenttype
 
 import ru.astrainteractive.astralibs.command.api.argumenttype.PrimitiveArgumentType
 import kotlin.time.Duration

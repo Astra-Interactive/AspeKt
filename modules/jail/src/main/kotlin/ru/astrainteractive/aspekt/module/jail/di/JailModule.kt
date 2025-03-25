@@ -27,7 +27,9 @@ class JailModule(coreModule: CoreModule) {
     )
     private val jailEvent = JailEvent(
         cachedJailApi = cachedJailApi,
-        jailController = jailController
+        jailController = jailController,
+        kyoriKrate = coreModule.kyoriComponentSerializer,
+        translationKrate = coreModule.translation
     )
 
     private val jailCommandManager = JailCommandManager(
@@ -44,7 +46,9 @@ class JailModule(coreModule: CoreModule) {
         scope = coreModule.scope,
         cachedJailApi = cachedJailApi,
         jailApi = jailApi,
-        jailController = jailController
+        jailController = jailController,
+        kyoriKrate = coreModule.kyoriComponentSerializer,
+        translationKrate = coreModule.translation
     )
 
     val lifecycle = Lifecycle.Lambda(

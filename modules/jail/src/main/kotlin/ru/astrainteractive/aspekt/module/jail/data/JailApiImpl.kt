@@ -15,27 +15,28 @@ internal class JailApiImpl(
 ) : JailApi {
     override suspend fun deleteJail(jailName: String): Result<Unit> {
         return runCatching {
-            val file = folder.resolve(jailName)
+            val file = folder.resolve("$jailName.yml")
             file.delete()
         }
     }
 
     override suspend fun addJail(jail: Jail): Result<Unit> {
         return runCatching {
-            val file = folder.resolve(jail.name)
+            val file = folder.resolve("${jail.name}.yml")
             stringFormat.writeIntoFile(jail, file)
         }
     }
 
     override suspend fun getJails(): Result<List<Jail>> {
         return runCatching {
-            folder.listFiles().orEmpty()
+            folder.listFiles()
+                .orEmpty()
                 .mapNotNull { file -> stringFormat.parseOrNull(file) }
         }
     }
 
     override suspend fun getJail(name: String): Result<Jail> {
-        val file = folder.resolve(name)
+        val file = folder.resolve("$name.yml")
         return stringFormat.parse(file)
     }
 

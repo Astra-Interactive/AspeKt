@@ -22,5 +22,6 @@ internal class JailCommandManager(
 ) : Logger by JUtiltLogger("AspeKt-JailCommandManager") {
     fun register() {
         jail()
+        jailTabCompleter()
     }
 }
