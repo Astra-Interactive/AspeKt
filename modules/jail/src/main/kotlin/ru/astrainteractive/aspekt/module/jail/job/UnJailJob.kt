@@ -34,7 +34,10 @@ internal class UnJailJob(
             val inmatesToFree = jailApi.getInmates()
                 .getOrNull()
                 .orEmpty()
-                .filter { inmate -> Instant.now().epochSecond.minus(inmate.start.epochSecond) > inmate.duration.inWholeSeconds }
+                .filter { inmate ->
+                    val diff = Instant.now().epochSecond.minus(inmate.start.epochSecond)
+                    diff > inmate.duration.inWholeSeconds
+                }
 
             inmatesToFree.forEach { inmate ->
                 jailApi.free(inmate.uuid)

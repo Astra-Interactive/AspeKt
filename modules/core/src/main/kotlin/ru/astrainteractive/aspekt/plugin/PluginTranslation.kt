@@ -176,7 +176,7 @@ class PluginTranslation(
     @Serializable
     class General(
         @SerialName("prefix")
-        val prefix: StringDesc.Raw = StringDesc.Raw("&#18dbd1[AspeKt]"),
+        val prefix: StringDesc.Raw = StringDesc.Raw("&#18dbd1[AspeKt] "),
         @SerialName("reload")
         val reload: StringDesc.Raw = StringDesc.Raw("&#dbbb18Перезагрузка плагина"),
         @SerialName("reload_complete")
@@ -200,8 +200,13 @@ class PluginTranslation(
         @SerialName("dropped_money")
         val droppedMoney: StringDesc.Raw = StringDesc.Raw("&6Монетка"),
         @SerialName("maybe_tpr")
-        val maybeTpr: StringDesc.Raw = StringDesc.Raw("&#db2c18Возможно, вы хотели ввести /tpr")
+        val maybeTpr: StringDesc.Raw = StringDesc.Raw("&#db2c18Возможно, вы хотели ввести /tpr"),
+        private val commandError: StringDesc.Raw = prefix
+            .plus(StringDesc.Raw("&#db2c18Ошибка выполнения команды: %error%"))
+            .toRaw()
     ) {
+
+        fun commandError(error: String): StringDesc = commandError.replace("%error%", error)
 
         fun discordLinkReward(amount: Number): StringDesc {
             return discordLinkReward.replace("{AMOUNT}", DecimalFormat("0.00").format(amount))

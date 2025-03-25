@@ -20,7 +20,6 @@ internal fun JailCommandManager.jail() = plugin.setCommandExecutor(
     alias = "jail",
     commandExecutor = commandExecutor@{ ctx ->
         val jailArg = ctx.requireArgument(0, EnumArgumentType(JailArg.entries))
-        println("Executing jail $jailArg")
         when (jailArg) {
             JailArg.LIST -> listJails(ctx)
 
@@ -34,6 +33,14 @@ internal fun JailCommandManager.jail() = plugin.setCommandExecutor(
         }
     },
     errorHandler = { ctx, throwable ->
+        val translation = translationKrate.cachedValue
+        val kyori = kyoriKrate.cachedValue
+        with(kyori) {
+            val message = translation.general
+                .commandError(throwable.message ?: throwable.localizedMessage)
+                .component
+            ctx.sender.sendMessage(message)
+        }
         error(throwable) { "could not execute jail command" }
     }
 )

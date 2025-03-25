@@ -28,6 +28,7 @@ internal data object DurationArgumentType : PrimitiveArgumentType<Duration> {
 
     // 1 year 2 month 3 weeks 4 days 5 hours 10 minutes 30 seconds
     // 3w4d6h10m30s
+    @Suppress("MaxLineLength")
     override fun transform(value: String): Duration {
         val spl = value
             .replace(Delimiter.W.value, Delimiter.W.value.plus(" "))
@@ -40,6 +41,7 @@ internal data object DurationArgumentType : PrimitiveArgumentType<Duration> {
         val durationList = spl.map { part ->
             val delimiter = Delimiter.entries
                 .firstOrNull { delimiter -> part.contains(delimiter.value) }
+
                 ?: error("Wrong usage on argument. Coult not determine delimiter $value. Should be as 1y2mo3w4d6h10m30s")
 
             val intAmount = part

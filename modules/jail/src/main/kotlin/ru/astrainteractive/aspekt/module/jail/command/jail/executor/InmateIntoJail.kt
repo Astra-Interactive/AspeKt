@@ -48,7 +48,6 @@ internal fun JailCommandManager.inmateIntoJail(ctx: BukkitCommandContext) {
                                 jail = jailName
                             ).component
                         )
-
                         cachedJailApi.cache(inmate.uuid)
                         jailController.onJailed(inmate)
                     }

@@ -220,3 +220,17 @@ reward:
 - type: "TIMES_OF_TWO"
 - type: "EQUATION_EASY"
 ```
+
+### Jail
+
+Add jails and block inmates command executions
+
+## Commands
+
+| Command                               | Permission           | Description             |
+|:--------------------------------------|:---------------------|:------------------------|
+| `/jail list`                          | `aspekt.jail.list`   | `Show jail list`        |
+| `/jail create <JAIL>`                 | `aspekt.jail.create` | `Create jail`           |
+| `/jail delete <JAIL>`                 | `aspekt.jail.delete` | `Delete jail`           |
+| `/jail free <JAIL>`                   | `aspekt.jail.free`   | `Free player from jail` |
+| `/jail inmate <JAIL> <PLAYER> <TIME>` | `aspekt.jail.inmate` | `Move player to jail`   |

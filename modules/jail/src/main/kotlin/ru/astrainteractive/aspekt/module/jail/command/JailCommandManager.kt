@@ -13,6 +13,7 @@ import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.klibs.kstorage.api.Krate
 
+@Suppress("LongParameterList")
 internal class JailCommandManager(
     val scope: CoroutineScope,
     val plugin: JavaPlugin,

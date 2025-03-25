@@ -26,6 +26,8 @@ class JailModule(coreModule: CoreModule) {
         jailApi = jailApi
     )
     private val jailEvent = JailEvent(
+        scope = coreModule.scope,
+        jailApi = jailApi,
         cachedJailApi = cachedJailApi,
         jailController = jailController,
         kyoriKrate = coreModule.kyoriComponentSerializer,

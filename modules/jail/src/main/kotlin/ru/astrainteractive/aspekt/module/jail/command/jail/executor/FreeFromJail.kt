@@ -15,15 +15,16 @@ internal fun JailCommandManager.freeFromJail(ctx: BukkitCommandContext) {
     scope.launch {
         with(kyoriKrate.cachedValue) {
             val offlinePlayerToFree = ctx.requireArgument(1, OfflinePlayerArgument)
+            val inmate = jailApi.getInmate(offlinePlayerToFree.uniqueId.toString())
+                .getOrNull()
+                ?: error("Could not find jail inmate!")
+
             jailApi.free(offlinePlayerToFree.uniqueId.toString())
                 .onFailure {
                     error(it) { "#JailArg.CREATE" }
                     ctx.sender.sendMessage(translation.jails.inmateFreeFail.component)
                 }
                 .onSuccess {
-                    val inmate = jailApi.getInmate(offlinePlayerToFree.uniqueId.toString())
-                        .getOrNull()
-                        ?: error("Could not find jail inmate!")
                     jailController.free(inmate)
                     cachedJailApi.cache(inmate.uuid)
 
