@@ -28,6 +28,7 @@ internal interface JailApi {
      * Get current jail inmates
      */
     suspend fun getJailInmates(jailName: String): Result<List<JailInmate>>
+    suspend fun getInmates(): Result<List<JailInmate>>
 
     /**
      * Add player into jail cell

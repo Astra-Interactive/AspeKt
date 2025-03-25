@@ -118,6 +118,7 @@ private fun JailCommandManager.inmateIntoJail(ctx: BukkitCommandContext) {
                             ).component
                         )
                     }
+                    cachedJailApi.cache(inmate.uuid)
                 }
         }
     }
@@ -146,6 +147,7 @@ private fun JailCommandManager.freeFromJail(ctx: BukkitCommandContext) {
                             ).component
                         )
                     }
+                    cachedJailApi.cache(inmate.uuid)
                 }
         }
     }

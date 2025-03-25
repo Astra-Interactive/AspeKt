@@ -39,12 +39,15 @@ internal class JailApiImpl(
         return stringFormat.parse(file)
     }
 
-    override suspend fun getJailInmates(jailName: String): Result<List<JailInmate>> {
+    override suspend fun getInmates(): Result<List<JailInmate>> {
         val file = folder.resolve("jail.inmates.yml")
         return runCatching {
             stringFormat.parseOrDefault(file = file, factory = { emptyList<JailInmate>() })
-                .filter { it.jailName == jailName }
         }
+    }
+
+    override suspend fun getJailInmates(jailName: String): Result<List<JailInmate>> {
+        return getInmates().map { inmates -> inmates.filter { inmate -> inmate.jailName == jailName } }
     }
 
     override suspend fun addInmate(inmate: JailInmate): Result<Unit> {

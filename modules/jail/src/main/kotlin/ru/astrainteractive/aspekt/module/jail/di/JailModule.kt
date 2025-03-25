@@ -9,6 +9,7 @@ import ru.astrainteractive.aspekt.module.jail.data.CachedJailApiImpl
 import ru.astrainteractive.aspekt.module.jail.data.JailApi
 import ru.astrainteractive.aspekt.module.jail.data.JailApiImpl
 import ru.astrainteractive.aspekt.module.jail.event.JailEvent
+import ru.astrainteractive.aspekt.module.jail.job.UnJailJob
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class JailModule(coreModule: CoreModule) {
@@ -39,13 +40,22 @@ class JailModule(coreModule: CoreModule) {
         jailController = jailController
     )
 
+    private val unJailJob = UnJailJob(
+        scope = coreModule.scope,
+        cachedJailApi = cachedJailApi,
+        jailApi = jailApi,
+        jailController = jailController
+    )
+
     val lifecycle = Lifecycle.Lambda(
         onEnable = {
             jailEvent.onEnable(coreModule.plugin)
             jailCommandManager.register()
+            unJailJob.onEnable()
         },
         onDisable = {
             jailEvent.onDisable()
+            unJailJob.onDisable()
             jailController.cancel()
         }
     )
