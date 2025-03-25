@@ -13,7 +13,10 @@ import ru.astrainteractive.aspekt.module.moneydrop.database.model.MoneyDropLocat
 import ru.astrainteractive.aspekt.module.moneydrop.database.table.MoneyDropLocationTable
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
+import java.time.Instant
 import kotlin.coroutines.CoroutineContext
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.days
 
 internal class MoneyDropDaoImpl(
     private val databaseFlow: Flow<Database>,
@@ -30,10 +33,11 @@ internal class MoneyDropDaoImpl(
                         it[MoneyDropLocationTable.z] = location.z
                         it[MoneyDropLocationTable.world] = location.world
                         it[MoneyDropLocationTable.additionalConstraint] = location.additionalConstraint
+                        it[MoneyDropLocationTable.instant] = location.instant
                     }
                 }
             }
-        }.onFailure { error { "#addLocation -> ${it.message}" } }
+        }.onFailure { throwable -> error(throwable) { "#addLocation -> ${throwable.message}" } }
     }
 
     override suspend fun isLocationExists(location: MoneyDropLocation): Boolean {
@@ -48,11 +52,27 @@ internal class MoneyDropDaoImpl(
                                 .and(MoneyDropLocationTable.z.eq(location.z))
                                 .and(MoneyDropLocationTable.world.eq(location.world))
                                 .and(MoneyDropLocationTable.additionalConstraint.eq(location.additionalConstraint))
+                                .and {
+                                    val offset = Instant
+                                        .now()
+                                        .minus(MAX_MONEY_DROP_TIMEOUT)
+                                    MoneyDropLocationTable
+                                        .instant
+                                        .greater(offset)
+                                }
                         }.count() > 0
                 }
             }
         }
-            .onFailure { error { "#isLocationExists -> ${it.message}" } }
+            .onFailure { throwable -> error(throwable) { "#isLocationExists -> ${throwable.message}" } }
             .getOrElse { false }
+    }
+
+    operator fun Instant.minus(duration: Duration): Instant {
+        return this.minusMillis(duration.inWholeMilliseconds)
+    }
+
+    companion object {
+        private val MAX_MONEY_DROP_TIMEOUT = 1.days
     }
 }
