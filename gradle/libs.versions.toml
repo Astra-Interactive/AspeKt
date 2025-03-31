@@ -30,6 +30,10 @@ minecraft-luckperms = "5.4" # https://github.com/LuckPerms/LuckPerms
 minecraft-essentialsx = "2.20.1" # https://github.com/EssentialsX/Essentials
 minecraft-towny = "0.101.1.0" # https://github.com/TownyAdvanced/Towny
 minecraft-packetevents = "2.7.0" # https://github.com/retrooper/packetevents
+minecraft-version = "1.20.1"
+minecraft-forgeversion = "47.2.20"
+minecraft-kyori="4.19.0"
+forgegradle = "[6.0,6.2)"
 
 # Shadow
 gradle-shadow = "8.0.0" # https://github.com/johnrengelman/shadow
@@ -108,14 +112,17 @@ minecraft-astralibs-menu-bukkit = { module = "ru.astrainteractive.astralibs:menu
 minecraft-astralibs-core-bukkit = { module = "ru.astrainteractive.astralibs:core-bukkit", version.ref = "minecraft-astralibs" }
 minecraft-astralibs-command = { module = "ru.astrainteractive.astralibs:command", version.ref = "minecraft-astralibs" }
 minecraft-astralibs-command-bukkit = { module = "ru.astrainteractive.astralibs:command-bukkit", version.ref = "minecraft-astralibs" }
+minecraft-kyori-plain = { module = "net.kyori:adventure-text-serializer-plain", version.ref = "minecraft-kyori" }
+minecraft-kyori-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "minecraft-kyori" }
+minecraft-kyori-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "minecraft-kyori" }
 
-cache4k = { module = "io.github.reactivecircus.cache4k:cache4k", version.ref = "cache4k" }
+cache4k = { module = "io.github.reactivecircus.cache4k:cache4k-jvm", version.ref = "cache4k" }
 
 [bundles]
 exposed = ["exposed-java-time", "exposed-jdbc", "exposed-dao", "exposed-core"]
 minecraft-bukkit = ["minecraft-paper-api", "minecraft-spigot-api", "minecraft-spigot-core", "minecraft-vaultapi", "minecraft-papi"]
 testing-kotlin = ["kotlin-coroutines-core", "kotlin-coroutines-coreJvm", "kotlin-coroutines-test", "driver-jdbc", "driver-mysql", "driver-h2", "kotlin-serialization", "kotlin-serializationJson"]
-kotlin = ["kotlin-coroutines-core", "kotlin-coroutines-coreJvm", "kotlin-serialization", "kotlin-serializationJson", "kotlin-serializationKaml", "kotlin-gradle"]
+kotlin = ["kotlin-coroutines-core", "kotlin-coroutines-coreJvm", "kotlin-serialization", "kotlin-serializationJson", "kotlin-serializationKaml"]
 
 
 [plugins]
@@ -143,3 +150,4 @@ klibs-gradle-rootinfo = { id = "ru.astrainteractive.gradleplugin.root.info", ver
 # klibs - minecraft
 klibs-minecraft-resource-processor = { id = "ru.astrainteractive.gradleplugin.minecraft.resource-processor", version.ref = "klibs-gradleplugin" }
 klibs-minecraft-shadow = { id = "ru.astrainteractive.gradleplugin.minecraft.shadow", version.ref = "klibs-gradleplugin" }
+forgegradle = { id = "net.minecraftforge.gradle", version.ref = "forgegradle" }
