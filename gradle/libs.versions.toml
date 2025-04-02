@@ -12,7 +12,7 @@ driver-mysql = "8.0.33" # https://github.com/mysql/mysql-connector-j
 driver-h2 = "2.3.232" # https://github.com/h2database/h2database
 
 # klibs
-klibs-gradleplugin = "1.5.2" # https://github.com/makeevrserg/gradle-plugin
+klibs-gradleplugin = "1.6.12" # https://github.com/makeevrserg/gradle-plugin
 klibs-mikro = "1.8.15" # https://github.com/makeevrserg/klibs.mikro
 klibs-kdi = "1.4.8" # https://github.com/makeevrserg/klibs.kdi
 klibs-kstorage = "3.2.6" # https://github.com/makeevrserg/klibs.kstorage
@@ -36,7 +36,7 @@ minecraft-kyori="4.19.0"
 forgegradle = "[6.0,6.2)"
 
 # Shadow
-gradle-shadow = "8.0.0" # https://github.com/johnrengelman/shadow
+gradle-shadow = "9.0.0-beta12" # https://github.com/johnrengelman/shadow
 
 # BuildConfig
 gradle-buildconfig = "5.5.1" # https://github.com/gmazzo/gradle-buildconfig-plugin
@@ -65,7 +65,7 @@ kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.
 kotlin-benchmark-runtime = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-runtime", version.ref = "kotlin-benchmark" }
 
 # Shadow
-gradle-shadow = { module = "gradle.plugin.com.github.johnrengelman:shadow", version.ref = "gradle-shadow" }
+gradle-shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "gradle-shadow" }
 
 # Drivers
 driver-jdbc = { module = "org.xerial:sqlite-jdbc", version.ref = "driver-jdbc" }
@@ -135,7 +135,7 @@ kotlin-benchmark = { id = "org.jetbrains.kotlinx.benchmark", version.ref = "kotl
 kotlin-allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin-version" }
 
 # Gradle
-gradle-shadow = { id = "com.github.johnrengelman.shadow", version.ref = "gradle-shadow" }
+gradle-shadow = { id = "com.gradleup.shadow", version.ref = "gradle-shadow" }
 gradle-buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "gradle-buildconfig" }
 
 # klibs - core
