@@ -4,7 +4,7 @@ import ru.astrainteractive.gradleplugin.property.extension.ModelPropertyValueExt
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
-    id("io.github.goooler.shadow")
+    alias(libs.plugins.gradle.shadow)
     alias(libs.plugins.klibs.minecraft.shadow)
     alias(libs.plugins.klibs.minecraft.resource.processor)
 }

@@ -1,8 +1,8 @@
 package ru.astrainteractive.aspekt.module.autocrop.presentation
 
+import com.google.common.cache.Cache
+import com.google.common.cache.CacheBuilder
 import org.bukkit.Location
-import org.jetbrains.kotlin.com.google.common.cache.Cache
-import org.jetbrains.kotlin.com.google.common.cache.CacheBuilder
 import java.util.concurrent.TimeUnit
 
 internal class CropDupeController {
