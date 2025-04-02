@@ -1,4 +1,4 @@
-package ru.astrainteractive.di
+package ru.astrainteractive.aspekt.di
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob

@@ -11,7 +11,7 @@ import ru.astrainteractive.aspekt.core.forge.event.flowEvent
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.di.RootModule
+import ru.astrainteractive.aspekt.di.RootModule
 import javax.annotation.ParametersAreNonnullByDefault
 
 @Mod("aspekt")
