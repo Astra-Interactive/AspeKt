@@ -1,7 +1,6 @@
 package ru.astrainteractive.aspekt.module.moneydrop
 
 import kotlinx.coroutines.launch
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -9,7 +8,7 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPistonExtendEvent
 import org.bukkit.event.block.BlockPistonRetractEvent
 import org.bukkit.event.block.BlockPlaceEvent
-import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.inventory.InventoryMoveItemEvent
 import org.bukkit.event.inventory.InventoryPickupItemEvent
@@ -25,12 +24,10 @@ internal class MoneyDropEvent(
     Logger by JUtiltLogger("AspeKt-MoneyDropEvent") {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    fun entityDamageByEntityEvent(e: EntityDamageByEntityEvent) {
+    fun entityDeathEvent(e: EntityDeathEvent) {
         if (e.isCancelled) return
-        val player = e.damager as? Player ?: return
         if (e.entity is Player) return
-        val entity = e.entity as? LivingEntity ?: return
-        if (entity.health > e.finalDamage) return
+        val entity = e.entity
         if (!entity.isDead) return
         moneyDropController.tryDrop(entity.location, entity.type.name)
     }
