@@ -5,7 +5,6 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
     alias(libs.plugins.forgegradle)
-    id("io.github.goooler.shadow")
     alias(libs.plugins.klibs.minecraft.shadow)
     alias(libs.plugins.klibs.minecraft.resource.processor)
 }
@@ -41,19 +40,10 @@ minecraft {
     accessTransformer(rootProject.file("build").resolve("accesstransformer.cfg"))
 }
 
-configurations {
-    apiElements {
-        artifacts.clear()
-    }
-    runtimeElements {
-        setExtendsFrom(emptySet())
-        // Publish the jarJar
-        artifacts.clear()
-        outgoing.artifact(tasks.jarJar)
-    }
-}
-
-val destination = File("/home/makeevrsergh/Desktop/server/mods/")
+val destination = rootDir
+    .resolve("build")
+    .resolve("forge")
+    .resolve("mods")
     .takeIf(File::exists)
     ?: File(rootDir, "jars")
 
@@ -98,13 +88,11 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         exclude("DebugProbesKt.bin")
         exclude("_COROUTINE/**")
         // meta
-//        exclude("META-INF/services/**")
         exclude("META-INF/*.kotlin_module")
         exclude("META-INF/com.android.tools/**")
         exclude("META-INF/gradle-plugins/**")
         exclude("META-INF/maven/**")
         exclude("META-INF/proguard/**")
-        exclude("META-INF/versions/**")
         exclude("META-INF/native/**")
         exclude("META-INF/**LICENCE**")
     }
