@@ -5,6 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import net.minecraft.server.level.ServerPlayer
 import net.minecraftforge.event.RegisterCommandsEvent
+import ru.astrainteractive.aspekt.core.forge.command.context.ForgeCommandContext
 import ru.astrainteractive.aspekt.core.forge.command.util.argument
 import ru.astrainteractive.aspekt.core.forge.command.util.command
 import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
@@ -17,6 +18,7 @@ import ru.astrainteractive.aspekt.module.auth.api.checkAuthDataIsValid
 import ru.astrainteractive.aspekt.module.auth.api.isRegistered
 import ru.astrainteractive.aspekt.module.auth.api.model.AuthData
 import ru.astrainteractive.astralibs.command.api.argumenttype.IntArgumentType
+import ru.astrainteractive.astralibs.command.api.error.ErrorHandler
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.kstorage.api.Krate
@@ -27,15 +29,25 @@ fun RegisterCommandsEvent.loginCommand(
     authorizedApi: AuthorizedApi,
     kyoriKrate: Krate<KyoriComponentSerializer>
 ) {
+    val errorHandler = ErrorHandler<ForgeCommandContext> { ctx, e ->
+        with(kyoriKrate.cachedValue) {
+            StringDesc.Raw(e.localizedMessage)
+                .component
+                .toNative()
+                .run(ctx.instance.source::sendSystemMessage)
+        }
+    }
     command(
         alias = "testcommand",
+        errorHandler = errorHandler,
         block = {
             argument(
                 alias = "arg1",
                 type = StringArgumentType.string(),
                 suggests = listOf("sug1", "sug2"),
+
                 execute = { ctx ->
-                    ctx.requireArgument("arg", IntArgumentType)
+                    ctx.requireArgument("arg1", IntArgumentType)
                 },
             )
         }
