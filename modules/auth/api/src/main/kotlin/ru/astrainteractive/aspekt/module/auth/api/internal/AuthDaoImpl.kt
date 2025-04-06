@@ -32,11 +32,11 @@ internal class AuthDaoImpl(private val databaseFlow: Flow<Database>) : AuthDao {
         }
     }
 
-    override suspend fun deleteAccount(authData: AuthData): Result<Unit> {
+    override suspend fun deleteAccount(uuid: UUID): Result<Unit> {
         return runCatching {
             transaction(requireDatabase()) {
                 UserTable.deleteWhere {
-                    UserTable.id eq authData.uuid.toString()
+                    UserTable.id eq uuid.toString()
                 }
             }
         }
@@ -65,6 +65,24 @@ internal class AuthDaoImpl(private val databaseFlow: Flow<Database>) : AuthDao {
             transaction(requireDatabase()) {
                 UserTable.selectAll()
                     .where { UserTable.id eq uuid.toString() }
+                    .map {
+                        AuthData(
+                            lastUsername = it[UserTable.lastUsername],
+                            uuid = UUID.fromString(it[UserTable.id].value),
+                            passwordSha256 = it[UserTable.passwordHash],
+                            lastIpAddress = it[UserTable.lastIpAddress]
+                        )
+                    }
+                    .first()
+            }
+        }
+    }
+
+    override suspend fun getUser(username: String): Result<AuthData> {
+        return runCatching {
+            transaction(requireDatabase()) {
+                UserTable.selectAll()
+                    .where { UserTable.lastUsername eq username }
                     .map {
                         AuthData(
                             lastUsername = it[UserTable.lastUsername],
