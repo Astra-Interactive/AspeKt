@@ -26,10 +26,12 @@ fun <T> Krate<KyoriComponentSerializer>.withAudience(instance: T): KyoriAudience
     )
 }
 
+@JvmName("sendSystemMessageFromCommandStack")
 fun KyoriAudienceContext<CommandSourceStack>.sendSystemMessage(desc: StringDesc) {
     audience.sendSystemMessage(kyori.toComponent(desc).toNative())
 }
 
+@JvmName("sendSystemMessageFromPlayer")
 fun KyoriAudienceContext<Player>.sendSystemMessage(desc: StringDesc) {
     audience.sendSystemMessage(kyori.toComponent(desc).toNative())
 }

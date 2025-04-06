@@ -8,6 +8,7 @@ import net.minecraftforge.event.RegisterCommandsEvent
 import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.command.loginCommand
 import ru.astrainteractive.aspekt.module.auth.command.registerCommand
+import ru.astrainteractive.aspekt.module.auth.command.unregisterCommand
 import ru.astrainteractive.aspekt.module.auth.event.ForgeAuthEvent
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
@@ -20,7 +21,7 @@ class ForgeAuthModule(
     registerCommandsEventFlow: Flow<RegisterCommandsEvent>,
 ) {
     @Suppress("UnusedPrivateProperty")
-    private val loginCommandJob = registerCommandsEventFlow
+    private val commandsJob = registerCommandsEventFlow
         .onEach { registerCommandsEvent ->
             registerCommandsEvent.loginCommand(
                 scope = scope,
@@ -28,12 +29,13 @@ class ForgeAuthModule(
                 authorizedApi = authApiModule.authorizedApi,
                 kyoriKrate = kyoriKrate
             )
-        }.launchIn(scope)
-
-    @Suppress("UnusedPrivateProperty")
-    private val registerCommandJob = registerCommandsEventFlow
-        .onEach { registerCommandsEvent ->
             registerCommandsEvent.registerCommand(
+                scope = scope,
+                authDao = authApiModule.authDao,
+                authorizedApi = authApiModule.authorizedApi,
+                kyoriKrate = kyoriKrate
+            )
+            registerCommandsEvent.unregisterCommand(
                 scope = scope,
                 authDao = authApiModule.authDao,
                 authorizedApi = authApiModule.authorizedApi,
