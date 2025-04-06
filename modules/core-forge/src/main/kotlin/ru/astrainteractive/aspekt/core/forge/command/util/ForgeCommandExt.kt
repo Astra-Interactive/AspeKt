@@ -7,11 +7,15 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
+import net.minecraft.server.level.ServerPlayer
 import net.minecraftforge.event.RegisterCommandsEvent
 import ru.astrainteractive.aspekt.core.forge.command.context.ForgeCommandBuilderContext
 import ru.astrainteractive.aspekt.core.forge.command.context.ForgeCommandContext
+import ru.astrainteractive.aspekt.core.forge.permission.toPermissible
 import ru.astrainteractive.astralibs.command.api.error.ErrorHandler
 import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
+import ru.astrainteractive.astralibs.command.api.exception.CommandException
+import ru.astrainteractive.astralibs.permission.Permission
 
 fun <T : Any> CommandContext<CommandSourceStack>.requireArgument(
     alias: String,
@@ -35,6 +39,13 @@ fun <T : Any> CommandContext<CommandSourceStack>.argumentOrElse(
     default: () -> T
 ): T {
     return findArgument(alias, type) ?: default.invoke()
+}
+
+fun CommandContext<CommandSourceStack>.requirePermission(permission: Permission): Boolean {
+    val serverPlayer = source.entity as? ServerPlayer ?: run {
+        throw CommandException("$source is not a player!")
+    }
+    return serverPlayer.toPermissible().hasPermission(permission)
 }
 
 fun ForgeCommandBuilderContext.stringArgument(
