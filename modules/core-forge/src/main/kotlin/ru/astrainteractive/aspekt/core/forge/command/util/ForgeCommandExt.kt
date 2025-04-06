@@ -2,13 +2,14 @@ package ru.astrainteractive.aspekt.core.forge.command.util
 
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.arguments.ArgumentType
-import com.mojang.brigadier.builder.ArgumentBuilder
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
 import net.minecraftforge.event.RegisterCommandsEvent
+import ru.astrainteractive.aspekt.core.forge.command.context.ForgeCommandBuilderContext
+import ru.astrainteractive.aspekt.core.forge.command.context.ForgeCommandContext
+import ru.astrainteractive.astralibs.command.api.error.ErrorHandler
 import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
 
 fun <T : Any> CommandContext<CommandSourceStack>.requireArgument(
@@ -35,12 +36,12 @@ fun <T : Any> CommandContext<CommandSourceStack>.argumentOrElse(
     return findArgument(alias, type) ?: default.invoke()
 }
 
-fun <T> ArgumentBuilder<CommandSourceStack, *>.argument(
+fun <T> ForgeCommandBuilderContext.argument(
     alias: String,
     type: ArgumentType<T>,
     suggests: List<String> = emptyList(),
     builder: (RequiredArgumentBuilder<CommandSourceStack, T>.() -> Unit)? = null,
-    execute: (RequiredArgumentBuilder<CommandSourceStack, T>.(CommandContext<CommandSourceStack>) -> Unit)? = null
+    execute: (RequiredArgumentBuilder<CommandSourceStack, T>.(CommandContext<CommandSourceStack>) -> Unit)? = null,
 ) {
     val argument: RequiredArgumentBuilder<CommandSourceStack, T> = Commands
         .argument(alias, type)
@@ -53,46 +54,26 @@ fun <T> ArgumentBuilder<CommandSourceStack, *>.argument(
     builder?.invoke(argument)
     execute?.let {
         argument.executes { commandContext ->
-            execute.invoke(argument, commandContext)
+            runCatching { execute.invoke(argument, commandContext) }
+                .onFailure { throwable ->
+                    errorHandler.handle(
+                        ctx = ForgeCommandContext(commandContext),
+                        throwable = throwable
+                    )
+                }
             Command.SINGLE_SUCCESS
         }
     }
-    then(argument)
+    this.builder.then(argument)
 }
 
-/**
- * Example:
- * fun RegisterCommandsEvent.giveItemCommand() {
- *     command("giveitem2") {
- *         argument(
- *             alias = "player",
- *             type = StringArgumentType.string(),
- *             builder = {
- *                 argument(
- *                     alias = "truefalse",
- *                     type = PrimitiveArgumentType.Boolean.toBrigadier(),
- *                     builder = {
- *                         argument(
- *                             alias = "amount",
- *                             type = IntegerArgumentType.integer(1, 4),
- *                             execute = {
- *                                 println("Player -> Item -> amount")
- *                             }
- *                         )
- *                     },
- *                     execute = {
- *                         println("Player -> Item")
- *                     }
- *                 )
- *             },
- *         )
- *     }
- * }
- */
-fun RegisterCommandsEvent.command(alias: String, block: LiteralArgumentBuilder<CommandSourceStack>.() -> Unit) {
+fun RegisterCommandsEvent.command(
+    alias: String,
+    errorHandler: ErrorHandler<ForgeCommandContext> = ErrorHandler { _, _ -> },
+    block: ForgeCommandBuilderContext.() -> Unit
+) {
     val literal = Commands.literal(alias)
-    runCatching {
-        literal.block()
-    }.onFailure { println("Catched exception: ${it.localizedMessage}") }
+    val context = ForgeCommandBuilderContext(literal, errorHandler)
+    context.block()
     dispatcher.register(literal)
 }
