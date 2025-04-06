@@ -16,26 +16,28 @@ import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.checkAuthDataIsValid
 import ru.astrainteractive.aspekt.module.auth.api.isRegistered
 import ru.astrainteractive.aspekt.module.auth.api.model.AuthData
+import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.kstorage.api.Krate
 
 fun RegisterCommandsEvent.loginCommand(
     scope: CoroutineScope,
     authDao: AuthDao,
     authorizedApi: AuthorizedApi,
-    kyoriKrate: Krate<KyoriComponentSerializer>
+    kyoriKrate: Krate<KyoriComponentSerializer>,
+    translationKrate: Krate<AuthTranslation>
 ) {
     command("login") {
         stringArgument(
             alias = "password",
             execute = execute@{ ctx ->
+                val translation = translationKrate.cachedValue
                 val player = ctx.source.entity as? ServerPlayer
                 player ?: run {
                     kyoriKrate
                         .withAudience(ctx.source)
-                        .sendSystemMessage(StringDesc.Raw("Команда только для игроков!"))
+                        .sendSystemMessage(translation.onlyPlayerCommand)
                     return@execute
                 }
 
@@ -45,7 +47,7 @@ fun RegisterCommandsEvent.loginCommand(
                     if (!isRegistered) {
                         kyoriKrate
                             .withAudience(ctx.source)
-                            .sendSystemMessage(StringDesc.Raw("Вы не зарегистрированы! /login ПАРОЛЬ ПАРОЛЬ"))
+                            .sendSystemMessage(translation.notRegistered)
                         return@launch
                     }
                     val authData = AuthData(
@@ -57,12 +59,12 @@ fun RegisterCommandsEvent.loginCommand(
                     if (authDao.checkAuthDataIsValid(authData).getOrDefault(false)) {
                         kyoriKrate
                             .withAudience(ctx.source)
-                            .sendSystemMessage(StringDesc.Raw("Вы успешно авторизованы!"))
+                            .sendSystemMessage(translation.authSuccess)
                         authorizedApi.authUser(player.uuid)
                     } else {
                         kyoriKrate
                             .withAudience(ctx.source)
-                            .sendSystemMessage(StringDesc.Raw("Пароль неверный!"))
+                            .sendSystemMessage(translation.wrongPassword)
                     }
                 }
             }

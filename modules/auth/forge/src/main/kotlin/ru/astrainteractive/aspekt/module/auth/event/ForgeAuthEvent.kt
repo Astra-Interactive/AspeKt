@@ -25,11 +25,12 @@ import ru.astrainteractive.aspekt.core.forge.kyori.withAudience
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
+import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.aspekt.module.auth.event.model.Location
 import ru.astrainteractive.aspekt.module.auth.event.model.dist
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.string.StringDesc.Raw
 import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.util.CacheOwnerExt.getValue
 import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
@@ -37,7 +38,9 @@ import kotlin.time.toJavaDuration
 class ForgeAuthEvent(
     private val authorizedApi: AuthorizedApi,
     private val kyoriKrate: Krate<KyoriComponentSerializer>,
+    translationKrate: Krate<AuthTranslation>
 ) {
+    val translation by translationKrate
     private val scope = CoroutineScope(SupervisorJob() + ForgeMainDispatcher)
 
     val playerLoggedOutEvent = flowEvent<PlayerLoggedOutEvent>()
@@ -63,13 +66,13 @@ class ForgeAuthEvent(
             AuthorizedApi.AuthState.NotAuthorized -> {
                 kyoriKrate
                     .withAudience(player)
-                    .sendSystemMessage(Raw("Вы не авторизованы! /login ПАРОЛЬ"))
+                    .sendSystemMessage(translation.notAuthorized)
             }
 
             AuthorizedApi.AuthState.NotRegistered -> {
                 kyoriKrate
                     .withAudience(player)
-                    .sendSystemMessage(Raw("Вы не зарегистрированы! /register ПАРОЛЬ ПАРОЛЬ"))
+                    .sendSystemMessage(translation.notRegistered)
             }
         }
     }

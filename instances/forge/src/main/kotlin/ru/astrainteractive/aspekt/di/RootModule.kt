@@ -1,5 +1,7 @@
 package ru.astrainteractive.aspekt.di
 
+import com.charleskorn.kaml.PolymorphismStyle
+import com.charleskorn.kaml.Yaml
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -18,6 +20,7 @@ import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
+import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 import ru.astrainteractive.klibs.mikro.core.dispatchers.DefaultKotlinDispatchers
 import java.io.File
@@ -43,7 +46,14 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
 
     val authApiModule = AuthApiModule(
         scope = scope,
-        dataFolder = dataFolder
+        dataFolder = dataFolder,
+        stringFormat = YamlStringFormat(
+            configuration = Yaml.default.configuration.copy(
+                encodeDefaults = true,
+                strictMode = false,
+                polymorphismStyle = PolymorphismStyle.Property
+            )
+        )
     )
     val forgeAuthModule by lazy {
         ForgeAuthModule(

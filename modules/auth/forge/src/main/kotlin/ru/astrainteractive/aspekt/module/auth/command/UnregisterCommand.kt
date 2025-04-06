@@ -13,22 +13,24 @@ import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
-import ru.astrainteractive.aspekt.module.auth.api.permission.AuthPermission
+import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthPermission
+import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.kstorage.api.Krate
 
 fun RegisterCommandsEvent.unregisterCommand(
     scope: CoroutineScope,
     authDao: AuthDao,
     authorizedApi: AuthorizedApi,
-    kyoriKrate: Krate<KyoriComponentSerializer>
+    kyoriKrate: Krate<KyoriComponentSerializer>,
+    translationKrate: Krate<AuthTranslation>
 ) {
-    command("unregister",) {
+    command("unregister") {
         stringArgument(
             alias = "username",
             execute = execute@{ ctx ->
+                val translation = translationKrate.cachedValue
                 ctx.requirePermission(AuthPermission.Unregister)
                 val usernameToDelete = ctx.requireArgument("username", StringArgumentType)
                 scope.launch {
@@ -36,7 +38,7 @@ fun RegisterCommandsEvent.unregisterCommand(
                         .onFailure {
                             kyoriKrate
                                 .withAudience(ctx.source)
-                                .sendSystemMessage(StringDesc.Raw("Пользователь не найден!"))
+                                .sendSystemMessage(translation.userNotFound)
                         }.getOrNull() ?: return@launch
 
                     authDao.deleteAccount(authData.uuid)
@@ -55,11 +57,11 @@ fun RegisterCommandsEvent.unregisterCommand(
                                 }
                             kyoriKrate
                                 .withAudience(ctx.source)
-                                .sendSystemMessage(StringDesc.Raw("Данные пользователя удалены!"))
+                                .sendSystemMessage(translation.userDeleted)
                         }.onFailure {
                             kyoriKrate
                                 .withAudience(ctx.source)
-                                .sendSystemMessage(StringDesc.Raw("Не удалось удалить пользователя!"))
+                                .sendSystemMessage(translation.userCouldNotBeDeleted)
                         }
                 }
             }
