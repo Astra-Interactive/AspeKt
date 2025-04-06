@@ -1,12 +1,11 @@
 package ru.astrainteractive.aspekt.module.auth.command
 
-import com.mojang.brigadier.arguments.StringArgumentType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import net.minecraft.server.level.ServerPlayer
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.command.util.argument
 import ru.astrainteractive.aspekt.core.forge.command.util.command
+import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
 import ru.astrainteractive.aspekt.core.forge.util.sha256
 import ru.astrainteractive.aspekt.core.forge.util.toNative
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
@@ -26,13 +25,11 @@ fun RegisterCommandsEvent.registerCommand(
     kyoriKrate: Krate<KyoriComponentSerializer>
 ) {
     command("register") {
-        argument(
+        stringArgument(
             alias = "password",
-            type = StringArgumentType.string(),
             builder = {
-                argument(
+                stringArgument(
                     alias = "password_confirm",
-                    type = StringArgumentType.string(),
                     execute = execute@{ ctx ->
                         val player = ctx.source.entity as? ServerPlayer
                         player ?: run {
