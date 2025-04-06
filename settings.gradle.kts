@@ -49,6 +49,7 @@ include(":instances:forge")
 // Modules
 include(":modules:core")
 include(":modules:core-forge")
+include(":modules:core-bukkit")
 include(":modules:menu")
 include(":modules:broadcast")
 include(":modules:adminprivate")

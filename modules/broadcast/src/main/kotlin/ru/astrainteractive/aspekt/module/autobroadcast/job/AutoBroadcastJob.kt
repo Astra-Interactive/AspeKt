@@ -40,7 +40,7 @@ internal class AutoBroadcastJob(
     private var i = Random.nextInt()
 
     override fun execute() {
-        scope.launch(dispatchers.BukkitMain) {
+        scope.launch(dispatchers.Main) {
             i++
             if (i >= Int.MAX_VALUE) i = 0
             val announcements = announcements.announcements.values.toList()

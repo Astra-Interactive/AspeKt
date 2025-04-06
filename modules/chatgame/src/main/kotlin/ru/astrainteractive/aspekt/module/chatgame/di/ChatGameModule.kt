@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.chatgame.di
 
+import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.di.factory.ConfigKrateFactory
 import ru.astrainteractive.aspekt.module.chatgame.command.ChatGameCommand
@@ -12,12 +13,15 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 interface ChatGameModule {
     val lifecycle: Lifecycle
 
-    class Default(coreModule: CoreModule) : ChatGameModule {
+    class Default(
+        coreModule: CoreModule,
+        bukkitCoreModule: BukkitCoreModule
+    ) : ChatGameModule {
 
         private val config = ConfigKrateFactory.create(
             fileNameWithoutExtension = "chat_game",
             stringFormat = coreModule.yamlFormat,
-            dataFolder = coreModule.plugin.dataFolder,
+            dataFolder = coreModule.dataFolder,
             factory = ::ChatGameConfig
         )
 
@@ -36,13 +40,13 @@ interface ChatGameModule {
         )
 
         private val command = ChatGameCommand(
-            plugin = coreModule.plugin,
+            plugin = bukkitCoreModule.plugin,
             chatGameStore = chatGameStore,
             kyoriComponentSerializerProvider = coreModule.kyoriComponentSerializer,
             translationProvider = coreModule.translation,
             scope = coreModule.scope,
             chatGameConfigProvider = config,
-            currencyEconomyProviderFactory = coreModule.currencyEconomyProviderFactory
+            currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory
         )
 
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
