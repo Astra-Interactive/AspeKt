@@ -20,7 +20,8 @@ import net.minecraftforge.event.level.BlockEvent
 import net.minecraftforge.eventbus.api.EventPriority
 import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
 import ru.astrainteractive.aspekt.core.forge.event.flowEvent
-import ru.astrainteractive.aspekt.core.forge.util.toNative
+import ru.astrainteractive.aspekt.core.forge.kyori.sendSystemMessage
+import ru.astrainteractive.aspekt.core.forge.kyori.withAudience
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
@@ -60,21 +61,15 @@ class ForgeAuthEvent(
 
             AuthorizedApi.AuthState.Pending,
             AuthorizedApi.AuthState.NotAuthorized -> {
-                with(kyoriKrate.cachedValue) {
-                    Raw("Вы не авторизованы! /login ПАРОЛЬ")
-                        .component
-                        .toNative()
-                        .also(player::sendSystemMessage)
-                }
+                kyoriKrate
+                    .withAudience(player)
+                    .sendSystemMessage(Raw("Вы не авторизованы! /login ПАРОЛЬ"))
             }
 
             AuthorizedApi.AuthState.NotRegistered -> {
-                with(kyoriKrate.cachedValue) {
-                    Raw("Вы не зарегистрированы! /register ПАРОЛЬ ПАРОЛЬ")
-                        .component
-                        .toNative()
-                        .also(player::sendSystemMessage)
-                }
+                kyoriKrate
+                    .withAudience(player)
+                    .sendSystemMessage(Raw("Вы не зарегистрированы! /register ПАРОЛЬ ПАРОЛЬ"))
             }
         }
     }

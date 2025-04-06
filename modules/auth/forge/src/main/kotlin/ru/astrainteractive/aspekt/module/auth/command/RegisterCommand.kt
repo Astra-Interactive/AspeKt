@@ -6,8 +6,9 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraftforge.event.RegisterCommandsEvent
 import ru.astrainteractive.aspekt.core.forge.command.util.command
 import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
+import ru.astrainteractive.aspekt.core.forge.kyori.sendSystemMessage
+import ru.astrainteractive.aspekt.core.forge.kyori.withAudience
 import ru.astrainteractive.aspekt.core.forge.util.sha256
-import ru.astrainteractive.aspekt.core.forge.util.toNative
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
@@ -33,12 +34,9 @@ fun RegisterCommandsEvent.registerCommand(
                     execute = execute@{ ctx ->
                         val player = ctx.source.entity as? ServerPlayer
                         player ?: run {
-                            with(kyoriKrate.cachedValue) {
-                                StringDesc.Raw("Команда только для игроков!")
-                                    .component
-                                    .toNative()
-                                    .run(ctx.source::sendSystemMessage)
-                            }
+                            kyoriKrate
+                                .withAudience(ctx.source)
+                                .sendSystemMessage(StringDesc.Raw("Команда только для игроков!"))
                             return@execute
                         }
                         val passwordSha = ctx.getArgument(
@@ -48,12 +46,9 @@ fun RegisterCommandsEvent.registerCommand(
                         scope.launch {
                             val isRegistered = authDao.isRegistered(player.uuid)
                             if (isRegistered) {
-                                with(kyoriKrate.cachedValue) {
-                                    StringDesc.Raw("Вы уже зарегистрированы!")
-                                        .component
-                                        .toNative()
-                                        .run(ctx.source::sendSystemMessage)
-                                }
+                                kyoriKrate
+                                    .withAudience(ctx.source)
+                                    .sendSystemMessage(StringDesc.Raw("Вы уже зарегистрированы!"))
                                 return@launch
                             }
                             val authData = AuthData(
@@ -64,19 +59,13 @@ fun RegisterCommandsEvent.registerCommand(
                             )
                             authDao.createAccount(authData)
                                 .onFailure {
-                                    with(kyoriKrate.cachedValue) {
-                                        StringDesc.Raw("Не удалось создать аккаунт!")
-                                            .component
-                                            .toNative()
-                                            .run(ctx.source::sendSystemMessage)
-                                    }
+                                    kyoriKrate
+                                        .withAudience(ctx.source)
+                                        .sendSystemMessage(StringDesc.Raw("Не удалось создать аккаунт!"))
                                 }.onSuccess {
-                                    with(kyoriKrate.cachedValue) {
-                                        StringDesc.Raw("Аккаунт создан успешно!")
-                                            .component
-                                            .toNative()
-                                            .run(ctx.source::sendSystemMessage)
-                                    }
+                                    kyoriKrate
+                                        .withAudience(ctx.source)
+                                        .sendSystemMessage(StringDesc.Raw("Аккаунт создан успешно!"))
                                     authorizedApi.authUser(player.uuid)
                                 }
                         }
