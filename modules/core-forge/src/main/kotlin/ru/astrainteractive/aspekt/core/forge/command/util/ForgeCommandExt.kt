@@ -3,13 +3,16 @@ package ru.astrainteractive.aspekt.core.forge.command.util
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.arguments.ArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
+import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
+import net.minecraft.server.MinecraftServer
+import net.minecraft.server.dedicated.DedicatedServer
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.server.rcon.RconConsoleSource
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.command.context.ForgeCommandBuilderContext
 import ru.astrainteractive.aspekt.core.forge.command.context.ForgeCommandContext
 import ru.astrainteractive.aspekt.core.forge.permission.toPermissible
 import ru.astrainteractive.astralibs.command.api.error.ErrorHandler
@@ -42,15 +45,19 @@ fun <T : Any> CommandContext<CommandSourceStack>.argumentOrElse(
 }
 
 fun CommandContext<CommandSourceStack>.requirePermission(permission: Permission): Boolean {
+    if (source.source is RconConsoleSource) return true
+    if (source.source is DedicatedServer) return true
+    if (source.source is MinecraftServer) return true
     val serverPlayer = source.entity as? ServerPlayer ?: run {
-        throw CommandException("$source is not a player!")
+        throw CommandException("$source.source; is not a player!")
     }
     return serverPlayer.toPermissible().hasPermission(permission)
 }
 
-fun ForgeCommandBuilderContext.stringArgument(
+fun ArgumentBuilder<CommandSourceStack, *>.stringArgument(
     alias: String,
     suggests: List<String> = emptyList(),
+    errorHandler: ErrorHandler<ForgeCommandContext> = ErrorHandler { _, _ -> },
     builder: (RequiredArgumentBuilder<CommandSourceStack, String>.() -> Unit)? = null,
     execute: (RequiredArgumentBuilder<CommandSourceStack, String>.(CommandContext<CommandSourceStack>) -> Unit)? = null,
 ) = argument(
@@ -58,17 +65,20 @@ fun ForgeCommandBuilderContext.stringArgument(
     type = StringArgumentType.string(),
     suggests = suggests,
     builder = builder,
-    execute = execute
+    execute = execute,
+    errorHandler = errorHandler
 )
 
-fun <T> ForgeCommandBuilderContext.argument(
+@Suppress("LongParameterList")
+fun <T> ArgumentBuilder<CommandSourceStack, *>.argument(
     alias: String,
     type: ArgumentType<T>,
     suggests: List<String> = emptyList(),
+    errorHandler: ErrorHandler<ForgeCommandContext> = ErrorHandler { _, _ -> },
     builder: (RequiredArgumentBuilder<CommandSourceStack, T>.() -> Unit)? = null,
     execute: (RequiredArgumentBuilder<CommandSourceStack, T>.(CommandContext<CommandSourceStack>) -> Unit)? = null,
 ) {
-    val argument: RequiredArgumentBuilder<CommandSourceStack, T> = Commands
+    val requiredArgumentBuilder: RequiredArgumentBuilder<CommandSourceStack, T> = Commands
         .argument(alias, type)
         .suggests { context, builder ->
             suggests.forEach { suggestion ->
@@ -76,10 +86,10 @@ fun <T> ForgeCommandBuilderContext.argument(
             }
             builder.buildFuture()
         }
-    builder?.invoke(argument)
+    builder?.invoke(requiredArgumentBuilder)
     execute?.let {
-        argument.executes { commandContext ->
-            runCatching { execute.invoke(argument, commandContext) }
+        requiredArgumentBuilder.executes { commandContext ->
+            runCatching { execute.invoke(requiredArgumentBuilder, commandContext) }
                 .onFailure { throwable ->
                     errorHandler.handle(
                         ctx = ForgeCommandContext(commandContext),
@@ -89,16 +99,14 @@ fun <T> ForgeCommandBuilderContext.argument(
             Command.SINGLE_SUCCESS
         }
     }
-    this.builder.then(argument)
+    this.then(requiredArgumentBuilder)
 }
 
 fun RegisterCommandsEvent.command(
     alias: String,
-    errorHandler: ErrorHandler<ForgeCommandContext> = ErrorHandler { _, _ -> },
-    block: ForgeCommandBuilderContext.() -> Unit
+    block: ArgumentBuilder<CommandSourceStack, *>.() -> Unit
 ) {
     val literal = Commands.literal(alias)
-    val context = ForgeCommandBuilderContext(literal, errorHandler)
-    context.block()
+    literal.block()
     dispatcher.register(literal)
 }
