@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.core.forge.command.util
 
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.arguments.ArgumentType
+import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
@@ -35,6 +36,19 @@ fun <T : Any> CommandContext<CommandSourceStack>.argumentOrElse(
 ): T {
     return findArgument(alias, type) ?: default.invoke()
 }
+
+fun ForgeCommandBuilderContext.stringArgument(
+    alias: String,
+    suggests: List<String> = emptyList(),
+    builder: (RequiredArgumentBuilder<CommandSourceStack, String>.() -> Unit)? = null,
+    execute: (RequiredArgumentBuilder<CommandSourceStack, String>.(CommandContext<CommandSourceStack>) -> Unit)? = null,
+) = argument(
+    alias = alias,
+    type = StringArgumentType.string(),
+    suggests = suggests,
+    builder = builder,
+    execute = execute
+)
 
 fun <T> ForgeCommandBuilderContext.argument(
     alias: String,
