@@ -7,6 +7,13 @@ interface AuthDao {
     suspend fun createAccount(authData: AuthData): Result<Unit>
     suspend fun deleteAccount(authData: AuthData): Result<Unit>
     suspend fun updateAccount(authData: AuthData): Result<Unit>
-    suspend fun isRegistered(uuid: UUID): Result<Boolean>
-    suspend fun checkAuthDataIsOk(authData: AuthData): Result<Boolean>
+    suspend fun getUser(uuid: UUID): Result<AuthData>
+}
+
+suspend fun AuthDao.checkAuthDataIsValid(authData: AuthData): Result<Boolean> {
+    return getUser(authData.uuid).map { it.passwordSha256 == authData.passwordSha256 }
+}
+
+suspend fun AuthDao.isRegistered(uuid: UUID): Boolean {
+    return getUser(uuid).getOrNull() != null
 }

@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
 import net.minecraftforge.event.entity.EntityEvent
 import net.minecraftforge.event.entity.EntityJoinLevelEvent
@@ -20,7 +21,9 @@ import net.minecraftforge.eventbus.api.EventPriority
 import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
 import ru.astrainteractive.aspekt.core.forge.event.flowEvent
 import ru.astrainteractive.aspekt.core.forge.util.toNative
+import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
+import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
 import ru.astrainteractive.aspekt.module.auth.event.model.Location
 import ru.astrainteractive.aspekt.module.auth.event.model.dist
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
@@ -41,7 +44,14 @@ class ForgeAuthEvent(
         .launchIn(scope)
 
     val playerLoggedInEvent = flowEvent<PlayerLoggedInEvent>()
-        .onEach { authorizedApi.loadUserInfo(it.entity.uuid) }
+        .onEach {
+            val playerLoginModel = PlayerLoginModel(
+                username = it.entity.name.toPlain(),
+                uuid = it.entity.uuid,
+                ip = (it.entity as ServerPlayer).ipAddress
+            )
+            authorizedApi.loadUserInfo(playerLoginModel)
+        }
         .launchIn(scope)
 
     private fun processPlayerEvent(player: Player) = scope.launch {

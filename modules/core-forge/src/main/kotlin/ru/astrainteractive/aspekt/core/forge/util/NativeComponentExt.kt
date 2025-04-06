@@ -18,3 +18,7 @@ fun Component.toKyori(): net.kyori.adventure.text.Component {
 fun net.kyori.adventure.text.Component.toPlain(): String {
     return KyoriComponentSerializer.Plain.serializer.serialize(this)
 }
+
+fun Component.toPlain(): String {
+    return toKyori().toPlain()
+}
