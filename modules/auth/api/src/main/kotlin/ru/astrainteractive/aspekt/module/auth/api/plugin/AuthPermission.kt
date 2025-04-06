@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.module.auth.api.permission
+package ru.astrainteractive.aspekt.module.auth.api.plugin
 
 import ru.astrainteractive.astralibs.permission.Permission
 

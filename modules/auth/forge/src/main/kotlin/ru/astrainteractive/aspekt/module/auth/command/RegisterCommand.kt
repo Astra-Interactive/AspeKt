@@ -9,23 +9,27 @@ import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
 import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
 import ru.astrainteractive.aspekt.core.forge.kyori.sendSystemMessage
 import ru.astrainteractive.aspekt.core.forge.kyori.withAudience
+import ru.astrainteractive.aspekt.core.forge.util.getValue
 import ru.astrainteractive.aspekt.core.forge.util.sha256
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.isRegistered
 import ru.astrainteractive.aspekt.module.auth.api.model.AuthData
+import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.util.CacheOwnerExt.getValue
+import ru.astrainteractive.klibs.kstorage.util.getValue
 
 @Suppress("LongMethod")
 fun RegisterCommandsEvent.registerCommand(
     scope: CoroutineScope,
     authDao: AuthDao,
     authorizedApi: AuthorizedApi,
-    kyoriKrate: Krate<KyoriComponentSerializer>
+    kyoriKrate: Krate<KyoriComponentSerializer>,
+    translationKrate: Krate<AuthTranslation>
 ) {
     command("register") {
         stringArgument(
@@ -34,11 +38,12 @@ fun RegisterCommandsEvent.registerCommand(
                 stringArgument(
                     alias = "password_confirm",
                     execute = execute@{ ctx ->
+                        val translation = translationKrate.cachedValue
                         val player = ctx.source.entity as? ServerPlayer
                         player ?: run {
                             kyoriKrate
                                 .withAudience(ctx.source)
-                                .sendSystemMessage(StringDesc.Raw("Команда только для игроков!"))
+                                .sendSystemMessage(translation.onlyPlayerCommand)
                             return@execute
                         }
                         val passwordSha = ctx.requireArgument("password", StringArgumentType).sha256()
@@ -47,7 +52,7 @@ fun RegisterCommandsEvent.registerCommand(
                             if (isRegistered) {
                                 kyoriKrate
                                     .withAudience(ctx.source)
-                                    .sendSystemMessage(StringDesc.Raw("Вы уже зарегистрированы!"))
+                                    .sendSystemMessage(translation.alreadyRegistered)
                                 return@launch
                             }
                             val authData = AuthData(
@@ -60,11 +65,11 @@ fun RegisterCommandsEvent.registerCommand(
                                 .onFailure {
                                     kyoriKrate
                                         .withAudience(ctx.source)
-                                        .sendSystemMessage(StringDesc.Raw("Не удалось создать аккаунт!"))
+                                        .sendSystemMessage(translation.couldNotCreateAccount)
                                 }.onSuccess {
                                     kyoriKrate
                                         .withAudience(ctx.source)
-                                        .sendSystemMessage(StringDesc.Raw("Аккаунт создан успешно!"))
+                                        .sendSystemMessage(translation.accountCreated)
                                     authorizedApi.authUser(player.uuid)
                                 }
                         }

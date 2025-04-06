@@ -27,19 +27,22 @@ class ForgeAuthModule(
                 scope = scope,
                 authDao = authApiModule.authDao,
                 authorizedApi = authApiModule.authorizedApi,
-                kyoriKrate = kyoriKrate
+                kyoriKrate = kyoriKrate,
+                translationKrate = authApiModule.translationKrate
             )
             registerCommandsEvent.registerCommand(
                 scope = scope,
                 authDao = authApiModule.authDao,
                 authorizedApi = authApiModule.authorizedApi,
-                kyoriKrate = kyoriKrate
+                kyoriKrate = kyoriKrate,
+                translationKrate = authApiModule.translationKrate
             )
             registerCommandsEvent.unregisterCommand(
                 scope = scope,
                 authDao = authApiModule.authDao,
                 authorizedApi = authApiModule.authorizedApi,
-                kyoriKrate = kyoriKrate
+                kyoriKrate = kyoriKrate,
+                translationKrate = authApiModule.translationKrate
             )
         }.launchIn(scope)
 
@@ -47,6 +50,7 @@ class ForgeAuthModule(
     private val forgeAuthEvent = ForgeAuthEvent(
         authorizedApi = authApiModule.authorizedApi,
         kyoriKrate = kyoriKrate,
+        translationKrate = authApiModule.translationKrate
     )
 
     val lifecycle = Lifecycle.Lambda()
