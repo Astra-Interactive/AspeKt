@@ -4,10 +4,12 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateController
 import ru.astrainteractive.aspekt.module.adminprivate.controller.di.AdminPrivateControllerDependencies
-import ru.astrainteractive.aspekt.module.adminprivate.data.AdminPrivateRepository
-import ru.astrainteractive.aspekt.module.adminprivate.data.AdminPrivateRepositoryImpl
-import ru.astrainteractive.aspekt.module.adminprivate.model.AdminChunk
+import ru.astrainteractive.aspekt.module.adminprivate.data.ClaimsRepository
+import ru.astrainteractive.aspekt.module.adminprivate.data.ClaimsRepositoryImpl
+import ru.astrainteractive.aspekt.module.adminprivate.data.getAllChunks
+import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
+import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimPlayer
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import java.io.File
 import java.util.UUID
@@ -19,11 +21,15 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 internal class AdminPrivateControllerTest {
-    private val randomChunk: AdminChunk
+    private val claimPlayer = ClaimPlayer(
+        uuid = UUID.randomUUID(),
+        username = "username"
+    )
+    private val randomChunk: ClaimChunk
         get() {
             val x = Random.nextInt(0, 100)
             val z = Random.nextInt(0, 100)
-            return AdminChunk(
+            return ClaimChunk(
                 x = x,
                 z = z,
                 worldName = UUID.randomUUID().toString(),
@@ -35,9 +41,9 @@ internal class AdminPrivateControllerTest {
         get() = File(System.getProperty("java.io.tmpdir"))
 
     inner class Dependencies : AdminPrivateControllerDependencies {
-        override val repository: AdminPrivateRepository =
-            AdminPrivateRepositoryImpl(
-                file = tempFile.resolve(UUID.randomUUID().toString()),
+        override val repository: ClaimsRepository =
+            ClaimsRepositoryImpl(
+                folder = tempFile.resolve(UUID.randomUUID().toString()),
                 stringFormat = YamlStringFormat()
             )
     }
@@ -47,9 +53,9 @@ internal class AdminPrivateControllerTest {
         val module = Dependencies()
         val controller = AdminPrivateController(module)
         randomChunk.let { chunk ->
-            controller.claim(chunk)
+            controller.claim(claimPlayer, chunk)
             assertEquals(1, module.repository.getAllChunks().size)
-            controller.unclaim(chunk)
+            controller.unclaim(claimPlayer, chunk)
             assertEquals(0, module.repository.getAllChunks().size)
         }
     }
@@ -59,13 +65,13 @@ internal class AdminPrivateControllerTest {
         val module = Dependencies()
         val controller = AdminPrivateController(module)
         randomChunk.let { chunk ->
-            controller.claim(chunk)
-            controller.setFlag(ChunkFlag.BREAK, true, chunk)
+            controller.claim(claimPlayer, chunk)
+            controller.setFlag(claimPlayer, ChunkFlag.BREAK, true, chunk)
             module.repository.getAllChunks().first().flags[ChunkFlag.BREAK].let { flagValue ->
                 assertNotNull(flagValue)
                 assertTrue(flagValue)
             }
-            controller.setFlag(ChunkFlag.BREAK, false, chunk)
+            controller.setFlag(claimPlayer, ChunkFlag.BREAK, false, chunk)
             module.repository.getAllChunks().first().flags[ChunkFlag.BREAK].let { flagValue ->
                 assertNotNull(flagValue)
                 assertFalse(flagValue)
@@ -79,11 +85,11 @@ internal class AdminPrivateControllerTest {
         val controller = AdminPrivateController(module)
         randomChunk.let { chunk ->
             assertTrue { controller.isAble(chunk, ChunkFlag.BREAK) }
-            controller.claim(chunk)
+            controller.claim(claimPlayer, chunk)
             assertFalse { controller.isAble(chunk, ChunkFlag.BREAK) }
-            controller.setFlag(ChunkFlag.BREAK, true, chunk)
+            controller.setFlag(claimPlayer, ChunkFlag.BREAK, true, chunk)
             assertTrue { controller.isAble(chunk, ChunkFlag.BREAK) }
-            controller.setFlag(ChunkFlag.BREAK, false, chunk)
+            controller.setFlag(claimPlayer, ChunkFlag.BREAK, false, chunk)
             assertFalse { controller.isAble(chunk, ChunkFlag.BREAK) }
         }
     }
@@ -93,7 +99,7 @@ internal class AdminPrivateControllerTest {
         val module = Dependencies()
         val controller = AdminPrivateController(module)
         randomChunk.let { chunk ->
-            controller.claim(chunk)
+            controller.claim(claimPlayer, chunk)
             val expectArray = listOf(
                 listOf(false, false, false),
                 listOf(false, true, false),

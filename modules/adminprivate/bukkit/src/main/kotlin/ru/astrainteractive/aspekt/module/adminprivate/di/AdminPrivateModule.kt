@@ -14,18 +14,17 @@ import java.io.File
 
 interface AdminPrivateModule {
     val lifecycle: Lifecycle
-    val adminChunksFile: File
 
     class Default(
         private val coreModule: CoreModule,
         bukkitCoreModule: BukkitCoreModule
     ) : AdminPrivateModule {
-        override val adminChunksFile: File = coreModule.dataFolder.resolve("adminchunks.yml")
-
         private val adminPrivateController = AdminPrivateController(
             dependencies = AdminPrivateControllerDependencies.Default(
                 coreModule = coreModule,
-                adminChunksFile = adminChunksFile
+                folder = coreModule.dataFolder
+                    .resolve("claims")
+                    .also(File::mkdirs)
             )
         )
 
@@ -49,10 +48,8 @@ interface AdminPrivateModule {
             onEnable = {
                 adminPrivateCommandRegistry.register()
                 adminPrivateEvent.onEnable(bukkitCoreModule.plugin)
-                adminPrivateController.reloadKrate()
             },
             onReload = {
-                adminPrivateController.reloadKrate()
             },
             onDisable = {
                 adminPrivateEvent.onDisable()

@@ -2,7 +2,8 @@
 
 package ru.astrainteractive.aspekt.module.adminprivate.util
 
-import ru.astrainteractive.aspekt.module.adminprivate.model.AdminChunk
+import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimChunk
+import ru.astrainteractive.aspekt.module.adminprivate.model.UniqueWorldKey
 
-internal inline val AdminChunk.uniqueWorldKey: String
-    get() = "${this.chunkKey}_${this.worldName}"
+internal inline val ClaimChunk.uniqueWorldKey: UniqueWorldKey
+    get() = UniqueWorldKey("${this.chunkKey}_${this.worldName}")

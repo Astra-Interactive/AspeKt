@@ -1,18 +1,32 @@
 package ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate
 
-import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
+import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimChunk
+import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimPlayer
 import ru.astrainteractive.astralibs.command.api.exception.CommandException
 
 internal interface AdminPrivateCommand {
     sealed interface Model {
-        class ShowMap(val player: Player) : Model
-        class Claim(val player: Player) : Model
-        class UnClaim(val player: Player) : Model
+        class ShowMap(
+            val claimPlayer: ClaimPlayer,
+            val chunk: ClaimChunk
+        ) : Model
+
+        class Claim(
+            val claimPlayer: ClaimPlayer,
+            val chunk: ClaimChunk
+        ) : Model
+
+        class UnClaim(
+            val claimPlayer: ClaimPlayer,
+            val chunk: ClaimChunk
+        ) : Model
+
         class SetFlag(
-            val player: Player,
+            val claimPlayer: ClaimPlayer,
             val flag: ChunkFlag,
-            val value: Boolean
+            val value: Boolean,
+            val chunk: ClaimChunk
         ) : Model
     }
 

@@ -2,6 +2,8 @@ package ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate
 
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
+import ru.astrainteractive.aspekt.module.adminprivate.util.claimChunk
+import ru.astrainteractive.aspekt.module.adminprivate.util.claimPlayer
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.api.argumenttype.ArgumentType
 import ru.astrainteractive.astralibs.command.api.argumenttype.BooleanArgumentType
@@ -21,17 +23,17 @@ internal class AdminPrivateCommandParser : CommandParser<AdminPrivateCommand.Mod
         return when (args.getOrNull(0)) {
             "map" -> {
                 val player = sender as? Player ?: throw AdminPrivateCommand.Error.NotPlayer
-                player.let(AdminPrivateCommand.Model::ShowMap)
+                AdminPrivateCommand.Model.ShowMap(player.claimPlayer, player.chunk.claimChunk)
             }
 
             "claim" -> {
                 val player = sender as? Player ?: throw AdminPrivateCommand.Error.NotPlayer
-                player.let(AdminPrivateCommand.Model::Claim)
+                AdminPrivateCommand.Model.Claim(player.claimPlayer, player.chunk.claimChunk)
             }
 
             "unclaim" -> {
                 val player = sender as? Player ?: throw AdminPrivateCommand.Error.NotPlayer
-                player.let(AdminPrivateCommand.Model::UnClaim)
+                AdminPrivateCommand.Model.UnClaim(player.claimPlayer, player.chunk.claimChunk)
             }
 
             "flag" -> {
@@ -42,9 +44,10 @@ internal class AdminPrivateCommandParser : CommandParser<AdminPrivateCommand.Mod
                 )
                 val value = commandContext.requireArgument(2, BooleanArgumentType)
                 AdminPrivateCommand.Model.SetFlag(
-                    player = player,
+                    claimPlayer = player.claimPlayer,
                     flag = flag,
-                    value = value
+                    value = value,
+                    chunk = player.chunk.claimChunk
                 )
             }
 
