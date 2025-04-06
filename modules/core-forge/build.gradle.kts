@@ -15,6 +15,8 @@ dependencies {
     implementation(libs.minecraft.kyori.plain)
     implementation(libs.minecraft.kyori.legacy)
     implementation(libs.minecraft.kyori.gson)
+
+    compileOnly(libs.minecraft.luckperms)
 }
 
 dependencies {

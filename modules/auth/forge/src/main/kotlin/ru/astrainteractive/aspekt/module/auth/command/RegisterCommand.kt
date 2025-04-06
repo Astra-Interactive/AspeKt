@@ -5,6 +5,7 @@ import kotlinx.coroutines.launch
 import net.minecraft.server.level.ServerPlayer
 import net.minecraftforge.event.RegisterCommandsEvent
 import ru.astrainteractive.aspekt.core.forge.command.util.command
+import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
 import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
 import ru.astrainteractive.aspekt.core.forge.kyori.sendSystemMessage
 import ru.astrainteractive.aspekt.core.forge.kyori.withAudience
@@ -14,6 +15,7 @@ import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.isRegistered
 import ru.astrainteractive.aspekt.module.auth.api.model.AuthData
+import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.kstorage.api.Krate
@@ -39,10 +41,7 @@ fun RegisterCommandsEvent.registerCommand(
                                 .sendSystemMessage(StringDesc.Raw("Команда только для игроков!"))
                             return@execute
                         }
-                        val passwordSha = ctx.getArgument(
-                            "password",
-                            String::class.java
-                        ).sha256()
+                        val passwordSha = ctx.requireArgument("password", StringArgumentType).sha256()
                         scope.launch {
                             val isRegistered = authDao.isRegistered(player.uuid)
                             if (isRegistered) {
