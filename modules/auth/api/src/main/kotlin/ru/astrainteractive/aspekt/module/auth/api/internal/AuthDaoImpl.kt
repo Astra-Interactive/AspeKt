@@ -12,6 +12,7 @@ import org.jetbrains.exposed.sql.update
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.model.AuthData
 import ru.astrainteractive.aspekt.module.auth.api.table.UserTable
+import java.time.LocalDateTime
 import java.util.UUID
 
 internal class AuthDaoImpl(private val databaseFlow: Flow<Database>) : AuthDao {
@@ -23,6 +24,9 @@ internal class AuthDaoImpl(private val databaseFlow: Flow<Database>) : AuthDao {
                     it[UserTable.id] = authData.uuid.toString()
                     it[UserTable.lastUsername] = authData.lastUsername
                     it[UserTable.passwordHash] = authData.passwordSha256
+                    it[UserTable.createdAt] = LocalDateTime.now()
+                    it[UserTable.updatedAt] = LocalDateTime.now()
+                    it[UserTable.lastIpAddress] = authData.lastIpAddress
                 }
             }
         }
@@ -48,36 +52,28 @@ internal class AuthDaoImpl(private val databaseFlow: Flow<Database>) : AuthDao {
                     body = {
                         it[UserTable.passwordHash] = authData.passwordSha256
                         it[UserTable.lastUsername] = authData.lastUsername
+                        it[UserTable.updatedAt] = LocalDateTime.now()
+                        it[UserTable.lastIpAddress] = authData.lastIpAddress
                     }
                 )
             }
         }
     }
 
-    override suspend fun isRegistered(uuid: UUID): Result<Boolean> {
+    override suspend fun getUser(uuid: UUID): Result<AuthData> {
         return runCatching {
             transaction(requireDatabase()) {
                 UserTable.selectAll()
                     .where { UserTable.id eq uuid.toString() }
-                    .firstOrNull() != null
-            }
-        }
-    }
-
-    override suspend fun checkAuthDataIsOk(authData: AuthData): Result<Boolean> {
-        return runCatching {
-            transaction(requireDatabase()) {
-                UserTable.selectAll()
-                    .where { UserTable.id eq authData.uuid.toString() }
                     .map {
                         AuthData(
                             lastUsername = it[UserTable.lastUsername],
                             uuid = UUID.fromString(it[UserTable.id].value),
-                            passwordSha256 = it[UserTable.passwordHash]
+                            passwordSha256 = it[UserTable.passwordHash],
+                            lastIpAddress = it[UserTable.lastIpAddress]
                         )
                     }
-                    .firstOrNull()
-                    ?.passwordSha256 == authData.passwordSha256
+                    .first()
             }
         }
     }
