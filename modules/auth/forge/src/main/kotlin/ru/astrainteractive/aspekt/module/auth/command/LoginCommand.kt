@@ -5,15 +5,18 @@ import kotlinx.coroutines.launch
 import net.minecraft.server.level.ServerPlayer
 import net.minecraftforge.event.RegisterCommandsEvent
 import ru.astrainteractive.aspekt.core.forge.command.util.command
+import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
 import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
+import ru.astrainteractive.aspekt.core.forge.kyori.sendSystemMessage
+import ru.astrainteractive.aspekt.core.forge.kyori.withAudience
 import ru.astrainteractive.aspekt.core.forge.util.sha256
-import ru.astrainteractive.aspekt.core.forge.util.toNative
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.checkAuthDataIsValid
 import ru.astrainteractive.aspekt.module.auth.api.isRegistered
 import ru.astrainteractive.aspekt.module.auth.api.model.AuthData
+import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.kstorage.api.Krate
@@ -30,27 +33,19 @@ fun RegisterCommandsEvent.loginCommand(
             execute = execute@{ ctx ->
                 val player = ctx.source.entity as? ServerPlayer
                 player ?: run {
-                    with(kyoriKrate.cachedValue) {
-                        StringDesc.Raw("Команда только для игроков!")
-                            .component
-                            .toNative()
-                            .run(ctx.source::sendSystemMessage)
-                    }
+                    kyoriKrate
+                        .withAudience(ctx.source)
+                        .sendSystemMessage(StringDesc.Raw("Команда только для игроков!"))
                     return@execute
                 }
-                val passwordSha = ctx.getArgument(
-                    "password",
-                    String::class.java
-                ).sha256()
+
+                val passwordSha = ctx.requireArgument("password", StringArgumentType).sha256()
                 scope.launch {
                     val isRegistered = authDao.isRegistered(player.uuid)
                     if (!isRegistered) {
-                        with(kyoriKrate.cachedValue) {
-                            StringDesc.Raw("Вы не зарегистрированы! /login ПАРОЛЬ ПАРОЛЬ")
-                                .component
-                                .toNative()
-                                .run(ctx.source::sendSystemMessage)
-                        }
+                        kyoriKrate
+                            .withAudience(ctx.source)
+                            .sendSystemMessage(StringDesc.Raw("Вы не зарегистрированы! /login ПАРОЛЬ ПАРОЛЬ"))
                         return@launch
                     }
                     val authData = AuthData(
@@ -60,20 +55,14 @@ fun RegisterCommandsEvent.loginCommand(
                         lastIpAddress = player.ipAddress
                     )
                     if (authDao.checkAuthDataIsValid(authData).getOrDefault(false)) {
-                        with(kyoriKrate.cachedValue) {
-                            StringDesc.Raw("Вы успешно авторизованы!")
-                                .component
-                                .toNative()
-                                .run(ctx.source::sendSystemMessage)
-                        }
+                        kyoriKrate
+                            .withAudience(ctx.source)
+                            .sendSystemMessage(StringDesc.Raw("Вы успешно авторизованы!"))
                         authorizedApi.authUser(player.uuid)
                     } else {
-                        with(kyoriKrate.cachedValue) {
-                            StringDesc.Raw("Пароль неверный!")
-                                .component
-                                .toNative()
-                                .run(ctx.source::sendSystemMessage)
-                        }
+                        kyoriKrate
+                            .withAudience(ctx.source)
+                            .sendSystemMessage(StringDesc.Raw("Пароль неверный!"))
                     }
                 }
             }
