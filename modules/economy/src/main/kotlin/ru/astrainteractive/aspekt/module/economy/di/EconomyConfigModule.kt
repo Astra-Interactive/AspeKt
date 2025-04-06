@@ -17,7 +17,7 @@ internal interface EconomyConfigModule {
     val currencyConfiguration: DefaultStateFlowMutableKrate<CurrencyConfiguration?>
 
     class Default(coreModule: CoreModule) : EconomyConfigModule, Logger by JUtiltLogger("EconomyConfigModule") {
-        override val folder = coreModule.plugin.dataFolder.resolve("economy")
+        override val folder = coreModule.dataFolder.resolve("economy")
 
         override val databaseConfiguration = fileConfigKrate<DatabaseConfiguration>(
             file = folder.resolve("db"),

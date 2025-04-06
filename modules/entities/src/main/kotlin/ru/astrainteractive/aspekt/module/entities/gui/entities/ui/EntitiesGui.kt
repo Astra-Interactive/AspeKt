@@ -13,7 +13,6 @@ import ru.astrainteractive.aspekt.module.entities.gui.entities.presentation.Defa
 import ru.astrainteractive.aspekt.module.entities.gui.entities.presentation.EntitiesComponent
 import ru.astrainteractive.aspekt.module.entities.gui.entities.util.toMaterial
 import ru.astrainteractive.aspekt.util.getValue
-import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.menu.holder.DefaultPlayerHolder
 import ru.astrainteractive.astralibs.menu.holder.PlayerHolder
@@ -29,10 +28,11 @@ import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setI
 import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setOnClickListener
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 internal class EntitiesGui(
     player: Player,
-    private val bukkitDispatchers: BukkitDispatchers,
+    private val dispatchers: KotlinDispatchers,
     kyoriComponentSerializerKrate: Krate<KyoriComponentSerializer>
 ) : PaginatedInventoryMenu() {
     private val kyoriComponentSerializer by kyoriComponentSerializerKrate
@@ -132,7 +132,7 @@ internal class EntitiesGui(
                 )
             }
             .onEach { render() }
-            .flowOn(bukkitDispatchers.BukkitMain)
+            .flowOn(dispatchers.Main)
             .launchIn(menuScope)
         viewModel.loadData()
     }

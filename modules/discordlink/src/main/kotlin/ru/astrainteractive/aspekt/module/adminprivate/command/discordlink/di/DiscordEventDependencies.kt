@@ -3,14 +3,14 @@ package ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di
 import kotlinx.coroutines.CoroutineScope
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.RoleController
-import ru.astrainteractive.astralibs.async.BukkitDispatchers
+import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 internal interface DiscordEventDependencies {
     val discordController: RoleController
     val luckPermsController: RoleController
     val addMoneyController: RoleController
     val scope: CoroutineScope
-    val dispatchers: BukkitDispatchers
+    val dispatchers: KotlinDispatchers
 
     class Default(
         coreModule: CoreModule,
@@ -19,6 +19,6 @@ internal interface DiscordEventDependencies {
         override val addMoneyController: RoleController
     ) : DiscordEventDependencies {
         override val scope: CoroutineScope = coreModule.scope
-        override val dispatchers: BukkitDispatchers = coreModule.dispatchers
+        override val dispatchers: KotlinDispatchers = coreModule.dispatchers
     }
 }

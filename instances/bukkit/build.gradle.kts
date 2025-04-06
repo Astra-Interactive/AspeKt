@@ -34,6 +34,7 @@ dependencies {
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
     implementation(projects.modules.core)
+    implementation(projects.modules.coreBukkit)
     implementation(projects.modules.menu)
     implementation(projects.modules.broadcast)
     implementation(projects.modules.adminprivate)

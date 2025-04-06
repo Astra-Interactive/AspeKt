@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.inventorysort.event.sort.di
 
 import org.bukkit.plugin.java.JavaPlugin
-import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.inventorysort.event.sort.SortController
 import ru.astrainteractive.astralibs.event.EventListener
 
@@ -11,10 +11,10 @@ internal interface SortDependencies {
     val sortController: SortController
 
     class Default(
-        coreModule: CoreModule
+        bukkitCoreModule: BukkitCoreModule
     ) : SortDependencies {
-        override val eventListener: EventListener = coreModule.eventListener
-        override val plugin: JavaPlugin = coreModule.plugin
+        override val eventListener: EventListener = bukkitCoreModule.eventListener
+        override val plugin: JavaPlugin = bukkitCoreModule.plugin
         override val sortController: SortController by lazy {
             SortController()
         }

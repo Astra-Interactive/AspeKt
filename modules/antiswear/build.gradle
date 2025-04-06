@@ -24,4 +24,5 @@ dependencies {
     testImplementation(libs.kotlin.coroutines.test)
     // Local
     implementation(projects.modules.core)
+    implementation(projects.modules.coreBukkit)
 }

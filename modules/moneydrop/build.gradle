@@ -23,4 +23,5 @@ dependencies {
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
     implementation(projects.modules.core)
+    implementation(projects.modules.coreBukkit)
 }
