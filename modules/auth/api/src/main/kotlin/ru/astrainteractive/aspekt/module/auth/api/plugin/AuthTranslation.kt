@@ -8,7 +8,7 @@ import ru.astrainteractive.astralibs.string.StringDescExt.plus
 @Serializable
 data class AuthTranslation(
     @SerialName("prefix")
-    val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BJAIL&7] "),
+    val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BAUTH&7] "),
     @SerialName("not_authorized")
     val notAuthorized: StringDesc.Raw = prefix
         .plus("Вы не авторизованы! /login ПАРОЛЬ")
