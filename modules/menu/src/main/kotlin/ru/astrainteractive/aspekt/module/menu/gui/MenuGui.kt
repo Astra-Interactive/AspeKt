@@ -14,7 +14,6 @@ import org.bukkit.inventory.ItemStack
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.async.BukkitDispatchers
 import ru.astrainteractive.astralibs.economy.EconomyFacade
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.menu.holder.DefaultPlayerHolder
@@ -27,6 +26,7 @@ import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setI
 import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setOnClickListener
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
 import ru.astrainteractive.astralibs.string.StringDesc
+import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 @Suppress("TooManyFunctions")
 internal class MenuGui(
@@ -34,7 +34,7 @@ internal class MenuGui(
     private val economyProvider: EconomyFacade?,
     private val translation: PluginTranslation,
     private val menuModel: MenuModel,
-    private val dispatchers: BukkitDispatchers,
+    private val dispatchers: KotlinDispatchers,
     private val kyoriComponentSerializer: KyoriComponentSerializer
 ) : InventoryMenu() {
     override val inventorySize: InventorySize = menuModel.size
@@ -56,7 +56,7 @@ internal class MenuGui(
         menuScope.launch(dispatchers.IO) {
             while (isActive) {
                 delay(interval)
-                withContext(dispatchers.BukkitMain) {
+                withContext(dispatchers.Main) {
                     render()
                 }
             }

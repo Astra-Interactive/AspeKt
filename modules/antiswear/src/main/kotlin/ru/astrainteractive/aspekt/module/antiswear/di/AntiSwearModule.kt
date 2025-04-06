@@ -1,6 +1,7 @@
 package ru.astrainteractive.aspekt.module.antiswear.di
 
 import org.bukkit.Bukkit
+import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.antiswear.command.SwearCommandRegistry
 import ru.astrainteractive.aspekt.module.antiswear.command.di.SwearCommandDependencies
@@ -13,7 +14,10 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 interface AntiSwearModule {
     val lifecycle: Lifecycle
 
-    class Default(coreModule: CoreModule) : AntiSwearModule {
+    class Default(
+        coreModule: CoreModule,
+        bukkitCoreModule: BukkitCoreModule
+    ) : AntiSwearModule {
         private val swearRepository = SwearRepositoryImpl(
             dispatchers = coreModule.dispatchers,
             tempFileStringFormat = coreModule.jsonStringFormat
@@ -25,7 +29,8 @@ interface AntiSwearModule {
         private val swearCommandRegistry = SwearCommandRegistry(
             dependencies = SwearCommandDependencies.Default(
                 coreModule = coreModule,
-                swearRepository = swearRepository
+                swearRepository = swearRepository,
+                bukkitCoreModule = bukkitCoreModule
             )
         )
 
@@ -44,9 +49,9 @@ interface AntiSwearModule {
 
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onEnable = {
-                antiSwearEventListener.onEnable(coreModule.plugin)
+                antiSwearEventListener.onEnable(bukkitCoreModule.plugin)
                 swearCommandRegistry.register()
-                if (isPacketEventsEnabled) packetEventSwearListener?.onEnable(coreModule.plugin)
+                if (isPacketEventsEnabled) packetEventSwearListener?.onEnable(bukkitCoreModule.plugin)
             },
             onDisable = {
                 antiSwearEventListener.onDisable()

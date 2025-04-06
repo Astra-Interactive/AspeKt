@@ -6,6 +6,10 @@ import org.bukkit.inventory.ItemStack
 import ru.astrainteractive.klibs.mikro.core.util.next
 import java.util.UUID
 
+interface HashMapCache<T, V> {
+    operator fun get(key: T, block: suspend () -> V)
+}
+
 internal class SortController {
 
     private val sortTypes = mutableMapOf<UUID, Sort>()

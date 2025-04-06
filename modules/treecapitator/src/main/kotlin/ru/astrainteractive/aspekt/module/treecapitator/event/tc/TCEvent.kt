@@ -59,9 +59,9 @@ internal class TCEvent(
             placeSapling(sapling, block.getRelative(BlockFace.DOWN), i + 1)
             return
         }
-        scope.launch(dispatchers.BukkitAsync) {
+        scope.launch(dispatchers.IO) {
             delay(100)
-            withContext(dispatchers.BukkitMain) {
+            withContext(dispatchers.Main) {
                 airBlock.location.block.setType(sapling, true)
             }
         }

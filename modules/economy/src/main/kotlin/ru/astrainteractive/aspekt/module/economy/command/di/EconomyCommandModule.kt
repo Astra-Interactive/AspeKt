@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.economy.command.di
 
+import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.economy.command.ekon.EkonCommandRegistry
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
@@ -10,10 +11,11 @@ internal interface EconomyCommandModule {
 
     class Default(
         coreModule: CoreModule,
-        databaseModule: EconomyDatabaseModule
+        databaseModule: EconomyDatabaseModule,
+        bukkitCoreModule: BukkitCoreModule
     ) : EconomyCommandModule {
         private val econCommandRegistry = EkonCommandRegistry(
-            plugin = coreModule.plugin,
+            plugin = bukkitCoreModule.plugin,
             getTranslation = { coreModule.translation.cachedValue },
             getKyori = { coreModule.kyoriComponentSerializer.cachedValue },
             dao = databaseModule.economyDao,

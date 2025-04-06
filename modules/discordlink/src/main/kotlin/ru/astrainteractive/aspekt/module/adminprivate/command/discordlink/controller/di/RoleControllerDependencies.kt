@@ -1,6 +1,7 @@
 package ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.di
 
 import org.bukkit.configuration.file.FileConfiguration
+import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
@@ -20,6 +21,7 @@ internal interface RoleControllerDependencies {
 
     class Default(
         coreModule: CoreModule,
+        bukkitCoreModule: BukkitCoreModule,
         discordLinkModule: DiscordLinkModule
     ) : RoleControllerDependencies {
         override val pluginConfiguration: PluginConfiguration by coreModule.pluginConfig
@@ -27,6 +29,6 @@ internal interface RoleControllerDependencies {
         override val tempFileConfiguration: FileConfiguration by discordLinkModule.tempFileConfiguration
         override val translation: PluginTranslation by coreModule.translation
         override val kyoriComponentSerializer by coreModule.kyoriComponentSerializer
-        override val currencyEconomyProviderFactory = coreModule.currencyEconomyProviderFactory
+        override val currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory
     }
 }
