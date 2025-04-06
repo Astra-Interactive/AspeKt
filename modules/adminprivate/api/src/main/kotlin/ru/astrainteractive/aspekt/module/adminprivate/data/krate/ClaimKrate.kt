@@ -1,24 +1,24 @@
 package ru.astrainteractive.aspekt.module.adminprivate.data.krate
 
 import kotlinx.serialization.StringFormat
-import ru.astrainteractive.aspekt.module.adminprivate.model.AdminPrivateConfig
+import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimData
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.parse
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.writeIntoFile
 import ru.astrainteractive.klibs.kstorage.suspend.flow.StateFlowSuspendMutableKrate
 import ru.astrainteractive.klibs.kstorage.suspend.impl.DefaultSuspendMutableKrate
 import java.io.File
 
-internal class AdminPrivateKrate(
+class ClaimKrate(
     file: File,
     stringFormat: StringFormat
-) : StateFlowSuspendMutableKrate<AdminPrivateConfig> by DefaultSuspendMutableKrate(
-    factory = { AdminPrivateConfig() },
+) : StateFlowSuspendMutableKrate<ClaimData> by DefaultSuspendMutableKrate(
+    factory = { ClaimData() },
     saver = { value -> stringFormat.writeIntoFile(value, file) },
     loader = {
-        if (file.length() == 0L) {
+        if (!file.exists() || file.length() == 0L) {
             null
         } else {
-            stringFormat.parse<AdminPrivateConfig>(file)
+            stringFormat.parse<ClaimData>(file)
                 .onFailure(Throwable::printStackTrace)
                 .getOrNull()
         }

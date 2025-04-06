@@ -3,7 +3,9 @@ package ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate
 import kotlinx.coroutines.launch
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.module.adminprivate.command.di.AdminPrivateCommandDependencies
-import ru.astrainteractive.aspekt.module.adminprivate.util.adminChunk
+import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimChunk
+import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimPlayer
+import ru.astrainteractive.aspekt.module.adminprivate.util.claimChunk
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 
@@ -12,9 +14,9 @@ internal class AdminPrivateCommandExecutor(
 ) : AdminPrivateCommandDependencies by dependencies,
     CommandExecutor<AdminPrivateCommand.Model> {
 
-    private suspend fun showMap(player: Player) {
+    private suspend fun showMap(claimPlayer: ClaimPlayer, chunk: ClaimChunk) {
         val result = runCatching {
-            adminPrivateController.map(5, player.chunk.adminChunk)
+            adminPrivateController.map(5, chunk)
         }
         result.onSuccess {
             translation.adminPrivate.blockMap
@@ -39,53 +41,54 @@ internal class AdminPrivateCommandExecutor(
             adminPrivateController.setFlag(
                 flag = input.flag,
                 value = input.value,
-                chunk = input.player.chunk.adminChunk
+                chunk = input.chunk,
+                claimPlayer = input.claimPlayer
             )
         }
         result.onSuccess {
             translation.adminPrivate.chunkFlagChanged
                 .let(kyoriComponentSerializer::toComponent)
-                .run(input.player::sendMessage)
+                .run(input.claimPlayer::sendMessage)
         }
         result.onFailure {
             it.printStackTrace()
             translation.adminPrivate.error
                 .let(kyoriComponentSerializer::toComponent)
-                .run(input.player::sendMessage)
+                .run(input.claimPlayer::sendMessage)
         }
     }
 
     private suspend fun claim(input: AdminPrivateCommand.Model.Claim) {
         val result = runCatching {
-            adminPrivateController.claim(input.player.chunk.adminChunk)
+            adminPrivateController.claim(input.claimPlayer, input.chunk)
         }
         result.onSuccess {
             translation.adminPrivate.chunkClaimed
                 .let(kyoriComponentSerializer::toComponent)
-                .run(input.player::sendMessage)
+                .run(input.claimPlayer::sendMessage)
         }
         result.onFailure {
             it.printStackTrace()
             translation.adminPrivate.error
                 .let(kyoriComponentSerializer::toComponent)
-                .run(input.player::sendMessage)
+                .run(input.claimPlayer::sendMessage)
         }
     }
 
     private suspend fun unclaim(input: AdminPrivateCommand.Model.UnClaim) {
         val result = runCatching {
-            adminPrivateController.unclaim(input.player.chunk.adminChunk)
+            adminPrivateController.unclaim(input.claimPlayer, input.chunk)
         }
         result.onSuccess {
             translation.adminPrivate.chunkUnClaimed
                 .let(kyoriComponentSerializer::toComponent)
-                .run(input.player::sendMessage)
+                .run(input.claimPlayer::sendMessage)
         }
         result.onFailure {
             it.printStackTrace()
             translation.adminPrivate.error
                 .let(kyoriComponentSerializer::toComponent)
-                .run(input.player::sendMessage)
+                .run(input.claimPlayer::sendMessage)
         }
     }
 
@@ -100,7 +103,7 @@ internal class AdminPrivateCommandExecutor(
             }
 
             is AdminPrivateCommand.Model.ShowMap -> scope.launch(dispatchers.IO) {
-                showMap(input.player)
+                showMap(input.claimPlayer, input.chunk)
             }
 
             is AdminPrivateCommand.Model.UnClaim -> scope.launch(dispatchers.IO) {

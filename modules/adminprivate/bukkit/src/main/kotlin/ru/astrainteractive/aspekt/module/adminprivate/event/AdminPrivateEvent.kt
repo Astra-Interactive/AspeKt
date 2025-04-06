@@ -36,9 +36,9 @@ import org.bukkit.event.world.PortalCreateEvent
 import ru.astrainteractive.aspekt.module.adminprivate.debounce.EventDebounce
 import ru.astrainteractive.aspekt.module.adminprivate.debounce.RetractKey
 import ru.astrainteractive.aspekt.module.adminprivate.event.di.AdminPrivateDependencies
-import ru.astrainteractive.aspekt.module.adminprivate.model.AdminChunk
+import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
-import ru.astrainteractive.aspekt.module.adminprivate.util.adminChunk
+import ru.astrainteractive.aspekt.module.adminprivate.util.claimChunk
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
@@ -51,16 +51,15 @@ internal class AdminPrivateEvent(
     private fun <T> handleDefault(
         retractKey: RetractKey,
         e: T,
-        adminChunk: AdminChunk,
+        claimChunk: ClaimChunk,
         player: Player?,
         flag: ChunkFlag
     ) where T : Event, T : Cancellable {
-        if (!adminPrivateController.isEnabled) return
         if (player?.toPermissible()?.hasPermission(PluginPermission.AdminClaim) == true) return
         if (e.isCancelled) return
         val sharedEvent = BukkitSharedCancellableEvent(e)
         debounce.debounceEvent(retractKey, sharedEvent) {
-            val isAble = adminPrivateController.isAble(adminChunk, flag)
+            val isAble = adminPrivateController.isAble(claimChunk, flag)
             val isCancelled = !isAble
             if (isCancelled) {
                 translation.adminPrivate.actionIsBlockByAdminClaim(flag.name)
@@ -76,7 +75,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.chunk, e.player, "blockBreakEvent"),
             e = e,
-            adminChunk = e.block.chunk.adminChunk,
+            claimChunk = e.block.chunk.claimChunk,
             player = e.player,
             flag = ChunkFlag.BREAK
         )
@@ -87,7 +86,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.chunk, e.player, "blockPlaceEvent"),
             e = e,
-            adminChunk = e.blockPlaced.chunk.adminChunk,
+            claimChunk = e.blockPlaced.chunk.claimChunk,
             player = e.player,
             flag = ChunkFlag.PLACE
         )
@@ -101,7 +100,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(location, e.player, "interactEvent"),
             e = e,
-            adminChunk = location.chunk.adminChunk,
+            claimChunk = location.chunk.claimChunk,
             player = e.player,
             flag = ChunkFlag.INTERACT
         )
@@ -112,7 +111,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.player.location, e.player, "itemFrameEvent"),
             e = e,
-            adminChunk = e.player.location.chunk.adminChunk,
+            claimChunk = e.player.location.chunk.claimChunk,
             player = e.player,
             flag = ChunkFlag.INTERACT
         )
@@ -123,7 +122,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.entity.location, e.entity, "breakItemFrameEvent"),
             e = e,
-            adminChunk = e.entity.location.chunk.adminChunk,
+            claimChunk = e.entity.location.chunk.claimChunk,
             player = e.remover as? Player,
             flag = ChunkFlag.INTERACT
         )
@@ -134,7 +133,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.player.location, e.player, "armorStandEvent"),
             e = e,
-            adminChunk = e.player.location.chunk.adminChunk,
+            claimChunk = e.player.location.chunk.claimChunk,
             player = e.player,
             flag = ChunkFlag.INTERACT
         )
@@ -146,7 +145,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(armorStand.location, armorStand, "armorStandBreakEvent"),
             e = e,
-            adminChunk = armorStand.location.chunk.adminChunk,
+            claimChunk = armorStand.location.chunk.claimChunk,
             player = e.damager as? Player,
             flag = ChunkFlag.INTERACT
         )
@@ -159,7 +158,7 @@ internal class AdminPrivateEvent(
             handleDefault(
                 retractKey = RetractKey.Vararg(block.chunk, "onBlockExplode"),
                 e = e,
-                adminChunk = block.chunk.adminChunk,
+                claimChunk = block.chunk.claimChunk,
                 player = null,
                 flag = ChunkFlag.EXPLODE
             )
@@ -172,7 +171,7 @@ internal class AdminPrivateEvent(
             handleDefault(
                 retractKey = RetractKey.Vararg(block.chunk, "onEntityExplode"),
                 e = e,
-                adminChunk = block.chunk.adminChunk,
+                claimChunk = block.chunk.claimChunk,
                 player = null,
                 flag = ChunkFlag.EXPLODE
             )
@@ -184,7 +183,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.entity.location.chunk, "onPrimeExplosion"),
             e = e,
-            adminChunk = e.entity.location.chunk.adminChunk,
+            claimChunk = e.entity.location.chunk.claimChunk,
             player = null,
             flag = ChunkFlag.EXPLODE
         )
@@ -196,7 +195,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.blockClicked.location.chunk, "onBucketEmptyEvent"),
             e = e,
-            adminChunk = e.blockClicked.location.chunk.adminChunk,
+            claimChunk = e.blockClicked.location.chunk.claimChunk,
             player = null,
             flag = ChunkFlag.EMPTY_BUCKET
         )
@@ -208,7 +207,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.blockPlaced.location.chunk, "onTntLavaPlace"),
             e = e,
-            adminChunk = e.blockPlaced.location.chunk.adminChunk,
+            claimChunk = e.blockPlaced.location.chunk.claimChunk,
             player = null,
             flag = ChunkFlag.EXPLODE
         )
@@ -220,7 +219,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.location.chunk, "onBlockFromTo"),
             e = e,
-            adminChunk = e.block.location.chunk.adminChunk,
+            claimChunk = e.block.location.chunk.claimChunk,
             player = null,
             flag = ChunkFlag.SPREAD
         )
@@ -232,7 +231,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(location.chunk, "onBlockIgniteEvent"),
             e = e,
-            adminChunk = location.chunk.adminChunk,
+            claimChunk = location.chunk.claimChunk,
             player = e.player,
             flag = ChunkFlag.SPREAD
         )
@@ -244,7 +243,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(location.chunk, "onBlockBurnEvent"),
             e = e,
-            adminChunk = location.chunk.adminChunk,
+            claimChunk = location.chunk.claimChunk,
             player = null,
             flag = ChunkFlag.SPREAD
         )
@@ -256,7 +255,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.location.chunk, "onBlockSpread"),
             e = e,
-            adminChunk = e.block.location.chunk.adminChunk,
+            claimChunk = e.block.location.chunk.claimChunk,
             player = null,
             flag = ChunkFlag.SPREAD
         )
@@ -268,7 +267,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.entity.location.chunk, player, "playerDamageEvent"),
             e = e,
-            adminChunk = player.location.chunk.adminChunk,
+            claimChunk = player.location.chunk.claimChunk,
             player = null,
             flag = ChunkFlag.RECEIVE_DAMAGE
         )
@@ -280,7 +279,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.entity.location.chunk, e.entity, "entitySpawnEvent"),
             e = e,
-            adminChunk = e.entity.location.chunk.adminChunk,
+            claimChunk = e.entity.location.chunk.claimChunk,
             player = null,
             flag = ChunkFlag.HOSTILE_MOB_SPAWN
         )
@@ -299,7 +298,7 @@ internal class AdminPrivateEvent(
                     "portalCreateEvent"
                 ),
                 e = e,
-                adminChunk = chunk.adminChunk,
+                claimChunk = chunk.claimChunk,
                 player = null,
                 flag = ChunkFlag.PLACE
             )
@@ -310,7 +309,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.location.chunk, "BlockPistonEvent"),
             e = e,
-            adminChunk = e.block.location.chunk.adminChunk,
+            claimChunk = e.block.location.chunk.claimChunk,
             player = null,
             flag = ChunkFlag.PLACE
         )
@@ -331,7 +330,7 @@ internal class AdminPrivateEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.location.chunk, "BlockFadeEvent"),
             e = e,
-            adminChunk = e.block.location.chunk.adminChunk,
+            claimChunk = e.block.location.chunk.claimChunk,
             player = null,
             flag = ChunkFlag.ICE_MELT
         )

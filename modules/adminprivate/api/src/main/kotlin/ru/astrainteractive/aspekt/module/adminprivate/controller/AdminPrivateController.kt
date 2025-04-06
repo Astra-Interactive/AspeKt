@@ -3,8 +3,10 @@ package ru.astrainteractive.aspekt.module.adminprivate.controller
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.module.adminprivate.controller.di.AdminPrivateControllerDependencies
-import ru.astrainteractive.aspekt.module.adminprivate.model.AdminChunk
+import ru.astrainteractive.aspekt.module.adminprivate.data.getAllChunks
+import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
+import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimPlayer
 import ru.astrainteractive.aspekt.module.adminprivate.util.uniqueWorldKey
 import ru.astrainteractive.astralibs.async.CoroutineFeature
 
@@ -13,12 +15,7 @@ class AdminPrivateController(
 ) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO),
     AdminPrivateControllerDependencies by dependencies {
 
-    val isEnabled: Boolean
-        get() = repository.krate.cachedValue.isEnabled
-
-    fun reloadKrate() = launch { repository.krate.loadAndGet() }
-
-    suspend fun map(size: Int, chunk: AdminChunk): Array<Array<Boolean>> {
+    suspend fun map(size: Int, chunk: ClaimChunk): Array<Array<Boolean>> {
         val m = Array(size) {
             Array(size) { false }
         }
@@ -35,29 +32,33 @@ class AdminPrivateController(
         return m
     }
 
-    suspend fun claim(adminChunk: AdminChunk) {
-        val actualAdminChunk = adminChunk.copy(
+    suspend fun claim(claimPlayer: ClaimPlayer, claimChunk: ClaimChunk) {
+        val actualAdminChunk = claimChunk.copy(
             flags = ChunkFlag.entries.associateWith { false }
         )
-        repository.saveChunk(actualAdminChunk)
+        repository.saveChunk(claimPlayer, actualAdminChunk)
     }
 
-    suspend fun unclaim(adminChunk: AdminChunk) {
-        repository.deleteChunk(adminChunk)
+    suspend fun unclaim(claimPlayer: ClaimPlayer, claimChunk: ClaimChunk) {
+        repository.deleteChunk(claimPlayer, claimChunk)
     }
 
-    suspend fun setFlag(flag: ChunkFlag, value: Boolean, chunk: AdminChunk) {
-        val actualChunk = repository.getChunk(chunk)
+    suspend fun setFlag(claimPlayer: ClaimPlayer, flag: ChunkFlag, value: Boolean, chunk: ClaimChunk) {
+        val actualChunk = repository.getChunk(claimPlayer, chunk)
         val updatedChunk = actualChunk.copy(
             flags = actualChunk.flags.toMutableMap().apply {
                 this[flag] = value
             }
         )
-        repository.saveChunk(updatedChunk)
+        repository.saveChunk(claimPlayer, updatedChunk)
     }
 
-    fun isAble(chunk: AdminChunk, chunkFlag: ChunkFlag): Boolean {
-        val actualChunk = repository.krate.cachedValue.chunks[chunk.uniqueWorldKey] ?: return true
+    fun isAble(chunk: ClaimChunk, chunkFlag: ChunkFlag): Boolean {
+
+        val actualChunk = repository
+            .getAllChunks()
+            .firstOrNull { it.uniqueWorldKey == chunk.uniqueWorldKey }
+            ?: return true
         return actualChunk.flags[chunkFlag] ?: false
     }
 }
