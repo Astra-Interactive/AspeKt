@@ -1,7 +1,6 @@
 package ru.astrainteractive.aspekt.module.jail.di
 
 import kotlinx.coroutines.cancel
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.jail.command.JailCommandManager
 import ru.astrainteractive.aspekt.module.jail.controller.JailController
@@ -13,12 +12,9 @@ import ru.astrainteractive.aspekt.module.jail.event.JailEvent
 import ru.astrainteractive.aspekt.module.jail.job.UnJailJob
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
-class JailModule(
-    coreModule: CoreModule,
-    bukkitCoreModule: BukkitCoreModule
-) {
+class JailModule(coreModule: CoreModule) {
     private val jailApi: JailApi = JailApiImpl(
-        folder = coreModule.dataFolder.resolve("jail"),
+        folder = coreModule.plugin.dataFolder.resolve("jail"),
         stringFormat = coreModule.yamlFormat
     )
     private val cachedJailApi: CachedJailApi = CachedJailApiImpl(
@@ -40,7 +36,7 @@ class JailModule(
 
     private val jailCommandManager = JailCommandManager(
         scope = coreModule.scope,
-        plugin = bukkitCoreModule.plugin,
+        plugin = coreModule.plugin,
         translationKrate = coreModule.translation,
         kyoriKrate = coreModule.kyoriComponentSerializer,
         jailApi = jailApi,
@@ -59,7 +55,7 @@ class JailModule(
 
     val lifecycle = Lifecycle.Lambda(
         onEnable = {
-            jailEvent.onEnable(bukkitCoreModule.plugin)
+            jailEvent.onEnable(coreModule.plugin)
             jailCommandManager.register()
             unJailJob.onEnable()
         },

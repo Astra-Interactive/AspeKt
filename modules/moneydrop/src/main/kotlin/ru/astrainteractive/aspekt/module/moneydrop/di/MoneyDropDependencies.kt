@@ -2,7 +2,6 @@ package ru.astrainteractive.aspekt.module.moneydrop.di
 
 import kotlinx.coroutines.CoroutineScope
 import org.bukkit.plugin.java.JavaPlugin
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.module.moneydrop.MoneyDropController
@@ -22,14 +21,13 @@ internal interface MoneyDropDependencies {
 
     class Default(
         coreModule: CoreModule,
-        bukkitCoreModule: BukkitCoreModule,
         override val moneyDropController: MoneyDropController
     ) : MoneyDropDependencies {
-        override val eventListener: EventListener = bukkitCoreModule.eventListener
-        override val plugin: JavaPlugin = bukkitCoreModule.plugin
+        override val eventListener: EventListener = coreModule.eventListener
+        override val plugin: JavaPlugin = coreModule.plugin
         override val kyoriComponentSerializer by coreModule.kyoriComponentSerializer
         override val translation: PluginTranslation by coreModule.translation
-        override val currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory
+        override val currencyEconomyProviderFactory = coreModule.currencyEconomyProviderFactory
         override val scope: CoroutineScope = coreModule.scope
     }
 }

@@ -1,7 +1,6 @@
 package ru.astrainteractive.aspekt.module.adminprivate.di
 
 import kotlinx.coroutines.cancel
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate.AdminPrivateCommandRegistry
 import ru.astrainteractive.aspekt.module.adminprivate.command.di.AdminPrivateCommandDependencies
@@ -16,10 +15,7 @@ interface AdminPrivateModule {
     val lifecycle: Lifecycle
     val adminChunksFile: File
 
-    class Default(
-        private val coreModule: CoreModule,
-        bukkitCoreModule: BukkitCoreModule
-    ) : AdminPrivateModule {
+    class Default(private val coreModule: CoreModule) : AdminPrivateModule {
         private val adminPrivateController = AdminPrivateController(
             dependencies = AdminPrivateControllerDependencies.Default(
                 coreModule = coreModule,
@@ -30,25 +26,23 @@ interface AdminPrivateModule {
         private val adminPrivateCommandRegistry = AdminPrivateCommandRegistry(
             dependencies = AdminPrivateCommandDependencies.Default(
                 coreModule = coreModule,
-                adminPrivateController = adminPrivateController,
-                bukkitCoreModule = bukkitCoreModule
+                adminPrivateController = adminPrivateController
             )
         )
 
-        override val adminChunksFile: File = coreModule.dataFolder.resolve("adminchunks.yml")
+        override val adminChunksFile: File = coreModule.plugin.dataFolder.resolve("adminchunks.yml")
 
         private val adminPrivateEvent = AdminPrivateEvent(
             dependencies = AdminPrivateDependencies.Default(
                 coreModule = coreModule,
-                adminPrivateController = adminPrivateController,
-                bukkitCoreModule = bukkitCoreModule
+                adminPrivateController = adminPrivateController
             )
         )
 
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onEnable = {
                 adminPrivateCommandRegistry.register()
-                adminPrivateEvent.onEnable(bukkitCoreModule.plugin)
+                adminPrivateEvent.onEnable(coreModule.plugin)
                 adminPrivateController.reloadKrate()
             },
             onReload = {
