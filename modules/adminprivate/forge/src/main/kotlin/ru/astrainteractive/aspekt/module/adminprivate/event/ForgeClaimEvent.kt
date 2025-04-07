@@ -101,7 +101,6 @@ class ForgeClaimEvent(
             )
         }.launchIn(scope)
 
-
     val playerInteractEvent = flowEvent<PlayerInteractEvent>()
         .onEach { e ->
             val serverPlayer = e.entity as? ServerPlayer ?: return@onEach

@@ -36,8 +36,8 @@ import org.bukkit.event.world.PortalCreateEvent
 import ru.astrainteractive.aspekt.module.adminprivate.debounce.EventDebounce
 import ru.astrainteractive.aspekt.module.adminprivate.debounce.RetractKey
 import ru.astrainteractive.aspekt.module.adminprivate.event.di.AdminPrivateDependencies
-import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
+import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.adminprivate.util.claimChunk
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.event.EventListener

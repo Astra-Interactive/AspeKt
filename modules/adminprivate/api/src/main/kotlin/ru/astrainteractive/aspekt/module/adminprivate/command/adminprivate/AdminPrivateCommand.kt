@@ -5,7 +5,7 @@ import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimPlayer
 import ru.astrainteractive.astralibs.command.api.exception.CommandException
 
-internal interface AdminPrivateCommand {
+interface AdminPrivateCommand {
     sealed interface Model {
         class ShowMap(
             val claimPlayer: ClaimPlayer,

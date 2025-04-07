@@ -30,9 +30,12 @@ dependencies {
     shadeImplementation(libs.minecraft.kyori.legacy)
     shadeImplementation(libs.minecraft.kyori.gson)
     // Local
+    shadeImplementation(projects.modules.core)
     shadeImplementation(projects.modules.coreForge)
     shadeImplementation(projects.modules.auth.api)
     shadeImplementation(projects.modules.auth.forge)
+    shadeImplementation(projects.modules.adminprivate.api)
+    shadeImplementation(projects.modules.adminprivate.forge)
 }
 
 minecraft {

@@ -1,8 +1,9 @@
 package ru.astrainteractive.aspekt.module.adminprivate.messenger
 
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import net.minecraft.server.MinecraftServer
 import ru.astrainteractive.aspekt.core.forge.kyori.sendSystemMessage
 import ru.astrainteractive.aspekt.core.forge.kyori.withAudience
@@ -19,9 +20,9 @@ class ForgeMessenger(
         player: ClaimPlayer,
         stringDesc: StringDesc
     ) {
-        val player = runBlocking {
-            serverFlow.first().playerList.getPlayer(player.uuid)
-        } ?: return
-        kyoriKrate.withAudience(player).sendSystemMessage(stringDesc)
+        GlobalScope.launch {
+            val player = serverFlow.first().playerList.getPlayer(player.uuid) ?: return@launch
+            kyoriKrate.withAudience(player).sendSystemMessage(stringDesc)
+        }
     }
 }
