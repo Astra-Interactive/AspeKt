@@ -35,7 +35,8 @@ class AspeKt : LifecyclePlugin(), Logger by JUtiltLogger("AspeKt") {
             rootModule.treeCapitatorModule.lifecycle,
             rootModule.restrictionModule.lifecycle,
             rootModule.inventorySortModule.lifecycle,
-            rootModule.jailModule.lifecycle
+            rootModule.jailModule.lifecycle,
+            rootModule.invisibleItemFrameModule.lifecycle
         )
 
     /**

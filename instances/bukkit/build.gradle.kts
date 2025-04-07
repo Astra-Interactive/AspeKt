@@ -52,6 +52,7 @@ dependencies {
     implementation(projects.modules.restrictions)
     implementation(projects.modules.entities)
     implementation(projects.modules.jail)
+    implementation(projects.modules.invisibleItemFrames)
 }
 val destination = File("/home/makeevrserg/Desktop/git/AspeKt/build/bukkit/plugins/")
     .takeIf(File::exists)

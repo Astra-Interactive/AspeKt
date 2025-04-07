@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.di
 
 import ru.astrainteractive.aspekt.command.di.CommandManagerModule
 import ru.astrainteractive.aspekt.inventorysort.di.InventorySortModule
+import ru.astrainteractive.aspekt.invisibleframes.di.InvisibleItemFrameModule
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
 import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule
 import ru.astrainteractive.aspekt.module.antiswear.di.AntiSwearModule
@@ -82,5 +83,8 @@ class RootModule(plugin: LifecyclePlugin) {
     }
     val jailModule: JailModule by lazy {
         JailModule(coreModule)
+    }
+    val invisibleItemFrameModule by lazy {
+        InvisibleItemFrameModule(coreModule)
     }
 }
