@@ -41,7 +41,7 @@ class ForgeAuthEvent(
     translationKrate: Krate<AuthTranslation>
 ) {
     val translation by translationKrate
-    private val scope = CoroutineScope(SupervisorJob() + ForgeMainDispatcher)
+    private val scope = CoroutineScope(SupervisorJob() + ForgeMainDispatcher) // todo
 
     val playerLoggedOutEvent = flowEvent<PlayerLoggedOutEvent>()
         .onEach { authorizedApi.forgetUser(it.entity.uuid) }

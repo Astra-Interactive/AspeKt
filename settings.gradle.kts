@@ -55,6 +55,7 @@ include(":modules:broadcast")
 include(
     ":modules:adminprivate:api",
     ":modules:adminprivate:bukkit",
+    ":modules:adminprivate:forge",
 )
 include(":modules:discordlink")
 include(":modules:towny-discord")
