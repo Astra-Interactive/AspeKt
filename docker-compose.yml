@@ -19,7 +19,7 @@ services:
       TYPE: PAPER
       VERSION: 1.21.4
       # Custom -------------------
-    #      CUSTOM_SERVER: https://api.papermc.io/v2/projects/paper/versions/1.21.1/builds/121/downloads/paper-1.21.1-121.jar
+#      CUSTOM_SERVER: https://api.papermc.io/v2/projects/paper/versions/1.21.1/builds/121/downloads/paper-1.21.1-121.jar
     volumes:
 #      - ./build/forge:/data # Forge
       - ./build/bukkit:/data # Bukkit/Paper/Spigot

@@ -31,9 +31,8 @@ class PluginTranslation(
     @SerialName("economy")
     val economy: Economy = Economy(),
     @SerialName("jails")
-    val jails: Jails = Jails()
+    val jails: Jails = Jails(),
 ) {
-
     @Serializable
     data class Jails(
         val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BJAIL&7] "),

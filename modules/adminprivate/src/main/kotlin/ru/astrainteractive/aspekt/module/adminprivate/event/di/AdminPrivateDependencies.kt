@@ -1,6 +1,7 @@
 package ru.astrainteractive.aspekt.module.adminprivate.event.di
 
 import org.bukkit.plugin.java.JavaPlugin
+import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateController
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -17,11 +18,12 @@ internal interface AdminPrivateDependencies {
 
     class Default(
         coreModule: CoreModule,
+        bukkitCoreModule: BukkitCoreModule,
         override val adminPrivateController: AdminPrivateController
     ) : AdminPrivateDependencies {
 
-        override val eventListener: EventListener = coreModule.eventListener
-        override val plugin: JavaPlugin = coreModule.plugin
+        override val eventListener: EventListener = bukkitCoreModule.eventListener
+        override val plugin: JavaPlugin = bukkitCoreModule.plugin
         override val translation: PluginTranslation by coreModule.translation
         override val kyoriComponentSerializer by coreModule.kyoriComponentSerializer
     }

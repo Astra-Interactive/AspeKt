@@ -17,4 +17,5 @@ dependencies {
     implementation(libs.minecraft.astralibs.command.bukkit)
     // Local
     implementation(projects.modules.core)
+    implementation(projects.modules.coreBukkit)
 }

@@ -20,71 +20,77 @@ import ru.astrainteractive.aspekt.module.restrictions.di.RestrictionModule
 import ru.astrainteractive.aspekt.module.sit.di.SitModule
 import ru.astrainteractive.aspekt.module.towny.discord.di.TownyDiscordModule
 import ru.astrainteractive.aspekt.module.treecapitator.di.TreeCapitatorModule
+import ru.astrainteractive.astralibs.async.DefaultBukkitDispatchers
 import ru.astrainteractive.astralibs.lifecycle.LifecyclePlugin
 
 class RootModule(plugin: LifecyclePlugin) {
     val coreModule: CoreModule by lazy {
-        CoreModule.Default(plugin)
+        CoreModule.Default(
+            dataFolder = plugin.dataFolder,
+            dispatchers = DefaultBukkitDispatchers(plugin)
+        )
+    }
+    val bukkitCoreModule: BukkitCoreModule by lazy {
+        BukkitCoreModule(plugin)
     }
     val adminPrivateModule: AdminPrivateModule by lazy {
-        AdminPrivateModule.Default(coreModule)
+        AdminPrivateModule.Default(coreModule, bukkitCoreModule)
     }
     val menuModule: MenuModule by lazy {
-        MenuModule.Default(coreModule)
+        MenuModule.Default(coreModule, bukkitCoreModule)
     }
     val sitModule: SitModule by lazy {
-        SitModule.Default(coreModule)
+        SitModule.Default(coreModule, bukkitCoreModule)
     }
     val entitiesModule: EntitiesModule by lazy {
-        EntitiesModule(coreModule)
+        EntitiesModule(coreModule, bukkitCoreModule)
     }
     val autoBroadcastModule by lazy {
         AutoBroadcastModule.Default(coreModule)
     }
     val discordLinkModule: DiscordLinkModule by lazy {
-        DiscordLinkModule.Default(coreModule)
+        DiscordLinkModule.Default(coreModule, bukkitCoreModule)
     }
-
     val commandManagerModule: CommandManagerModule by lazy {
-        CommandManagerModule.Default(coreModule = coreModule)
+        CommandManagerModule.Default(coreModule, bukkitCoreModule)
     }
     val townyDiscordModule: TownyDiscordModule by lazy {
         TownyDiscordModule.Default(coreModule, discordLinkModule)
     }
     val moneyDropModule: MoneyDropModule by lazy {
-        MoneyDropModule.Default(coreModule)
+        MoneyDropModule.Default(coreModule, bukkitCoreModule)
     }
     val autoCropModule: AutoCropModule by lazy {
-        AutoCropModule.Default(coreModule)
+        AutoCropModule.Default(coreModule, bukkitCoreModule)
     }
     val newBeeModule: NewBeeModule by lazy {
-        NewBeeModule.Default(coreModule = coreModule)
+        NewBeeModule.Default(coreModule, bukkitCoreModule)
     }
     val antiSwearModule: AntiSwearModule by lazy {
-        AntiSwearModule.Default(coreModule = coreModule)
+        AntiSwearModule.Default(coreModule, bukkitCoreModule)
     }
     val moneyAdvancementModule: MoneyAdvancementModule by lazy {
-        MoneyAdvancementModule.Default(coreModule)
+        MoneyAdvancementModule.Default(coreModule, bukkitCoreModule)
     }
     val chatGameModule: ChatGameModule by lazy {
-        ChatGameModule.Default(coreModule = coreModule)
+        ChatGameModule.Default(coreModule, bukkitCoreModule)
     }
     val economyModule: EconomyModule by lazy {
-        EconomyModule.Default(coreModule)
+        EconomyModule.Default(coreModule, bukkitCoreModule)
     }
     val restrictionModule: RestrictionModule by lazy {
-        RestrictionModule(coreModule)
+        RestrictionModule(coreModule, bukkitCoreModule)
     }
     val treeCapitatorModule: TreeCapitatorModule by lazy {
-        TreeCapitatorModule(coreModule)
+        TreeCapitatorModule(coreModule, bukkitCoreModule)
     }
     val inventorySortModule: InventorySortModule by lazy {
-        InventorySortModule(coreModule)
+        InventorySortModule(bukkitCoreModule)
     }
     val jailModule: JailModule by lazy {
-        JailModule(coreModule)
+        JailModule(coreModule, bukkitCoreModule)
     }
     val invisibleItemFrameModule by lazy {
-        InvisibleItemFrameModule(coreModule)
+        InvisibleItemFrameModule(bukkitCoreModule)
     }
 }
