@@ -26,9 +26,9 @@ dependencies {
 
 dependencies {
     minecraft(
-            "net.minecraftforge",
-            "forge",
-            "${libs.versions.minecraft.version.get()}-${libs.versions.minecraft.forgeversion.get()}"
+        "net.minecraftforge",
+        "forge",
+        "${libs.versions.minecraft.version.get()}-${libs.versions.minecraft.forgeversion.get()}"
     )
 }
 minecraft {

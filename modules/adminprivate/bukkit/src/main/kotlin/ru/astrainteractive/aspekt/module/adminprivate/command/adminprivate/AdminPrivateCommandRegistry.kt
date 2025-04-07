@@ -1,6 +1,7 @@
 package ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate
 
 import ru.astrainteractive.aspekt.module.adminprivate.command.di.AdminPrivateCommandDependencies
+import ru.astrainteractive.aspekt.module.adminprivate.messenger.BukkitMessenger
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
 import ru.astrainteractive.astralibs.command.api.exception.ArgumentTypeException
 import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
@@ -10,7 +11,7 @@ import ru.astrainteractive.astralibs.command.api.util.PluginExt.setCommandExecut
 import ru.astrainteractive.astralibs.util.StringListExt.withEntry
 
 internal class AdminPrivateCommandRegistry(
-    dependencies: AdminPrivateCommandDependencies
+    private val dependencies: AdminPrivateCommandDependencies
 ) : AdminPrivateCommandDependencies by dependencies {
 
     private fun adminPrivateCompleter() =
@@ -32,25 +33,31 @@ internal class AdminPrivateCommandRegistry(
         plugin.setCommandExecutor(
             alias = "adminprivate",
             commandParser = AdminPrivateCommandParser(),
-            commandExecutor = AdminPrivateCommandExecutor(dependencies = this),
+            commandExecutor = AdminPrivateCommandExecutor(
+                messenger = BukkitMessenger(kyoriKrate = dependencies.kyoriComponentSerializer),
+                adminPrivateController = dependencies.adminPrivateController,
+                scope = dependencies.scope,
+                dispatchers = dependencies.dispatchers,
+                translationKrate = dependencies.translation
+            ),
             errorHandler = { context, throwable ->
                 when (throwable) {
-                    is AdminPrivateCommand.Error.NotPlayer -> with(kyoriComponentSerializer) {
-                        context.sender.sendMessage(translation.general.onlyPlayerCommand.component)
+                    is AdminPrivateCommand.Error.NotPlayer -> with(kyoriComponentSerializer.cachedValue) {
+                        context.sender.sendMessage(translation.cachedValue.general.onlyPlayerCommand.component)
                     }
 
-                    is DefaultCommandException -> with(kyoriComponentSerializer) {
+                    is DefaultCommandException -> with(kyoriComponentSerializer.cachedValue) {
                         when (throwable) {
                             is ArgumentTypeException -> {
-                                context.sender.sendMessage(translation.general.wrongUsage.component)
+                                context.sender.sendMessage(translation.cachedValue.general.wrongUsage.component)
                             }
 
                             is BadArgumentException -> {
-                                context.sender.sendMessage(translation.general.wrongUsage.component)
+                                context.sender.sendMessage(translation.cachedValue.general.wrongUsage.component)
                             }
 
                             is NoPermissionException -> {
-                                context.sender.sendMessage(translation.general.noPermission.component)
+                                context.sender.sendMessage(translation.cachedValue.general.noPermission.component)
                             }
 
                             else -> {

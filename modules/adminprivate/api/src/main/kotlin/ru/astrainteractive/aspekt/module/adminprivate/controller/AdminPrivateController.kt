@@ -1,11 +1,10 @@
 package ru.astrainteractive.aspekt.module.adminprivate.controller
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.module.adminprivate.controller.di.AdminPrivateControllerDependencies
 import ru.astrainteractive.aspekt.module.adminprivate.data.getAllChunks
-import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
+import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimPlayer
 import ru.astrainteractive.aspekt.module.adminprivate.util.uniqueWorldKey
 import ru.astrainteractive.astralibs.async.CoroutineFeature
@@ -54,7 +53,6 @@ class AdminPrivateController(
     }
 
     fun isAble(chunk: ClaimChunk, chunkFlag: ChunkFlag): Boolean {
-
         val actualChunk = repository
             .getAllChunks()
             .firstOrNull { it.uniqueWorldKey == chunk.uniqueWorldKey }

@@ -2,22 +2,18 @@ package ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.bukkit.entity.Player
-import ru.astrainteractive.aspekt.module.adminprivate.command.di.AdminPrivateCommandDependencies
 import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateController
 import ru.astrainteractive.aspekt.module.adminprivate.messenger.Messenger
 import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimPlayer
-import ru.astrainteractive.aspekt.module.adminprivate.util.claimChunk
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.kstorage.api.Krate
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
-internal class AdminPrivateCommandExecutor(
+class AdminPrivateCommandExecutor(
     private val messenger: Messenger,
     private val adminPrivateController: AdminPrivateController,
     private val scope: CoroutineScope,

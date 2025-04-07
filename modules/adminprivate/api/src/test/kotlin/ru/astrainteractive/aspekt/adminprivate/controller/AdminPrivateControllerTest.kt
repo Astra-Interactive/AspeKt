@@ -7,8 +7,8 @@ import ru.astrainteractive.aspekt.module.adminprivate.controller.di.AdminPrivate
 import ru.astrainteractive.aspekt.module.adminprivate.data.ClaimsRepository
 import ru.astrainteractive.aspekt.module.adminprivate.data.ClaimsRepositoryImpl
 import ru.astrainteractive.aspekt.module.adminprivate.data.getAllChunks
-import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.ChunkFlag
+import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimPlayer
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import java.io.File

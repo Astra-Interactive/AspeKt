@@ -1,7 +1,6 @@
 package ru.astrainteractive.aspekt.core.forge.kyori
 
 import net.minecraft.commands.CommandSourceStack
-import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
 import ru.astrainteractive.aspekt.core.forge.util.toNative
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
