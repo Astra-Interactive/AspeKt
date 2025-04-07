@@ -91,6 +91,6 @@ class RootModule(plugin: LifecyclePlugin) {
         JailModule(coreModule, bukkitCoreModule)
     }
     val invisibleItemFrameModule by lazy {
-        InvisibleItemFrameModule(coreModule)
+        InvisibleItemFrameModule(bukkitCoreModule)
     }
 }

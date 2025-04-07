@@ -5,7 +5,7 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
     alias(libs.plugins.gradle.shadow)
-    alias(libs.plugins.klibs.minecraft.shadow)
+//    alias(libs.plugins.klibs.minecraft.shadow)
     alias(libs.plugins.klibs.minecraft.resource.processor)
 }
 
@@ -22,6 +22,7 @@ dependencies {
     implementation(libs.minecraft.astralibs.command)
     implementation(libs.minecraft.astralibs.command.bukkit)
     implementation(libs.minecraft.astralibs.core.bukkit)
+    implementation(libs.minecraft.astralibs.exposed)
     compileOnly(libs.minecraft.vaultapi)
     compileOnly(libs.driver.h2)
     compileOnly(libs.driver.jdbc)
@@ -57,7 +58,7 @@ dependencies {
 }
 val destination = File("/home/makeevrserg/Desktop/git/AspeKt/build/bukkit/plugins/")
     .takeIf(File::exists)
-    ?: File(rootDir, "jars")
+    ?: File(rootDir, "jars").also(File::mkdirs)
 
 minecraftProcessResource {
     bukkit()
@@ -65,21 +66,23 @@ minecraftProcessResource {
 
 val shadowJar = tasks.named<ShadowJar>("shadowJar")
 shadowJar.configure {
-    if (!destination.exists()) destination.mkdirs()
-
-    val projectInfo = requireProjectInfo
-    isReproducibleFileOrder = true
     mergeServiceFiles()
-    dependsOn(configurations)
-    archiveClassifier.set(null as String?)
-    relocate("org.bstats", projectInfo.group)
-
+    mustRunAfter(minecraftProcessResource.task)
+    dependsOn(minecraftProcessResource.task)
+    isReproducibleFileOrder = true
+    archiveClassifier = null as String?
+    archiveVersion.set(requireProjectInfo.versionString)
+    archiveBaseName.set("${requireProjectInfo.name}-bukkit")
+    destinationDirectory = destination
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+//    configurations = listOf(project.configurations.shadow.get())
+//    dependsOn(configurations)
+    relocationPrefix = requireProjectInfo.group
+    enableRelocation = true
     minimize {
         exclude(dependency(libs.exposed.jdbc.get()))
         exclude(dependency(libs.exposed.dao.get()))
+        exclude(dependency(libs.exposed.core.get()))
         exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib:${libs.versions.kotlin.version.get()}"))
     }
-    archiveVersion.set(projectInfo.versionString)
-    archiveBaseName.set("${projectInfo.name}-bukkit")
-    destination.also(destinationDirectory::set)
 }
