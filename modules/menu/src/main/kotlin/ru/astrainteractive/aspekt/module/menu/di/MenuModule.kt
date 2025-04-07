@@ -1,6 +1,5 @@
 package ru.astrainteractive.aspekt.module.menu.di
 
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.menu.command.MenuCommandFactory
 import ru.astrainteractive.aspekt.module.menu.di.factory.MenuModelsFactory
@@ -15,13 +14,12 @@ interface MenuModule {
     val lifecycle: Lifecycle
 
     class Default(
-        private val coreModule: CoreModule,
-        private val bukkitCoreModule: BukkitCoreModule
+        private val coreModule: CoreModule
     ) : MenuModule {
         private val menuModels: MutableKrate<List<MenuModel>> = DefaultMutableKrate(
             loader = {
                 MenuModelsFactory(
-                    bukkitCoreModule.plugin.dataFolder,
+                    coreModule.plugin.dataFolder,
                     coreModule.yamlFormat
                 ).create()
             },
@@ -29,10 +27,10 @@ interface MenuModule {
         )
 
         private val menuRouter: MenuRouter
-            get() = MenuRouterImpl(coreModule, bukkitCoreModule)
+            get() = MenuRouterImpl(coreModule)
 
         private val menuCommandFactory = MenuCommandFactory(
-            plugin = bukkitCoreModule.plugin,
+            plugin = coreModule.plugin,
             kyoriComponentSerializer = coreModule.kyoriComponentSerializer,
             menuModelProvider = menuModels,
             translationProvider = coreModule.translation,

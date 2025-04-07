@@ -2,7 +2,6 @@ package ru.astrainteractive.aspekt.module.antiswear.command.di
 
 import kotlinx.coroutines.CoroutineScope
 import org.bukkit.plugin.java.JavaPlugin
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.antiswear.data.SwearRepository
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -17,10 +16,9 @@ internal interface SwearCommandDependencies {
 
     class Default(
         private val coreModule: CoreModule,
-        bukkitCoreModule: BukkitCoreModule,
         override val swearRepository: SwearRepository
     ) : SwearCommandDependencies {
-        override val plugin: JavaPlugin = bukkitCoreModule.plugin
+        override val plugin: JavaPlugin = coreModule.plugin
         override val translation: PluginTranslation
             get() = coreModule.translation.cachedValue
         override val kyoriComponentSerializer: KyoriComponentSerializer

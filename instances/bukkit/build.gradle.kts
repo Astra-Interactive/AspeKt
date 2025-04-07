@@ -4,7 +4,7 @@ import ru.astrainteractive.gradleplugin.property.extension.ModelPropertyValueExt
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
-    alias(libs.plugins.gradle.shadow)
+    id("io.github.goooler.shadow")
     alias(libs.plugins.klibs.minecraft.shadow)
     alias(libs.plugins.klibs.minecraft.resource.processor)
 }
@@ -34,7 +34,6 @@ dependencies {
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
     implementation(projects.modules.core)
-    implementation(projects.modules.coreBukkit)
     implementation(projects.modules.menu)
     implementation(projects.modules.broadcast)
     implementation(projects.modules.adminprivate)
@@ -54,7 +53,7 @@ dependencies {
     implementation(projects.modules.entities)
     implementation(projects.modules.jail)
 }
-val destination = File("/home/makeevrserg/Desktop/git/conf.smp/smp/plugins/")
+val destination = File("/home/makeevrserg/Desktop/git/AspeKt/build/bukkit/plugins/")
     .takeIf(File::exists)
     ?: File(rootDir, "jars")
 

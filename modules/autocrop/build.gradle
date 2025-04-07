@@ -14,5 +14,4 @@ dependencies {
     implementation(libs.minecraft.astralibs.core.bukkit)
     // Test
     implementation(projects.modules.core)
-    implementation(projects.modules.coreBukkit)
 }

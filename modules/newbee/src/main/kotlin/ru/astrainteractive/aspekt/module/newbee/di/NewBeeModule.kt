@@ -1,6 +1,5 @@
 package ru.astrainteractive.aspekt.module.newbee.di
 
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.newbee.event.NewBeeEventListener
 import ru.astrainteractive.aspekt.module.newbee.event.di.EventDependencies
@@ -10,8 +9,7 @@ interface NewBeeModule {
     val lifecycle: Lifecycle
 
     class Default(
-        coreModule: CoreModule,
-        bukkitCoreModule: BukkitCoreModule
+        coreModule: CoreModule
     ) : NewBeeModule {
         private val newBeeEventListener = NewBeeEventListener(
             dependencies = EventDependencies.Default(
@@ -24,7 +22,7 @@ interface NewBeeModule {
 
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onEnable = {
-                newBeeEventListener.onEnable(bukkitCoreModule.plugin)
+                newBeeEventListener.onEnable(coreModule.plugin)
             },
             onDisable = {
                 newBeeEventListener.onDisable()

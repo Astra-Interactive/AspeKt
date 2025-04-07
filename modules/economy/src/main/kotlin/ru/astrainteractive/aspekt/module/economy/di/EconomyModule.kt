@@ -1,6 +1,5 @@
 package ru.astrainteractive.aspekt.module.economy.di
 
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.economy.command.di.EconomyCommandModule
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
@@ -14,8 +13,7 @@ interface EconomyModule {
     val lifecycle: Lifecycle
 
     class Default(
-        coreModule: CoreModule,
-        bukkitCoreModule: BukkitCoreModule
+        coreModule: CoreModule
     ) : EconomyModule,
         Logger by JUtiltLogger("EconomyModule") {
 
@@ -32,8 +30,7 @@ interface EconomyModule {
 
         private val commandModule = EconomyCommandModule.Default(
             coreModule = coreModule,
-            databaseModule = databaseModule,
-            bukkitCoreModule = bukkitCoreModule
+            databaseModule = databaseModule
         )
 
         private val papiIntegrationModule: PapiIntegrationModule = PapiIntegrationModule.Default(
@@ -43,8 +40,8 @@ interface EconomyModule {
 
         private val serviceModule = EconomyServiceModule.Default(
             economyConfigModule = economyConfigModule,
-            databaseModule = databaseModule,
-            bukkitCoreModule = bukkitCoreModule
+            coreModule = coreModule,
+            databaseModule = databaseModule
         )
 
         private val lifecycles: List<Lifecycle>

@@ -6,7 +6,6 @@ pluginManagement {
         mavenCentral()
         mavenLocal()
         google()
-        maven("https://maven.minecraftforge.net")
     }
 }
 
@@ -45,11 +44,8 @@ rootProject.name = "AspeKt"
 // Spigot
 include(":instances:bukkit")
 include(":instances:velocity")
-include(":instances:forge")
 // Modules
 include(":modules:core")
-include(":modules:core-forge")
-include(":modules:core-bukkit")
 include(":modules:menu")
 include(":modules:broadcast")
 include(":modules:adminprivate")
@@ -68,7 +64,3 @@ include(":modules:sit")
 include(":modules:inventorysort")
 include(":modules:treecapitator")
 include(":modules:jail")
-include(
-    ":modules:auth:api",
-    ":modules:auth:forge"
-)

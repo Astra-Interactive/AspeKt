@@ -1,7 +1,6 @@
 package ru.astrainteractive.aspekt.module.restrictions.event.restrictions.di
 
 import org.bukkit.plugin.java.JavaPlugin
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.util.getValue
@@ -12,12 +11,9 @@ internal interface RestrictionsDependencies {
     val plugin: JavaPlugin
     val configuration: PluginConfiguration
 
-    class Default(
-        coreModule: CoreModule,
-        bukkitCoreModule: BukkitCoreModule
-    ) : RestrictionsDependencies {
-        override val eventListener: EventListener = bukkitCoreModule.eventListener
-        override val plugin: JavaPlugin = bukkitCoreModule.plugin
+    class Default(coreModule: CoreModule) : RestrictionsDependencies {
+        override val eventListener: EventListener = coreModule.eventListener
+        override val plugin: JavaPlugin = coreModule.plugin
         override val configuration: PluginConfiguration by coreModule.pluginConfig
     }
 }

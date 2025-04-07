@@ -3,7 +3,6 @@ package ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di
 import org.bukkit.Bukkit
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.AddMoneyController
 import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.DiscordController
@@ -25,16 +24,12 @@ interface DiscordLinkModule {
     val tempFileConfiguration: Krate<FileConfiguration>
     val discordController: RoleController.Discord
 
-    class Default(
-        coreModule: CoreModule,
-        bukkitCoreModule: BukkitCoreModule
-    ) : DiscordLinkModule {
+    class Default(coreModule: CoreModule) : DiscordLinkModule {
 
         private val roleControllerDependencies by lazy {
             RoleControllerDependencies.Default(
-                coreModule = coreModule,
-                bukkitCoreModule = bukkitCoreModule,
-                discordLinkModule = this
+                coreModule,
+                this
             )
         }
 
@@ -50,7 +45,7 @@ interface DiscordLinkModule {
             DiscordController(roleControllerDependencies)
         }
 
-        override val tempFile = coreModule.dataFolder.resolve("temp.yml")
+        override val tempFile = coreModule.plugin.dataFolder.resolve("temp.yml")
 
         override val tempFileConfiguration: Krate<FileConfiguration> = DefaultMutableKrate(
             factory = { YamlConfiguration() },
@@ -85,7 +80,7 @@ interface DiscordLinkModule {
         override val lifecycle by lazy {
             Lifecycle.Lambda(
                 onEnable = {
-                    discordEvent?.onEnable(bukkitCoreModule.plugin)
+                    discordEvent?.onEnable(coreModule.plugin)
                     discordLinkJob?.onEnable()
                 },
                 onDisable = {
