@@ -1,0 +1,16 @@
+plugins {
+    id("org.jetbrains.kotlin.jvm")
+    id("org.jetbrains.kotlin.plugin.serialization")
+}
+
+dependencies {
+    // Kotlin
+    implementation(libs.bundles.kotlin)
+    // Spigot dependencies
+    compileOnly(libs.minecraft.paper.api)
+    // AstraLibs
+    implementation(libs.minecraft.astralibs.core)
+    implementation(libs.minecraft.astralibs.core.bukkit)
+    // Local
+    implementation(projects.modules.core)
+}
