@@ -44,7 +44,7 @@ import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
 
 @Suppress("TooManyFunctions")
-internal class AdminPrivateEvent(
+internal class BukkitClaimEvent(
     dependencies: AdminPrivateDependencies,
 ) : AdminPrivateDependencies by dependencies, EventListener {
     private val debounce = EventDebounce<RetractKey>(5000L)

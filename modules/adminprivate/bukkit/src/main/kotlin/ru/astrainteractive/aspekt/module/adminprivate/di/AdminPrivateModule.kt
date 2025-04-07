@@ -7,7 +7,7 @@ import ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate.Admin
 import ru.astrainteractive.aspekt.module.adminprivate.command.di.AdminPrivateCommandDependencies
 import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateController
 import ru.astrainteractive.aspekt.module.adminprivate.controller.di.AdminPrivateControllerDependencies
-import ru.astrainteractive.aspekt.module.adminprivate.event.AdminPrivateEvent
+import ru.astrainteractive.aspekt.module.adminprivate.event.BukkitClaimEvent
 import ru.astrainteractive.aspekt.module.adminprivate.event.di.AdminPrivateDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import java.io.File
@@ -36,7 +36,7 @@ interface AdminPrivateModule {
             )
         )
 
-        private val adminPrivateEvent = AdminPrivateEvent(
+        private val bukkitClaimEvent = BukkitClaimEvent(
             dependencies = AdminPrivateDependencies.Default(
                 coreModule = coreModule,
                 adminPrivateController = adminPrivateController,
@@ -47,12 +47,12 @@ interface AdminPrivateModule {
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onEnable = {
                 adminPrivateCommandRegistry.register()
-                adminPrivateEvent.onEnable(bukkitCoreModule.plugin)
+                bukkitClaimEvent.onEnable(bukkitCoreModule.plugin)
             },
             onReload = {
             },
             onDisable = {
-                adminPrivateEvent.onDisable()
+                bukkitClaimEvent.onDisable()
                 adminPrivateController.cancel()
             }
         )

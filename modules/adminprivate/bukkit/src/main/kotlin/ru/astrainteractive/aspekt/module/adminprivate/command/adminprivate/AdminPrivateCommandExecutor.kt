@@ -1,38 +1,46 @@
 package ru.astrainteractive.aspekt.module.adminprivate.command.adminprivate
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.module.adminprivate.command.di.AdminPrivateCommandDependencies
+import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateController
+import ru.astrainteractive.aspekt.module.adminprivate.messenger.Messenger
 import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.adminprivate.model.ClaimPlayer
 import ru.astrainteractive.aspekt.module.adminprivate.util.claimChunk
+import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.string.StringDesc
+import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 internal class AdminPrivateCommandExecutor(
-    dependencies: AdminPrivateCommandDependencies
-) : AdminPrivateCommandDependencies by dependencies,
-    CommandExecutor<AdminPrivateCommand.Model> {
+    private val messenger: Messenger,
+    private val adminPrivateController: AdminPrivateController,
+    private val scope: CoroutineScope,
+    private val dispatchers: KotlinDispatchers,
+    translationKrate: Krate<PluginTranslation>,
+) : CommandExecutor<AdminPrivateCommand.Model> {
+    val translation by translationKrate
 
     private suspend fun showMap(claimPlayer: ClaimPlayer, chunk: ClaimChunk) {
         val result = runCatching {
             adminPrivateController.map(5, chunk)
         }
-        result.onSuccess {
-            translation.adminPrivate.blockMap
-                .let(kyoriComponentSerializer::toComponent)
-                .run(player::sendMessage)
-            it.forEach {
-                it.joinToString("") { if (it) "&#1cba56☒" else "&#c91e1e☒" }
-                    .let(KyoriComponentSerializer.Legacy::toComponent)
-                    .run(player::sendMessage)
+        result.onSuccess { claims ->
+            messenger.sendMessage(claimPlayer, translation.adminPrivate.blockMap)
+            claims.forEach { claim ->
+                val desc = claim.joinToString("") { if (it) "&#1cba56☒" else "&#c91e1e☒" }
+                    .let(StringDesc::Raw)
+                messenger.sendMessage(claimPlayer, desc)
             }
         }
         result.onFailure {
             it.printStackTrace()
-            translation.adminPrivate.error
-                .let(kyoriComponentSerializer::toComponent)
-                .run(player::sendMessage)
+            messenger.sendMessage(claimPlayer, translation.adminPrivate.error)
         }
     }
 
@@ -46,15 +54,11 @@ internal class AdminPrivateCommandExecutor(
             )
         }
         result.onSuccess {
-            translation.adminPrivate.chunkFlagChanged
-                .let(kyoriComponentSerializer::toComponent)
-                .run(input.claimPlayer::sendMessage)
+            messenger.sendMessage(input.claimPlayer, translation.adminPrivate.chunkFlagChanged)
         }
         result.onFailure {
             it.printStackTrace()
-            translation.adminPrivate.error
-                .let(kyoriComponentSerializer::toComponent)
-                .run(input.claimPlayer::sendMessage)
+            messenger.sendMessage(input.claimPlayer, translation.adminPrivate.error)
         }
     }
 
@@ -63,15 +67,11 @@ internal class AdminPrivateCommandExecutor(
             adminPrivateController.claim(input.claimPlayer, input.chunk)
         }
         result.onSuccess {
-            translation.adminPrivate.chunkClaimed
-                .let(kyoriComponentSerializer::toComponent)
-                .run(input.claimPlayer::sendMessage)
+            messenger.sendMessage(input.claimPlayer, translation.adminPrivate.chunkClaimed)
         }
         result.onFailure {
             it.printStackTrace()
-            translation.adminPrivate.error
-                .let(kyoriComponentSerializer::toComponent)
-                .run(input.claimPlayer::sendMessage)
+            messenger.sendMessage(input.claimPlayer, translation.adminPrivate.error)
         }
     }
 
@@ -80,15 +80,11 @@ internal class AdminPrivateCommandExecutor(
             adminPrivateController.unclaim(input.claimPlayer, input.chunk)
         }
         result.onSuccess {
-            translation.adminPrivate.chunkUnClaimed
-                .let(kyoriComponentSerializer::toComponent)
-                .run(input.claimPlayer::sendMessage)
+            messenger.sendMessage(input.claimPlayer, translation.adminPrivate.chunkUnClaimed)
         }
         result.onFailure {
             it.printStackTrace()
-            translation.adminPrivate.error
-                .let(kyoriComponentSerializer::toComponent)
-                .run(input.claimPlayer::sendMessage)
+            messenger.sendMessage(input.claimPlayer, translation.adminPrivate.error)
         }
     }
 

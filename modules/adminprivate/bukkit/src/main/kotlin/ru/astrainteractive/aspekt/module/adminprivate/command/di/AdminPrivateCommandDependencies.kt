@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.adminprivate.controller.AdminPrivateController
+import ru.astrainteractive.aspekt.module.adminprivate.messenger.Messenger
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
@@ -17,6 +18,7 @@ internal interface AdminPrivateCommandDependencies {
     val translation: PluginTranslation
     val dispatchers: KotlinDispatchers
     val kyoriComponentSerializer: KyoriComponentSerializer
+    val messenger: Messenger
 
     class Default(
         coreModule: CoreModule,
