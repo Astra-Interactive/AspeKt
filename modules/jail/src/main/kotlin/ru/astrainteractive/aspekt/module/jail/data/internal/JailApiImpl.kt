@@ -1,6 +1,7 @@
-package ru.astrainteractive.aspekt.module.jail.data
+package ru.astrainteractive.aspekt.module.jail.data.internal
 
 import kotlinx.serialization.StringFormat
+import ru.astrainteractive.aspekt.module.jail.data.JailApi
 import ru.astrainteractive.aspekt.module.jail.model.Jail
 import ru.astrainteractive.aspekt.module.jail.model.JailInmate
 import ru.astrainteractive.astralibs.serialization.StringFormatExt.parse

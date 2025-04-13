@@ -29,6 +29,7 @@ internal fun JailCommandManager.inmateIntoJail(ctx: BukkitCommandContext) {
                 jailName = jailName,
                 start = Instant.now(),
                 duration = jailDuration,
+                lastUsername = jailOfflinePlayer.name.orEmpty(),
                 lastLocation = jailOfflinePlayer.location
                     ?.toJailLocation()
                     ?: Bukkit.getWorlds().first().spawnLocation.toJailLocation()

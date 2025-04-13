@@ -6,9 +6,9 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.jail.command.JailCommandManager
 import ru.astrainteractive.aspekt.module.jail.controller.JailController
 import ru.astrainteractive.aspekt.module.jail.data.CachedJailApi
-import ru.astrainteractive.aspekt.module.jail.data.CachedJailApiImpl
 import ru.astrainteractive.aspekt.module.jail.data.JailApi
-import ru.astrainteractive.aspekt.module.jail.data.JailApiImpl
+import ru.astrainteractive.aspekt.module.jail.data.internal.CachedJailApiImpl
+import ru.astrainteractive.aspekt.module.jail.data.internal.JailApiImpl
 import ru.astrainteractive.aspekt.module.jail.event.JailEvent
 import ru.astrainteractive.aspekt.module.jail.job.UnJailJob
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle

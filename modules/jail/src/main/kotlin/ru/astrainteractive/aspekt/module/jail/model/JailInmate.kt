@@ -8,6 +8,7 @@ import kotlin.time.Duration
 @Serializable
 internal data class JailInmate(
     val uuid: String,
+    val lastUsername: String,
     val jailName: String,
     val duration: Duration,
     @Serializable(InstantSerializer::class)
