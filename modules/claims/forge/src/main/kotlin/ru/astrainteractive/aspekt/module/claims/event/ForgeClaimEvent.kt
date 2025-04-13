@@ -22,16 +22,19 @@ import ru.astrainteractive.aspekt.module.claims.debounce.EventDebounce
 import ru.astrainteractive.aspekt.module.claims.debounce.RetractKey
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
+import ru.astrainteractive.aspekt.module.claims.util.toClaimPlayer
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.logging.JUtiltLogger
+import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.klibs.kstorage.api.Krate
 
 class ForgeClaimEvent(
     private val claimController: ClaimController,
     translationKrate: Krate<PluginTranslation>,
     kyoriKrate: Krate<KyoriComponentSerializer>
-) {
+) : Logger by JUtiltLogger("AspeKt-ForgeClaimEvent") {
     private val translation by translationKrate
     private val kyori by kyoriKrate
     private val scope = CoroutineScope(SupervisorJob() + ForgeMainDispatcher)
@@ -44,11 +47,23 @@ class ForgeClaimEvent(
         player: ServerPlayer?,
         flag: ChunkFlag
     ) where T : Event {
-        if (player?.toPermissible()?.hasPermission(PluginPermission.AdminClaim) == true) return
-        if (e.isCanceled) return
+        // todo
+        if (player?.toPermissible()?.hasPermission(PluginPermission.AdminClaim) == true) {
+            info { "#handleDefault has permission" }
+            return
+        }
+        if (e.isCanceled) {
+            info { "#handleDefault cancelled" }
+            return
+        }
         val sharedEvent = ForgeSharedCancellableEvent(e)
+        info { "#handleDefault" }
         debounce.debounceEvent(retractKey, sharedEvent) {
-            val isAble = claimController.isAble(claimChunk, flag)
+            val isAble = claimController.isAble(
+                chunk = claimChunk,
+                chunkFlag = flag,
+                claimPlayer = player?.toClaimPlayer()
+            )
             val isCancelled = !isAble
             if (isCancelled && player != null) {
                 translation.claim.actionIsBlockByAdminClaim(flag.name)

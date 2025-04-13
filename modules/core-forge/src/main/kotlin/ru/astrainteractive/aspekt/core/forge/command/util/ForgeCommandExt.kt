@@ -13,7 +13,6 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.rcon.RconConsoleSource
-import net.minecraftforge.event.RegisterCommandsEvent
 import ru.astrainteractive.aspekt.core.forge.command.context.ForgeCommandContext
 import ru.astrainteractive.aspekt.core.forge.permission.toPermissible
 import ru.astrainteractive.astralibs.command.api.error.ErrorHandler
@@ -103,13 +102,37 @@ fun <T> ArgumentBuilder<CommandSourceStack, *>.argument(
     return then(requiredArgumentBuilder)
 }
 
-fun RegisterCommandsEvent.command(
+fun ArgumentBuilder<CommandSourceStack, *>.literal(
     alias: String,
-    block: ArgumentBuilder<CommandSourceStack, *>.() -> Unit
+    execute: ((CommandContext<CommandSourceStack>) -> Unit)? = null,
+    block: (ArgumentBuilder<CommandSourceStack, *>.() -> Unit)? = null,
 ) {
     val literal = Commands.literal(alias)
-    literal.block()
-    dispatcher.register(literal)
+    block?.invoke(literal)
+    execute?.let {
+        literal.executes { ctx ->
+            execute.invoke(ctx)
+            Command.SINGLE_SUCCESS
+        }
+    }
+
+    then(literal)
+}
+
+fun literal(
+    alias: String,
+    execute: ((CommandContext<CommandSourceStack>) -> Unit)? = null,
+    block: (ArgumentBuilder<CommandSourceStack, *>.() -> Unit)? = null,
+): LiteralArgumentBuilder<CommandSourceStack> {
+    val literal = Commands.literal(alias)
+    block?.invoke(literal)
+    execute?.let {
+        literal.executes { ctx ->
+            execute.invoke(ctx)
+            Command.SINGLE_SUCCESS
+        }
+    }
+    return literal
 }
 
 fun literal(name: String): LiteralArgumentBuilder<CommandSourceStack> {

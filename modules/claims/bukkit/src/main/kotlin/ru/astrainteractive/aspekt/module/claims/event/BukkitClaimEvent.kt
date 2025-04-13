@@ -39,6 +39,7 @@ import ru.astrainteractive.aspekt.module.claims.event.di.ClaimDependencies
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.util.asClaimChunk
+import ru.astrainteractive.aspekt.module.claims.util.asClaimPlayer
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
@@ -59,7 +60,11 @@ internal class BukkitClaimEvent(
         if (e.isCancelled) return
         val sharedEvent = BukkitSharedCancellableEvent(e)
         debounce.debounceEvent(retractKey, sharedEvent) {
-            val isAble = claimController.isAble(claimChunk, flag)
+            val isAble = claimController.isAble(
+                chunk = claimChunk,
+                chunkFlag = flag,
+                claimPlayer = player?.asClaimPlayer()
+            )
             val isCancelled = !isAble
             if (isCancelled) {
                 translation.claim.actionIsBlockByAdminClaim(flag.name)

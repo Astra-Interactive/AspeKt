@@ -4,10 +4,12 @@ import ru.astrainteractive.aspekt.module.claims.data.krate.ClaimKrate
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimData
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
+import ru.astrainteractive.aspekt.module.claims.model.UniqueWorldKey
 import ru.astrainteractive.klibs.kstorage.suspend.SuspendMutableKrate
 
 interface ClaimsRepository {
     val allKrates: List<ClaimKrate>
+    val chunkByKrate: Map<UniqueWorldKey, ClaimKrate>
 
     suspend fun getKrate(owner: ClaimPlayer): SuspendMutableKrate<ClaimData>
     suspend fun getChunk(claimPlayer: ClaimPlayer, chunk: ClaimChunk): ClaimChunk

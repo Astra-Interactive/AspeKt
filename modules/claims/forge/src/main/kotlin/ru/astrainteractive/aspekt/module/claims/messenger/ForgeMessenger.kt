@@ -1,9 +1,9 @@
 package ru.astrainteractive.aspekt.module.claims.messenger
 
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import net.minecraft.server.MinecraftServer
 import ru.astrainteractive.aspekt.core.forge.kyori.sendSystemMessage
 import ru.astrainteractive.aspekt.core.forge.kyori.withAudience
@@ -14,15 +14,16 @@ import ru.astrainteractive.klibs.kstorage.api.Krate
 
 class ForgeMessenger(
     private val kyoriKrate: Krate<KyoriComponentSerializer>,
-    private val serverFlow: Flow<MinecraftServer>
+    serverFlow: Flow<MinecraftServer>,
+    scope: CoroutineScope
 ) : Messenger {
+    private val serverStateFlow = serverFlow.stateIn(scope, SharingStarted.Eagerly, null)
     override fun sendMessage(
         player: ClaimPlayer,
         stringDesc: StringDesc
     ) {
-        GlobalScope.launch {
-            val player = serverFlow.first().playerList.getPlayer(player.uuid) ?: return@launch
-            kyoriKrate.withAudience(player).sendSystemMessage(stringDesc)
-        }
+        val server = serverStateFlow.value ?: return
+        val player = server.playerList.getPlayer(player.uuid) ?: return
+        kyoriKrate.withAudience(player).sendSystemMessage(stringDesc)
     }
 }

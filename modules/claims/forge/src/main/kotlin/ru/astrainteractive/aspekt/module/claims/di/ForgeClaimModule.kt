@@ -9,6 +9,7 @@ import net.minecraftforge.event.RegisterCommandsEvent
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.claims.command.claim
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecutor
+import ru.astrainteractive.aspekt.module.claims.event.ForgeClaimEvent
 import ru.astrainteractive.aspekt.module.claims.messenger.ForgeMessenger
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
@@ -23,6 +24,7 @@ class ForgeClaimModule(
         messenger = ForgeMessenger(
             kyoriKrate = coreModule.kyoriComponentSerializer,
             serverFlow = serverFlow,
+            scope = coreModule.scope
         ),
         claimController = claimModule.claimController,
         scope = coreModule.scope,
@@ -31,12 +33,21 @@ class ForgeClaimModule(
         claimsRepository = claimModule.claimsRepository
     )
 
+    @Suppress("UnusedPrivateProperty")
+    private val forgeClaimEvent = ForgeClaimEvent(
+        claimController = claimModule.claimController,
+        translationKrate = coreModule.translation,
+        kyoriKrate = coreModule.kyoriComponentSerializer
+    )
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {
             coreModule.scope.launch(Dispatchers.IO) {
                 registerCommandsEventFlow
                     .first()
-                    .claim(claimCommandExecutor)
+                    .claim(
+                        claimCommandExecutor = claimCommandExecutor,
+                        minecraftServer = serverFlow.first()
+                    )
             }
         }
     )

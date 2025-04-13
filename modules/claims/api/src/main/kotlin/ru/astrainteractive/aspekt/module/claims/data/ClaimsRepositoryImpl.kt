@@ -7,6 +7,7 @@ import ru.astrainteractive.aspekt.module.claims.data.krate.ClaimKrate
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimData
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
+import ru.astrainteractive.aspekt.module.claims.model.UniqueWorldKey
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.klibs.kstorage.suspend.SuspendMutableKrate
 import java.io.File
@@ -19,22 +20,39 @@ internal class ClaimsRepositoryImpl(
     private val mutex = Mutex()
 
     private val mutableAllKrates = folder.listFiles().orEmpty().associate { file ->
-        UUID.fromString(file.nameWithoutExtension) to ClaimKrate(
+        val uuid = UUID.fromString(file.nameWithoutExtension)
+        uuid to ClaimKrate(
             file = file,
-            stringFormat = stringFormat
+            stringFormat = stringFormat,
+            ownerUUID = uuid
         )
     }.toMutableMap()
 
     override val allKrates: List<ClaimKrate>
         get() = mutableAllKrates.values.toList()
 
+    private val _chunkByKrate = HashMap<UniqueWorldKey, ClaimKrate>()
+    override val chunkByKrate: Map<UniqueWorldKey, ClaimKrate>
+        get() = _chunkByKrate.toMap()
+
+    private fun updateChunkByKrate() {
+        mutableAllKrates.values.forEach { krate ->
+            krate.cachedValue.chunks.forEach { chunk ->
+                _chunkByKrate[chunk.key] = krate
+            }
+        }
+    }
+
     override suspend fun getKrate(owner: ClaimPlayer): SuspendMutableKrate<ClaimData> {
-        return mutableAllKrates.getOrPut(owner.uuid) {
+        val krate = mutableAllKrates.getOrPut(owner.uuid) {
             ClaimKrate(
                 file = folder.resolve("${owner.uuid}.yml"),
-                stringFormat = stringFormat
+                stringFormat = stringFormat,
+                ownerUUID = owner.uuid
             )
         }
+        updateChunkByKrate()
+        return krate
     }
 
     override suspend fun getChunk(claimPlayer: ClaimPlayer, chunk: ClaimChunk): ClaimChunk = mutex.withLock {
@@ -51,6 +69,7 @@ internal class ClaimsRepositoryImpl(
             }
         )
         krate.save(newValue)
+        updateChunkByKrate()
     }
 
     override suspend fun deleteChunk(claimPlayer: ClaimPlayer, chunk: ClaimChunk) = mutex.withLock {
@@ -61,5 +80,10 @@ internal class ClaimsRepositoryImpl(
             }
         )
         krate.save(newValue)
+        updateChunkByKrate()
+    }
+
+    init {
+        updateChunkByKrate()
     }
 }

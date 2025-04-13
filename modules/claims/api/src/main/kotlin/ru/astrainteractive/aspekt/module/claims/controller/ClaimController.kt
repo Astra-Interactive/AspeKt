@@ -8,10 +8,13 @@ import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.astralibs.async.CoroutineFeature
+import ru.astrainteractive.astralibs.logging.JUtiltLogger
+import ru.astrainteractive.astralibs.logging.Logger
 
 class ClaimController(
     private val repository: ClaimsRepository,
-) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO) {
+) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO),
+    Logger by JUtiltLogger("AspeKt-ClaimController") {
 
     suspend fun map(size: Int, chunk: ClaimChunk): Array<Array<Boolean>> {
         val m = Array(size) {
@@ -51,11 +54,32 @@ class ClaimController(
         repository.saveChunk(claimPlayer, updatedChunk)
     }
 
-    fun isAble(chunk: ClaimChunk, chunkFlag: ChunkFlag): Boolean {
-        val actualChunk = repository
+    fun isAble(
+        chunk: ClaimChunk,
+        chunkFlag: ChunkFlag,
+        claimPlayer: ClaimPlayer? = null
+    ): Boolean {
+        info { "#isAble $chunk $claimPlayer" }
+        val chunkValue = repository
             .getAllChunks()
             .firstOrNull { it.uniqueWorldKey == chunk.uniqueWorldKey }
-            ?: return true
-        return actualChunk.flags[chunkFlag] ?: false
+            ?.flags
+            ?.get(chunkFlag)
+            ?: true
+        val krate = repository
+            .chunkByKrate[chunk.uniqueWorldKey]
+        if (krate == null) {
+            info { "Krate is null" }
+            return chunkValue
+        }
+        if (krate.cachedValue.ownerUUID == claimPlayer?.uuid) {
+            info { "Not owner $claimPlayer" }
+            return true
+        }
+        if (krate.cachedValue.members.map(ClaimPlayer::uuid).contains(claimPlayer?.uuid)) {
+            info { "Not member $claimPlayer" }
+            return true
+        }
+        return chunkValue
     }
 }

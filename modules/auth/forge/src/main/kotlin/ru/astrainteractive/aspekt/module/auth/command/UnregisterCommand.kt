@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.auth.command
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.command.util.command
+import ru.astrainteractive.aspekt.core.forge.command.util.literal
 import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
 import ru.astrainteractive.aspekt.core.forge.command.util.requirePermission
 import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
@@ -26,7 +26,7 @@ fun RegisterCommandsEvent.unregisterCommand(
     kyoriKrate: Krate<KyoriComponentSerializer>,
     translationKrate: Krate<AuthTranslation>
 ) {
-    command("unregister") {
+    literal("unregister") {
         stringArgument(
             alias = "username",
             execute = execute@{ ctx ->
