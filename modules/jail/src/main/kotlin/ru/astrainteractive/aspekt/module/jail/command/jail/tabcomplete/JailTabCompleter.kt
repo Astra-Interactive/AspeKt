@@ -1,8 +1,12 @@
 package ru.astrainteractive.aspekt.module.jail.command.jail.tabcomplete
 
+import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.module.jail.command.JailCommandManager
 import ru.astrainteractive.aspekt.module.jail.command.jail.model.JailArg
 import ru.astrainteractive.aspekt.module.jail.command.tabcomplete.withArgument
+import ru.astrainteractive.aspekt.module.jail.model.Jail
+import ru.astrainteractive.aspekt.module.jail.model.JailInmate
 import ru.astrainteractive.astralibs.command.api.argumenttype.EnumArgumentType
 import ru.astrainteractive.astralibs.command.api.command.BukkitTabCompleter
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.argumentOrElse
@@ -28,17 +32,17 @@ internal fun JailCommandManager.jailTabCompleter() = plugin.setCommandTabComplet
 
                     JailArg.CREATE -> ctx.withArgument(
                         index = 1,
-                        hints = listOf("JAIL_NAME")
+                        hints = cachedJailApi.getJails().map(Jail::name)
                     )
 
-                    JailArg.DELETE -> listOf("JAIL_NAME")
+                    JailArg.DELETE -> cachedJailApi.getJails().map(Jail::name)
                     JailArg.INMATE -> ctx.withArgument(
                         index = 1,
-                        hints = listOf("JAIL_NAME"),
+                        hints = cachedJailApi.getJails().map(Jail::name),
                         block = {
                             ctx.withArgument(
                                 index = 2,
-                                hints = listOf("USER_NAME"),
+                                hints = Bukkit.getOnlinePlayers().map(Player::getName),
                                 block = {
                                     ctx.withArgument(
                                         index = 3,
@@ -49,7 +53,7 @@ internal fun JailCommandManager.jailTabCompleter() = plugin.setCommandTabComplet
                         }
                     )
 
-                    JailArg.FREE -> listOf("USER_NAME")
+                    JailArg.FREE -> cachedJailApi.getInmates().map(JailInmate::lastUsername)
                 }
             }
         ).orEmpty()
