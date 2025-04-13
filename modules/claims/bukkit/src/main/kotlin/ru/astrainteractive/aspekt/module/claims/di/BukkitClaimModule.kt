@@ -1,45 +1,35 @@
 package ru.astrainteractive.aspekt.module.claims.di
 
-import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandRegistry
 import ru.astrainteractive.aspekt.module.claims.command.di.ClaimCommandDependencies
-import ru.astrainteractive.aspekt.module.claims.controller.ClaimController
-import ru.astrainteractive.aspekt.module.claims.controller.di.ClaimControllerDependencies
 import ru.astrainteractive.aspekt.module.claims.event.BukkitClaimEvent
 import ru.astrainteractive.aspekt.module.claims.event.di.ClaimDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import java.io.File
 
-interface ClaimModule {
+interface BukkitClaimModule {
     val lifecycle: Lifecycle
 
     class Default(
         private val coreModule: CoreModule,
-        bukkitCoreModule: BukkitCoreModule
-    ) : ClaimModule {
-        private val claimController = ClaimController(
-            dependencies = ClaimControllerDependencies.Default(
-                coreModule = coreModule,
-                folder = coreModule.dataFolder
-                    .resolve("claims")
-                    .also(File::mkdirs)
-            )
-        )
+        bukkitCoreModule: BukkitCoreModule,
+        claimModule: ClaimModule
+    ) : BukkitClaimModule {
 
         private val claimCommandRegistry = ClaimCommandRegistry(
             dependencies = ClaimCommandDependencies.Default(
                 coreModule = coreModule,
-                claimController = claimController,
-                bukkitCoreModule = bukkitCoreModule
+                claimController = claimModule.claimController,
+                bukkitCoreModule = bukkitCoreModule,
+                claimsRepository = claimModule.claimsRepository
             )
         )
 
         private val bukkitClaimEvent = BukkitClaimEvent(
             dependencies = ClaimDependencies.Default(
                 coreModule = coreModule,
-                claimController = claimController,
+                claimController = claimModule.claimController,
                 bukkitCoreModule = bukkitCoreModule
             )
         )
@@ -53,7 +43,6 @@ interface ClaimModule {
             },
             onDisable = {
                 bukkitClaimEvent.onDisable()
-                claimController.cancel()
             }
         )
     }

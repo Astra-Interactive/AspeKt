@@ -38,7 +38,7 @@ import ru.astrainteractive.aspekt.module.claims.debounce.RetractKey
 import ru.astrainteractive.aspekt.module.claims.event.di.ClaimDependencies
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
-import ru.astrainteractive.aspekt.module.claims.util.claimChunk
+import ru.astrainteractive.aspekt.module.claims.util.asClaimChunk
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
@@ -75,7 +75,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.chunk, e.player, "blockBreakEvent"),
             e = e,
-            claimChunk = e.block.chunk.claimChunk,
+            claimChunk = e.block.chunk.asClaimChunk(),
             player = e.player,
             flag = ChunkFlag.BREAK
         )
@@ -86,7 +86,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.chunk, e.player, "blockPlaceEvent"),
             e = e,
-            claimChunk = e.blockPlaced.chunk.claimChunk,
+            claimChunk = e.blockPlaced.chunk.asClaimChunk(),
             player = e.player,
             flag = ChunkFlag.PLACE
         )
@@ -100,7 +100,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(location, e.player, "interactEvent"),
             e = e,
-            claimChunk = location.chunk.claimChunk,
+            claimChunk = location.chunk.asClaimChunk(),
             player = e.player,
             flag = ChunkFlag.INTERACT
         )
@@ -111,7 +111,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.player.location, e.player, "itemFrameEvent"),
             e = e,
-            claimChunk = e.player.location.chunk.claimChunk,
+            claimChunk = e.player.location.chunk.asClaimChunk(),
             player = e.player,
             flag = ChunkFlag.INTERACT
         )
@@ -122,7 +122,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.entity.location, e.entity, "breakItemFrameEvent"),
             e = e,
-            claimChunk = e.entity.location.chunk.claimChunk,
+            claimChunk = e.entity.location.chunk.asClaimChunk(),
             player = e.remover as? Player,
             flag = ChunkFlag.INTERACT
         )
@@ -133,7 +133,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.player.location, e.player, "armorStandEvent"),
             e = e,
-            claimChunk = e.player.location.chunk.claimChunk,
+            claimChunk = e.player.location.chunk.asClaimChunk(),
             player = e.player,
             flag = ChunkFlag.INTERACT
         )
@@ -145,7 +145,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(armorStand.location, armorStand, "armorStandBreakEvent"),
             e = e,
-            claimChunk = armorStand.location.chunk.claimChunk,
+            claimChunk = armorStand.location.chunk.asClaimChunk(),
             player = e.damager as? Player,
             flag = ChunkFlag.INTERACT
         )
@@ -158,7 +158,7 @@ internal class BukkitClaimEvent(
             handleDefault(
                 retractKey = RetractKey.Vararg(block.chunk, "onBlockExplode"),
                 e = e,
-                claimChunk = block.chunk.claimChunk,
+                claimChunk = block.chunk.asClaimChunk(),
                 player = null,
                 flag = ChunkFlag.EXPLODE
             )
@@ -171,7 +171,7 @@ internal class BukkitClaimEvent(
             handleDefault(
                 retractKey = RetractKey.Vararg(block.chunk, "onEntityExplode"),
                 e = e,
-                claimChunk = block.chunk.claimChunk,
+                claimChunk = block.chunk.asClaimChunk(),
                 player = null,
                 flag = ChunkFlag.EXPLODE
             )
@@ -183,7 +183,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.entity.location.chunk, "onPrimeExplosion"),
             e = e,
-            claimChunk = e.entity.location.chunk.claimChunk,
+            claimChunk = e.entity.location.chunk.asClaimChunk(),
             player = null,
             flag = ChunkFlag.EXPLODE
         )
@@ -195,7 +195,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.blockClicked.location.chunk, "onBucketEmptyEvent"),
             e = e,
-            claimChunk = e.blockClicked.location.chunk.claimChunk,
+            claimChunk = e.blockClicked.location.chunk.asClaimChunk(),
             player = null,
             flag = ChunkFlag.EMPTY_BUCKET
         )
@@ -207,7 +207,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.blockPlaced.location.chunk, "onTntLavaPlace"),
             e = e,
-            claimChunk = e.blockPlaced.location.chunk.claimChunk,
+            claimChunk = e.blockPlaced.location.chunk.asClaimChunk(),
             player = null,
             flag = ChunkFlag.EXPLODE
         )
@@ -219,7 +219,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.location.chunk, "onBlockFromTo"),
             e = e,
-            claimChunk = e.block.location.chunk.claimChunk,
+            claimChunk = e.block.location.chunk.asClaimChunk(),
             player = null,
             flag = ChunkFlag.SPREAD
         )
@@ -231,7 +231,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(location.chunk, "onBlockIgniteEvent"),
             e = e,
-            claimChunk = location.chunk.claimChunk,
+            claimChunk = location.chunk.asClaimChunk(),
             player = e.player,
             flag = ChunkFlag.SPREAD
         )
@@ -243,7 +243,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(location.chunk, "onBlockBurnEvent"),
             e = e,
-            claimChunk = location.chunk.claimChunk,
+            claimChunk = location.chunk.asClaimChunk(),
             player = null,
             flag = ChunkFlag.SPREAD
         )
@@ -255,7 +255,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.location.chunk, "onBlockSpread"),
             e = e,
-            claimChunk = e.block.location.chunk.claimChunk,
+            claimChunk = e.block.location.chunk.asClaimChunk(),
             player = null,
             flag = ChunkFlag.SPREAD
         )
@@ -267,7 +267,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.entity.location.chunk, player, "playerDamageEvent"),
             e = e,
-            claimChunk = player.location.chunk.claimChunk,
+            claimChunk = player.location.chunk.asClaimChunk(),
             player = null,
             flag = ChunkFlag.RECEIVE_DAMAGE
         )
@@ -279,7 +279,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.entity.location.chunk, e.entity, "entitySpawnEvent"),
             e = e,
-            claimChunk = e.entity.location.chunk.claimChunk,
+            claimChunk = e.entity.location.chunk.asClaimChunk(),
             player = null,
             flag = ChunkFlag.HOSTILE_MOB_SPAWN
         )
@@ -298,7 +298,7 @@ internal class BukkitClaimEvent(
                     "portalCreateEvent"
                 ),
                 e = e,
-                claimChunk = chunk.claimChunk,
+                claimChunk = chunk.asClaimChunk(),
                 player = null,
                 flag = ChunkFlag.PLACE
             )
@@ -309,7 +309,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.location.chunk, "BlockPistonEvent"),
             e = e,
-            claimChunk = e.block.location.chunk.claimChunk,
+            claimChunk = e.block.location.chunk.asClaimChunk(),
             player = null,
             flag = ChunkFlag.PLACE
         )
@@ -330,7 +330,7 @@ internal class BukkitClaimEvent(
         handleDefault(
             retractKey = RetractKey.Vararg(e.block.location.chunk, "BlockFadeEvent"),
             e = e,
-            claimChunk = e.block.location.chunk.claimChunk,
+            claimChunk = e.block.location.chunk.asClaimChunk(),
             player = null,
             flag = ChunkFlag.ICE_MELT
         )

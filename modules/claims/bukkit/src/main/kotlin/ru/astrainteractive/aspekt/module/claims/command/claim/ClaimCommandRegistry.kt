@@ -38,7 +38,8 @@ internal class ClaimCommandRegistry(
                 claimController = dependencies.claimController,
                 scope = dependencies.scope,
                 dispatchers = dependencies.dispatchers,
-                translationKrate = dependencies.translation
+                translationKrate = dependencies.translation,
+                claimsRepository = dependencies.claimsRepository
             ),
             errorHandler = { context, throwable ->
                 when (throwable) {

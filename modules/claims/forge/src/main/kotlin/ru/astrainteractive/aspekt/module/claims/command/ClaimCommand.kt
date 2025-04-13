@@ -8,17 +8,13 @@ import net.minecraftforge.event.RegisterCommandsEvent
 import ru.astrainteractive.aspekt.core.forge.command.util.argument
 import ru.astrainteractive.aspekt.core.forge.command.util.command
 import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
+import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandArgument
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecutor
 import ru.astrainteractive.aspekt.module.claims.command.claim.Claimommand
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.util.getClaimChunk
 import ru.astrainteractive.aspekt.module.claims.util.toClaimPlayer
-import ru.astrainteractive.astralibs.command.api.argumenttype.EnumArgument
 import ru.astrainteractive.astralibs.command.api.argumenttype.EnumArgumentType
-
-enum class SecondArgument(override val value: String) : EnumArgument {
-    CLAIM("claim"), UNCLAIM("unclaim"), MAP("map"), FLAG("flag")
-}
 
 @Suppress("LongMethod")
 internal fun RegisterCommandsEvent.claim(
@@ -28,11 +24,11 @@ internal fun RegisterCommandsEvent.claim(
         argument(
             alias = "first_arg",
             type = StringArgumentType.string(),
-            suggests = SecondArgument.entries.map(SecondArgument::value),
+            suggests = ClaimCommandArgument.entries.map(ClaimCommandArgument::value),
             execute = { ctx ->
-                val arg = ctx.requireArgument("first_arg", EnumArgumentType(SecondArgument.entries))
+                val arg = ctx.requireArgument("first_arg", EnumArgumentType(ClaimCommandArgument.entries))
                 when (arg) {
-                    SecondArgument.CLAIM -> {
+                    ClaimCommandArgument.CLAIM -> {
                         val player = ctx.source.player ?: return@argument
                         claimCommandExecutor.execute(
                             Claimommand.Model.Claim(
@@ -42,7 +38,7 @@ internal fun RegisterCommandsEvent.claim(
                         )
                     }
 
-                    SecondArgument.UNCLAIM -> {
+                    ClaimCommandArgument.UNCLAIM -> {
                         val player = ctx.source.player ?: return@argument
                         claimCommandExecutor.execute(
                             Claimommand.Model.UnClaim(
@@ -52,7 +48,7 @@ internal fun RegisterCommandsEvent.claim(
                         )
                     }
 
-                    SecondArgument.MAP -> {
+                    ClaimCommandArgument.MAP -> {
                         val player = ctx.source.player ?: return@argument
                         claimCommandExecutor.execute(
                             Claimommand.Model.ShowMap(
@@ -62,7 +58,9 @@ internal fun RegisterCommandsEvent.claim(
                         )
                     }
 
-                    SecondArgument.FLAG -> Unit
+                    ClaimCommandArgument.FLAG -> Unit
+                    ClaimCommandArgument.ADD_MEMBER -> TODO()
+                    ClaimCommandArgument.REMOVE_MEMBER -> TODO()
                 }
             },
             builder = {
@@ -76,7 +74,7 @@ internal fun RegisterCommandsEvent.claim(
                             suggests = listOf("true", "false"),
                             type = BoolArgumentType.bool(),
                             execute = execute@{ ctx ->
-                                ctx.requireArgument("first_arg", EnumArgumentType(SecondArgument.entries))
+                                ctx.requireArgument("first_arg", EnumArgumentType(ClaimCommandArgument.entries))
                                 val flag = ctx
                                     .getArgument("specific_flag", String::class.java)
                                     .let { flag -> ChunkFlag.entries.firstOrNull { entry -> entry.name == flag } }

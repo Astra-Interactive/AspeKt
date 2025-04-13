@@ -19,6 +19,7 @@ import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
 import ru.astrainteractive.aspekt.core.forge.event.flowEvent
 import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.di.ForgeAuthModule
+import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
 import ru.astrainteractive.aspekt.module.claims.di.ForgeClaimModule
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
@@ -80,11 +81,19 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
         )
     }
 
+    val claimModule by lazy {
+        ClaimModule(
+            coreModule.jsonStringFormat,
+            dataFolder = dataFolder
+        )
+    }
+
     val forgeClaimModule by lazy {
         ForgeClaimModule(
             registerCommandsEventFlow = registerCommandsEvent.filterNotNull(),
             serverFlow = serverStateFlow.filterNotNull(),
-            coreModule = coreModule
+            coreModule = coreModule,
+            claimModule = claimModule
         )
     }
 

@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.claims.controller.ClaimController
+import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kstorage.api.Krate
@@ -17,11 +18,13 @@ internal interface ClaimCommandDependencies {
     val translation: Krate<PluginTranslation>
     val dispatchers: KotlinDispatchers
     val kyoriComponentSerializer: Krate<KyoriComponentSerializer>
+    val claimsRepository: ClaimsRepository
 
     class Default(
         coreModule: CoreModule,
         bukkitCoreModule: BukkitCoreModule,
-        override val claimController: ClaimController
+        override val claimController: ClaimController,
+        override val claimsRepository: ClaimsRepository
     ) : ClaimCommandDependencies {
         override val plugin: JavaPlugin = bukkitCoreModule.plugin
         override val scope: CoroutineScope = coreModule.scope

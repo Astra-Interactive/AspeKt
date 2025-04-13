@@ -28,6 +28,16 @@ interface Claimommand {
             val value: Boolean,
             val chunk: ClaimChunk
         ) : Model
+
+        class AddMember(
+            val owner: ClaimPlayer,
+            val member: ClaimPlayer
+        ) : Model
+
+        class RemoveMember(
+            val owner: ClaimPlayer,
+            val member: ClaimPlayer
+        ) : Model
     }
 
     sealed class Error(message: String) : CommandException(message) {

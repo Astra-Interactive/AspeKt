@@ -230,6 +230,10 @@ class PluginTranslation(
         val error: StringDesc.Raw = StringDesc.Raw("&#db2c18Ошибка! Смотрите консоль"),
         @SerialName("map")
         val blockMap: StringDesc.Raw = StringDesc.Raw("&#18dbd1Карта блоков:"),
+        @SerialName("member_added")
+        val memberAdded: StringDesc.Raw = StringDesc.Raw("&#18dbd1Участник добавлен"),
+        @SerialName("member_removed")
+        val memberRemoved: StringDesc.Raw = StringDesc.Raw("&#18dbd1Участник удален"),
         @SerialName("action_blocked")
         private val actionIsBlockByAdminClaim: StringDesc.Raw = StringDesc.Raw(
             "&#db2c18Ошибка! Действией %action% заблокировано на этом чанке!"

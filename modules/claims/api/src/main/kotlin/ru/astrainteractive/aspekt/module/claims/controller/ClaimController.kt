@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.module.claims.controller
 
 import kotlinx.coroutines.Dispatchers
-import ru.astrainteractive.aspekt.module.claims.controller.di.ClaimControllerDependencies
+import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.data.getAllChunks
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
@@ -10,9 +10,8 @@ import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.astralibs.async.CoroutineFeature
 
 class ClaimController(
-    dependencies: ClaimControllerDependencies
-) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO),
-    ClaimControllerDependencies by dependencies {
+    private val repository: ClaimsRepository,
+) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO) {
 
     suspend fun map(size: Int, chunk: ClaimChunk): Array<Array<Boolean>> {
         val m = Array(size) {

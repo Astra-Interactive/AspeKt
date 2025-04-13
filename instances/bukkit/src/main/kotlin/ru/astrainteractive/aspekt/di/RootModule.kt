@@ -8,6 +8,7 @@ import ru.astrainteractive.aspekt.module.autobroadcast.di.AutoBroadcastModule
 import ru.astrainteractive.aspekt.module.autocrop.di.AutoCropModule
 import ru.astrainteractive.aspekt.module.chatgame.di.ChatGameModule
 import ru.astrainteractive.aspekt.module.claims.command.discordlink.di.DiscordLinkModule
+import ru.astrainteractive.aspekt.module.claims.di.BukkitClaimModule
 import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
 import ru.astrainteractive.aspekt.module.economy.di.EconomyModule
 import ru.astrainteractive.aspekt.module.entities.di.EntitiesModule
@@ -33,8 +34,18 @@ class RootModule(plugin: LifecyclePlugin) {
     val bukkitCoreModule: BukkitCoreModule by lazy {
         BukkitCoreModule(plugin)
     }
-    val claimModule: ClaimModule by lazy {
-        ClaimModule.Default(coreModule, bukkitCoreModule)
+    val claimModule by lazy {
+        ClaimModule(
+            stringFormat = coreModule.jsonStringFormat,
+            dataFolder = coreModule.dataFolder
+        )
+    }
+    val bukkitClaimModule: BukkitClaimModule by lazy {
+        BukkitClaimModule.Default(
+            coreModule = coreModule,
+            bukkitCoreModule = bukkitCoreModule,
+            claimModule = claimModule
+        )
     }
     val menuModule: MenuModule by lazy {
         MenuModule.Default(coreModule, bukkitCoreModule)

@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ClaimData(
     val chunks: Map<UniqueWorldKey, ClaimChunk> = emptyMap(),
-    val members: List<ClaimPlayer> = emptyList()
+    val members: Set<ClaimPlayer> = emptySet()
 )

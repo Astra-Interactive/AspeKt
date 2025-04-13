@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.module.claims.command.claim
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.module.claims.controller.ClaimController
+import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.messenger.Messenger
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
@@ -11,6 +12,7 @@ import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.util.KrateExt.update
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 class ClaimCommandExecutor(
@@ -19,6 +21,7 @@ class ClaimCommandExecutor(
     private val scope: CoroutineScope,
     private val dispatchers: KotlinDispatchers,
     translationKrate: Krate<PluginTranslation>,
+    private val claimsRepository: ClaimsRepository
 ) : CommandExecutor<Claimommand.Model> {
     val translation by translationKrate
 
@@ -84,6 +87,22 @@ class ClaimCommandExecutor(
         }
     }
 
+    private suspend fun addMember(input: Claimommand.Model.AddMember) {
+        val krate = claimsRepository.getKrate(input.owner)
+        krate.update { data ->
+            data.copy(members = data.members + input.member)
+        }
+        messenger.sendMessage(input.owner, translation.claim.memberAdded)
+    }
+
+    private suspend fun removeMember(input: Claimommand.Model.RemoveMember) {
+        val krate = claimsRepository.getKrate(input.owner)
+        krate.update { data ->
+            data.copy(members = data.members - input.member)
+        }
+        messenger.sendMessage(input.owner, translation.claim.memberRemoved)
+    }
+
     override fun execute(input: Claimommand.Model) {
         when (input) {
             is Claimommand.Model.Claim -> scope.launch(dispatchers.IO) {
@@ -100,6 +119,14 @@ class ClaimCommandExecutor(
 
             is Claimommand.Model.UnClaim -> scope.launch(dispatchers.IO) {
                 unclaim(input)
+            }
+
+            is Claimommand.Model.AddMember -> scope.launch(dispatchers.IO) {
+                addMember(input)
+            }
+
+            is Claimommand.Model.RemoveMember -> scope.launch(dispatchers.IO) {
+                removeMember(input)
             }
         }
     }
