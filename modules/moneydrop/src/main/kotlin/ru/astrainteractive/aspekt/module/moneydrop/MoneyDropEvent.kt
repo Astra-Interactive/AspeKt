@@ -27,6 +27,10 @@ internal class MoneyDropEvent(
     fun entityDeathEvent(e: EntityDeathEvent) {
         if (e.isCancelled) return
         if (e.entity is Player) return
+        listOf(
+            e.damageSource.directEntity,
+            e.damageSource.causingEntity
+        ).filterIsInstance<Player>().firstOrNull() ?: return
         val entity = e.entity
         if (!entity.isDead) return
         moneyDropController.tryDrop(entity.location, entity.type.name)
