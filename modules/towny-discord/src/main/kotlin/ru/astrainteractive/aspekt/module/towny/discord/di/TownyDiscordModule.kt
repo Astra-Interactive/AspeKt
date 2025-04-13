@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.towny.discord.di
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.job.ScheduledJob
-import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
+import ru.astrainteractive.aspekt.module.claims.command.discordlink.di.DiscordLinkModule
 import ru.astrainteractive.aspekt.module.towny.discord.job.TownyDiscordRoleJob
 import ru.astrainteractive.aspekt.module.towny.discord.job.di.TownyDiscordDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle

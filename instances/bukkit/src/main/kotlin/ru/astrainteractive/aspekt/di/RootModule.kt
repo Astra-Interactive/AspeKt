@@ -3,12 +3,12 @@ package ru.astrainteractive.aspekt.di
 import ru.astrainteractive.aspekt.command.di.CommandManagerModule
 import ru.astrainteractive.aspekt.inventorysort.di.InventorySortModule
 import ru.astrainteractive.aspekt.invisibleframes.di.InvisibleItemFrameModule
-import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
-import ru.astrainteractive.aspekt.module.adminprivate.di.AdminPrivateModule
 import ru.astrainteractive.aspekt.module.antiswear.di.AntiSwearModule
 import ru.astrainteractive.aspekt.module.autobroadcast.di.AutoBroadcastModule
 import ru.astrainteractive.aspekt.module.autocrop.di.AutoCropModule
 import ru.astrainteractive.aspekt.module.chatgame.di.ChatGameModule
+import ru.astrainteractive.aspekt.module.claims.command.discordlink.di.DiscordLinkModule
+import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
 import ru.astrainteractive.aspekt.module.economy.di.EconomyModule
 import ru.astrainteractive.aspekt.module.entities.di.EntitiesModule
 import ru.astrainteractive.aspekt.module.jail.di.JailModule
@@ -33,8 +33,8 @@ class RootModule(plugin: LifecyclePlugin) {
     val bukkitCoreModule: BukkitCoreModule by lazy {
         BukkitCoreModule(plugin)
     }
-    val adminPrivateModule: AdminPrivateModule by lazy {
-        AdminPrivateModule.Default(coreModule, bukkitCoreModule)
+    val claimModule: ClaimModule by lazy {
+        ClaimModule.Default(coreModule, bukkitCoreModule)
     }
     val menuModule: MenuModule by lazy {
         MenuModule.Default(coreModule, bukkitCoreModule)

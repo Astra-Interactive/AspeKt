@@ -53,9 +53,9 @@ include(":modules:core-bukkit")
 include(":modules:menu")
 include(":modules:broadcast")
 include(
-    ":modules:adminprivate:api",
-    ":modules:adminprivate:bukkit",
-    ":modules:adminprivate:forge",
+    ":modules:claims:api",
+    ":modules:claims:bukkit",
+    ":modules:claims:forge",
 )
 include(":modules:discordlink")
 include(":modules:towny-discord")

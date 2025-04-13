@@ -2,8 +2,8 @@ package ru.astrainteractive.aspekt.module.towny.discord.job.di
 
 import kotlinx.coroutines.CoroutineScope
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.controller.RoleController
-import ru.astrainteractive.aspekt.module.adminprivate.command.discordlink.di.DiscordLinkModule
+import ru.astrainteractive.aspekt.module.claims.command.discordlink.controller.RoleController
+import ru.astrainteractive.aspekt.module.claims.command.discordlink.di.DiscordLinkModule
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers

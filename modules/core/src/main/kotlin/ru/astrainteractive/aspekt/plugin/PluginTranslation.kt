@@ -18,8 +18,8 @@ class PluginTranslation(
     val general: General = General(),
     @SerialName("sit")
     val sit: Sit = Sit(),
-    @SerialName("adminprivate")
-    val adminPrivate: AdminPrivate = AdminPrivate(),
+    @SerialName("claim")
+    val claim: Claim = Claim(),
     @SerialName("money_advancement")
     val moneyAdvancement: MoneyAdvancement = MoneyAdvancement(),
     @SerialName("newbee")
@@ -218,7 +218,7 @@ class PluginTranslation(
     }
 
     @Serializable
-    class AdminPrivate(
+    class Claim(
         // Admin claim
         @SerialName("flag_changed")
         val chunkFlagChanged: StringDesc.Raw = StringDesc.Raw("&#db2c18Флаг чанка изменен!"),

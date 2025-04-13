@@ -34,8 +34,8 @@ dependencies {
     shadeImplementation(projects.modules.coreForge)
     shadeImplementation(projects.modules.auth.api)
     shadeImplementation(projects.modules.auth.forge)
-    shadeImplementation(projects.modules.adminprivate.api)
-    shadeImplementation(projects.modules.adminprivate.forge)
+    shadeImplementation(projects.modules.claims.api)
+    shadeImplementation(projects.modules.claims.forge)
 }
 
 minecraft {

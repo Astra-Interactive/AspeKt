@@ -78,7 +78,7 @@ core:
     destroy_leaves: true
 ```
 
-### AdminPrivate
+### Claim
 
 This feature allows admins to create chunk-based private system.
 
@@ -167,12 +167,12 @@ money_drop:
     max: 100.0
 ```
 
-| Command                            | Permission           | Description                       |
-|:-----------------------------------|:---------------------|:----------------------------------|
-| `/adminprivate map`                | `aspekt.admin_claim` | `Show map of near claimed chunks` |
-| `/adminprivate claim`              | `aspekt.admin_claim` | `Claim current chunk`             |
-| `/adminprivate unclaim`            | `aspekt.admin_claim` | `Unclaim current chunk`           |
-| `/adminprivate flag <flag> <bool>` | `aspekt.admin_claim` | `Set flag for chunk`              |
+| Command                     | Permission     | Description                       |
+|:----------------------------|:---------------|:----------------------------------|
+| `/claim map`                | `aspekt.claim` | `Show map of near claimed chunks` |
+| `/claim claim`              | `aspekt.claim` | `Claim current chunk`             |
+| `/claim unclaim`            | `aspekt.claim` | `Unclaim current chunk`           |
+| `/claim flag <flag> <bool>` | `aspekt.claim` | `Set flag for chunk`              |
 
 ### Inventory sort
 

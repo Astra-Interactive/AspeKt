@@ -23,7 +23,7 @@ class AspeKt : LifecyclePlugin(), Logger by JUtiltLogger("AspeKt") {
             rootModule.coreModule.lifecycle,
             rootModule.menuModule.lifecycle,
             rootModule.discordLinkModule.lifecycle,
-            rootModule.adminPrivateModule.lifecycle,
+            rootModule.claimModule.lifecycle,
             rootModule.townyDiscordModule.lifecycle,
             rootModule.moneyDropModule.lifecycle,
             rootModule.autoCropModule.lifecycle,
