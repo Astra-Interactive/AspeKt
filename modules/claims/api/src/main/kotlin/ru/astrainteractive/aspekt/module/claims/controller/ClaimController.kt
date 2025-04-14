@@ -59,7 +59,6 @@ class ClaimController(
         chunkFlag: ChunkFlag,
         claimPlayer: ClaimPlayer? = null
     ): Boolean {
-        info { "#isAble $chunk $claimPlayer" }
         val chunkValue = repository
             .getAllChunks()
             .firstOrNull { it.uniqueWorldKey == chunk.uniqueWorldKey }
@@ -69,15 +68,12 @@ class ClaimController(
         val krate = repository
             .chunkByKrate[chunk.uniqueWorldKey]
         if (krate == null) {
-            info { "Krate is null" }
             return chunkValue
         }
         if (krate.cachedValue.ownerUUID == claimPlayer?.uuid) {
-            info { "Not owner $claimPlayer" }
             return true
         }
         if (krate.cachedValue.members.map(ClaimPlayer::uuid).contains(claimPlayer?.uuid)) {
-            info { "Not member $claimPlayer" }
             return true
         }
         return chunkValue

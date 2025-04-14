@@ -50,11 +50,9 @@ class ForgeClaimEvent(
         flag: ChunkFlag
     ): Boolean where T : Event {
         if (player?.toPermissible()?.hasPermission(PluginPermission.AdminClaim) == true) {
-            info { "#handleDefault has permission" }
             return false
         }
         if (e.isCanceled) {
-            info { "#handleDefault cancelled" }
             return true
         }
         val sharedEvent = if (e.isCancelable) ForgeSharedCancellableEvent(e) else ForgeEmptyCancellableEvent()

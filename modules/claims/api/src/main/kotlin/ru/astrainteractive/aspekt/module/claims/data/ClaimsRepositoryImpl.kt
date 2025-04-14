@@ -1,5 +1,7 @@
 package ru.astrainteractive.aspekt.module.claims.data
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.StringFormat
@@ -10,22 +12,26 @@ import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.model.UniqueWorldKey
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.klibs.kstorage.suspend.SuspendMutableKrate
+import ru.astrainteractive.klibs.kstorage.util.KrateExt.update
 import java.io.File
 import java.util.UUID
 
 internal class ClaimsRepositoryImpl(
     private val folder: File,
-    private val stringFormat: StringFormat
+    private val stringFormat: StringFormat,
+    private val scope: CoroutineScope
 ) : ClaimsRepository {
     private val mutex = Mutex()
 
     private val mutableAllKrates = folder.listFiles().orEmpty().associate { file ->
         val uuid = UUID.fromString(file.nameWithoutExtension)
-        uuid to ClaimKrate(
+        val krate = ClaimKrate(
             file = file,
             stringFormat = stringFormat,
             ownerUUID = uuid
         )
+        scope.launch { krate.loadAndGet() }
+        uuid to krate
     }.toMutableMap()
 
     override val allKrates: List<ClaimKrate>
@@ -51,6 +57,7 @@ internal class ClaimsRepositoryImpl(
                 ownerUUID = owner.uuid
             )
         }
+        scope.launch { krate.loadAndGet() }
         updateChunkByKrate()
         return krate
     }
@@ -62,24 +69,24 @@ internal class ClaimsRepositoryImpl(
     }
 
     override suspend fun saveChunk(claimPlayer: ClaimPlayer, chunk: ClaimChunk) = mutex.withLock {
-        val krate = getKrate(claimPlayer)
-        val newValue = krate.cachedValue.copy(
-            chunks = krate.cachedValue.chunks.toMutableMap().apply {
-                this[chunk.uniqueWorldKey] = chunk
-            }
-        )
-        krate.save(newValue)
+        getKrate(claimPlayer).update { data ->
+            data.copy(
+                chunks = data.chunks.toMutableMap().apply {
+                    this[chunk.uniqueWorldKey] = chunk
+                }
+            )
+        }
         updateChunkByKrate()
     }
 
     override suspend fun deleteChunk(claimPlayer: ClaimPlayer, chunk: ClaimChunk) = mutex.withLock {
-        val krate = getKrate(claimPlayer)
-        val newValue = krate.cachedValue.copy(
-            chunks = krate.cachedValue.chunks.toMutableMap().apply {
-                remove(chunk.uniqueWorldKey)
-            }
-        )
-        krate.save(newValue)
+        getKrate(claimPlayer).update { data ->
+            data.copy(
+                chunks = data.chunks.toMutableMap().apply {
+                    remove(chunk.uniqueWorldKey)
+                }
+            )
+        }
         updateChunkByKrate()
     }
 

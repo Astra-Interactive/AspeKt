@@ -37,7 +37,8 @@ class RootModule(plugin: LifecyclePlugin) {
     val claimModule by lazy {
         ClaimModule(
             stringFormat = coreModule.jsonStringFormat,
-            dataFolder = coreModule.dataFolder
+            dataFolder = coreModule.dataFolder,
+            scope = coreModule.scope
         )
     }
     val bukkitClaimModule: BukkitClaimModule by lazy {

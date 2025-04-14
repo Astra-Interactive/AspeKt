@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.claims.di
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.StringFormat
 import ru.astrainteractive.aspekt.module.claims.controller.ClaimController
@@ -10,13 +11,15 @@ import java.io.File
 
 class ClaimModule(
     stringFormat: StringFormat,
-    dataFolder: File
+    dataFolder: File,
+    scope: CoroutineScope
 ) {
     val claimsRepository: ClaimsRepository = ClaimsRepositoryImpl(
         folder = dataFolder
             .resolve("claims")
             .also(File::mkdirs),
-        stringFormat = stringFormat
+        stringFormat = stringFormat,
+        scope = scope
     )
     val claimController = ClaimController(claimsRepository)
 

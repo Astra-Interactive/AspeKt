@@ -83,8 +83,9 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
 
     val claimModule by lazy {
         ClaimModule(
-            coreModule.jsonStringFormat,
-            dataFolder = dataFolder
+            stringFormat = coreModule.jsonStringFormat,
+            dataFolder = dataFolder,
+            scope = scope
         )
     }
 
