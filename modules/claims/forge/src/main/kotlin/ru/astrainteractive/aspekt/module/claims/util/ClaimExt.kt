@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.claims.util
 
+import com.mojang.authlib.GameProfile
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.storage.ServerLevelData
@@ -11,6 +12,13 @@ internal fun Player.toClaimPlayer(): ClaimPlayer {
     return ClaimPlayer(
         uuid = uuid,
         username = name.toPlain()
+    )
+}
+
+internal fun GameProfile.toClaimPlayer(): ClaimPlayer {
+    return ClaimPlayer(
+        uuid = id,
+        username = name
     )
 }
 

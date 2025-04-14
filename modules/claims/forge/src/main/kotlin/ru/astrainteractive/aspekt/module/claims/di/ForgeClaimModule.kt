@@ -4,7 +4,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import net.minecraft.server.MinecraftServer
 import net.minecraftforge.event.RegisterCommandsEvent
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.claims.command.claim
@@ -15,7 +14,6 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class ForgeClaimModule(
     registerCommandsEventFlow: Flow<RegisterCommandsEvent>,
-    serverFlow: Flow<MinecraftServer>,
     coreModule: CoreModule,
     claimModule: ClaimModule
 ) {
@@ -23,8 +21,6 @@ class ForgeClaimModule(
     private val claimCommandExecutor = ClaimCommandExecutor(
         messenger = ForgeMessenger(
             kyoriKrate = coreModule.kyoriComponentSerializer,
-            serverFlow = serverFlow,
-            scope = coreModule.scope
         ),
         claimController = claimModule.claimController,
         scope = coreModule.scope,
@@ -44,10 +40,7 @@ class ForgeClaimModule(
             coreModule.scope.launch(Dispatchers.IO) {
                 registerCommandsEventFlow
                     .first()
-                    .claim(
-                        claimCommandExecutor = claimCommandExecutor,
-                        minecraftServer = serverFlow.first()
-                    )
+                    .claim(claimCommandExecutor = claimCommandExecutor)
             }
         }
     )

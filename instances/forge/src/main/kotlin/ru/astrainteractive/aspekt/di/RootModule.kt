@@ -91,7 +91,6 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
     val forgeClaimModule by lazy {
         ForgeClaimModule(
             registerCommandsEventFlow = registerCommandsEvent.filterNotNull(),
-            serverFlow = serverStateFlow.filterNotNull(),
             coreModule = coreModule,
             claimModule = claimModule
         )

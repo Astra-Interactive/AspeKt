@@ -74,5 +74,5 @@ fun RegisterCommandsEvent.registerCommand(
                 )
             }
         )
-    }
+    }.run(dispatcher::register)
 }

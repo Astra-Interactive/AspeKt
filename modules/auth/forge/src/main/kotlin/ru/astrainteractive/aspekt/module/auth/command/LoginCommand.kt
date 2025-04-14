@@ -69,5 +69,5 @@ fun RegisterCommandsEvent.loginCommand(
                 }
             }
         )
-    }
+    }.run(dispatcher::register)
 }

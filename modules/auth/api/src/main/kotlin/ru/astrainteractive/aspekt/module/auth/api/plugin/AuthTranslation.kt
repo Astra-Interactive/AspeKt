@@ -35,7 +35,7 @@ data class AuthTranslation(
         .toRaw(),
     @SerialName("user_deleted")
     val userDeleted: StringDesc.Raw = prefix
-        .plus("Пользователь не найден!")
+        .plus("Пользователь удален!")
         .toRaw(),
     @SerialName("user_could_not_be_deleted")
     val userCouldNotBeDeleted: StringDesc.Raw = prefix
