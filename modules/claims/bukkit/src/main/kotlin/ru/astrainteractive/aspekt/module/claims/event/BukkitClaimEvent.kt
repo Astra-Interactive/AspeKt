@@ -82,7 +82,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = e.block.chunk.asClaimChunk(),
             player = e.player,
-            flag = ChunkFlag.BREAK
+            flag = ChunkFlag.ALLOW_BREAK
         )
     }
 
@@ -93,7 +93,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = e.blockPlaced.chunk.asClaimChunk(),
             player = e.player,
-            flag = ChunkFlag.PLACE
+            flag = ChunkFlag.ALLOW_PLACE
         )
     }
 
@@ -107,7 +107,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = location.chunk.asClaimChunk(),
             player = e.player,
-            flag = ChunkFlag.INTERACT
+            flag = ChunkFlag.ALLOW_INTERACT
         )
     }
 
@@ -118,7 +118,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = e.player.location.chunk.asClaimChunk(),
             player = e.player,
-            flag = ChunkFlag.INTERACT
+            flag = ChunkFlag.ALLOW_INTERACT
         )
     }
 
@@ -129,7 +129,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = e.entity.location.chunk.asClaimChunk(),
             player = e.remover as? Player,
-            flag = ChunkFlag.INTERACT
+            flag = ChunkFlag.ALLOW_INTERACT
         )
     }
 
@@ -140,7 +140,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = e.player.location.chunk.asClaimChunk(),
             player = e.player,
-            flag = ChunkFlag.INTERACT
+            flag = ChunkFlag.ALLOW_INTERACT
         )
     }
 
@@ -152,7 +152,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = armorStand.location.chunk.asClaimChunk(),
             player = e.damager as? Player,
-            flag = ChunkFlag.INTERACT
+            flag = ChunkFlag.ALLOW_INTERACT
         )
     }
 
@@ -165,7 +165,7 @@ internal class BukkitClaimEvent(
                 e = e,
                 claimChunk = block.chunk.asClaimChunk(),
                 player = null,
-                flag = ChunkFlag.EXPLODE
+                flag = ChunkFlag.ALLOW_EXPLODE
             )
         }
     }
@@ -178,7 +178,7 @@ internal class BukkitClaimEvent(
                 e = e,
                 claimChunk = block.chunk.asClaimChunk(),
                 player = null,
-                flag = ChunkFlag.EXPLODE
+                flag = ChunkFlag.ALLOW_EXPLODE
             )
         }
     }
@@ -190,7 +190,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = e.entity.location.chunk.asClaimChunk(),
             player = null,
-            flag = ChunkFlag.EXPLODE
+            flag = ChunkFlag.ALLOW_EXPLODE
         )
     }
 
@@ -202,7 +202,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = e.blockClicked.location.chunk.asClaimChunk(),
             player = null,
-            flag = ChunkFlag.EMPTY_BUCKET
+            flag = ChunkFlag.ALLOW_EMPTY_BUCKET
         )
     }
 
@@ -214,7 +214,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = e.blockPlaced.location.chunk.asClaimChunk(),
             player = null,
-            flag = ChunkFlag.EXPLODE
+            flag = ChunkFlag.ALLOW_EXPLODE
         )
     }
 
@@ -226,7 +226,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = e.block.location.chunk.asClaimChunk(),
             player = null,
-            flag = ChunkFlag.SPREAD
+            flag = ChunkFlag.ALLOW_SPREAD
         )
     }
 
@@ -238,7 +238,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = location.chunk.asClaimChunk(),
             player = e.player,
-            flag = ChunkFlag.SPREAD
+            flag = ChunkFlag.ALLOW_SPREAD
         )
     }
 
@@ -250,7 +250,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = location.chunk.asClaimChunk(),
             player = null,
-            flag = ChunkFlag.SPREAD
+            flag = ChunkFlag.ALLOW_SPREAD
         )
     }
 
@@ -262,7 +262,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = e.block.location.chunk.asClaimChunk(),
             player = null,
-            flag = ChunkFlag.SPREAD
+            flag = ChunkFlag.ALLOW_SPREAD
         )
     }
 
@@ -274,7 +274,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = player.location.chunk.asClaimChunk(),
             player = null,
-            flag = ChunkFlag.RECEIVE_DAMAGE
+            flag = ChunkFlag.ALLOW_RECEIVE_DAMAGE
         )
     }
 
@@ -286,7 +286,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = e.entity.location.chunk.asClaimChunk(),
             player = null,
-            flag = ChunkFlag.HOSTILE_MOB_SPAWN
+            flag = ChunkFlag.ALLOW_HOSTILE_MOB_SPAWN
         )
     }
 
@@ -305,7 +305,7 @@ internal class BukkitClaimEvent(
                 e = e,
                 claimChunk = chunk.asClaimChunk(),
                 player = null,
-                flag = ChunkFlag.PLACE
+                flag = ChunkFlag.ALLOW_PLACE
             )
         }
     }
@@ -316,7 +316,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = e.block.location.chunk.asClaimChunk(),
             player = null,
-            flag = ChunkFlag.PLACE
+            flag = ChunkFlag.ALLOW_PLACE
         )
     }
 
@@ -337,7 +337,7 @@ internal class BukkitClaimEvent(
             e = e,
             claimChunk = e.block.location.chunk.asClaimChunk(),
             player = null,
-            flag = ChunkFlag.ICE_MELT
+            flag = ChunkFlag.ALLOW_ICE_MELT
         )
     }
 }

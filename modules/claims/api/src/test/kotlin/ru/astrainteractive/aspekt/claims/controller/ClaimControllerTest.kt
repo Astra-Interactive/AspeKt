@@ -3,8 +3,6 @@ package ru.astrainteractive.aspekt.claims.controller
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import ru.astrainteractive.aspekt.module.claims.controller.ClaimController
-import ru.astrainteractive.aspekt.module.claims.controller.di.ClaimControllerDependencies
-import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepositoryImpl
 import ru.astrainteractive.aspekt.module.claims.data.getAllChunks
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
@@ -40,39 +38,38 @@ internal class ClaimControllerTest {
     private val tempFile: File
         get() = File(System.getProperty("java.io.tmpdir"))
 
-    inner class Dependencies : ClaimControllerDependencies {
-        override val repository: ClaimsRepository =
-            ClaimsRepositoryImpl(
-                folder = tempFile.resolve(UUID.randomUUID().toString()),
-                stringFormat = YamlStringFormat()
-            )
+    private fun getRepository(): ClaimsRepositoryImpl {
+        return ClaimsRepositoryImpl(
+            folder = tempFile.resolve(UUID.randomUUID().toString()),
+            stringFormat = YamlStringFormat()
+        )
     }
 
     @Test
     fun testClaimAndUnclaim(): Unit = runBlocking {
-        val module = Dependencies()
-        val controller = ClaimController(module)
+        val repository = getRepository()
+        val controller = ClaimController(repository)
         randomChunk.let { chunk ->
             controller.claim(claimPlayer, chunk)
-            assertEquals(1, module.repository.getAllChunks().size)
+            assertEquals(1, repository.getAllChunks().size)
             controller.unclaim(claimPlayer, chunk)
-            assertEquals(0, module.repository.getAllChunks().size)
+            assertEquals(0, repository.getAllChunks().size)
         }
     }
 
     @Test
     fun testSetFlag(): Unit = runBlocking {
-        val module = Dependencies()
-        val controller = ClaimController(module)
+        val repository = getRepository()
+        val controller = ClaimController(repository)
         randomChunk.let { chunk ->
             controller.claim(claimPlayer, chunk)
-            controller.setFlag(claimPlayer, ChunkFlag.BREAK, true, chunk)
-            module.repository.getAllChunks().first().flags[ChunkFlag.BREAK].let { flagValue ->
+            controller.setFlag(claimPlayer, ChunkFlag.ALLOW_BREAK, true, chunk)
+            repository.getAllChunks().first().flags[ChunkFlag.ALLOW_BREAK].let { flagValue ->
                 assertNotNull(flagValue)
                 assertTrue(flagValue)
             }
-            controller.setFlag(claimPlayer, ChunkFlag.BREAK, false, chunk)
-            module.repository.getAllChunks().first().flags[ChunkFlag.BREAK].let { flagValue ->
+            controller.setFlag(claimPlayer, ChunkFlag.ALLOW_BREAK, false, chunk)
+            repository.getAllChunks().first().flags[ChunkFlag.ALLOW_BREAK].let { flagValue ->
                 assertNotNull(flagValue)
                 assertFalse(flagValue)
             }
@@ -81,23 +78,23 @@ internal class ClaimControllerTest {
 
     @Test
     fun testIsAble(): Unit = runBlocking {
-        val module = Dependencies()
-        val controller = ClaimController(module)
+        val repository = getRepository()
+        val controller = ClaimController(repository)
         randomChunk.let { chunk ->
-            assertTrue { controller.isAble(chunk, ChunkFlag.BREAK) }
+            assertTrue { controller.isAble(chunk, ChunkFlag.ALLOW_BREAK) }
             controller.claim(claimPlayer, chunk)
-            assertFalse { controller.isAble(chunk, ChunkFlag.BREAK) }
-            controller.setFlag(claimPlayer, ChunkFlag.BREAK, true, chunk)
-            assertTrue { controller.isAble(chunk, ChunkFlag.BREAK) }
-            controller.setFlag(claimPlayer, ChunkFlag.BREAK, false, chunk)
-            assertFalse { controller.isAble(chunk, ChunkFlag.BREAK) }
+            assertFalse { controller.isAble(chunk, ChunkFlag.ALLOW_BREAK) }
+            controller.setFlag(claimPlayer, ChunkFlag.ALLOW_BREAK, true, chunk)
+            assertTrue { controller.isAble(chunk, ChunkFlag.ALLOW_BREAK) }
+            controller.setFlag(claimPlayer, ChunkFlag.ALLOW_BREAK, false, chunk)
+            assertFalse { controller.isAble(chunk, ChunkFlag.ALLOW_BREAK) }
         }
     }
 
     @Test
     fun testMapThree(): Unit = runBlocking {
-        val module = Dependencies()
-        val controller = ClaimController(module)
+        val repository = getRepository()
+        val controller = ClaimController(repository)
         randomChunk.let { chunk ->
             controller.claim(claimPlayer, chunk)
             val expectArray = listOf(

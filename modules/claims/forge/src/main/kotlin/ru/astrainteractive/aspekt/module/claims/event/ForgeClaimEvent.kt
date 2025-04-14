@@ -98,7 +98,7 @@ class ForgeClaimEvent(
                 e = e,
                 claimChunk = chunk.toClaimChunk(e.level),
                 player = serverPlayer,
-                flag = ChunkFlag.BREAK
+                flag = ChunkFlag.ALLOW_BREAK
             )
         }.launchIn(scope)
 
@@ -112,7 +112,7 @@ class ForgeClaimEvent(
                 e = e,
                 claimChunk = chunk.toClaimChunk(e.level),
                 player = serverPlayer,
-                flag = ChunkFlag.PLACE
+                flag = ChunkFlag.ALLOW_PLACE
             )
         }.launchIn(scope)
 
@@ -126,7 +126,7 @@ class ForgeClaimEvent(
                 e = e,
                 claimChunk = chunk.toClaimChunk(e.level),
                 player = serverPlayer,
-                flag = ChunkFlag.INTERACT
+                flag = ChunkFlag.ALLOW_INTERACT
             )
         }.launchIn(scope)
 }
