@@ -16,12 +16,13 @@ class AspeKt : LifecyclePlugin(), Logger by JUtiltLogger("AspeKt") {
     private val rootModule = RootModule(this)
     private val lifecycles: List<Lifecycle>
         get() = listOfNotNull(
+            rootModule.coreModule.lifecycle,
+            rootModule.bukkitCoreModule.lifecycle,
+            rootModule.menuModule.lifecycle,
             rootModule.economyModule.lifecycle,
             rootModule.autoBroadcastModule.lifecycle,
             rootModule.sitModule.lifecycle,
             rootModule.commandManagerModule,
-            rootModule.coreModule.lifecycle,
-            rootModule.menuModule.lifecycle,
             rootModule.discordLinkModule.lifecycle,
             rootModule.bukkitClaimModule.lifecycle,
             rootModule.townyDiscordModule.lifecycle,
