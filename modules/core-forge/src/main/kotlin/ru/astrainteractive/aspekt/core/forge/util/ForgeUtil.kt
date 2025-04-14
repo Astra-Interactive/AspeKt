@@ -4,6 +4,8 @@ import com.mojang.authlib.GameProfile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -17,13 +19,16 @@ import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import java.util.UUID
 
+/**
+ * Don't forget to instantiate [ForgeUtil] on init at loader
+ */
 object ForgeUtil : Logger by JUtiltLogger("AspeKt-ForgeUtil") {
     private val serverFlow = flowEvent<ServerStartedEvent>()
         .map { event -> event.server }
         .flowOn(Dispatchers.IO)
         .stateIn(GlobalScope, SharingStarted.Eagerly, null)
 
-    internal val serverOrNull: MinecraftServer?
+    val serverOrNull: MinecraftServer?
         get() {
             val server = serverFlow.value
             if (server == null) {
@@ -31,6 +36,10 @@ object ForgeUtil : Logger by JUtiltLogger("AspeKt-ForgeUtil") {
             }
             return server
         }
+
+    suspend fun requireServer(): MinecraftServer {
+        return serverFlow.filterNotNull().first()
+    }
 
     fun initialize() = Unit
 }
