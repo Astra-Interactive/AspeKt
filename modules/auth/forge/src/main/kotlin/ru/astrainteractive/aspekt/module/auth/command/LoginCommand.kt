@@ -9,7 +9,6 @@ import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
 import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
 import ru.astrainteractive.aspekt.core.forge.kyori.sendSystemMessage
 import ru.astrainteractive.aspekt.core.forge.kyori.withAudience
-import ru.astrainteractive.aspekt.core.forge.util.sha256
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
@@ -17,6 +16,7 @@ import ru.astrainteractive.aspekt.module.auth.api.checkAuthDataIsValid
 import ru.astrainteractive.aspekt.module.auth.api.isRegistered
 import ru.astrainteractive.aspekt.module.auth.api.model.AuthData
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
+import ru.astrainteractive.aspekt.module.auth.api.util.sha256
 import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kstorage.api.Krate

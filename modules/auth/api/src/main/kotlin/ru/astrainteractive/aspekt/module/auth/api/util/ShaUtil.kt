@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.core.forge.util
+package ru.astrainteractive.aspekt.module.auth.api.util
 
 import java.security.MessageDigest
 
