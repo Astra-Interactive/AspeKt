@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.claims.controller
 
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import ru.astrainteractive.aspekt.module.claims.controller.ClaimController
@@ -17,7 +18,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
-import kotlinx.coroutines.GlobalScope
 
 internal class ClaimControllerTest {
     private val claimPlayer = ClaimPlayer(
