@@ -17,6 +17,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import kotlinx.coroutines.GlobalScope
 
 internal class ClaimControllerTest {
     private val claimPlayer = ClaimPlayer(
@@ -41,7 +42,8 @@ internal class ClaimControllerTest {
     private fun getRepository(): ClaimsRepositoryImpl {
         return ClaimsRepositoryImpl(
             folder = tempFile.resolve(UUID.randomUUID().toString()),
-            stringFormat = YamlStringFormat()
+            stringFormat = YamlStringFormat(),
+            scope = GlobalScope
         )
     }
 
