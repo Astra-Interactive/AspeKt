@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.LevelAccessor
@@ -11,12 +12,13 @@ import net.minecraft.world.level.chunk.ChunkAccess
 import net.minecraft.world.level.storage.ServerLevelData
 import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.event.level.BlockEvent
+import net.minecraftforge.event.level.ExplosionEvent
 import net.minecraftforge.eventbus.api.Event
 import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
 import ru.astrainteractive.aspekt.core.forge.event.flowEvent
-import ru.astrainteractive.aspekt.core.forge.permission.toPermissible
 import ru.astrainteractive.aspekt.core.forge.util.getValue
 import ru.astrainteractive.aspekt.core.forge.util.toNative
+import ru.astrainteractive.aspekt.core.forge.util.toPermissible
 import ru.astrainteractive.aspekt.module.claims.controller.ClaimController
 import ru.astrainteractive.aspekt.module.claims.debounce.EventDebounce
 import ru.astrainteractive.aspekt.module.claims.debounce.RetractKey
@@ -46,19 +48,17 @@ class ForgeClaimEvent(
         claimChunk: ClaimChunk,
         player: ServerPlayer?,
         flag: ChunkFlag
-    ) where T : Event {
-        // todo
+    ): Boolean where T : Event {
         if (player?.toPermissible()?.hasPermission(PluginPermission.AdminClaim) == true) {
             info { "#handleDefault has permission" }
-            return
+            return false
         }
         if (e.isCanceled) {
             info { "#handleDefault cancelled" }
-            return
+            return true
         }
-        val sharedEvent = ForgeSharedCancellableEvent(e)
-        info { "#handleDefault" }
-        debounce.debounceEvent(retractKey, sharedEvent) {
+        val sharedEvent = if (e.isCancelable) ForgeSharedCancellableEvent(e) else ForgeEmptyCancellableEvent()
+        return debounce.debounceEvent(retractKey, sharedEvent) {
             val isAble = claimController.isAble(
                 chunk = claimChunk,
                 chunkFlag = flag,
@@ -128,5 +128,41 @@ class ForgeClaimEvent(
                 player = serverPlayer,
                 flag = ChunkFlag.ALLOW_INTERACT
             )
+        }.launchIn(scope)
+
+    val explodeEvent = flowEvent<ExplosionEvent>()
+        .onEach { e ->
+            val blocksPos = if (e is ExplosionEvent.Detonate) {
+                e.affectedBlocks
+            } else {
+                listOf(
+                    BlockPos(
+                        e.explosion.position.x.toInt(),
+                        e.explosion.position.y.toInt(),
+                        e.explosion.position.z.toInt()
+                    )
+                )
+            }
+            val isCancelled = blocksPos
+                .map { blockPos -> e.level.getChunkAt(blockPos) }
+                .map { chunk -> chunk.toClaimChunk(e.level) }
+                .distinct()
+                .map { claimChunk ->
+                    handleDefault(
+                        retractKey = RetractKey.Vararg(
+                            claimChunk.x,
+                            claimChunk.z,
+                            "ExplosionEvent"
+                        ),
+                        e = e,
+                        claimChunk = claimChunk,
+                        player = null,
+                        flag = ChunkFlag.ALLOW_EXPLODE
+                    )
+                }.any()
+            if (isCancelled && e is ExplosionEvent.Detonate) {
+                e.affectedBlocks.clear()
+                e.affectedEntities.clear()
+            }
         }.launchIn(scope)
 }

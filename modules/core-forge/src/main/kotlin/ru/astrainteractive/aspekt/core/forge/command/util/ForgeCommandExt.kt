@@ -14,7 +14,7 @@ import net.minecraft.server.dedicated.DedicatedServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.rcon.RconConsoleSource
 import ru.astrainteractive.aspekt.core.forge.command.context.ForgeCommandContext
-import ru.astrainteractive.aspekt.core.forge.permission.toPermissible
+import ru.astrainteractive.aspekt.core.forge.util.toPermissible
 import ru.astrainteractive.astralibs.command.api.error.ErrorHandler
 import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
 import ru.astrainteractive.astralibs.command.api.exception.CommandException

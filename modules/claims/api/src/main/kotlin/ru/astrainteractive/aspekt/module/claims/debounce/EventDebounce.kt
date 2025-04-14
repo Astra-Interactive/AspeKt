@@ -38,10 +38,11 @@ class EventDebounce<K : RetractKey>(debounceTime: Long) {
         key: K,
         originalEvent: T,
         shouldBeCancelled: () -> Boolean
-    ) {
+    ): Boolean {
         val entryHolder = cache.getUnchecked(key)
         if (entryHolder.entry is Entry.Pending) entryHolder.entry = shouldBeCancelled.invoke().let(Entry::Loaded)
         val isCancelled = entryHolder.isCancelled
         if (isCancelled) originalEvent.isCancelled = isCancelled
+        return isCancelled
     }
 }

@@ -3,12 +3,11 @@ package ru.astrainteractive.aspekt.core.forge.permission
 import net.luckperms.api.LuckPerms
 import net.luckperms.api.LuckPermsProvider
 import net.luckperms.api.util.Tristate
-import net.minecraft.world.entity.player.Player
 import ru.astrainteractive.astralibs.permission.Permissible
 import ru.astrainteractive.astralibs.permission.Permission
 import java.util.UUID
 
-internal class ForgePlayerPermissible(private val uuid: UUID) : Permissible {
+internal class ForgeLuckPermsPlayerPermissible(private val uuid: UUID) : Permissible {
     private val luckPermsOrNull: LuckPerms?
         get() = runCatching { LuckPermsProvider.get() }.getOrNull()
 
@@ -40,8 +39,4 @@ internal class ForgePlayerPermissible(private val uuid: UUID) : Permissible {
             ?.mapNotNull { it.toIntOrNull() }
             .orEmpty()
     }
-}
-
-fun Player.toPermissible(): Permissible {
-    return ForgePlayerPermissible(this.uuid)
 }
