@@ -8,6 +8,7 @@ import net.minecraftforge.event.server.ServerStoppingEvent
 import net.minecraftforge.eventbus.api.EventPriority
 import net.minecraftforge.fml.common.Mod
 import ru.astrainteractive.aspekt.core.forge.event.flowEvent
+import ru.astrainteractive.aspekt.core.forge.util.ForgeUtil
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
@@ -50,4 +51,8 @@ class ForgeEntryPoint :
         .onEach { e ->
             info { "#registerCommandsEvent" }
         }.launchIn(rootModule.scope)
+
+    init {
+        ForgeUtil.initialize()
+    }
 }

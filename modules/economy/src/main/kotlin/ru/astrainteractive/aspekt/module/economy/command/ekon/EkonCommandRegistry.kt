@@ -30,7 +30,7 @@ internal class EkonCommandRegistry(
     private val translation get() = getTranslation.invoke()
 
     @Suppress("CyclomaticComplexMethod")
-    private fun adminPrivateCompleter() =
+    private fun claimCompleter() =
         plugin.getCommand(EkonCommand.ALIAS)?.setTabCompleter { sender, command, label, args ->
             when {
                 args.size <= 1 -> listOf("list", "top", "balance", "set", "add").withEntry(args.getOrNull(0))
@@ -81,7 +81,7 @@ internal class EkonCommandRegistry(
         }
 
     fun register() {
-        adminPrivateCompleter()
+        claimCompleter()
         plugin.setCommandExecutor(
             alias = EkonCommand.ALIAS,
             commandParser = EkonCommandParser(

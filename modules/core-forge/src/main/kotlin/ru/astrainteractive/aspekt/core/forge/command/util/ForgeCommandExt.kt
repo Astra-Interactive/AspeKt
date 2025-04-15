@@ -4,6 +4,7 @@ import com.mojang.brigadier.Command
 import com.mojang.brigadier.arguments.ArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.ArgumentBuilder
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.commands.CommandSourceStack
@@ -12,9 +13,8 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.rcon.RconConsoleSource
-import net.minecraftforge.event.RegisterCommandsEvent
 import ru.astrainteractive.aspekt.core.forge.command.context.ForgeCommandContext
-import ru.astrainteractive.aspekt.core.forge.permission.toPermissible
+import ru.astrainteractive.aspekt.core.forge.util.toPermissible
 import ru.astrainteractive.astralibs.command.api.error.ErrorHandler
 import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
 import ru.astrainteractive.astralibs.command.api.exception.CommandException
@@ -77,7 +77,7 @@ fun <T> ArgumentBuilder<CommandSourceStack, *>.argument(
     errorHandler: ErrorHandler<ForgeCommandContext> = ErrorHandler { _, _ -> },
     builder: (RequiredArgumentBuilder<CommandSourceStack, T>.() -> Unit)? = null,
     execute: (RequiredArgumentBuilder<CommandSourceStack, T>.(CommandContext<CommandSourceStack>) -> Unit)? = null,
-) {
+): ArgumentBuilder<CommandSourceStack, *> {
     val requiredArgumentBuilder: RequiredArgumentBuilder<CommandSourceStack, T> = Commands
         .argument(alias, type)
         .suggests { context, builder ->
@@ -99,14 +99,73 @@ fun <T> ArgumentBuilder<CommandSourceStack, *>.argument(
             Command.SINGLE_SUCCESS
         }
     }
-    this.then(requiredArgumentBuilder)
+    return then(requiredArgumentBuilder)
 }
 
-fun RegisterCommandsEvent.command(
+fun ArgumentBuilder<CommandSourceStack, *>.literal(
     alias: String,
-    block: ArgumentBuilder<CommandSourceStack, *>.() -> Unit
+    execute: ((CommandContext<CommandSourceStack>) -> Unit)? = null,
+    block: (ArgumentBuilder<CommandSourceStack, *>.() -> Unit)? = null,
 ) {
     val literal = Commands.literal(alias)
-    literal.block()
-    dispatcher.register(literal)
+    block?.invoke(literal)
+    execute?.let {
+        literal.executes { ctx ->
+            execute.invoke(ctx)
+            Command.SINGLE_SUCCESS
+        }
+    }
+
+    then(literal)
+}
+
+fun literal(
+    alias: String,
+    execute: ((CommandContext<CommandSourceStack>) -> Unit)? = null,
+    block: (ArgumentBuilder<CommandSourceStack, *>.() -> Unit)? = null,
+): LiteralArgumentBuilder<CommandSourceStack> {
+    val literal = Commands.literal(alias)
+    block?.invoke(literal)
+    execute?.let {
+        literal.executes { ctx ->
+            execute.invoke(ctx)
+            Command.SINGLE_SUCCESS
+        }
+    }
+    return literal
+}
+
+fun literal(name: String): LiteralArgumentBuilder<CommandSourceStack> {
+    return Commands.literal(name)
+}
+
+fun <T> argument(
+    alias: String,
+    type: ArgumentType<T>,
+    suggests: List<String> = emptyList(),
+    errorHandler: ErrorHandler<ForgeCommandContext> = ErrorHandler { _, _ -> },
+    execute: ((CommandContext<CommandSourceStack>) -> Unit)? = null,
+): RequiredArgumentBuilder<CommandSourceStack, T> {
+    val argument = Commands.argument(alias, type)
+    if (suggests.isNotEmpty()) {
+        argument.suggests { context, builder ->
+            suggests.forEach { suggestion ->
+                builder.suggest(suggestion)
+            }
+            builder.buildFuture()
+        }
+    }
+    execute?.let {
+        argument.executes {
+            runCatching { execute.invoke(it) }
+                .onFailure { throwable ->
+                    errorHandler.handle(
+                        ctx = ForgeCommandContext(it),
+                        throwable = throwable
+                    )
+                }
+            Command.SINGLE_SUCCESS
+        }
+    }
+    return argument
 }

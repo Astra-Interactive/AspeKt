@@ -24,7 +24,7 @@ class AspeKt : LifecyclePlugin(), Logger by JUtiltLogger("AspeKt") {
             rootModule.sitModule.lifecycle,
             rootModule.commandManagerModule,
             rootModule.discordLinkModule.lifecycle,
-            rootModule.adminPrivateModule.lifecycle,
+            rootModule.bukkitClaimModule.lifecycle,
             rootModule.townyDiscordModule.lifecycle,
             rootModule.moneyDropModule.lifecycle,
             rootModule.autoCropModule.lifecycle,

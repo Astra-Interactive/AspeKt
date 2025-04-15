@@ -52,7 +52,11 @@ include(":modules:core-forge")
 include(":modules:core-bukkit")
 include(":modules:menu")
 include(":modules:broadcast")
-include(":modules:adminprivate")
+include(
+    ":modules:claims:api",
+    ":modules:claims:bukkit",
+    ":modules:claims:forge",
+)
 include(":modules:discordlink")
 include(":modules:towny-discord")
 include(":modules:moneydrop")

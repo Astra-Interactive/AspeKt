@@ -32,6 +32,6 @@ fun KyoriAudienceContext<CommandSourceStack>.sendSystemMessage(desc: StringDesc)
 }
 
 @JvmName("sendSystemMessageFromPlayer")
-fun KyoriAudienceContext<Player>.sendSystemMessage(desc: StringDesc) {
+fun KyoriAudienceContext<out Player>.sendSystemMessage(desc: StringDesc) {
     audience.sendSystemMessage(kyori.toComponent(desc).toNative())
 }

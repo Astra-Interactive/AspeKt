@@ -2,7 +2,9 @@ package ru.astrainteractive.aspekt.di
 
 import com.charleskorn.kaml.PolymorphismStyle
 import com.charleskorn.kaml.Yaml
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.SharingStarted
@@ -13,9 +15,12 @@ import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.event.server.ServerStartedEvent
 import net.minecraftforge.eventbus.api.EventPriority
 import net.minecraftforge.fml.loading.FMLPaths
+import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
 import ru.astrainteractive.aspekt.core.forge.event.flowEvent
 import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.di.ForgeAuthModule
+import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
+import ru.astrainteractive.aspekt.module.claims.di.ForgeClaimModule
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
@@ -23,6 +28,7 @@ import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 import ru.astrainteractive.klibs.mikro.core.dispatchers.DefaultKotlinDispatchers
+import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import java.io.File
 
 class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
@@ -63,9 +69,40 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
             registerCommandsEventFlow = registerCommandsEvent.filterNotNull(),
         )
     }
+    val coreModule by lazy {
+        CoreModule.Default(
+            dataFolder = dataFolder,
+            dispatchers = object : KotlinDispatchers {
+                override val Main: CoroutineDispatcher = ForgeMainDispatcher
+                override val IO: CoroutineDispatcher = Dispatchers.IO
+                override val Default: CoroutineDispatcher = Dispatchers.Default
+                override val Unconfined: CoroutineDispatcher = Dispatchers.Unconfined
+            }
+        )
+    }
+
+    val claimModule by lazy {
+        ClaimModule(
+            stringFormat = coreModule.jsonStringFormat,
+            dataFolder = dataFolder,
+            scope = scope
+        )
+    }
+
+    val forgeClaimModule by lazy {
+        ForgeClaimModule(
+            registerCommandsEventFlow = registerCommandsEvent.filterNotNull(),
+            coreModule = coreModule,
+            claimModule = claimModule
+        )
+    }
 
     private val lifecycles: List<Lifecycle>
-        get() = listOf(forgeAuthModule.lifecycle)
+        get() = listOf(
+            coreModule.lifecycle,
+            forgeAuthModule.lifecycle,
+            forgeClaimModule.lifecycle
+        )
 
     val lifecycle = Lifecycle.Lambda(
         onEnable = {

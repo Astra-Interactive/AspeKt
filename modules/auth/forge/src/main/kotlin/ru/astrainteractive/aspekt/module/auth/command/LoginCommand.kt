@@ -4,12 +4,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import net.minecraft.server.level.ServerPlayer
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.command.util.command
+import ru.astrainteractive.aspekt.core.forge.command.util.literal
 import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
 import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
 import ru.astrainteractive.aspekt.core.forge.kyori.sendSystemMessage
 import ru.astrainteractive.aspekt.core.forge.kyori.withAudience
-import ru.astrainteractive.aspekt.core.forge.util.sha256
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
@@ -17,6 +16,7 @@ import ru.astrainteractive.aspekt.module.auth.api.checkAuthDataIsValid
 import ru.astrainteractive.aspekt.module.auth.api.isRegistered
 import ru.astrainteractive.aspekt.module.auth.api.model.AuthData
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
+import ru.astrainteractive.aspekt.module.auth.api.util.sha256
 import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kstorage.api.Krate
@@ -28,7 +28,7 @@ fun RegisterCommandsEvent.loginCommand(
     kyoriKrate: Krate<KyoriComponentSerializer>,
     translationKrate: Krate<AuthTranslation>
 ) {
-    command("login") {
+    literal("login") {
         stringArgument(
             alias = "password",
             execute = execute@{ ctx ->
@@ -69,5 +69,5 @@ fun RegisterCommandsEvent.loginCommand(
                 }
             }
         )
-    }
+    }.run(dispatcher::register)
 }

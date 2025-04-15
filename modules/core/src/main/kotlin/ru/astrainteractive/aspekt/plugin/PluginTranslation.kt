@@ -18,8 +18,8 @@ class PluginTranslation(
     val general: General = General(),
     @SerialName("sit")
     val sit: Sit = Sit(),
-    @SerialName("adminprivate")
-    val adminPrivate: AdminPrivate = AdminPrivate(),
+    @SerialName("claim")
+    val claim: Claim = Claim(),
     @SerialName("money_advancement")
     val moneyAdvancement: MoneyAdvancement = MoneyAdvancement(),
     @SerialName("newbee")
@@ -218,7 +218,7 @@ class PluginTranslation(
     }
 
     @Serializable
-    class AdminPrivate(
+    class Claim(
         // Admin claim
         @SerialName("flag_changed")
         val chunkFlagChanged: StringDesc.Raw = StringDesc.Raw("&#db2c18Флаг чанка изменен!"),
@@ -230,6 +230,10 @@ class PluginTranslation(
         val error: StringDesc.Raw = StringDesc.Raw("&#db2c18Ошибка! Смотрите консоль"),
         @SerialName("map")
         val blockMap: StringDesc.Raw = StringDesc.Raw("&#18dbd1Карта блоков:"),
+        @SerialName("member_added")
+        val memberAdded: StringDesc.Raw = StringDesc.Raw("&#18dbd1Участник добавлен"),
+        @SerialName("member_removed")
+        val memberRemoved: StringDesc.Raw = StringDesc.Raw("&#18dbd1Участник удален"),
         @SerialName("action_blocked")
         private val actionIsBlockByAdminClaim: StringDesc.Raw = StringDesc.Raw(
             "&#db2c18Ошибка! Действией %action% заблокировано на этом чанке!"

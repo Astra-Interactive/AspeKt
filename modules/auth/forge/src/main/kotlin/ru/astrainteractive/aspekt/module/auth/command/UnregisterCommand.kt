@@ -3,12 +3,16 @@ package ru.astrainteractive.aspekt.module.auth.command
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.command.util.command
+import ru.astrainteractive.aspekt.core.forge.command.util.literal
 import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
 import ru.astrainteractive.aspekt.core.forge.command.util.requirePermission
 import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
 import ru.astrainteractive.aspekt.core.forge.kyori.sendSystemMessage
 import ru.astrainteractive.aspekt.core.forge.kyori.withAudience
+import ru.astrainteractive.aspekt.core.forge.util.ForgeUtil
+import ru.astrainteractive.aspekt.core.forge.util.getOnlinePlayer
+import ru.astrainteractive.aspekt.core.forge.util.getOnlinePlayers
+import ru.astrainteractive.aspekt.core.forge.util.getPlayerGameProfile
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
@@ -26,9 +30,10 @@ fun RegisterCommandsEvent.unregisterCommand(
     kyoriKrate: Krate<KyoriComponentSerializer>,
     translationKrate: Krate<AuthTranslation>
 ) {
-    command("unregister") {
+    literal("unregister") {
         stringArgument(
             alias = "username",
+            suggests = ForgeUtil.getOnlinePlayers().map { player -> player.name.toPlain() },
             execute = execute@{ ctx ->
                 val translation = translationKrate.cachedValue
                 ctx.requirePermission(AuthPermission.Unregister)
@@ -39,25 +44,41 @@ fun RegisterCommandsEvent.unregisterCommand(
                             kyoriKrate
                                 .withAudience(ctx.source)
                                 .sendSystemMessage(translation.userNotFound)
-                        }.getOrNull() ?: return@launch
+                        }.getOrNull() ?: run {
+                        return@launch
+                    }
 
                     authDao.deleteAccount(authData.uuid)
                         .onSuccess {
-                            ctx.source.server
-                                .playerList
-                                .getPlayerByName(usernameToDelete)
-                                ?.let { serverPlayer ->
-                                    val playerModel = PlayerLoginModel(
-                                        username = serverPlayer.name.toPlain(),
-                                        uuid = serverPlayer.uuid,
-                                        ip = serverPlayer.ipAddress
+                            val onlinePlayerLoginModel = ForgeUtil
+                                .getOnlinePlayer(usernameToDelete)
+                                ?.let { player ->
+                                    PlayerLoginModel(
+                                        username = player.name.toPlain(),
+                                        uuid = player.uuid,
+                                        ip = player.ipAddress
                                     )
-                                    authorizedApi.forgetUser(playerModel.uuid)
-                                    authorizedApi.loadUserInfo(playerModel)
                                 }
-                            kyoriKrate
-                                .withAudience(ctx.source)
-                                .sendSystemMessage(translation.userDeleted)
+                            val offlinePlayerLoginModel = ForgeUtil
+                                .getPlayerGameProfile(usernameToDelete)
+                                ?.let { profile ->
+                                    PlayerLoginModel(
+                                        username = profile.name,
+                                        uuid = profile.id,
+                                        ip = null.orEmpty()
+                                    )
+                                }
+                            val playerLoginModel = onlinePlayerLoginModel ?: offlinePlayerLoginModel
+                            playerLoginModel
+                                ?.uuid
+                                ?.let { playerLoginModel ->
+                                    authorizedApi.forgetUser(playerLoginModel)
+                                    kyoriKrate
+                                        .withAudience(ctx.source)
+                                        .sendSystemMessage(translation.userDeleted)
+                                }
+                            onlinePlayerLoginModel
+                                ?.let(authorizedApi::loadUserInfo)
                         }.onFailure {
                             kyoriKrate
                                 .withAudience(ctx.source)
@@ -66,5 +87,5 @@ fun RegisterCommandsEvent.unregisterCommand(
                 }
             }
         )
-    }
+    }.run(dispatcher::register)
 }
