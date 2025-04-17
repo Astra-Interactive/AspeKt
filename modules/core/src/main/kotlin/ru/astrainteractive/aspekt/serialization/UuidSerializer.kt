@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.module.claims.serialization
+package ru.astrainteractive.aspekt.serialization
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -8,7 +8,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import java.util.UUID
 
-internal object UuidSerializer : KSerializer<UUID> {
+object UuidSerializer : KSerializer<UUID> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("KUUID", PrimitiveKind.STRING)
 
     override fun serialize(encoder: Encoder, value: UUID) {

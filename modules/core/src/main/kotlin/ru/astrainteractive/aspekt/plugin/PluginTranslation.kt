@@ -32,7 +32,26 @@ class PluginTranslation(
     val economy: Economy = Economy(),
     @SerialName("jails")
     val jails: Jails = Jails(),
+    @SerialName("homes")
+    val homes: Homes = Homes(),
 ) {
+    @Serializable
+    data class Homes(
+        val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BHOMES&7] "),
+        val homeCreated: StringDesc.Raw = prefix
+            .plus("Дом создан!")
+            .toRaw(),
+        val homeNotFound: StringDesc.Raw = prefix
+            .plus("Такой дом не найден!")
+            .toRaw(),
+        val homeDeleted: StringDesc.Raw = prefix
+            .plus("Дом удален!")
+            .toRaw(),
+        val teleporting: StringDesc.Raw = prefix
+            .plus("Вы были телепортированы домой")
+            .toRaw(),
+    )
+
     @Serializable
     data class Jails(
         val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BJAIL&7] "),
@@ -94,16 +113,35 @@ class PluginTranslation(
     @Serializable
     class Economy(
         val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BECO&7]"),
-        val playerNotFound: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#db2c18Игрок не найден"),
-        val errorTransferMoney: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#db2c18Не удалось выдать валюту"),
-        val moneyTransferred: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#42f596Валюта успешно выдана игроку"),
-        private val playerBalance: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#42f596Баланс игрока %balance%"),
-        private val currencies: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#42f596Доступные валюту: %currencies%"),
-        val topsTitle: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#42f596Топ игроков по балансу:"),
-        val topsEmpty: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#42f596Топ игроков пуст!"),
-        private val topItem: StringDesc.Raw = StringDesc.Raw("${prefix.raw} &#42f596%index%. %name% → %balance%"),
+        val playerNotFound: StringDesc.Raw = prefix
+            .plus("&#db2c18Игрок не найден")
+            .toRaw(),
+        val errorTransferMoney: StringDesc.Raw = prefix
+            .plus("&#db2c18Не удалось выдать валюту")
+            .toRaw(),
+        val moneyTransferred: StringDesc.Raw = prefix
+            .plus("&#42f596Валюта успешно выдана игроку")
+            .toRaw(),
+        private val playerBalance: StringDesc.Raw = prefix
+            .plus("&#42f596Баланс игрока %balance%")
+            .toRaw(),
+        private val currencies: StringDesc.Raw = prefix
+            .plus("&#42f596Доступные валюту: %currencies%")
+            .toRaw(),
+        val topsTitle: StringDesc.Raw = prefix
+            .plus("&#42f596Топ игроков по балансу:")
+            .toRaw(),
+        val topsEmpty: StringDesc.Raw = prefix
+            .plus("&#42f596Топ игроков пуст!")
+            .toRaw(),
+        private val topItem: StringDesc.Raw = prefix
+            .plus("&#42f596%index%. %name% → %balance%")
+            .toRaw(),
+
         @SerialName("currency_not_found")
-        val currencyNotFound: StringDesc.Raw = StringDesc.Raw("&#db2c18Валюта не найдена!"),
+        val currencyNotFound: StringDesc.Raw = prefix
+            .plus("&#db2c18Валюта не найдена!")
+            .toRaw(),
     ) {
         fun playerBalance(amount: Number) = playerBalance.replace("%balance%", DecimalFormat("0.00").format(amount))
         fun currencies(value: String) = currencies.replace("%currencies%", value)
@@ -115,28 +153,37 @@ class PluginTranslation(
 
     @Serializable
     class ChatGame(
+        val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BКВИЗ&7] "),
         @SerialName("solve_riddle")
-        private val solveRiddle: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BКВИЗ&7] Загадка: %quiz% → &2/quiz ОТВЕТ"),
+        private val solveRiddle: StringDesc.Raw = prefix
+            .plus("Загадка: %quiz% → &2/quiz ОТВЕТ")
+            .toRaw(),
         @SerialName("solve_example")
-        private val solveExample: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BКВИЗ&7] Пример: %quiz% → &2/quiz ОТВЕТ"),
+        private val solveExample: StringDesc.Raw = prefix
+            .plus("Пример: %quiz% → &2/quiz ОТВЕТ")
+            .toRaw(),
         @SerialName("solve_anagram")
-        private val solveAnagram: StringDesc.Raw = StringDesc.Raw(
-            "&7[&#DBB72BКВИЗ&7] Анаграмма: %quiz% → &2/quiz ОТВЕТ"
-        ),
+        private val solveAnagram: StringDesc.Raw = prefix
+            .plus("Анаграмма: %quiz% → &2/quiz ОТВЕТ")
+            .toRaw(),
         @SerialName("solve_quadratic")
-        private val solveQuadratic: StringDesc.Raw = StringDesc.Raw(
-            "&7[&#DBB72BКВИЗ&7] Квадратное уравнение: %quiz% → &2/quiz ОТВЕТ &7Любой вариант ответа с точностью до сотой. Например: 0.02, 0.3, 1.0"
-        ),
+        private val solveQuadratic: StringDesc.Raw = prefix
+            .plus(
+                "Квадратное уравнение: %quiz% → &2/quiz ОТВЕТ &7Любой вариант ответа с точностью до сотой. Например: 0.02, 0.3, 1.0"
+            )
+            .toRaw(),
         @SerialName("no_quiz_available")
-        val noQuizAvailable: StringDesc.Raw = StringDesc.Raw(
-            "&7[&#DBB72BКВИЗ&7] &#db2c18В данный момент нет активного квиза!"
-        ),
+        val noQuizAvailable: StringDesc.Raw = prefix
+            .plus("&#db2c18В данный момент нет активного квиза!")
+            .toRaw(),
         @SerialName("wrong_answer")
-        val wrongAnswer: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BКВИЗ&7] &#db2c18Ответ неверный!"),
+        val wrongAnswer: StringDesc.Raw = prefix
+            .plus("&#db2c18Ответ неверный!")
+            .toRaw(),
         @SerialName("game_ended")
-        val gameEndedMoneyReward: StringDesc.Raw = StringDesc.Raw(
-            "&7[&#DBB72BКВИЗ&7] &6%player% &7угадал верный ответ! И получил &6%amount% &7монет!"
-        ),
+        val gameEndedMoneyReward: StringDesc.Raw = prefix
+            .plus("&6%player% &7угадал верный ответ! И получил &6%amount% &7монет!")
+            .toRaw(),
     ) {
         fun solveRiddle(quiz: String) = solveRiddle.replace("%quiz%", quiz)
         fun solveExample(quiz: String) = solveExample.replace("%quiz%", quiz)
@@ -150,18 +197,19 @@ class PluginTranslation(
 
     @Serializable
     class MoneyAdvancement(
+        val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BДОСТИЖЕНИЕ&7] "),
         @SerialName("reload_complete")
-        private val challengeCompleted: StringDesc.Raw = StringDesc.Raw(
-            "&7[&#DBB72BДОСТИЖЕНИЕ&7] Вы выполднили достижение-челлендж и получили награду: %money% монет"
-        ),
+        private val challengeCompleted: StringDesc.Raw = prefix
+            .plus("Вы выполднили достижение-челлендж и получили награду: %money% монет")
+            .toRaw(),
         @SerialName("goal_completed")
-        private val goalCompleted: StringDesc.Raw = StringDesc.Raw(
-            "&7[&#DBB72BДОСТИЖЕНИЕ&7] Вы выполднили целевое достижение и получили награду: %money% монет"
-        ),
+        private val goalCompleted: StringDesc.Raw = prefix
+            .plus("Вы выполднили целевое достижение и получили награду: %money% монет")
+            .toRaw(),
         @SerialName("task_completed")
-        private val taskCompleted: StringDesc.Raw = StringDesc.Raw(
-            "&7[&#DBB72BДОСТИЖЕНИЕ&7] Вы выполднили достижение и получили награду: %money% монет"
-        ),
+        private val taskCompleted: StringDesc.Raw = prefix
+            .plus("Вы выполднили достижение и получили награду: %money% монет")
+            .toRaw(),
     ) {
         fun challengeCompleted(money: Number) = challengeCompleted.replace(
             "%money%",
@@ -175,33 +223,51 @@ class PluginTranslation(
     @Serializable
     class General(
         @SerialName("prefix")
-        val prefix: StringDesc.Raw = StringDesc.Raw("&#18dbd1[AspeKt] "),
+        val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BAspeKt&7] "),
         @SerialName("reload")
-        val reload: StringDesc.Raw = StringDesc.Raw("&#dbbb18Перезагрузка плагина"),
+        val reload: StringDesc.Raw = prefix
+            .plus("&#dbbb18Перезагрузка плагина")
+            .toRaw(),
         @SerialName("reload_complete")
-        val reloadComplete: StringDesc.Raw = StringDesc.Raw("&#42f596Перезагрузка успешно завершена"),
+        val reloadComplete: StringDesc.Raw = prefix
+            .plus("&#42f596Перезагрузка успешно завершена")
+            .toRaw(),
         @SerialName("no_permission")
-        val noPermission: StringDesc.Raw = StringDesc.Raw("&#db2c18У вас нет прав!"),
+        val noPermission: StringDesc.Raw = prefix
+            .plus("&#db2c18У вас нет прав!")
+            .toRaw(),
         @SerialName("not_enough_money")
-        val notEnoughMoney: StringDesc.Raw = StringDesc.Raw("&#db2c18Недостаточно средств!"),
+        val notEnoughMoney: StringDesc.Raw = prefix
+            .plus("&#db2c18Недостаточно средств!")
+            .toRaw(),
         @SerialName("wrong_usage")
-        val wrongUsage: StringDesc.Raw = StringDesc.Raw("&#db2c18Неверное использование!"),
+        val wrongUsage: StringDesc.Raw = prefix
+            .plus("&#db2c18Неверное использование!")
+            .toRaw(),
         @SerialName("only_player_command")
-        val onlyPlayerCommand: StringDesc.Raw = StringDesc.Raw("&#db2c18Эта команда только для игроков!"),
+        val onlyPlayerCommand: StringDesc.Raw = prefix
+            .plus("&#db2c18Эта команда только для игроков!")
+            .toRaw(),
         @SerialName("menu_not_found")
-        val menuNotFound: StringDesc.Raw = StringDesc.Raw("&#db2c18Меню с заданным ID не найдено"),
+        val menuNotFound: StringDesc.Raw = prefix
+            .plus("&#db2c18Меню с заданным ID не найдено")
+            .toRaw(),
         @SerialName("discord_link_reward")
-        private val discordLinkReward: StringDesc.Raw = StringDesc.Raw(
-            "&#42f596Вы получили {AMOUNT}$ за привязку дискорда!"
-        ),
+        private val discordLinkReward: StringDesc.Raw = prefix
+            .plus("&#42f596Вы получили {AMOUNT}$ за привязку дискорда!")
+            .toRaw(),
         @SerialName("picked_up_money")
-        private val pickedUpMoney: StringDesc.Raw = StringDesc.Raw("&#42f596Вы подобрали {AMOUNT} загадочных монет"),
+        private val pickedUpMoney: StringDesc.Raw = prefix
+            .plus("&#42f596Вы подобрали {AMOUNT} загадочных монет")
+            .toRaw(),
         @SerialName("dropped_money")
         val droppedMoney: StringDesc.Raw = StringDesc.Raw("&6Монетка"),
         @SerialName("maybe_tpr")
-        val maybeTpr: StringDesc.Raw = StringDesc.Raw("&#db2c18Возможно, вы хотели ввести /tpr"),
+        val maybeTpr: StringDesc.Raw = prefix
+            .plus("&#db2c18Возможно, вы хотели ввести /tpr")
+            .toRaw(),
         private val commandError: StringDesc.Raw = prefix
-            .plus(StringDesc.Raw("&#db2c18Ошибка выполнения команды: %error%"))
+            .plus("&#db2c18Ошибка выполнения команды: %error%")
             .toRaw()
     ) {
 
@@ -219,25 +285,41 @@ class PluginTranslation(
 
     @Serializable
     class Claim(
+        @SerialName("prefix")
+        val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BCLAIM&7] "),
         // Admin claim
         @SerialName("flag_changed")
-        val chunkFlagChanged: StringDesc.Raw = StringDesc.Raw("&#db2c18Флаг чанка изменен!"),
+        val chunkFlagChanged: StringDesc.Raw = prefix
+            .plus("Флаг чанка изменен!")
+            .toRaw(),
         @SerialName("claimed")
-        val chunkClaimed: StringDesc.Raw = StringDesc.Raw("&#db2c18Вы заняли чанк!"),
+        val chunkClaimed: StringDesc.Raw = prefix
+            .plus("Вы заняли чанк!")
+            .toRaw(),
         @SerialName("unclaimed")
-        val chunkUnClaimed: StringDesc.Raw = StringDesc.Raw("&#db2c18Чанк свободен!"),
+        val chunkUnClaimed: StringDesc.Raw = prefix
+            .plus("Чанк свободен!")
+            .toRaw(),
         @SerialName("error")
-        val error: StringDesc.Raw = StringDesc.Raw("&#db2c18Ошибка! Смотрите консоль"),
+        val error: StringDesc.Raw = prefix
+            .plus("Ошибка! Смотрите консоль")
+            .toRaw(),
         @SerialName("map")
-        val blockMap: StringDesc.Raw = StringDesc.Raw("&#18dbd1Карта блоков:"),
+        val blockMap: StringDesc.Raw = prefix
+            .plus("Карта блоков:")
+            .toRaw(),
         @SerialName("member_added")
-        val memberAdded: StringDesc.Raw = StringDesc.Raw("&#18dbd1Участник добавлен"),
+        val memberAdded: StringDesc.Raw = prefix
+            .plus("Участник добавлен")
+            .toRaw(),
         @SerialName("member_removed")
-        val memberRemoved: StringDesc.Raw = StringDesc.Raw("&#18dbd1Участник удален"),
+        val memberRemoved: StringDesc.Raw = prefix
+            .plus("Участник удален")
+            .toRaw(),
         @SerialName("action_blocked")
-        private val actionIsBlockByAdminClaim: StringDesc.Raw = StringDesc.Raw(
-            "&#db2c18Ошибка! Действией %action% заблокировано на этом чанке!"
-        ),
+        private val actionIsBlockByAdminClaim: StringDesc.Raw = prefix
+            .plus("Ошибка! Действией %action% заблокировано на этом чанке!")
+            .toRaw(),
     ) {
         fun actionIsBlockByAdminClaim(action: String): StringDesc {
             return actionIsBlockByAdminClaim.replace("%action%", action)
@@ -246,39 +328,55 @@ class PluginTranslation(
 
     @Serializable
     class Sit(
+        @SerialName("prefix")
+        val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BSIT&7] "),
         @SerialName("already")
-        val sitAlready: StringDesc.Raw = StringDesc.Raw("&#dbbb18Вы уже сидите"),
+        val sitAlready: StringDesc.Raw = prefix
+            .plus("&#dbbb18Вы уже сидите")
+            .toRaw(),
         @SerialName("air")
-        val sitInAir: StringDesc.Raw = StringDesc.Raw("&#dbbb18Нельзя сидеть в воздухе"),
+        val sitInAir: StringDesc.Raw = prefix
+            .plus("&#dbbb18Нельзя сидеть в воздухе")
+            .toRaw(),
         @SerialName("too_far")
-        val tooFar: StringDesc.Raw = StringDesc.Raw("&#dbbb18Слишком далеко"),
+        val tooFar: StringDesc.Raw = prefix
+            .plus("&#dbbb18Слишком далеко")
+            .toRaw(),
         @SerialName("cant_sit_in_block")
-        val cantSitInBlock: StringDesc.Raw = StringDesc.Raw("&#dbbb18Нельзя сидеть в блоке")
+        val cantSitInBlock: StringDesc.Raw = prefix
+            .plus("&#dbbb18Нельзя сидеть в блоке")
+            .toRaw()
     )
 
     @Serializable
     class NewBee(
-        val youAreNewBee: StringDesc.Raw = StringDesc.Raw(
-            "&7[&#DBB72BЗАЩИТА&7] &#1D72F2Вы новичок! &6Поэтому в первые 50 минут вам будет играть легче! Наслаждайтесь игрой!"
-        ),
+        @SerialName("prefix")
+        val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BЗАЩИТА&7] "),
+        val youAreNewBee: StringDesc.Raw = prefix
+            .plus("&#1D72F2Вы новичок! &6Поэтому в первые 50 минут вам будет играть легче! Наслаждайтесь игрой!")
+            .toRaw(),
         val newBeeTitle: StringDesc.Raw = StringDesc.Raw("&#DBB72BЗащита новичка"),
         val newBeeSubtitle: StringDesc.Raw = StringDesc.Raw("&#db2c18Включена"),
-        val newBeeShieldForceDisabled: StringDesc.Raw = StringDesc.Raw(
-            "&7[&#DBB72BЗАЩИТА&7] &#DBB72BВы вступили в бой с игроком. Защита новичка была удалена"
-        )
+        val newBeeShieldForceDisabled: StringDesc.Raw = prefix
+            .plus("Вы вступили в бой с игроком. Защита новичка была удалена")
+            .toRaw()
     )
 
     @Serializable
     class Swear(
         val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BSF&7] "),
-        val swearFilterEnabled: StringDesc.Raw = StringDesc.Raw("${prefix.raw}&#db2c18Фильтр плохих слов включен"),
-        val swearFilterDisabled: StringDesc.Raw = StringDesc.Raw("${prefix.raw}&#db2c18Фильтр плохих слов выключен"),
-        private val swearFilterEnabledFor: StringDesc.Raw = StringDesc.Raw(
-            "${prefix.raw}&#db2c18Фильтр плохих слов включен для {player}"
-        ),
-        private val swearFilterDisabledFor: StringDesc.Raw = StringDesc.Raw(
-            "${prefix.raw}&#db2c18Фильтр плохих слов выключен для {player}"
-        ),
+        val swearFilterEnabled: StringDesc.Raw = prefix
+            .plus("Фильтр плохих слов включен")
+            .toRaw(),
+        val swearFilterDisabled: StringDesc.Raw = prefix
+            .plus("Фильтр плохих слов выключен")
+            .toRaw(),
+        private val swearFilterEnabledFor: StringDesc.Raw = prefix
+            .plus("Фильтр плохих слов включен для {player}")
+            .toRaw(),
+        private val swearFilterDisabledFor: StringDesc.Raw = prefix
+            .plus("Фильтр плохих слов выключен для {player}")
+            .toRaw(),
     ) {
         fun swearFilterEnabledFor(name: String) = swearFilterEnabledFor.replace("{player}", name)
         fun swearFilterDisabledFor(name: String) = swearFilterDisabledFor.replace("{player}", name)

@@ -56,7 +56,7 @@ fun CommandContext<CommandSourceStack>.requirePermission(permission: Permission)
 
 fun ArgumentBuilder<CommandSourceStack, *>.stringArgument(
     alias: String,
-    suggests: List<String> = emptyList(),
+    suggests: (CommandContext<CommandSourceStack>) -> List<String> = { emptyList() },
     errorHandler: ErrorHandler<ForgeCommandContext> = ErrorHandler { _, _ -> },
     builder: (RequiredArgumentBuilder<CommandSourceStack, String>.() -> Unit)? = null,
     execute: (RequiredArgumentBuilder<CommandSourceStack, String>.(CommandContext<CommandSourceStack>) -> Unit)? = null,
@@ -73,7 +73,7 @@ fun ArgumentBuilder<CommandSourceStack, *>.stringArgument(
 fun <T> ArgumentBuilder<CommandSourceStack, *>.argument(
     alias: String,
     type: ArgumentType<T>,
-    suggests: List<String> = emptyList(),
+    suggests: (CommandContext<CommandSourceStack>) -> List<String> = { emptyList() },
     errorHandler: ErrorHandler<ForgeCommandContext> = ErrorHandler { _, _ -> },
     builder: (RequiredArgumentBuilder<CommandSourceStack, T>.() -> Unit)? = null,
     execute: (RequiredArgumentBuilder<CommandSourceStack, T>.(CommandContext<CommandSourceStack>) -> Unit)? = null,
@@ -81,7 +81,7 @@ fun <T> ArgumentBuilder<CommandSourceStack, *>.argument(
     val requiredArgumentBuilder: RequiredArgumentBuilder<CommandSourceStack, T> = Commands
         .argument(alias, type)
         .suggests { context, builder ->
-            suggests.forEach { suggestion ->
+            suggests.invoke(context).forEach { suggestion ->
                 builder.suggest(suggestion)
             }
             builder.buildFuture()

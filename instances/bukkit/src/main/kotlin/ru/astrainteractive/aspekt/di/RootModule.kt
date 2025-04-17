@@ -1,8 +1,11 @@
 package ru.astrainteractive.aspekt.di
 
+import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.command.di.CommandManagerModule
 import ru.astrainteractive.aspekt.inventorysort.di.InventorySortModule
 import ru.astrainteractive.aspekt.invisibleframes.di.InvisibleItemFrameModule
+import ru.astrainteractive.aspekt.minecraft.messenger.MinecraftMessenger
+import ru.astrainteractive.aspekt.minecraft.player.MinecraftPlayer
 import ru.astrainteractive.aspekt.module.antiswear.di.AntiSwearModule
 import ru.astrainteractive.aspekt.module.autobroadcast.di.AutoBroadcastModule
 import ru.astrainteractive.aspekt.module.autocrop.di.AutoCropModule
@@ -23,12 +26,23 @@ import ru.astrainteractive.aspekt.module.towny.discord.di.TownyDiscordModule
 import ru.astrainteractive.aspekt.module.treecapitator.di.TreeCapitatorModule
 import ru.astrainteractive.astralibs.async.DefaultBukkitDispatchers
 import ru.astrainteractive.astralibs.lifecycle.LifecyclePlugin
+import ru.astrainteractive.astralibs.string.StringDesc
 
 class RootModule(plugin: LifecyclePlugin) {
     val coreModule: CoreModule by lazy {
         CoreModule.Default(
             dataFolder = plugin.dataFolder,
-            dispatchers = DefaultBukkitDispatchers(plugin)
+            dispatchers = DefaultBukkitDispatchers(plugin),
+            createMinecraftMessenger = { kyoriKrate ->
+                object : MinecraftMessenger {
+                    override fun send(
+                        player: MinecraftPlayer,
+                        stringDesc: StringDesc
+                    ): Unit = with(kyoriKrate.cachedValue) {
+                        Bukkit.getPlayer(player.uuid)?.sendMessage(stringDesc.component)
+                    }
+                }
+            }
         )
     }
     val bukkitCoreModule: BukkitCoreModule by lazy {
