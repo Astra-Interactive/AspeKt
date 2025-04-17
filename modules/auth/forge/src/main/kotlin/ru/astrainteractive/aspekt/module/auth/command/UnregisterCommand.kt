@@ -33,7 +33,7 @@ fun RegisterCommandsEvent.unregisterCommand(
     literal("unregister") {
         stringArgument(
             alias = "username",
-            suggests = ForgeUtil.getOnlinePlayers().map { player -> player.name.toPlain() },
+            suggests = { ForgeUtil.getOnlinePlayers().map { player -> player.name.toPlain() } },
             execute = execute@{ ctx ->
                 val translation = translationKrate.cachedValue
                 ctx.requirePermission(AuthPermission.Unregister)

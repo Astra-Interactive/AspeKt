@@ -26,7 +26,7 @@ internal fun RegisterCommandsEvent.claim(
         literal(ClaimCommandArgument.FLAG.value) {
             stringArgument(
                 alias = "ChunkFlag",
-                suggests = ChunkFlag.entries.map(ChunkFlag::name),
+                suggests = { ChunkFlag.entries.map(ChunkFlag::name) },
                 builder = {
                     argument(
                         alias = "bool",

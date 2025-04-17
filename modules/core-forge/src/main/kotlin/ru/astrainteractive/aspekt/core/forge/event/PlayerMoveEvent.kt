@@ -5,8 +5,11 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.storage.ServerLevelData
 import net.minecraftforge.event.entity.living.LivingEvent
 import ru.astrainteractive.aspekt.core.forge.model.Location
+import ru.astrainteractive.aspekt.util.cast
+import ru.astrainteractive.aspekt.util.tryCast
 import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
@@ -26,11 +29,16 @@ fun playerMoveFlowEvent() = flow {
     flowEvent<LivingEvent.LivingTickEvent>()
         .filter { it.entity is Player }
         .onEach { event ->
-            val player = event.entity as? Player ?: return@onEach
+            val player = event.entity.tryCast<Player>() ?: return@onEach
             val location = Location(
                 x = event.entity.x,
                 y = event.entity.y,
-                z = event.entity.z
+                z = event.entity.z,
+                worldName = event.entity
+                    .level()
+                    .levelData
+                    .cast<ServerLevelData>()
+                    .levelName
             )
             val cachedLocation = cache.get(event.entity.uuid) {
                 location

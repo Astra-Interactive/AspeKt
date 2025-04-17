@@ -17,10 +17,12 @@ import net.minecraftforge.eventbus.api.EventPriority
 import net.minecraftforge.fml.loading.FMLPaths
 import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
 import ru.astrainteractive.aspekt.core.forge.event.flowEvent
+import ru.astrainteractive.aspekt.core.forge.minecraft.messenger.ForgeMinecraftMessenger
 import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.di.ForgeAuthModule
 import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
 import ru.astrainteractive.aspekt.module.claims.di.ForgeClaimModule
+import ru.astrainteractive.aspekt.module.sethome.di.HomesModule
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
@@ -77,7 +79,8 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
                 override val IO: CoroutineDispatcher = Dispatchers.IO
                 override val Default: CoroutineDispatcher = Dispatchers.Default
                 override val Unconfined: CoroutineDispatcher = Dispatchers.Unconfined
-            }
+            },
+            createMinecraftMessenger = { kyoriKrate -> ForgeMinecraftMessenger(kyoriKrate) }
         )
     }
 
@@ -97,11 +100,21 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
         )
     }
 
+    val homesModule by lazy {
+        HomesModule(
+            registerCommandsEventFlow = registerCommandsEvent.filterNotNull(),
+            dataFolder = dataFolder,
+            stringFormat = coreModule.jsonStringFormat,
+            coreModule = coreModule
+        )
+    }
+
     private val lifecycles: List<Lifecycle>
         get() = listOf(
             coreModule.lifecycle,
             forgeAuthModule.lifecycle,
-            forgeClaimModule.lifecycle
+            forgeClaimModule.lifecycle,
+            homesModule.lifecycle
         )
 
     val lifecycle = Lifecycle.Lambda(

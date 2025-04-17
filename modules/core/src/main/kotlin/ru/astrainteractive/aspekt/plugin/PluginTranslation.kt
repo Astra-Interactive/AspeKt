@@ -32,7 +32,26 @@ class PluginTranslation(
     val economy: Economy = Economy(),
     @SerialName("jails")
     val jails: Jails = Jails(),
+    @SerialName("homes")
+    val homes: Homes = Homes(),
 ) {
+    @Serializable
+    data class Homes(
+        val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BHOMES&7] "),
+        val homeCreated: StringDesc.Raw = prefix
+            .plus("Дом создан!")
+            .toRaw(),
+        val homeNotFound: StringDesc.Raw = prefix
+            .plus("Такой дом не найден!")
+            .toRaw(),
+        val homeDeleted: StringDesc.Raw = prefix
+            .plus("Дом удален!")
+            .toRaw(),
+        val teleporting: StringDesc.Raw = prefix
+            .plus("Вы были телепортированы домой")
+            .toRaw(),
+    )
+
     @Serializable
     data class Jails(
         val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BJAIL&7] "),

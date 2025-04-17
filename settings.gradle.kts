@@ -57,6 +57,10 @@ include(
     ":modules:claims:bukkit",
     ":modules:claims:forge",
 )
+include(
+    ":modules:sethome:api",
+    ":modules:sethome:forge",
+)
 include(":modules:discordlink")
 include(":modules:towny-discord")
 include(":modules:moneydrop")
