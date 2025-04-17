@@ -26,7 +26,4 @@ class ForgeTeleportApi : TeleportApi {
             0f
         )
     }
-
-    fun clear() {
-    }
 }

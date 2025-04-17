@@ -45,7 +45,6 @@ class HomesModule(
             }
         },
         onDisable = {
-            teleporter.clear()
             homeKrateProvider.clear()
         }
     )
