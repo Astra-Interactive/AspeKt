@@ -4,7 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.claims.controller.ClaimController
+import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimErrorMapper
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
@@ -13,18 +13,18 @@ import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 internal interface ClaimCommandDependencies {
     val plugin: JavaPlugin
-    val claimController: ClaimController
     val scope: CoroutineScope
     val translation: Krate<PluginTranslation>
     val dispatchers: KotlinDispatchers
     val kyoriComponentSerializer: Krate<KyoriComponentSerializer>
     val claimsRepository: ClaimsRepository
+    val claimErrorMapper: ClaimErrorMapper
 
     class Default(
         coreModule: CoreModule,
         bukkitCoreModule: BukkitCoreModule,
-        override val claimController: ClaimController,
-        override val claimsRepository: ClaimsRepository
+        override val claimsRepository: ClaimsRepository,
+        override val claimErrorMapper: ClaimErrorMapper
     ) : ClaimCommandDependencies {
         override val plugin: JavaPlugin = bukkitCoreModule.plugin
         override val scope: CoroutineScope = coreModule.scope

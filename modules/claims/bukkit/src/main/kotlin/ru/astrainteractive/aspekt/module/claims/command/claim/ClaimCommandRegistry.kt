@@ -35,11 +35,11 @@ internal class ClaimCommandRegistry(
             commandParser = ClaimCommandParser(),
             commandExecutor = ClaimCommandExecutor(
                 messenger = BukkitMessenger(kyoriKrate = dependencies.kyoriComponentSerializer),
-                claimController = dependencies.claimController,
                 scope = dependencies.scope,
                 dispatchers = dependencies.dispatchers,
                 translationKrate = dependencies.translation,
-                claimsRepository = dependencies.claimsRepository
+                claimsRepository = dependencies.claimsRepository,
+                claimErrorMapper = dependencies.claimErrorMapper
             ),
             errorHandler = { context, throwable ->
                 when (throwable) {

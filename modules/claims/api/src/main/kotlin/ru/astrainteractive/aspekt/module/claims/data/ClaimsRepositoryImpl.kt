@@ -5,13 +5,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.StringFormat
+import ru.astrainteractive.aspekt.module.claims.data.exception.ClaimNotFoundException
+import ru.astrainteractive.aspekt.module.claims.data.exception.ClaimNotOwnedException
+import ru.astrainteractive.aspekt.module.claims.data.exception.UnderClaimException
 import ru.astrainteractive.aspekt.module.claims.data.krate.ClaimKrate
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
-import ru.astrainteractive.aspekt.module.claims.model.ClaimData
-import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.model.UniqueWorldKey
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
-import ru.astrainteractive.klibs.kstorage.suspend.SuspendMutableKrate
 import ru.astrainteractive.klibs.kstorage.util.KrateExt.update
 import java.io.File
 import java.util.UUID
@@ -22,7 +22,6 @@ internal class ClaimsRepositoryImpl(
     private val scope: CoroutineScope
 ) : ClaimsRepository {
     private val mutex = Mutex()
-
     private val mutableAllKrates = folder.listFiles().orEmpty().associate { file ->
         val uuid = UUID.fromString(file.nameWithoutExtension)
         val krate = ClaimKrate(
@@ -41,7 +40,7 @@ internal class ClaimsRepositoryImpl(
     override val chunkByKrate: Map<UniqueWorldKey, ClaimKrate>
         get() = _chunkByKrate.toMap()
 
-    private fun updateChunkByKrate() {
+    private suspend fun updateChunkByKrate() {
         mutableAllKrates.values.forEach { krate ->
             krate.cachedValue.chunks.forEach { chunk ->
                 _chunkByKrate[chunk.key] = krate
@@ -49,12 +48,12 @@ internal class ClaimsRepositoryImpl(
         }
     }
 
-    override suspend fun getKrate(owner: ClaimPlayer): SuspendMutableKrate<ClaimData> {
-        val krate = mutableAllKrates.getOrPut(owner.uuid) {
+    override suspend fun getKrate(uuid: UUID): ClaimKrate {
+        val krate = mutableAllKrates.getOrPut(uuid) {
             ClaimKrate(
-                file = folder.resolve("${owner.uuid}.yml"),
+                file = folder.resolve("$uuid.yml"),
                 stringFormat = stringFormat,
-                ownerUUID = owner.uuid
+                ownerUUID = uuid
             )
         }
         scope.launch { krate.loadAndGet() }
@@ -62,29 +61,43 @@ internal class ClaimsRepositoryImpl(
         return krate
     }
 
-    override suspend fun saveChunk(claimPlayer: ClaimPlayer, chunk: ClaimChunk) = mutex.withLock {
-        getKrate(claimPlayer).update { data ->
-            data.copy(
-                chunks = data.chunks.toMutableMap().apply {
-                    this[chunk.uniqueWorldKey] = chunk
-                }
-            )
+    override suspend fun saveChunk(uuid: UUID, chunk: ClaimChunk) = mutex.withLock {
+        runCatching {
+            claimOwnerUuid(chunk.uniqueWorldKey)?.let { claimOwnerUuid ->
+                throw UnderClaimException(claimOwnerUuid)
+            }
+            getKrate(uuid).update { data ->
+                data.copy(
+                    chunks = data.chunks.toMutableMap().apply {
+                        this[chunk.uniqueWorldKey] = chunk
+                    }
+                )
+            }
+            updateChunkByKrate()
         }
-        updateChunkByKrate()
     }
 
-    override suspend fun deleteChunk(claimPlayer: ClaimPlayer, chunk: ClaimChunk) = mutex.withLock {
-        getKrate(claimPlayer).update { data ->
-            data.copy(
-                chunks = data.chunks.toMutableMap().apply {
-                    remove(chunk.uniqueWorldKey)
-                }
-            )
+    override suspend fun deleteChunk(uuid: UUID, key: UniqueWorldKey) = mutex.withLock {
+        runCatching {
+            if (!isPlayerOwnClaim(uuid, key)) {
+                throw ClaimNotOwnedException
+            }
+            if (key !in chunkByKrate) {
+                throw ClaimNotFoundException
+            }
+
+            getKrate(uuid).update { data ->
+                data.copy(
+                    chunks = data.chunks
+                        .toMutableMap()
+                        .minus(key)
+                )
+            }
+            updateChunkByKrate()
         }
-        updateChunkByKrate()
     }
 
     init {
-        updateChunkByKrate()
+        scope.launch { updateChunkByKrate() }
     }
 }

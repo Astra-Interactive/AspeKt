@@ -2,11 +2,14 @@ package ru.astrainteractive.aspekt.module.claims.command.claim
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import ru.astrainteractive.aspekt.module.claims.controller.ClaimController
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
+import ru.astrainteractive.aspekt.module.claims.data.claim
+import ru.astrainteractive.aspekt.module.claims.data.map
+import ru.astrainteractive.aspekt.module.claims.data.setFlag
 import ru.astrainteractive.aspekt.module.claims.messenger.Messenger
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
+import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
@@ -17,17 +20,17 @@ import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 class ClaimCommandExecutor(
     private val messenger: Messenger,
-    private val claimController: ClaimController,
     private val scope: CoroutineScope,
     private val dispatchers: KotlinDispatchers,
     translationKrate: Krate<PluginTranslation>,
-    private val claimsRepository: ClaimsRepository
+    private val claimsRepository: ClaimsRepository,
+    private val claimErrorMapper: ClaimErrorMapper
 ) : CommandExecutor<Claimommand.Model> {
     val translation by translationKrate
 
     private suspend fun showMap(claimPlayer: ClaimPlayer, chunk: ClaimChunk) {
         val result = runCatching {
-            claimController.map(5, chunk)
+            claimsRepository.map(5, chunk)
         }
         result.onSuccess { claims ->
             messenger.sendMessage(claimPlayer, translation.claim.blockMap)
@@ -38,57 +41,51 @@ class ClaimCommandExecutor(
             }
         }
         result.onFailure {
-            it.printStackTrace()
-            messenger.sendMessage(claimPlayer, translation.claim.error)
+            val message = claimErrorMapper.toStringDesc(it)
+            messenger.sendMessage(claimPlayer, message)
         }
     }
 
     private suspend fun setFlag(input: Claimommand.Model.SetFlag) {
-        val result = runCatching {
-            claimController.setFlag(
-                flag = input.flag,
-                value = input.value,
-                chunk = input.chunk,
-                claimPlayer = input.claimPlayer
-            )
-        }
+        val result = claimsRepository.setFlag(
+            flag = input.flag,
+            value = input.value,
+            key = input.chunk.uniqueWorldKey,
+            uuid = input.claimPlayer.uuid
+        )
         result.onSuccess {
             messenger.sendMessage(input.claimPlayer, translation.claim.chunkFlagChanged)
         }
         result.onFailure {
-            it.printStackTrace()
-            messenger.sendMessage(input.claimPlayer, translation.claim.error)
+            val message = claimErrorMapper.toStringDesc(it)
+            messenger.sendMessage(input.claimPlayer, message)
         }
     }
 
     private suspend fun claim(input: Claimommand.Model.Claim) {
-        val result = runCatching {
-            claimController.claim(input.claimPlayer, input.chunk)
-        }
+        val result = claimsRepository.claim(input.claimPlayer.uuid, input.chunk)
         result.onSuccess {
             messenger.sendMessage(input.claimPlayer, translation.claim.chunkClaimed)
         }
         result.onFailure {
-            it.printStackTrace()
-            messenger.sendMessage(input.claimPlayer, translation.claim.error)
+            val message = claimErrorMapper.toStringDesc(it)
+            messenger.sendMessage(input.claimPlayer, message)
         }
     }
 
     private suspend fun unclaim(input: Claimommand.Model.UnClaim) {
-        val result = runCatching {
-            claimController.unclaim(input.claimPlayer, input.chunk)
-        }
+        val result = claimsRepository.deleteChunk(input.claimPlayer.uuid, input.chunk.uniqueWorldKey)
         result.onSuccess {
             messenger.sendMessage(input.claimPlayer, translation.claim.chunkUnClaimed)
         }
         result.onFailure {
-            it.printStackTrace()
-            messenger.sendMessage(input.claimPlayer, translation.claim.error)
+            val message = claimErrorMapper.toStringDesc(it)
+            messenger.sendMessage(input.claimPlayer, message)
         }
     }
 
     private suspend fun addMember(input: Claimommand.Model.AddMember) {
-        val krate = claimsRepository.getKrate(input.owner)
+        val krate = claimsRepository.getKrate(input.owner.uuid)
         krate.update { data ->
             data.copy(members = data.members + input.member)
         }
@@ -96,7 +93,7 @@ class ClaimCommandExecutor(
     }
 
     private suspend fun removeMember(input: Claimommand.Model.RemoveMember) {
-        val krate = claimsRepository.getKrate(input.owner)
+        val krate = claimsRepository.getKrate(input.owner.uuid)
         krate.update { data ->
             data.copy(members = data.members - input.member)
         }

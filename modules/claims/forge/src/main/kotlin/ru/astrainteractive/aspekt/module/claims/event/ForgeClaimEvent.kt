@@ -19,12 +19,14 @@ import ru.astrainteractive.aspekt.core.forge.event.flowEvent
 import ru.astrainteractive.aspekt.core.forge.util.getValue
 import ru.astrainteractive.aspekt.core.forge.util.toNative
 import ru.astrainteractive.aspekt.core.forge.util.toPermissible
-import ru.astrainteractive.aspekt.module.claims.controller.ClaimController
+import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
+import ru.astrainteractive.aspekt.module.claims.data.isAble
 import ru.astrainteractive.aspekt.module.claims.debounce.EventDebounce
 import ru.astrainteractive.aspekt.module.claims.debounce.RetractKey
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.util.toClaimPlayer
+import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
@@ -33,7 +35,7 @@ import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.klibs.kstorage.api.Krate
 
 class ForgeClaimEvent(
-    private val claimController: ClaimController,
+    private val claimsRepository: ClaimsRepository,
     translationKrate: Krate<PluginTranslation>,
     kyoriKrate: Krate<KyoriComponentSerializer>
 ) : Logger by JUtiltLogger("AspeKt-ForgeClaimEvent") {
@@ -57,8 +59,8 @@ class ForgeClaimEvent(
         }
         val sharedEvent = if (e.isCancelable) ForgeSharedCancellableEvent(e) else ForgeEmptyCancellableEvent()
         return debounce.debounceEvent(retractKey, sharedEvent) {
-            val isAble = claimController.isAble(
-                chunk = claimChunk,
+            val isAble = claimsRepository.isAble(
+                key = claimChunk.uniqueWorldKey,
                 chunkFlag = flag,
                 claimPlayer = player?.toClaimPlayer()
             )

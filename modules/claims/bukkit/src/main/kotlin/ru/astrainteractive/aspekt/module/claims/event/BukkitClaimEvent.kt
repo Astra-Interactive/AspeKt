@@ -33,6 +33,7 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent
 import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.world.PortalCreateEvent
+import ru.astrainteractive.aspekt.module.claims.data.isAble
 import ru.astrainteractive.aspekt.module.claims.debounce.EventDebounce
 import ru.astrainteractive.aspekt.module.claims.debounce.RetractKey
 import ru.astrainteractive.aspekt.module.claims.event.di.ClaimDependencies
@@ -40,6 +41,7 @@ import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.util.asClaimChunk
 import ru.astrainteractive.aspekt.module.claims.util.asClaimPlayer
+import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
@@ -60,8 +62,8 @@ internal class BukkitClaimEvent(
         if (e.isCancelled) return
         val sharedEvent = BukkitSharedCancellableEvent(e)
         debounce.debounceEvent(retractKey, sharedEvent) {
-            val isAble = claimController.isAble(
-                chunk = claimChunk,
+            val isAble = claimsRepository.isAble(
+                key = claimChunk.uniqueWorldKey,
                 chunkFlag = flag,
                 claimPlayer = player?.asClaimPlayer()
             )

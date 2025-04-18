@@ -88,7 +88,8 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
         ClaimModule(
             stringFormat = coreModule.jsonStringFormat,
             dataFolder = dataFolder,
-            scope = scope
+            scope = scope,
+            translationKrate = coreModule.translation
         )
     }
 

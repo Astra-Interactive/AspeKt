@@ -42,7 +42,7 @@ class ForgePermissible(private val uuid: UUID) : Permissible {
         val node = permission.asBooleanNode().getOrCreate()
         val player = ForgeUtil.getOnlinePlayer(uuid) ?: return false
 //        return PermissionAPI.getPermission(player, node)
-        return true
+        return false
     }
 
     override fun maxPermissionSize(permission: Permission): Int? {
