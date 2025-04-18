@@ -62,12 +62,6 @@ internal class ClaimsRepositoryImpl(
         return krate
     }
 
-    override suspend fun getChunk(claimPlayer: ClaimPlayer, chunk: ClaimChunk): ClaimChunk = mutex.withLock {
-        getAllChunks(claimPlayer).firstOrNull {
-            it.uniqueWorldKey == chunk.uniqueWorldKey
-        } ?: error("Chunk is not under admin claim")
-    }
-
     override suspend fun saveChunk(claimPlayer: ClaimPlayer, chunk: ClaimChunk) = mutex.withLock {
         getKrate(claimPlayer).update { data ->
             data.copy(

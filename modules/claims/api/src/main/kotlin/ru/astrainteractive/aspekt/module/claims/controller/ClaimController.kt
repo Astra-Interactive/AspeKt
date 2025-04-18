@@ -3,6 +3,9 @@ package ru.astrainteractive.aspekt.module.claims.controller
 import kotlinx.coroutines.Dispatchers
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.data.getAllChunks
+import ru.astrainteractive.aspekt.module.claims.data.getChunk
+import ru.astrainteractive.aspekt.module.claims.data.isAble
+import ru.astrainteractive.aspekt.module.claims.data.map
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
@@ -17,35 +20,29 @@ class ClaimController(
     Logger by JUtiltLogger("AspeKt-ClaimController") {
 
     suspend fun map(size: Int, chunk: ClaimChunk): Array<Array<Boolean>> {
-        val m = Array(size) {
-            Array(size) { false }
-        }
-        val chunks = repository.getAllChunks()
-        for (i in 0 until size) {
-            for (j in 0 until size) {
-                m[i][j] = chunks.any {
-                    val x = chunk.x - size / 2 + i
-                    val z = chunk.z + size / 2 - j
-                    it.x == x && it.z == z
-                }
-            }
-        }
-        return m
+        return repository.map(size, chunk)
     }
 
     suspend fun claim(claimPlayer: ClaimPlayer, claimChunk: ClaimChunk) {
-        val actualAdminChunk = claimChunk.copy(
-            flags = ChunkFlag.entries.associateWith { false }
+        repository.saveChunk(
+            claimPlayer = claimPlayer,
+            chunk = claimChunk.copy(
+                flags = ChunkFlag.entries.associateWith { false }
+            )
         )
-        repository.saveChunk(claimPlayer, actualAdminChunk)
     }
 
     suspend fun unclaim(claimPlayer: ClaimPlayer, claimChunk: ClaimChunk) {
         repository.deleteChunk(claimPlayer, claimChunk)
     }
 
-    suspend fun setFlag(claimPlayer: ClaimPlayer, flag: ChunkFlag, value: Boolean, chunk: ClaimChunk) {
-        val actualChunk = repository.getChunk(claimPlayer, chunk)
+    suspend fun setFlag(
+        claimPlayer: ClaimPlayer,
+        flag: ChunkFlag,
+        value: Boolean,
+        chunk: ClaimChunk
+    ) {
+        val actualChunk = repository.getChunk(claimPlayer, chunk.uniqueWorldKey) ?: return
         val updatedChunk = actualChunk.copy(
             flags = actualChunk.flags.toMutableMap().apply {
                 this[flag] = value
@@ -58,24 +55,9 @@ class ClaimController(
         chunk: ClaimChunk,
         chunkFlag: ChunkFlag,
         claimPlayer: ClaimPlayer? = null
-    ): Boolean {
-        val chunkValue = repository
-            .getAllChunks()
-            .firstOrNull { it.uniqueWorldKey == chunk.uniqueWorldKey }
-            ?.flags
-            ?.get(chunkFlag)
-            ?: true
-        val krate = repository
-            .chunkByKrate[chunk.uniqueWorldKey]
-        if (krate == null) {
-            return chunkValue
-        }
-        if (krate.cachedValue.ownerUUID == claimPlayer?.uuid) {
-            return true
-        }
-        if (krate.cachedValue.members.map(ClaimPlayer::uuid).contains(claimPlayer?.uuid)) {
-            return true
-        }
-        return chunkValue
-    }
+    ): Boolean = repository.isAble(
+        chunk.uniqueWorldKey,
+        chunkFlag,
+        claimPlayer
+    )
 }
