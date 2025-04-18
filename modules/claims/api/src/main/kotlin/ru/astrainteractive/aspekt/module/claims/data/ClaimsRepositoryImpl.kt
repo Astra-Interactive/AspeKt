@@ -12,13 +12,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.StringFormat
 import ru.astrainteractive.aspekt.module.claims.data.exception.ClaimNotFoundException
 import ru.astrainteractive.aspekt.module.claims.data.exception.ClaimNotOwnedException
-import ru.astrainteractive.aspekt.module.claims.data.exception.UnderClaimException
 import ru.astrainteractive.aspekt.module.claims.data.krate.ClaimKrate
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.UniqueWorldKey
@@ -37,17 +35,19 @@ internal class ClaimsRepositoryImpl(
     private val krates = krateFilesStateFlow
         .map { files ->
             files.map { file ->
-                ClaimKrate(
+                val krate = ClaimKrate(
                     file = file,
                     stringFormat = stringFormat,
                     ownerUUID = UUID.fromString(file.nameWithoutExtension)
                 )
+                krate.loadAndGet()
+                krate
             }
         }
         .flowOn(Dispatchers.IO)
         .stateIn(scope, SharingStarted.Eagerly, emptyList())
 
-    private suspend fun requireKrate(uuid: UUID): ClaimKrate {
+    override suspend fun requireKrate(uuid: UUID): ClaimKrate {
         krateFilesStateFlow.update { files ->
             if (files.none { it.nameWithoutExtension == uuid.toString() }) {
                 files + folder.resolve("$uuid.yml")
@@ -58,6 +58,10 @@ internal class ClaimsRepositoryImpl(
         return krates
             .mapNotNull { it.firstOrNull { it.cachedValue.ownerUUID == uuid } }
             .first()
+    }
+
+    override fun findKrate(uuid: UUID): ClaimKrate? {
+        return krates.value.firstOrNull { it.cachedValue.ownerUUID == uuid }
     }
 
     override val allKrates: List<ClaimKrate>
@@ -82,18 +86,9 @@ internal class ClaimsRepositoryImpl(
     override val chunkByKrate: Map<UniqueWorldKey, ClaimKrate>
         get() = _chunkByKrate.value
 
-    override suspend fun getKrate(uuid: UUID): ClaimKrate {
-        val krate = requireKrate(uuid)
-        scope.launch { krate.loadAndGet() }
-        return krate
-    }
-
     override suspend fun saveChunk(uuid: UUID, chunk: ClaimChunk) = mutex.withLock {
         runCatching {
-            claimOwnerUuid(chunk.uniqueWorldKey)?.let { claimOwnerUuid ->
-                throw UnderClaimException(claimOwnerUuid)
-            }
-            getKrate(uuid).update { data ->
+            requireKrate(uuid).update { data ->
                 data.copy(
                     chunks = data.chunks.toMutableMap().apply {
                         this[chunk.uniqueWorldKey] = chunk
@@ -105,14 +100,13 @@ internal class ClaimsRepositoryImpl(
 
     override suspend fun deleteChunk(uuid: UUID, key: UniqueWorldKey) = mutex.withLock {
         runCatching {
-            if (!isPlayerOwnClaim(uuid, key)) {
-                throw ClaimNotOwnedException
-            }
             if (key !in chunkByKrate) {
                 throw ClaimNotFoundException
             }
-
-            getKrate(uuid).update { data ->
+            if (!isPlayerOwnClaim(uuid, key)) {
+                throw ClaimNotOwnedException
+            }
+            requireKrate(uuid).update { data ->
                 data.copy(
                     chunks = data.chunks
                         .toMutableMap()

@@ -40,7 +40,10 @@ class ForgeClaimModule(
             coreModule.scope.launch(Dispatchers.IO) {
                 registerCommandsEventFlow
                     .first()
-                    .claim(claimCommandExecutor = claimCommandExecutor)
+                    .claim(
+                        claimCommandExecutor = claimCommandExecutor,
+                        claimsRepository = claimModule.claimsRepository
+                    )
             }
         }
     )

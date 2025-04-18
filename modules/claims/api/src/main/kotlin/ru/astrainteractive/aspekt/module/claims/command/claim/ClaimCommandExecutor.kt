@@ -85,7 +85,11 @@ class ClaimCommandExecutor(
     }
 
     private suspend fun addMember(input: Claimommand.Model.AddMember) {
-        val krate = claimsRepository.getKrate(input.owner.uuid)
+        val krate = claimsRepository.requireKrate(input.owner.uuid)
+        if (input.member in krate.cachedValue.members) {
+            messenger.sendMessage(input.owner, translation.claim.alreadyMember)
+            return
+        }
         krate.update { data ->
             data.copy(members = data.members + input.member)
         }
@@ -93,7 +97,11 @@ class ClaimCommandExecutor(
     }
 
     private suspend fun removeMember(input: Claimommand.Model.RemoveMember) {
-        val krate = claimsRepository.getKrate(input.owner.uuid)
+        val krate = claimsRepository.requireKrate(input.owner.uuid)
+        if (input.member !in krate.cachedValue.members) {
+            messenger.sendMessage(input.owner, translation.claim.notMember)
+            return
+        }
         krate.update { data ->
             data.copy(members = data.members - input.member)
         }

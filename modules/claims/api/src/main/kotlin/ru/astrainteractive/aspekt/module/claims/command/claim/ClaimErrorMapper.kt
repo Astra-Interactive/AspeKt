@@ -17,20 +17,20 @@ class ClaimErrorMapper(
     fun toStringDesc(throwable: Throwable): StringDesc.Raw {
         when (throwable) {
             is UnderClaimException -> {
-                return StringDesc.Raw("Кто-то ухе заприватил тут")
+                return translation.claim.chunkUnderClaim
             }
 
             is ClaimNotFoundException -> {
-                return StringDesc.Raw("Тут нет привата")
+                return translation.claim.noClaimHere
             }
 
             is ClaimNotOwnedException -> {
-                return StringDesc.Raw("Вы не владелец этого привата")
+                return translation.claim.notClaimOwner
             }
 
             else -> {
                 error(throwable) { "#toStringDesc" }
-                return StringDesc.Raw("Произошла неизвестная ошибка. Обратитесь к администратору")
+                return translation.claim.error
             }
         }
     }

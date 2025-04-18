@@ -1,6 +1,7 @@
 package ru.astrainteractive.aspekt.core.forge.event
 
 import com.google.common.cache.CacheBuilder
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
@@ -13,7 +14,6 @@ import ru.astrainteractive.aspekt.util.tryCast
 import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
-import kotlinx.coroutines.flow.collect
 
 class PlayerMoveEvent(
     val instance: LivingEvent.LivingTickEvent,

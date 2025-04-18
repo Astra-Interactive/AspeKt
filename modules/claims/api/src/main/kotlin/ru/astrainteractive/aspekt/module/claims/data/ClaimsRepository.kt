@@ -1,6 +1,7 @@
 package ru.astrainteractive.aspekt.module.claims.data
 
 import ru.astrainteractive.aspekt.module.claims.data.exception.ClaimNotFoundException
+import ru.astrainteractive.aspekt.module.claims.data.exception.UnderClaimException
 import ru.astrainteractive.aspekt.module.claims.data.krate.ClaimKrate
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
@@ -12,7 +13,8 @@ import java.util.UUID
 interface ClaimsRepository {
     val allKrates: List<ClaimKrate>
     val chunkByKrate: Map<UniqueWorldKey, ClaimKrate>
-    suspend fun getKrate(uuid: UUID): ClaimKrate
+    suspend fun requireKrate(uuid: UUID): ClaimKrate
+    fun findKrate(uuid: UUID): ClaimKrate?
     suspend fun saveChunk(uuid: UUID, chunk: ClaimChunk): Result<Unit>
     suspend fun deleteChunk(uuid: UUID, key: UniqueWorldKey): Result<Unit>
 }
@@ -32,6 +34,9 @@ suspend fun ClaimsRepository.setFlag(
     key: UniqueWorldKey
 ): Result<Unit> {
     val actualChunk = getChunk(uuid, key) ?: return Result.failure(ClaimNotFoundException)
+    claimOwnerUuid(key)?.let { ownerUuid ->
+        if (ownerUuid != uuid) throw UnderClaimException(ownerUuid)
+    }
     val updatedChunk = actualChunk.copy(
         flags = actualChunk.flags.toMutableMap().apply {
             this[flag] = value
@@ -48,10 +53,13 @@ suspend fun ClaimsRepository.getChunk(
 }
 
 suspend fun ClaimsRepository.getAllChunks(uuid: UUID): List<ClaimChunk> {
-    return getKrate(uuid).loadAndGet().chunks.map { it.value }
+    return requireKrate(uuid).loadAndGet().chunks.map { it.value }
 }
 
 suspend fun ClaimsRepository.claim(uuid: UUID, claimChunk: ClaimChunk): Result<Unit> {
+    claimOwnerUuid(claimChunk.uniqueWorldKey)?.let { ownerUuid ->
+        if (ownerUuid != uuid) throw UnderClaimException(ownerUuid)
+    }
     return saveChunk(
         uuid = uuid,
         chunk = claimChunk.copy(
