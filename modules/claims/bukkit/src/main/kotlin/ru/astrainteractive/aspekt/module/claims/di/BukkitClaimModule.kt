@@ -20,17 +20,17 @@ interface BukkitClaimModule {
         private val claimCommandRegistry = ClaimCommandRegistry(
             dependencies = ClaimCommandDependencies.Default(
                 coreModule = coreModule,
-                claimController = claimModule.claimController,
                 bukkitCoreModule = bukkitCoreModule,
-                claimsRepository = claimModule.claimsRepository
+                claimsRepository = claimModule.claimsRepository,
+                claimErrorMapper = claimModule.claimErrorMapper
             )
         )
 
         private val bukkitClaimEvent = BukkitClaimEvent(
             dependencies = ClaimDependencies.Default(
                 coreModule = coreModule,
-                claimController = claimModule.claimController,
-                bukkitCoreModule = bukkitCoreModule
+                bukkitCoreModule = bukkitCoreModule,
+                claimsRepository = claimModule.claimsRepository
             )
         )
 

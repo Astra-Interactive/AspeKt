@@ -22,25 +22,28 @@ class ForgeClaimModule(
         messenger = ForgeMessenger(
             kyoriKrate = coreModule.kyoriComponentSerializer,
         ),
-        claimController = claimModule.claimController,
         scope = coreModule.scope,
         dispatchers = coreModule.dispatchers,
         translationKrate = coreModule.translation,
-        claimsRepository = claimModule.claimsRepository
+        claimsRepository = claimModule.claimsRepository,
+        claimErrorMapper = claimModule.claimErrorMapper
     )
 
     @Suppress("UnusedPrivateProperty")
     private val forgeClaimEvent = ForgeClaimEvent(
-        claimController = claimModule.claimController,
         translationKrate = coreModule.translation,
-        kyoriKrate = coreModule.kyoriComponentSerializer
+        kyoriKrate = coreModule.kyoriComponentSerializer,
+        claimsRepository = claimModule.claimsRepository
     )
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {
             coreModule.scope.launch(Dispatchers.IO) {
                 registerCommandsEventFlow
                     .first()
-                    .claim(claimCommandExecutor = claimCommandExecutor)
+                    .claim(
+                        claimCommandExecutor = claimCommandExecutor,
+                        claimsRepository = claimModule.claimsRepository
+                    )
             }
         }
     )

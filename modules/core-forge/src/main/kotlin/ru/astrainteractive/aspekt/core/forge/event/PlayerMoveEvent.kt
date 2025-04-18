@@ -1,6 +1,7 @@
 package ru.astrainteractive.aspekt.core.forge.event
 
 import com.google.common.cache.CacheBuilder
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
@@ -50,5 +51,5 @@ fun playerMoveFlowEvent() = flow {
                 player = player
             )
             emit(event)
-        }
+        }.collect()
 }

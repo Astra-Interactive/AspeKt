@@ -3,12 +3,16 @@ package ru.astrainteractive.aspekt.claims.controller
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import ru.astrainteractive.aspekt.module.claims.controller.ClaimController
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepositoryImpl
+import ru.astrainteractive.aspekt.module.claims.data.claim
 import ru.astrainteractive.aspekt.module.claims.data.getAllChunks
+import ru.astrainteractive.aspekt.module.claims.data.isAble
+import ru.astrainteractive.aspekt.module.claims.data.map
+import ru.astrainteractive.aspekt.module.claims.data.setFlag
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
+import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import java.io.File
 import java.util.UUID
@@ -50,11 +54,10 @@ internal class ClaimControllerTest {
     @Test
     fun testClaimAndUnclaim(): Unit = runBlocking {
         val repository = getRepository()
-        val controller = ClaimController(repository)
         randomChunk.let { chunk ->
-            controller.claim(claimPlayer, chunk)
+            repository.claim(claimPlayer.uuid, chunk)
             assertEquals(1, repository.getAllChunks().size)
-            controller.unclaim(claimPlayer, chunk)
+            repository.deleteChunk(claimPlayer.uuid, chunk.uniqueWorldKey)
             assertEquals(0, repository.getAllChunks().size)
         }
     }
@@ -62,15 +65,14 @@ internal class ClaimControllerTest {
     @Test
     fun testSetFlag(): Unit = runBlocking {
         val repository = getRepository()
-        val controller = ClaimController(repository)
         randomChunk.let { chunk ->
-            controller.claim(claimPlayer, chunk)
-            controller.setFlag(claimPlayer, ChunkFlag.ALLOW_BREAK, true, chunk)
+            repository.claim(claimPlayer.uuid, chunk)
+            repository.setFlag(claimPlayer.uuid, ChunkFlag.ALLOW_BREAK, true, chunk.uniqueWorldKey)
             repository.getAllChunks().first().flags[ChunkFlag.ALLOW_BREAK].let { flagValue ->
                 assertNotNull(flagValue)
                 assertTrue(flagValue)
             }
-            controller.setFlag(claimPlayer, ChunkFlag.ALLOW_BREAK, false, chunk)
+            repository.setFlag(claimPlayer.uuid, ChunkFlag.ALLOW_BREAK, false, chunk.uniqueWorldKey)
             repository.getAllChunks().first().flags[ChunkFlag.ALLOW_BREAK].let { flagValue ->
                 assertNotNull(flagValue)
                 assertFalse(flagValue)
@@ -81,30 +83,28 @@ internal class ClaimControllerTest {
     @Test
     fun testIsAble(): Unit = runBlocking {
         val repository = getRepository()
-        val controller = ClaimController(repository)
         randomChunk.let { chunk ->
-            assertTrue { controller.isAble(chunk, ChunkFlag.ALLOW_BREAK) }
-            controller.claim(claimPlayer, chunk)
-            assertFalse { controller.isAble(chunk, ChunkFlag.ALLOW_BREAK) }
-            controller.setFlag(claimPlayer, ChunkFlag.ALLOW_BREAK, true, chunk)
-            assertTrue { controller.isAble(chunk, ChunkFlag.ALLOW_BREAK) }
-            controller.setFlag(claimPlayer, ChunkFlag.ALLOW_BREAK, false, chunk)
-            assertFalse { controller.isAble(chunk, ChunkFlag.ALLOW_BREAK) }
+            assertTrue { repository.isAble(chunk.uniqueWorldKey, ChunkFlag.ALLOW_BREAK) }
+            repository.claim(claimPlayer.uuid, chunk)
+            assertFalse { repository.isAble(chunk.uniqueWorldKey, ChunkFlag.ALLOW_BREAK) }
+            repository.setFlag(claimPlayer.uuid, ChunkFlag.ALLOW_BREAK, true, chunk.uniqueWorldKey)
+            assertTrue { repository.isAble(chunk.uniqueWorldKey, ChunkFlag.ALLOW_BREAK) }
+            repository.setFlag(claimPlayer.uuid, ChunkFlag.ALLOW_BREAK, false, chunk.uniqueWorldKey)
+            assertFalse { repository.isAble(chunk.uniqueWorldKey, ChunkFlag.ALLOW_BREAK) }
         }
     }
 
     @Test
     fun testMapThree(): Unit = runBlocking {
         val repository = getRepository()
-        val controller = ClaimController(repository)
         randomChunk.let { chunk ->
-            controller.claim(claimPlayer, chunk)
+            repository.claim(claimPlayer.uuid, chunk)
             val expectArray = listOf(
                 listOf(false, false, false),
                 listOf(false, true, false),
                 listOf(false, false, false)
             )
-            assertContentEquals(expectArray, controller.map(3, chunk).map { it.toList() }.toList())
+            assertContentEquals(expectArray, repository.map(3, chunk).map { it.toList() }.toList())
         }
     }
 }

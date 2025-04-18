@@ -320,6 +320,26 @@ class PluginTranslation(
         private val actionIsBlockByAdminClaim: StringDesc.Raw = prefix
             .plus("Ошибка! Действией %action% заблокировано на этом чанке!")
             .toRaw(),
+        @SerialName("chunk_under_claim")
+        val chunkUnderClaim: StringDesc.Raw = prefix
+            .plus("Этот чанк уже запривачен!")
+            .toRaw(),
+        @SerialName("no_claim_here")
+        val noClaimHere: StringDesc.Raw = prefix
+            .plus("На этом месте нет привата!")
+            .toRaw(),
+        @SerialName("not_claim_owner")
+        val notClaimOwner: StringDesc.Raw = prefix
+            .plus("Вы не владелец привата!")
+            .toRaw(),
+        @SerialName("already_member")
+        val alreadyMember: StringDesc.Raw = prefix
+            .plus("Игрок уже участник привата!")
+            .toRaw(),
+        @SerialName("not_member")
+        val notMember: StringDesc.Raw = prefix
+            .plus("Игрок не участник привата!")
+            .toRaw(),
     ) {
         fun actionIsBlockByAdminClaim(action: String): StringDesc {
             return actionIsBlockByAdminClaim.replace("%action%", action)

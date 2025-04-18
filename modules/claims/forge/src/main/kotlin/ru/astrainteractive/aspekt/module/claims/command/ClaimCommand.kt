@@ -10,17 +10,22 @@ import ru.astrainteractive.aspekt.core.forge.command.util.literal
 import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
 import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
 import ru.astrainteractive.aspekt.core.forge.util.ForgeUtil
+import ru.astrainteractive.aspekt.core.forge.util.getOnlinePlayers
 import ru.astrainteractive.aspekt.core.forge.util.getPlayerGameProfile
+import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandArgument
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecutor
 import ru.astrainteractive.aspekt.module.claims.command.claim.Claimommand
+import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
+import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.util.getClaimChunk
 import ru.astrainteractive.aspekt.module.claims.util.toClaimPlayer
 
 @Suppress("LongMethod")
 internal fun RegisterCommandsEvent.claim(
     claimCommandExecutor: ClaimCommandExecutor,
+    claimsRepository: ClaimsRepository
 ) {
     literal("claim") {
         literal(ClaimCommandArgument.FLAG.value) {
@@ -31,7 +36,7 @@ internal fun RegisterCommandsEvent.claim(
                     argument(
                         alias = "bool",
                         type = BoolArgumentType.bool(),
-                        suggests = listOf("true", "false"),
+                        suggests = { listOf("true", "false") },
                         execute = execute@{ ctx ->
                             val flag = ctx
                                 .getArgument("ChunkFlag", String::class.java)
@@ -56,6 +61,7 @@ internal fun RegisterCommandsEvent.claim(
             argument(
                 alias = "player",
                 type = StringArgumentType.string(),
+                suggests = { ForgeUtil.getOnlinePlayers().map { player -> player.name.toPlain() } },
                 execute = execute@{ ctx ->
                     val ownerPlayer = ctx.source.player ?: return@execute
                     val memberPlayerName = ctx.requireArgument(
@@ -78,6 +84,14 @@ internal fun RegisterCommandsEvent.claim(
             argument(
                 alias = "player",
                 type = StringArgumentType.string(),
+                suggests = suggests@{ ctx ->
+                    ctx.source?.player?.uuid
+                        ?.let(claimsRepository::findKrate)
+                        ?.cachedValue
+                        ?.members
+                        ?.map(ClaimPlayer::username)
+                        .orEmpty()
+                },
                 execute = execute@{ ctx ->
                     val ownerPlayer = ctx.source.player ?: return@execute
                     val memberPlayerName = ctx.requireArgument(
