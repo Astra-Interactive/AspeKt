@@ -1,6 +1,17 @@
 package ru.astrainteractive.aspekt.module.claims.data
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -22,42 +33,58 @@ internal class ClaimsRepositoryImpl(
     private val scope: CoroutineScope
 ) : ClaimsRepository {
     private val mutex = Mutex()
-    private val mutableAllKrates = folder.listFiles().orEmpty().associate { file ->
-        val uuid = UUID.fromString(file.nameWithoutExtension)
-        val krate = ClaimKrate(
-            file = file,
-            stringFormat = stringFormat,
-            ownerUUID = uuid
-        )
-        scope.launch { krate.loadAndGet() }
-        uuid to krate
-    }.toMutableMap()
-
-    override val allKrates: List<ClaimKrate>
-        get() = mutableAllKrates.values.toList()
-
-    private val _chunkByKrate = HashMap<UniqueWorldKey, ClaimKrate>()
-    override val chunkByKrate: Map<UniqueWorldKey, ClaimKrate>
-        get() = _chunkByKrate.toMap()
-
-    private suspend fun updateChunkByKrate() {
-        mutableAllKrates.values.forEach { krate ->
-            krate.cachedValue.chunks.forEach { chunk ->
-                _chunkByKrate[chunk.key] = krate
+    private val krateFilesStateFlow = MutableStateFlow(folder.listFiles().orEmpty().toList())
+    private val krates = krateFilesStateFlow
+        .map { files ->
+            files.map { file ->
+                ClaimKrate(
+                    file = file,
+                    stringFormat = stringFormat,
+                    ownerUUID = UUID.fromString(file.nameWithoutExtension)
+                )
             }
         }
+        .flowOn(Dispatchers.IO)
+        .stateIn(scope, SharingStarted.Eagerly, emptyList())
+
+    private suspend fun requireKrate(uuid: UUID): ClaimKrate {
+        krateFilesStateFlow.update { files ->
+            if (files.none { it.nameWithoutExtension == uuid.toString() }) {
+                files + folder.resolve("$uuid.yml")
+            } else {
+                files
+            }
+        }
+        return krates
+            .mapNotNull { it.firstOrNull { it.cachedValue.ownerUUID == uuid } }
+            .first()
     }
 
-    override suspend fun getKrate(uuid: UUID): ClaimKrate {
-        val krate = mutableAllKrates.getOrPut(uuid) {
-            ClaimKrate(
-                file = folder.resolve("$uuid.yml"),
-                stringFormat = stringFormat,
-                ownerUUID = uuid
-            )
+    override val allKrates: List<ClaimKrate>
+        get() = krates.value
+
+    private val _chunkByKrate = krates
+        .flatMapLatest { claimKrates ->
+            combine(claimKrates.map { it.cachedStateFlow }) {
+                buildMap {
+                    it.forEachIndexed { i, data ->
+                        val krate = claimKrates[i]
+                        data.chunks.forEach { chunk ->
+                            put(chunk.key, krate)
+                        }
+                    }
+                }
+            }
         }
+        .flowOn(Dispatchers.IO)
+        .stateIn(scope, SharingStarted.Eagerly, emptyMap())
+
+    override val chunkByKrate: Map<UniqueWorldKey, ClaimKrate>
+        get() = _chunkByKrate.value
+
+    override suspend fun getKrate(uuid: UUID): ClaimKrate {
+        val krate = requireKrate(uuid)
         scope.launch { krate.loadAndGet() }
-        updateChunkByKrate()
         return krate
     }
 
@@ -73,7 +100,6 @@ internal class ClaimsRepositoryImpl(
                     }
                 )
             }
-            updateChunkByKrate()
         }
     }
 
@@ -93,11 +119,6 @@ internal class ClaimsRepositoryImpl(
                         .minus(key)
                 )
             }
-            updateChunkByKrate()
         }
-    }
-
-    init {
-        scope.launch { updateChunkByKrate() }
     }
 }
