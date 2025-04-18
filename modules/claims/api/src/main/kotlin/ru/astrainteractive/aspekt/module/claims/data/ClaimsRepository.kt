@@ -58,7 +58,7 @@ suspend fun ClaimsRepository.getAllChunks(uuid: UUID): List<ClaimChunk> {
 
 suspend fun ClaimsRepository.claim(uuid: UUID, claimChunk: ClaimChunk): Result<Unit> {
     claimOwnerUuid(claimChunk.uniqueWorldKey)?.let { ownerUuid ->
-        if (ownerUuid != uuid) throw UnderClaimException(ownerUuid)
+        throw UnderClaimException(ownerUuid)
     }
     return saveChunk(
         uuid = uuid,
