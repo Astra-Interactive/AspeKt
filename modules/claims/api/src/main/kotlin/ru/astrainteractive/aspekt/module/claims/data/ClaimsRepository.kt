@@ -33,10 +33,10 @@ suspend fun ClaimsRepository.setFlag(
     value: Boolean,
     key: UniqueWorldKey
 ): Result<Unit> {
-    val actualChunk = getChunk(uuid, key) ?: return Result.failure(ClaimNotFoundException)
     claimOwnerUuid(key)?.let { ownerUuid ->
         if (ownerUuid != uuid) throw UnderClaimException(ownerUuid)
     }
+    val actualChunk = getChunk(uuid, key) ?: return Result.failure(ClaimNotFoundException)
     val updatedChunk = actualChunk.copy(
         flags = actualChunk.flags.toMutableMap().apply {
             this[flag] = value
