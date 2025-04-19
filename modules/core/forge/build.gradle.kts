@@ -18,7 +18,7 @@ dependencies {
 
     compileOnly(libs.minecraft.luckperms)
 
-    compileOnly(projects.modules.core)
+    compileOnly(projects.modules.core.api)
 }
 
 dependencies {

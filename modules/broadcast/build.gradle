@@ -15,5 +15,5 @@ dependencies {
     implementation(libs.minecraft.astralibs.menu.bukkit)
     implementation(libs.minecraft.astralibs.core.bukkit)
     // Local
-    implementation(projects.modules.core)
+    implementation(projects.modules.core.api)
 }
