@@ -22,7 +22,7 @@ dependencies {
     // Local
     implementation(projects.modules.core.api)
     implementation(projects.modules.core.forge)
-    implementation(projects.modules.claims.api)
+    implementation(projects.modules.tpa.api)
 }
 
 dependencies {

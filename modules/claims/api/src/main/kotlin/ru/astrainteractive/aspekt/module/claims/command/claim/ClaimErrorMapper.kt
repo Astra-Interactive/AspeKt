@@ -4,11 +4,11 @@ import ru.astrainteractive.aspekt.module.claims.data.exception.ClaimNotFoundExce
 import ru.astrainteractive.aspekt.module.claims.data.exception.ClaimNotOwnedException
 import ru.astrainteractive.aspekt.module.claims.data.exception.UnderClaimException
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.util.getValue
 
 class ClaimErrorMapper(
     translationKrate: Krate<PluginTranslation>

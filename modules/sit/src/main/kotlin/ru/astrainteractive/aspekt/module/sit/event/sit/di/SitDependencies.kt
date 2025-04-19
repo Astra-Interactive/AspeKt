@@ -5,8 +5,8 @@ import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.sit.event.sit.SitController
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.event.EventListener
+import ru.astrainteractive.klibs.kstorage.util.getValue
 
 internal interface SitDependencies {
     val eventListener: EventListener

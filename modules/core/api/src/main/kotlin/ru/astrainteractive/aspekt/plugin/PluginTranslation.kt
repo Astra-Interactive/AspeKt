@@ -34,7 +34,56 @@ class PluginTranslation(
     val jails: Jails = Jails(),
     @SerialName("homes")
     val homes: Homes = Homes(),
+    @SerialName("tpa")
+    val tpa: Tpa = Tpa(),
 ) {
+
+    @Serializable
+    data class Tpa(
+        val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BTPA&7] "),
+        @SerialName("you_have_no_pending_tp")
+        val youHaveNoPendingTp: StringDesc.Raw = prefix
+            .plus("Вы не ожидаете телепортации к игроку")
+            .toRaw(),
+        @SerialName("request_cancelled")
+        val requestCancelled: StringDesc.Raw = prefix
+            .plus("Запрос отменен")
+            .toRaw(),
+        @SerialName("no_pending_tp_to_deny")
+        val noPendingTpToDeny: StringDesc.Raw = prefix
+            .plus("У вас нет активных запросов")
+            .toRaw(),
+        @SerialName("cant_tp_self")
+        val cantTpSelf: StringDesc.Raw = prefix
+            .plus("Нельзя отправить запрос самому себе")
+            .toRaw(),
+        @SerialName("request_sent")
+        val requestSent: StringDesc.Raw = prefix
+            .plus("Запрос отправлен")
+            .toRaw(),
+        @SerialName("request_accepted")
+        val requestAccepted: StringDesc.Raw = prefix
+            .plus("Запрос принят")
+            .toRaw(),
+        @SerialName("request_denied")
+        private val requestDenied: StringDesc.Raw = prefix
+            .plus("Игрок %player% отменил запрос")
+            .toRaw(),
+        @SerialName("request_tpa")
+        private val requestTpa: StringDesc.Raw = prefix
+            .plus("Игрок %player% хочет телепортировать вас к себе")
+            .toRaw(),
+        @SerialName("request_tpa_here")
+        private val requestTpaHere: StringDesc.Raw = prefix
+            .plus("Игрок %player% хочет к вам телепортироваться")
+            .toRaw(),
+    ) {
+
+        fun requestDenied(denier: String) = requestDenied.replace("%player%", denier)
+        fun requestTpa(denier: String) = requestTpa.replace("%player%", denier)
+        fun requestTpaHere(denier: String) = requestTpaHere.replace("%player%", denier)
+    }
+
     @Serializable
     data class Homes(
         val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BHOMES&7] "),

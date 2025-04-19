@@ -1,8 +1,8 @@
 package ru.astrainteractive.aspekt.minecraft.location
 
+import kotlinx.serialization.Serializable
 import kotlin.math.pow
 import kotlin.math.sqrt
-import kotlinx.serialization.Serializable
 
 @Serializable
 data class Location(

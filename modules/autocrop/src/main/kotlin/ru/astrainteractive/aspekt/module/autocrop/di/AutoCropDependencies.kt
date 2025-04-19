@@ -14,8 +14,8 @@ import ru.astrainteractive.aspekt.module.autocrop.mapping.CropSeedMaterialMapper
 import ru.astrainteractive.aspekt.module.autocrop.mapping.CropSeedMaterialMapperImpl
 import ru.astrainteractive.aspekt.module.autocrop.presentation.CropDupeController
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.event.EventListener
+import ru.astrainteractive.klibs.kstorage.util.getValue
 
 internal interface AutoCropDependencies {
     val eventListener: EventListener

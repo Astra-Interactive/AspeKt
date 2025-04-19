@@ -23,6 +23,7 @@ import ru.astrainteractive.aspekt.module.auth.di.ForgeAuthModule
 import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
 import ru.astrainteractive.aspekt.module.claims.di.ForgeClaimModule
 import ru.astrainteractive.aspekt.module.sethome.di.HomesModule
+import ru.astrainteractive.aspekt.module.tpa.di.TpaModule
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
@@ -110,12 +111,20 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
         )
     }
 
+    val tpaModule by lazy {
+        TpaModule(
+            coreModule = coreModule,
+            registerCommandsEventFlow = registerCommandsEvent.filterNotNull(),
+        )
+    }
+
     private val lifecycles: List<Lifecycle>
         get() = listOf(
             coreModule.lifecycle,
             forgeAuthModule.lifecycle,
             forgeClaimModule.lifecycle,
-            homesModule.lifecycle
+            homesModule.lifecycle,
+            tpaModule.lifecycle
         )
 
     val lifecycle = Lifecycle.Lambda(
