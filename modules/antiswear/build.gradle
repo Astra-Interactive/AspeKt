@@ -23,6 +23,6 @@ dependencies {
     testImplementation(libs.minecraft.paper.api)
     testImplementation(libs.kotlin.coroutines.test)
     // Local
-    implementation(projects.modules.core)
-    implementation(projects.modules.coreBukkit)
+    implementation(projects.modules.core.api)
+    implementation(projects.modules.core.bukkit)
 }

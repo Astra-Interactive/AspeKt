@@ -19,8 +19,8 @@ dependencies {
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
     // Local
-    implementation(projects.modules.core)
-    implementation(projects.modules.coreForge)
+    implementation(projects.modules.core.api)
+    implementation(projects.modules.core.forge)
     implementation(projects.modules.claims.api)
 }
 

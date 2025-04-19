@@ -16,7 +16,8 @@ dependencies {
     implementation(libs.minecraft.kyori.legacy)
     implementation(libs.minecraft.kyori.gson)
     // Local
-    implementation(projects.modules.coreForge)
+    implementation(projects.modules.core.api)
+    implementation(projects.modules.core.forge)
     implementation(projects.modules.auth.api)
 }
 

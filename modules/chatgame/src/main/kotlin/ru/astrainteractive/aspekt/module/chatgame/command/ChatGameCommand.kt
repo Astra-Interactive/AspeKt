@@ -14,11 +14,11 @@ import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.Reward
 import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStore
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.util.getValue
 import kotlin.random.Random
 
 @Suppress("LongParameterList")

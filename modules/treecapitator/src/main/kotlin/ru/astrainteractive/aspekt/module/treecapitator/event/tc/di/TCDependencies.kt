@@ -5,8 +5,8 @@ import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
-import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.event.EventListener
+import ru.astrainteractive.klibs.kstorage.util.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 internal interface TCDependencies {

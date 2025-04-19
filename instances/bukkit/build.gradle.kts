@@ -34,8 +34,8 @@ dependencies {
     // Test
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
-    implementation(projects.modules.core)
-    implementation(projects.modules.coreBukkit)
+    implementation(projects.modules.core.api)
+    implementation(projects.modules.core.bukkit)
     implementation(projects.modules.menu)
     implementation(projects.modules.broadcast)
     implementation(projects.modules.claims.api)

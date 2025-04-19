@@ -4,9 +4,9 @@ import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.job.ScheduledJob
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStore
-import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.util.getValue
 
 internal class ChatGameJob(
     private val chatGameStore: ChatGameStore,

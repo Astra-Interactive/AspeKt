@@ -4,8 +4,8 @@ import ru.astrainteractive.aspekt.module.chatgame.model.ChatGame
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameData
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.util.getValue
 import kotlin.math.pow
 import kotlin.math.sign
 import kotlin.math.sqrt

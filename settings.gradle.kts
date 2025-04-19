@@ -47,9 +47,11 @@ include(":instances:bukkit")
 include(":instances:velocity")
 include(":instances:forge")
 // Modules
-include(":modules:core")
-include(":modules:core-forge")
-include(":modules:core-bukkit")
+include(
+    ":modules:core:api",
+    ":modules:core:bukkit",
+    ":modules:core:forge",
+)
 include(":modules:menu")
 include(":modules:broadcast")
 include(
@@ -60,6 +62,10 @@ include(
 include(
     ":modules:sethome:api",
     ":modules:sethome:forge",
+)
+include(
+    ":modules:tpa:api",
+    ":modules:tpa:forge",
 )
 include(":modules:discordlink")
 include(":modules:towny-discord")

@@ -7,8 +7,8 @@ import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.module.claims.command.discordlink.di.DiscordLinkModule
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.aspekt.util.getValue
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.klibs.kstorage.util.getValue
 import java.io.File
 
 internal interface RoleControllerDependencies {

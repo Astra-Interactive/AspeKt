@@ -11,7 +11,6 @@ import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
 import ru.astrainteractive.aspekt.module.sethome.model.PlayerHome
-import ru.astrainteractive.aspekt.module.sethome.util.toHomeLocation
 import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
 
 @Suppress("LongMethod")
@@ -30,7 +29,7 @@ internal fun RegisterCommandsEvent.homes(
                         name = player.name.toPlain()
                     ),
                     playerHome = PlayerHome(
-                        location = player.getLocation().toHomeLocation(),
+                        location = player.getLocation(),
                         name = ctx.requireArgument("home_name", StringArgumentType)
                     ),
                 ).run(homeCommandExecutor::execute)

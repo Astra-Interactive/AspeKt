@@ -20,9 +20,9 @@ import ru.astrainteractive.aspekt.core.forge.event.flowEvent
 import ru.astrainteractive.aspekt.core.forge.event.playerMoveFlowEvent
 import ru.astrainteractive.aspekt.core.forge.kyori.sendSystemMessage
 import ru.astrainteractive.aspekt.core.forge.kyori.withAudience
-import ru.astrainteractive.aspekt.core.forge.model.dist
 import ru.astrainteractive.aspekt.core.forge.util.getValue
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
+import ru.astrainteractive.aspekt.minecraft.location.dist
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation

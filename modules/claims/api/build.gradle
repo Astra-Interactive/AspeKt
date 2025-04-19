@@ -15,7 +15,7 @@ dependencies {
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
     // Local
-    implementation(projects.modules.core)
+    implementation(projects.modules.core.api)
 
     compileOnly("com.google.guava:guava:31.1-jre")
 }
