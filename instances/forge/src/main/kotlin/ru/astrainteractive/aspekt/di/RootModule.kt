@@ -10,11 +10,13 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.event.server.ServerStartedEvent
 import net.minecraftforge.eventbus.api.EventPriority
 import net.minecraftforge.fml.loading.FMLPaths
+import ru.astrainteractive.aspekt.command.rtp.rtp
 import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
 import ru.astrainteractive.aspekt.core.forge.event.flowEvent
 import ru.astrainteractive.aspekt.core.forge.minecraft.messenger.ForgeMinecraftMessenger
@@ -51,6 +53,13 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
         .stateIn(scope, SharingStarted.Eagerly, null)
 
     private val registerCommandsEvent = flowEvent<RegisterCommandsEvent>(EventPriority.HIGHEST)
+        .filterNotNull()
+        .onEach { event ->
+            event.rtp(
+                scope = scope,
+                messenger = coreModule.minecraftMessenger
+            )
+        }
         .stateIn(scope, SharingStarted.Eagerly, null)
 
     val authApiModule = AuthApiModule(

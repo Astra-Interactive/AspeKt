@@ -96,24 +96,19 @@ fun ClaimsRepository.isAble(
     chunkFlag: ChunkFlag,
     claimPlayer: ClaimPlayer? = null
 ): Boolean {
-    println("#isAble")
     val chunkValue = getAllChunks()
         .firstOrNull { it.uniqueWorldKey == key }
         ?.flags
         ?.get(chunkFlag)
         ?: true
-    println("#isAble chunkValue: $chunkValue")
     val krate = chunkByKrate[key]
     if (krate == null) {
-        println("#isAble krate is null")
         return chunkValue
     }
     if (krate.cachedValue.ownerUUID == claimPlayer?.uuid) {
-        println("#isAble owner action")
         return true
     }
     if (krate.cachedValue.members.map(ClaimPlayer::uuid).contains(claimPlayer?.uuid)) {
-        println("#isAble member action action")
         return true
     }
     return chunkValue
