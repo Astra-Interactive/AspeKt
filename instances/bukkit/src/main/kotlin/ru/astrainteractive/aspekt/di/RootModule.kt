@@ -27,6 +27,7 @@ import ru.astrainteractive.aspekt.module.treecapitator.di.TreeCapitatorModule
 import ru.astrainteractive.astralibs.async.DefaultBukkitDispatchers
 import ru.astrainteractive.astralibs.lifecycle.LifecyclePlugin
 import ru.astrainteractive.astralibs.string.StringDesc
+import java.util.UUID
 
 class RootModule(plugin: LifecyclePlugin) {
     val coreModule: CoreModule by lazy {
@@ -40,6 +41,13 @@ class RootModule(plugin: LifecyclePlugin) {
                         stringDesc: StringDesc
                     ): Unit = with(kyoriKrate.cachedValue) {
                         Bukkit.getPlayer(player.uuid)?.sendMessage(stringDesc.component)
+                    }
+
+                    override fun send(
+                        uuid: UUID,
+                        stringDesc: StringDesc
+                    ): Unit = with(kyoriKrate.cachedValue) {
+                        Bukkit.getPlayer(uuid)?.sendMessage(stringDesc.component)
                     }
                 }
             }
