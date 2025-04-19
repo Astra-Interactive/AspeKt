@@ -4,7 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.minecraft.messenger.MinecraftMessenger
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
-import ru.astrainteractive.aspekt.module.sethome.teleport.TeleportApi
+import ru.astrainteractive.aspekt.minecraft.teleport.TeleportApi
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.klibs.kstorage.api.Krate

@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.serialization")
+    id("org.jetbrains.kotlin.jvm")
+    id("org.jetbrains.kotlin.plugin.serialization")
     alias(libs.plugins.forgegradle)
 }
 
@@ -10,15 +10,19 @@ dependencies {
     // AstraLibs
     implementation(libs.minecraft.astralibs.core)
     implementation(libs.minecraft.astralibs.command)
-    implementation(libs.klibs.mikro.core)
     implementation(libs.klibs.kstorage)
+    implementation(libs.klibs.mikro.core)
     implementation(libs.minecraft.kyori.plain)
     implementation(libs.minecraft.kyori.legacy)
     implementation(libs.minecraft.kyori.gson)
+    compileOnly("com.google.guava:guava:31.1-jre")
+    // Test
+    testImplementation(libs.bundles.testing.kotlin)
+    testImplementation(libs.tests.kotlin.test)
     // Local
     implementation(projects.modules.core.api)
     implementation(projects.modules.core.forge)
-    implementation(projects.modules.auth.api)
+    implementation(projects.modules.claims.api)
 }
 
 dependencies {
