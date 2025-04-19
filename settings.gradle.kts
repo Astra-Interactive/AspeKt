@@ -67,6 +67,7 @@ include(
     ":modules:tpa:api",
     ":modules:tpa:forge",
 )
+include(":modules:spawn:forge")
 include(":modules:discordlink")
 include(":modules:towny-discord")
 include(":modules:moneydrop")
