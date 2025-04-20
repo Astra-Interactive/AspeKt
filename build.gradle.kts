@@ -17,7 +17,6 @@ plugins {
     alias(libs.plugins.klibs.gradle.rootinfo) apply false
     alias(libs.plugins.klibs.minecraft.shadow) apply false
     alias(libs.plugins.klibs.minecraft.resource.processor) apply false
-    kotlin("kapt") version "2.0.0" apply false
 }
 
 apply(plugin = "ru.astrainteractive.gradleplugin.dokka.root")

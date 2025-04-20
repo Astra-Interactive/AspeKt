@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.command.rtp
+package ru.astrainteractive.aspekt.module.rtp.command
 
 import com.google.common.cache.CacheBuilder
 import kotlinx.coroutines.CoroutineScope
@@ -8,33 +8,23 @@ import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.block.AirBlock
 import net.minecraft.world.level.block.LiquidBlock
 import net.minecraft.world.level.storage.ServerLevelData
-import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.command.util.literal
-import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
-import ru.astrainteractive.aspekt.core.forge.minecraft.teleport.ForgeTeleportApi
-import ru.astrainteractive.aspekt.core.forge.util.toPlain
+import ru.astrainteractive.aspekt.core.forge.util.ForgeUtil
+import ru.astrainteractive.aspekt.core.forge.util.getOnlinePlayer
 import ru.astrainteractive.aspekt.minecraft.location.Location
-import ru.astrainteractive.aspekt.minecraft.messenger.MinecraftMessenger
-import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
 import ru.astrainteractive.aspekt.util.cast
-import ru.astrainteractive.aspekt.util.tryCast
-import ru.astrainteractive.astralibs.string.StringDesc
 import java.util.UUID
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 
-object SafeLocationProvider {
+class ForgeSafeLocationProvider : SafeLocationProvider {
     private val mutex = Mutex()
     private val jobMap = HashMap<UUID, Deferred<Location>>()
 
@@ -43,6 +33,7 @@ object SafeLocationProvider {
         .expireAfterWrite(10.seconds.toJavaDuration())
         .build<UUID, Unit>()
 
+    @Suppress("LoopWithTooManyJumpStatements")
     private fun safeLocationFlow(level: ServerLevel) = channelFlow {
         do {
             val x = Random.nextInt(-10000, 10000).toDouble()
@@ -71,57 +62,31 @@ object SafeLocationProvider {
         } while (currentCoroutineContext().isActive)
     }
 
-    fun getJobsNumber(): Int {
+    override fun getJobsNumber(): Int {
         return jobMap.size
     }
 
-    fun isActive(player: ServerPlayer): Boolean {
-        return player.uuid in jobMap
+    override fun isActive(uuid: UUID): Boolean {
+        return uuid in jobMap
     }
 
-    fun hasTimeout(player: ServerPlayer): Boolean {
-        val hasTimeout = timeout.getIfPresent(player.uuid) != null
-        if (!hasTimeout) timeout.put(player.uuid, Unit)
+    override fun hasTimeout(uuid: UUID): Boolean {
+        val hasTimeout = timeout.getIfPresent(uuid) != null
+        if (!hasTimeout) timeout.put(uuid, Unit)
         return hasTimeout
     }
 
-    suspend fun getLocation(scope: CoroutineScope, player: ServerPlayer): Deferred<Location> {
-        return mutex.withLock {
-            val deferred = jobMap.getOrPut(player.uuid) {
+    override suspend fun getLocation(scope: CoroutineScope, uuid: UUID): Location? {
+        val deferred = mutex.withLock {
+            val player = ForgeUtil.getOnlinePlayer(uuid) ?: return@withLock null
+            val deferred = jobMap.getOrPut(uuid) {
                 scope.async { safeLocationFlow(player.level().cast<ServerLevel>()).first() }
             }
             deferred.invokeOnCompletion {
-                jobMap.remove(player.uuid)
+                jobMap.remove(uuid)
             }
             deferred
         }
+        return deferred?.await()
     }
-}
-
-fun RegisterCommandsEvent.rtp(
-    scope: CoroutineScope,
-    messenger: MinecraftMessenger
-) {
-    literal(
-        alias = "rtp",
-        execute = { ctx ->
-            val player = ctx.source.player?.tryCast<ServerPlayer>() ?: return@literal
-            if (SafeLocationProvider.getJobsNumber() > 0) {
-                messenger.send(player.uuid, StringDesc.Raw("Max RTP jobs are reached!"))
-                return@literal
-            }
-            if (SafeLocationProvider.isActive(player)) return@literal
-            if (SafeLocationProvider.hasTimeout(player)) {
-                messenger.send(player.uuid, StringDesc.Raw("Timeout..."))
-                return@literal
-            }
-            scope.launch {
-                val location = SafeLocationProvider.getLocation(this, player).await()
-                messenger.send(player.uuid, StringDesc.Raw("Found place for you!"))
-                withContext(ForgeMainDispatcher) {
-                    ForgeTeleportApi().teleport(OnlineMinecraftPlayer(player.uuid, player.name.toPlain()), location)
-                }
-            }
-        }
-    ).run(dispatcher::register)
 }

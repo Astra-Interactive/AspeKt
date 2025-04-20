@@ -40,6 +40,8 @@ dependencies {
     shadeImplementation(projects.modules.sethome.forge)
     shadeImplementation(projects.modules.tpa.api)
     shadeImplementation(projects.modules.tpa.forge)
+    shadeImplementation(projects.modules.rtp.api)
+    shadeImplementation(projects.modules.rtp.forge)
 }
 
 minecraft {
