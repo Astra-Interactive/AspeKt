@@ -55,11 +55,22 @@ class PluginTranslation(
         val foundPlace: StringDesc.Raw = prefix
             .plus("Найдено место для вас!")
             .toRaw(),
+        @SerialName("not_found_place")
+        val notFoundPlace: StringDesc.Raw = prefix
+            .plus("Не удалось найти место!")
+            .toRaw(),
         @SerialName("searching")
         val searching: StringDesc.Raw = prefix
             .plus("Ищем для вас место...!")
             .toRaw(),
-    )
+
+        @SerialName("low_tick_time")
+        private val lowTickTime: StringDesc.Raw = prefix
+            .plus("Слишком маленький TPS: %tps%...!")
+            .toRaw(),
+    ) {
+        fun lowTickTime(tps: Double) = lowTickTime.replace("%tps%", tps.toInt().toString())
+    }
 
     @Serializable
     data class Tpa(

@@ -28,13 +28,21 @@ class RtpCommandExecutor(
             return
         }
         if (safeLocationProvider.isActive(player.uuid)) return
+        if (input.averageTickTime < 18) {
+            messenger.send(player.uuid, translation.rtp.lowTickTime(input.averageTickTime))
+            return
+        }
         if (safeLocationProvider.hasTimeout(player.uuid)) {
             messenger.send(player.uuid, translation.rtp.timeout)
             return
         }
         messenger.send(player.uuid, translation.rtp.searching)
         scope.launch {
-            val location = safeLocationProvider.getLocation(this, player.uuid) ?: return@launch
+            val location = safeLocationProvider.getLocation(this, player.uuid)
+            if (location == null) {
+                messenger.send(player.uuid, translation.rtp.notFoundPlace)
+                return@launch
+            }
             messenger.send(player.uuid, translation.rtp.foundPlace)
             withContext(dispatchers.Main) {
                 teleportApi.teleport(OnlineMinecraftPlayer(player.uuid, player.name), location)

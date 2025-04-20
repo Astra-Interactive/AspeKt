@@ -36,8 +36,8 @@ class ForgeSafeLocationProvider : SafeLocationProvider {
     @Suppress("LoopWithTooManyJumpStatements")
     private fun safeLocationFlow(level: ServerLevel) = channelFlow {
         do {
-            val x = Random.nextInt(-10000, 10000).toDouble()
-            val z = Random.nextInt(-10000, 10000).toDouble()
+            val x = Random.nextInt(-1000000, 1000000).toDouble()
+            val z = Random.nextInt(-1000000, 1000000).toDouble()
             val worldName = level.levelData.cast<ServerLevelData>().levelName
 
             val blockPos = BlockPos.MutableBlockPos(x.toInt(), 50, z.toInt())
