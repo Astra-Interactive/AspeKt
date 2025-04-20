@@ -36,7 +36,26 @@ class PluginTranslation(
     val homes: Homes = Homes(),
     @SerialName("tpa")
     val tpa: Tpa = Tpa(),
+    @SerialName("rtp")
+    val rtp: Rtp = Rtp(),
 ) {
+
+    @Serializable
+    data class Rtp(
+        val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BRTP&7] "),
+        @SerialName("max_rtp_jobs")
+        val maxRtpJobs: StringDesc.Raw = prefix
+            .plus("Достигнуто максимальное количество одновременных телепортов!")
+            .toRaw(),
+        @SerialName("timeout")
+        val timeout: StringDesc.Raw = prefix
+            .plus("Подождите немного прежде чем телепортироваться!")
+            .toRaw(),
+        @SerialName("found_place")
+        val foundPlace: StringDesc.Raw = prefix
+            .plus("Найдено место для вас!")
+            .toRaw(),
+    )
 
     @Serializable
     data class Tpa(

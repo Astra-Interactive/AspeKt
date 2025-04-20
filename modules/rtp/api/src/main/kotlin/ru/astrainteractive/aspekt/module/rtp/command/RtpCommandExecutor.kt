@@ -6,8 +6,10 @@ import kotlinx.coroutines.withContext
 import ru.astrainteractive.aspekt.minecraft.messenger.MinecraftMessenger
 import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
 import ru.astrainteractive.aspekt.minecraft.teleport.TeleportApi
+import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
-import ru.astrainteractive.astralibs.string.StringDesc
+import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.util.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 class RtpCommandExecutor(
@@ -15,22 +17,24 @@ class RtpCommandExecutor(
     private val messenger: MinecraftMessenger,
     private val safeLocationProvider: SafeLocationProvider,
     private val teleportApi: TeleportApi,
-    private val dispatchers: KotlinDispatchers
+    private val dispatchers: KotlinDispatchers,
+    translationKrate: Krate<PluginTranslation>
 ) : CommandExecutor<RtpCommand> {
+    private val translation by translationKrate
     override fun execute(input: RtpCommand) {
         val player = input.player
         if (safeLocationProvider.getJobsNumber() > 0) {
-            messenger.send(player.uuid, StringDesc.Raw("Max RTP jobs are reached!"))
+            messenger.send(player.uuid, translation.rtp.maxRtpJobs)
             return
         }
         if (safeLocationProvider.isActive(player.uuid)) return
         if (safeLocationProvider.hasTimeout(player.uuid)) {
-            messenger.send(player.uuid, StringDesc.Raw("Timeout..."))
+            messenger.send(player.uuid, translation.rtp.timeout)
             return
         }
         scope.launch {
             val location = safeLocationProvider.getLocation(this, player.uuid) ?: return@launch
-            messenger.send(player.uuid, StringDesc.Raw("Found place for you!"))
+            messenger.send(player.uuid, translation.rtp.foundPlace)
             withContext(dispatchers.Main) {
                 teleportApi.teleport(OnlineMinecraftPlayer(player.uuid, player.name), location)
             }

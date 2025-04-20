@@ -27,7 +27,8 @@ class RtpModule(
                             messenger = coreModule.minecraftMessenger,
                             safeLocationProvider = ForgeSafeLocationProvider(),
                             teleportApi = ForgeTeleportApi(),
-                            dispatchers = coreModule.dispatchers
+                            dispatchers = coreModule.dispatchers,
+                            translationKrate = coreModule.translation
                         )
                     )
             }
