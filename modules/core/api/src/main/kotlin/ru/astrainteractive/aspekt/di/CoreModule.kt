@@ -8,7 +8,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
 import ru.astrainteractive.aspekt.di.factory.ConfigKrateFactory
-import ru.astrainteractive.aspekt.minecraft.messenger.MinecraftMessenger
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.CoroutineFeature
@@ -38,12 +37,9 @@ interface CoreModule {
 
     val jsonStringFormat: StringFormat
 
-    val minecraftMessenger: MinecraftMessenger
-
     class Default(
         override val dataFolder: File,
         override val dispatchers: KotlinDispatchers,
-        createMinecraftMessenger: (Krate<KyoriComponentSerializer>) -> MinecraftMessenger
     ) : CoreModule, Logger by JUtiltLogger("CoreModule") {
         // Core
 
@@ -74,8 +70,6 @@ interface CoreModule {
             loader = { null },
             factory = { KyoriComponentSerializer.Legacy }
         )
-
-        override val minecraftMessenger: MinecraftMessenger = createMinecraftMessenger.invoke(kyoriComponentSerializer)
 
         override val jsonStringFormat: StringFormat = Json {
             isLenient = true

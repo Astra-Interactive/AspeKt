@@ -32,7 +32,7 @@ minecraft-towny = "0.101.1.0" # https://github.com/TownyAdvanced/Towny
 minecraft-packetevents = "2.7.0" # https://github.com/retrooper/packetevents
 minecraft-version = "1.20.1"
 minecraft-forgeversion = "47.2.20"
-minecraft-kyori="4.19.0"
+minecraft-kyori = "4.19.0"
 forgegradle = "[6.0,6.2)"
 
 # Shadow
@@ -50,6 +50,8 @@ discordsrv = "1.29.0" # https://github.com/DiscordSRV/DiscordSRV
 # Mockito
 mockito = "5.15.2" # https://github.com/mockito/mockito
 cache4k = "0.14.0" # https://github.com/ReactiveCircus/cache4k
+
+google-autoservice = "1.0.1"
 
 
 [libraries]
@@ -118,6 +120,9 @@ minecraft-kyori-gson = { module = "net.kyori:adventure-text-serializer-gson", ve
 
 cache4k = { module = "io.github.reactivecircus.cache4k:cache4k-jvm", version.ref = "cache4k" }
 
+google-autoservice = { module = "com.google.auto.service:auto-service", version.ref = "google-autoservice" }
+google-autoservice-annotations = { module = "com.google.auto.service:auto-service-annotations", version.ref = "google-autoservice" }
+
 [bundles]
 exposed = ["exposed-java-time", "exposed-jdbc", "exposed-dao", "exposed-core"]
 minecraft-bukkit = ["minecraft-paper-api", "minecraft-spigot-api", "minecraft-spigot-core", "minecraft-vaultapi", "minecraft-papi"]
@@ -133,6 +138,7 @@ kotlin-gradle = { id = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref 
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-version" }
 kotlin-benchmark = { id = "org.jetbrains.kotlinx.benchmark", version.ref = "kotlin-benchmark" }
 kotlin-allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin-version" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin-version" }
 
 # Gradle
 gradle-shadow = { id = "com.gradleup.shadow", version.ref = "gradle-shadow" }

@@ -2,11 +2,11 @@ package ru.astrainteractive.aspekt.module.sethome.command
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import ru.astrainteractive.aspekt.minecraft.messenger.MinecraftMessenger
-import ru.astrainteractive.aspekt.minecraft.teleport.TeleportApi
+import ru.astrainteractive.aspekt.minecraft.asTeleportable
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
+import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kstorage.api.Krate
 import ru.astrainteractive.klibs.kstorage.util.KrateExt.update
 import ru.astrainteractive.klibs.kstorage.util.getValue
@@ -14,9 +14,8 @@ import ru.astrainteractive.klibs.kstorage.util.getValue
 class HomeCommandExecutor(
     private val homeKrateProvider: HomeKrateProvider,
     private val scope: CoroutineScope,
-    private val teleportApi: TeleportApi,
     private val translationKrate: Krate<PluginTranslation>,
-    private val minecraftMessenger: MinecraftMessenger,
+    private val kyoriKrate: Krate<KyoriComponentSerializer>
 ) : CommandExecutor<HomeCommand> {
     private val translation by translationKrate
     override fun execute(input: HomeCommand) {
@@ -28,11 +27,16 @@ class HomeCommandExecutor(
                         .loadAndGet()
                         .firstOrNull { home -> home.name == input.homeName }
                     if (home == null) {
-                        minecraftMessenger.send(input.playerData, translation.homes.homeNotFound)
+                        with(kyoriKrate.cachedValue) {
+                            input.playerData.asAudience().sendMessage(translation.homes.homeNotFound.component)
+                        }
                         return@launch
                     }
                     krate.update { homes -> homes.filter { home.name != input.homeName } }
-                    minecraftMessenger.send(input.playerData, translation.homes.homeDeleted)
+
+                    with(kyoriKrate.cachedValue) {
+                        input.playerData.asAudience().sendMessage(translation.homes.homeDeleted.component)
+                    }
                 }
             }
 
@@ -40,7 +44,10 @@ class HomeCommandExecutor(
                 val krate = homeKrateProvider.get(input.playerData.uuid)
                 scope.launch {
                     krate.update { homes -> homes.plus(input.playerHome) }
-                    minecraftMessenger.send(input.playerData, translation.homes.homeCreated)
+
+                    with(kyoriKrate.cachedValue) {
+                        input.playerData.asAudience().sendMessage(translation.homes.homeCreated.component)
+                    }
                 }
             }
 
@@ -51,11 +58,17 @@ class HomeCommandExecutor(
                         .loadAndGet()
                         .firstOrNull { home -> home.name == input.homeName }
                     if (home == null) {
-                        minecraftMessenger.send(input.playerData, translation.homes.homeNotFound)
+                        with(kyoriKrate.cachedValue) {
+                            input.playerData.asAudience().sendMessage(translation.homes.homeNotFound.component)
+                        }
                         return@launch
                     }
-                    teleportApi.teleport(input.playerData, home.location)
-                    minecraftMessenger.send(input.playerData, translation.homes.teleporting)
+                    input.playerData
+                        .asTeleportable()
+                        .teleport(home.location)
+                    with(kyoriKrate.cachedValue) {
+                        input.playerData.asAudience().sendMessage(translation.homes.teleporting.component)
+                    }
                 }
             }
         }

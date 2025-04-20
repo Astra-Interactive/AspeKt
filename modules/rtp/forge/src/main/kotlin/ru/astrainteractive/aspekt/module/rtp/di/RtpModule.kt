@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.minecraft.teleport.ForgeTeleportApi
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.rtp.command.ForgeSafeLocationProvider
 import ru.astrainteractive.aspekt.module.rtp.command.RtpCommandExecutor
@@ -24,11 +23,10 @@ class RtpModule(
                     .rtp(
                         rtpCommandExecutor = RtpCommandExecutor(
                             scope = coreModule.scope,
-                            messenger = coreModule.minecraftMessenger,
                             safeLocationProvider = ForgeSafeLocationProvider(),
-                            teleportApi = ForgeTeleportApi(),
                             dispatchers = coreModule.dispatchers,
-                            translationKrate = coreModule.translation
+                            translationKrate = coreModule.translation,
+                            kyoriKrate = coreModule.kyoriComponentSerializer
                         )
                     )
             }

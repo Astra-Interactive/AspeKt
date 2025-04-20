@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
     alias(libs.plugins.forgegradle)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 dependencies {
@@ -15,7 +16,8 @@ dependencies {
     implementation(libs.minecraft.kyori.plain)
     implementation(libs.minecraft.kyori.legacy)
     implementation(libs.minecraft.kyori.gson)
-
+    compileOnly(libs.google.autoservice.annotations)
+    kapt(libs.google.autoservice)
     compileOnly(libs.minecraft.luckperms)
 
     compileOnly(projects.modules.core.api)

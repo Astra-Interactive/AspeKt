@@ -1,6 +1,7 @@
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.kotlin.plugin.serialization")
+    id("org.jetbrains.kotlin.kapt")
 }
 
 dependencies {
@@ -17,5 +18,8 @@ dependencies {
     implementation(libs.klibs.mikro.core)
     implementation(libs.minecraft.astralibs.menu.bukkit)
     implementation(libs.minecraft.astralibs.core.bukkit)
+    compileOnly(libs.google.autoservice.annotations)
+    kapt(libs.google.autoservice)
+
     implementation(projects.modules.core.api)
 }

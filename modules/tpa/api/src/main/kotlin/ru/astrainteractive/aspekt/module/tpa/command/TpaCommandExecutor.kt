@@ -2,124 +2,140 @@ package ru.astrainteractive.aspekt.module.tpa.command
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import ru.astrainteractive.aspekt.minecraft.messenger.MinecraftMessenger
-import ru.astrainteractive.aspekt.minecraft.teleport.TeleportApi
+import ru.astrainteractive.aspekt.minecraft.asLocatable
+import ru.astrainteractive.aspekt.minecraft.asTeleportable
 import ru.astrainteractive.aspekt.module.tpa.api.TpaApi
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
+import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kstorage.api.Krate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 
 class TpaCommandExecutor(
     translationKrate: Krate<PluginTranslation>,
-    private val teleportApi: TeleportApi,
     private val tpaApi: TpaApi,
     private val scope: CoroutineScope,
-    private val messenger: MinecraftMessenger
+    private val kyoriKrate: Krate<KyoriComponentSerializer>
 ) : CommandExecutor<TpaCommand> {
     private val translation by translationKrate
+    private val kyori by kyoriKrate
 
-    private fun tpaCancel(input: TpaCommand.TpaCancel) {
-        if (!tpaApi.isBeingWaited(input.executorPlayer.uuid)) {
-            messenger.send(input.executorPlayer, translation.tpa.youHaveNoPendingTp)
+    private suspend fun tpaCancel(input: TpaCommand.TpaCancel) = with(kyori) {
+        if (!tpaApi.isBeingWaited(input.executorPlayer)) {
+            input.executorPlayer.asAudience().sendMessage(translation.tpa.youHaveNoPendingTp.component)
             return
         }
-        tpaApi.cancel(input.executorPlayer.uuid)
-        messenger.send(input.executorPlayer, translation.tpa.requestCancelled)
+        tpaApi.cancel(input.executorPlayer)
+        input.executorPlayer.asAudience().sendMessage(translation.tpa.requestCancelled.component)
     }
 
-    private fun tpaDeny(input: TpaCommand.TpaDeny) {
-        if (!tpaApi.isBeingWaited(input.executorPlayer.uuid)) {
-            messenger.send(input.executorPlayer, translation.tpa.noPendingTpToDeny)
+    private suspend fun tpaDeny(input: TpaCommand.TpaDeny) = with(kyori) {
+        if (!tpaApi.isBeingWaited(input.executorPlayer)) {
+            input.executorPlayer
+                .asAudience()
+                .sendMessage(translation.tpa.noPendingTpToDeny.component)
             return
         }
-        tpaApi.deny(input.executorPlayer.uuid).forEach { deniedPlayerUuid ->
-            messenger.send(
-                deniedPlayerUuid,
-                translation.tpa.requestDenied(input.executorPlayer.name)
-            )
+        tpaApi.deny(input.executorPlayer).forEach { deniedPlayerUuid ->
+            deniedPlayerUuid
+                .asAudience()
+                .sendMessage(translation.tpa.requestDenied(input.executorPlayer.name).component)
         }
-        messenger.send(input.executorPlayer, translation.tpa.requestCancelled)
+        input.executorPlayer
+            .asAudience()
+            .sendMessage(translation.tpa.requestCancelled.component)
     }
 
-    private fun tpaHere(input: TpaCommand.TpaHere) {
+    private suspend fun tpaHere(input: TpaCommand.TpaHere): Unit = with(kyori) {
         if (input.executorPlayer.uuid == input.targetPlayer.uuid) {
-            messenger.send(input.executorPlayer, translation.tpa.cantTpSelf)
+            input.executorPlayer
+                .asAudience()
+                .sendMessage(translation.tpa.cantTpSelf.component)
             return
         }
         tpaApi.tpaHere(
-            input.executorPlayer.uuid,
-            input.targetPlayer.uuid
+            input.executorPlayer,
+            input.targetPlayer
         )
-        messenger.send(input.executorPlayer, translation.tpa.requestSent)
-        messenger.send(
-            input.targetPlayer,
-            translation.tpa.requestTpaHere(input.executorPlayer.name)
-        )
+        input.executorPlayer
+            .asAudience()
+            .sendMessage(translation.tpa.requestSent.component)
+        input.targetPlayer
+            .asAudience()
+            .sendMessage(translation.tpa.requestTpaHere(input.executorPlayer.name).component)
     }
 
-    private fun tpaTo(input: TpaCommand.TpaTo) {
+    private suspend fun tpaTo(input: TpaCommand.TpaTo): Unit = with(kyori) {
         if (input.executorPlayer.uuid == input.targetPlayer.uuid) {
-            messenger.send(input.executorPlayer, translation.tpa.cantTpSelf)
+            input.executorPlayer
+                .asAudience()
+                .sendMessage(translation.tpa.cantTpSelf.component)
             return
         }
         tpaApi.tpa(
-            input.executorPlayer.uuid,
-            input.targetPlayer.uuid
+            input.executorPlayer,
+            input.targetPlayer
         )
-        messenger.send(input.executorPlayer, translation.tpa.requestSent)
-        messenger.send(
-            input.targetPlayer,
-            translation.tpa.requestTpa(input.executorPlayer.name)
-        )
+        input.executorPlayer
+            .asAudience()
+            .sendMessage(translation.tpa.requestSent.component)
+
+        input.targetPlayer
+            .asAudience()
+            .sendMessage(translation.tpa.requestTpa(input.executorPlayer.name).component)
     }
 
-    private fun tpaAccept(input: TpaCommand.TpaAccept) = scope.launch {
-        if (!tpaApi.isBeingWaited(input.executorPlayer.uuid)) {
-            messenger.send(input.executorPlayer, translation.tpa.noPendingTpToDeny)
-            return@launch
+    private suspend fun tpaAccept(input: TpaCommand.TpaAccept): Unit = with(kyori) {
+        if (!tpaApi.isBeingWaited(input.executorPlayer)) {
+            input.executorPlayer
+                .asAudience()
+                .sendMessage(translation.tpa.noPendingTpToDeny.component)
+            return
         }
-        val tpas = tpaApi.get(input.executorPlayer.uuid)
+        val tpas = tpaApi.get(input.executorPlayer)
         tpas.forEach { (executorUuid, request) ->
             when (request.type) {
                 TpaApi.RequestType.TPA -> {
-                    teleportApi.teleport(
-                        executorUuid,
-                        request.uuid
-                    )
+                    executorUuid
+                        .asTeleportable()
+                        .teleport(request.player.asLocatable().getLocation())
                 }
 
                 TpaApi.RequestType.TPAHERE -> {
-                    teleportApi.teleport(
-                        request.uuid,
-                        executorUuid,
-                    )
+                    request.player
+                        .asTeleportable()
+                        .teleport(request.player.asLocatable().getLocation())
                 }
             }
         }
-        messenger.send(input.executorPlayer, translation.tpa.requestAccepted)
+
+        input.executorPlayer
+            .asAudience()
+            .sendMessage(translation.tpa.requestAccepted.component)
     }
 
     override fun execute(input: TpaCommand) {
-        when (input) {
-            is TpaCommand.TpaCancel -> {
-                tpaCancel(input)
-            }
+        scope.launch {
+            when (input) {
+                is TpaCommand.TpaCancel -> {
+                    tpaCancel(input)
+                }
 
-            is TpaCommand.TpaDeny -> {
-                tpaDeny(input)
-            }
+                is TpaCommand.TpaDeny -> {
+                    tpaDeny(input)
+                }
 
-            is TpaCommand.TpaHere -> {
-                tpaHere(input)
-            }
+                is TpaCommand.TpaHere -> {
+                    tpaHere(input)
+                }
 
-            is TpaCommand.TpaTo -> {
-                tpaTo(input)
-            }
+                is TpaCommand.TpaTo -> {
+                    tpaTo(input)
+                }
 
-            is TpaCommand.TpaAccept -> {
-                tpaAccept(input)
+                is TpaCommand.TpaAccept -> {
+                    tpaAccept(input)
+                }
             }
         }
     }

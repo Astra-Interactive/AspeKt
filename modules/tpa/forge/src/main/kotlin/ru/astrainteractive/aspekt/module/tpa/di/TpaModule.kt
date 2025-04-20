@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.minecraft.teleport.ForgeTeleportApi
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.tpa.api.TpaApi
 import ru.astrainteractive.aspekt.module.tpa.command.TpaCommandExecutor
@@ -18,10 +17,9 @@ class TpaModule(
 ) {
     val tpaCommandExecutor = TpaCommandExecutor(
         translationKrate = coreModule.translation,
-        teleportApi = ForgeTeleportApi(),
         tpaApi = TpaApi(),
         scope = coreModule.scope,
-        messenger = coreModule.minecraftMessenger
+        kyoriKrate = coreModule.kyoriComponentSerializer
     )
 
     val lifecycle = Lifecycle.Lambda(
