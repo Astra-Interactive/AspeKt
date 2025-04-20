@@ -22,6 +22,7 @@ import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.di.ForgeAuthModule
 import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
 import ru.astrainteractive.aspekt.module.claims.di.ForgeClaimModule
+import ru.astrainteractive.aspekt.module.rtp.di.RtpModule
 import ru.astrainteractive.aspekt.module.sethome.di.HomesModule
 import ru.astrainteractive.aspekt.module.tpa.di.TpaModule
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
@@ -51,6 +52,7 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
         .stateIn(scope, SharingStarted.Eagerly, null)
 
     private val registerCommandsEvent = flowEvent<RegisterCommandsEvent>(EventPriority.HIGHEST)
+        .filterNotNull()
         .stateIn(scope, SharingStarted.Eagerly, null)
 
     val authApiModule = AuthApiModule(
@@ -117,6 +119,12 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
             registerCommandsEventFlow = registerCommandsEvent.filterNotNull(),
         )
     }
+    val rtpModule by lazy {
+        RtpModule(
+            coreModule = coreModule,
+            registerCommandsEventFlow = registerCommandsEvent.filterNotNull(),
+        )
+    }
 
     private val lifecycles: List<Lifecycle>
         get() = listOf(
@@ -124,7 +132,8 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
             forgeAuthModule.lifecycle,
             forgeClaimModule.lifecycle,
             homesModule.lifecycle,
-            tpaModule.lifecycle
+            tpaModule.lifecycle,
+            rtpModule.lifecycle
         )
 
     val lifecycle = Lifecycle.Lambda(
