@@ -32,6 +32,7 @@ class RtpCommandExecutor(
             messenger.send(player.uuid, translation.rtp.timeout)
             return
         }
+        messenger.send(player.uuid, translation.rtp.searching)
         scope.launch {
             val location = safeLocationProvider.getLocation(this, player.uuid) ?: return@launch
             messenger.send(player.uuid, translation.rtp.foundPlace)

@@ -77,7 +77,7 @@ class ForgeSafeLocationProvider : SafeLocationProvider {
     }
 
     override suspend fun getLocation(scope: CoroutineScope, uuid: UUID): Location? {
-        val deferred = mutex.withLock {
+        return mutex.withLock {
             val player = ForgeUtil.getOnlinePlayer(uuid) ?: return@withLock null
             val deferred = jobMap.getOrPut(uuid) {
                 scope.async { safeLocationFlow(player.level().cast<ServerLevel>()).first() }
@@ -85,8 +85,7 @@ class ForgeSafeLocationProvider : SafeLocationProvider {
             deferred.invokeOnCompletion {
                 jobMap.remove(uuid)
             }
-            deferred
+            deferred.await()
         }
-        return deferred?.await()
     }
 }

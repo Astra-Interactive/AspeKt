@@ -55,6 +55,10 @@ class PluginTranslation(
         val foundPlace: StringDesc.Raw = prefix
             .plus("Найдено место для вас!")
             .toRaw(),
+        @SerialName("searching")
+        val searching: StringDesc.Raw = prefix
+            .plus("Ищем для вас место...!")
+            .toRaw(),
     )
 
     @Serializable
