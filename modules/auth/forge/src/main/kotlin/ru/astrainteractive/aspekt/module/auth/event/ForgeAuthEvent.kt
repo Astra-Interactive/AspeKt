@@ -18,8 +18,7 @@ import net.minecraftforge.eventbus.api.EventPriority
 import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
 import ru.astrainteractive.aspekt.core.forge.event.flowEvent
 import ru.astrainteractive.aspekt.core.forge.event.playerMoveFlowEvent
-import ru.astrainteractive.aspekt.core.forge.kyori.sendSystemMessage
-import ru.astrainteractive.aspekt.core.forge.kyori.withAudience
+import ru.astrainteractive.aspekt.core.forge.util.asAudience
 import ru.astrainteractive.aspekt.core.forge.util.getValue
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.minecraft.location.dist
@@ -53,20 +52,22 @@ class ForgeAuthEvent(
         .launchIn(scope)
 
     private fun processPlayerEvent(player: Player) = scope.launch {
-        when (authorizedApi.getAuthState(player.uuid)) {
-            AuthorizedApi.AuthState.Authorized -> Unit
+        with(kyoriKrate.cachedValue) {
+            when (authorizedApi.getAuthState(player.uuid)) {
+                AuthorizedApi.AuthState.Authorized -> Unit
 
-            AuthorizedApi.AuthState.Pending,
-            AuthorizedApi.AuthState.NotAuthorized -> {
-                kyoriKrate
-                    .withAudience(player)
-                    .sendSystemMessage(translation.notAuthorized)
-            }
+                AuthorizedApi.AuthState.Pending,
+                AuthorizedApi.AuthState.NotAuthorized -> {
+                    player
+                        .asAudience()
+                        .sendMessage(translation.notAuthorized.component)
+                }
 
-            AuthorizedApi.AuthState.NotRegistered -> {
-                kyoriKrate
-                    .withAudience(player)
-                    .sendSystemMessage(translation.notRegistered)
+                AuthorizedApi.AuthState.NotRegistered -> {
+                    player
+                        .asAudience()
+                        .sendMessage(translation.notRegistered.component)
+                }
             }
         }
     }

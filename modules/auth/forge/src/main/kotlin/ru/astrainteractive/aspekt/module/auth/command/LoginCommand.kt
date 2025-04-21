@@ -7,8 +7,7 @@ import net.minecraftforge.event.RegisterCommandsEvent
 import ru.astrainteractive.aspekt.core.forge.command.util.literal
 import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
 import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
-import ru.astrainteractive.aspekt.core.forge.kyori.sendSystemMessage
-import ru.astrainteractive.aspekt.core.forge.kyori.withAudience
+import ru.astrainteractive.aspekt.core.forge.util.asAudience
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
@@ -32,39 +31,41 @@ fun RegisterCommandsEvent.loginCommand(
         stringArgument(
             alias = "password",
             execute = execute@{ ctx ->
-                val translation = translationKrate.cachedValue
-                val player = ctx.source.entity as? ServerPlayer
-                player ?: run {
-                    kyoriKrate
-                        .withAudience(ctx.source)
-                        .sendSystemMessage(translation.onlyPlayerCommand)
-                    return@execute
-                }
+                with(kyoriKrate.cachedValue) {
+                    val translation = translationKrate.cachedValue
+                    val player = ctx.source.entity as? ServerPlayer
+                    scope.launch {
+                        player ?: run {
+                            ctx.source
+                                .asAudience()
+                                .sendMessage(translation.onlyPlayerCommand.component)
+                            return@launch
+                        }
 
-                val passwordSha = ctx.requireArgument("password", StringArgumentType).sha256()
-                scope.launch {
-                    val isRegistered = authDao.isRegistered(player.uuid)
-                    if (!isRegistered) {
-                        kyoriKrate
-                            .withAudience(ctx.source)
-                            .sendSystemMessage(translation.notRegistered)
-                        return@launch
-                    }
-                    val authData = AuthData(
-                        lastUsername = player.name.toPlain(),
-                        uuid = player.uuid,
-                        passwordSha256 = passwordSha,
-                        lastIpAddress = player.ipAddress
-                    )
-                    if (authDao.checkAuthDataIsValid(authData).getOrDefault(false)) {
-                        kyoriKrate
-                            .withAudience(ctx.source)
-                            .sendSystemMessage(translation.authSuccess)
-                        authorizedApi.authUser(player.uuid)
-                    } else {
-                        kyoriKrate
-                            .withAudience(ctx.source)
-                            .sendSystemMessage(translation.wrongPassword)
+                        val passwordSha = ctx.requireArgument("password", StringArgumentType).sha256()
+                        val isRegistered = authDao.isRegistered(player.uuid)
+                        if (!isRegistered) {
+                            ctx.source
+                                .asAudience()
+                                .sendMessage(translation.notRegistered.component)
+                            return@launch
+                        }
+                        val authData = AuthData(
+                            lastUsername = player.name.toPlain(),
+                            uuid = player.uuid,
+                            passwordSha256 = passwordSha,
+                            lastIpAddress = player.ipAddress
+                        )
+                        if (authDao.checkAuthDataIsValid(authData).getOrDefault(false)) {
+                            ctx.source
+                                .asAudience()
+                                .sendMessage(translation.authSuccess.component)
+                            authorizedApi.authUser(player.uuid)
+                        } else {
+                            ctx.source
+                                .asAudience()
+                                .sendMessage(translation.wrongPassword.component)
+                        }
                     }
                 }
             }

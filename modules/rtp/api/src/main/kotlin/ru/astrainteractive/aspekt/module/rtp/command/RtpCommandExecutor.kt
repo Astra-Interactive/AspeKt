@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.module.rtp.command
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ru.astrainteractive.aspekt.minecraft.asAudience
 import ru.astrainteractive.aspekt.minecraft.asTeleportable
 import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
 import ru.astrainteractive.aspekt.plugin.PluginTranslation

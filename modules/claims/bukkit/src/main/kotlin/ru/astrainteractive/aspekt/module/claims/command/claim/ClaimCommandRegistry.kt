@@ -1,7 +1,6 @@
 package ru.astrainteractive.aspekt.module.claims.command.claim
 
 import ru.astrainteractive.aspekt.module.claims.command.di.ClaimCommandDependencies
-import ru.astrainteractive.aspekt.module.claims.messenger.BukkitMessenger
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.astralibs.command.api.exception.ArgumentTypeException
 import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
@@ -34,12 +33,12 @@ internal class ClaimCommandRegistry(
             alias = "claim",
             commandParser = ClaimCommandParser(),
             commandExecutor = ClaimCommandExecutor(
-                messenger = BukkitMessenger(kyoriKrate = dependencies.kyoriComponentSerializer),
                 scope = dependencies.scope,
                 dispatchers = dependencies.dispatchers,
                 translationKrate = dependencies.translation,
                 claimsRepository = dependencies.claimsRepository,
-                claimErrorMapper = dependencies.claimErrorMapper
+                claimErrorMapper = dependencies.claimErrorMapper,
+                kyoriKrate = kyoriComponentSerializer
             ),
             errorHandler = { context, throwable ->
                 when (throwable) {

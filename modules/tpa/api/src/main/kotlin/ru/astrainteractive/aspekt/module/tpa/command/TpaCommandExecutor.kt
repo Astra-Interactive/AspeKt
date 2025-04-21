@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.module.tpa.command
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import ru.astrainteractive.aspekt.minecraft.asAudience
 import ru.astrainteractive.aspekt.minecraft.asLocatable
 import ru.astrainteractive.aspekt.minecraft.asTeleportable
 import ru.astrainteractive.aspekt.module.tpa.api.TpaApi
