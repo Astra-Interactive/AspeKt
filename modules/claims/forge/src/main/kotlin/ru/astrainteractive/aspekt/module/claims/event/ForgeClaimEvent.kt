@@ -51,7 +51,7 @@ class ForgeClaimEvent(
         player: ServerPlayer?,
         flag: ChunkFlag
     ): Boolean where T : Event {
-        if (player?.toPermissible()?.hasPermission(PluginPermission.AdminClaim) == true) {
+        if (player?.toPermissible()?.hasPermission(PluginPermission.ADMIN_CLAIM) == true) {
             return false
         }
         if (e.isCanceled) {

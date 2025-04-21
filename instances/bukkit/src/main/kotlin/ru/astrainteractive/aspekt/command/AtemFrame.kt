@@ -23,7 +23,7 @@ fun CommandManager.atemFrameTabCompleter() =
 fun CommandManager.atemFrame() = plugin.setCommandExecutor(
     alias = "atemframe",
     commandExecutor = commandExecutor@{ ctx ->
-        ctx.requirePermission(PluginPermission.AtemFrame)
+        ctx.requirePermission(PluginPermission.ATEM_FRAME)
 
         val player = ctx.sender as? Player ?: return@commandExecutor
 

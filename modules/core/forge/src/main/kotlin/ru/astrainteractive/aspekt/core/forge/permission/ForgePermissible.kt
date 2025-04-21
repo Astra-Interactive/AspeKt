@@ -3,29 +3,20 @@
 package ru.astrainteractive.aspekt.core.forge.permission
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import net.minecraft.resources.ResourceLocation
-import net.minecraftforge.event.entity.player.PermissionsChangedEvent
 import net.minecraftforge.server.permission.PermissionAPI
 import net.minecraftforge.server.permission.events.PermissionGatherEvent
 import net.minecraftforge.server.permission.nodes.PermissionNode
-import net.minecraftforge.server.permission.nodes.PermissionTypes
 import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
 import ru.astrainteractive.aspekt.core.forge.event.flowEvent
 import ru.astrainteractive.aspekt.core.forge.util.ForgeUtil
 import ru.astrainteractive.aspekt.core.forge.util.getOnlinePlayer
-import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.permission.Permissible
 import ru.astrainteractive.astralibs.permission.Permission
 import java.util.UUID
-
 
 class ForgePermissible(private val uuid: UUID) : Permissible {
     private inline fun <reified T> Permission.asNodeOrNull(): PermissionNode<T>? {

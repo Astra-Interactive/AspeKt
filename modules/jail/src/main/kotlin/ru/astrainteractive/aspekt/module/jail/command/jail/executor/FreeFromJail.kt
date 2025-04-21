@@ -10,7 +10,7 @@ import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.requirePermission
 
 internal fun JailCommandManager.freeFromJail(ctx: BukkitCommandContext) {
-    ctx.requirePermission(PluginPermission.Jail.JailFree)
+    ctx.requirePermission(PluginPermission.JAIL_FREE)
     val translation = translationKrate.cachedValue
     scope.launch {
         with(kyoriKrate.cachedValue) {

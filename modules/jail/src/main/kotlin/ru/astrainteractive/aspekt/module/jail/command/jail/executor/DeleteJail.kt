@@ -9,7 +9,7 @@ import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.requirePermission
 
 internal fun JailCommandManager.deleteJail(ctx: BukkitCommandContext) {
-    ctx.requirePermission(PluginPermission.Jail.JailDelete)
+    ctx.requirePermission(PluginPermission.JAIL_DELETE)
     val translation = translationKrate.cachedValue
     scope.launch {
         val jailName = ctx.requireArgument(1, StringArgumentType)

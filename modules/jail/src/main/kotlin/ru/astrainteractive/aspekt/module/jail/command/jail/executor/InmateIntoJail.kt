@@ -16,7 +16,7 @@ import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt
 import java.time.Instant
 
 internal fun JailCommandManager.inmateIntoJail(ctx: BukkitCommandContext) {
-    ctx.requirePermission(PluginPermission.Jail.JailInmate)
+    ctx.requirePermission(PluginPermission.JAIL_INMATE)
     val translation = translationKrate.cachedValue
     scope.launch {
         val jailName = ctx.requireArgument(1, StringArgumentType)

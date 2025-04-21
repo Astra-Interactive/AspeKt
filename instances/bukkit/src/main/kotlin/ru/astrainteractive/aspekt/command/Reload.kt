@@ -14,7 +14,7 @@ import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissib
  * Here you should also check for permission
  */
 fun CommandManager.reload() = plugin.getCommand("aesreload")?.setExecutor { sender, command, label, args ->
-    if (!sender.toPermissible().hasPermission(PluginPermission.Reload)) {
+    if (!sender.toPermissible().hasPermission(PluginPermission.RELOAD)) {
         translation.general.noPermission
             .let(kyoriComponentSerializer::toComponent)
             .run(sender::sendMessage)

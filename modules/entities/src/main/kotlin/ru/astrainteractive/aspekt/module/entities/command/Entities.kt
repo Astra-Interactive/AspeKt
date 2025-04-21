@@ -7,7 +7,7 @@ import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissib
 
 internal fun EntitiesCommandDependencies.entities() =
     plugin.getCommand("entities")?.setExecutor { sender, command, label, args ->
-        if (!sender.toPermissible().hasPermission(PluginPermission.Entities)) return@setExecutor true
+        if (!sender.toPermissible().hasPermission(PluginPermission.ENTITIES)) return@setExecutor true
         val player = sender as? Player ?: return@setExecutor true
         router.open(Router.Route.Entities(player))
         true

@@ -27,7 +27,7 @@ internal class SwearCommandRegistry(
 
         val canForceSetSwear = playerSender
             ?.toPermissible()
-            ?.hasPermission(PluginPermission.ForcePlayerSwear) == true
+            ?.hasPermission(PluginPermission.FORCE_PLAYER_SWEAR) == true
 
         if (playerArgument != null && !canForceSetSwear) {
             sender.sendMessage(kyoriComponentSerializer.toComponent(translation.general.noPermission))

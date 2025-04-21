@@ -14,7 +14,7 @@ import ru.astrainteractive.astralibs.command.api.exception.StringDescException
 import ru.astrainteractive.astralibs.string.StringDesc
 
 internal fun JailCommandManager.createJail(ctx: BukkitCommandContext) {
-    ctx.requirePermission(PluginPermission.Jail.JailCreate)
+    ctx.requirePermission(PluginPermission.JAIL_CREATE)
     val player = ctx.sender as? Player
     player ?: throw StringDescException(StringDesc.Plain("Executor should be player"))
     val jail = Jail(
