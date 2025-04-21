@@ -14,6 +14,7 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import javax.annotation.ParametersAreNonnullByDefault
+import ru.astrainteractive.aspekt.core.forge.permission.ForgePermissible
 
 @Mod("aspekt")
 @ParametersAreNonnullByDefault
@@ -54,5 +55,6 @@ class ForgeEntryPoint :
 
     init {
         ForgeUtil.initialize()
+        ForgePermissible.init()
     }
 }
