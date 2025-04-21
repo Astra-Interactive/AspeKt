@@ -4,9 +4,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import net.minecraft.server.level.ServerPlayer
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.command.util.literal
+import ru.astrainteractive.aspekt.core.forge.command.util.argument
+import ru.astrainteractive.aspekt.core.forge.command.util.command
 import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
-import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
+import ru.astrainteractive.aspekt.core.forge.command.util.runs
 import ru.astrainteractive.aspekt.core.forge.util.asAudience
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
@@ -27,10 +28,9 @@ fun RegisterCommandsEvent.loginCommand(
     kyoriKrate: Krate<KyoriComponentSerializer>,
     translationKrate: Krate<AuthTranslation>
 ) {
-    literal("login") {
-        stringArgument(
-            alias = "password",
-            execute = execute@{ ctx ->
+    command("login") {
+        argument(alias = "password", com.mojang.brigadier.arguments.StringArgumentType.string()) {
+            runs { ctx ->
                 with(kyoriKrate.cachedValue) {
                     val translation = translationKrate.cachedValue
                     val player = ctx.source.entity as? ServerPlayer
@@ -69,6 +69,6 @@ fun RegisterCommandsEvent.loginCommand(
                     }
                 }
             }
-        )
+        }
     }.run(dispatcher::register)
 }

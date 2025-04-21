@@ -3,10 +3,12 @@ package ru.astrainteractive.aspekt.module.auth.command
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.command.util.literal
+import ru.astrainteractive.aspekt.core.forge.command.util.argument
+import ru.astrainteractive.aspekt.core.forge.command.util.command
+import ru.astrainteractive.aspekt.core.forge.command.util.hints
 import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
 import ru.astrainteractive.aspekt.core.forge.command.util.requirePermission
-import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
+import ru.astrainteractive.aspekt.core.forge.command.util.runs
 import ru.astrainteractive.aspekt.core.forge.util.ForgeUtil
 import ru.astrainteractive.aspekt.core.forge.util.asAudience
 import ru.astrainteractive.aspekt.core.forge.util.getOnlinePlayer
@@ -29,11 +31,10 @@ fun RegisterCommandsEvent.unregisterCommand(
     kyoriKrate: Krate<KyoriComponentSerializer>,
     translationKrate: Krate<AuthTranslation>
 ) {
-    literal("unregister") {
-        stringArgument(
-            alias = "username",
-            suggests = { ForgeUtil.getOnlinePlayers().map { player -> player.name.toPlain() } },
-            execute = execute@{ ctx ->
+    command("unregister") {
+        argument("username", com.mojang.brigadier.arguments.StringArgumentType.string()) {
+            hints(ForgeUtil.getOnlinePlayers().map { player -> player.name.toPlain() })
+            runs { ctx ->
                 val translation = translationKrate.cachedValue
                 ctx.requirePermission(AuthPermission.Unregister)
                 val usernameToDelete = ctx.requireArgument("username", StringArgumentType)
@@ -44,9 +45,7 @@ fun RegisterCommandsEvent.unregisterCommand(
                                 ctx.source
                                     .asAudience()
                                     .sendMessage(translation.userNotFound.component)
-                            }.getOrNull() ?: run {
-                            return@launch
-                        }
+                            }.getOrNull() ?: run { return@launch }
 
                         authDao.deleteAccount(authData.uuid)
                             .onSuccess {
@@ -87,6 +86,6 @@ fun RegisterCommandsEvent.unregisterCommand(
                     }
                 }
             }
-        )
+        }
     }.run(dispatcher::register)
 }

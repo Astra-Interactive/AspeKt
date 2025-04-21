@@ -5,7 +5,7 @@ import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
 import java.util.ServiceLoader
 
 fun interface Locatable {
-    suspend fun getLocation(): Location
+    fun getLocation(): Location
 
     interface Factory<T : Any> {
         fun from(instance: T): Locatable

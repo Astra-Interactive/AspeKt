@@ -1,9 +1,10 @@
+@file:Suppress("TooManyFunctions")
+
 package ru.astrainteractive.aspekt.core.forge.command.util
 
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.arguments.ArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
-import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
@@ -13,9 +14,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.rcon.RconConsoleSource
-import ru.astrainteractive.aspekt.core.forge.command.context.ForgeCommandContext
 import ru.astrainteractive.aspekt.core.forge.util.toPermissible
-import ru.astrainteractive.astralibs.command.api.error.ErrorHandler
 import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
 import ru.astrainteractive.astralibs.command.api.exception.CommandException
 import ru.astrainteractive.astralibs.permission.Permission
@@ -54,118 +53,90 @@ fun CommandContext<CommandSourceStack>.requirePermission(permission: Permission)
     return serverPlayer.toPermissible().hasPermission(permission)
 }
 
-fun ArgumentBuilder<CommandSourceStack, *>.stringArgument(
+fun command(
     alias: String,
-    suggests: (CommandContext<CommandSourceStack>) -> List<String> = { emptyList() },
-    errorHandler: ErrorHandler<ForgeCommandContext> = ErrorHandler { _, _ -> },
-    builder: (RequiredArgumentBuilder<CommandSourceStack, String>.() -> Unit)? = null,
-    execute: (RequiredArgumentBuilder<CommandSourceStack, String>.(CommandContext<CommandSourceStack>) -> Unit)? = null,
-) = argument(
-    alias = alias,
-    type = StringArgumentType.string(),
-    suggests = suggests,
-    builder = builder,
-    execute = execute,
-    errorHandler = errorHandler
-)
-
-@Suppress("LongParameterList")
-fun <T> ArgumentBuilder<CommandSourceStack, *>.argument(
-    alias: String,
-    type: ArgumentType<T>,
-    suggests: (CommandContext<CommandSourceStack>) -> List<String> = { emptyList() },
-    errorHandler: ErrorHandler<ForgeCommandContext> = ErrorHandler { _, _ -> },
-    builder: (RequiredArgumentBuilder<CommandSourceStack, T>.() -> Unit)? = null,
-    execute: (RequiredArgumentBuilder<CommandSourceStack, T>.(CommandContext<CommandSourceStack>) -> Unit)? = null,
-): ArgumentBuilder<CommandSourceStack, *> {
-    val requiredArgumentBuilder: RequiredArgumentBuilder<CommandSourceStack, T> = Commands
-        .argument(alias, type)
-        .suggests { context, builder ->
-            suggests.invoke(context).forEach { suggestion ->
-                builder.suggest(suggestion)
-            }
-            builder.buildFuture()
-        }
-    builder?.invoke(requiredArgumentBuilder)
-    execute?.let {
-        requiredArgumentBuilder.executes { commandContext ->
-            runCatching { execute.invoke(requiredArgumentBuilder, commandContext) }
-                .onFailure { throwable ->
-                    errorHandler.handle(
-                        ctx = ForgeCommandContext(commandContext),
-                        throwable = throwable
-                    )
-                }
-            Command.SINGLE_SUCCESS
-        }
-    }
-    return then(requiredArgumentBuilder)
-}
-
-fun ArgumentBuilder<CommandSourceStack, *>.literal(
-    alias: String,
-    execute: ((CommandContext<CommandSourceStack>) -> Unit)? = null,
-    block: (ArgumentBuilder<CommandSourceStack, *>.() -> Unit)? = null,
-) {
+    block: LiteralArgumentBuilder<CommandSourceStack>.() -> Unit
+): LiteralArgumentBuilder<CommandSourceStack?> {
     val literal = Commands.literal(alias)
-    block?.invoke(literal)
-    execute?.let {
-        literal.executes { ctx ->
-            execute.invoke(ctx)
-            Command.SINGLE_SUCCESS
-        }
-    }
-
-    then(literal)
-}
-
-fun literal(
-    alias: String,
-    execute: ((CommandContext<CommandSourceStack>) -> Unit)? = null,
-    block: (ArgumentBuilder<CommandSourceStack, *>.() -> Unit)? = null,
-): LiteralArgumentBuilder<CommandSourceStack> {
-    val literal = Commands.literal(alias)
-    block?.invoke(literal)
-    execute?.let {
-        literal.executes { ctx ->
-            execute.invoke(ctx)
-            Command.SINGLE_SUCCESS
-        }
-    }
+    literal.block()
     return literal
 }
 
-fun literal(name: String): LiteralArgumentBuilder<CommandSourceStack> {
-    return Commands.literal(name)
+fun LiteralArgumentBuilder<CommandSourceStack>.literal(
+    alias: String,
+    block: LiteralArgumentBuilder<CommandSourceStack>.() -> Unit
+) {
+    val literal = Commands.literal(alias)
+    literal.block()
+    this.then(literal)
 }
 
-fun <T> argument(
+fun <T> LiteralArgumentBuilder<CommandSourceStack>.argument(
     alias: String,
     type: ArgumentType<T>,
-    suggests: List<String> = emptyList(),
-    errorHandler: ErrorHandler<ForgeCommandContext> = ErrorHandler { _, _ -> },
-    execute: ((CommandContext<CommandSourceStack>) -> Unit)? = null,
-): RequiredArgumentBuilder<CommandSourceStack, T> {
+    block: RequiredArgumentBuilder<CommandSourceStack, T>.() -> Unit
+) {
     val argument = Commands.argument(alias, type)
-    if (suggests.isNotEmpty()) {
-        argument.suggests { context, builder ->
-            suggests.forEach { suggestion ->
-                builder.suggest(suggestion)
-            }
-            builder.buildFuture()
-        }
+    argument.block()
+    this.then(argument)
+}
+
+fun LiteralArgumentBuilder<CommandSourceStack>.stringArgument(
+    alias: String,
+    block: RequiredArgumentBuilder<CommandSourceStack, String>.() -> Unit
+) {
+    val argument = Commands.argument(alias, StringArgumentType.string())
+    argument.block()
+    this.then(argument)
+}
+
+fun <T> RequiredArgumentBuilder<CommandSourceStack, *>.argument(
+    alias: String,
+    type: ArgumentType<T>,
+    block: RequiredArgumentBuilder<CommandSourceStack, T>.() -> Unit
+) {
+    val argument = Commands.argument(alias, type)
+    argument.block()
+    this.then(argument)
+}
+
+fun RequiredArgumentBuilder<CommandSourceStack, *>.stringArgument(
+    alias: String,
+    block: RequiredArgumentBuilder<CommandSourceStack, String>.() -> Unit
+) {
+    val argument = Commands.argument(alias, StringArgumentType.string())
+    argument.block()
+    this.then(argument)
+}
+
+fun RequiredArgumentBuilder<CommandSourceStack, *>.runs(
+    block: (RequiredArgumentBuilder<CommandSourceStack, *>.(CommandContext<CommandSourceStack>) -> Unit)
+) {
+    executes {
+        block.invoke(this, it)
+        Command.SINGLE_SUCCESS
     }
-    execute?.let {
-        argument.executes {
-            runCatching { execute.invoke(it) }
-                .onFailure { throwable ->
-                    errorHandler.handle(
-                        ctx = ForgeCommandContext(it),
-                        throwable = throwable
-                    )
-                }
-            Command.SINGLE_SUCCESS
-        }
+}
+
+fun LiteralArgumentBuilder<CommandSourceStack>.runs(
+    block: LiteralArgumentBuilder<CommandSourceStack>.(CommandContext<CommandSourceStack>) -> Unit
+) {
+    executes {
+        block.invoke(this, it)
+        Command.SINGLE_SUCCESS
     }
-    return argument
+}
+
+fun RequiredArgumentBuilder<CommandSourceStack, *>.hints(block: (CommandContext<CommandSourceStack>) -> List<String>) {
+    suggests { context, builder ->
+        block.invoke(context).forEach(builder::suggest)
+        builder.buildFuture()
+    }
+}
+
+fun RequiredArgumentBuilder<CommandSourceStack, *>.hints(list: List<String>) {
+    suggests { context, builder ->
+        list.forEach(builder::suggest)
+        builder.buildFuture()
+    }
 }

@@ -5,7 +5,7 @@ import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
 import java.util.ServiceLoader
 
 fun interface Audience {
-    suspend fun sendMessage(component: Component)
+    fun sendMessage(component: Component)
 
     interface Factory<T : Any> {
         fun from(instance: T): Audience

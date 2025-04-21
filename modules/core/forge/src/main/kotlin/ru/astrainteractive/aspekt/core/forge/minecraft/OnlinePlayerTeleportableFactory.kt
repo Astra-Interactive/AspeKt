@@ -12,9 +12,9 @@ class OnlinePlayerTeleportableFactory : Teleportable.Factory<OnlineMinecraftPlay
     override fun from(instance: OnlineMinecraftPlayer): Teleportable {
         return Teleportable { location ->
             val player = ForgeUtil.getOnlinePlayer(instance.uuid) ?: return@Teleportable
-            val level = ForgeUtil.requireServer()
-                .allLevels
-                .firstOrNull { (it.level.levelData as ServerLevelData).levelName == location.worldName }
+            val level = ForgeUtil.serverOrNull
+                ?.allLevels
+                ?.firstOrNull { (it.level.levelData as ServerLevelData).levelName == location.worldName }
                 ?: return@Teleportable
             player.teleportTo(
                 level,

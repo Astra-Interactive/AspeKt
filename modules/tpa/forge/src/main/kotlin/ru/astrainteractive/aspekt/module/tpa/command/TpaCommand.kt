@@ -4,9 +4,11 @@ package ru.astrainteractive.aspekt.module.tpa.command
 
 import net.minecraft.world.entity.player.Player
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.command.util.literal
+import ru.astrainteractive.aspekt.core.forge.command.util.argument
+import ru.astrainteractive.aspekt.core.forge.command.util.command
+import ru.astrainteractive.aspekt.core.forge.command.util.hints
 import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
-import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
+import ru.astrainteractive.aspekt.core.forge.command.util.runs
 import ru.astrainteractive.aspekt.core.forge.util.ForgeUtil
 import ru.astrainteractive.aspekt.core.forge.util.getOnlinePlayer
 import ru.astrainteractive.aspekt.core.forge.util.getOnlinePlayers
@@ -25,72 +27,67 @@ private fun Player.toMinecraftPlayer(): OnlineMinecraftPlayer {
 internal fun RegisterCommandsEvent.tpa(
     tpaCommandExecutor: TpaCommandExecutor
 ) {
-    literal("tpa") {
-        stringArgument(
-            alias = "player",
-            suggests = { ForgeUtil.getOnlinePlayers().map { it.name.toPlain() } },
-            execute = execute@{ ctx ->
+    command("tpa") {
+        argument("player", com.mojang.brigadier.arguments.StringArgumentType.string()) {
+            hints(ForgeUtil.getOnlinePlayers().map { it.name.toPlain() })
+
+            runs { ctx ->
                 val targetPlayerName = ctx.requireArgument("player", StringArgumentType)
                 TpaCommand.TpaTo(
                     executorPlayer = ctx.source.player
                         ?.toMinecraftPlayer()
-                        ?: return@execute,
+                        ?: return@runs,
                     targetPlayer = ForgeUtil.getOnlinePlayer(targetPlayerName)
                         ?.toMinecraftPlayer()
-                        ?: return@execute
+                        ?: return@runs
                 ).run(tpaCommandExecutor::execute)
             }
-        )
+        }
     }.run(dispatcher::register)
 
-    literal("tpahere") {
-        stringArgument(
-            alias = "player",
-            suggests = { ForgeUtil.getOnlinePlayers().map { it.name.toPlain() } },
-            execute = execute@{ ctx ->
+    command("tpahere") {
+        argument("player", com.mojang.brigadier.arguments.StringArgumentType.string()) {
+            runs { ctx ->
                 val targetPlayerName = ctx.requireArgument("player", StringArgumentType)
                 TpaCommand.TpaHere(
                     executorPlayer = ctx.source.player
                         ?.toMinecraftPlayer()
-                        ?: return@execute,
+                        ?: return@runs,
                     targetPlayer = ForgeUtil.getOnlinePlayer(targetPlayerName)
                         ?.toMinecraftPlayer()
-                        ?: return@execute
+                        ?: return@runs
                 ).run(tpaCommandExecutor::execute)
             }
-        )
+        }
     }.run(dispatcher::register)
 
-    literal(
-        "tpacancel",
-        execute = execute@{ ctx ->
+    command("tpacancel") {
+        runs { ctx ->
             TpaCommand.TpaCancel(
                 executorPlayer = ctx.source.player
                     ?.toMinecraftPlayer()
-                    ?: return@execute,
+                    ?: return@runs,
             ).run(tpaCommandExecutor::execute)
-        },
-    ).run(dispatcher::register)
+        }
+    }.run(dispatcher::register)
 
-    literal(
-        "tpaccept",
-        execute = execute@{ ctx ->
+    command("tpaccept") {
+        runs { ctx ->
             TpaCommand.TpaAccept(
                 executorPlayer = ctx.source.player
                     ?.toMinecraftPlayer()
-                    ?: return@execute,
+                    ?: return@runs,
             ).run(tpaCommandExecutor::execute)
-        },
-    ).run(dispatcher::register)
+        }
+    }.run(dispatcher::register)
 
-    literal(
-        "tpadeny",
-        execute = execute@{ ctx ->
+    command("tpadeny") {
+        runs { ctx ->
             TpaCommand.TpaDeny(
                 executorPlayer = ctx.source.player
                     ?.toMinecraftPlayer()
-                    ?: return@execute,
+                    ?: return@runs,
             ).run(tpaCommandExecutor::execute)
-        },
-    ).run(dispatcher::register)
+        }
+    }
 }

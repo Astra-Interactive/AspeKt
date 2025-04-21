@@ -3,8 +3,10 @@
 package ru.astrainteractive.aspekt.module.sethome.command
 
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.command.util.literal
+import ru.astrainteractive.aspekt.core.forge.command.util.command
+import ru.astrainteractive.aspekt.core.forge.command.util.hints
 import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
+import ru.astrainteractive.aspekt.core.forge.command.util.runs
 import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
 import ru.astrainteractive.aspekt.core.forge.model.getLocation
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
@@ -18,11 +20,10 @@ internal fun RegisterCommandsEvent.homes(
     homeKrateProvider: HomeKrateProvider,
     homeCommandExecutor: HomeCommandExecutor
 ) {
-    literal("sethome") {
-        stringArgument(
-            alias = "home_name",
-            execute = execute@{ ctx ->
-                val player = ctx.source.player ?: return@execute
+    command("sethome") {
+        stringArgument("home_name") {
+            runs { ctx ->
+                val player = ctx.source.player ?: return@runs
                 HomeCommand.SetHome(
                     playerData = OnlineMinecraftPlayer(
                         uuid = player.uuid,
@@ -34,18 +35,17 @@ internal fun RegisterCommandsEvent.homes(
                     ),
                 ).run(homeCommandExecutor::execute)
             }
-        )
+        }
     }.run(dispatcher::register)
 
-    literal("delhome") {
-        stringArgument(
-            alias = "home_name",
-            suggests = suggests@{ ctx ->
-                val player = ctx.source.player ?: return@suggests emptyList()
+    command("delhome") {
+        stringArgument("home_name") {
+            hints { ctx ->
+                val player = ctx.source.player ?: return@hints emptyList()
                 homeKrateProvider.get(player.uuid).cachedValue.map(PlayerHome::name)
-            },
-            execute = execute@{ ctx ->
-                val player = ctx.source.player ?: return@execute
+            }
+            runs { ctx ->
+                val player = ctx.source.player ?: return@runs
                 HomeCommand.DelHome(
                     playerData = OnlineMinecraftPlayer(
                         uuid = player.uuid,
@@ -54,18 +54,17 @@ internal fun RegisterCommandsEvent.homes(
                     homeName = ctx.requireArgument("home_name", StringArgumentType)
                 ).run(homeCommandExecutor::execute)
             }
-        )
+        }
     }.run(dispatcher::register)
 
-    literal("home") {
-        stringArgument(
-            alias = "home_name",
-            suggests = suggests@{ ctx ->
-                val player = ctx.source.player ?: return@suggests emptyList()
+    command("home") {
+        stringArgument("home_name") {
+            hints { ctx ->
+                val player = ctx.source.player ?: return@hints emptyList()
                 homeKrateProvider.get(player.uuid).cachedValue.map(PlayerHome::name)
-            },
-            execute = execute@{ ctx ->
-                val player = ctx.source.player ?: return@execute
+            }
+            runs { ctx ->
+                val player = ctx.source.player ?: return@runs
                 HomeCommand.TpHome(
                     playerData = OnlineMinecraftPlayer(
                         uuid = player.uuid,
@@ -74,6 +73,6 @@ internal fun RegisterCommandsEvent.homes(
                     homeName = ctx.requireArgument("home_name", StringArgumentType)
                 ).run(homeCommandExecutor::execute)
             }
-        )
+        }
     }.run(dispatcher::register)
 }
