@@ -22,7 +22,6 @@ internal class ForgeLuckPermsPlayerPermissible(
             ?.cachedData
             ?.permissionData
             ?.checkPermission(permission.value)
-        info { "#hasPermission $tristate" }
         return tristate == Tristate.TRUE
     }
 
@@ -44,6 +43,5 @@ internal class ForgeLuckPermsPlayerPermissible(
             ?.map { it.replace("${permission.value}.", "") }
             ?.mapNotNull { it.toIntOrNull() }
             .orEmpty()
-            .also { info { "#permissionSizes $it" } }
     }
 }

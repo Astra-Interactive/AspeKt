@@ -31,8 +31,8 @@ class RtpCommandExecutor(
                     return@launch
                 }
                 if (safeLocationProvider.isActive(player.uuid)) return@launch
-                if (input.averageTickTime < 18) {
-                    player.asAudience().sendMessage(translation.rtp.lowTickTime(input.averageTickTime).component)
+                if (input.nextTickTime < 18) {
+                    player.asAudience().sendMessage(translation.rtp.lowTickTime(input.nextTickTime).component)
                     return@launch
                 }
                 if (safeLocationProvider.hasTimeout(player.uuid)) {
