@@ -5,10 +5,13 @@ import ru.astrainteractive.aspekt.core.forge.util.ForgeUtil
 import ru.astrainteractive.aspekt.core.forge.util.getOnlinePlayer
 import ru.astrainteractive.aspekt.core.forge.util.toNative
 import ru.astrainteractive.aspekt.minecraft.Audience
+import ru.astrainteractive.aspekt.minecraft.ServiceStatusProvider
 import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
 
 @AutoService(Audience.Factory::class)
-class OnlinePlayerAudienceFactory : Audience.Factory<OnlineMinecraftPlayer> {
+class OnlinePlayerAudienceFactory :
+    Audience.Factory<OnlineMinecraftPlayer>,
+    ServiceStatusProvider by ForgeServiceStatusProvider {
     override fun from(instance: OnlineMinecraftPlayer): Audience {
         return Audience { component ->
             val player = ForgeUtil.getOnlinePlayer(instance.uuid) ?: return@Audience

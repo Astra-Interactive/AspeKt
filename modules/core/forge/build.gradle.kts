@@ -20,7 +20,7 @@ dependencies {
     kapt(libs.google.autoservice)
     compileOnly(libs.minecraft.luckperms)
 
-    compileOnly(projects.modules.core.api)
+    implementation(projects.modules.core.api)
 }
 
 dependencies {
