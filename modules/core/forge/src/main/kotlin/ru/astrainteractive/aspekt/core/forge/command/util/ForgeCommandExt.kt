@@ -14,7 +14,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.dedicated.DedicatedServer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.rcon.RconConsoleSource
-import ru.astrainteractive.aspekt.core.forge.util.toPermissible
+import ru.astrainteractive.aspekt.core.forge.util.asPermissible
 import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
 import ru.astrainteractive.astralibs.command.api.exception.CommandException
 import ru.astrainteractive.astralibs.permission.Permission
@@ -50,7 +50,7 @@ fun CommandContext<CommandSourceStack>.requirePermission(permission: Permission)
     val serverPlayer = source.entity as? ServerPlayer ?: run {
         throw CommandException("$source.source; is not a player!")
     }
-    return serverPlayer.toPermissible().hasPermission(permission)
+    return serverPlayer.asPermissible().hasPermission(permission)
 }
 
 fun command(

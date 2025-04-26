@@ -16,9 +16,8 @@ import net.minecraftforge.event.level.ExplosionEvent
 import net.minecraftforge.eventbus.api.Event
 import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
 import ru.astrainteractive.aspekt.core.forge.event.flowEvent
-import ru.astrainteractive.aspekt.core.forge.util.getValue
+import ru.astrainteractive.aspekt.core.forge.util.asPermissible
 import ru.astrainteractive.aspekt.core.forge.util.toNative
-import ru.astrainteractive.aspekt.core.forge.util.toPermissible
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.data.isAble
 import ru.astrainteractive.aspekt.module.claims.debounce.EventDebounce
@@ -33,6 +32,7 @@ import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.util.getValue
 
 class ForgeClaimEvent(
     private val claimsRepository: ClaimsRepository,
@@ -51,7 +51,7 @@ class ForgeClaimEvent(
         player: ServerPlayer?,
         flag: ChunkFlag
     ): Boolean where T : Event {
-        if (player?.toPermissible()?.hasPermission(PluginPermission.ADMIN_CLAIM) == true) {
+        if (player?.asPermissible()?.hasPermission(PluginPermission.ADMIN_CLAIM) == true) {
             return false
         }
         if (e.isCanceled) {

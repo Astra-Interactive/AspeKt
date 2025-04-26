@@ -9,6 +9,7 @@ import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
 import ru.astrainteractive.aspekt.core.forge.command.util.runs
 import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
 import ru.astrainteractive.aspekt.core.forge.model.getLocation
+import ru.astrainteractive.aspekt.core.forge.util.asLocatable
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
@@ -30,7 +31,7 @@ internal fun RegisterCommandsEvent.homes(
                         name = player.name.toPlain()
                     ),
                     playerHome = PlayerHome(
-                        location = player.getLocation(),
+                        location = player.asLocatable().getLocation(),
                         name = ctx.requireArgument("home_name", StringArgumentType)
                     ),
                 ).run(homeCommandExecutor::execute)
