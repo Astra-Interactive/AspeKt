@@ -8,7 +8,6 @@ import ru.astrainteractive.aspekt.core.forge.command.util.hints
 import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
 import ru.astrainteractive.aspekt.core.forge.command.util.runs
 import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
-import ru.astrainteractive.aspekt.core.forge.model.getLocation
 import ru.astrainteractive.aspekt.core.forge.util.asLocatable
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
