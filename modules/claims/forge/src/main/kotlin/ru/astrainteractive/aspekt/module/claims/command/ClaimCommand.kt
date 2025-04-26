@@ -138,5 +138,4 @@ internal fun RegisterCommandsEvent.claim(
             }
         }
     }.run(dispatcher::register)
-    claim2Command().run(dispatcher::register)
 }
