@@ -15,7 +15,7 @@ import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.persistence.Persistence.getPersistentDataOrNull
 import ru.astrainteractive.astralibs.persistence.Persistence.hasPersistentData
 import ru.astrainteractive.astralibs.persistence.Persistence.setPersistentDataType
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import java.time.Instant
@@ -23,9 +23,9 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 
 internal class MoneyDropController(
-    pluginConfigurationDependency: Krate<PluginConfiguration>,
-    translationDependency: Krate<PluginTranslation>,
-    kyoriComponentSerializerDependency: Krate<KyoriComponentSerializer>,
+    pluginConfigurationDependency: CachedKrate<PluginConfiguration>,
+    translationDependency: CachedKrate<PluginTranslation>,
+    kyoriComponentSerializerDependency: CachedKrate<KyoriComponentSerializer>,
     private val dao: MoneyDropDao,
     private val dispatchers: KotlinDispatchers
 ) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO) {

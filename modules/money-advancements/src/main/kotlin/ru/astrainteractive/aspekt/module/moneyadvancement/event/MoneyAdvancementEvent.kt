@@ -13,14 +13,14 @@ import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 
 class MoneyAdvancementEvent(
-    configurationProvider: Krate<PluginConfiguration>,
+    configurationProvider: CachedKrate<PluginConfiguration>,
     private val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory,
-    kyoriComponentSerializerProvider: Krate<KyoriComponentSerializer>,
-    translationProvider: Krate<PluginTranslation>
+    kyoriComponentSerializerProvider: CachedKrate<KyoriComponentSerializer>,
+    translationProvider: CachedKrate<PluginTranslation>
 ) : EventListener,
     Logger by JUtiltLogger("MoneyAdvancementEvent"),
     CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO) {

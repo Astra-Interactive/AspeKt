@@ -19,14 +19,14 @@ import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.aspekt.module.auth.api.util.sha256
 import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 
 fun RegisterCommandsEvent.loginCommand(
     scope: CoroutineScope,
     authDao: AuthDao,
     authorizedApi: AuthorizedApi,
-    kyoriKrate: Krate<KyoriComponentSerializer>,
-    translationKrate: Krate<AuthTranslation>
+    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    translationKrate: CachedKrate<AuthTranslation>
 ) {
     command("login") {
         argument(alias = "password", com.mojang.brigadier.arguments.StringArgumentType.string()) {

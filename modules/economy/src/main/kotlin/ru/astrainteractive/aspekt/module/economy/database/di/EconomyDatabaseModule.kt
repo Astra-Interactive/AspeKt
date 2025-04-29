@@ -23,7 +23,7 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.util.FlowExt.mapCached
-import ru.astrainteractive.klibs.kstorage.api.flow.StateFlowKrate
+import ru.astrainteractive.klibs.kstorage.api.StateFlowKrate
 import java.io.File
 import kotlin.coroutines.CoroutineContext
 

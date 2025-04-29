@@ -15,16 +15,16 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.string.StringDesc
-import ru.astrainteractive.klibs.kstorage.api.Krate
-import ru.astrainteractive.klibs.kstorage.util.KrateExt.update
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
+import ru.astrainteractive.klibs.kstorage.util.update
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 class ClaimCommandExecutor(
     private val scope: CoroutineScope,
     private val dispatchers: KotlinDispatchers,
-    translationKrate: Krate<PluginTranslation>,
-    kyoriKrate: Krate<KyoriComponentSerializer>,
+    translationKrate: CachedKrate<PluginTranslation>,
+    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val claimsRepository: ClaimsRepository,
     private val claimErrorMapper: ClaimErrorMapper
 ) : CommandExecutor<Claimommand.Model> {
@@ -119,7 +119,7 @@ class ClaimCommandExecutor(
 
     private suspend fun addMember(input: Claimommand.Model.AddMember) = with(kyori) {
         val krate = claimsRepository.requireKrate(input.owner.uuid)
-        if (input.member in krate.cachedValue.members) {
+        if (input.member in krate.cachedStateFlow.value.members) {
             input.owner
                 .toOnlineMinecraftPlayer()
                 .asAudience()
@@ -137,7 +137,7 @@ class ClaimCommandExecutor(
 
     private suspend fun removeMember(input: Claimommand.Model.RemoveMember) = with(kyori) {
         val krate = claimsRepository.requireKrate(input.owner.uuid)
-        if (input.member !in krate.cachedValue.members) {
+        if (input.member !in krate.cachedStateFlow.value.members) {
             input.owner
                 .toOnlineMinecraftPlayer()
                 .asAudience()

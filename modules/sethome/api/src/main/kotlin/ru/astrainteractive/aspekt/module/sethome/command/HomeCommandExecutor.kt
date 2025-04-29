@@ -8,15 +8,15 @@ import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.klibs.kstorage.api.Krate
-import ru.astrainteractive.klibs.kstorage.util.KrateExt.update
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
+import ru.astrainteractive.klibs.kstorage.util.update
 
 class HomeCommandExecutor(
     private val homeKrateProvider: HomeKrateProvider,
     private val scope: CoroutineScope,
-    private val translationKrate: Krate<PluginTranslation>,
-    private val kyoriKrate: Krate<KyoriComponentSerializer>
+    private val translationKrate: CachedKrate<PluginTranslation>,
+    private val kyoriKrate: CachedKrate<KyoriComponentSerializer>
 ) : CommandExecutor<HomeCommand> {
     private val translation by translationKrate
     override fun execute(input: HomeCommand) {
@@ -25,7 +25,7 @@ class HomeCommandExecutor(
                 val krate = homeKrateProvider.get(input.playerData.uuid)
                 scope.launch {
                     val home = krate
-                        .loadAndGet()
+                        .getValue()
                         .firstOrNull { home -> home.name == input.homeName }
                     if (home == null) {
                         with(kyoriKrate.cachedValue) {
@@ -56,7 +56,7 @@ class HomeCommandExecutor(
                 val krate = homeKrateProvider.get(input.playerData.uuid)
                 scope.launch {
                     val home = krate
-                        .loadAndGet()
+                        .getValue()
                         .firstOrNull { home -> home.name == input.homeName }
                     if (home == null) {
                         with(kyoriKrate.cachedValue) {

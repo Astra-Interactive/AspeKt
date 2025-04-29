@@ -8,7 +8,7 @@ import ru.astrainteractive.aspekt.module.antiswear.data.model.AntiSwearStorage
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.klibs.kstorage.suspend.SuspendMutableKrate
-import ru.astrainteractive.klibs.kstorage.util.KrateExt.update
+import ru.astrainteractive.klibs.kstorage.util.update
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import java.io.File
 import java.util.UUID
@@ -29,7 +29,7 @@ internal class SwearRepositoryImpl(
     )
 
     override suspend fun rememberPlayer(player: Player) = withContext(dispatchers.IO) {
-        swearFilterMap[player.uniqueId] = getAntiSwearKrate(player).loadAndGet().isSwearFilterEnabled
+        swearFilterMap[player.uniqueId] = getAntiSwearKrate(player).getValue().isSwearFilterEnabled
     }
 
     override suspend fun forgetPlayer(player: Player): Unit = withContext(dispatchers.IO) {

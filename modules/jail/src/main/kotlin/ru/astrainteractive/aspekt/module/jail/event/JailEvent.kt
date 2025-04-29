@@ -24,7 +24,7 @@ import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 
 internal class JailEvent(
@@ -32,8 +32,8 @@ internal class JailEvent(
     private val cachedJailApi: CachedJailApi,
     private val jailController: JailController,
     private val scope: CoroutineScope,
-    kyoriKrate: Krate<KyoriComponentSerializer>,
-    translationKrate: Krate<PluginTranslation>
+    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    translationKrate: CachedKrate<PluginTranslation>
 ) : EventListener, Logger by JUtiltLogger("AspeKt-JailEvent") {
     private val kyori by kyoriKrate
     private val translation by translationKrate

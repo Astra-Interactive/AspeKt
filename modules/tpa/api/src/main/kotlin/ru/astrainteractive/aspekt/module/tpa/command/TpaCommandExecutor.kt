@@ -9,14 +9,14 @@ import ru.astrainteractive.aspekt.module.tpa.api.TpaApi
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 
 class TpaCommandExecutor(
-    translationKrate: Krate<PluginTranslation>,
+    translationKrate: CachedKrate<PluginTranslation>,
     private val tpaApi: TpaApi,
     private val scope: CoroutineScope,
-    private val kyoriKrate: Krate<KyoriComponentSerializer>
+    private val kyoriKrate: CachedKrate<KyoriComponentSerializer>
 ) : CommandExecutor<TpaCommand> {
     private val translation by translationKrate
     private val kyori by kyoriKrate

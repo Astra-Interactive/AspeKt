@@ -81,7 +81,8 @@ internal fun RegisterCommandsEvent.claim(
                 hints { ctx ->
                     ctx.source?.player?.uuid
                         ?.let(claimsRepository::findKrate)
-                        ?.cachedValue
+                        ?.cachedStateFlow
+                        ?.value
                         ?.members
                         ?.map(ClaimPlayer::username)
                         .orEmpty()

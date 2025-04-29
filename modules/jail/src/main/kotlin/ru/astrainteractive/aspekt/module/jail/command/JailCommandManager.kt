@@ -11,14 +11,14 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 
 @Suppress("LongParameterList")
 internal class JailCommandManager(
     val scope: CoroutineScope,
     val plugin: JavaPlugin,
-    val translationKrate: Krate<PluginTranslation>,
-    val kyoriKrate: Krate<KyoriComponentSerializer>,
+    val translationKrate: CachedKrate<PluginTranslation>,
+    val kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     val jailApi: JailApi,
     val cachedJailApi: CachedJailApi,
     val jailController: JailController

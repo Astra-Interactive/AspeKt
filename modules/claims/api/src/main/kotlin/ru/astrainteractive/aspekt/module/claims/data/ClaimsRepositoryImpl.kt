@@ -21,7 +21,7 @@ import ru.astrainteractive.aspekt.module.claims.data.krate.ClaimKrate
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.UniqueWorldKey
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
-import ru.astrainteractive.klibs.kstorage.util.KrateExt.update
+import ru.astrainteractive.klibs.kstorage.util.update
 import java.io.File
 import java.util.UUID
 
@@ -40,7 +40,7 @@ internal class ClaimsRepositoryImpl(
                     stringFormat = stringFormat,
                     ownerUUID = UUID.fromString(file.nameWithoutExtension)
                 )
-                krate.loadAndGet()
+                krate.getValue()
                 krate
             }
         }
@@ -56,12 +56,12 @@ internal class ClaimsRepositoryImpl(
             }
         }
         return krates
-            .mapNotNull { it.firstOrNull { it.cachedValue.ownerUUID == uuid } }
+            .mapNotNull { it.firstOrNull { it.cachedStateFlow.value.ownerUUID == uuid } }
             .first()
     }
 
     override fun findKrate(uuid: UUID): ClaimKrate? {
-        return krates.value.firstOrNull { it.cachedValue.ownerUUID == uuid }
+        return krates.value.firstOrNull { it.cachedStateFlow.value.ownerUUID == uuid }
     }
 
     override val allKrates: List<ClaimKrate>

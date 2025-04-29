@@ -42,7 +42,7 @@ internal fun RegisterCommandsEvent.homes(
         stringArgument("home_name") {
             hints { ctx ->
                 val player = ctx.source.player ?: return@hints emptyList()
-                homeKrateProvider.get(player.uuid).cachedValue.map(PlayerHome::name)
+                homeKrateProvider.get(player.uuid).cachedStateFlow.value.map(PlayerHome::name)
             }
             runs { ctx ->
                 val player = ctx.source.player ?: return@runs
@@ -61,7 +61,7 @@ internal fun RegisterCommandsEvent.homes(
         stringArgument("home_name") {
             hints { ctx ->
                 val player = ctx.source.player ?: return@hints emptyList()
-                homeKrateProvider.get(player.uuid).cachedValue.map(PlayerHome::name)
+                homeKrateProvider.get(player.uuid).cachedStateFlow.value.map(PlayerHome::name)
             }
             runs { ctx ->
                 val player = ctx.source.player ?: return@runs

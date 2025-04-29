@@ -25,13 +25,13 @@ import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 
 class ForgeAuthEvent(
     private val authorizedApi: AuthorizedApi,
-    private val kyoriKrate: Krate<KyoriComponentSerializer>,
-    translationKrate: Krate<AuthTranslation>
+    private val kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    translationKrate: CachedKrate<AuthTranslation>
 ) {
     val translation by translationKrate
     private val scope = CoroutineScope(SupervisorJob() + ForgeMainDispatcher) // todo

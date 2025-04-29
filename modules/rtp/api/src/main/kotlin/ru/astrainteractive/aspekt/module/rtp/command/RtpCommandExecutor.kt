@@ -9,7 +9,7 @@ import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
@@ -17,8 +17,8 @@ class RtpCommandExecutor(
     private val scope: CoroutineScope,
     private val safeLocationProvider: SafeLocationProvider,
     private val dispatchers: KotlinDispatchers,
-    translationKrate: Krate<PluginTranslation>,
-    private val kyoriKrate: Krate<KyoriComponentSerializer>
+    translationKrate: CachedKrate<PluginTranslation>,
+    private val kyoriKrate: CachedKrate<KyoriComponentSerializer>
 ) : CommandExecutor<RtpCommand> {
     private val translation by translationKrate
     private val kyori by kyoriKrate

@@ -17,7 +17,7 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 import kotlin.random.Random
 
@@ -25,9 +25,9 @@ import kotlin.random.Random
 internal class ChatGameCommand(
     private val plugin: JavaPlugin,
     private val chatGameStore: ChatGameStore,
-    kyoriComponentSerializerProvider: Krate<KyoriComponentSerializer>,
-    translationProvider: Krate<PluginTranslation>,
-    chatGameConfigProvider: Krate<ChatGameConfig>,
+    kyoriComponentSerializerProvider: CachedKrate<KyoriComponentSerializer>,
+    translationProvider: CachedKrate<PluginTranslation>,
+    chatGameConfigProvider: CachedKrate<ChatGameConfig>,
     private val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory,
     private val scope: CoroutineScope
 ) : Logger by JUtiltLogger("ChatGameCommand") {

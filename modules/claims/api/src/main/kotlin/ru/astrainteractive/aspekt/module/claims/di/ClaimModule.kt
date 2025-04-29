@@ -7,14 +7,14 @@ import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepositoryImpl
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import java.io.File
 
 class ClaimModule(
     stringFormat: StringFormat,
     dataFolder: File,
     scope: CoroutineScope,
-    translationKrate: Krate<PluginTranslation>
+    translationKrate: CachedKrate<PluginTranslation>
 ) {
     val claimsRepository: ClaimsRepository = ClaimsRepositoryImpl(
         folder = dataFolder

@@ -31,13 +31,13 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 
 class ForgeClaimEvent(
     private val claimsRepository: ClaimsRepository,
-    translationKrate: Krate<PluginTranslation>,
-    kyoriKrate: Krate<KyoriComponentSerializer>
+    translationKrate: CachedKrate<PluginTranslation>,
+    kyoriKrate: CachedKrate<KyoriComponentSerializer>
 ) : Logger by JUtiltLogger("AspeKt-ForgeClaimEvent") {
     private val translation by translationKrate
     private val kyori by kyoriKrate

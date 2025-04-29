@@ -17,8 +17,10 @@ import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import ru.astrainteractive.astralibs.util.fileConfigKrate
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
+import ru.astrainteractive.klibs.kstorage.util.asCachedKrate
+import ru.astrainteractive.klibs.kstorage.util.asCachedMutableKrate
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import java.io.File
 
@@ -29,11 +31,11 @@ interface CoreModule {
     val dispatchers: KotlinDispatchers
 
     val scope: CoroutineScope
-    val pluginConfig: Krate<PluginConfiguration>
-    val translation: Krate<PluginTranslation>
+    val pluginConfig: CachedKrate<PluginConfiguration>
+    val translation: CachedKrate<PluginTranslation>
     val yamlFormat: StringFormat
 
-    val kyoriComponentSerializer: Krate<KyoriComponentSerializer>
+    val kyoriComponentSerializer: CachedKrate<KyoriComponentSerializer>
 
     val jsonStringFormat: StringFormat
 
@@ -53,23 +55,22 @@ interface CoreModule {
             ),
         )
 
-        override val pluginConfig = fileConfigKrate(
+        override val pluginConfig = ConfigKrateFactory.fileConfigKrate(
             file = dataFolder.resolve("config.yml"),
             stringFormat = yamlFormat,
             factory = ::PluginConfiguration
-        )
+        ).asCachedMutableKrate()
 
-        override val translation = ConfigKrateFactory.create(
-            fileNameWithoutExtension = "translations",
+        override val translation = ConfigKrateFactory.fileConfigKrate(
+            file = dataFolder.resolve("translations.yml"),
             stringFormat = yamlFormat,
-            dataFolder = dataFolder,
             factory = ::PluginTranslation
-        )
+        ).asCachedMutableKrate()
 
         override val kyoriComponentSerializer = DefaultMutableKrate<KyoriComponentSerializer>(
             loader = { null },
             factory = { KyoriComponentSerializer.Legacy }
-        )
+        ).asCachedKrate()
 
         override val jsonStringFormat: StringFormat = Json {
             isLenient = true
@@ -80,8 +81,8 @@ interface CoreModule {
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onEnable = {},
             onReload = {
-                pluginConfig.loadAndGet()
-                translation.loadAndGet()
+                pluginConfig.getValue()
+                translation.getValue()
             },
             onDisable = {
                 scope.cancel()
