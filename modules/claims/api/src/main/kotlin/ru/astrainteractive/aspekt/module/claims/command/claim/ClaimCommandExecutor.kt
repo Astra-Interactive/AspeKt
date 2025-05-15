@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.claims.command.claim
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import ru.astrainteractive.aspekt.minecraft.asAudience
+import ru.astrainteractive.aspekt.minecraft.MinecraftNativeBridge
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.data.claim
 import ru.astrainteractive.aspekt.module.claims.data.map
@@ -26,8 +26,9 @@ class ClaimCommandExecutor(
     translationKrate: CachedKrate<PluginTranslation>,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val claimsRepository: ClaimsRepository,
-    private val claimErrorMapper: ClaimErrorMapper
-) : CommandExecutor<Claimommand.Model> {
+    private val claimErrorMapper: ClaimErrorMapper,
+    minecraftNativeBridge: MinecraftNativeBridge
+) : CommandExecutor<Claimommand.Model>, MinecraftNativeBridge by minecraftNativeBridge {
     private val translation by translationKrate
     private val kyori by kyoriKrate
 

@@ -2,8 +2,7 @@ package ru.astrainteractive.aspekt.module.jail.command
 
 import kotlinx.coroutines.CoroutineScope
 import org.bukkit.plugin.java.JavaPlugin
-import ru.astrainteractive.aspekt.module.jail.command.jail.jail
-import ru.astrainteractive.aspekt.module.jail.command.jail.tabcomplete.jailTabCompleter
+import ru.astrainteractive.aspekt.module.jail.command.jail.jailCommand
 import ru.astrainteractive.aspekt.module.jail.controller.JailController
 import ru.astrainteractive.aspekt.module.jail.data.CachedJailApi
 import ru.astrainteractive.aspekt.module.jail.data.JailApi
@@ -24,7 +23,6 @@ internal class JailCommandManager(
     val jailController: JailController
 ) : Logger by JUtiltLogger("AspeKt-JailCommandManager") {
     fun register() {
-        jail()
-        jailTabCompleter()
+        jailCommand()
     }
 }

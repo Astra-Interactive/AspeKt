@@ -2,8 +2,7 @@ package ru.astrainteractive.aspekt.module.sethome.command
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import ru.astrainteractive.aspekt.minecraft.asAudience
-import ru.astrainteractive.aspekt.minecraft.asTeleportable
+import ru.astrainteractive.aspekt.minecraft.MinecraftNativeBridge
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
@@ -16,8 +15,9 @@ class HomeCommandExecutor(
     private val homeKrateProvider: HomeKrateProvider,
     private val scope: CoroutineScope,
     private val translationKrate: CachedKrate<PluginTranslation>,
-    private val kyoriKrate: CachedKrate<KyoriComponentSerializer>
-) : CommandExecutor<HomeCommand> {
+    private val kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    minecraftNativeBridge: MinecraftNativeBridge
+) : CommandExecutor<HomeCommand>, MinecraftNativeBridge by minecraftNativeBridge {
     private val translation by translationKrate
     override fun execute(input: HomeCommand) {
         when (input) {

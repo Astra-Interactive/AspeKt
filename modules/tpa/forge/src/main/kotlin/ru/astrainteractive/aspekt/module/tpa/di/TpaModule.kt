@@ -19,7 +19,8 @@ class TpaModule(
         translationKrate = coreModule.translation,
         tpaApi = TpaApi(),
         scope = coreModule.scope,
-        kyoriKrate = coreModule.kyoriComponentSerializer
+        kyoriKrate = coreModule.kyoriComponentSerializer,
+        minecraftNativeBridge = coreModule.minecraftNativeBridge
     )
 
     val lifecycle = Lifecycle.Lambda(

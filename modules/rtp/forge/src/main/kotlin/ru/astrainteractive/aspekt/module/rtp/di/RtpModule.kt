@@ -26,7 +26,8 @@ class RtpModule(
                             safeLocationProvider = ForgeSafeLocationProvider(),
                             dispatchers = coreModule.dispatchers,
                             translationKrate = coreModule.translation,
-                            kyoriKrate = coreModule.kyoriComponentSerializer
+                            kyoriKrate = coreModule.kyoriComponentSerializer,
+                            minecraftNativeBridge = coreModule.minecraftNativeBridge
                         )
                     )
             }

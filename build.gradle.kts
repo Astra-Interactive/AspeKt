@@ -29,4 +29,9 @@ subprojects.forEach {
     it.plugins.withId("org.jetbrains.kotlin.jvm") {
         it.apply(plugin = "ru.astrainteractive.gradleplugin.java.core")
     }
+    it.tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        compilerOptions.freeCompilerArgs = listOf(
+            "-Xcontext-parameters",
+        )
+    }
 }

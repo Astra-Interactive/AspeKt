@@ -2,9 +2,7 @@ package ru.astrainteractive.aspekt.module.tpa.command
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import ru.astrainteractive.aspekt.minecraft.asAudience
-import ru.astrainteractive.aspekt.minecraft.asLocatable
-import ru.astrainteractive.aspekt.minecraft.asTeleportable
+import ru.astrainteractive.aspekt.minecraft.MinecraftNativeBridge
 import ru.astrainteractive.aspekt.module.tpa.api.TpaApi
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
@@ -16,8 +14,9 @@ class TpaCommandExecutor(
     translationKrate: CachedKrate<PluginTranslation>,
     private val tpaApi: TpaApi,
     private val scope: CoroutineScope,
-    private val kyoriKrate: CachedKrate<KyoriComponentSerializer>
-) : CommandExecutor<TpaCommand> {
+    private val kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    minecraftNativeBridge: MinecraftNativeBridge
+) : CommandExecutor<TpaCommand>, MinecraftNativeBridge by minecraftNativeBridge {
     private val translation by translationKrate
     private val kyori by kyoriKrate
 

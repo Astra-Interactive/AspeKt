@@ -3,8 +3,7 @@ package ru.astrainteractive.aspekt.module.rtp.command
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.astrainteractive.aspekt.minecraft.asAudience
-import ru.astrainteractive.aspekt.minecraft.asTeleportable
+import ru.astrainteractive.aspekt.minecraft.MinecraftNativeBridge
 import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
@@ -18,8 +17,9 @@ class RtpCommandExecutor(
     private val safeLocationProvider: SafeLocationProvider,
     private val dispatchers: KotlinDispatchers,
     translationKrate: CachedKrate<PluginTranslation>,
-    private val kyoriKrate: CachedKrate<KyoriComponentSerializer>
-) : CommandExecutor<RtpCommand> {
+    private val kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    minecraftNativeBridge: MinecraftNativeBridge
+) : CommandExecutor<RtpCommand>, MinecraftNativeBridge by minecraftNativeBridge {
     private val translation by translationKrate
     private val kyori by kyoriKrate
     override fun execute(input: RtpCommand) {

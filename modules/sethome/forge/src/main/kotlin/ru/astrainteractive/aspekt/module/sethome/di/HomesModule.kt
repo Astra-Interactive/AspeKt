@@ -27,7 +27,8 @@ class HomesModule(
         homeKrateProvider = homeKrateProvider,
         scope = coreModule.scope,
         translationKrate = coreModule.translation,
-        kyoriKrate = coreModule.kyoriComponentSerializer
+        kyoriKrate = coreModule.kyoriComponentSerializer,
+        minecraftNativeBridge = coreModule.minecraftNativeBridge
     )
 
     val lifecycle = Lifecycle.Lambda(

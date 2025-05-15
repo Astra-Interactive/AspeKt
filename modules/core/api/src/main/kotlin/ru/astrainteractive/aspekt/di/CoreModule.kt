@@ -8,6 +8,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
 import ru.astrainteractive.aspekt.di.factory.ConfigKrateFactory
+import ru.astrainteractive.aspekt.minecraft.MinecraftNativeBridge
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.CoroutineFeature
@@ -30,6 +31,8 @@ interface CoreModule {
 
     val dispatchers: KotlinDispatchers
 
+    val minecraftNativeBridge: MinecraftNativeBridge
+
     val scope: CoroutineScope
     val pluginConfig: CachedKrate<PluginConfiguration>
     val translation: CachedKrate<PluginTranslation>
@@ -42,6 +45,7 @@ interface CoreModule {
     class Default(
         override val dataFolder: File,
         override val dispatchers: KotlinDispatchers,
+        override val minecraftNativeBridge: MinecraftNativeBridge
     ) : CoreModule, Logger by JUtiltLogger("CoreModule") {
         // Core
 
