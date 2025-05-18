@@ -5,6 +5,7 @@ import net.minecraftforge.event.RegisterCommandsEvent
 import ru.astrainteractive.aspekt.core.forge.command.util.command
 import ru.astrainteractive.aspekt.core.forge.command.util.runs
 import ru.astrainteractive.aspekt.core.forge.util.ForgeUtil
+import ru.astrainteractive.aspekt.core.forge.util.asOnlineMinecraftPlayer
 import ru.astrainteractive.aspekt.core.forge.util.getNextTickTime
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
@@ -15,7 +16,7 @@ fun RegisterCommandsEvent.rtp(rtpCommandExecutor: RtpCommandExecutor) {
         runs { ctx ->
             val player = ctx.source.player?.tryCast<ServerPlayer>() ?: return@runs
             RtpCommand(
-                player = OnlineMinecraftPlayer(player.uuid, player.name.toPlain()),
+                player = player.asOnlineMinecraftPlayer(),
                 nextTickTime = ForgeUtil.getNextTickTime()
             ).run(rtpCommandExecutor::execute)
         }

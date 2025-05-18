@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.module.claims.command.claim
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.minecraft.MinecraftNativeBridge
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.data.claim
@@ -28,14 +29,15 @@ class ClaimCommandExecutor(
     private val claimsRepository: ClaimsRepository,
     private val claimErrorMapper: ClaimErrorMapper,
     minecraftNativeBridge: MinecraftNativeBridge
-) : CommandExecutor<Claimommand.Model>, MinecraftNativeBridge by minecraftNativeBridge {
+) : CommandExecutor<Claimommand.Model>,
+    MinecraftNativeBridge by minecraftNativeBridge,
+    KyoriComponentSerializer by kyoriKrate.asUnboxed() {
     private val translation by translationKrate
-    private val kyori by kyoriKrate
 
     private suspend fun showMap(
         claimPlayer: ClaimPlayer,
         chunk: ClaimChunk
-    ) = with(kyori) {
+    ) {
         val result = runCatching {
             claimsRepository.map(5, chunk)
         }
@@ -62,7 +64,7 @@ class ClaimCommandExecutor(
         }
     }
 
-    private suspend fun setFlag(input: Claimommand.Model.SetFlag) = with(kyori) {
+    private suspend fun setFlag(input: Claimommand.Model.SetFlag) {
         val result = claimsRepository.setFlag(
             flag = input.flag,
             value = input.value,
@@ -84,7 +86,7 @@ class ClaimCommandExecutor(
         }
     }
 
-    private suspend fun claim(input: Claimommand.Model.Claim) = with(kyori) {
+    private suspend fun claim(input: Claimommand.Model.Claim) {
         val result = claimsRepository.claim(input.claimPlayer.uuid, input.chunk)
         result.onSuccess {
             input.claimPlayer
@@ -101,7 +103,7 @@ class ClaimCommandExecutor(
         }
     }
 
-    private suspend fun unclaim(input: Claimommand.Model.UnClaim) = with(kyori) {
+    private suspend fun unclaim(input: Claimommand.Model.UnClaim) {
         val result = claimsRepository.deleteChunk(input.claimPlayer.uuid, input.chunk.uniqueWorldKey)
         result.onSuccess {
             input.claimPlayer
@@ -118,7 +120,7 @@ class ClaimCommandExecutor(
         }
     }
 
-    private suspend fun addMember(input: Claimommand.Model.AddMember) = with(kyori) {
+    private suspend fun addMember(input: Claimommand.Model.AddMember) {
         val krate = claimsRepository.requireKrate(input.owner.uuid)
         if (input.member in krate.cachedStateFlow.value.members) {
             input.owner
@@ -136,7 +138,7 @@ class ClaimCommandExecutor(
             .sendMessage(translation.claim.memberAdded.component)
     }
 
-    private suspend fun removeMember(input: Claimommand.Model.RemoveMember) = with(kyori) {
+    private suspend fun removeMember(input: Claimommand.Model.RemoveMember) {
         val krate = claimsRepository.requireKrate(input.owner.uuid)
         if (input.member !in krate.cachedStateFlow.value.members) {
             input.owner

@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import net.minecraft.server.level.ServerPlayer
 import net.minecraftforge.event.RegisterCommandsEvent
+import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.core.forge.command.util.argument
 import ru.astrainteractive.aspekt.core.forge.command.util.command
 import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
@@ -28,10 +29,10 @@ fun RegisterCommandsEvent.loginCommand(
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<AuthTranslation>
 ) {
-    command("login") {
-        argument(alias = "password", com.mojang.brigadier.arguments.StringArgumentType.string()) {
-            runs { ctx ->
-                with(kyoriKrate.cachedValue) {
+    with(kyoriKrate.asUnboxed()) {
+        command("login") {
+            argument(alias = "password", com.mojang.brigadier.arguments.StringArgumentType.string()) {
+                runs { ctx ->
                     val translation = translationKrate.cachedValue
                     val player = ctx.source.entity as? ServerPlayer
                     scope.launch {
@@ -69,6 +70,6 @@ fun RegisterCommandsEvent.loginCommand(
                     }
                 }
             }
-        }
-    }.run(dispatcher::register)
+        }.run(dispatcher::register)
+    }
 }

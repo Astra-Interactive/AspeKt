@@ -15,6 +15,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent
 import net.minecraftforge.event.level.BlockEvent
 import net.minecraftforge.eventbus.api.EventPriority
+import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
 import ru.astrainteractive.aspekt.core.forge.event.flowEvent
 import ru.astrainteractive.aspekt.core.forge.event.playerMoveFlowEvent
@@ -32,7 +33,7 @@ class ForgeAuthEvent(
     private val authorizedApi: AuthorizedApi,
     private val kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<AuthTranslation>
-) {
+) : KyoriComponentSerializer by kyoriKrate.asUnboxed() {
     val translation by translationKrate
     private val scope = CoroutineScope(SupervisorJob() + ForgeMainDispatcher) // todo
 
@@ -52,22 +53,20 @@ class ForgeAuthEvent(
         .launchIn(scope)
 
     private fun processPlayerEvent(player: Player) = scope.launch {
-        with(kyoriKrate.cachedValue) {
-            when (authorizedApi.getAuthState(player.uuid)) {
-                AuthorizedApi.AuthState.Authorized -> Unit
+        when (authorizedApi.getAuthState(player.uuid)) {
+            AuthorizedApi.AuthState.Authorized -> Unit
 
-                AuthorizedApi.AuthState.Pending,
-                AuthorizedApi.AuthState.NotAuthorized -> {
-                    player
-                        .asAudience()
-                        .sendMessage(translation.notAuthorized.component)
-                }
+            AuthorizedApi.AuthState.Pending,
+            AuthorizedApi.AuthState.NotAuthorized -> {
+                player
+                    .asAudience()
+                    .sendMessage(translation.notAuthorized.component)
+            }
 
-                AuthorizedApi.AuthState.NotRegistered -> {
-                    player
-                        .asAudience()
-                        .sendMessage(translation.notRegistered.component)
-                }
+            AuthorizedApi.AuthState.NotRegistered -> {
+                player
+                    .asAudience()
+                    .sendMessage(translation.notRegistered.component)
             }
         }
     }

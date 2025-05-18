@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.module.economy.command.ekon
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
+import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.module.economy.command.ekon.argument.CurrencyArgument
 import ru.astrainteractive.aspekt.module.economy.command.ekon.argument.OfflinePlayerArgument
 import ru.astrainteractive.aspekt.module.economy.database.dao.CachedDao
@@ -18,15 +19,16 @@ import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.util.StringListExt.withEntry
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 
 internal class EkonCommandRegistry(
     private val plugin: JavaPlugin,
-    private val getKyori: () -> KyoriComponentSerializer,
+    private val getKyori: CachedKrate<KyoriComponentSerializer>,
     private val getTranslation: () -> PluginTranslation,
     private val dao: EconomyDao,
     private val cachedDao: CachedDao
-) : Logger by JUtiltLogger("EkonCommandRegistry") {
-    private val kyori get() = getKyori.invoke()
+) : Logger by JUtiltLogger("EkonCommandRegistry"),
+    KyoriComponentSerializer by getKyori.asUnboxed() {
     private val translation get() = getTranslation.invoke()
 
     @Suppress("CyclomaticComplexMethod")
@@ -94,7 +96,7 @@ internal class EkonCommandRegistry(
             ),
             errorHandler = { context, throwable ->
                 when (throwable) {
-                    is DefaultCommandException -> with(kyori) {
+                    is DefaultCommandException -> {
                         when (throwable) {
                             is ArgumentTypeException -> {
                                 context.sender.sendMessage(translation.general.wrongUsage.component)
@@ -114,15 +116,15 @@ internal class EkonCommandRegistry(
                         }
                     }
 
-                    is CurrencyArgument.CurrencyNotFoundException -> with(kyori) {
+                    is CurrencyArgument.CurrencyNotFoundException -> {
                         context.sender.sendMessage(translation.economy.currencyNotFound.component)
                     }
 
-                    is OfflinePlayerArgument.PlayerNotFound -> with(kyori) {
+                    is OfflinePlayerArgument.PlayerNotFound -> {
                         context.sender.sendMessage(translation.economy.playerNotFound.component)
                     }
 
-                    else -> with(kyori) {
+                    else -> {
                         error { "#errorHandler handler for ${throwable::class} not found" }
                         context.sender.sendMessage(translation.general.noPermission.component)
                     }

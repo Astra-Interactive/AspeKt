@@ -5,5 +5,5 @@ import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
 
 fun ClaimPlayer.toOnlineMinecraftPlayer() = OnlineMinecraftPlayer(
     uuid = uuid,
-    name = username
+    name = username,
 )

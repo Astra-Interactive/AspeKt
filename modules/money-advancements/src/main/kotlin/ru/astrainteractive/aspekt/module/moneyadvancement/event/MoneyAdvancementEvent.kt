@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
+import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -23,9 +24,9 @@ class MoneyAdvancementEvent(
     translationProvider: CachedKrate<PluginTranslation>
 ) : EventListener,
     Logger by JUtiltLogger("MoneyAdvancementEvent"),
-    CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO) {
+    CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO),
+    KyoriComponentSerializer by kyoriComponentSerializerProvider.asUnboxed() {
     private val configuration by configurationProvider
-    private val kyoriComponentSerializer by kyoriComponentSerializerProvider
     private val translation by translationProvider
 
     @EventHandler
@@ -40,19 +41,19 @@ class MoneyAdvancementEvent(
         val frame = e.advancement.display?.frame() ?: return
         info { "#onAdvancement ${e.advancement.key} ${e.advancement.display?.title()}" }
         when (frame) {
-            AdvancementDisplay.Frame.CHALLENGE -> with(kyoriComponentSerializer) {
+            AdvancementDisplay.Frame.CHALLENGE -> {
                 val amount = configuration.advancementMoney.challenge.toDouble()
                 launch { economy.addMoney(e.player.uniqueId, amount) }
                 e.player.sendMessage(translation.moneyAdvancement.challengeCompleted(amount).component)
             }
 
-            AdvancementDisplay.Frame.GOAL -> with(kyoriComponentSerializer) {
+            AdvancementDisplay.Frame.GOAL -> {
                 val amount = configuration.advancementMoney.goal.toDouble()
                 launch { economy.addMoney(e.player.uniqueId, amount) }
                 e.player.sendMessage(translation.moneyAdvancement.goalCompleted(amount).component)
             }
 
-            AdvancementDisplay.Frame.TASK -> with(kyoriComponentSerializer) {
+            AdvancementDisplay.Frame.TASK -> {
                 val amount = configuration.advancementMoney.task.toDouble()
                 launch { economy.addMoney(e.player.uniqueId, amount) }
                 e.player.sendMessage(translation.moneyAdvancement.taskCompleted(amount).component)

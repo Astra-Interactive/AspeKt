@@ -10,18 +10,12 @@ import ru.astrainteractive.aspekt.core.forge.command.util.hints
 import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
 import ru.astrainteractive.aspekt.core.forge.command.util.runs
 import ru.astrainteractive.aspekt.core.forge.util.ForgeUtil
+import ru.astrainteractive.aspekt.core.forge.util.asOnlineMinecraftPlayer
 import ru.astrainteractive.aspekt.core.forge.util.getOnlinePlayer
 import ru.astrainteractive.aspekt.core.forge.util.getOnlinePlayers
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
 import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
-
-private fun Player.toMinecraftPlayer(): OnlineMinecraftPlayer {
-    return OnlineMinecraftPlayer(
-        uuid = uuid,
-        name = name.toPlain()
-    )
-}
 
 @Suppress("LongMethod")
 internal fun RegisterCommandsEvent.tpa(
@@ -35,10 +29,10 @@ internal fun RegisterCommandsEvent.tpa(
                 val targetPlayerName = ctx.requireArgument("player", StringArgumentType)
                 TpaCommand.TpaTo(
                     executorPlayer = ctx.source.player
-                        ?.toMinecraftPlayer()
+                        ?.asOnlineMinecraftPlayer()
                         ?: return@runs,
                     targetPlayer = ForgeUtil.getOnlinePlayer(targetPlayerName)
-                        ?.toMinecraftPlayer()
+                        ?.asOnlineMinecraftPlayer()
                         ?: return@runs
                 ).run(tpaCommandExecutor::execute)
             }
@@ -51,10 +45,10 @@ internal fun RegisterCommandsEvent.tpa(
                 val targetPlayerName = ctx.requireArgument("player", StringArgumentType)
                 TpaCommand.TpaHere(
                     executorPlayer = ctx.source.player
-                        ?.toMinecraftPlayer()
+                        ?.asOnlineMinecraftPlayer()
                         ?: return@runs,
                     targetPlayer = ForgeUtil.getOnlinePlayer(targetPlayerName)
-                        ?.toMinecraftPlayer()
+                        ?.asOnlineMinecraftPlayer()
                         ?: return@runs
                 ).run(tpaCommandExecutor::execute)
             }
@@ -65,7 +59,7 @@ internal fun RegisterCommandsEvent.tpa(
         runs { ctx ->
             TpaCommand.TpaCancel(
                 executorPlayer = ctx.source.player
-                    ?.toMinecraftPlayer()
+                    ?.asOnlineMinecraftPlayer()
                     ?: return@runs,
             ).run(tpaCommandExecutor::execute)
         }
@@ -75,7 +69,7 @@ internal fun RegisterCommandsEvent.tpa(
         runs { ctx ->
             TpaCommand.TpaAccept(
                 executorPlayer = ctx.source.player
-                    ?.toMinecraftPlayer()
+                    ?.asOnlineMinecraftPlayer()
                     ?: return@runs,
             ).run(tpaCommandExecutor::execute)
         }
@@ -85,7 +79,7 @@ internal fun RegisterCommandsEvent.tpa(
         runs { ctx ->
             TpaCommand.TpaDeny(
                 executorPlayer = ctx.source.player
-                    ?.toMinecraftPlayer()
+                    ?.asOnlineMinecraftPlayer()
                     ?: return@runs,
             ).run(tpaCommandExecutor::execute)
         }

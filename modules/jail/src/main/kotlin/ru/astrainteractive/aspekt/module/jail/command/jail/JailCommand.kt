@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.module.jail.command.jail
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.command.command
 import ru.astrainteractive.aspekt.command.hints
 import ru.astrainteractive.aspekt.command.literal
@@ -24,33 +25,31 @@ import ru.astrainteractive.astralibs.string.StringDesc
 import java.time.Instant
 
 internal fun JailCommandManager.jailCommand() {
-    command("jail") {
-        literal("list") {
-            runs { ctx ->
-                ctx.requirePermission(PluginPermission.JAIL_LIST)
-                val translation = translationKrate.cachedValue
-                scope.launch {
-                    with(kyoriKrate.cachedValue) {
+    with(kyoriKrate.asUnboxed()) {
+        command("jail") {
+            literal("list") {
+                runs { ctx ->
+                    ctx.requirePermission(PluginPermission.JAIL_LIST)
+                    val translation = translationKrate.cachedValue
+                    scope.launch {
                         val jails = jailApi.getJails().getOrNull().orEmpty().map(Jail::name)
                         val jailsString = jails.joinToString()
                         ctx.source.sender.sendMessage(translation.jails.jailsList(jailsString).component)
                     }
                 }
             }
-        }
-        literal("create") {
-            stringArgument("jail") {
-                runs { ctx ->
-                    ctx.requirePermission(PluginPermission.JAIL_CREATE)
-                    val player = ctx.source.sender as? Player
-                    player ?: throw StringDescException(StringDesc.Plain("Executor should be player"))
-                    val jail = Jail(
-                        name = ctx.requireArgument("jail", StringArgumentType),
-                        location = player.location.toJailLocation()
-                    )
-                    val translation = translationKrate.cachedValue
-                    scope.launch {
-                        with(kyoriKrate.cachedValue) {
+            literal("create") {
+                stringArgument("jail") {
+                    runs { ctx ->
+                        ctx.requirePermission(PluginPermission.JAIL_CREATE)
+                        val player = ctx.source.sender as? Player
+                        player ?: throw StringDescException(StringDesc.Plain("Executor should be player"))
+                        val jail = Jail(
+                            name = ctx.requireArgument("jail", StringArgumentType),
+                            location = player.location.toJailLocation()
+                        )
+                        val translation = translationKrate.cachedValue
+                        scope.launch {
                             jailApi.addJail(jail)
                                 .onFailure {
                                     error(it) { "#JailArg.CREATE" }
@@ -67,16 +66,14 @@ internal fun JailCommandManager.jailCommand() {
                     }
                 }
             }
-        }
-        literal("delete") {
-            stringArgument("jail") {
-                hints(cachedJailApi.getJails().map(Jail::name))
-                runs { ctx ->
-                    ctx.requirePermission(PluginPermission.JAIL_DELETE)
-                    val translation = translationKrate.cachedValue
-                    scope.launch {
-                        val jailName = ctx.requireArgument("jail", StringArgumentType)
-                        with(kyoriKrate.cachedValue) {
+            literal("delete") {
+                stringArgument("jail") {
+                    hints(cachedJailApi.getJails().map(Jail::name))
+                    runs { ctx ->
+                        ctx.requirePermission(PluginPermission.JAIL_DELETE)
+                        val translation = translationKrate.cachedValue
+                        scope.launch {
+                            val jailName = ctx.requireArgument("jail", StringArgumentType)
                             if (jailApi.getJailInmates(jailName).getOrNull().orEmpty().isNotEmpty()) {
                                 ctx.source.sender.sendMessage(translation.jails.jailHasInmates(jailName).component)
                             } else {
@@ -96,15 +93,13 @@ internal fun JailCommandManager.jailCommand() {
                     }
                 }
             }
-        }
-        literal("free") {
-            stringArgument("player") {
-                hints(Bukkit.getOnlinePlayers().map(Player::getName))
-                runs { ctx ->
-                    ctx.requirePermission(PluginPermission.JAIL_FREE)
-                    val translation = translationKrate.cachedValue
-                    scope.launch {
-                        with(kyoriKrate.cachedValue) {
+            literal("free") {
+                stringArgument("player") {
+                    hints(Bukkit.getOnlinePlayers().map(Player::getName))
+                    runs { ctx ->
+                        ctx.requirePermission(PluginPermission.JAIL_FREE)
+                        val translation = translationKrate.cachedValue
+                        scope.launch {
                             val offlinePlayerToFree = ctx.requireArgument("player", OfflinePlayerArgument)
                             val inmate = jailApi.getInmate(offlinePlayerToFree.uniqueId.toString())
                                 .getOrNull()
@@ -130,23 +125,21 @@ internal fun JailCommandManager.jailCommand() {
                     }
                 }
             }
-        }
-        literal("inmate") {
-            stringArgument("jail") {
-                hints(cachedJailApi.getJails().map(Jail::name))
-                stringArgument("player") {
-                    hints(Bukkit.getOnlinePlayers().map(Player::getName))
-                    stringArgument("time") {
-                        hints(listOf("TIME:1s,1m,1h10m"))
-                        runs { ctx ->
-                            ctx.requirePermission(PluginPermission.JAIL_INMATE)
-                            val translation = translationKrate.cachedValue
-                            scope.launch {
-                                val jailName = ctx.requireArgument("jail", StringArgumentType)
-                                val jailOfflinePlayer = ctx.requireArgument("player", OfflinePlayerArgument)
-                                val jailDuration = ctx.requireArgument("time", DurationArgumentType)
+            literal("inmate") {
+                stringArgument("jail") {
+                    hints(cachedJailApi.getJails().map(Jail::name))
+                    stringArgument("player") {
+                        hints(Bukkit.getOnlinePlayers().map(Player::getName))
+                        stringArgument("time") {
+                            hints(listOf("TIME:1s,1m,1h10m"))
+                            runs { ctx ->
+                                ctx.requirePermission(PluginPermission.JAIL_INMATE)
+                                val translation = translationKrate.cachedValue
+                                scope.launch {
+                                    val jailName = ctx.requireArgument("jail", StringArgumentType)
+                                    val jailOfflinePlayer = ctx.requireArgument("player", OfflinePlayerArgument)
+                                    val jailDuration = ctx.requireArgument("time", DurationArgumentType)
 
-                                with(kyoriKrate.cachedValue) {
                                     val inmate = JailInmate(
                                         uuid = jailOfflinePlayer.uniqueId.toString(),
                                         jailName = jailName,

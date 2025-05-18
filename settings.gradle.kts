@@ -13,6 +13,7 @@ pluginManagement {
 buildscript {
     repositories {
         maven("https://plugins.gradle.org/m2/")
+        maven("https://libraries.minecraft.net")
     }
 }
 

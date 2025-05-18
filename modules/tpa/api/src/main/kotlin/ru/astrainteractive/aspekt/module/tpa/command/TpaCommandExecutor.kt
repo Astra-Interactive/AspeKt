@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.module.tpa.command
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.minecraft.MinecraftNativeBridge
 import ru.astrainteractive.aspekt.module.tpa.api.TpaApi
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -14,13 +15,14 @@ class TpaCommandExecutor(
     translationKrate: CachedKrate<PluginTranslation>,
     private val tpaApi: TpaApi,
     private val scope: CoroutineScope,
-    private val kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     minecraftNativeBridge: MinecraftNativeBridge
-) : CommandExecutor<TpaCommand>, MinecraftNativeBridge by minecraftNativeBridge {
+) : CommandExecutor<TpaCommand>,
+    MinecraftNativeBridge by minecraftNativeBridge,
+    KyoriComponentSerializer by kyoriKrate.asUnboxed() {
     private val translation by translationKrate
-    private val kyori by kyoriKrate
 
-    private suspend fun tpaCancel(input: TpaCommand.TpaCancel) = with(kyori) {
+    private suspend fun tpaCancel(input: TpaCommand.TpaCancel) {
         if (!tpaApi.isBeingWaited(input.executorPlayer)) {
             input.executorPlayer.asAudience().sendMessage(translation.tpa.youHaveNoPendingTp.component)
             return
@@ -29,7 +31,7 @@ class TpaCommandExecutor(
         input.executorPlayer.asAudience().sendMessage(translation.tpa.requestCancelled.component)
     }
 
-    private suspend fun tpaDeny(input: TpaCommand.TpaDeny) = with(kyori) {
+    private suspend fun tpaDeny(input: TpaCommand.TpaDeny) {
         if (!tpaApi.isBeingWaited(input.executorPlayer)) {
             input.executorPlayer
                 .asAudience()
@@ -46,7 +48,7 @@ class TpaCommandExecutor(
             .sendMessage(translation.tpa.requestCancelled.component)
     }
 
-    private suspend fun tpaHere(input: TpaCommand.TpaHere): Unit = with(kyori) {
+    private suspend fun tpaHere(input: TpaCommand.TpaHere): Unit {
         if (input.executorPlayer.uuid == input.targetPlayer.uuid) {
             input.executorPlayer
                 .asAudience()
@@ -65,7 +67,7 @@ class TpaCommandExecutor(
             .sendMessage(translation.tpa.requestTpaHere(input.executorPlayer.name).component)
     }
 
-    private suspend fun tpaTo(input: TpaCommand.TpaTo): Unit = with(kyori) {
+    private suspend fun tpaTo(input: TpaCommand.TpaTo): Unit {
         if (input.executorPlayer.uuid == input.targetPlayer.uuid) {
             input.executorPlayer
                 .asAudience()
@@ -85,7 +87,7 @@ class TpaCommandExecutor(
             .sendMessage(translation.tpa.requestTpa(input.executorPlayer.name).component)
     }
 
-    private suspend fun tpaAccept(input: TpaCommand.TpaAccept): Unit = with(kyori) {
+    private suspend fun tpaAccept(input: TpaCommand.TpaAccept): Unit {
         if (!tpaApi.isBeingWaited(input.executorPlayer)) {
             input.executorPlayer
                 .asAudience()

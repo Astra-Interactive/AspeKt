@@ -14,6 +14,7 @@ import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 import java.time.Instant
 import kotlin.time.Duration.Companion.seconds
+import ru.astrainteractive.aspekt.asUnboxed
 
 internal class UnJailJob(
     private val scope: CoroutineScope,
@@ -22,11 +23,11 @@ internal class UnJailJob(
     private val jailController: JailController,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<PluginTranslation>
-) : ScheduledJob("AspeKt-UnJail") {
+) : ScheduledJob("AspeKt-UnJail"),
+    KyoriComponentSerializer by kyoriKrate.asUnboxed() {
     override val delayMillis: Long = 10.seconds.inWholeMilliseconds
     override val initialDelayMillis: Long = 0.seconds.inWholeMilliseconds
     override val isEnabled: Boolean = true
-    private val kyori by kyoriKrate
     private val translation by translationKrate
 
     override fun execute() {
@@ -43,9 +44,7 @@ internal class UnJailJob(
                 jailApi.free(inmate.uuid)
                 cachedJailApi.cache(inmate.uuid)
                 jailController.free(inmate)
-                with(kyori) {
-                    inmate.offlinePlayer.sendMessage(translation.jails.youVeBeenFreed.component)
-                }
+                inmate.offlinePlayer.sendMessage(translation.jails.youVeBeenFreed.component)
             }
         }
     }

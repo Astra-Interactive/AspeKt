@@ -9,6 +9,7 @@ import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
 import ru.astrainteractive.aspekt.core.forge.command.util.runs
 import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
 import ru.astrainteractive.aspekt.core.forge.util.asLocatable
+import ru.astrainteractive.aspekt.core.forge.util.asOnlineMinecraftPlayer
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
@@ -25,10 +26,7 @@ internal fun RegisterCommandsEvent.homes(
             runs { ctx ->
                 val player = ctx.source.player ?: return@runs
                 HomeCommand.SetHome(
-                    playerData = OnlineMinecraftPlayer(
-                        uuid = player.uuid,
-                        name = player.name.toPlain()
-                    ),
+                    playerData = player.asOnlineMinecraftPlayer(),
                     playerHome = PlayerHome(
                         location = player.asLocatable().getLocation(),
                         name = ctx.requireArgument("home_name", StringArgumentType)
@@ -47,10 +45,7 @@ internal fun RegisterCommandsEvent.homes(
             runs { ctx ->
                 val player = ctx.source.player ?: return@runs
                 HomeCommand.DelHome(
-                    playerData = OnlineMinecraftPlayer(
-                        uuid = player.uuid,
-                        name = player.name.toPlain()
-                    ),
+                    playerData = player.asOnlineMinecraftPlayer(),
                     homeName = ctx.requireArgument("home_name", StringArgumentType)
                 ).run(homeCommandExecutor::execute)
             }
@@ -66,10 +61,7 @@ internal fun RegisterCommandsEvent.homes(
             runs { ctx ->
                 val player = ctx.source.player ?: return@runs
                 HomeCommand.TpHome(
-                    playerData = OnlineMinecraftPlayer(
-                        uuid = player.uuid,
-                        name = player.name.toPlain()
-                    ),
+                    playerData = player.asOnlineMinecraftPlayer(),
                     homeName = ctx.requireArgument("home_name", StringArgumentType)
                 ).run(homeCommandExecutor::execute)
             }
