@@ -5,7 +5,7 @@ import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
 
 fun CommandManager.maxOnline() = plugin.getCommand("maxonline")?.setExecutor { sender, command, label, args ->
-    if (!sender.toPermissible().hasPermission(PluginPermission.MaxOnline)) return@setExecutor true
+    if (!sender.toPermissible().hasPermission(PluginPermission.MAX_ONLINE)) return@setExecutor true
     val argument = args.getOrNull(0)?.toIntOrNull() ?: Bukkit.getServer().maxPlayers
 
     if (argument < 30) {

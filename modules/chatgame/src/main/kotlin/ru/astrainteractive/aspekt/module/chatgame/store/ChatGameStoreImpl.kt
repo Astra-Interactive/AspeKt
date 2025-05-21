@@ -7,11 +7,11 @@ import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.store.generator.RiddleGenerator
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 
 internal class ChatGameStoreImpl(
-    chatGameConfigProvider: Krate<ChatGameConfig>,
+    chatGameConfigProvider: CachedKrate<ChatGameConfig>,
     private val riddleGenerator: RiddleGenerator
 ) : ChatGameStore, Logger by JUtiltLogger("ChatGameStore") {
     private val chatGameConfig by chatGameConfigProvider

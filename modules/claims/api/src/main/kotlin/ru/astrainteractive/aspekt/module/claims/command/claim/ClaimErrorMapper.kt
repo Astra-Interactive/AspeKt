@@ -7,11 +7,11 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.string.StringDesc
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 
 class ClaimErrorMapper(
-    translationKrate: Krate<PluginTranslation>
+    translationKrate: CachedKrate<PluginTranslation>
 ) : Logger by JUtiltLogger("AspeKt-ClaimErrorMapper") {
     private val translation by translationKrate
     fun toStringDesc(throwable: Throwable): StringDesc.Raw {

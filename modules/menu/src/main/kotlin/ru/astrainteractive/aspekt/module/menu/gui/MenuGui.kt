@@ -12,7 +12,7 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.ItemStack
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
-import ru.astrainteractive.aspekt.plugin.PluginPermission
+import ru.astrainteractive.aspekt.plugin.PluginNamedPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.economy.EconomyFacade
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
@@ -156,7 +156,7 @@ internal class MenuGui(
                 .setItemStack(menuItem.toItemStack())
                 .setIndex(menuItem.index)
                 .setOnClickListener {
-                    val permission = menuItem.permission?.let(PluginPermission::CustomPermission)
+                    val permission = menuItem.permission?.let(::PluginNamedPermission)
 
                     val hasPermission = permission?.let(playerHolder.player.toPermissible()::hasPermission) ?: true
                     if (!hasPermission) {

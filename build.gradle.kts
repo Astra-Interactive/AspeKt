@@ -17,6 +17,7 @@ plugins {
     alias(libs.plugins.klibs.gradle.rootinfo) apply false
     alias(libs.plugins.klibs.minecraft.shadow) apply false
     alias(libs.plugins.klibs.minecraft.resource.processor) apply false
+    alias(libs.plugins.kotlin.kapt) apply false
 }
 
 apply(plugin = "ru.astrainteractive.gradleplugin.dokka.root")
@@ -27,5 +28,10 @@ subprojects.forEach {
     it.apply(plugin = "ru.astrainteractive.gradleplugin.dokka.module")
     it.plugins.withId("org.jetbrains.kotlin.jvm") {
         it.apply(plugin = "ru.astrainteractive.gradleplugin.java.core")
+    }
+    it.tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        compilerOptions.freeCompilerArgs = listOf(
+            "-Xcontext-parameters",
+        )
     }
 }

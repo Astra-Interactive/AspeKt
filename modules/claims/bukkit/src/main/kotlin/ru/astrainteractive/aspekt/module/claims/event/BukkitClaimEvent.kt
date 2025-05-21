@@ -58,7 +58,7 @@ internal class BukkitClaimEvent(
         player: Player?,
         flag: ChunkFlag
     ) where T : Event, T : Cancellable {
-        if (player?.toPermissible()?.hasPermission(PluginPermission.AdminClaim) == true) return
+        if (player?.toPermissible()?.hasPermission(PluginPermission.ADMIN_CLAIM) == true) return
         if (e.isCancelled) return
         val sharedEvent = BukkitSharedCancellableEvent(e)
         debounce.debounceEvent(retractKey, sharedEvent) {

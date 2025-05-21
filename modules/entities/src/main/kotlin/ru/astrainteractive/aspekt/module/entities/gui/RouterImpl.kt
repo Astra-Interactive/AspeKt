@@ -5,13 +5,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.astrainteractive.aspekt.module.entities.gui.entities.ui.EntitiesGui
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 internal class RouterImpl(
     private val scope: CoroutineScope,
     private val dispatchers: KotlinDispatchers,
-    private val kyoriComponentSerializerKrate: Krate<KyoriComponentSerializer>,
+    private val kyoriComponentSerializerKrate: CachedKrate<KyoriComponentSerializer>,
 ) : Router {
     override fun open(route: Router.Route) {
         scope.launch(dispatchers.IO) {

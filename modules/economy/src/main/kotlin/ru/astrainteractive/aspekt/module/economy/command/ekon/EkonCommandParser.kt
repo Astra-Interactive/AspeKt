@@ -22,7 +22,7 @@ internal class EkonCommandParser(
         val sender = commandContext.sender
         val args = commandContext.args
 
-        commandContext.requirePermission(PluginPermission.AdminClaim)
+        commandContext.requirePermission(PluginPermission.ADMIN_CLAIM)
         return when (val arg = args.getOrNull(0)) {
             "list" -> {
                 EkonCommand.Model.ListCurrencies(sender)
@@ -54,7 +54,7 @@ internal class EkonCommandParser(
             }
 
             "set", "add" -> {
-                commandContext.requirePermission(PluginPermission.Economy.SetBalance)
+                commandContext.requirePermission(PluginPermission.SET_BALANCE)
                 val currency = commandContext.requireArgument(
                     index = 1,
                     type = CurrencyArgument(cachedDao.getAllCurrencies())

@@ -4,5 +4,5 @@ import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
 
 class RtpCommand(
     val player: OnlineMinecraftPlayer,
-    val averageTickTime: Double
+    val nextTickTime: Double
 )

@@ -82,6 +82,6 @@ fun ForgeUtil.getOnlinePlayer(name: String): ServerPlayer? {
     return serverOrNull?.playerList?.getPlayerByName(name)
 }
 
-fun ForgeUtil.getAverageTickTime(): Double {
-    return serverOrNull?.averageTickTime?.toDouble() ?: 0.0
+fun ForgeUtil.getNextTickTime(): Double {
+    return serverOrNull?.nextTickTime?.toDouble() ?: 0.0
 }

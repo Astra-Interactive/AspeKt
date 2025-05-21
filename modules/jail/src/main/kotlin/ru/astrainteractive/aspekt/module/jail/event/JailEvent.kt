@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.event.server.ServerLoadEvent
+import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.module.jail.controller.JailController
 import ru.astrainteractive.aspekt.module.jail.data.CachedJailApi
 import ru.astrainteractive.aspekt.module.jail.data.JailApi
@@ -24,7 +25,7 @@ import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 
 internal class JailEvent(
@@ -32,17 +33,17 @@ internal class JailEvent(
     private val cachedJailApi: CachedJailApi,
     private val jailController: JailController,
     private val scope: CoroutineScope,
-    kyoriKrate: Krate<KyoriComponentSerializer>,
-    translationKrate: Krate<PluginTranslation>
-) : EventListener, Logger by JUtiltLogger("AspeKt-JailEvent") {
-    private val kyori by kyoriKrate
+    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    translationKrate: CachedKrate<PluginTranslation>
+) : EventListener, Logger by JUtiltLogger("AspeKt-JailEvent"),
+    KyoriComponentSerializer by kyoriKrate.asUnboxed() {
     private val translation by translationKrate
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun playerCommandPreprocessEvent(e: PlayerCommandPreprocessEvent) {
         if (!cachedJailApi.isInJail(e.player)) return
         e.isCancelled = true
-        with(kyori) { e.player.sendMessage(translation.jails.jailedCommandBlocked.component) }
+        e.player.sendMessage(translation.jails.jailedCommandBlocked.component)
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -63,7 +64,7 @@ internal class JailEvent(
                 .getOrNull()
                 ?: return@launch
             jailController.tryTeleportToJail(player.uniqueId)
-            with(kyori) { player.sendMessage(translation.jails.youInJail.component) }
+            player.sendMessage(translation.jails.youInJail.component)
         }
     }
 

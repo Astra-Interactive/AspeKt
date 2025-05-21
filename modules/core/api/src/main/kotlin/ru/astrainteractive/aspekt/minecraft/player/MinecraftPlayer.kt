@@ -12,7 +12,8 @@ interface MinecraftPlayer {
 class OnlineMinecraftPlayer(
     @Serializable(UuidSerializer::class)
     override val uuid: UUID,
-    val name: String
+    val name: String,
+    val ipAddress: String
 ) : MinecraftPlayer
 
 @Serializable

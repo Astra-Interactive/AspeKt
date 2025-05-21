@@ -4,12 +4,11 @@ import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.menu.command.MenuCommandFactory
 import ru.astrainteractive.aspekt.module.menu.di.factory.MenuModelsFactory
-import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouterImpl
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.klibs.kstorage.api.MutableKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
+import ru.astrainteractive.klibs.kstorage.util.asCachedKrate
 
 interface MenuModule {
     val lifecycle: Lifecycle
@@ -18,7 +17,7 @@ interface MenuModule {
         private val coreModule: CoreModule,
         private val bukkitCoreModule: BukkitCoreModule
     ) : MenuModule {
-        private val menuModels: MutableKrate<List<MenuModel>> = DefaultMutableKrate(
+        private val menuModels = DefaultMutableKrate(
             loader = {
                 MenuModelsFactory(
                     bukkitCoreModule.plugin.dataFolder,
@@ -26,7 +25,7 @@ interface MenuModule {
                 ).create()
             },
             factory = { emptyList() }
-        )
+        ).asCachedKrate()
 
         private val menuRouter: MenuRouter
             get() = MenuRouterImpl(coreModule, bukkitCoreModule)
@@ -45,7 +44,7 @@ interface MenuModule {
                     menuCommandFactory.create()
                 },
                 onReload = {
-                    menuModels.loadAndGet()
+                    menuModels.getValue()
                 }
             )
         }

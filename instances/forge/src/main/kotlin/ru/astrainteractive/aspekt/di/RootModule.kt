@@ -17,7 +17,7 @@ import net.minecraftforge.eventbus.api.EventPriority
 import net.minecraftforge.fml.loading.FMLPaths
 import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
 import ru.astrainteractive.aspekt.core.forge.event.flowEvent
-import ru.astrainteractive.aspekt.core.forge.minecraft.messenger.ForgeMinecraftMessenger
+import ru.astrainteractive.aspekt.core.forge.minecraft.ForgeMinecraftNativeBridge
 import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.di.ForgeAuthModule
 import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
@@ -31,6 +31,7 @@ import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
+import ru.astrainteractive.klibs.kstorage.util.asCachedKrate
 import ru.astrainteractive.klibs.mikro.core.dispatchers.DefaultKotlinDispatchers
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import java.io.File
@@ -44,7 +45,7 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
     val kyoriKrate = DefaultMutableKrate<KyoriComponentSerializer>(
         loader = { null },
         factory = { KyoriComponentSerializer.Legacy }
-    )
+    ).asCachedKrate()
 
     @Suppress("UnusedPrivateProperty")
     private val serverStateFlow = flowEvent<ServerStartedEvent>()
@@ -83,7 +84,7 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
                 override val Default: CoroutineDispatcher = Dispatchers.Default
                 override val Unconfined: CoroutineDispatcher = Dispatchers.Unconfined
             },
-            createMinecraftMessenger = { kyoriKrate -> ForgeMinecraftMessenger(kyoriKrate) }
+            minecraftNativeBridge = ForgeMinecraftNativeBridge()
         )
     }
 

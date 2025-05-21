@@ -9,6 +9,7 @@ import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStoreImpl
 import ru.astrainteractive.aspekt.module.chatgame.store.generator.RiddleGenerator
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.klibs.kstorage.util.asCachedKrate
 
 interface ChatGameModule {
     val lifecycle: Lifecycle
@@ -18,12 +19,11 @@ interface ChatGameModule {
         bukkitCoreModule: BukkitCoreModule
     ) : ChatGameModule {
 
-        private val config = ConfigKrateFactory.create(
-            fileNameWithoutExtension = "chat_game",
+        private val config = ConfigKrateFactory.fileConfigKrate(
+            file = coreModule.dataFolder.resolve("chat_game.yml"),
             stringFormat = coreModule.yamlFormat,
-            dataFolder = coreModule.dataFolder,
             factory = ::ChatGameConfig
-        )
+        ).asCachedKrate()
 
         private val chatGameStore = ChatGameStoreImpl(
             chatGameConfigProvider = config,
@@ -58,7 +58,7 @@ interface ChatGameModule {
                 chatGameJob.onDisable()
             },
             onReload = {
-                config.loadAndGet()
+                config.getValue()
                 chatGameJob.onDisable()
                 chatGameJob.onEnable()
             }

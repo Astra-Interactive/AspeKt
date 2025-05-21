@@ -3,11 +3,16 @@ package ru.astrainteractive.aspekt.core.forge.permission
 import net.luckperms.api.LuckPerms
 import net.luckperms.api.LuckPermsProvider
 import net.luckperms.api.util.Tristate
+import ru.astrainteractive.astralibs.logging.JUtiltLogger
+import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.permission.Permissible
 import ru.astrainteractive.astralibs.permission.Permission
 import java.util.UUID
 
-internal class ForgeLuckPermsPlayerPermissible(private val uuid: UUID) : Permissible {
+internal class ForgeLuckPermsPlayerPermissible(
+    private val uuid: UUID
+) : Permissible,
+    Logger by JUtiltLogger("AspeKt-ForgeLuckPermsPlayerPermissible") {
     private val luckPermsOrNull: LuckPerms?
         get() = runCatching { LuckPermsProvider.get() }.getOrNull()
 

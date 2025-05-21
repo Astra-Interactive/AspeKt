@@ -9,12 +9,12 @@ import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 
 internal class SitController(
-    configuration: Krate<PluginConfiguration>,
-    translation: Krate<PluginTranslation>,
+    configuration: CachedKrate<PluginConfiguration>,
+    translation: CachedKrate<PluginTranslation>,
     kyoriComponentSerializer: KyoriComponentSerializer
 ) : KyoriComponentSerializer by kyoriComponentSerializer {
     private val translation by translation
