@@ -9,6 +9,7 @@ import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
 import ru.astrainteractive.aspekt.di.factory.ConfigKrateFactory
 import ru.astrainteractive.aspekt.minecraft.MinecraftNativeBridge
+import ru.astrainteractive.aspekt.minecraft.PlatformServer
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.CoroutineFeature
@@ -41,11 +42,13 @@ interface CoreModule {
     val kyoriComponentSerializer: CachedKrate<KyoriComponentSerializer>
 
     val jsonStringFormat: StringFormat
+    val platformServer: PlatformServer
 
     class Default(
         override val dataFolder: File,
         override val dispatchers: KotlinDispatchers,
-        override val minecraftNativeBridge: MinecraftNativeBridge
+        override val minecraftNativeBridge: MinecraftNativeBridge,
+        override val platformServer: PlatformServer
     ) : CoreModule, Logger by JUtiltLogger("CoreModule") {
         // Core
 

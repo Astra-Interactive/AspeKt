@@ -10,8 +10,9 @@ import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
 import ru.astrainteractive.astralibs.exposed.model.DatabaseConfiguration
-import ru.astrainteractive.klibs.kstorage.api.impl.DefaultStateFlowMutableKrate
-import ru.astrainteractive.klibs.kstorage.util.KrateExt.update
+import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
+import ru.astrainteractive.klibs.kstorage.util.asStateFlowMutableKrate
+import ru.astrainteractive.klibs.kstorage.util.update
 import java.io.File
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -31,10 +32,10 @@ class EconomyDaoTest {
     private val requireModule: EconomyDatabaseModule
         get() = _module ?: error("Module not set")
 
-    private val dbConfig = DefaultStateFlowMutableKrate<DatabaseConfiguration>(
+    private val dbConfig = DefaultMutableKrate<DatabaseConfiguration>(
         factory = { DatabaseConfiguration.H2("test") },
         loader = { DatabaseConfiguration.H2("test") }
-    )
+    ).asStateFlowMutableKrate()
 
     @BeforeTest
     fun setup() {

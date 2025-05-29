@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.di
 
 import ru.astrainteractive.aspekt.command.di.CommandManagerModule
 import ru.astrainteractive.aspekt.core.forge.minecraft.BukkitMinecraftNativeBridge
+import ru.astrainteractive.aspekt.core.forge.minecraft.BukkitPlatformServer
 import ru.astrainteractive.aspekt.inventorysort.di.InventorySortModule
 import ru.astrainteractive.aspekt.invisibleframes.di.InvisibleItemFrameModule
 import ru.astrainteractive.aspekt.module.antiswear.di.AntiSwearModule
@@ -30,7 +31,8 @@ class RootModule(plugin: LifecyclePlugin) {
         CoreModule.Default(
             dataFolder = plugin.dataFolder,
             dispatchers = DefaultBukkitDispatchers(plugin),
-            minecraftNativeBridge = BukkitMinecraftNativeBridge()
+            minecraftNativeBridge = BukkitMinecraftNativeBridge(),
+            platformServer = BukkitPlatformServer()
         )
     }
     val bukkitCoreModule: BukkitCoreModule by lazy {

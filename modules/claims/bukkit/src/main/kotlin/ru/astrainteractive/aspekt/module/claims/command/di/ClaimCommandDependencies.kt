@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.minecraft.MinecraftNativeBridge
+import ru.astrainteractive.aspekt.minecraft.PlatformServer
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimErrorMapper
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -21,6 +22,7 @@ internal interface ClaimCommandDependencies {
     val claimsRepository: ClaimsRepository
     val claimErrorMapper: ClaimErrorMapper
     val minecraftNativeBridge: MinecraftNativeBridge
+    val platformServer: PlatformServer
 
     class Default(
         coreModule: CoreModule,
@@ -34,5 +36,6 @@ internal interface ClaimCommandDependencies {
         override val dispatchers: KotlinDispatchers = coreModule.dispatchers
         override val kyoriComponentSerializer = coreModule.kyoriComponentSerializer
         override val minecraftNativeBridge: MinecraftNativeBridge = coreModule.minecraftNativeBridge
+        override val platformServer: PlatformServer = coreModule.platformServer
     }
 }

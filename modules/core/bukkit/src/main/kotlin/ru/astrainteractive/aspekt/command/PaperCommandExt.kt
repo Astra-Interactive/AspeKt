@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package ru.astrainteractive.aspekt.command
 
 import com.mojang.brigadier.Command

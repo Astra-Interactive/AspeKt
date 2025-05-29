@@ -7,8 +7,6 @@ import ru.astrainteractive.aspekt.core.forge.command.util.runs
 import ru.astrainteractive.aspekt.core.forge.util.ForgeUtil
 import ru.astrainteractive.aspekt.core.forge.util.asOnlineMinecraftPlayer
 import ru.astrainteractive.aspekt.core.forge.util.getNextTickTime
-import ru.astrainteractive.aspekt.core.forge.util.toPlain
-import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
 import ru.astrainteractive.aspekt.util.tryCast
 
 fun RegisterCommandsEvent.rtp(rtpCommandExecutor: RtpCommandExecutor) {

@@ -39,7 +39,8 @@ internal class ClaimCommandRegistry(
                 claimsRepository = dependencies.claimsRepository,
                 claimErrorMapper = dependencies.claimErrorMapper,
                 kyoriKrate = kyoriComponentSerializer,
-                minecraftNativeBridge = dependencies.minecraftNativeBridge
+                minecraftNativeBridge = dependencies.minecraftNativeBridge,
+                platformServer = dependencies.platformServer
             ),
             errorHandler = { context, throwable ->
                 when (throwable) {

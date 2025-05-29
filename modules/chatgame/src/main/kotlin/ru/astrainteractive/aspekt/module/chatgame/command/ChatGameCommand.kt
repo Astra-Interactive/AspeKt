@@ -9,6 +9,7 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
+import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.Reward
@@ -20,7 +21,6 @@ import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 import kotlin.random.Random
-import ru.astrainteractive.aspekt.asUnboxed
 
 @Suppress("LongParameterList")
 internal class ChatGameCommand(

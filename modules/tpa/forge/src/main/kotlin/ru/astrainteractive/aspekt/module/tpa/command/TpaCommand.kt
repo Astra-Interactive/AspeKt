@@ -2,7 +2,6 @@
 
 package ru.astrainteractive.aspekt.module.tpa.command
 
-import net.minecraft.world.entity.player.Player
 import net.minecraftforge.event.RegisterCommandsEvent
 import ru.astrainteractive.aspekt.core.forge.command.util.argument
 import ru.astrainteractive.aspekt.core.forge.command.util.command
@@ -14,7 +13,6 @@ import ru.astrainteractive.aspekt.core.forge.util.asOnlineMinecraftPlayer
 import ru.astrainteractive.aspekt.core.forge.util.getOnlinePlayer
 import ru.astrainteractive.aspekt.core.forge.util.getOnlinePlayers
 import ru.astrainteractive.aspekt.core.forge.util.toPlain
-import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
 import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
 
 @Suppress("LongMethod")

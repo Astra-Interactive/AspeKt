@@ -48,7 +48,7 @@ class TpaCommandExecutor(
             .sendMessage(translation.tpa.requestCancelled.component)
     }
 
-    private suspend fun tpaHere(input: TpaCommand.TpaHere): Unit {
+    private suspend fun tpaHere(input: TpaCommand.TpaHere) {
         if (input.executorPlayer.uuid == input.targetPlayer.uuid) {
             input.executorPlayer
                 .asAudience()
@@ -67,7 +67,7 @@ class TpaCommandExecutor(
             .sendMessage(translation.tpa.requestTpaHere(input.executorPlayer.name).component)
     }
 
-    private suspend fun tpaTo(input: TpaCommand.TpaTo): Unit {
+    private suspend fun tpaTo(input: TpaCommand.TpaTo) {
         if (input.executorPlayer.uuid == input.targetPlayer.uuid) {
             input.executorPlayer
                 .asAudience()
@@ -87,7 +87,7 @@ class TpaCommandExecutor(
             .sendMessage(translation.tpa.requestTpa(input.executorPlayer.name).component)
     }
 
-    private suspend fun tpaAccept(input: TpaCommand.TpaAccept): Unit {
+    private suspend fun tpaAccept(input: TpaCommand.TpaAccept) {
         if (!tpaApi.isBeingWaited(input.executorPlayer)) {
             input.executorPlayer
                 .asAudience()

@@ -24,6 +24,7 @@ import ru.astrainteractive.astralibs.command.api.exception.StringDescException
 import ru.astrainteractive.astralibs.string.StringDesc
 import java.time.Instant
 
+@Suppress("LongMethod")
 internal fun JailCommandManager.jailCommand() {
     with(kyoriKrate.asUnboxed()) {
         command("jail") {

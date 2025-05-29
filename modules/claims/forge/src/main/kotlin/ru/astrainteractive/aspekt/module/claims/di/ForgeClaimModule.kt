@@ -24,7 +24,8 @@ class ForgeClaimModule(
         claimsRepository = claimModule.claimsRepository,
         claimErrorMapper = claimModule.claimErrorMapper,
         kyoriKrate = coreModule.kyoriComponentSerializer,
-        minecraftNativeBridge = coreModule.minecraftNativeBridge
+        minecraftNativeBridge = coreModule.minecraftNativeBridge,
+        platformServer = coreModule.platformServer
     )
 
     @Suppress("UnusedPrivateProperty")

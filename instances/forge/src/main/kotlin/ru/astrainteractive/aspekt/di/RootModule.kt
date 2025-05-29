@@ -18,6 +18,7 @@ import net.minecraftforge.fml.loading.FMLPaths
 import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
 import ru.astrainteractive.aspekt.core.forge.event.flowEvent
 import ru.astrainteractive.aspekt.core.forge.minecraft.ForgeMinecraftNativeBridge
+import ru.astrainteractive.aspekt.core.forge.minecraft.ForgePlatformServer
 import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.di.ForgeAuthModule
 import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
@@ -84,7 +85,8 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
                 override val Default: CoroutineDispatcher = Dispatchers.Default
                 override val Unconfined: CoroutineDispatcher = Dispatchers.Unconfined
             },
-            minecraftNativeBridge = ForgeMinecraftNativeBridge()
+            minecraftNativeBridge = ForgeMinecraftNativeBridge(),
+            platformServer = ForgePlatformServer
         )
     }
 

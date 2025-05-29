@@ -4,7 +4,6 @@ import ru.astrainteractive.aspekt.core.forge.permission.ForgeLuckPermsPlayerPerm
 import ru.astrainteractive.aspekt.core.forge.util.ForgeUtil
 import ru.astrainteractive.aspekt.core.forge.util.asOnlineMinecraftPlayer
 import ru.astrainteractive.aspekt.core.forge.util.getOnlinePlayer
-import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.minecraft.Audience
 import ru.astrainteractive.aspekt.minecraft.Locatable
 import ru.astrainteractive.aspekt.minecraft.MinecraftNativeBridge

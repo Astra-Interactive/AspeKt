@@ -35,7 +35,8 @@ internal class JailEvent(
     private val scope: CoroutineScope,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<PluginTranslation>
-) : EventListener, Logger by JUtiltLogger("AspeKt-JailEvent"),
+) : EventListener,
+    Logger by JUtiltLogger("AspeKt-JailEvent"),
     KyoriComponentSerializer by kyoriKrate.asUnboxed() {
     private val translation by translationKrate
 
