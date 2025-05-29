@@ -2,12 +2,12 @@ package ru.astrainteractive.aspekt.module.rtp.command
 
 import net.minecraft.server.level.ServerPlayer
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.command.util.command
-import ru.astrainteractive.aspekt.core.forge.command.util.runs
-import ru.astrainteractive.aspekt.core.forge.util.ForgeUtil
-import ru.astrainteractive.aspekt.core.forge.util.asOnlineMinecraftPlayer
-import ru.astrainteractive.aspekt.core.forge.util.getNextTickTime
 import ru.astrainteractive.aspekt.util.tryCast
+import ru.astrainteractive.astralibs.command.util.command
+import ru.astrainteractive.astralibs.command.util.runs
+import ru.astrainteractive.astralibs.server.util.ForgeUtil
+import ru.astrainteractive.astralibs.server.util.asOnlineMinecraftPlayer
+import ru.astrainteractive.astralibs.server.util.getNextTickTime
 
 fun RegisterCommandsEvent.rtp(rtpCommandExecutor: RtpCommandExecutor) {
     command(alias = "rtp") {

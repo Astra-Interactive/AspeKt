@@ -3,16 +3,16 @@
 package ru.astrainteractive.aspekt.module.sethome.command
 
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.command.util.command
-import ru.astrainteractive.aspekt.core.forge.command.util.hints
-import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
-import ru.astrainteractive.aspekt.core.forge.command.util.runs
-import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
-import ru.astrainteractive.aspekt.core.forge.util.asLocatable
-import ru.astrainteractive.aspekt.core.forge.util.asOnlineMinecraftPlayer
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
 import ru.astrainteractive.aspekt.module.sethome.model.PlayerHome
 import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
+import ru.astrainteractive.astralibs.command.util.command
+import ru.astrainteractive.astralibs.command.util.hints
+import ru.astrainteractive.astralibs.command.util.requireArgument
+import ru.astrainteractive.astralibs.command.util.runs
+import ru.astrainteractive.astralibs.command.util.stringArgument
+import ru.astrainteractive.astralibs.server.util.asLocatable
+import ru.astrainteractive.astralibs.server.util.asOnlineMinecraftPlayer
 
 @Suppress("LongMethod")
 internal fun RegisterCommandsEvent.homes(

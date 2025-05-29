@@ -15,10 +15,6 @@ import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.event.server.ServerStartedEvent
 import net.minecraftforge.eventbus.api.EventPriority
 import net.minecraftforge.fml.loading.FMLPaths
-import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
-import ru.astrainteractive.aspekt.core.forge.event.flowEvent
-import ru.astrainteractive.aspekt.core.forge.minecraft.ForgeMinecraftNativeBridge
-import ru.astrainteractive.aspekt.core.forge.minecraft.ForgePlatformServer
 import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.di.ForgeAuthModule
 import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
@@ -26,11 +22,15 @@ import ru.astrainteractive.aspekt.module.claims.di.ForgeClaimModule
 import ru.astrainteractive.aspekt.module.rtp.di.RtpModule
 import ru.astrainteractive.aspekt.module.sethome.di.HomesModule
 import ru.astrainteractive.aspekt.module.tpa.di.TpaModule
+import ru.astrainteractive.astralibs.coroutine.ForgeMainDispatcher
+import ru.astrainteractive.astralibs.event.flowEvent
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
+import ru.astrainteractive.astralibs.server.ForgeMinecraftNativeBridge
+import ru.astrainteractive.astralibs.server.ForgePlatformServer
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 import ru.astrainteractive.klibs.kstorage.util.asCachedKrate
 import ru.astrainteractive.klibs.mikro.core.dispatchers.DefaultKotlinDispatchers

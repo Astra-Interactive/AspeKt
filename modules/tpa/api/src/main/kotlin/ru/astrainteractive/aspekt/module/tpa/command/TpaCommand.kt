@@ -1,6 +1,6 @@
 package ru.astrainteractive.aspekt.module.tpa.command
 
-import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
+import ru.astrainteractive.astralibs.server.player.OnlineMinecraftPlayer
 
 sealed interface TpaCommand {
     data class TpaTo(

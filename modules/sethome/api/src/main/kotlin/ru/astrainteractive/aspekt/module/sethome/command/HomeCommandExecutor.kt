@@ -3,11 +3,11 @@ package ru.astrainteractive.aspekt.module.sethome.command
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.asUnboxed
-import ru.astrainteractive.aspekt.minecraft.MinecraftNativeBridge
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.server.MinecraftNativeBridge
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 import ru.astrainteractive.klibs.kstorage.util.update

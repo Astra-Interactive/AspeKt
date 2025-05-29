@@ -16,16 +16,16 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent
 import net.minecraftforge.event.level.BlockEvent
 import net.minecraftforge.eventbus.api.EventPriority
 import ru.astrainteractive.aspekt.asUnboxed
-import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
-import ru.astrainteractive.aspekt.core.forge.event.flowEvent
-import ru.astrainteractive.aspekt.core.forge.event.playerMoveFlowEvent
-import ru.astrainteractive.aspekt.core.forge.util.asAudience
-import ru.astrainteractive.aspekt.core.forge.util.toPlain
-import ru.astrainteractive.aspekt.minecraft.location.dist
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
+import ru.astrainteractive.astralibs.coroutine.ForgeMainDispatcher
+import ru.astrainteractive.astralibs.event.flowEvent
+import ru.astrainteractive.astralibs.event.playerMoveFlowEvent
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.server.location.dist
+import ru.astrainteractive.astralibs.server.util.asAudience
+import ru.astrainteractive.astralibs.server.util.toPlain
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 

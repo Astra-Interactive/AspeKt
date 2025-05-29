@@ -1,8 +1,6 @@
 package ru.astrainteractive.aspekt.di
 
 import ru.astrainteractive.aspekt.command.di.CommandManagerModule
-import ru.astrainteractive.aspekt.core.forge.minecraft.BukkitMinecraftNativeBridge
-import ru.astrainteractive.aspekt.core.forge.minecraft.BukkitPlatformServer
 import ru.astrainteractive.aspekt.inventorysort.di.InventorySortModule
 import ru.astrainteractive.aspekt.invisibleframes.di.InvisibleItemFrameModule
 import ru.astrainteractive.aspekt.module.antiswear.di.AntiSwearModule
@@ -25,6 +23,8 @@ import ru.astrainteractive.aspekt.module.towny.discord.di.TownyDiscordModule
 import ru.astrainteractive.aspekt.module.treecapitator.di.TreeCapitatorModule
 import ru.astrainteractive.astralibs.async.DefaultBukkitDispatchers
 import ru.astrainteractive.astralibs.lifecycle.LifecyclePlugin
+import ru.astrainteractive.astralibs.server.BukkitMinecraftNativeBridge
+import ru.astrainteractive.astralibs.server.BukkitPlatformServer
 
 class RootModule(plugin: LifecyclePlugin) {
     val coreModule: CoreModule by lazy {

@@ -4,12 +4,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import net.minecraft.server.level.ServerPlayer
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.command.util.argument
-import ru.astrainteractive.aspekt.core.forge.command.util.command
-import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
-import ru.astrainteractive.aspekt.core.forge.command.util.runs
-import ru.astrainteractive.aspekt.core.forge.util.asAudience
-import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.isRegistered
@@ -17,7 +11,13 @@ import ru.astrainteractive.aspekt.module.auth.api.model.AuthData
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.aspekt.module.auth.api.util.sha256
 import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
+import ru.astrainteractive.astralibs.command.util.argument
+import ru.astrainteractive.astralibs.command.util.command
+import ru.astrainteractive.astralibs.command.util.requireArgument
+import ru.astrainteractive.astralibs.command.util.runs
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.server.util.asAudience
+import ru.astrainteractive.astralibs.server.util.toPlain
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 
 @Suppress("LongMethod")

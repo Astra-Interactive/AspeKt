@@ -8,8 +8,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
 import ru.astrainteractive.aspekt.di.factory.ConfigKrateFactory
-import ru.astrainteractive.aspekt.minecraft.MinecraftNativeBridge
-import ru.astrainteractive.aspekt.minecraft.PlatformServer
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.CoroutineFeature
@@ -18,6 +16,8 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
+import ru.astrainteractive.astralibs.server.MinecraftNativeBridge
+import ru.astrainteractive.astralibs.server.PlatformServer
 import ru.astrainteractive.astralibs.util.fileConfigKrate
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate

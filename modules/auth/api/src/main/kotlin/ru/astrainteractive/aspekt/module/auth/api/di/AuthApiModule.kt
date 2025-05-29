@@ -21,6 +21,7 @@ import ru.astrainteractive.astralibs.exposed.factory.DatabaseFactory
 import ru.astrainteractive.astralibs.exposed.model.DatabaseConfiguration
 import ru.astrainteractive.astralibs.util.FlowExt.mapCached
 import ru.astrainteractive.astralibs.util.fileConfigKrate
+import ru.astrainteractive.klibs.kstorage.util.asCachedKrate
 import java.io.File
 
 class AuthApiModule(
@@ -54,5 +55,5 @@ class AuthApiModule(
         file = dataFolder.resolve("translation.yml"),
         stringFormat = stringFormat,
         factory = ::AuthTranslation,
-    )
+    ).asCachedKrate()
 }

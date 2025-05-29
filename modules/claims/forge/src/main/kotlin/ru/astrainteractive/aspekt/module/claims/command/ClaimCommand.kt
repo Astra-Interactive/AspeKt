@@ -5,17 +5,6 @@ package ru.astrainteractive.aspekt.module.claims.command
 import com.mojang.brigadier.arguments.BoolArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.command.util.argument
-import ru.astrainteractive.aspekt.core.forge.command.util.command
-import ru.astrainteractive.aspekt.core.forge.command.util.hints
-import ru.astrainteractive.aspekt.core.forge.command.util.literal
-import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
-import ru.astrainteractive.aspekt.core.forge.command.util.runs
-import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
-import ru.astrainteractive.aspekt.core.forge.util.ForgeUtil
-import ru.astrainteractive.aspekt.core.forge.util.getOnlinePlayers
-import ru.astrainteractive.aspekt.core.forge.util.getPlayerGameProfile
-import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandArgument
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecutor
 import ru.astrainteractive.aspekt.module.claims.command.claim.Claimommand
@@ -24,6 +13,17 @@ import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.util.getClaimChunk
 import ru.astrainteractive.aspekt.module.claims.util.toClaimPlayer
+import ru.astrainteractive.astralibs.command.util.argument
+import ru.astrainteractive.astralibs.command.util.command
+import ru.astrainteractive.astralibs.command.util.hints
+import ru.astrainteractive.astralibs.command.util.literal
+import ru.astrainteractive.astralibs.command.util.requireArgument
+import ru.astrainteractive.astralibs.command.util.runs
+import ru.astrainteractive.astralibs.command.util.stringArgument
+import ru.astrainteractive.astralibs.server.util.ForgeUtil
+import ru.astrainteractive.astralibs.server.util.getOnlinePlayers
+import ru.astrainteractive.astralibs.server.util.getPlayerGameProfile
+import ru.astrainteractive.astralibs.server.util.toPlain
 
 @Suppress("LongMethod")
 internal fun RegisterCommandsEvent.claim(

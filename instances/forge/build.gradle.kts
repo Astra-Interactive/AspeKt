@@ -20,6 +20,7 @@ dependencies {
     shadeImplementation(libs.bundles.exposed)
     // AstraLibs
     shadeImplementation(libs.minecraft.astralibs.core)
+    shadeImplementation(libs.minecraft.astralibs.core.forge)
     shadeImplementation(libs.minecraft.astralibs.command)
     shadeImplementation(libs.kotlin.serializationKaml)
     shadeImplementation(libs.klibs.mikro.core)

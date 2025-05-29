@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.module.tpa.api
 
 import com.google.common.cache.CacheBuilder
-import ru.astrainteractive.aspekt.minecraft.player.OnlineMinecraftPlayer
+import ru.astrainteractive.astralibs.server.player.OnlineMinecraftPlayer
 import java.util.concurrent.TimeUnit
 
 class TpaApi {

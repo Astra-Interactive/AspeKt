@@ -4,13 +4,6 @@ import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.asUnboxed
-import ru.astrainteractive.aspekt.command.command
-import ru.astrainteractive.aspekt.command.hints
-import ru.astrainteractive.aspekt.command.literal
-import ru.astrainteractive.aspekt.command.requireArgument
-import ru.astrainteractive.aspekt.command.requirePermission
-import ru.astrainteractive.aspekt.command.runs
-import ru.astrainteractive.aspekt.command.stringArgument
 import ru.astrainteractive.aspekt.module.jail.command.JailCommandManager
 import ru.astrainteractive.aspekt.module.jail.command.argumenttype.DurationArgumentType
 import ru.astrainteractive.aspekt.module.jail.model.Jail
@@ -21,6 +14,13 @@ import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.api.argumenttype.OfflinePlayerArgument
 import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
 import ru.astrainteractive.astralibs.command.api.exception.StringDescException
+import ru.astrainteractive.astralibs.command.api.util.command
+import ru.astrainteractive.astralibs.command.api.util.hints
+import ru.astrainteractive.astralibs.command.api.util.literal
+import ru.astrainteractive.astralibs.command.api.util.requireArgument
+import ru.astrainteractive.astralibs.command.api.util.requirePermission
+import ru.astrainteractive.astralibs.command.api.util.runs
+import ru.astrainteractive.astralibs.command.api.util.stringArgument
 import ru.astrainteractive.astralibs.string.StringDesc
 import java.time.Instant
 

@@ -4,9 +4,9 @@ import com.mojang.authlib.GameProfile
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.storage.ServerLevelData
-import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
+import ru.astrainteractive.astralibs.server.util.toPlain
 
 internal fun Player.toClaimPlayer(): ClaimPlayer {
     return ClaimPlayer(
