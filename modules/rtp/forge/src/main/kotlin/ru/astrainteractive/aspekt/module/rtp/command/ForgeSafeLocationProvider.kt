@@ -15,10 +15,10 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.block.AirBlock
 import net.minecraft.world.level.block.LiquidBlock
 import net.minecraft.world.level.storage.ServerLevelData
-import ru.astrainteractive.aspekt.util.cast
 import ru.astrainteractive.astralibs.server.location.Location
 import ru.astrainteractive.astralibs.server.util.ForgeUtil
 import ru.astrainteractive.astralibs.server.util.getOnlinePlayer
+import ru.astrainteractive.astralibs.util.cast
 import java.util.UUID
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds

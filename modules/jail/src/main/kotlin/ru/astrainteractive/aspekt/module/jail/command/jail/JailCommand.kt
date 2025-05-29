@@ -3,7 +3,6 @@ package ru.astrainteractive.aspekt.module.jail.command.jail
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.module.jail.command.JailCommandManager
 import ru.astrainteractive.aspekt.module.jail.command.argumenttype.DurationArgumentType
 import ru.astrainteractive.aspekt.module.jail.model.Jail
@@ -21,12 +20,13 @@ import ru.astrainteractive.astralibs.command.api.util.requireArgument
 import ru.astrainteractive.astralibs.command.api.util.requirePermission
 import ru.astrainteractive.astralibs.command.api.util.runs
 import ru.astrainteractive.astralibs.command.api.util.stringArgument
+import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.string.StringDesc
 import java.time.Instant
 
 @Suppress("LongMethod")
 internal fun JailCommandManager.jailCommand() {
-    with(kyoriKrate.asUnboxed()) {
+    with(kyoriKrate.unwrap()) {
         command("jail") {
             literal("list") {
                 runs { ctx ->

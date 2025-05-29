@@ -9,13 +9,13 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
-import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.Reward
 import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStore
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
@@ -32,7 +32,7 @@ internal class ChatGameCommand(
     private val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory,
     private val scope: CoroutineScope
 ) : Logger by JUtiltLogger("ChatGameCommand"),
-    KyoriComponentSerializer by kyoriComponentSerializerProvider.asUnboxed() {
+    KyoriComponentSerializer by kyoriComponentSerializerProvider.unwrap() {
     private val translation by translationProvider
     private val chatGameConfig by chatGameConfigProvider
     private val mutex = Mutex()

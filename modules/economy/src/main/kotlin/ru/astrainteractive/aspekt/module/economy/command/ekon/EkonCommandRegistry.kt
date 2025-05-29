@@ -3,7 +3,6 @@ package ru.astrainteractive.aspekt.module.economy.command.ekon
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
-import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.module.economy.command.ekon.argument.CurrencyArgument
 import ru.astrainteractive.aspekt.module.economy.command.ekon.argument.OfflinePlayerArgument
 import ru.astrainteractive.aspekt.module.economy.database.dao.CachedDao
@@ -16,6 +15,7 @@ import ru.astrainteractive.astralibs.command.api.exception.DefaultCommandExcepti
 import ru.astrainteractive.astralibs.command.api.exception.NoPermissionException
 import ru.astrainteractive.astralibs.command.api.util.PluginExt.setCommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.util.StringListExt.withEntry
@@ -28,7 +28,7 @@ internal class EkonCommandRegistry(
     private val dao: EconomyDao,
     private val cachedDao: CachedDao
 ) : Logger by JUtiltLogger("EkonCommandRegistry"),
-    KyoriComponentSerializer by getKyori.asUnboxed() {
+    KyoriComponentSerializer by getKyori.unwrap() {
     private val translation get() = getTranslation.invoke()
 
     @Suppress("CyclomaticComplexMethod")

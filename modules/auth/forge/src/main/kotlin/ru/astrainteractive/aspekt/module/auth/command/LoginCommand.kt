@@ -4,7 +4,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import net.minecraft.server.level.ServerPlayer
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.checkAuthDataIsValid
@@ -18,6 +17,7 @@ import ru.astrainteractive.astralibs.command.util.command
 import ru.astrainteractive.astralibs.command.util.requireArgument
 import ru.astrainteractive.astralibs.command.util.runs
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.server.util.asAudience
 import ru.astrainteractive.astralibs.server.util.toPlain
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
@@ -29,7 +29,7 @@ fun RegisterCommandsEvent.loginCommand(
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<AuthTranslation>
 ) {
-    with(kyoriKrate.asUnboxed()) {
+    with(kyoriKrate.unwrap()) {
         command("login") {
             argument(alias = "password", com.mojang.brigadier.arguments.StringArgumentType.string()) {
                 runs { ctx ->

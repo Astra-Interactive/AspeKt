@@ -2,11 +2,11 @@ package ru.astrainteractive.aspekt.module.tpa.command
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.module.tpa.api.TpaApi
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.server.MinecraftNativeBridge
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
@@ -19,7 +19,7 @@ class TpaCommandExecutor(
     minecraftNativeBridge: MinecraftNativeBridge
 ) : CommandExecutor<TpaCommand>,
     MinecraftNativeBridge by minecraftNativeBridge,
-    KyoriComponentSerializer by kyoriKrate.asUnboxed() {
+    KyoriComponentSerializer by kyoriKrate.unwrap() {
     private val translation by translationKrate
 
     private suspend fun tpaCancel(input: TpaCommand.TpaCancel) {

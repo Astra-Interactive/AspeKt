@@ -2,7 +2,6 @@ package ru.astrainteractive.aspekt.module.jail.job
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.job.ScheduledJob
 import ru.astrainteractive.aspekt.module.jail.controller.JailController
 import ru.astrainteractive.aspekt.module.jail.data.CachedJailApi
@@ -11,6 +10,7 @@ import ru.astrainteractive.aspekt.module.jail.util.offlinePlayer
 import ru.astrainteractive.aspekt.module.jail.util.sendMessage
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 import java.time.Instant
@@ -24,7 +24,7 @@ internal class UnJailJob(
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<PluginTranslation>
 ) : ScheduledJob("AspeKt-UnJail"),
-    KyoriComponentSerializer by kyoriKrate.asUnboxed() {
+    KyoriComponentSerializer by kyoriKrate.unwrap() {
     override val delayMillis: Long = 10.seconds.inWholeMilliseconds
     override val initialDelayMillis: Long = 0.seconds.inWholeMilliseconds
     override val isEnabled: Boolean = true

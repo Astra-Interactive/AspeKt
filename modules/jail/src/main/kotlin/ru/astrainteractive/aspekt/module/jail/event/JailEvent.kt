@@ -12,7 +12,6 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.event.server.ServerLoadEvent
-import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.module.jail.controller.JailController
 import ru.astrainteractive.aspekt.module.jail.data.CachedJailApi
 import ru.astrainteractive.aspekt.module.jail.data.JailApi
@@ -23,6 +22,7 @@ import ru.astrainteractive.aspekt.module.jail.util.sendMessage
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
@@ -37,7 +37,7 @@ internal class JailEvent(
     translationKrate: CachedKrate<PluginTranslation>
 ) : EventListener,
     Logger by JUtiltLogger("AspeKt-JailEvent"),
-    KyoriComponentSerializer by kyoriKrate.asUnboxed() {
+    KyoriComponentSerializer by kyoriKrate.unwrap() {
     private val translation by translationKrate
 
     @EventHandler(priority = EventPriority.HIGHEST)

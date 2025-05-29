@@ -15,7 +15,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent
 import net.minecraftforge.event.level.BlockEvent
 import net.minecraftforge.eventbus.api.EventPriority
-import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
@@ -23,6 +22,7 @@ import ru.astrainteractive.astralibs.coroutine.ForgeMainDispatcher
 import ru.astrainteractive.astralibs.event.flowEvent
 import ru.astrainteractive.astralibs.event.playerMoveFlowEvent
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.server.location.dist
 import ru.astrainteractive.astralibs.server.util.asAudience
 import ru.astrainteractive.astralibs.server.util.toPlain
@@ -33,7 +33,7 @@ class ForgeAuthEvent(
     private val authorizedApi: AuthorizedApi,
     private val kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<AuthTranslation>
-) : KyoriComponentSerializer by kyoriKrate.asUnboxed() {
+) : KyoriComponentSerializer by kyoriKrate.unwrap() {
     val translation by translationKrate
     private val scope = CoroutineScope(SupervisorJob() + ForgeMainDispatcher) // todo
 

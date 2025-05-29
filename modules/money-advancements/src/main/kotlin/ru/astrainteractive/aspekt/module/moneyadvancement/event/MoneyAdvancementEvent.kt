@@ -5,13 +5,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
-import ru.astrainteractive.aspekt.asUnboxed
 import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.CoroutineFeature
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
@@ -25,7 +25,7 @@ class MoneyAdvancementEvent(
 ) : EventListener,
     Logger by JUtiltLogger("MoneyAdvancementEvent"),
     CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO),
-    KyoriComponentSerializer by kyoriComponentSerializerProvider.asUnboxed() {
+    KyoriComponentSerializer by kyoriComponentSerializerProvider.unwrap() {
     private val configuration by configurationProvider
     private val translation by translationProvider
 
