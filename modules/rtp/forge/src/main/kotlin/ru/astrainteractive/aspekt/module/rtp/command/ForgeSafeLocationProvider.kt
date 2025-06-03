@@ -18,7 +18,7 @@ import net.minecraft.world.level.storage.ServerLevelData
 import ru.astrainteractive.astralibs.server.location.Location
 import ru.astrainteractive.astralibs.server.util.ForgeUtil
 import ru.astrainteractive.astralibs.server.util.getOnlinePlayer
-import ru.astrainteractive.astralibs.util.cast
+import ru.astrainteractive.klibs.mikro.core.util.cast
 import java.util.UUID
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds

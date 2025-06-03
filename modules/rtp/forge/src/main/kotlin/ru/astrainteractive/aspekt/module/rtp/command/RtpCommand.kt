@@ -7,7 +7,7 @@ import ru.astrainteractive.astralibs.command.util.runs
 import ru.astrainteractive.astralibs.server.util.ForgeUtil
 import ru.astrainteractive.astralibs.server.util.asOnlineMinecraftPlayer
 import ru.astrainteractive.astralibs.server.util.getNextTickTime
-import ru.astrainteractive.astralibs.util.tryCast
+import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 fun RegisterCommandsEvent.rtp(rtpCommandExecutor: RtpCommandExecutor) {
     command(alias = "rtp") {
