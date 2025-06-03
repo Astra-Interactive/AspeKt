@@ -12,7 +12,7 @@ import ru.astrainteractive.aspekt.module.jail.util.toJailLocation
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.api.argumenttype.OfflinePlayerArgument
 import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
-import ru.astrainteractive.astralibs.command.api.exception.StringDescException
+import ru.astrainteractive.astralibs.command.api.exception.StringDescCommandException
 import ru.astrainteractive.astralibs.command.api.util.command
 import ru.astrainteractive.astralibs.command.api.util.hints
 import ru.astrainteractive.astralibs.command.api.util.literal
@@ -44,7 +44,7 @@ internal fun JailCommandManager.jailCommand() {
                     runs { ctx ->
                         ctx.requirePermission(PluginPermission.JAIL_CREATE)
                         val player = ctx.source.sender as? Player
-                        player ?: throw StringDescException(StringDesc.Plain("Executor should be player"))
+                        player ?: throw StringDescCommandException(StringDesc.Plain("Executor should be player"))
                         val jail = Jail(
                             name = ctx.requireArgument("jail", StringArgumentType),
                             location = player.location.toJailLocation()

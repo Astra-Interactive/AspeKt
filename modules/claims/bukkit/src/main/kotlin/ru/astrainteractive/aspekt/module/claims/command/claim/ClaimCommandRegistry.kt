@@ -4,7 +4,7 @@ import ru.astrainteractive.aspekt.module.claims.command.di.ClaimCommandDependenc
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.astralibs.command.api.exception.ArgumentTypeException
 import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
-import ru.astrainteractive.astralibs.command.api.exception.DefaultCommandException
+import ru.astrainteractive.astralibs.command.api.exception.CommandException
 import ru.astrainteractive.astralibs.command.api.exception.NoPermissionException
 import ru.astrainteractive.astralibs.command.api.util.PluginExt.setCommandExecutor
 import ru.astrainteractive.astralibs.util.StringListExt.withEntry
@@ -48,7 +48,7 @@ internal class ClaimCommandRegistry(
                         context.sender.sendMessage(translation.cachedValue.general.onlyPlayerCommand.component)
                     }
 
-                    is DefaultCommandException -> with(kyoriComponentSerializer.cachedValue) {
+                    is CommandException -> with(kyoriComponentSerializer.cachedValue) {
                         when (throwable) {
                             is ArgumentTypeException -> {
                                 context.sender.sendMessage(translation.cachedValue.general.wrongUsage.component)

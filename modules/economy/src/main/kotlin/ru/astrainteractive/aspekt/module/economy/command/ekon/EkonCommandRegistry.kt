@@ -11,7 +11,7 @@ import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.exception.ArgumentTypeException
 import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
-import ru.astrainteractive.astralibs.command.api.exception.DefaultCommandException
+import ru.astrainteractive.astralibs.command.api.exception.CommandException
 import ru.astrainteractive.astralibs.command.api.exception.NoPermissionException
 import ru.astrainteractive.astralibs.command.api.util.PluginExt.setCommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
@@ -96,7 +96,7 @@ internal class EkonCommandRegistry(
             ),
             errorHandler = { context, throwable ->
                 when (throwable) {
-                    is DefaultCommandException -> {
+                    is CommandException -> {
                         when (throwable) {
                             is ArgumentTypeException -> {
                                 context.sender.sendMessage(translation.general.wrongUsage.component)
