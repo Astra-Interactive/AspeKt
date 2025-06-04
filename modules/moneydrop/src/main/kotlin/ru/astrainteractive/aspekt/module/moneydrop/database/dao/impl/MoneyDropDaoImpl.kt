@@ -73,6 +73,6 @@ internal class MoneyDropDaoImpl(
     }
 
     companion object {
-        private val MAX_MONEY_DROP_TIMEOUT = 1.days
+        private val MAX_MONEY_DROP_TIMEOUT = 30.days
     }
 }
