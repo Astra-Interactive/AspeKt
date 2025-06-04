@@ -17,7 +17,6 @@ plugins {
     alias(libs.plugins.klibs.gradle.rootinfo) apply false
     alias(libs.plugins.klibs.minecraft.shadow) apply false
     alias(libs.plugins.klibs.minecraft.resource.processor) apply false
-    alias(libs.plugins.kotlin.kapt) apply false
 }
 
 apply(plugin = "ru.astrainteractive.gradleplugin.dokka.root")
@@ -29,16 +28,10 @@ subprojects.forEach {
     it.plugins.withId("org.jetbrains.kotlin.jvm") {
         it.apply(plugin = "ru.astrainteractive.gradleplugin.java.core")
     }
-    it.tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        compilerOptions.freeCompilerArgs = listOf(
-            "-Xcontext-parameters",
-        )
-    }
     it.repositories {
         gradlePluginPortal()
         mavenCentral()
         mavenLocal()
-        maven("/home/makeevrserg/.m2/repository/")
         maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
         maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
         maven("https://papermc.io/repo/repository/maven-public/")
