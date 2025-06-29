@@ -59,7 +59,9 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
 
     val authApiModule = AuthApiModule(
         scope = scope,
-        dataFolder = dataFolder,
+        dataFolder = dataFolder
+            .resolve("auth")
+            .also(File::mkdirs),
         stringFormat = YamlStringFormat(
             configuration = Yaml.default.configuration.copy(
                 encodeDefaults = true,

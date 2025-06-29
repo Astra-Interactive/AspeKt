@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.module.jail.command.tabcomplete
 
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContext
-import ru.astrainteractive.astralibs.util.StringListExt.withEntry
+import ru.astrainteractive.astralibs.util.withEntry
 
 internal fun BukkitCommandContext.withArgument(
     index: Int,

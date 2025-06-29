@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.auth.api.plugin
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import ru.astrainteractive.astralibs.string.StringDesc
-import ru.astrainteractive.astralibs.string.StringDescExt.plus
+import ru.astrainteractive.astralibs.string.plus
 
 @Serializable
 data class AuthTranslation(

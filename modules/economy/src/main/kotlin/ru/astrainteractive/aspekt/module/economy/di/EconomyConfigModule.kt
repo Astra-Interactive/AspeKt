@@ -7,7 +7,6 @@ import ru.astrainteractive.astralibs.exposed.model.DatabaseConfiguration
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.astralibs.util.fileConfigKrate
 import ru.astrainteractive.klibs.kstorage.api.StateFlowKrate
 import ru.astrainteractive.klibs.kstorage.util.asStateFlowKrate
 import java.io.File

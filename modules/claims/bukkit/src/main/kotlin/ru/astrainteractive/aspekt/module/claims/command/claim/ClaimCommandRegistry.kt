@@ -7,7 +7,7 @@ import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
 import ru.astrainteractive.astralibs.command.api.exception.CommandException
 import ru.astrainteractive.astralibs.command.api.exception.NoPermissionException
 import ru.astrainteractive.astralibs.command.api.util.PluginExt.setCommandExecutor
-import ru.astrainteractive.astralibs.util.StringListExt.withEntry
+import ru.astrainteractive.astralibs.util.withEntry
 
 internal class ClaimCommandRegistry(
     private val dependencies: ClaimCommandDependencies

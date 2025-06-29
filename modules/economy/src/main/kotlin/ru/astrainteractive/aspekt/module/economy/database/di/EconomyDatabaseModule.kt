@@ -17,7 +17,6 @@ import ru.astrainteractive.aspekt.module.economy.database.dao.impl.CachedDaoImpl
 import ru.astrainteractive.aspekt.module.economy.database.dao.impl.EconomyDaoImpl
 import ru.astrainteractive.aspekt.module.economy.database.table.CurrencyTable
 import ru.astrainteractive.aspekt.module.economy.database.table.PlayerCurrencyTable
-import ru.astrainteractive.astralibs.exposed.factory.DatabaseFactory
 import ru.astrainteractive.astralibs.exposed.model.DatabaseConfiguration
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
@@ -26,6 +25,7 @@ import ru.astrainteractive.astralibs.util.mapCached
 import ru.astrainteractive.klibs.kstorage.api.StateFlowKrate
 import java.io.File
 import kotlin.coroutines.CoroutineContext
+import ru.astrainteractive.astralibs.exposed.model.connect
 
 internal interface EconomyDatabaseModule {
     val lifecycle: Lifecycle
@@ -45,7 +45,7 @@ internal interface EconomyDatabaseModule {
             .mapCached(coroutineScope) { dbConfig, previous ->
                 previous?.connector?.invoke()?.close()
                 previous?.run(TransactionManager::closeAndUnregister)
-                val database = DatabaseFactory(dataFolder).create(dbConfig)
+                val database = dbConfig.connect(dataFolder)
                 TransactionManager.manager.defaultIsolationLevel = java.sql.Connection.TRANSACTION_SERIALIZABLE
                 transaction(database) {
                     addLogger(Slf4jSqlDebugLogger)

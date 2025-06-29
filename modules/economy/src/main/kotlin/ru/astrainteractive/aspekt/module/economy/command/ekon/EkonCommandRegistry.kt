@@ -18,7 +18,7 @@ import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.astralibs.util.StringListExt.withEntry
+import ru.astrainteractive.astralibs.util.withEntry
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 
 internal class EkonCommandRegistry(

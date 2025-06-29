@@ -18,7 +18,6 @@ import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import ru.astrainteractive.astralibs.server.MinecraftNativeBridge
 import ru.astrainteractive.astralibs.server.PlatformServer
-import ru.astrainteractive.astralibs.util.fileConfigKrate
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 import ru.astrainteractive.klibs.kstorage.util.asCachedKrate
