@@ -18,6 +18,7 @@ import ru.astrainteractive.aspekt.module.economy.database.dao.impl.EconomyDaoImp
 import ru.astrainteractive.aspekt.module.economy.database.table.CurrencyTable
 import ru.astrainteractive.aspekt.module.economy.database.table.PlayerCurrencyTable
 import ru.astrainteractive.astralibs.exposed.model.DatabaseConfiguration
+import ru.astrainteractive.astralibs.exposed.model.connect
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
@@ -25,7 +26,6 @@ import ru.astrainteractive.astralibs.util.mapCached
 import ru.astrainteractive.klibs.kstorage.api.StateFlowKrate
 import java.io.File
 import kotlin.coroutines.CoroutineContext
-import ru.astrainteractive.astralibs.exposed.model.connect
 
 internal interface EconomyDatabaseModule {
     val lifecycle: Lifecycle
