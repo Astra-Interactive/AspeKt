@@ -11,6 +11,7 @@ dependencies {
     implementation(libs.minecraft.astralibs.command)
     implementation(libs.klibs.kstorage)
     implementation(libs.klibs.mikro.core)
+    compileOnly(libs.minecraft.kyori.plain)
     // Test
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)

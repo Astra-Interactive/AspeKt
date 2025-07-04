@@ -12,9 +12,9 @@ dependencies {
     implementation(libs.minecraft.astralibs.command)
     implementation(libs.klibs.mikro.core)
     implementation(libs.klibs.kstorage)
-    implementation(libs.minecraft.kyori.plain)
-    implementation(libs.minecraft.kyori.legacy)
-    implementation(libs.minecraft.kyori.gson)
+    compileOnly(libs.minecraft.kyori.plain)
+    compileOnly(libs.minecraft.kyori.legacy)
+    compileOnly(libs.minecraft.kyori.gson)
     compileOnly(libs.minecraft.luckperms)
 
     implementation(projects.modules.core.api)
