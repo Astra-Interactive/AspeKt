@@ -4,6 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.astralibs.string.plus
+import ru.astrainteractive.astralibs.string.toRaw
 
 @Serializable
 data class AuthTranslation(
@@ -54,7 +55,3 @@ data class AuthTranslation(
         .plus("Не удалось создать аккаунт!")
         .toRaw(),
 )
-
-fun StringDesc.toRaw(): StringDesc.Raw {
-    return StringDesc.Raw(this.raw)
-}
