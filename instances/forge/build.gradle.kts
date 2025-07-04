@@ -61,12 +61,13 @@ val reobfShadowJar = reobf.create("shadowJar")
 
 astraShadowJar.configureManifest()
 
-minecraftProcessResource.forge()
+minecraftProcessResource {
+    forge()
+}
 
 val shadowJar by tasks.getting(ShadowJar::class) {
     mergeServiceFiles()
-    mustRunAfter(minecraftProcessResource.task)
-    dependsOn(minecraftProcessResource.task)
+    dependsOn(tasks.named<ProcessResources>("processResources"))
     finalizedBy(reobfShadowJar)
     configurations = listOf(project.configurations.shadeImplementation.get())
     isReproducibleFileOrder = true

@@ -71,8 +71,7 @@ minecraftProcessResource {
 val shadowJar = tasks.named<ShadowJar>("shadowJar")
 shadowJar.configure {
     mergeServiceFiles()
-    mustRunAfter(minecraftProcessResource.task)
-    dependsOn(minecraftProcessResource.task)
+    dependsOn(tasks.named<ProcessResources>("processResources"))
     isReproducibleFileOrder = true
     archiveClassifier = null as String?
     archiveVersion.set(requireProjectInfo.versionString)
@@ -86,9 +85,5 @@ shadowJar.configure {
         exclude(dependency(libs.exposed.jdbc.get()))
         exclude(dependency(libs.exposed.dao.get()))
         exclude(dependency(libs.exposed.core.get()))
-        exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib:${libs.versions.kotlin.version.get()}"))
-    }
-    dependencies {
-        exclude(dependency("net.kyori:.*"))
     }
 }

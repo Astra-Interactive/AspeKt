@@ -12,7 +12,7 @@ driver-mysql = "8.0.33" # https://github.com/mysql/mysql-connector-j
 driver-h2 = "2.3.232" # https://github.com/h2database/h2database
 
 # klibs
-klibs-gradleplugin = "1.6.12" # https://github.com/makeevrserg/gradle-plugin
+klibs-gradleplugin = "1.9.0" # https://github.com/makeevrserg/gradle-plugin
 klibs-mikro = "1.11.0" # https://github.com/makeevrserg/klibs.mikro
 klibs-kstorage = "4.2.0" # https://github.com/makeevrserg/klibs.kstorage
 
