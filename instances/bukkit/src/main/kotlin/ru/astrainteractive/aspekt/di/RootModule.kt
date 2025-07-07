@@ -36,7 +36,10 @@ class RootModule(plugin: LifecyclePlugin) {
         )
     }
     val bukkitCoreModule: BukkitCoreModule by lazy {
-        BukkitCoreModule(plugin)
+        BukkitCoreModule(
+            plugin = plugin,
+            scope = coreModule.scope
+        )
     }
     val claimModule by lazy {
         ClaimModule(
