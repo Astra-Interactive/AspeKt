@@ -34,7 +34,7 @@ suspend fun ClaimsRepository.setFlag(
     key: UniqueWorldKey
 ): Result<Unit> {
     claimOwnerUuid(key)?.let { ownerUuid ->
-        if (ownerUuid != uuid) throw UnderClaimException(ownerUuid)
+        if (ownerUuid != uuid) return Result.failure(UnderClaimException(ownerUuid))
     }
     val actualChunk = getChunk(uuid, key) ?: return Result.failure(ClaimNotFoundException)
     val updatedChunk = actualChunk.copy(
@@ -58,7 +58,7 @@ suspend fun ClaimsRepository.getAllChunks(uuid: UUID): List<ClaimChunk> {
 
 suspend fun ClaimsRepository.claim(uuid: UUID, claimChunk: ClaimChunk): Result<Unit> {
     claimOwnerUuid(claimChunk.uniqueWorldKey)?.let { ownerUuid ->
-        throw UnderClaimException(ownerUuid)
+        return Result.failure(UnderClaimException(ownerUuid))
     }
     return saveChunk(
         uuid = uuid,
