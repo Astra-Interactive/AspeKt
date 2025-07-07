@@ -1,5 +1,7 @@
 package ru.astrainteractive.aspekt.module.jail.command.jail
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
+import io.papermc.paper.command.brigadier.CommandSourceStack
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -25,8 +27,8 @@ import ru.astrainteractive.astralibs.string.StringDesc
 import java.time.Instant
 
 @Suppress("LongMethod")
-internal fun JailCommandManager.jailCommand() {
-    with(kyoriKrate.unwrap()) {
+internal fun JailCommandManager.jailCommand(): LiteralArgumentBuilder<CommandSourceStack> {
+    return with(kyoriKrate.unwrap()) {
         command("jail") {
             literal("list") {
                 runs { ctx ->

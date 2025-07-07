@@ -35,12 +35,11 @@ class RootModule(plugin: LifecyclePlugin) {
             platformServer = BukkitPlatformServer()
         )
     }
-    val bukkitCoreModule: BukkitCoreModule by lazy {
-        BukkitCoreModule(
-            plugin = plugin,
-            scope = coreModule.scope
-        )
-    }
+    val bukkitCoreModule: BukkitCoreModule = BukkitCoreModule(
+        plugin = plugin,
+        scope = coreModule.scope,
+        mainScope = coreModule.mainScope
+    )
     val claimModule by lazy {
         ClaimModule(
             stringFormat = coreModule.jsonStringFormat,

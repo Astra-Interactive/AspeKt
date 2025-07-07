@@ -1,6 +1,12 @@
 package ru.astrainteractive.aspekt.module.jail.command
 
+import io.papermc.paper.command.brigadier.Commands
+import io.papermc.paper.plugin.lifecycle.event.registrar.ReloadableRegistrarEvent
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onEach
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.module.jail.command.jail.jailCommand
 import ru.astrainteractive.aspekt.module.jail.controller.JailController
@@ -20,9 +26,14 @@ internal class JailCommandManager(
     val kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     val jailApi: JailApi,
     val cachedJailApi: CachedJailApi,
-    val jailController: JailController
+    val jailController: JailController,
+    val commandsRegistrarFlow: SharedFlow<ReloadableRegistrarEvent<Commands>?>,
+    val mainScope: CoroutineScope
 ) : Logger by JUtiltLogger("AspeKt-JailCommandManager") {
     fun register() {
-        jailCommand()
+        commandsRegistrarFlow
+            .mapNotNull { it?.registrar() }
+            .onEach { it.register(jailCommand().build()) }
+            .launchIn(mainScope)
     }
 }

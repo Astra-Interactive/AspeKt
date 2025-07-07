@@ -34,6 +34,7 @@ interface CoreModule {
     val minecraftNativeBridge: MinecraftNativeBridge
 
     val scope: CoroutineScope
+    val mainScope: CoroutineScope
     val pluginConfig: CachedKrate<PluginConfiguration>
     val translation: CachedKrate<PluginTranslation>
     val yamlFormat: StringFormat
@@ -52,6 +53,7 @@ interface CoreModule {
         // Core
 
         override val scope = CoroutineFeature.Default(Dispatchers.IO)
+        override val mainScope: CoroutineScope = CoroutineFeature.Default(dispatchers.Main)
 
         override val yamlFormat: StringFormat = YamlStringFormat(
             configuration = Yaml.default.configuration.copy(
