@@ -40,8 +40,6 @@ dependencies {
     implementation(projects.modules.broadcast)
     implementation(projects.modules.claims.api)
     implementation(projects.modules.claims.bukkit)
-    implementation(projects.modules.discordlink)
-    implementation(projects.modules.townyDiscord)
     implementation(projects.modules.moneydrop)
     implementation(projects.modules.moneyAdvancements)
     implementation(projects.modules.autocrop)
@@ -53,7 +51,6 @@ dependencies {
     implementation(projects.modules.inventorysort)
     implementation(projects.modules.sit)
     implementation(projects.modules.restrictions)
-    implementation(projects.modules.entities)
     implementation(projects.modules.jail)
     implementation(projects.modules.invisibleItemFrames)
 }
