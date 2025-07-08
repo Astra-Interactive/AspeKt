@@ -19,7 +19,7 @@ internal class ClaimCommandParser : CommandParser<Claimommand.Model, BukkitComma
     override fun parse(commandContext: BukkitCommandContext): Claimommand.Model {
         val sender = commandContext.sender
         val claimArgument = commandContext.requireArgument(0, EnumArgumentType(ClaimCommandArgument.entries))
-        commandContext.requirePermission(PluginPermission.AdminClaim)
+        commandContext.requirePermission(PluginPermission.ADMIN_CLAIM)
         return when (claimArgument) {
             ClaimCommandArgument.MAP -> {
                 val player = sender as? Player ?: throw Claimommand.Error.NotPlayer

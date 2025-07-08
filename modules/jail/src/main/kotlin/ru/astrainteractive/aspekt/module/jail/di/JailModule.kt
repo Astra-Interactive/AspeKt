@@ -45,7 +45,9 @@ class JailModule(
         kyoriKrate = coreModule.kyoriComponentSerializer,
         jailApi = jailApi,
         cachedJailApi = cachedJailApi,
-        jailController = jailController
+        jailController = jailController,
+        commandsRegistrarFlow = bukkitCoreModule.commandsRegistrarFlow,
+        mainScope = coreModule.mainScope
     )
 
     private val unJailJob = UnJailJob(

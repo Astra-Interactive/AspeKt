@@ -10,22 +10,22 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.CoroutineFeature
 import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 
 internal class EkonCommandExecutor(
-    private val getKyori: () -> KyoriComponentSerializer,
+    private val getKyori: CachedKrate<KyoriComponentSerializer>,
     private val getTranslation: () -> PluginTranslation,
     private val dao: EconomyDao
 ) : CommandExecutor<EkonCommand.Model>,
-    CoroutineFeature by CoroutineFeature.Default(
-        Dispatchers.IO
-    ),
+    CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO),
+    KyoriComponentSerializer by getKyori.unwrap(),
     Logger by JUtiltLogger("EkonCommandExecutor") {
-    private val kyori get() = getKyori.invoke()
     private val translation get() = getTranslation.invoke()
 
-    private suspend fun addCurrency(input: EkonCommand.Model.Add) = with(kyori) {
+    private suspend fun addCurrency(input: EkonCommand.Model.Add) {
         val playerCurrency = dao.findPlayerCurrency(
             playerUuid = input.otherPlayer.uniqueId.toString(),
             currencyId = input.currency.id
@@ -47,7 +47,7 @@ internal class EkonCommandExecutor(
         }.onSuccess { input.sender.sendMessage(translation.economy.moneyTransferred.component) }
     }
 
-    private suspend fun setCurrency(input: EkonCommand.Model.Set) = with(kyori) {
+    private suspend fun setCurrency(input: EkonCommand.Model.Set) {
         kotlin.runCatching {
             val updatedCurrency = PlayerCurrency(
                 playerModel = PlayerModel(
@@ -64,7 +64,7 @@ internal class EkonCommandExecutor(
         }.onSuccess { input.sender.sendMessage(translation.economy.moneyTransferred.component) }
     }
 
-    private suspend fun balance(input: EkonCommand.Model.Balance) = with(kyori) {
+    private suspend fun balance(input: EkonCommand.Model.Balance) {
         val amount = dao.findPlayerCurrency(
             playerUuid = input.otherPlayer.uniqueId.toString(),
             currencyId = input.currency.id
@@ -72,7 +72,7 @@ internal class EkonCommandExecutor(
         input.sender.sendMessage(translation.economy.playerBalance(amount).component)
     }
 
-    private suspend fun listCurrencies(input: EkonCommand.Model.ListCurrencies) = with(kyori) {
+    private suspend fun listCurrencies(input: EkonCommand.Model.ListCurrencies) {
         val currencies = dao.getAllCurrencies()
             .map(CurrencyModel::name)
             .joinToString(",")
@@ -80,7 +80,7 @@ internal class EkonCommandExecutor(
         input.sender.sendMessage(translation.economy.currencies(currencies).component)
     }
 
-    private suspend fun topPlayers(input: EkonCommand.Model.Top) = with(kyori) {
+    private suspend fun topPlayers(input: EkonCommand.Model.Top) {
         val top5 = dao.topCurrency(
             id = input.currency.id,
             page = input.page,
@@ -104,27 +104,25 @@ internal class EkonCommandExecutor(
 
     override fun execute(input: EkonCommand.Model) {
         launch {
-            with(kyori) {
-                when (input) {
-                    is EkonCommand.Model.Add -> {
-                        addCurrency(input)
-                    }
+            when (input) {
+                is EkonCommand.Model.Add -> {
+                    addCurrency(input)
+                }
 
-                    is EkonCommand.Model.Set -> {
-                        setCurrency(input)
-                    }
+                is EkonCommand.Model.Set -> {
+                    setCurrency(input)
+                }
 
-                    is EkonCommand.Model.Balance -> {
-                        balance(input)
-                    }
+                is EkonCommand.Model.Balance -> {
+                    balance(input)
+                }
 
-                    is EkonCommand.Model.ListCurrencies -> {
-                        listCurrencies(input)
-                    }
+                is EkonCommand.Model.ListCurrencies -> {
+                    listCurrencies(input)
+                }
 
-                    is EkonCommand.Model.Top -> {
-                        topPlayers(input)
-                    }
+                is EkonCommand.Model.Top -> {
+                    topPlayers(input)
                 }
             }
         }

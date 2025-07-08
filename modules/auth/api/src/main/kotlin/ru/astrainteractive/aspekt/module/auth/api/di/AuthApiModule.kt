@@ -9,7 +9,6 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Slf4jSqlDebugLogger
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.TransactionManager
-import org.jetbrains.exposed.sql.transactions.TransactionManager.Companion.closeAndUnregister
 import org.jetbrains.exposed.sql.transactions.transaction
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
@@ -17,10 +16,12 @@ import ru.astrainteractive.aspekt.module.auth.api.internal.AuthDaoImpl
 import ru.astrainteractive.aspekt.module.auth.api.internal.AuthorizedApiImpl
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.aspekt.module.auth.api.table.UserTable
-import ru.astrainteractive.astralibs.exposed.factory.DatabaseFactory
 import ru.astrainteractive.astralibs.exposed.model.DatabaseConfiguration
-import ru.astrainteractive.astralibs.util.FlowExt.mapCached
-import ru.astrainteractive.astralibs.util.fileConfigKrate
+import ru.astrainteractive.astralibs.exposed.model.connect
+import ru.astrainteractive.astralibs.serialization.StringFormatExt.parseOrWriteIntoDefault
+import ru.astrainteractive.astralibs.util.mapCached
+import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
+import ru.astrainteractive.klibs.kstorage.util.asCachedKrate
 import java.io.File
 
 class AuthApiModule(
@@ -32,7 +33,7 @@ class AuthApiModule(
         .mapCached(scope) { dbConfig, previous ->
             previous?.connector?.invoke()?.close()
             previous?.run(TransactionManager::closeAndUnregister)
-            val database = DatabaseFactory(dataFolder).create(dbConfig)
+            val database = dbConfig.connect(dataFolder)
             TransactionManager.manager.defaultIsolationLevel = java.sql.Connection.TRANSACTION_SERIALIZABLE
             transaction(database) {
                 addLogger(Slf4jSqlDebugLogger)
@@ -50,9 +51,13 @@ class AuthApiModule(
         authDao = authDao,
         scope = scope
     )
-    val translationKrate = fileConfigKrate(
-        file = dataFolder.resolve("translation.yml"),
-        stringFormat = stringFormat,
+    val translationKrate = DefaultMutableKrate(
         factory = ::AuthTranslation,
-    )
+        loader = {
+            stringFormat.parseOrWriteIntoDefault(
+                file = dataFolder.resolve("translation.yml"),
+                default = ::AuthTranslation
+            )
+        }
+    ).asCachedKrate()
 }

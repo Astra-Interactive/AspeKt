@@ -9,6 +9,7 @@ dependencies {
     // Spigot dependencies
     compileOnly(libs.minecraft.paper.api)
     compileOnly(libs.minecraft.discordsrv)
+    implementation(libs.minecraft.astralibs.command)
     compileOnly(libs.minecraft.vaultapi)
     // AstraLibs
     implementation(libs.minecraft.astralibs.core)
@@ -17,5 +18,6 @@ dependencies {
     implementation(libs.klibs.mikro.core)
     implementation(libs.minecraft.astralibs.menu.bukkit)
     implementation(libs.minecraft.astralibs.core.bukkit)
+
     implementation(projects.modules.core.api)
 }

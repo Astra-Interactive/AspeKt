@@ -17,7 +17,7 @@ internal interface EconomyCommandModule {
         private val econCommandRegistry = EkonCommandRegistry(
             plugin = bukkitCoreModule.plugin,
             getTranslation = { coreModule.translation.cachedValue },
-            getKyori = { coreModule.kyoriComponentSerializer.cachedValue },
+            getKyori = coreModule.kyoriComponentSerializer,
             dao = databaseModule.economyDao,
             cachedDao = databaseModule.cachedDao
         )

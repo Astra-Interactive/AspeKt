@@ -12,12 +12,12 @@ import ru.astrainteractive.aspekt.module.auth.command.unregisterCommand
 import ru.astrainteractive.aspekt.module.auth.event.ForgeAuthEvent
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 
 class ForgeAuthModule(
     private val scope: CoroutineScope,
     private val authApiModule: AuthApiModule,
-    private val kyoriKrate: Krate<KyoriComponentSerializer>,
+    private val kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     registerCommandsEventFlow: Flow<RegisterCommandsEvent>,
 ) {
     @Suppress("UnusedPrivateProperty")

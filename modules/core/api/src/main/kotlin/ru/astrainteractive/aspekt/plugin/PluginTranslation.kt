@@ -5,8 +5,9 @@ package ru.astrainteractive.aspekt.plugin
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import ru.astrainteractive.astralibs.string.StringDesc
-import ru.astrainteractive.astralibs.string.StringDescExt.plus
-import ru.astrainteractive.astralibs.string.StringDescExt.replace
+import ru.astrainteractive.astralibs.string.plus
+import ru.astrainteractive.astralibs.string.replace
+import ru.astrainteractive.astralibs.string.toRaw
 import java.text.DecimalFormat
 
 /**
@@ -484,8 +485,4 @@ class PluginTranslation(
         fun swearFilterEnabledFor(name: String) = swearFilterEnabledFor.replace("{player}", name)
         fun swearFilterDisabledFor(name: String) = swearFilterDisabledFor.replace("{player}", name)
     }
-}
-
-private fun StringDesc.toRaw(): StringDesc.Raw {
-    return StringDesc.Raw(this.raw)
 }

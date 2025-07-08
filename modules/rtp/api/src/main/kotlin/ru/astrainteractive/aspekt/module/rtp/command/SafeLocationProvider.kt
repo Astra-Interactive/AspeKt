@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.module.rtp.command
 
 import kotlinx.coroutines.CoroutineScope
-import ru.astrainteractive.aspekt.minecraft.location.Location
+import ru.astrainteractive.astralibs.server.location.Location
 import java.util.UUID
 
 interface SafeLocationProvider {

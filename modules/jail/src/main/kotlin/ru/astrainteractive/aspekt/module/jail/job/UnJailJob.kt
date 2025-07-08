@@ -10,7 +10,8 @@ import ru.astrainteractive.aspekt.module.jail.util.offlinePlayer
 import ru.astrainteractive.aspekt.module.jail.util.sendMessage
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.astralibs.kyori.unwrap
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 import java.time.Instant
 import kotlin.time.Duration.Companion.seconds
@@ -20,13 +21,13 @@ internal class UnJailJob(
     private val cachedJailApi: CachedJailApi,
     private val jailApi: JailApi,
     private val jailController: JailController,
-    kyoriKrate: Krate<KyoriComponentSerializer>,
-    translationKrate: Krate<PluginTranslation>
-) : ScheduledJob("AspeKt-UnJail") {
+    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    translationKrate: CachedKrate<PluginTranslation>
+) : ScheduledJob("AspeKt-UnJail"),
+    KyoriComponentSerializer by kyoriKrate.unwrap() {
     override val delayMillis: Long = 10.seconds.inWholeMilliseconds
     override val initialDelayMillis: Long = 0.seconds.inWholeMilliseconds
     override val isEnabled: Boolean = true
-    private val kyori by kyoriKrate
     private val translation by translationKrate
 
     override fun execute() {
@@ -43,9 +44,7 @@ internal class UnJailJob(
                 jailApi.free(inmate.uuid)
                 cachedJailApi.cache(inmate.uuid)
                 jailController.free(inmate)
-                with(kyori) {
-                    inmate.offlinePlayer.sendMessage(translation.jails.youVeBeenFreed.component)
-                }
+                inmate.offlinePlayer.sendMessage(translation.jails.youVeBeenFreed.component)
             }
         }
     }

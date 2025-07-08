@@ -15,25 +15,25 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent
 import net.minecraftforge.event.level.BlockEvent
 import net.minecraftforge.eventbus.api.EventPriority
-import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
-import ru.astrainteractive.aspekt.core.forge.event.flowEvent
-import ru.astrainteractive.aspekt.core.forge.event.playerMoveFlowEvent
-import ru.astrainteractive.aspekt.core.forge.kyori.sendSystemMessage
-import ru.astrainteractive.aspekt.core.forge.kyori.withAudience
-import ru.astrainteractive.aspekt.core.forge.util.getValue
-import ru.astrainteractive.aspekt.core.forge.util.toPlain
-import ru.astrainteractive.aspekt.minecraft.location.dist
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
+import ru.astrainteractive.astralibs.coroutine.ForgeMainDispatcher
+import ru.astrainteractive.astralibs.event.flowEvent
+import ru.astrainteractive.astralibs.event.playerMoveFlowEvent
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.astralibs.kyori.unwrap
+import ru.astrainteractive.astralibs.server.location.dist
+import ru.astrainteractive.astralibs.server.util.asAudience
+import ru.astrainteractive.astralibs.server.util.toPlain
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
+import ru.astrainteractive.klibs.kstorage.util.getValue
 
 class ForgeAuthEvent(
     private val authorizedApi: AuthorizedApi,
-    private val kyoriKrate: Krate<KyoriComponentSerializer>,
-    translationKrate: Krate<AuthTranslation>
-) {
+    private val kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    translationKrate: CachedKrate<AuthTranslation>
+) : KyoriComponentSerializer by kyoriKrate.unwrap() {
     val translation by translationKrate
     private val scope = CoroutineScope(SupervisorJob() + ForgeMainDispatcher) // todo
 
@@ -58,15 +58,15 @@ class ForgeAuthEvent(
 
             AuthorizedApi.AuthState.Pending,
             AuthorizedApi.AuthState.NotAuthorized -> {
-                kyoriKrate
-                    .withAudience(player)
-                    .sendSystemMessage(translation.notAuthorized)
+                player
+                    .asAudience()
+                    .sendMessage(translation.notAuthorized.component)
             }
 
             AuthorizedApi.AuthState.NotRegistered -> {
-                kyoriKrate
-                    .withAudience(player)
-                    .sendSystemMessage(translation.notRegistered)
+                player
+                    .asAudience()
+                    .sendMessage(translation.notRegistered.component)
             }
         }
     }

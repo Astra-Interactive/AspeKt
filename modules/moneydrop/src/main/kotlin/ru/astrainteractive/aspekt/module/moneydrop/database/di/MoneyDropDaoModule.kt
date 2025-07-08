@@ -1,11 +1,12 @@
 package ru.astrainteractive.aspekt.module.moneydrop.database.di
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Slf4jSqlDebugLogger
@@ -52,7 +53,9 @@ internal interface MoneyDropDaoModule {
 
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onDisable = {
-                runBlocking { TransactionManager.closeAndUnregister(database.first()) }
+                GlobalScope.launch {
+                    TransactionManager.closeAndUnregister(database.first())
+                }
             }
         )
     }

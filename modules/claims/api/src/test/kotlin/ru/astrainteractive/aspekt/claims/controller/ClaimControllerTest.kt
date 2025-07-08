@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.claims.controller
 
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepositoryImpl
 import ru.astrainteractive.aspekt.module.claims.data.claim
@@ -52,7 +52,7 @@ internal class ClaimControllerTest {
     }
 
     @Test
-    fun testClaimAndUnclaim(): Unit = runBlocking {
+    fun testClaimAndUnclaim(): Unit = runTest {
         val repository = getRepository()
         randomChunk.let { chunk ->
             repository.claim(claimPlayer.uuid, chunk)
@@ -63,7 +63,7 @@ internal class ClaimControllerTest {
     }
 
     @Test
-    fun testSetFlag(): Unit = runBlocking {
+    fun testSetFlag(): Unit = runTest {
         val repository = getRepository()
         randomChunk.let { chunk ->
             repository.claim(claimPlayer.uuid, chunk)
@@ -81,7 +81,7 @@ internal class ClaimControllerTest {
     }
 
     @Test
-    fun testIsAble(): Unit = runBlocking {
+    fun testIsAble(): Unit = runTest {
         val repository = getRepository()
         randomChunk.let { chunk ->
             assertTrue { repository.isAble(chunk.uniqueWorldKey, ChunkFlag.ALLOW_BREAK) }
@@ -95,7 +95,7 @@ internal class ClaimControllerTest {
     }
 
     @Test
-    fun testMapThree(): Unit = runBlocking {
+    fun testMapThree(): Unit = runTest {
         val repository = getRepository()
         randomChunk.let { chunk ->
             repository.claim(claimPlayer.uuid, chunk)

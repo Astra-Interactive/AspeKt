@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.serialization.StringFormat
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.minecraft.teleport.ForgeTeleportApi
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.sethome.command.HomeCommandExecutor
 import ru.astrainteractive.aspekt.module.sethome.command.homes
@@ -24,13 +23,12 @@ class HomesModule(
         folder = dataFolder.resolve("homes").also(File::mkdirs),
         stringFormat = stringFormat
     )
-    val teleporter = ForgeTeleportApi()
     val homeCommandExecutor = HomeCommandExecutor(
         homeKrateProvider = homeKrateProvider,
         scope = coreModule.scope,
-        teleportApi = teleporter,
         translationKrate = coreModule.translation,
-        minecraftMessenger = coreModule.minecraftMessenger
+        kyoriKrate = coreModule.kyoriComponentSerializer,
+        minecraftNativeBridge = coreModule.minecraftNativeBridge
     )
 
     val lifecycle = Lifecycle.Lambda(

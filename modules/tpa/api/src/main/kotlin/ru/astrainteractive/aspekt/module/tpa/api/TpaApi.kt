@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.module.tpa.api
 
 import com.google.common.cache.CacheBuilder
-import java.util.UUID
+import ru.astrainteractive.astralibs.server.player.OnlineMinecraftPlayer
 import java.util.concurrent.TimeUnit
 
 class TpaApi {
@@ -10,50 +10,50 @@ class TpaApi {
     }
 
     data class Request(
-        val uuid: UUID,
+        val player: OnlineMinecraftPlayer,
         val type: RequestType
     )
 
     private val cache = CacheBuilder
         .newBuilder()
         .expireAfterWrite(30, TimeUnit.SECONDS)
-        .build<UUID, Request>()
+        .build<OnlineMinecraftPlayer, Request>()
 
-    fun tpa(executor: UUID, target: UUID) {
+    fun tpa(executor: OnlineMinecraftPlayer, target: OnlineMinecraftPlayer) {
         cache.put(executor, Request(target, RequestType.TPA))
     }
 
-    fun tpaHere(executor: UUID, target: UUID) {
+    fun tpaHere(executor: OnlineMinecraftPlayer, target: OnlineMinecraftPlayer) {
         cache.put(executor, Request(target, RequestType.TPAHERE))
     }
 
-    fun get(uuid: UUID): Map<UUID, Request> {
-        return cache.asMap().filter { it.value.uuid == uuid }
+    fun get(player: OnlineMinecraftPlayer): Map<OnlineMinecraftPlayer, Request> {
+        return cache.asMap().filter { it.value.player == player }
     }
 
-    fun cancel(uuid: UUID) {
-        cache.invalidate(uuid)
+    fun cancel(player: OnlineMinecraftPlayer) {
+        cache.invalidate(player)
     }
 
-    fun deny(uuid: UUID): Set<UUID> {
-        val uuids = cache.asMap()
-            .filter { it.value.uuid == uuid }
+    fun deny(player: OnlineMinecraftPlayer): Set<OnlineMinecraftPlayer> {
+        val players = cache.asMap()
+            .filter { it.value.player == player }
             .keys
-        uuids.forEach(::cancel)
-        return uuids
+        players.forEach(::cancel)
+        return players
     }
 
     /**
      * This player is awaiting to teleport
      */
-    fun hasPendingRequest(uuid: UUID): Boolean {
-        return cache.getIfPresent(uuid) != null
+    fun hasPendingRequest(player: OnlineMinecraftPlayer): Boolean {
+        return cache.getIfPresent(player) != null
     }
 
     /**
      * Some people has request for this player
      */
-    fun isBeingWaited(uuid: UUID): Boolean {
-        return uuid in cache.asMap().values.map(Request::uuid)
+    fun isBeingWaited(player: OnlineMinecraftPlayer): Boolean {
+        return player in cache.asMap().values.map(Request::player)
     }
 }

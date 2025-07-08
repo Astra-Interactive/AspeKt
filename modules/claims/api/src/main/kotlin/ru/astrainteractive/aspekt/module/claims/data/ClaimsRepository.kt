@@ -20,7 +20,7 @@ interface ClaimsRepository {
 }
 
 suspend fun ClaimsRepository.claimOwnerUuid(key: UniqueWorldKey): UUID? {
-    return chunkByKrate[key]?.cachedValue?.ownerUUID
+    return chunkByKrate[key]?.cachedStateFlow?.value?.ownerUUID
 }
 
 suspend fun ClaimsRepository.isPlayerOwnClaim(uuid: UUID, key: UniqueWorldKey): Boolean {
@@ -34,7 +34,7 @@ suspend fun ClaimsRepository.setFlag(
     key: UniqueWorldKey
 ): Result<Unit> {
     claimOwnerUuid(key)?.let { ownerUuid ->
-        if (ownerUuid != uuid) throw UnderClaimException(ownerUuid)
+        if (ownerUuid != uuid) return Result.failure(UnderClaimException(ownerUuid))
     }
     val actualChunk = getChunk(uuid, key) ?: return Result.failure(ClaimNotFoundException)
     val updatedChunk = actualChunk.copy(
@@ -53,12 +53,12 @@ suspend fun ClaimsRepository.getChunk(
 }
 
 suspend fun ClaimsRepository.getAllChunks(uuid: UUID): List<ClaimChunk> {
-    return requireKrate(uuid).loadAndGet().chunks.map { it.value }
+    return requireKrate(uuid).getValue().chunks.map { it.value }
 }
 
 suspend fun ClaimsRepository.claim(uuid: UUID, claimChunk: ClaimChunk): Result<Unit> {
     claimOwnerUuid(claimChunk.uniqueWorldKey)?.let { ownerUuid ->
-        throw UnderClaimException(ownerUuid)
+        return Result.failure(UnderClaimException(ownerUuid))
     }
     return saveChunk(
         uuid = uuid,
@@ -70,7 +70,7 @@ suspend fun ClaimsRepository.claim(uuid: UUID, claimChunk: ClaimChunk): Result<U
 
 fun ClaimsRepository.getAllChunks(): List<ClaimChunk> {
     return allKrates
-        .map { claimDataKrate -> claimDataKrate.cachedValue }
+        .map { claimDataKrate -> claimDataKrate.cachedStateFlow.value }
         .flatMap { claimData -> claimData.chunks.values }
 }
 
@@ -105,10 +105,10 @@ fun ClaimsRepository.isAble(
     if (krate == null) {
         return chunkValue
     }
-    if (krate.cachedValue.ownerUUID == claimPlayer?.uuid) {
+    if (krate.cachedStateFlow.value.ownerUUID == claimPlayer?.uuid) {
         return true
     }
-    if (krate.cachedValue.members.map(ClaimPlayer::uuid).contains(claimPlayer?.uuid)) {
+    if (krate.cachedStateFlow.value.members.map(ClaimPlayer::uuid).contains(claimPlayer?.uuid)) {
         return true
     }
     return chunkValue

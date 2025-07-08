@@ -4,12 +4,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import net.minecraft.server.level.ServerPlayer
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.aspekt.core.forge.command.util.literal
-import ru.astrainteractive.aspekt.core.forge.command.util.requireArgument
-import ru.astrainteractive.aspekt.core.forge.command.util.stringArgument
-import ru.astrainteractive.aspekt.core.forge.kyori.sendSystemMessage
-import ru.astrainteractive.aspekt.core.forge.kyori.withAudience
-import ru.astrainteractive.aspekt.core.forge.util.toPlain
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.isRegistered
@@ -17,39 +11,43 @@ import ru.astrainteractive.aspekt.module.auth.api.model.AuthData
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.aspekt.module.auth.api.util.sha256
 import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
+import ru.astrainteractive.astralibs.command.util.argument
+import ru.astrainteractive.astralibs.command.util.command
+import ru.astrainteractive.astralibs.command.util.requireArgument
+import ru.astrainteractive.astralibs.command.util.runs
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.astralibs.server.util.asAudience
+import ru.astrainteractive.astralibs.server.util.toPlain
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 
 @Suppress("LongMethod")
 fun RegisterCommandsEvent.registerCommand(
     scope: CoroutineScope,
     authDao: AuthDao,
     authorizedApi: AuthorizedApi,
-    kyoriKrate: Krate<KyoriComponentSerializer>,
-    translationKrate: Krate<AuthTranslation>
+    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    translationKrate: CachedKrate<AuthTranslation>,
 ) {
-    literal("register") {
-        stringArgument(
-            alias = "password",
-            builder = {
-                stringArgument(
-                    alias = "password_confirm",
-                    execute = execute@{ ctx ->
-                        val translation = translationKrate.cachedValue
-                        val player = ctx.source.entity as? ServerPlayer
-                        player ?: run {
-                            kyoriKrate
-                                .withAudience(ctx.source)
-                                .sendSystemMessage(translation.onlyPlayerCommand)
-                            return@execute
-                        }
-                        val passwordSha = ctx.requireArgument("password", StringArgumentType).sha256()
-                        scope.launch {
+    command("register") {
+        argument(alias = "password", com.mojang.brigadier.arguments.StringArgumentType.string()) {
+            argument("password_confirm", com.mojang.brigadier.arguments.StringArgumentType.string()) {
+                runs { ctx ->
+                    scope.launch {
+                        with(kyoriKrate.cachedValue) {
+                            val translation = translationKrate.cachedValue
+                            val player = ctx.source.entity as? ServerPlayer
+                            player ?: run {
+                                ctx.source
+                                    .asAudience()
+                                    .sendMessage(translation.onlyPlayerCommand.component)
+                                return@launch
+                            }
+                            val passwordSha = ctx.requireArgument("password", StringArgumentType).sha256()
                             val isRegistered = authDao.isRegistered(player.uuid)
                             if (isRegistered) {
-                                kyoriKrate
-                                    .withAudience(ctx.source)
-                                    .sendSystemMessage(translation.alreadyRegistered)
+                                ctx.source
+                                    .asAudience()
+                                    .sendMessage(translation.alreadyRegistered.component)
                                 return@launch
                             }
                             val authData = AuthData(
@@ -60,19 +58,19 @@ fun RegisterCommandsEvent.registerCommand(
                             )
                             authDao.createAccount(authData)
                                 .onFailure {
-                                    kyoriKrate
-                                        .withAudience(ctx.source)
-                                        .sendSystemMessage(translation.couldNotCreateAccount)
+                                    ctx.source
+                                        .asAudience()
+                                        .sendMessage(translation.couldNotCreateAccount.component)
                                 }.onSuccess {
-                                    kyoriKrate
-                                        .withAudience(ctx.source)
-                                        .sendSystemMessage(translation.accountCreated)
+                                    ctx.source
+                                        .asAudience()
+                                        .sendMessage(translation.accountCreated.component)
                                     authorizedApi.authUser(player.uuid)
                                 }
                         }
                     }
-                )
+                }
             }
-        )
+        }
     }.run(dispatcher::register)
 }

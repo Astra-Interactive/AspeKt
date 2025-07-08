@@ -8,7 +8,12 @@ dependencies {
     implementation(libs.bundles.kotlin)
     // AstraLibs
     implementation(libs.minecraft.astralibs.core)
+    implementation(libs.minecraft.astralibs.command)
+    compileOnly(libs.minecraft.kyori.plain)
+    compileOnly(libs.minecraft.kyori.legacy)
+    compileOnly(libs.minecraft.kyori.gson)
     api(libs.klibs.kstorage)
     implementation(libs.klibs.mikro.core)
     implementation(libs.klibs.mikro.core)
+    compileOnly("com.mojang:brigadier:1.0.18")
 }

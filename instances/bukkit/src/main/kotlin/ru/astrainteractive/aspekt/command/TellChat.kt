@@ -6,7 +6,7 @@ import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
 
 fun CommandManager.tellChat() = plugin.getCommand("tellchat")?.setExecutor { sender, command, label, args ->
-    if (!sender.toPermissible().hasPermission(PluginPermission.TellChat)) return@setExecutor true
+    if (!sender.toPermissible().hasPermission(PluginPermission.TELL_CHAT)) return@setExecutor true
     val argument = args.getOrNull(0) ?: error("Wrong usage")
     val message = args.slice(1 until args.size).joinToString(" ")
 

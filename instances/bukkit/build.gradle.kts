@@ -57,9 +57,12 @@ dependencies {
     implementation(projects.modules.jail)
     implementation(projects.modules.invisibleItemFrames)
 }
-val destination = File("/home/makeevrserg/Desktop/git/AspeKt/build/bukkit/plugins/")
+val destination = rootProject
+    .layout.buildDirectory.asFile.get()
+    .resolve("bukkit")
+    .resolve("plugins")
     .takeIf(File::exists)
-    ?: File(rootDir, "jars").also(File::mkdirs)
+    ?: rootDir.resolve("jars").also(File::mkdirs)
 
 minecraftProcessResource {
     bukkit()
@@ -68,22 +71,19 @@ minecraftProcessResource {
 val shadowJar = tasks.named<ShadowJar>("shadowJar")
 shadowJar.configure {
     mergeServiceFiles()
-    mustRunAfter(minecraftProcessResource.task)
-    dependsOn(minecraftProcessResource.task)
+    dependsOn(tasks.named<ProcessResources>("processResources"))
     isReproducibleFileOrder = true
     archiveClassifier = null as String?
     archiveVersion.set(requireProjectInfo.versionString)
     archiveBaseName.set("${requireProjectInfo.name}-bukkit")
     destinationDirectory = destination
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-//    configurations = listOf(project.configurations.shadow.get())
-//    dependsOn(configurations)
+    configurations = listOf(project.configurations.runtimeClasspath.get())
     relocationPrefix = requireProjectInfo.group
     enableRelocation = true
     minimize {
         exclude(dependency(libs.exposed.jdbc.get()))
         exclude(dependency(libs.exposed.dao.get()))
         exclude(dependency(libs.exposed.core.get()))
-        exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib:${libs.versions.kotlin.version.get()}"))
     }
 }

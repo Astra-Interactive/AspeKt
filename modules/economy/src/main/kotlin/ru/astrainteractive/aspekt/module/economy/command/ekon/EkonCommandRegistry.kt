@@ -11,22 +11,24 @@ import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.exception.ArgumentTypeException
 import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
-import ru.astrainteractive.astralibs.command.api.exception.DefaultCommandException
+import ru.astrainteractive.astralibs.command.api.exception.CommandException
 import ru.astrainteractive.astralibs.command.api.exception.NoPermissionException
 import ru.astrainteractive.astralibs.command.api.util.PluginExt.setCommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.astralibs.util.StringListExt.withEntry
+import ru.astrainteractive.astralibs.util.withEntry
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 
 internal class EkonCommandRegistry(
     private val plugin: JavaPlugin,
-    private val getKyori: () -> KyoriComponentSerializer,
+    private val getKyori: CachedKrate<KyoriComponentSerializer>,
     private val getTranslation: () -> PluginTranslation,
     private val dao: EconomyDao,
     private val cachedDao: CachedDao
-) : Logger by JUtiltLogger("EkonCommandRegistry") {
-    private val kyori get() = getKyori.invoke()
+) : Logger by JUtiltLogger("EkonCommandRegistry"),
+    KyoriComponentSerializer by getKyori.unwrap() {
     private val translation get() = getTranslation.invoke()
 
     @Suppress("CyclomaticComplexMethod")
@@ -94,7 +96,7 @@ internal class EkonCommandRegistry(
             ),
             errorHandler = { context, throwable ->
                 when (throwable) {
-                    is DefaultCommandException -> with(kyori) {
+                    is CommandException -> {
                         when (throwable) {
                             is ArgumentTypeException -> {
                                 context.sender.sendMessage(translation.general.wrongUsage.component)
@@ -114,15 +116,15 @@ internal class EkonCommandRegistry(
                         }
                     }
 
-                    is CurrencyArgument.CurrencyNotFoundException -> with(kyori) {
+                    is CurrencyArgument.CurrencyNotFoundException -> {
                         context.sender.sendMessage(translation.economy.currencyNotFound.component)
                     }
 
-                    is OfflinePlayerArgument.PlayerNotFound -> with(kyori) {
+                    is OfflinePlayerArgument.PlayerNotFound -> {
                         context.sender.sendMessage(translation.economy.playerNotFound.component)
                     }
 
-                    else -> with(kyori) {
+                    else -> {
                         error { "#errorHandler handler for ${throwable::class} not found" }
                         context.sender.sendMessage(translation.general.noPermission.component)
                     }

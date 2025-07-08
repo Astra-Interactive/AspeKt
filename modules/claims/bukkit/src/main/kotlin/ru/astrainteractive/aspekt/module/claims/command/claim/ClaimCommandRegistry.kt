@@ -1,14 +1,13 @@
 package ru.astrainteractive.aspekt.module.claims.command.claim
 
 import ru.astrainteractive.aspekt.module.claims.command.di.ClaimCommandDependencies
-import ru.astrainteractive.aspekt.module.claims.messenger.BukkitMessenger
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.astralibs.command.api.exception.ArgumentTypeException
 import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
-import ru.astrainteractive.astralibs.command.api.exception.DefaultCommandException
+import ru.astrainteractive.astralibs.command.api.exception.CommandException
 import ru.astrainteractive.astralibs.command.api.exception.NoPermissionException
 import ru.astrainteractive.astralibs.command.api.util.PluginExt.setCommandExecutor
-import ru.astrainteractive.astralibs.util.StringListExt.withEntry
+import ru.astrainteractive.astralibs.util.withEntry
 
 internal class ClaimCommandRegistry(
     private val dependencies: ClaimCommandDependencies
@@ -34,12 +33,14 @@ internal class ClaimCommandRegistry(
             alias = "claim",
             commandParser = ClaimCommandParser(),
             commandExecutor = ClaimCommandExecutor(
-                messenger = BukkitMessenger(kyoriKrate = dependencies.kyoriComponentSerializer),
                 scope = dependencies.scope,
                 dispatchers = dependencies.dispatchers,
                 translationKrate = dependencies.translation,
                 claimsRepository = dependencies.claimsRepository,
-                claimErrorMapper = dependencies.claimErrorMapper
+                claimErrorMapper = dependencies.claimErrorMapper,
+                kyoriKrate = kyoriComponentSerializer,
+                minecraftNativeBridge = dependencies.minecraftNativeBridge,
+                platformServer = dependencies.platformServer
             ),
             errorHandler = { context, throwable ->
                 when (throwable) {
@@ -47,7 +48,7 @@ internal class ClaimCommandRegistry(
                         context.sender.sendMessage(translation.cachedValue.general.onlyPlayerCommand.component)
                     }
 
-                    is DefaultCommandException -> with(kyoriComponentSerializer.cachedValue) {
+                    is CommandException -> with(kyoriComponentSerializer.cachedValue) {
                         when (throwable) {
                             is ArgumentTypeException -> {
                                 context.sender.sendMessage(translation.cachedValue.general.wrongUsage.component)

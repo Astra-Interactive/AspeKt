@@ -9,7 +9,6 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.claims.command.claim
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecutor
 import ru.astrainteractive.aspekt.module.claims.event.ForgeClaimEvent
-import ru.astrainteractive.aspekt.module.claims.messenger.ForgeMessenger
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class ForgeClaimModule(
@@ -19,14 +18,14 @@ class ForgeClaimModule(
 ) {
 
     private val claimCommandExecutor = ClaimCommandExecutor(
-        messenger = ForgeMessenger(
-            kyoriKrate = coreModule.kyoriComponentSerializer,
-        ),
         scope = coreModule.scope,
         dispatchers = coreModule.dispatchers,
         translationKrate = coreModule.translation,
         claimsRepository = claimModule.claimsRepository,
-        claimErrorMapper = claimModule.claimErrorMapper
+        claimErrorMapper = claimModule.claimErrorMapper,
+        kyoriKrate = coreModule.kyoriComponentSerializer,
+        minecraftNativeBridge = coreModule.minecraftNativeBridge,
+        platformServer = coreModule.platformServer
     )
 
     @Suppress("UnusedPrivateProperty")

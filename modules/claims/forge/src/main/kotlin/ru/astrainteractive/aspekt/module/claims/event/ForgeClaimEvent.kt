@@ -14,11 +14,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.event.level.BlockEvent
 import net.minecraftforge.event.level.ExplosionEvent
 import net.minecraftforge.eventbus.api.Event
-import ru.astrainteractive.aspekt.core.forge.coroutine.ForgeMainDispatcher
-import ru.astrainteractive.aspekt.core.forge.event.flowEvent
-import ru.astrainteractive.aspekt.core.forge.util.getValue
-import ru.astrainteractive.aspekt.core.forge.util.toNative
-import ru.astrainteractive.aspekt.core.forge.util.toPermissible
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.data.isAble
 import ru.astrainteractive.aspekt.module.claims.debounce.EventDebounce
@@ -29,15 +24,20 @@ import ru.astrainteractive.aspekt.module.claims.util.toClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.astralibs.coroutine.ForgeMainDispatcher
+import ru.astrainteractive.astralibs.event.flowEvent
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.astralibs.server.util.asPermissible
+import ru.astrainteractive.astralibs.server.util.toNative
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
+import ru.astrainteractive.klibs.kstorage.util.getValue
 
 class ForgeClaimEvent(
     private val claimsRepository: ClaimsRepository,
-    translationKrate: Krate<PluginTranslation>,
-    kyoriKrate: Krate<KyoriComponentSerializer>
+    translationKrate: CachedKrate<PluginTranslation>,
+    kyoriKrate: CachedKrate<KyoriComponentSerializer>
 ) : Logger by JUtiltLogger("AspeKt-ForgeClaimEvent") {
     private val translation by translationKrate
     private val kyori by kyoriKrate
@@ -51,7 +51,7 @@ class ForgeClaimEvent(
         player: ServerPlayer?,
         flag: ChunkFlag
     ): Boolean where T : Event {
-        if (player?.toPermissible()?.hasPermission(PluginPermission.AdminClaim) == true) {
+        if (player?.asPermissible()?.hasPermission(PluginPermission.ADMIN_CLAIM) == true) {
             return false
         }
         if (e.isCanceled) {

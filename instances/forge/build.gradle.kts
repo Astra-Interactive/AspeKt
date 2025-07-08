@@ -20,6 +20,7 @@ dependencies {
     shadeImplementation(libs.bundles.exposed)
     // AstraLibs
     shadeImplementation(libs.minecraft.astralibs.core)
+    shadeImplementation(libs.minecraft.astralibs.core.forge)
     shadeImplementation(libs.minecraft.astralibs.command)
     shadeImplementation(libs.kotlin.serializationKaml)
     shadeImplementation(libs.klibs.mikro.core)
@@ -60,12 +61,13 @@ val reobfShadowJar = reobf.create("shadowJar")
 
 astraShadowJar.configureManifest()
 
-minecraftProcessResource.forge()
+minecraftProcessResource {
+    forge()
+}
 
 val shadowJar by tasks.getting(ShadowJar::class) {
     mergeServiceFiles()
-    mustRunAfter(minecraftProcessResource.task)
-    dependsOn(minecraftProcessResource.task)
+    dependsOn(tasks.named<ProcessResources>("processResources"))
     finalizedBy(reobfShadowJar)
     configurations = listOf(project.configurations.shadeImplementation.get())
     isReproducibleFileOrder = true

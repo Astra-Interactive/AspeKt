@@ -8,17 +8,21 @@ import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimErrorMapper
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.astralibs.server.MinecraftNativeBridge
+import ru.astrainteractive.astralibs.server.PlatformServer
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 internal interface ClaimCommandDependencies {
     val plugin: JavaPlugin
     val scope: CoroutineScope
-    val translation: Krate<PluginTranslation>
+    val translation: CachedKrate<PluginTranslation>
     val dispatchers: KotlinDispatchers
-    val kyoriComponentSerializer: Krate<KyoriComponentSerializer>
+    val kyoriComponentSerializer: CachedKrate<KyoriComponentSerializer>
     val claimsRepository: ClaimsRepository
     val claimErrorMapper: ClaimErrorMapper
+    val minecraftNativeBridge: MinecraftNativeBridge
+    val platformServer: PlatformServer
 
     class Default(
         coreModule: CoreModule,
@@ -31,5 +35,7 @@ internal interface ClaimCommandDependencies {
         override val translation = coreModule.translation
         override val dispatchers: KotlinDispatchers = coreModule.dispatchers
         override val kyoriComponentSerializer = coreModule.kyoriComponentSerializer
+        override val minecraftNativeBridge: MinecraftNativeBridge = coreModule.minecraftNativeBridge
+        override val platformServer: PlatformServer = coreModule.platformServer
     }
 }

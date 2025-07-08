@@ -4,7 +4,7 @@ import ru.astrainteractive.aspekt.module.chatgame.model.ChatGame
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameData
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 import kotlin.math.pow
 import kotlin.math.sign
@@ -12,8 +12,8 @@ import kotlin.math.sqrt
 import kotlin.random.Random
 
 internal class RiddleGenerator(
-    configKrate: Krate<ChatGameConfig>,
-    translationKrate: Krate<PluginTranslation>
+    configKrate: CachedKrate<ChatGameConfig>,
+    translationKrate: CachedKrate<PluginTranslation>
 ) {
     private val config by configKrate
     private val translation by translationKrate

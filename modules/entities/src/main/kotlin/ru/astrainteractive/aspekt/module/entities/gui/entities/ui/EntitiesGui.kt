@@ -26,14 +26,14 @@ import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setI
 import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setItemStack
 import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setOnClickListener
 import ru.astrainteractive.astralibs.string.StringDesc
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 internal class EntitiesGui(
     player: Player,
     private val dispatchers: KotlinDispatchers,
-    kyoriComponentSerializerKrate: Krate<KyoriComponentSerializer>
+    kyoriComponentSerializerKrate: CachedKrate<KyoriComponentSerializer>
 ) : PaginatedInventoryMenu() {
     private val kyoriComponentSerializer by kyoriComponentSerializerKrate
     private val viewModel = DefaultEntitiesComponent()

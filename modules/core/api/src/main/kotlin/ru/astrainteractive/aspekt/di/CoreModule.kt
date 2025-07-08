@@ -8,7 +8,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
 import ru.astrainteractive.aspekt.di.factory.ConfigKrateFactory
-import ru.astrainteractive.aspekt.minecraft.messenger.MinecraftMessenger
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.CoroutineFeature
@@ -17,9 +16,12 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.logging.JUtiltLogger
 import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.serialization.YamlStringFormat
-import ru.astrainteractive.astralibs.util.fileConfigKrate
-import ru.astrainteractive.klibs.kstorage.api.Krate
+import ru.astrainteractive.astralibs.server.MinecraftNativeBridge
+import ru.astrainteractive.astralibs.server.PlatformServer
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
+import ru.astrainteractive.klibs.kstorage.util.asCachedKrate
+import ru.astrainteractive.klibs.kstorage.util.asCachedMutableKrate
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import java.io.File
 
@@ -29,25 +31,29 @@ interface CoreModule {
 
     val dispatchers: KotlinDispatchers
 
+    val minecraftNativeBridge: MinecraftNativeBridge
+
     val scope: CoroutineScope
-    val pluginConfig: Krate<PluginConfiguration>
-    val translation: Krate<PluginTranslation>
+    val mainScope: CoroutineScope
+    val pluginConfig: CachedKrate<PluginConfiguration>
+    val translation: CachedKrate<PluginTranslation>
     val yamlFormat: StringFormat
 
-    val kyoriComponentSerializer: Krate<KyoriComponentSerializer>
+    val kyoriComponentSerializer: CachedKrate<KyoriComponentSerializer>
 
     val jsonStringFormat: StringFormat
-
-    val minecraftMessenger: MinecraftMessenger
+    val platformServer: PlatformServer
 
     class Default(
         override val dataFolder: File,
         override val dispatchers: KotlinDispatchers,
-        createMinecraftMessenger: (Krate<KyoriComponentSerializer>) -> MinecraftMessenger
+        override val minecraftNativeBridge: MinecraftNativeBridge,
+        override val platformServer: PlatformServer
     ) : CoreModule, Logger by JUtiltLogger("CoreModule") {
         // Core
 
         override val scope = CoroutineFeature.Default(Dispatchers.IO)
+        override val mainScope: CoroutineScope = CoroutineFeature.Default(dispatchers.Main)
 
         override val yamlFormat: StringFormat = YamlStringFormat(
             configuration = Yaml.default.configuration.copy(
@@ -57,25 +63,22 @@ interface CoreModule {
             ),
         )
 
-        override val pluginConfig = fileConfigKrate(
+        override val pluginConfig = ConfigKrateFactory.fileConfigKrate(
             file = dataFolder.resolve("config.yml"),
             stringFormat = yamlFormat,
             factory = ::PluginConfiguration
-        )
+        ).asCachedMutableKrate()
 
-        override val translation = ConfigKrateFactory.create(
-            fileNameWithoutExtension = "translations",
+        override val translation = ConfigKrateFactory.fileConfigKrate(
+            file = dataFolder.resolve("translations.yml"),
             stringFormat = yamlFormat,
-            dataFolder = dataFolder,
             factory = ::PluginTranslation
-        )
+        ).asCachedMutableKrate()
 
         override val kyoriComponentSerializer = DefaultMutableKrate<KyoriComponentSerializer>(
             loader = { null },
             factory = { KyoriComponentSerializer.Legacy }
-        )
-
-        override val minecraftMessenger: MinecraftMessenger = createMinecraftMessenger.invoke(kyoriComponentSerializer)
+        ).asCachedKrate()
 
         override val jsonStringFormat: StringFormat = Json {
             isLenient = true
@@ -86,8 +89,8 @@ interface CoreModule {
         override val lifecycle: Lifecycle = Lifecycle.Lambda(
             onEnable = {},
             onReload = {
-                pluginConfig.loadAndGet()
-                translation.loadAndGet()
+                pluginConfig.getValue()
+                translation.getValue()
             },
             onDisable = {
                 scope.cancel()
