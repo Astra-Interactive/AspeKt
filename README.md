@@ -1,236 +1,67 @@
-[![kotlin_version](https://img.shields.io/badge/kotlin-1.9.0-blueviolet?style=flat-square)](https://github.com/Astra-Interactive/AstraLibs)
-[![minecraft_version](https://img.shields.io/badge/minecraft-1.20-green?style=flat-square)](https://github.com/Astra-Interactive/AstraLibs)
-[![platforms](https://img.shields.io/badge/platform-spigot-blue?style=flat-square)](https://github.com/Astra-Interactive/AstraLibs)
+<p align="center">
+  <img src="assets/logo.png" alt="AspeKt Logo" width="200"/>
+</p>
 
-# AspeKt
+<h1 align="center">AspeKt</h1>
+<p align="center"><strong>A lightning-fast, Kotlin-powered essentials plugin for Paper&Forge servers</strong></p>
+<p align="center">⚡ Minimal. Modular. Modern. ⚡</p>
 
-AspeKt is Essentials plugin for [EmpireProjekt](https://EmpireProjekt.ru) server
-Essentials plugin for EmpireSMP
+---
 
-It provides basic functionality and commands in one plugin
+## 🚀 What is AspeKt?
 
-* **AspeKt requires Paper to run.** Other server software may work, but these are not tested.
-* **AspeKt is made only for Latest Paper release(1.19.4).** Other versions may work, but these are not tested.
+**AspeKt** is a high-performance essentials-style plugin for modern Paper&Forge servers, built in **Kotlin** and
+tailored for real-world SMP needs. Developed by the Astra-Interactive team, it replaces bloated legacy plugins with a
+sleek, modular toolkit.
 
-## Support
+Originally built for the EmpireProjekt community, AspeKt is open to all.
 
-I don't provide support for plugins, which are not released by me on spigot or any other website(except github)
+---
 
-## Building
+## 🔧 Key Features
 
-To build AspeKt, you need JDK 18 or higher installed on your system.
+- **AntiSwear** - Replace bad words with asterisk `*`
+- **Auth** - Auth plugin for forge server
+- **Broadcast** - Broadcast messages as BossBar, ActionBar or game message
+- **AutoCrop** - Collect crops with a hoe
+- **ChatGame** - Solve `/quiz` and get money
+- **Claims** - Simple claim system for Forge/Paper
+- **Economy** - WIP economy module with custom currencies
+- **InventorySort** - Sort inventories
+- **InvisibleItemFrames** - Make item frames invisible
+- **Jail** - Put bad people into jails!
+- **Menu** - Define clickable GUIs via simple YAML files (hot-reload supported).
+- **MoneyAdvancements** - Get money for advancements
+- **MoneyDrop** - Dropped money from mobs or blocks
+- **NewBee** - Add effects for NewBee players!
+- **Restrictions** - Deny players from using TNT, Lava, etc
+- **RTP** - Forge RTP plugin
+- **Sethome** - Forge sethome plugin
+- **Sit** - Sit plugin
+- **Tpa** - Forge TPA plugin
+- **TreeCapitator** – Chop down full trees by breaking a single log.
 
-Clone this repository, modify `destination` in [build.gradle.kts](plugin/build.gradle.kts) then run the following
-command:
+---
 
-* On Linux or macOS: `./gradlew shadowJar`
-* On Windows: `gradlew shadowJar`
+## 📥 Installation
 
-## Features
+1. Download the latest `.jar` from [Releases](https://github.com/Astra-Interactive/AspeKt/releases).
+2. Drop it into your server's `/plugins/` folder.
+3. Start the server. Configs will auto-generate.
+4. Customize features via config and optional menu files.
 
-### AutoBroadcast
+---
 
-```yaml
-announcements:
-  interval: 5
-  announcements:
-    - '#FFFFFF[#baa51c!#FFFFFF]: #03b5fcДискорд сервера #03fc56discord.gg/Gwukdr8'
-```
+## 🚧 Building from Source
 
-### AutoCrop
+```bash
+git clone https://github.com/Astra-Interactive/AspeKt.git
+cd AspeKt
+./gradlew shadowJar
+ ```
 
-It allows players to gather crops by right clicking it
+🛠️ Support & Contributing
 
-```yaml
-core:
-  auto_crop:
-    enabled: true
-    min: 1
-    max: 2
-    duping:
-      enabled: true
-      clear_every: 60000
-      location_timeout: 15000
-```
-
-### Sit
-
-Allows players to use /sit, or sit on slabs or stairs by right clicking it
-
-```yaml
-core:
-  sit: true
-```
-
-### TreeCapitator
-
-Allows players to break trees when shift+break
-
-```yaml
-core:
-  tree_capitator:
-    enabled: true
-    destroy_limit: 16
-    damage_axe: true
-    break_axe: true
-    replant: true
-    replant_max_iterations: 10
-    destroy_leaves: true
-```
-
-### Claim
-
-This feature allows admins to create chunk-based private system.
-
-Data stored in adminchunks.yml and can be easily modified. Changes are applied by plugin reload.
-
-```yaml
-# Sample config
-isEnabled: true
-chunks:
-  "-863288426379_world":
-    x: 117
-    z: -201
-    worldName: "world"
-    chunkKey: -863288426379
-    flags:
-      "BREAK": false
-      "PLACE": false
-      "INTERACT": false
-      "EXPLODE": false
-      "EMPTY_BUCKET": false
-      "SPREAD": false
-```
-
-### Menu
-
-This feature allows admins to create simple menu guis
-
-Data stored in menu/XXX.yml and can be easily modified. Changes are applied by plugin reload.
-
-#### Placeholders:
-
-- `{PLAYER}` - player, opened an inventory
-
-```yaml
-# XXS, XS, S, M, L, XL
-size: XXS
-# Can be executed by /menu XXX
-# Example: /menu main
-command: main
-# Title of the menu
-title: Main Menu
-# Items stored in page
-items:
-  diamond:
-    permission: com.example.permission
-    index: 3
-    name: Item
-    lore:
-      - Lore1
-      - Lore2
-    amount: 3
-    material: DIAMOND
-    custom_model_data: 10
-    # Console command reward
-    reward:
-      !<console_command>
-      commands:
-        - say hello
-        - give {PLAYER} dirt 64
-    # Player command reward
-    reward:
-      !<player_command>
-      commands:
-        - say hello
-    # Money price         
-    price:
-      !<money>
-      amount: 10
-```
-
-### Money Drop
-
-Drop money from mobs. It's configured to be exploit-free, so it will not be dropped from same location
-
-```yaml
-money_drop:
-  "zombie":
-    from: "ZOMBIE"
-    chance: 100.0
-    min: 10.0
-    max: 100.0
-  "diamond_ore":
-    from: "DIAMOND_ORE"
-    chance: 100.0
-    min: 10.0
-    max: 100.0
-```
-
-| Command                     | Permission     | Description                       |
-|:----------------------------|:---------------|:----------------------------------|
-| `/claim map`                | `aspekt.claim` | `Show map of near claimed chunks` |
-| `/claim claim`              | `aspekt.claim` | `Claim current chunk`             |
-| `/claim unclaim`            | `aspekt.claim` | `Unclaim current chunk`           |
-| `/claim flag <flag> <bool>` | `aspekt.claim` | `Set flag for chunk`              |
-
-### Inventory sort
-
-AspeKt allows players to sort their inventories by pressing Shift+MiddleMouseButton
-
-## Commands
-
-| Command                                 | Permission               | Description                                          |
-|:----------------------------------------|:-------------------------|:-----------------------------------------------------|
-| `/maxonline <int>`                      | `aspekt.maxonline`       | `Set server max online to new value`                 |
-| `/atemframe <visible> <fixed> <radius>` | `aspekt.atemframe`       | `Makes itemFrames in <radius> <visible> and <fixed>` |
-| `/aesreload`                            | `aspekt.reload`          | `Reloads plugin`                                     |
-| `/sit`                                  | `-`                      | `Sit a player`                                       |
-| `/tellchat <player> [message]`          | `aspekt.tellchat`        | `Sends player a message like /tellraw command`       |
-| `/swearfilter <on\| off> [PLAYER]`      | `aspekt.set_swear.admin` | `Set swear filter for player`                        |
-| `/swearfilter <on\| off>`               | `-`                      | `Set swear filter for yourself`                      |
-
-### ChatGames
-
-Chat games will randomly appear in chat after specified time amount
-
-After entering `/quiz ANSWER` chat game will end and player who won will be rewarded with specified reward
-
-## Commands
-
-| Command          | Permission | Description       |
-|:-----------------|:-----------|:------------------|
-| `/quiz <ANSWER>` | `-`        | `Say quiz answer` |
-
-#### Rewards
-
-```yaml
-reward:
-  type: "MONEY"
-  amount: 400.0
-```
-
-#### Riddles
-
-```yaml
-- type: "RIDDLE"
-  question: "Висит груша нельзя скушать"
-  answer: "Лампа"
-- type: "SUM_OF_TWO"
-- type: "TIMES_OF_TWO"
-- type: "EQUATION_EASY"
-```
-
-### Jail
-
-Add jails and block inmates command executions
-
-## Commands
-
-| Command                               | Permission           | Description             |
-|:--------------------------------------|:---------------------|:------------------------|
-| `/jail list`                          | `aspekt.jail.list`   | `Show jail list`        |
-| `/jail create <JAIL>`                 | `aspekt.jail.create` | `Create jail`           |
-| `/jail delete <JAIL>`                 | `aspekt.jail.delete` | `Delete jail`           |
-| `/jail free <JAIL>`                   | `aspekt.jail.free`   | `Free player from jail` |
-| `/jail inmate <JAIL> <PLAYER> <TIME>` | `aspekt.jail.inmate` | `Move player to jail`   |
+- Open issues or PRs via GitHub.
+- Requires support? Please open a feature request or bug ticket.
+- Contributions are welcome—check out the code, share ideas!
