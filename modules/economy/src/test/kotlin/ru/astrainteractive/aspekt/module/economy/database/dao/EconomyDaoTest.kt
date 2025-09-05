@@ -42,7 +42,6 @@ class EconomyDaoTest {
         _folder = File("temp-folder")
         requireFolder.mkdirs()
         _module = EconomyDatabaseModule.Default(
-            dataFolder = requireFolder,
             dbConfig = dbConfig,
             coroutineScope = CoroutineScope(scheduler),
             ioDispatcher = scheduler

@@ -7,8 +7,8 @@ import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
 import ru.astrainteractive.aspekt.module.economy.integration.papi.core.Placeholder
-import ru.astrainteractive.astralibs.logging.JUtiltLogger
-import ru.astrainteractive.astralibs.logging.Logger
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
 

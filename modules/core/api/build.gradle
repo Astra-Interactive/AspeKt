@@ -14,6 +14,6 @@ dependencies {
     compileOnly(libs.minecraft.kyori.gson)
     api(libs.klibs.kstorage)
     implementation(libs.klibs.mikro.core)
-    implementation(libs.klibs.mikro.core)
+    implementation(libs.klibs.mikro.extensions)
     compileOnly("com.mojang:brigadier:1.0.18")
 }

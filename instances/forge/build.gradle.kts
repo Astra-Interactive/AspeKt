@@ -71,6 +71,7 @@ val shadowJar by tasks.getting(ShadowJar::class) {
     finalizedBy(reobfShadowJar)
     configurations = listOf(project.configurations.shadeImplementation.get())
     isReproducibleFileOrder = true
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     archiveClassifier = null as String?
     archiveVersion = requireProjectInfo.versionString
     archiveBaseName = "${requireProjectInfo.name}-forge"

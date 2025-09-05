@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.module.auth.api.table
 
 import org.jetbrains.exposed.sql.javatime.datetime
-import ru.astrainteractive.astralibs.exposed.table.StringIdTable
+import ru.astrainteractive.astralibs.exposed.dao.StringIdTable
 
 internal object UserTable : StringIdTable("USER_TABLE", "uuid") {
     val lastUsername = text("last_username")

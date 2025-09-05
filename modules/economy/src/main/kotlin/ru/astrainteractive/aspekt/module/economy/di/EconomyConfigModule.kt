@@ -5,10 +5,10 @@ import ru.astrainteractive.aspekt.di.factory.ConfigKrateFactory
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyConfiguration
 import ru.astrainteractive.astralibs.exposed.model.DatabaseConfiguration
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.astralibs.logging.JUtiltLogger
-import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.klibs.kstorage.api.StateFlowKrate
 import ru.astrainteractive.klibs.kstorage.util.asStateFlowKrate
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import java.io.File
 
 internal interface EconomyConfigModule {
@@ -23,7 +23,7 @@ internal interface EconomyConfigModule {
         override val databaseConfiguration = ConfigKrateFactory.fileConfigKrate<DatabaseConfiguration>(
             file = folder.resolve("db"),
             stringFormat = coreModule.yamlFormat,
-            factory = { DatabaseConfiguration.H2(name = "db", arguments = emptyList()) }
+            factory = { DatabaseConfiguration.H2(path = folder.resolve("db").path, arguments = emptyList()) }
         ).asStateFlowKrate()
 
         override val currencyConfiguration = ConfigKrateFactory.fileConfigKrate<CurrencyConfiguration?>(

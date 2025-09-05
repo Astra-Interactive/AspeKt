@@ -11,8 +11,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import ru.astrainteractive.aspekt.module.moneydrop.database.dao.MoneyDropDao
 import ru.astrainteractive.aspekt.module.moneydrop.database.model.MoneyDropLocation
 import ru.astrainteractive.aspekt.module.moneydrop.database.table.MoneyDropLocationTable
-import ru.astrainteractive.astralibs.logging.JUtiltLogger
-import ru.astrainteractive.astralibs.logging.Logger
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import java.time.Instant
 import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration

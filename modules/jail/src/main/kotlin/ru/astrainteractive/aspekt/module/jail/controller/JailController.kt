@@ -6,16 +6,17 @@ import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.module.jail.data.JailApi
 import ru.astrainteractive.aspekt.module.jail.model.JailInmate
 import ru.astrainteractive.aspekt.module.jail.util.toBukkitLocation
-import ru.astrainteractive.astralibs.async.CoroutineFeature
-import ru.astrainteractive.astralibs.logging.JUtiltLogger
-import ru.astrainteractive.astralibs.logging.Logger
+import ru.astrainteractive.astralibs.async.withTimings
+import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import java.util.UUID
 
 internal class JailController(
     private val dispatchers: KotlinDispatchers,
     private val jailApi: JailApi
-) : CoroutineFeature by CoroutineFeature.Default(dispatchers.Default),
+) : CoroutineFeature by CoroutineFeature.Default(dispatchers.Default).withTimings(),
     Logger by JUtiltLogger("AspeKt-JailController") {
 
     fun onJailed(inmate: JailInmate) {

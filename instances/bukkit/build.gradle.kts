@@ -5,7 +5,6 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
     alias(libs.plugins.gradle.shadow)
-//    alias(libs.plugins.klibs.minecraft.shadow)
     alias(libs.plugins.klibs.minecraft.resource.processor)
 }
 
@@ -22,7 +21,6 @@ dependencies {
     implementation(libs.minecraft.astralibs.command)
     implementation(libs.minecraft.astralibs.command.bukkit)
     implementation(libs.minecraft.astralibs.core.bukkit)
-    implementation(libs.minecraft.astralibs.exposed)
     compileOnly(libs.minecraft.vaultapi)
     compileOnly(libs.driver.h2)
     compileOnly(libs.driver.jdbc)

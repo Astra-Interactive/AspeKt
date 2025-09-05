@@ -14,8 +14,8 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent
 import org.bukkit.event.inventory.InventoryPickupItemEvent
 import ru.astrainteractive.aspekt.module.moneydrop.di.MoneyDropDependencies
 import ru.astrainteractive.astralibs.event.EventListener
-import ru.astrainteractive.astralibs.logging.JUtiltLogger
-import ru.astrainteractive.astralibs.logging.Logger
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
 internal class MoneyDropEvent(
     dependencies: MoneyDropDependencies
