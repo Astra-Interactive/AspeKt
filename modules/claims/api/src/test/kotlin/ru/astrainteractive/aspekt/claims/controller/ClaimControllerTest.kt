@@ -2,6 +2,14 @@ package ru.astrainteractive.aspekt.claims.controller
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -16,6 +24,7 @@ import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.astralibs.util.YamlStringFormat
+import ru.astrainteractive.klibs.mikro.core.coroutines.awaitForCompletion
 import java.io.File
 import java.util.UUID
 import kotlin.random.Random
@@ -55,10 +64,12 @@ internal class ClaimControllerTest {
 
     @Test
     fun testClaimAndUnclaim(): Unit = runTest {
-        val repository =getRepository()
+        val repository = getRepository()
         randomChunk.let { chunk ->
+            assertEquals(0, repository.getAllChunks().size)
             repository.claim(claimPlayer.uuid, chunk)
             assertEquals(1, repository.getAllChunks().size)
+            awaitForCompletion { chunk.uniqueWorldKey in repository.chunkByKrate }
             repository.deleteChunk(claimPlayer.uuid, chunk.uniqueWorldKey)
             assertEquals(0, repository.getAllChunks().size)
         }

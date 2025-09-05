@@ -17,11 +17,9 @@ class ClaimKrate(
 ) : StateFlowSuspendMutableKrate<ClaimData> by DefaultStateFlowSuspendMutableKrate(
     factory = { ClaimData(ownerUUID) },
     saver = { value ->
-        delay(400)
         stringFormat.writeIntoFile(value, file)
     },
     loader = {
-        delay(400L)
         if (!file.exists() || file.length() == 0L) {
             null
         } else {
