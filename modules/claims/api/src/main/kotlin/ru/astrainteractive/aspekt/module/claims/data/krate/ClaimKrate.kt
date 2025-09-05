@@ -1,6 +1,5 @@
 package ru.astrainteractive.aspekt.module.claims.data.krate
 
-import kotlinx.coroutines.delay
 import kotlinx.serialization.StringFormat
 import ru.astrainteractive.aspekt.module.claims.model.ClaimData
 import ru.astrainteractive.astralibs.util.parse
