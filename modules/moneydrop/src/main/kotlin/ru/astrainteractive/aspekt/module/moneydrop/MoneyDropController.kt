@@ -10,13 +10,14 @@ import ru.astrainteractive.aspekt.module.moneydrop.database.dao.MoneyDropDao
 import ru.astrainteractive.aspekt.module.moneydrop.database.model.MoneyDropLocation
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.async.CoroutineFeature
+import ru.astrainteractive.astralibs.async.withTimings
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.persistence.Persistence.getPersistentDataOrNull
 import ru.astrainteractive.astralibs.persistence.Persistence.hasPersistentData
 import ru.astrainteractive.astralibs.persistence.Persistence.setPersistentDataType
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
+import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import java.time.Instant
 import kotlin.math.roundToInt
@@ -28,7 +29,7 @@ internal class MoneyDropController(
     kyoriComponentSerializerDependency: CachedKrate<KyoriComponentSerializer>,
     private val dao: MoneyDropDao,
     private val dispatchers: KotlinDispatchers
-) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO) {
+) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO).withTimings() {
     private val pluginConfiguration by pluginConfigurationDependency
     private val translation by translationDependency
     private val kyoriComponentSerializer by kyoriComponentSerializerDependency

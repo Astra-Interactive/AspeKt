@@ -5,8 +5,8 @@ import org.bukkit.Bukkit
 import ru.astrainteractive.astralibs.economy.EconomyFacade
 import ru.astrainteractive.astralibs.economy.EssentialsEconomyFacade
 import ru.astrainteractive.astralibs.economy.VaultEconomyFacade
-import ru.astrainteractive.astralibs.logging.JUtiltLogger
-import ru.astrainteractive.astralibs.logging.Logger
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
 interface CurrencyEconomyProviderFactory {
     fun findByCurrencyId(currencyId: String): EconomyFacade?

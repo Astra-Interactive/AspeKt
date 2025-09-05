@@ -6,14 +6,16 @@ import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
-import ru.astrainteractive.astralibs.async.CoroutineFeature
-import ru.astrainteractive.astralibs.logging.JUtiltLogger
-import ru.astrainteractive.astralibs.logging.Logger
+import ru.astrainteractive.astralibs.async.withTimings
+import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
 internal class PreHeatService(
     private val getCurrencies: () -> List<CurrencyModel>,
     private val dao: EconomyDao
-) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO), Logger by JUtiltLogger("PreHeatService") {
+) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO).withTimings(),
+    Logger by JUtiltLogger("PreHeatService") {
     private var lastJob: Job? = null
 
     fun tryPreHeat() = launch {

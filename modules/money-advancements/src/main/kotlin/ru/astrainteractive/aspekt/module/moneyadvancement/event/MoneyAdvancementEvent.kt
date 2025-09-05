@@ -8,14 +8,15 @@ import org.bukkit.event.player.PlayerAdvancementDoneEvent
 import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.async.CoroutineFeature
+import ru.astrainteractive.astralibs.async.withTimings
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
-import ru.astrainteractive.astralibs.logging.JUtiltLogger
-import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
+import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
 class MoneyAdvancementEvent(
     configurationProvider: CachedKrate<PluginConfiguration>,
@@ -24,7 +25,7 @@ class MoneyAdvancementEvent(
     translationProvider: CachedKrate<PluginTranslation>
 ) : EventListener,
     Logger by JUtiltLogger("MoneyAdvancementEvent"),
-    CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO),
+    CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO).withTimings(),
     KyoriComponentSerializer by kyoriComponentSerializerProvider.unwrap() {
     private val configuration by configurationProvider
     private val translation by translationProvider

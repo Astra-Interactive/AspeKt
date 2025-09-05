@@ -10,8 +10,8 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSy
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.module.antiswear.data.SwearRepository
 import ru.astrainteractive.aspekt.module.antiswear.util.SwearRuRegex
-import ru.astrainteractive.astralibs.logging.JUtiltLogger
-import ru.astrainteractive.astralibs.logging.Logger
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
 internal class PacketEventSwearListener(
     private val swearRepository: SwearRepository,

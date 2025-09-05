@@ -7,8 +7,8 @@ import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModu
 import ru.astrainteractive.aspekt.module.economy.integration.papi.di.PapiIntegrationModule
 import ru.astrainteractive.aspekt.module.economy.service.di.EconomyServiceModule
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.astralibs.logging.JUtiltLogger
-import ru.astrainteractive.astralibs.logging.Logger
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
 interface EconomyModule {
     val lifecycle: Lifecycle
@@ -25,7 +25,6 @@ interface EconomyModule {
 
         private val databaseModule = EconomyDatabaseModule.Default(
             dbConfig = economyConfigModule.databaseConfiguration,
-            dataFolder = economyConfigModule.folder,
             coroutineScope = coreModule.scope,
             ioDispatcher = coreModule.dispatchers.IO
         )

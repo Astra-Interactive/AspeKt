@@ -26,15 +26,15 @@ import ru.astrainteractive.astralibs.coroutine.ForgeMainDispatcher
 import ru.astrainteractive.astralibs.event.flowEvent
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.astralibs.logging.JUtiltLogger
-import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import ru.astrainteractive.astralibs.server.ForgeMinecraftNativeBridge
 import ru.astrainteractive.astralibs.server.ForgePlatformServer
+import ru.astrainteractive.astralibs.util.YamlStringFormat
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 import ru.astrainteractive.klibs.kstorage.util.asCachedKrate
 import ru.astrainteractive.klibs.mikro.core.dispatchers.DefaultKotlinDispatchers
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import java.io.File
 
 class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {

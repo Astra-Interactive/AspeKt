@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.menu.di.factory
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.StringFormat
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
-import ru.astrainteractive.astralibs.serialization.StringFormatExt.parse
+import ru.astrainteractive.astralibs.util.parse
 import java.io.File
 
 internal class MenuModelsFactory(

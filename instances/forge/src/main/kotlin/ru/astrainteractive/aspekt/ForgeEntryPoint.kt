@@ -10,9 +10,9 @@ import net.minecraftforge.fml.common.Mod
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.astralibs.event.flowEvent
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.astralibs.logging.JUtiltLogger
-import ru.astrainteractive.astralibs.logging.Logger
 import ru.astrainteractive.astralibs.server.util.ForgeUtil
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import javax.annotation.ParametersAreNonnullByDefault
 
 @Mod("aspekt")

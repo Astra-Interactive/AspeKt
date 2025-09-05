@@ -7,8 +7,8 @@ import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
 import ru.astrainteractive.aspekt.module.economy.integration.vault.VaultEconomyProvider
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
-import ru.astrainteractive.astralibs.logging.JUtiltLogger
-import ru.astrainteractive.astralibs.logging.Logger
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
 internal class BukkitVaultService(
     private val plugin: JavaPlugin,

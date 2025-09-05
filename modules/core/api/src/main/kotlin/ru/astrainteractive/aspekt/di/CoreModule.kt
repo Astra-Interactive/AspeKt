@@ -10,19 +10,20 @@ import kotlinx.serialization.json.Json
 import ru.astrainteractive.aspekt.di.factory.ConfigKrateFactory
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.async.CoroutineFeature
+import ru.astrainteractive.astralibs.async.withTimings
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.astralibs.logging.JUtiltLogger
-import ru.astrainteractive.astralibs.logging.Logger
-import ru.astrainteractive.astralibs.serialization.YamlStringFormat
 import ru.astrainteractive.astralibs.server.MinecraftNativeBridge
 import ru.astrainteractive.astralibs.server.PlatformServer
+import ru.astrainteractive.astralibs.util.YamlStringFormat
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 import ru.astrainteractive.klibs.kstorage.util.asCachedKrate
 import ru.astrainteractive.klibs.kstorage.util.asCachedMutableKrate
+import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import java.io.File
 
 interface CoreModule {
@@ -52,7 +53,9 @@ interface CoreModule {
     ) : CoreModule, Logger by JUtiltLogger("CoreModule") {
         // Core
 
-        override val scope = CoroutineFeature.Default(Dispatchers.IO)
+        override val scope = CoroutineFeature
+            .Default(Dispatchers.IO)
+            .withTimings()
         override val mainScope: CoroutineScope = CoroutineFeature.Default(dispatchers.Main)
 
         override val yamlFormat: StringFormat = YamlStringFormat(

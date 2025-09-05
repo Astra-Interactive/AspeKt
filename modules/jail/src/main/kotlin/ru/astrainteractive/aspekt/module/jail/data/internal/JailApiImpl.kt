@@ -4,10 +4,10 @@ import kotlinx.serialization.StringFormat
 import ru.astrainteractive.aspekt.module.jail.data.JailApi
 import ru.astrainteractive.aspekt.module.jail.model.Jail
 import ru.astrainteractive.aspekt.module.jail.model.JailInmate
-import ru.astrainteractive.astralibs.serialization.StringFormatExt.parse
-import ru.astrainteractive.astralibs.serialization.StringFormatExt.parseOrDefault
-import ru.astrainteractive.astralibs.serialization.StringFormatExt.parseOrNull
-import ru.astrainteractive.astralibs.serialization.StringFormatExt.writeIntoFile
+import ru.astrainteractive.astralibs.util.parse
+import ru.astrainteractive.astralibs.util.parseOrDefault
+import ru.astrainteractive.astralibs.util.parseOrNull
+import ru.astrainteractive.astralibs.util.writeIntoFile
 import java.io.File
 
 internal class JailApiImpl(

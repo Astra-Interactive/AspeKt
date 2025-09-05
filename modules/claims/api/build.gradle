@@ -11,10 +11,12 @@ dependencies {
     implementation(libs.minecraft.astralibs.command)
     implementation(libs.klibs.kstorage)
     implementation(libs.klibs.mikro.core)
+    implementation(libs.klibs.mikro.extensions)
     compileOnly(libs.minecraft.kyori.plain)
     // Test
     testImplementation(libs.bundles.testing.kotlin)
     testImplementation(libs.tests.kotlin.test)
+    testImplementation(libs.kotlin.coroutines.test)
     // Local
     implementation(projects.modules.core.api)
 

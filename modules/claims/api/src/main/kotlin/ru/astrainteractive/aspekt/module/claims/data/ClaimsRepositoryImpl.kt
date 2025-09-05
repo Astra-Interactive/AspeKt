@@ -113,6 +113,6 @@ internal class ClaimsRepositoryImpl(
                         .minus(key)
                 )
             }
-        }
+        }.onFailure { it.printStackTrace() }
     }
 }
