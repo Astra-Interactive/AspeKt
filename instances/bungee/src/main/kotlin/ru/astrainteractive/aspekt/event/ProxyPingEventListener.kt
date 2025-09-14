@@ -13,7 +13,6 @@ class ProxyPingEventListener(
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onProxyPingEvent(event: ProxyPingEvent) {
         val fakeSamplePlayerCount = onlineSimulator.currentOnlineFlow.value
-        JUtiltLogger("AspeKt-TestProxyPingEventListener").info { "onEvent: $event" }
         event.response.players.sample = List(fakeSamplePlayerCount) {
             ServerPing.PlayerInfo("Empire$it", UUID.randomUUID())
         }.toTypedArray()
