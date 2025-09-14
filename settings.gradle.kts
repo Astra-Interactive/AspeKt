@@ -66,6 +66,7 @@ rootProject.name = "AspeKt"
 // Spigot
 include(":instances:bukkit")
 include(":instances:forge")
+include(":instances:bungee")
 // Modules
 include(
     ":modules:core:api",
