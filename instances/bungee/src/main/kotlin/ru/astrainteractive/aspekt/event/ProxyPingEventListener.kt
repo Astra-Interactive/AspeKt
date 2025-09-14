@@ -4,7 +4,6 @@ import net.md_5.bungee.api.ServerPing
 import net.md_5.bungee.api.event.ProxyPingEvent
 import net.md_5.bungee.event.EventHandler
 import net.md_5.bungee.event.EventPriority
-import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import java.util.UUID
 
 class ProxyPingEventListener(

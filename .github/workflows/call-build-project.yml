@@ -10,6 +10,8 @@ jobs:
         include:
           - id: "bukkit"
             task: ":instances:bukkit:build"
+          - id: "bungee"
+            task: ":instances:bungee:build"
     steps:
       - name: Checkout Git repo
         uses: actions/checkout@v4
