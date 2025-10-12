@@ -5,7 +5,8 @@ plugins {
 
 dependencies {
     // Kotlin
-    implementation(libs.bundles.kotlin)
+    implementation(libs.kotlin.coroutines.core)
+
     implementation(libs.klibs.kstorage)
     // Spigot dependencies
     compileOnly(libs.minecraft.paper.api)

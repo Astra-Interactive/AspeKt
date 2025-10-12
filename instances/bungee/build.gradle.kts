@@ -11,7 +11,7 @@ plugins {
 
 dependencies {
     // Kotlin
-    implementation(libs.bundles.kotlin)
+    implementation(libs.kotlin.coroutines.core)
     // Spigot dependencies
     compileOnly(libs.minecraft.bungee)
     implementation(libs.minecraft.bstats)
@@ -60,7 +60,7 @@ shadowJar.configure {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     configurations = listOf(project.configurations.runtimeClasspath.get())
     relocationPrefix = requireProjectInfo.group
-    enableRelocation = true
+//    enableRelocation = true
     minimize {
         exclude(dependency(libs.exposed.jdbc.get()))
         exclude(dependency(libs.exposed.dao.get()))

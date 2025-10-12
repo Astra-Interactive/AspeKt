@@ -17,13 +17,13 @@ import ru.astrainteractive.aspekt.module.economy.database.dao.impl.CachedDaoImpl
 import ru.astrainteractive.aspekt.module.economy.database.dao.impl.EconomyDaoImpl
 import ru.astrainteractive.aspekt.module.economy.database.table.CurrencyTable
 import ru.astrainteractive.aspekt.module.economy.database.table.PlayerCurrencyTable
-import ru.astrainteractive.astralibs.exposed.model.DatabaseConfiguration
-import ru.astrainteractive.astralibs.exposed.util.connect
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.StateFlowKrate
 import ru.astrainteractive.klibs.mikro.core.coroutines.mapCached
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
+import ru.astrainteractive.klibs.mikro.exposed.model.DatabaseConfiguration
+import ru.astrainteractive.klibs.mikro.exposed.util.connect
 import kotlin.coroutines.CoroutineContext
 
 internal interface EconomyDatabaseModule {

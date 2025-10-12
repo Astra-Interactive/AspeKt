@@ -5,48 +5,47 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
     alias(libs.plugins.forgegradle)
-    alias(libs.plugins.klibs.minecraft.shadow)
     alias(libs.plugins.klibs.minecraft.resource.processor)
+    alias(libs.plugins.gradle.shadow)
 }
 
 dependencies {
     minecraft(
         "net.minecraftforge",
         "forge",
-        "${libs.versions.minecraft.version.get()}-${libs.versions.minecraft.forgeversion.get()}"
+        "${libs.versions.minecraft.mojang.version.get()}-${libs.versions.minecraft.forgeversion.get()}"
     )
     // Kotlin
-    shadeImplementation(libs.bundles.kotlin)
-    shadeImplementation(libs.bundles.exposed)
+    shadow(libs.kotlin.coroutines.core)
     // AstraLibs
-    shadeImplementation(libs.minecraft.astralibs.core)
-    shadeImplementation(libs.minecraft.astralibs.core.forge)
-    shadeImplementation(libs.minecraft.astralibs.command)
-    shadeImplementation(libs.kotlin.serializationKaml)
-    shadeImplementation(libs.klibs.mikro.core)
-    shadeImplementation(libs.klibs.kstorage)
-    shadeImplementation(libs.driver.h2)
-    shadeImplementation(libs.driver.jdbc)
-    shadeImplementation(libs.minecraft.kyori.plain)
-    shadeImplementation(libs.minecraft.kyori.legacy)
-    shadeImplementation(libs.minecraft.kyori.gson)
+    shadow(libs.minecraft.astralibs.core)
+    shadow(libs.minecraft.astralibs.core.forge)
+    shadow(libs.minecraft.astralibs.command)
+    shadow(libs.kotlin.serialization.kaml)
+    shadow(libs.klibs.mikro.core)
+    shadow(libs.klibs.kstorage)
+    shadow(libs.driver.h2)
+    shadow(libs.driver.jdbc)
+    shadow(libs.kyori.plain)
+    shadow(libs.kyori.legacy)
+    shadow(libs.kyori.gson)
     // Local
-    shadeImplementation(projects.modules.core.api)
-    shadeImplementation(projects.modules.core.forge)
-    shadeImplementation(projects.modules.auth.api)
-    shadeImplementation(projects.modules.auth.forge)
-    shadeImplementation(projects.modules.claims.api)
-    shadeImplementation(projects.modules.claims.forge)
-    shadeImplementation(projects.modules.sethome.api)
-    shadeImplementation(projects.modules.sethome.forge)
-    shadeImplementation(projects.modules.tpa.api)
-    shadeImplementation(projects.modules.tpa.forge)
-    shadeImplementation(projects.modules.rtp.api)
-    shadeImplementation(projects.modules.rtp.forge)
+    shadow(projects.modules.core.api)
+    shadow(projects.modules.core.forge)
+    shadow(projects.modules.auth.api)
+    shadow(projects.modules.auth.forge)
+    shadow(projects.modules.claims.api)
+    shadow(projects.modules.claims.forge)
+    shadow(projects.modules.sethome.api)
+    shadow(projects.modules.sethome.forge)
+    shadow(projects.modules.tpa.api)
+    shadow(projects.modules.tpa.forge)
+    shadow(projects.modules.rtp.api)
+    shadow(projects.modules.rtp.forge)
 }
 
 minecraft {
-    mappings("official", libs.versions.minecraft.version.get())
+    mappings("official", libs.versions.minecraft.mojang.version.get())
     accessTransformer(rootProject.file("build").resolve("accesstransformer.cfg"))
 }
 
@@ -59,8 +58,6 @@ val destination = rootDir
 
 val reobfShadowJar = reobf.create("shadowJar")
 
-astraShadowJar.configureManifest()
-
 minecraftProcessResource {
     forge()
 }
@@ -69,7 +66,7 @@ val shadowJar by tasks.getting(ShadowJar::class) {
     mergeServiceFiles()
     dependsOn(tasks.named<ProcessResources>("processResources"))
     finalizedBy(reobfShadowJar)
-    configurations = listOf(project.configurations.shadeImplementation.get())
+    configurations = listOf(project.configurations.shadow.get())
     isReproducibleFileOrder = true
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     archiveClassifier = null as String?
@@ -93,6 +90,7 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         exclude("natives/**")
         exclude("nl/altindag/**")
         exclude("org/eclipse/**")
+        exclude("org/apache/commons/logging/**")
         exclude("org/bouncycastle/**")
         exclude("org/checkerframework/**")
         exclude("org/conscrypt/**")

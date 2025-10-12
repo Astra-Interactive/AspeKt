@@ -1,5 +1,3 @@
-@file:OptIn(UnsafeApi::class)
-
 package ru.astrainteractive.aspekt.module.restrictions.event.restrictions
 
 import org.bukkit.Material
@@ -14,7 +12,6 @@ import org.bukkit.event.block.BlockSpreadEvent
 import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.entity.ExplosionPrimeEvent
 import org.bukkit.event.player.PlayerBucketEmptyEvent
-import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.module.restrictions.event.restrictions.di.RestrictionsDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.EventListener

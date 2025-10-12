@@ -10,7 +10,9 @@ plugins {
 
 dependencies {
     // Kotlin
-    implementation(libs.bundles.kotlin)
+    implementation(libs.kotlin.coroutines.core)
+    implementation(libs.kotlin.serialization.json)
+
     // Spigot dependencies
     compileOnly(libs.minecraft.paper.api)
     implementation(libs.minecraft.bstats)
@@ -30,7 +32,7 @@ dependencies {
     compileOnly(libs.minecraft.discordsrv)
     compileOnly(libs.minecraft.essentialsx)
     // Test
-    testImplementation(libs.bundles.testing.kotlin)
+
     testImplementation(libs.tests.kotlin.test)
     implementation(projects.modules.core.api)
     implementation(projects.modules.core.bukkit)
@@ -75,7 +77,7 @@ shadowJar.configure {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     configurations = listOf(project.configurations.runtimeClasspath.get())
     relocationPrefix = requireProjectInfo.group
-    enableRelocation = true
+//    enableRelocation = true
     minimize {
         exclude(dependency(libs.exposed.jdbc.get()))
         exclude(dependency(libs.exposed.dao.get()))
