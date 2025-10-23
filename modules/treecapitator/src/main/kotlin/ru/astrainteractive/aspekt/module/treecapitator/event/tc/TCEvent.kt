@@ -1,5 +1,3 @@
-@file:OptIn(UnsafeApi::class)
-
 package ru.astrainteractive.aspekt.module.treecapitator.event.tc
 
 import kotlinx.coroutines.delay
@@ -17,7 +15,6 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
-import org.jetbrains.kotlin.tooling.core.UnsafeApi
 import ru.astrainteractive.aspekt.module.treecapitator.event.tc.di.TCDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.EventListener

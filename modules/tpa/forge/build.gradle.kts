@@ -6,19 +6,20 @@ plugins {
 
 dependencies {
     // Kotlin
-    implementation(libs.bundles.kotlin)
+    implementation(libs.kotlin.coroutines.core)
+
     // AstraLibs
     implementation(libs.minecraft.astralibs.core)
     implementation(libs.minecraft.astralibs.core.forge)
     implementation(libs.minecraft.astralibs.command)
     implementation(libs.klibs.kstorage)
     implementation(libs.klibs.mikro.core)
-    compileOnly(libs.minecraft.kyori.plain)
-    compileOnly(libs.minecraft.kyori.legacy)
-    compileOnly(libs.minecraft.kyori.gson)
+    compileOnly(libs.kyori.plain)
+    compileOnly(libs.kyori.legacy)
+    compileOnly(libs.kyori.gson)
     compileOnly("com.google.guava:guava:31.1-jre")
     // Test
-    testImplementation(libs.bundles.testing.kotlin)
+
     testImplementation(libs.tests.kotlin.test)
     // Local
     implementation(projects.modules.core.api)
@@ -30,11 +31,11 @@ dependencies {
     minecraft(
         "net.minecraftforge",
         "forge",
-        "${libs.versions.minecraft.version.get()}-${libs.versions.minecraft.forgeversion.get()}"
+        "${libs.versions.minecraft.mojang.version.get()}-${libs.versions.minecraft.forgeversion.get()}"
     )
 }
 minecraft {
-    mappings("official", libs.versions.minecraft.version.get())
+    mappings("official", libs.versions.minecraft.mojang.version.get())
 }
 
 configurations.runtimeElements {

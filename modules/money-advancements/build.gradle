@@ -5,7 +5,9 @@ plugins {
 
 dependencies {
     // Kotlin
-    implementation(libs.bundles.kotlin)
+    implementation(libs.kotlin.coroutines.core)
+    implementation(libs.kotlin.serialization.json)
+
     // Spigot dependencies
     compileOnly(libs.minecraft.paper.api)
     implementation(libs.minecraft.bstats)
@@ -19,7 +21,7 @@ dependencies {
     // Spigot
     compileOnly(libs.minecraft.essentialsx)
     // Test
-    testImplementation(libs.bundles.testing.kotlin)
+
     testImplementation(libs.tests.kotlin.test)
     implementation(projects.modules.core.api)
     implementation(projects.modules.core.bukkit)

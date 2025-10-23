@@ -5,16 +5,18 @@ plugins {
 
 dependencies {
     // Kotlin
-    implementation(libs.bundles.kotlin)
+    implementation(libs.kotlin.coroutines.core)
+    implementation(libs.kotlin.serialization.json)
+
     // AstraLibs
     implementation(libs.minecraft.astralibs.core)
     implementation(libs.minecraft.astralibs.command)
     implementation(libs.klibs.kstorage)
     implementation(libs.klibs.mikro.core)
     implementation(libs.klibs.mikro.extensions)
-    compileOnly(libs.minecraft.kyori.plain)
+    compileOnly(libs.kyori.plain)
     // Test
-    testImplementation(libs.bundles.testing.kotlin)
+
     testImplementation(libs.tests.kotlin.test)
     testImplementation(libs.kotlin.coroutines.test)
     // Local

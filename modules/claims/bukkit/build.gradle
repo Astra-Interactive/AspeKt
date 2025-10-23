@@ -5,7 +5,8 @@ plugins {
 
 dependencies {
     // Kotlin
-    implementation(libs.bundles.kotlin)
+    implementation(libs.kotlin.coroutines.core)
+
     // Spigot dependencies
     compileOnly(libs.minecraft.paper.api)
     // AstraLibs
@@ -17,7 +18,7 @@ dependencies {
     implementation(libs.minecraft.astralibs.menu.bukkit)
     implementation(libs.minecraft.astralibs.core.bukkit)
     // Test
-    testImplementation(libs.bundles.testing.kotlin)
+
     testImplementation(libs.tests.kotlin.test)
     // Local
     implementation(projects.modules.core.api)

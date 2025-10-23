@@ -16,10 +16,11 @@ fun CommandManager.rtpBypassed() = plugin.getCommand("rtpbypass")?.setExecutor {
     val player = args.getOrNull(0)?.let(Bukkit::getPlayer) ?: return@setExecutor true
     val essentials = Bukkit.getPluginManager().getPlugin("Essentials") as Essentials
     val randomTeleport = RandomTeleport(essentials)
+
     val completable = randomTeleport.getRandomLocation(
-        randomTeleport.center,
-        randomTeleport.minRange,
-        randomTeleport.maxRange
+        randomTeleport.getCenter("default"),
+        randomTeleport.getMinRange("default"),
+        randomTeleport.getMaxRange("default")
     )
     completable.whenComplete { location, _ ->
         player.teleport(location)
