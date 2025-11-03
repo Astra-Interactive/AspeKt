@@ -5,7 +5,7 @@ package ru.astrainteractive.aspekt.module.sethome.command
 import net.minecraftforge.event.RegisterCommandsEvent
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
 import ru.astrainteractive.aspekt.module.sethome.model.PlayerHome
-import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
+import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentConverter
 import ru.astrainteractive.astralibs.command.util.command
 import ru.astrainteractive.astralibs.command.util.hints
 import ru.astrainteractive.astralibs.command.util.requireArgument
@@ -27,7 +27,7 @@ internal fun RegisterCommandsEvent.homes(
                     playerData = player.asOnlineMinecraftPlayer(),
                     playerHome = PlayerHome(
                         location = player.asLocatable().getLocation(),
-                        name = ctx.requireArgument("home_name", StringArgumentType)
+                        name = ctx.requireArgument("home_name", StringArgumentConverter)
                     ),
                 ).run(homeCommandExecutor::execute)
             }
@@ -44,7 +44,7 @@ internal fun RegisterCommandsEvent.homes(
                 val player = ctx.source.player ?: return@runs
                 HomeCommand.DelHome(
                     playerData = player.asOnlineMinecraftPlayer(),
-                    homeName = ctx.requireArgument("home_name", StringArgumentType)
+                    homeName = ctx.requireArgument("home_name", StringArgumentConverter)
                 ).run(homeCommandExecutor::execute)
             }
         }
@@ -60,7 +60,7 @@ internal fun RegisterCommandsEvent.homes(
                 val player = ctx.source.player ?: return@runs
                 HomeCommand.TpHome(
                     playerData = player.asOnlineMinecraftPlayer(),
-                    homeName = ctx.requireArgument("home_name", StringArgumentType)
+                    homeName = ctx.requireArgument("home_name", StringArgumentConverter)
                 ).run(homeCommandExecutor::execute)
             }
         }

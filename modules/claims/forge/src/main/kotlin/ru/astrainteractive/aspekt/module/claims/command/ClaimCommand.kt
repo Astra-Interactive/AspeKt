@@ -3,7 +3,6 @@
 package ru.astrainteractive.aspekt.module.claims.command
 
 import com.mojang.brigadier.arguments.BoolArgumentType
-import com.mojang.brigadier.arguments.StringArgumentType
 import net.minecraftforge.event.RegisterCommandsEvent
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandArgument
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecutor
@@ -13,6 +12,7 @@ import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.util.getClaimChunk
 import ru.astrainteractive.aspekt.module.claims.util.toClaimPlayer
+import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentConverter
 import ru.astrainteractive.astralibs.command.util.argument
 import ru.astrainteractive.astralibs.command.util.command
 import ru.astrainteractive.astralibs.command.util.hints
@@ -62,7 +62,7 @@ internal fun RegisterCommandsEvent.claim(
                     val ownerPlayer = ctx.source.player ?: return@runs
                     val memberPlayerName = ctx.requireArgument(
                         "player",
-                        ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
+                        StringArgumentConverter
                     )
                     val memberPlayer = ForgeUtil
                         .getPlayerGameProfile(memberPlayerName)
@@ -91,7 +91,7 @@ internal fun RegisterCommandsEvent.claim(
                     val ownerPlayer = ctx.source.player ?: return@runs
                     val memberPlayerName = ctx.requireArgument(
                         "player",
-                        ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
+                        StringArgumentConverter
                     )
                     val memberPlayer = ForgeUtil
                         .getPlayerGameProfile(memberPlayerName)

@@ -21,7 +21,7 @@ import ru.astrainteractive.aspekt.module.claims.data.krate.ClaimKrate
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.UniqueWorldKey
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
-import ru.astrainteractive.klibs.kstorage.util.update
+import ru.astrainteractive.klibs.kstorage.util.save
 import java.io.File
 import java.util.UUID
 
@@ -88,7 +88,7 @@ internal class ClaimsRepositoryImpl(
 
     override suspend fun saveChunk(uuid: UUID, chunk: ClaimChunk) = mutex.withLock {
         runCatching {
-            requireKrate(uuid).update { data ->
+            requireKrate(uuid).save { data ->
                 data.copy(
                     chunks = data.chunks.toMutableMap().apply {
                         this[chunk.uniqueWorldKey] = chunk
@@ -106,7 +106,7 @@ internal class ClaimsRepositoryImpl(
             if (!isPlayerOwnClaim(uuid, key)) {
                 throw ClaimNotOwnedException
             }
-            requireKrate(uuid).update { data ->
+            requireKrate(uuid).save { data ->
                 data.copy(
                     chunks = data.chunks
                         .toMutableMap()

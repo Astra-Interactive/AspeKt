@@ -8,7 +8,7 @@ import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthPermission
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
-import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
+import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentConverter
 import ru.astrainteractive.astralibs.command.util.argument
 import ru.astrainteractive.astralibs.command.util.command
 import ru.astrainteractive.astralibs.command.util.hints
@@ -37,7 +37,7 @@ fun RegisterCommandsEvent.unregisterCommand(
             runs { ctx ->
                 val translation = translationKrate.cachedValue
                 ctx.requirePermission(AuthPermission.Unregister)
-                val usernameToDelete = ctx.requireArgument("username", StringArgumentType)
+                val usernameToDelete = ctx.requireArgument("username", StringArgumentConverter)
                 scope.launch {
                     with(kyoriKrate.cachedValue) {
                         val authData = authDao.getUser(usernameToDelete)

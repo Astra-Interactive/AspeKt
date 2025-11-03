@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.jail.command.jail
 
+import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import io.papermc.paper.command.brigadier.CommandSourceStack
 import kotlinx.coroutines.launch
@@ -13,15 +14,14 @@ import ru.astrainteractive.aspekt.module.jail.util.sendMessage
 import ru.astrainteractive.aspekt.module.jail.util.toJailLocation
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.api.argumenttype.OfflinePlayerArgument
-import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
 import ru.astrainteractive.astralibs.command.api.exception.StringDescCommandException
+import ru.astrainteractive.astralibs.command.api.util.argument
 import ru.astrainteractive.astralibs.command.api.util.command
 import ru.astrainteractive.astralibs.command.api.util.hints
 import ru.astrainteractive.astralibs.command.api.util.literal
 import ru.astrainteractive.astralibs.command.api.util.requireArgument
 import ru.astrainteractive.astralibs.command.api.util.requirePermission
 import ru.astrainteractive.astralibs.command.api.util.runs
-import ru.astrainteractive.astralibs.command.api.util.stringArgument
 import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.string.StringDesc
 import java.time.Instant
@@ -42,13 +42,13 @@ internal fun JailCommandManager.jailCommand(): LiteralArgumentBuilder<CommandSou
                 }
             }
             literal("create") {
-                stringArgument("jail") {
+                argument("jail", StringArgumentType.string()) { jailArg ->
                     runs { ctx ->
                         ctx.requirePermission(PluginPermission.JAIL_CREATE)
                         val player = ctx.source.sender as? Player
                         player ?: throw StringDescCommandException(StringDesc.Plain("Executor should be player"))
                         val jail = Jail(
-                            name = ctx.requireArgument("jail", StringArgumentType),
+                            name = ctx.requireArgument(jailArg),
                             location = player.location.toJailLocation()
                         )
                         val translation = translationKrate.cachedValue
@@ -70,13 +70,13 @@ internal fun JailCommandManager.jailCommand(): LiteralArgumentBuilder<CommandSou
                 }
             }
             literal("delete") {
-                stringArgument("jail") {
-                    hints(cachedJailApi.getJails().map(Jail::name))
+                argument("jail", StringArgumentType.string()) { jailArg ->
+                    hints { cachedJailApi.getJails().map(Jail::name) }
                     runs { ctx ->
                         ctx.requirePermission(PluginPermission.JAIL_DELETE)
                         val translation = translationKrate.cachedValue
                         scope.launch {
-                            val jailName = ctx.requireArgument("jail", StringArgumentType)
+                            val jailName = ctx.requireArgument(jailArg)
                             if (jailApi.getJailInmates(jailName).getOrNull().orEmpty().isNotEmpty()) {
                                 ctx.source.sender.sendMessage(translation.jails.jailHasInmates(jailName).component)
                             } else {
@@ -97,13 +97,13 @@ internal fun JailCommandManager.jailCommand(): LiteralArgumentBuilder<CommandSou
                 }
             }
             literal("free") {
-                stringArgument("player") {
-                    hints(Bukkit.getOnlinePlayers().map(Player::getName))
+                argument("player", StringArgumentType.string()) { playerArg ->
+                    hints { Bukkit.getOnlinePlayers().map(Player::getName) }
                     runs { ctx ->
                         ctx.requirePermission(PluginPermission.JAIL_FREE)
                         val translation = translationKrate.cachedValue
                         scope.launch {
-                            val offlinePlayerToFree = ctx.requireArgument("player", OfflinePlayerArgument)
+                            val offlinePlayerToFree = ctx.requireArgument(playerArg, OfflinePlayerArgument)
                             val inmate = jailApi.getInmate(offlinePlayerToFree.uniqueId.toString())
                                 .getOrNull()
                                 ?: error("Could not find jail inmate!")
@@ -129,19 +129,19 @@ internal fun JailCommandManager.jailCommand(): LiteralArgumentBuilder<CommandSou
                 }
             }
             literal("inmate") {
-                stringArgument("jail") {
-                    hints(cachedJailApi.getJails().map(Jail::name))
-                    stringArgument("player") {
-                        hints(Bukkit.getOnlinePlayers().map(Player::getName))
-                        stringArgument("time") {
-                            hints(listOf("TIME:1s,1m,1h10m"))
+                argument("jail", StringArgumentType.string()) { jailArg ->
+                    hints { cachedJailApi.getJails().map(Jail::name) }
+                    argument("player", StringArgumentType.string()) { playerArg ->
+                        hints { Bukkit.getOnlinePlayers().map(Player::getName) }
+                        argument("time", StringArgumentType.string()) { timeArg ->
+                            hints { listOf("TIME:1s,1m,1h10m") }
                             runs { ctx ->
                                 ctx.requirePermission(PluginPermission.JAIL_INMATE)
                                 val translation = translationKrate.cachedValue
                                 scope.launch {
-                                    val jailName = ctx.requireArgument("jail", StringArgumentType)
-                                    val jailOfflinePlayer = ctx.requireArgument("player", OfflinePlayerArgument)
-                                    val jailDuration = ctx.requireArgument("time", DurationArgumentType)
+                                    val jailName = ctx.requireArgument(jailArg)
+                                    val jailOfflinePlayer = ctx.requireArgument(playerArg, OfflinePlayerArgument)
+                                    val jailDuration = ctx.requireArgument(timeArg, DurationArgumentType)
 
                                     val inmate = JailInmate(
                                         uuid = jailOfflinePlayer.uniqueId.toString(),

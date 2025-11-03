@@ -18,7 +18,7 @@ import ru.astrainteractive.astralibs.server.PlatformServer
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
-import ru.astrainteractive.klibs.kstorage.util.update
+import ru.astrainteractive.klibs.kstorage.util.save
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 @Suppress("LongParameterList")
@@ -131,7 +131,7 @@ class ClaimCommandExecutor(
                 ?.sendMessage(translation.claim.alreadyMember.component)
             return
         }
-        krate.update { data ->
+        krate.save { data ->
             data.copy(members = data.members + input.member)
         }
         platformServer
@@ -149,7 +149,7 @@ class ClaimCommandExecutor(
                 ?.sendMessage(translation.claim.notMember.component)
             return
         }
-        krate.update { data ->
+        krate.save { data ->
             data.copy(members = data.members - input.member)
         }
         platformServer

@@ -10,7 +10,7 @@ import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.server.MinecraftNativeBridge
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
-import ru.astrainteractive.klibs.kstorage.util.update
+import ru.astrainteractive.klibs.kstorage.util.save
 
 class HomeCommandExecutor(
     private val homeKrateProvider: HomeKrateProvider,
@@ -34,7 +34,7 @@ class HomeCommandExecutor(
                         input.playerData.asAudience().sendMessage(translation.homes.homeNotFound.component)
                         return@launch
                     }
-                    krate.update { homes -> homes.filter { home.name != input.homeName } }
+                    krate.save { homes -> homes.filter { home.name != input.homeName } }
 
                     input.playerData.asAudience().sendMessage(translation.homes.homeDeleted.component)
                 }
@@ -43,7 +43,7 @@ class HomeCommandExecutor(
             is HomeCommand.SetHome -> {
                 val krate = homeKrateProvider.get(input.playerData.uuid)
                 scope.launch {
-                    krate.update { homes -> homes.plus(input.playerHome) }
+                    krate.save { homes -> homes.plus(input.playerHome) }
 
                     input.playerData.asAudience().sendMessage(translation.homes.homeCreated.component)
                 }

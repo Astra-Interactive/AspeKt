@@ -1,13 +1,11 @@
 package ru.astrainteractive.aspekt.module.claims.command.claim
 
 import org.bukkit.entity.Player
-import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
+import ru.astrainteractive.aspekt.module.claims.model.ChunkFlagArgumentConverter
 import ru.astrainteractive.aspekt.module.claims.util.asClaimChunk
 import ru.astrainteractive.aspekt.module.claims.util.asClaimPlayer
 import ru.astrainteractive.aspekt.plugin.PluginPermission
-import ru.astrainteractive.astralibs.command.api.argumenttype.ArgumentType
-import ru.astrainteractive.astralibs.command.api.argumenttype.BooleanArgumentType
-import ru.astrainteractive.astralibs.command.api.argumenttype.EnumArgumentType
+import ru.astrainteractive.astralibs.command.api.argumenttype.BooleanArgumentConverter
 import ru.astrainteractive.astralibs.command.api.argumenttype.OnlinePlayerArgument
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContext
 import ru.astrainteractive.astralibs.command.api.context.BukkitCommandContextExt.requireArgument
@@ -16,10 +14,10 @@ import ru.astrainteractive.astralibs.command.api.parser.CommandParser
 
 internal class ClaimCommandParser : CommandParser<Claimommand.Model, BukkitCommandContext> {
 
-    override fun parse(commandContext: BukkitCommandContext): Claimommand.Model {
-        val sender = commandContext.sender
-        val claimArgument = commandContext.requireArgument(0, EnumArgumentType(ClaimCommandArgument.entries))
-        commandContext.requirePermission(PluginPermission.ADMIN_CLAIM)
+    override fun parse(ctx: BukkitCommandContext): Claimommand.Model {
+        val sender = ctx.sender
+        val claimArgument = ctx.requireArgument(0, ClaimCommandArgumentConverter)
+        ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
         return when (claimArgument) {
             ClaimCommandArgument.MAP -> {
                 val player = sender as? Player ?: throw Claimommand.Error.NotPlayer
@@ -38,7 +36,7 @@ internal class ClaimCommandParser : CommandParser<Claimommand.Model, BukkitComma
 
             ClaimCommandArgument.ADD_MEMBER -> {
                 val ownerPlayer = sender as? Player ?: throw Claimommand.Error.NotPlayer
-                val memberPlayer = commandContext.requireArgument(1, OnlinePlayerArgument)
+                val memberPlayer = ctx.requireArgument(1, OnlinePlayerArgument)
 
                 Claimommand.Model.AddMember(
                     owner = ownerPlayer.asClaimPlayer(),
@@ -48,7 +46,7 @@ internal class ClaimCommandParser : CommandParser<Claimommand.Model, BukkitComma
 
             ClaimCommandArgument.REMOVE_MEMBER -> {
                 val ownerPlayer = sender as? Player ?: throw Claimommand.Error.NotPlayer
-                val memberPlayer = commandContext.requireArgument(1, OnlinePlayerArgument)
+                val memberPlayer = ctx.requireArgument(1, OnlinePlayerArgument)
 
                 Claimommand.Model.RemoveMember(
                     owner = ownerPlayer.asClaimPlayer(),
@@ -58,11 +56,11 @@ internal class ClaimCommandParser : CommandParser<Claimommand.Model, BukkitComma
 
             ClaimCommandArgument.FLAG -> {
                 val player = sender as? Player ?: throw Claimommand.Error.NotPlayer
-                val flag = commandContext.requireArgument(
+                val flag = ctx.requireArgument(
                     index = 1,
-                    type = ArgumentType.Lambda("ChunkFlag", ChunkFlag::valueOf)
+                    type = ChunkFlagArgumentConverter
                 )
-                val value = commandContext.requireArgument(2, BooleanArgumentType)
+                val value = ctx.requireArgument(2, BooleanArgumentConverter)
                 Claimommand.Model.SetFlag(
                     claimPlayer = player.asClaimPlayer(),
                     flag = flag,

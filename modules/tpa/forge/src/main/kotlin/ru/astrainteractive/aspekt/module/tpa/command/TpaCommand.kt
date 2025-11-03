@@ -3,7 +3,7 @@
 package ru.astrainteractive.aspekt.module.tpa.command
 
 import net.minecraftforge.event.RegisterCommandsEvent
-import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
+import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentConverter
 import ru.astrainteractive.astralibs.command.util.argument
 import ru.astrainteractive.astralibs.command.util.command
 import ru.astrainteractive.astralibs.command.util.hints
@@ -24,7 +24,7 @@ internal fun RegisterCommandsEvent.tpa(
             hints(ForgeUtil.getOnlinePlayers().map { it.name.toPlain() })
 
             runs { ctx ->
-                val targetPlayerName = ctx.requireArgument("player", StringArgumentType)
+                val targetPlayerName = ctx.requireArgument("player", StringArgumentConverter)
                 TpaCommand.TpaTo(
                     executorPlayer = ctx.source.player
                         ?.asOnlineMinecraftPlayer()
@@ -40,7 +40,7 @@ internal fun RegisterCommandsEvent.tpa(
     command("tpahere") {
         argument("player", com.mojang.brigadier.arguments.StringArgumentType.string()) {
             runs { ctx ->
-                val targetPlayerName = ctx.requireArgument("player", StringArgumentType)
+                val targetPlayerName = ctx.requireArgument("player", StringArgumentConverter)
                 TpaCommand.TpaHere(
                     executorPlayer = ctx.source.player
                         ?.asOnlineMinecraftPlayer()

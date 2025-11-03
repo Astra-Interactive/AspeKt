@@ -10,7 +10,7 @@ import ru.astrainteractive.aspekt.module.auth.api.isRegistered
 import ru.astrainteractive.aspekt.module.auth.api.model.AuthData
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.aspekt.module.auth.api.util.sha256
-import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentType
+import ru.astrainteractive.astralibs.command.api.argumenttype.StringArgumentConverter
 import ru.astrainteractive.astralibs.command.util.argument
 import ru.astrainteractive.astralibs.command.util.command
 import ru.astrainteractive.astralibs.command.util.requireArgument
@@ -42,7 +42,7 @@ fun RegisterCommandsEvent.registerCommand(
                                     .sendMessage(translation.onlyPlayerCommand.component)
                                 return@launch
                             }
-                            val passwordSha = ctx.requireArgument("password", StringArgumentType).sha256()
+                            val passwordSha = ctx.requireArgument("password", StringArgumentConverter).sha256()
                             val isRegistered = authDao.isRegistered(player.uuid)
                             if (isRegistered) {
                                 ctx.source

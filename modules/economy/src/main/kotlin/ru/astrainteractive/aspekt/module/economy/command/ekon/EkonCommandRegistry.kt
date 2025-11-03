@@ -4,12 +4,11 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.module.economy.command.ekon.argument.CurrencyArgument
-import ru.astrainteractive.aspekt.module.economy.command.ekon.argument.OfflinePlayerArgument
 import ru.astrainteractive.aspekt.module.economy.database.dao.CachedDao
 import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.command.api.exception.ArgumentTypeException
+import ru.astrainteractive.astralibs.command.api.exception.ArgumentConverterException
 import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException
 import ru.astrainteractive.astralibs.command.api.exception.CommandException
 import ru.astrainteractive.astralibs.command.api.exception.NoPermissionException
@@ -98,7 +97,7 @@ internal class EkonCommandRegistry(
                 when (throwable) {
                     is CommandException -> {
                         when (throwable) {
-                            is ArgumentTypeException -> {
+                            is ArgumentConverterException -> {
                                 context.sender.sendMessage(translation.general.wrongUsage.component)
                             }
 
@@ -118,10 +117,6 @@ internal class EkonCommandRegistry(
 
                     is CurrencyArgument.CurrencyNotFoundException -> {
                         context.sender.sendMessage(translation.economy.currencyNotFound.component)
-                    }
-
-                    is OfflinePlayerArgument.PlayerNotFound -> {
-                        context.sender.sendMessage(translation.economy.playerNotFound.component)
                     }
 
                     else -> {
