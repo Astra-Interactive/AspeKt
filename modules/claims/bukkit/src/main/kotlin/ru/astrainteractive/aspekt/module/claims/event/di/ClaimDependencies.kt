@@ -25,6 +25,6 @@ internal interface ClaimDependencies {
         override val eventListener: EventListener = bukkitCoreModule.eventListener
         override val plugin: JavaPlugin = bukkitCoreModule.plugin
         override val translation: PluginTranslation by coreModule.translation
-        override val kyoriComponentSerializer by coreModule.kyoriComponentSerializer
+        override val kyoriComponentSerializer by coreModule.kyoriKrate
     }
 }

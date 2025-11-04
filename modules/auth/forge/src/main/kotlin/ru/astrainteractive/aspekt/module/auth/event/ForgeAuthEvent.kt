@@ -1,7 +1,6 @@
 package ru.astrainteractive.aspekt.module.auth.event
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -18,7 +17,6 @@ import net.minecraftforge.eventbus.api.EventPriority
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
-import ru.astrainteractive.astralibs.coroutine.ForgeMainDispatcher
 import ru.astrainteractive.astralibs.event.flowEvent
 import ru.astrainteractive.astralibs.event.playerMoveFlowEvent
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
@@ -32,14 +30,14 @@ import ru.astrainteractive.klibs.kstorage.util.getValue
 class ForgeAuthEvent(
     private val authorizedApi: AuthorizedApi,
     private val kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    private val mainScope: CoroutineScope,
     translationKrate: CachedKrate<AuthTranslation>
 ) : KyoriComponentSerializer by kyoriKrate.unwrap() {
     val translation by translationKrate
-    private val scope = CoroutineScope(SupervisorJob() + ForgeMainDispatcher) // todo
 
     val playerLoggedOutEvent = flowEvent<PlayerLoggedOutEvent>()
         .onEach { authorizedApi.forgetUser(it.entity.uuid) }
-        .launchIn(scope)
+        .launchIn(mainScope)
 
     val playerLoggedInEvent = flowEvent<PlayerLoggedInEvent>()
         .onEach {
@@ -50,9 +48,9 @@ class ForgeAuthEvent(
             )
             authorizedApi.loadUserInfo(playerLoginModel)
         }
-        .launchIn(scope)
+        .launchIn(mainScope)
 
-    private fun processPlayerEvent(player: Player) = scope.launch {
+    private fun processPlayerEvent(player: Player) = mainScope.launch {
         when (authorizedApi.getAuthState(player.uuid)) {
             AuthorizedApi.AuthState.Authorized -> Unit
 
@@ -82,7 +80,7 @@ class ForgeAuthEvent(
                     event.oldLocation.z
                 )
             }
-        }.launchIn(scope)
+        }.launchIn(mainScope)
 
     val breakEvent = flowEvent<BlockEvent.BreakEvent>(EventPriority.HIGHEST)
         .filter { it.player.isAlive }
@@ -91,7 +89,7 @@ class ForgeAuthEvent(
             println(event)
             event.isCanceled = true
             processPlayerEvent(event.player)
-        }.launchIn(scope)
+        }.launchIn(mainScope)
 
     val playerEvent = flowEvent<EntityEvent>(EventPriority.HIGHEST)
         .filter { it.isCancelable }
@@ -105,5 +103,5 @@ class ForgeAuthEvent(
             event.isCanceled = true
             processPlayerEvent(event.entity as Player)
         }
-        .launchIn(scope)
+        .launchIn(mainScope)
 }

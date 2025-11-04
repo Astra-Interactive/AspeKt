@@ -13,7 +13,7 @@ import java.io.File
 class ClaimModule(
     stringFormat: StringFormat,
     dataFolder: File,
-    scope: CoroutineScope,
+    ioScope: CoroutineScope,
     translationKrate: CachedKrate<PluginTranslation>
 ) {
     val claimsRepository: ClaimsRepository = ClaimsRepositoryImpl(
@@ -21,10 +21,8 @@ class ClaimModule(
             .resolve("claims")
             .also(File::mkdirs),
         stringFormat = stringFormat,
-        scope = scope
+        ioScope = ioScope
     )
     val claimErrorMapper = ClaimErrorMapper(translationKrate = translationKrate)
-    val lifecycle = Lifecycle.Lambda(
-        onDisable = {}
-    )
+    val lifecycle = Lifecycle.Empty
 }

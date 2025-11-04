@@ -8,23 +8,22 @@ import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.async.withTimings
-import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
+import ru.astrainteractive.klibs.kstorage.util.getValue
 import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
 internal class EkonCommandExecutor(
-    private val getKyori: CachedKrate<KyoriComponentSerializer>,
-    private val getTranslation: () -> PluginTranslation,
+    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    translationKrate: CachedKrate<PluginTranslation>,
     private val dao: EconomyDao
-) : CommandExecutor<EkonCommand.Model>,
-    CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO).withTimings(),
-    KyoriComponentSerializer by getKyori.unwrap(),
+) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO).withTimings(),
+    KyoriComponentSerializer by kyoriKrate.unwrap(),
     Logger by JUtiltLogger("EkonCommandExecutor") {
-    private val translation get() = getTranslation.invoke()
+    private val translation by translationKrate
 
     private suspend fun addCurrency(input: EkonCommand.Model.Add) {
         val playerCurrency = dao.findPlayerCurrency(
@@ -103,7 +102,7 @@ internal class EkonCommandExecutor(
         }
     }
 
-    override fun execute(input: EkonCommand.Model) {
+    fun execute(input: EkonCommand.Model) {
         launch {
             when (input) {
                 is EkonCommand.Model.Add -> {

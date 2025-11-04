@@ -46,7 +46,7 @@ class EconomyDaoTest {
             factory = { DatabaseConfiguration.H2(requireFolder.resolve("test").path) },
             loader = { DatabaseConfiguration.H2(requireFolder.resolve("test").path) }
         ).asStateFlowMutableKrate()
-        _module = EconomyDatabaseModule.Default(
+        _module = EconomyDatabaseModule(
             dbConfig = dbConfig,
             coroutineScope = CoroutineScope(scheduler),
             ioDispatcher = scheduler

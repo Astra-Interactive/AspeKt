@@ -7,53 +7,45 @@ import ru.astrainteractive.aspekt.module.moneydrop.MoneyDropEvent
 import ru.astrainteractive.aspekt.module.moneydrop.database.di.MoneyDropDaoModule
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
-interface MoneyDropModule {
-    val lifecycle: Lifecycle
+class MoneyDropModule(
+    coreModule: CoreModule,
+    bukkitCoreModule: BukkitCoreModule
+) {
+    private val moneyDropDaoModule = MoneyDropDaoModule(
+        dataFolder = coreModule.dataFolder,
+        ioDispatcher = coreModule.dispatchers.IO,
+        coroutineScope = coreModule.ioScope
+    )
 
-    class Default(
-        coreModule: CoreModule,
-        bukkitCoreModule: BukkitCoreModule
-    ) : MoneyDropModule {
-        private val moneyDropDaoModule by lazy {
-            MoneyDropDaoModule.Default(
-                dataFolder = coreModule.dataFolder,
-                ioDispatcher = coreModule.dispatchers.IO,
-                coroutineScope = coreModule.scope
-            )
-        }
+    private val moneyDropController = MoneyDropController(
+        pluginConfigurationDependency = coreModule.configKrate,
+        kyoriComponentSerializerDependency = coreModule.kyoriKrate,
+        translationDependency = coreModule.translation,
+        dispatchers = coreModule.dispatchers,
+        dao = moneyDropDaoModule.dao
+    )
 
-        private val moneyDropController: MoneyDropController by lazy {
-            MoneyDropController(
-                pluginConfigurationDependency = coreModule.pluginConfig,
-                kyoriComponentSerializerDependency = coreModule.kyoriComponentSerializer,
-                translationDependency = coreModule.translation,
-                dispatchers = coreModule.dispatchers,
-                dao = moneyDropDaoModule.dao
-            )
-        }
+    private val moneyDropEvent: MoneyDropEvent = MoneyDropEvent(
+        kyoriKrate = coreModule.kyoriKrate,
+        translationKrate = coreModule.translation,
+        moneyDropController = moneyDropController,
+        currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory,
+        ioScope = coreModule.ioScope
+    )
 
-        private val moneyDropEvent: MoneyDropEvent = MoneyDropEvent(
-            dependencies = MoneyDropDependencies.Default(
-                coreModule = coreModule,
-                moneyDropController = moneyDropController,
-                bukkitCoreModule = bukkitCoreModule
-            )
+    val lifecycle: Lifecycle by lazy {
+        Lifecycle.Lambda(
+            onEnable = {
+                moneyDropEvent.onEnable(bukkitCoreModule.plugin)
+                moneyDropDaoModule.lifecycle.onEnable()
+            },
+            onDisable = {
+                moneyDropDaoModule.lifecycle.onDisable()
+                moneyDropEvent.onDisable()
+            },
+            onReload = {
+                moneyDropDaoModule.lifecycle.onReload()
+            }
         )
-
-        override val lifecycle: Lifecycle by lazy {
-            Lifecycle.Lambda(
-                onEnable = {
-                    moneyDropEvent.onEnable(bukkitCoreModule.plugin)
-                    moneyDropDaoModule.lifecycle.onEnable()
-                },
-                onDisable = {
-                    moneyDropDaoModule.lifecycle.onDisable()
-                    moneyDropEvent.onDisable()
-                },
-                onReload = {
-                    moneyDropDaoModule.lifecycle.onReload()
-                }
-            )
-        }
     }
 }

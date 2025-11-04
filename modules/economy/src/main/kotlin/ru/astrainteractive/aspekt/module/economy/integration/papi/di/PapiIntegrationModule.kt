@@ -7,40 +7,36 @@ import ru.astrainteractive.aspekt.module.economy.integration.papi.PlaceholderExp
 import ru.astrainteractive.aspekt.module.economy.integration.papi.di.factory.PapiFactory
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
-internal interface PapiIntegrationModule {
-    val lifecycle: Lifecycle
+internal class PapiIntegrationModule(
+    databaseModule: EconomyDatabaseModule,
+    coreModule: CoreModule,
+) {
 
-    class Default(
-        databaseModule: EconomyDatabaseModule,
-        coreModule: CoreModule,
-    ) : PapiIntegrationModule {
+    private val isPapiEnabled: Boolean
+        get() = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")
 
-        private val isPapiEnabled: Boolean
-            get() = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")
-
-        private val economyPlaceholderExtension: PlaceholderExpansionApi by lazy {
-            PapiFactory(
-                economyDao = databaseModule.economyDao,
-                scope = coreModule.scope
-            ).create()
-        }
-        override val lifecycle: Lifecycle = Lifecycle.Lambda(
-            onEnable = {
-                if (isPapiEnabled) {
-                    economyPlaceholderExtension.register()
-                }
-            },
-            onReload = {
-                if (isPapiEnabled) {
-                    if (economyPlaceholderExtension.isRegistered()) economyPlaceholderExtension.unregister()
-                    economyPlaceholderExtension.register()
-                }
-            },
-            onDisable = {
-                if (isPapiEnabled) {
-                    if (economyPlaceholderExtension.isRegistered()) economyPlaceholderExtension.unregister()
-                }
-            }
-        )
+    private val economyPlaceholderExtension: PlaceholderExpansionApi by lazy {
+        PapiFactory(
+            economyDao = databaseModule.economyDao,
+            scope = coreModule.ioScope
+        ).create()
     }
+    val lifecycle: Lifecycle = Lifecycle.Lambda(
+        onEnable = {
+            if (isPapiEnabled) {
+                economyPlaceholderExtension.register()
+            }
+        },
+        onReload = {
+            if (isPapiEnabled) {
+                if (economyPlaceholderExtension.isRegistered()) economyPlaceholderExtension.unregister()
+                economyPlaceholderExtension.register()
+            }
+        },
+        onDisable = {
+            if (isPapiEnabled) {
+                if (economyPlaceholderExtension.isRegistered()) economyPlaceholderExtension.unregister()
+            }
+        }
+    )
 }

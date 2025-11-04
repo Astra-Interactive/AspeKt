@@ -7,13 +7,28 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
-import ru.astrainteractive.aspekt.module.autocrop.di.AutoCropDependencies
+import ru.astrainteractive.aspekt.module.autocrop.domain.HoeDamager
+import ru.astrainteractive.aspekt.module.autocrop.domain.HoeRadiusFactory
+import ru.astrainteractive.aspekt.module.autocrop.domain.RelativeBlockProvider
+import ru.astrainteractive.aspekt.module.autocrop.mapping.CropMaterialMapper
+import ru.astrainteractive.aspekt.module.autocrop.mapping.CropSeedMaterialMapper
+import ru.astrainteractive.aspekt.module.autocrop.presentation.CropDupeController
+import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
+import ru.astrainteractive.klibs.kstorage.util.getValue
 import kotlin.random.Random
 
 internal class AutoCropEvent(
-    module: AutoCropDependencies
-) : AutoCropDependencies by module, EventListener {
+    pluginConfig: CachedKrate<PluginConfiguration>,
+    val hoeDamager: HoeDamager,
+    val cropMaterialMapper: CropMaterialMapper,
+    val cropSeedMaterialMapper: CropSeedMaterialMapper,
+    val cropDupeController: CropDupeController,
+    val hoeRadiusFactory: HoeRadiusFactory,
+    val createRelativeBlockProvider: () -> RelativeBlockProvider
+) : EventListener {
+    private val configuration by pluginConfig
 
     private fun processBlock(block: Block, hoeItemStack: ItemStack?) {
         val autoCropConfig = configuration.autoCrop
@@ -53,7 +68,7 @@ internal class AutoCropEvent(
         val hoeMaybe = e.player.inventory.itemInMainHand
         val radius = hoeRadiusFactory.create(hoeMaybe)
         val hoeItemStack = hoeMaybe.takeIf { radius > 1 }
-        createRelativeBlockProvider()
+        createRelativeBlockProvider.invoke()
             .provide(clickedBlock, radius)
             .forEach { block ->
                 processBlock(block, hoeItemStack)

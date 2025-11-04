@@ -1,6 +1,9 @@
 package ru.astrainteractive.aspekt.di
 
-import ru.astrainteractive.aspekt.command.di.CommandManagerModule
+import org.bukkit.Bukkit
+import org.bukkit.entity.Player
+import org.bukkit.event.HandlerList
+import ru.astrainteractive.aspekt.command.di.CommonCommandsModule
 import ru.astrainteractive.aspekt.inventorysort.di.InventorySortModule
 import ru.astrainteractive.aspekt.invisibleframes.di.InvisibleItemFrameModule
 import ru.astrainteractive.aspekt.module.antiswear.di.AntiSwearModule
@@ -18,82 +21,120 @@ import ru.astrainteractive.aspekt.module.restrictions.di.RestrictionModule
 import ru.astrainteractive.aspekt.module.sit.di.SitModule
 import ru.astrainteractive.aspekt.module.treecapitator.di.TreeCapitatorModule
 import ru.astrainteractive.astralibs.async.DefaultBukkitDispatchers
+import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.lifecycle.LifecyclePlugin
 import ru.astrainteractive.astralibs.server.BukkitMinecraftNativeBridge
 import ru.astrainteractive.astralibs.server.BukkitPlatformServer
 
 class RootModule(plugin: LifecyclePlugin) {
-    val coreModule: CoreModule by lazy {
-        CoreModule.Default(
+    private val coreModule: CoreModule by lazy {
+        CoreModule(
             dataFolder = plugin.dataFolder,
             dispatchers = DefaultBukkitDispatchers(plugin),
             minecraftNativeBridge = BukkitMinecraftNativeBridge(),
             platformServer = BukkitPlatformServer()
         )
     }
-    val bukkitCoreModule: BukkitCoreModule = BukkitCoreModule(
+    private val bukkitCoreModule: BukkitCoreModule = BukkitCoreModule(
         plugin = plugin,
-        scope = coreModule.scope,
+        ioScope = coreModule.ioScope,
         mainScope = coreModule.mainScope
     )
-    val claimModule by lazy {
+    private val claimModule by lazy {
         ClaimModule(
             stringFormat = coreModule.jsonStringFormat,
             dataFolder = coreModule.dataFolder,
-            scope = coreModule.scope,
+            ioScope = coreModule.ioScope,
             translationKrate = coreModule.translation
         )
     }
-    val bukkitClaimModule: BukkitClaimModule by lazy {
-        BukkitClaimModule.Default(
+    private val bukkitClaimModule: BukkitClaimModule by lazy {
+        BukkitClaimModule(
             coreModule = coreModule,
             bukkitCoreModule = bukkitCoreModule,
             claimModule = claimModule
         )
     }
-    val menuModule: MenuModule by lazy {
-        MenuModule.Default(coreModule, bukkitCoreModule)
+    private val menuModule: MenuModule by lazy {
+        MenuModule(coreModule, bukkitCoreModule)
     }
-    val sitModule: SitModule by lazy {
-        SitModule.Default(coreModule, bukkitCoreModule)
+    private val sitModule: SitModule by lazy {
+        SitModule(coreModule, bukkitCoreModule)
     }
-    val autoBroadcastModule by lazy {
-        AutoBroadcastModule.Default(coreModule)
+    private val autoBroadcastModule by lazy {
+        AutoBroadcastModule(coreModule)
     }
-    val commandManagerModule: CommandManagerModule by lazy {
-        CommandManagerModule.Default(coreModule, bukkitCoreModule)
+    private val commonCommandModule: CommonCommandsModule by lazy {
+        CommonCommandsModule(coreModule, bukkitCoreModule)
     }
-    val moneyDropModule: MoneyDropModule by lazy {
-        MoneyDropModule.Default(coreModule, bukkitCoreModule)
+    private val moneyDropModule: MoneyDropModule by lazy {
+        MoneyDropModule(coreModule, bukkitCoreModule)
     }
-    val autoCropModule: AutoCropModule by lazy {
-        AutoCropModule.Default(coreModule, bukkitCoreModule)
+    private val autoCropModule: AutoCropModule by lazy {
+        AutoCropModule(coreModule, bukkitCoreModule)
     }
-    val newBeeModule: NewBeeModule by lazy {
-        NewBeeModule.Default(coreModule, bukkitCoreModule)
+    private val newBeeModule: NewBeeModule by lazy {
+        NewBeeModule(coreModule, bukkitCoreModule)
     }
-    val antiSwearModule: AntiSwearModule by lazy {
-        AntiSwearModule.Default(coreModule, bukkitCoreModule)
+    private val antiSwearModule: AntiSwearModule by lazy {
+        AntiSwearModule(coreModule, bukkitCoreModule)
     }
-    val moneyAdvancementModule: MoneyAdvancementModule by lazy {
-        MoneyAdvancementModule.Default(coreModule, bukkitCoreModule)
+    private val moneyAdvancementModule: MoneyAdvancementModule by lazy {
+        MoneyAdvancementModule(coreModule, bukkitCoreModule)
     }
-    val chatGameModule: ChatGameModule by lazy {
-        ChatGameModule.Default(coreModule, bukkitCoreModule)
+    private val chatGameModule: ChatGameModule by lazy {
+        ChatGameModule(coreModule, bukkitCoreModule)
     }
-    val restrictionModule: RestrictionModule by lazy {
+    private val restrictionModule: RestrictionModule by lazy {
         RestrictionModule(coreModule, bukkitCoreModule)
     }
-    val treeCapitatorModule: TreeCapitatorModule by lazy {
+    private val treeCapitatorModule: TreeCapitatorModule by lazy {
         TreeCapitatorModule(coreModule, bukkitCoreModule)
     }
-    val inventorySortModule: InventorySortModule by lazy {
+    private val inventorySortModule: InventorySortModule by lazy {
         InventorySortModule(bukkitCoreModule)
     }
-    val jailModule: JailModule by lazy {
+    private val jailModule: JailModule by lazy {
         JailModule(coreModule, bukkitCoreModule)
     }
-    val invisibleItemFrameModule by lazy {
+    private val invisibleItemFrameModule by lazy {
         InvisibleItemFrameModule(bukkitCoreModule)
     }
+
+    private val lifecycles: List<Lifecycle>
+        get() = listOfNotNull(
+            coreModule.lifecycle,
+            bukkitCoreModule.lifecycle,
+            menuModule.lifecycle,
+            autoBroadcastModule.lifecycle,
+            sitModule.lifecycle,
+            commonCommandModule.lifecycle,
+            bukkitClaimModule.lifecycle,
+            moneyDropModule.lifecycle,
+            autoCropModule.lifecycle,
+            newBeeModule.lifecycle,
+            antiSwearModule.lifecycle,
+            moneyAdvancementModule.lifecycle,
+            chatGameModule.lifecycle,
+            treeCapitatorModule.lifecycle,
+            restrictionModule.lifecycle,
+            inventorySortModule.lifecycle,
+            jailModule.lifecycle,
+            invisibleItemFrameModule.lifecycle
+        )
+
+    val lifecycle = Lifecycle.Lambda(
+        onEnable = {
+            lifecycles.forEach(Lifecycle::onEnable)
+        },
+        onReload = {
+            lifecycles.forEach(Lifecycle::onReload)
+            Bukkit.getOnlinePlayers().forEach(Player::closeInventory)
+        },
+        onDisable = {
+            lifecycles.forEach(Lifecycle::onDisable)
+            HandlerList.unregisterAll(bukkitCoreModule.plugin)
+            Bukkit.getOnlinePlayers().forEach(Player::closeInventory)
+        }
+    )
 }

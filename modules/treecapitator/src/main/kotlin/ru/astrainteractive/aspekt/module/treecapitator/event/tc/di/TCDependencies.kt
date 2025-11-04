@@ -20,10 +20,10 @@ internal interface TCDependencies {
         coreModule: CoreModule,
         bukkitCoreModule: BukkitCoreModule
     ) : TCDependencies {
-        override val configuration: PluginConfiguration by coreModule.pluginConfig
+        override val configuration: PluginConfiguration by coreModule.configKrate
         override val eventListener: EventListener = bukkitCoreModule.eventListener
         override val plugin: JavaPlugin = bukkitCoreModule.plugin
-        override val scope: CoroutineScope = coreModule.scope
+        override val scope: CoroutineScope = coreModule.ioScope
         override val dispatchers: KotlinDispatchers = coreModule.dispatchers
     }
 }

@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.moneydrop
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -12,16 +13,25 @@ import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.inventory.InventoryMoveItemEvent
 import org.bukkit.event.inventory.InventoryPickupItemEvent
-import ru.astrainteractive.aspekt.module.moneydrop.di.MoneyDropDependencies
+import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
+import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.event.EventListener
+import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
+import ru.astrainteractive.klibs.kstorage.util.getValue
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
 internal class MoneyDropEvent(
-    dependencies: MoneyDropDependencies
-) : MoneyDropDependencies by dependencies,
-    EventListener,
+    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    translationKrate: CachedKrate<PluginTranslation>,
+    val moneyDropController: MoneyDropController,
+    val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory,
+    val ioScope: CoroutineScope
+) : EventListener,
     Logger by JUtiltLogger("AspeKt-MoneyDropEvent") {
+    private val translation by translationKrate
+    private val kyori by kyoriKrate
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     fun entityDeathEvent(e: EntityDeathEvent) {
@@ -45,7 +55,7 @@ internal class MoneyDropEvent(
         val money = moneyDropController.getMoneyAmount(item) ?: return
         e.item.remove()
         e.isCancelled = true
-        scope.launch {
+        ioScope.launch {
             val economyProvider = when (val currencyId = moneyDropController.getMoneyCurrency(item)) {
                 null -> currencyEconomyProviderFactory.findDefault()
                 else -> currencyEconomyProviderFactory.findByCurrencyId(currencyId)
@@ -53,7 +63,7 @@ internal class MoneyDropEvent(
             economyProvider?.addMoney(player.uniqueId, money * amount)
         }
         translation.general.pickedUpMoney(amount * money)
-            .let(kyoriComponentSerializer::toComponent)
+            .let(kyori::toComponent)
             .run(player::sendMessage)
     }
 

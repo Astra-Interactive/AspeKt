@@ -7,29 +7,25 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
-interface MoneyAdvancementModule {
-    val lifecycle: Lifecycle
+class MoneyAdvancementModule(
+    coreModule: CoreModule,
+    bukkitCoreModule: BukkitCoreModule
+) : Logger by JUtiltLogger("MoneyAdvancementModule") {
+    private val moneyAdvancementEvent = MoneyAdvancementEvent(
+        configurationProvider = coreModule.configKrate,
+        currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory,
+        kyoriComponentSerializerProvider = coreModule.kyoriKrate,
+        translationProvider = coreModule.translation
+    )
 
-    class Default(
-        coreModule: CoreModule,
-        bukkitCoreModule: BukkitCoreModule
-    ) : MoneyAdvancementModule, Logger by JUtiltLogger("MoneyAdvancementModule") {
-        private val moneyAdvancementEvent = MoneyAdvancementEvent(
-            configurationProvider = coreModule.pluginConfig,
-            currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory,
-            kyoriComponentSerializerProvider = coreModule.kyoriComponentSerializer,
-            translationProvider = coreModule.translation
+    val lifecycle: Lifecycle by lazy {
+        Lifecycle.Lambda(
+            onEnable = {
+                moneyAdvancementEvent.onEnable(bukkitCoreModule.plugin)
+            },
+            onDisable = {
+                moneyAdvancementEvent.onDisable()
+            },
         )
-
-        override val lifecycle: Lifecycle by lazy {
-            Lifecycle.Lambda(
-                onEnable = {
-                    moneyAdvancementEvent.onEnable(bukkitCoreModule.plugin)
-                },
-                onDisable = {
-                    moneyAdvancementEvent.onDisable()
-                },
-            )
-        }
     }
 }

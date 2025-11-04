@@ -10,7 +10,6 @@ import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.server.MinecraftNativeBridge
@@ -31,8 +30,7 @@ class ClaimCommandExecutor(
     private val claimErrorMapper: ClaimErrorMapper,
     minecraftNativeBridge: MinecraftNativeBridge,
     private val platformServer: PlatformServer
-) : CommandExecutor<Claimommand.Model>,
-    MinecraftNativeBridge by minecraftNativeBridge,
+) : MinecraftNativeBridge by minecraftNativeBridge,
     KyoriComponentSerializer by kyoriKrate.unwrap() {
     private val translation by translationKrate
 
@@ -158,7 +156,7 @@ class ClaimCommandExecutor(
             ?.sendMessage(translation.claim.memberRemoved.component)
     }
 
-    override fun execute(input: Claimommand.Model) {
+    fun execute(input: Claimommand.Model) {
         when (input) {
             is Claimommand.Model.Claim -> scope.launch(dispatchers.IO) {
                 claim(input)

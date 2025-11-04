@@ -28,7 +28,7 @@ import java.util.UUID
 internal class ClaimsRepositoryImpl(
     private val folder: File,
     private val stringFormat: StringFormat,
-    private val scope: CoroutineScope
+    private val ioScope: CoroutineScope
 ) : ClaimsRepository {
     private val mutex = Mutex()
     private val krateFilesStateFlow = MutableStateFlow(folder.listFiles().orEmpty().toList())
@@ -45,7 +45,7 @@ internal class ClaimsRepositoryImpl(
             }
         }
         .flowOn(Dispatchers.IO)
-        .stateIn(scope, SharingStarted.Eagerly, emptyList())
+        .stateIn(ioScope, SharingStarted.Eagerly, emptyList())
 
     override suspend fun requireKrate(uuid: UUID): ClaimKrate {
         krateFilesStateFlow.update { files ->
@@ -81,7 +81,7 @@ internal class ClaimsRepositoryImpl(
             }
         }
         .flowOn(Dispatchers.IO)
-        .stateIn(scope, SharingStarted.Eagerly, emptyMap())
+        .stateIn(ioScope, SharingStarted.Eagerly, emptyMap())
 
     override val chunkByKrate: Map<UniqueWorldKey, ClaimKrate>
         get() = _chunkByKrate.value

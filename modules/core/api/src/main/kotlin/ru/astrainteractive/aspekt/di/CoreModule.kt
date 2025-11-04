@@ -16,88 +16,65 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.server.MinecraftNativeBridge
 import ru.astrainteractive.astralibs.server.PlatformServer
 import ru.astrainteractive.astralibs.util.YamlStringFormat
-import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 import ru.astrainteractive.klibs.kstorage.util.asCachedKrate
 import ru.astrainteractive.klibs.kstorage.util.asCachedMutableKrate
 import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
-import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
-import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import java.io.File
 
-interface CoreModule {
-    val dataFolder: File
-    val lifecycle: Lifecycle
-
-    val dispatchers: KotlinDispatchers
-
-    val minecraftNativeBridge: MinecraftNativeBridge
-
-    val scope: CoroutineScope
-    val mainScope: CoroutineScope
-    val pluginConfig: CachedKrate<PluginConfiguration>
-    val translation: CachedKrate<PluginTranslation>
-    val yamlFormat: StringFormat
-
-    val kyoriComponentSerializer: CachedKrate<KyoriComponentSerializer>
-
-    val jsonStringFormat: StringFormat
+class CoreModule(
+    val dataFolder: File,
+    val dispatchers: KotlinDispatchers,
+    val minecraftNativeBridge: MinecraftNativeBridge,
     val platformServer: PlatformServer
+) {
+    // Core
 
-    class Default(
-        override val dataFolder: File,
-        override val dispatchers: KotlinDispatchers,
-        override val minecraftNativeBridge: MinecraftNativeBridge,
-        override val platformServer: PlatformServer
-    ) : CoreModule, Logger by JUtiltLogger("CoreModule") {
-        // Core
+    val ioScope = CoroutineFeature
+        .Default(Dispatchers.IO)
+        .withTimings()
+    val mainScope: CoroutineScope = CoroutineFeature.Default(dispatchers.Main)
 
-        override val scope = CoroutineFeature
-            .Default(Dispatchers.IO)
-            .withTimings()
-        override val mainScope: CoroutineScope = CoroutineFeature.Default(dispatchers.Main)
+    val yamlFormat: StringFormat = YamlStringFormat(
+        configuration = Yaml.default.configuration.copy(
+            encodeDefaults = true,
+            strictMode = false,
+            polymorphismStyle = PolymorphismStyle.Property
+        ),
+    )
 
-        override val yamlFormat: StringFormat = YamlStringFormat(
-            configuration = Yaml.default.configuration.copy(
-                encodeDefaults = true,
-                strictMode = false,
-                polymorphismStyle = PolymorphismStyle.Property
-            ),
-        )
+    val configKrate = ConfigKrateFactory.fileConfigKrate(
+        file = dataFolder.resolve("config.yml"),
+        stringFormat = yamlFormat,
+        factory = ::PluginConfiguration
+    ).asCachedMutableKrate()
 
-        override val pluginConfig = ConfigKrateFactory.fileConfigKrate(
-            file = dataFolder.resolve("config.yml"),
-            stringFormat = yamlFormat,
-            factory = ::PluginConfiguration
-        ).asCachedMutableKrate()
+    val translation = ConfigKrateFactory.fileConfigKrate(
+        file = dataFolder.resolve("translations.yml"),
+        stringFormat = yamlFormat,
+        factory = ::PluginTranslation
+    ).asCachedMutableKrate()
 
-        override val translation = ConfigKrateFactory.fileConfigKrate(
-            file = dataFolder.resolve("translations.yml"),
-            stringFormat = yamlFormat,
-            factory = ::PluginTranslation
-        ).asCachedMutableKrate()
+    val kyoriKrate = DefaultMutableKrate<KyoriComponentSerializer>(
+        loader = { null },
+        factory = { KyoriComponentSerializer.Legacy }
+    ).asCachedKrate()
 
-        override val kyoriComponentSerializer = DefaultMutableKrate<KyoriComponentSerializer>(
-            loader = { null },
-            factory = { KyoriComponentSerializer.Legacy }
-        ).asCachedKrate()
-
-        override val jsonStringFormat: StringFormat = Json {
-            isLenient = true
-            ignoreUnknownKeys = true
-            prettyPrint = true
-        }
-
-        override val lifecycle: Lifecycle = Lifecycle.Lambda(
-            onEnable = {},
-            onReload = {
-                pluginConfig.getValue()
-                translation.getValue()
-            },
-            onDisable = {
-                scope.cancel()
-            }
-        )
+    val jsonStringFormat: StringFormat = Json {
+        isLenient = true
+        ignoreUnknownKeys = true
+        prettyPrint = true
     }
+
+    val lifecycle: Lifecycle = Lifecycle.Lambda(
+        onEnable = {},
+        onReload = {
+            configKrate.getValue()
+            translation.getValue()
+        },
+        onDisable = {
+            ioScope.cancel()
+        }
+    )
 }

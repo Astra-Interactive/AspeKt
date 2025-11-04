@@ -6,29 +6,25 @@ import ru.astrainteractive.aspekt.module.newbee.event.NewBeeEventListener
 import ru.astrainteractive.aspekt.module.newbee.event.di.EventDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
-interface NewBeeModule {
-    val lifecycle: Lifecycle
-
-    class Default(
-        coreModule: CoreModule,
-        bukkitCoreModule: BukkitCoreModule
-    ) : NewBeeModule {
-        private val newBeeEventListener = NewBeeEventListener(
-            dependencies = EventDependencies.Default(
-                translationKrate = coreModule.translation,
-                kyoriComponentSerializerKrate = coreModule.kyoriComponentSerializer,
-                scope = coreModule.scope,
-                dispatcher = coreModule.dispatchers
-            )
+class NewBeeModule(
+    coreModule: CoreModule,
+    bukkitCoreModule: BukkitCoreModule
+) {
+    private val newBeeEventListener = NewBeeEventListener(
+        dependencies = EventDependencies.Default(
+            translationKrate = coreModule.translation,
+            kyoriComponentSerializerKrate = coreModule.kyoriKrate,
+            scope = coreModule.ioScope,
+            dispatcher = coreModule.dispatchers
         )
+    )
 
-        override val lifecycle: Lifecycle = Lifecycle.Lambda(
-            onEnable = {
-                newBeeEventListener.onEnable(bukkitCoreModule.plugin)
-            },
-            onDisable = {
-                newBeeEventListener.onDisable()
-            }
-        )
-    }
+    val lifecycle: Lifecycle = Lifecycle.Lambda(
+        onEnable = {
+            newBeeEventListener.onEnable(bukkitCoreModule.plugin)
+        },
+        onDisable = {
+            newBeeEventListener.onDisable()
+        }
+    )
 }

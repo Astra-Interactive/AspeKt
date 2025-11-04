@@ -1,6 +1,5 @@
 package ru.astrainteractive.aspekt.claims.controller
 
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -49,7 +48,7 @@ internal class ClaimControllerTest {
         return ClaimsRepositoryImpl(
             folder = tempFile.resolve(UUID.randomUUID().toString()),
             stringFormat = YamlStringFormat(),
-            scope = backgroundScope
+            ioScope = backgroundScope
         )
     }
 

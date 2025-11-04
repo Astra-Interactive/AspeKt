@@ -15,7 +15,8 @@ enum class PluginPermission(override val value: String) : Permission {
     ENTITIES("aspekt.entities"),
     ADMIN_CLAIM("aspekt.admin_claim"),
     FORCE_PLAYER_SWEAR("aspekt.set_swear.admin"),
-    SET_BALANCE("aspekt.economy.set")
+    SET_BALANCE("aspekt.economy.set"),
+    RTP_BYPASS("aspekt.rtpbypass"),
 }
 
 data class PluginNamedPermission(override val value: String) : Permission

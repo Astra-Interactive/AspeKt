@@ -23,6 +23,6 @@ internal interface SitDependencies {
         override val eventListener: EventListener = bukkitCoreModule.eventListener
         override val plugin: JavaPlugin = bukkitCoreModule.plugin
 
-        override val configuration: PluginConfiguration by coreModule.pluginConfig
+        override val configuration: PluginConfiguration by coreModule.configKrate
     }
 }

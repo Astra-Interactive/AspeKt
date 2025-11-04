@@ -10,58 +10,53 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
-interface EconomyModule {
-    val lifecycle: Lifecycle
+class EconomyModule(
+    coreModule: CoreModule,
+    bukkitCoreModule: BukkitCoreModule
+) : Logger by JUtiltLogger("EconomyModule") {
 
-    class Default(
-        coreModule: CoreModule,
-        bukkitCoreModule: BukkitCoreModule
-    ) : EconomyModule,
-        Logger by JUtiltLogger("EconomyModule") {
+    private val economyConfigModule = EconomyConfigModule(
+        coreModule = coreModule
+    )
 
-        private val economyConfigModule = EconomyConfigModule.Default(
-            coreModule = coreModule
+    private val databaseModule = EconomyDatabaseModule(
+        dbConfig = economyConfigModule.databaseConfiguration,
+        coroutineScope = coreModule.ioScope,
+        ioDispatcher = coreModule.dispatchers.IO
+    )
+
+    private val commandModule = EconomyCommandModule(
+        coreModule = coreModule,
+        databaseModule = databaseModule,
+        bukkitCoreModule = bukkitCoreModule
+    )
+
+    private val papiIntegrationModule: PapiIntegrationModule = PapiIntegrationModule(
+        databaseModule = databaseModule,
+        coreModule = coreModule
+    )
+
+    private val serviceModule = EconomyServiceModule(
+        economyConfigModule = economyConfigModule,
+        databaseModule = databaseModule,
+        bukkitCoreModule = bukkitCoreModule
+    )
+
+    private val lifecycles: List<Lifecycle>
+        get() = listOf(
+            economyConfigModule.lifecycle,
+            databaseModule.lifecycle,
+            commandModule.lifecycle,
+            papiIntegrationModule.lifecycle,
+            serviceModule.lifecycle
         )
 
-        private val databaseModule = EconomyDatabaseModule.Default(
-            dbConfig = economyConfigModule.databaseConfiguration,
-            coroutineScope = coreModule.scope,
-            ioDispatcher = coreModule.dispatchers.IO
-        )
-
-        private val commandModule = EconomyCommandModule.Default(
-            coreModule = coreModule,
-            databaseModule = databaseModule,
-            bukkitCoreModule = bukkitCoreModule
-        )
-
-        private val papiIntegrationModule: PapiIntegrationModule = PapiIntegrationModule.Default(
-            databaseModule = databaseModule,
-            coreModule = coreModule
-        )
-
-        private val serviceModule = EconomyServiceModule.Default(
-            economyConfigModule = economyConfigModule,
-            databaseModule = databaseModule,
-            bukkitCoreModule = bukkitCoreModule
-        )
-
-        private val lifecycles: List<Lifecycle>
-            get() = listOf(
-                economyConfigModule.lifecycle,
-                databaseModule.lifecycle,
-                commandModule.lifecycle,
-                papiIntegrationModule.lifecycle,
-                serviceModule.lifecycle
-            )
-
-        override val lifecycle: Lifecycle = Lifecycle.Lambda(
-            onEnable = { lifecycles.forEach(Lifecycle::onEnable) },
-            onReload = {
-                lifecycles.forEach(Lifecycle::onReload)
-                error { "#onReload - reload of economy module may break everything! Consider full server reload." }
-            },
-            onDisable = { lifecycles.forEach(Lifecycle::onDisable) }
-        )
-    }
+    val lifecycle: Lifecycle = Lifecycle.Lambda(
+        onEnable = { lifecycles.forEach(Lifecycle::onEnable) },
+        onReload = {
+            lifecycles.forEach(Lifecycle::onReload)
+            error { "#onReload - reload of economy module may break everything! Consider full server reload." }
+        },
+        onDisable = { lifecycles.forEach(Lifecycle::onDisable) }
+    )
 }

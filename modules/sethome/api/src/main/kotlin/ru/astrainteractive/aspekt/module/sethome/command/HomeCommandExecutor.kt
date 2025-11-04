@@ -4,7 +4,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.server.MinecraftNativeBridge
@@ -15,14 +14,13 @@ import ru.astrainteractive.klibs.kstorage.util.save
 class HomeCommandExecutor(
     private val homeKrateProvider: HomeKrateProvider,
     private val scope: CoroutineScope,
-    private val translationKrate: CachedKrate<PluginTranslation>,
+    translationKrate: CachedKrate<PluginTranslation>,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     minecraftNativeBridge: MinecraftNativeBridge
-) : CommandExecutor<HomeCommand>,
-    MinecraftNativeBridge by minecraftNativeBridge,
+) : MinecraftNativeBridge by minecraftNativeBridge,
     KyoriComponentSerializer by kyoriKrate.unwrap() {
     private val translation by translationKrate
-    override fun execute(input: HomeCommand) {
+    fun execute(input: HomeCommand) {
         when (input) {
             is HomeCommand.DelHome -> {
                 val krate = homeKrateProvider.get(input.playerData.uuid)
