@@ -19,6 +19,7 @@ import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 import kotlin.random.Random
 
+@Suppress("LongParameterList")
 internal class AutoCropEvent(
     pluginConfig: CachedKrate<PluginConfiguration>,
     val hoeDamager: HoeDamager,

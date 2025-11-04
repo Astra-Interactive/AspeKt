@@ -39,6 +39,8 @@ internal class ClaimCommandRegistrar(
 ) {
     private val translation by translationKrate
     private val kyori by kyoriKrate
+
+    @Suppress("LongMethod")
     fun createNode(): LiteralCommandNode<CommandSourceStack> {
         return command("claim") {
             // /claim flag <ChunkFlag> <bool>

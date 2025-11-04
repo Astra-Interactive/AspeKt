@@ -41,6 +41,7 @@ internal class EkonCommandRegistrar(
     private val kyori by kyoriKrate
     private fun currencyNames(): List<String> = cachedDao.getAllCurrencies().map { it.name }
 
+    @Suppress("LongMethod")
     fun createNode(): LiteralCommandNode<CommandSourceStack> {
         return command("ekon") {
             runs { ctx ->

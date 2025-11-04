@@ -36,6 +36,8 @@ class ClaimCommandRegistrar(
     private val claimCommandExecutor: ClaimCommandExecutor,
     private val claimsRepository: ClaimsRepository
 ) {
+
+    @Suppress("LongMethod")
     fun createNode(): LiteralArgumentBuilder<CommandSourceStack> {
         return command("claim") {
             literal(ClaimCommandArgument.FLAG.value) {
