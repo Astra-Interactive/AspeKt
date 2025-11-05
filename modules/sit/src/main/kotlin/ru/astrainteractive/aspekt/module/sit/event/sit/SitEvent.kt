@@ -11,12 +11,16 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.util.Vector
-import ru.astrainteractive.aspekt.module.sit.event.sit.di.SitDependencies
+import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
+import ru.astrainteractive.klibs.kstorage.util.getValue
 
 internal class SitEvent(
-    dependencies: SitDependencies
-) : SitDependencies by dependencies, EventListener {
+    configKrate: CachedKrate<PluginConfiguration>,
+    private val sitController: SitController
+) : EventListener {
+    private val configuration by configKrate
 
     @EventHandler
     fun onDeathEvent(e: PlayerDeathEvent) {

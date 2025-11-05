@@ -4,7 +4,6 @@ import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.claims.command.di.ClaimCommandModule
 import ru.astrainteractive.aspekt.module.claims.event.BukkitClaimEvent
-import ru.astrainteractive.aspekt.module.claims.event.di.ClaimDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class BukkitClaimModule(
@@ -20,11 +19,9 @@ class BukkitClaimModule(
     )
 
     private val bukkitClaimEvent = BukkitClaimEvent(
-        dependencies = ClaimDependencies.Default(
-            coreModule = coreModule,
-            bukkitCoreModule = bukkitCoreModule,
-            claimsRepository = claimModule.claimsRepository
-        )
+        claimsRepository = claimModule.claimsRepository,
+        kyoriKrate = coreModule.kyoriKrate,
+        translationKrate = coreModule.translation
     )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(

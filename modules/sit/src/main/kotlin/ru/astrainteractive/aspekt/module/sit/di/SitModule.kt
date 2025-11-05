@@ -5,11 +5,10 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.sit.command.di.SitCommandModule
 import ru.astrainteractive.aspekt.module.sit.event.sit.SitController
 import ru.astrainteractive.aspekt.module.sit.event.sit.SitEvent
-import ru.astrainteractive.aspekt.module.sit.event.sit.di.SitDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class SitModule(
-    private val coreModule: CoreModule,
+    coreModule: CoreModule,
     private val bukkitCoreModule: BukkitCoreModule
 ) {
     private val sitController: SitController = SitController(
@@ -19,11 +18,8 @@ class SitModule(
     )
 
     private val sitEvent: SitEvent = SitEvent(
-        dependencies = SitDependencies.Default(
-            coreModule = coreModule,
-            bukkitCoreModule = bukkitCoreModule,
-            sitController = sitController
-        )
+        configKrate = coreModule.configKrate,
+        sitController = sitController
     )
 
     private val sitCommandModule = SitCommandModule(

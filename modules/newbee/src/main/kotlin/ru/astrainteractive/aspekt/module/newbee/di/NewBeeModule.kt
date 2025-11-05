@@ -3,7 +3,6 @@ package ru.astrainteractive.aspekt.module.newbee.di
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.newbee.event.NewBeeEventListener
-import ru.astrainteractive.aspekt.module.newbee.event.di.EventDependencies
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class NewBeeModule(
@@ -11,12 +10,10 @@ class NewBeeModule(
     bukkitCoreModule: BukkitCoreModule
 ) {
     private val newBeeEventListener = NewBeeEventListener(
-        dependencies = EventDependencies.Default(
-            translationKrate = coreModule.translation,
-            kyoriComponentSerializerKrate = coreModule.kyoriKrate,
-            scope = coreModule.ioScope,
-            dispatcher = coreModule.dispatchers
-        )
+        kyoriKrate = coreModule.kyoriKrate,
+        translationKrate = coreModule.translation,
+        ioScope = coreModule.ioScope,
+        dispatcher = coreModule.dispatchers
     )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
