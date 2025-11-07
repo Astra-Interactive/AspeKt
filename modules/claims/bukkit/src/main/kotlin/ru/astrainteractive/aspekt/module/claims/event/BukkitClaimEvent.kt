@@ -33,23 +33,31 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent
 import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.world.PortalCreateEvent
+import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.data.isAble
 import ru.astrainteractive.aspekt.module.claims.debounce.EventDebounce
 import ru.astrainteractive.aspekt.module.claims.debounce.RetractKey
-import ru.astrainteractive.aspekt.module.claims.event.di.ClaimDependencies
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.util.asClaimChunk
 import ru.astrainteractive.aspekt.module.claims.util.asClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.aspekt.plugin.PluginPermission
+import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.event.EventListener
+import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
+import ru.astrainteractive.klibs.kstorage.util.getValue
 
 @Suppress("TooManyFunctions")
 internal class BukkitClaimEvent(
-    dependencies: ClaimDependencies,
-) : ClaimDependencies by dependencies, EventListener {
+    translationKrate: CachedKrate<PluginTranslation>,
+    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    private val claimsRepository: ClaimsRepository
+) : EventListener {
+    private val kyori by kyoriKrate
+    private val translation by translationKrate
     private val debounce = EventDebounce<RetractKey>(5000L)
     private fun <T> handleDefault(
         retractKey: RetractKey,
@@ -70,7 +78,7 @@ internal class BukkitClaimEvent(
             val isCancelled = !isAble
             if (isCancelled) {
                 translation.claim.actionIsBlockByAdminClaim(flag.name)
-                    .let(kyoriComponentSerializer::toComponent)
+                    .let(kyori::toComponent)
                     .run { player?.sendMessage(this) }
             }
             isCancelled

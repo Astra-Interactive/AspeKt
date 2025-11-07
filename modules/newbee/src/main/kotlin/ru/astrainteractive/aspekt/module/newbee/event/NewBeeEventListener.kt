@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.newbee.event
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -12,19 +13,27 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import ru.astrainteractive.aspekt.module.newbee.event.di.EventDependencies
 import ru.astrainteractive.aspekt.module.newbee.util.NewBeeConstants
 import ru.astrainteractive.aspekt.module.newbee.util.NewBeeExt.isNewBee
 import ru.astrainteractive.aspekt.module.newbee.util.NewBeeExt.newBeeShieldDurationLeft
 import ru.astrainteractive.aspekt.module.newbee.util.NewBeeExt.ticks
+import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.event.EventListener
+import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
+import ru.astrainteractive.klibs.kstorage.util.getValue
+import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 
 internal class NewBeeEventListener(
-    dependencies: EventDependencies
-) : EventListener,
-    EventDependencies by dependencies {
+    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    translationKrate: CachedKrate<PluginTranslation>,
+    private val ioScope: CoroutineScope,
+    private val dispatcher: KotlinDispatchers
+) : EventListener {
+    private val kyori by kyoriKrate
+    private val translation by translationKrate
 
     private fun createInfinitePotionEffect(player: Player, type: PotionEffectType, amplifier: Int): PotionEffect {
         return PotionEffect(
@@ -67,15 +76,15 @@ internal class NewBeeEventListener(
         }
     }
 
-    private fun Player.giveNewBeeEffects() = scope.launch(dispatcher.Main) {
+    private fun Player.giveNewBeeEffects() = ioScope.launch(dispatcher.Main) {
         withContext(dispatcher.IO) { delay(5.seconds) }
         val effects = getNewBeeEffects(this@giveNewBeeEffects)
         addPotionEffects(effects)
-        val message = kyoriComponentSerializer.toComponent(translation.newBee.youAreNewBee)
+        val message = kyori.toComponent(translation.newBee.youAreNewBee)
         sendMessage(message)
         Title.title(
-            kyoriComponentSerializer.toComponent(translation.newBee.newBeeTitle),
-            kyoriComponentSerializer.toComponent(translation.newBee.newBeeSubtitle),
+            kyori.toComponent(translation.newBee.newBeeTitle),
+            kyori.toComponent(translation.newBee.newBeeSubtitle),
             Title.Times.times(
                 1.seconds.toJavaDuration(),
                 3.seconds.toJavaDuration(),
@@ -84,10 +93,10 @@ internal class NewBeeEventListener(
         ).run(::showTitle)
     }
 
-    private fun Player.takeNewBeeEffects() = scope.launch(dispatcher.Main) {
+    private fun Player.takeNewBeeEffects() = ioScope.launch(dispatcher.Main) {
         if (this@takeNewBeeEffects.activePotionEffects.isEmpty()) return@launch
         getNewBeeEffects(this@takeNewBeeEffects).map(PotionEffect::getType).forEach(::removePotionEffect)
-        val message = kyoriComponentSerializer.toComponent(translation.newBee.newBeeShieldForceDisabled)
+        val message = kyori.toComponent(translation.newBee.newBeeShieldForceDisabled)
         sendMessage(message)
     }
 

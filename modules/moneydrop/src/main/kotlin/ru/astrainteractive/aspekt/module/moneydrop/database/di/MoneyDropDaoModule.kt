@@ -20,43 +20,37 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import java.io.File
 import kotlin.coroutines.CoroutineContext
 
-internal interface MoneyDropDaoModule {
-    val lifecycle: Lifecycle
-
-    val dao: MoneyDropDao
-
-    class Default(
-        coroutineScope: CoroutineScope,
-        dataFolder: File,
-        ioDispatcher: CoroutineContext
-    ) : MoneyDropDaoModule {
-        private val database = flow {
-            val path = dataFolder.resolve("moneydrop_v2.db").absolutePath
-            val database = Database.connect(
-                url = "jdbc:sqlite:$path",
-                driver = "org.sqlite.JDBC"
+class MoneyDropDaoModule(
+    coroutineScope: CoroutineScope,
+    dataFolder: File,
+    ioDispatcher: CoroutineContext
+) {
+    private val database = flow {
+        val path = dataFolder.resolve("moneydrop_v2.db").absolutePath
+        val database = Database.connect(
+            url = "jdbc:sqlite:$path",
+            driver = "org.sqlite.JDBC"
+        )
+        TransactionManager.manager.defaultIsolationLevel = java.sql.Connection.TRANSACTION_SERIALIZABLE
+        transaction(database) {
+            addLogger(Slf4jSqlDebugLogger)
+            SchemaUtils.create(
+                MoneyDropLocationTable,
             )
-            TransactionManager.manager.defaultIsolationLevel = java.sql.Connection.TRANSACTION_SERIALIZABLE
-            transaction(database) {
-                addLogger(Slf4jSqlDebugLogger)
-                SchemaUtils.create(
-                    MoneyDropLocationTable,
-                )
-            }
-            emit(database)
-        }.shareIn(coroutineScope, SharingStarted.Eagerly, 1)
+        }
+        emit(database)
+    }.shareIn(coroutineScope, SharingStarted.Eagerly, 1)
 
-        override val dao: MoneyDropDao = MoneyDropDaoImpl(
-            databaseFlow = database,
-            ioDispatcher = ioDispatcher
-        )
+    internal val dao: MoneyDropDao = MoneyDropDaoImpl(
+        databaseFlow = database,
+        ioDispatcher = ioDispatcher
+    )
 
-        override val lifecycle: Lifecycle = Lifecycle.Lambda(
-            onDisable = {
-                GlobalScope.launch {
-                    TransactionManager.closeAndUnregister(database.first())
-                }
+    val lifecycle: Lifecycle = Lifecycle.Lambda(
+        onDisable = {
+            GlobalScope.launch {
+                TransactionManager.closeAndUnregister(database.first())
             }
-        )
-    }
+        }
+    )
 }

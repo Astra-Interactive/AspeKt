@@ -9,53 +9,49 @@ import ru.astrainteractive.aspekt.module.economy.service.BukkitVaultService
 import ru.astrainteractive.aspekt.module.economy.service.PreHeatService
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
-internal interface EconomyServiceModule {
-    val lifecycle: Lifecycle
+internal class EconomyServiceModule(
+    bukkitCoreModule: BukkitCoreModule,
+    databaseModule: EconomyDatabaseModule,
+    private val economyConfigModule: EconomyConfigModule
+) {
+    private val shouldSync get() = economyConfigModule.currencyConfiguration.cachedValue?.shouldSync == true
 
-    class Default(
-        private val economyConfigModule: EconomyConfigModule,
-        bukkitCoreModule: BukkitCoreModule,
-        databaseModule: EconomyDatabaseModule
-    ) : EconomyServiceModule {
-        private val shouldSync get() = economyConfigModule.currencyConfiguration.cachedValue?.shouldSync == true
+    private val isVaultEnabled: Boolean
+        get() = Bukkit.getPluginManager().isPluginEnabled("Vault")
 
-        private val isVaultEnabled: Boolean
-            get() = Bukkit.getPluginManager().isPluginEnabled("Vault")
+    private val bukkitVaultService = BukkitVaultService(
+        plugin = bukkitCoreModule.plugin,
+        dao = databaseModule.economyDao,
+        getCurrencies = {
+            economyConfigModule.currencyConfiguration.cachedValue?.currencies
+                ?.values
+                .orEmpty()
+                .toList()
+        },
+    )
 
-        private val bukkitVaultService = BukkitVaultService(
-            plugin = bukkitCoreModule.plugin,
-            dao = databaseModule.economyDao,
-            getCurrencies = {
-                economyConfigModule.currencyConfiguration.cachedValue?.currencies
-                    ?.values
-                    .orEmpty()
-                    .toList()
-            },
-        )
+    private val preHeatService = PreHeatService(
+        getCurrencies = {
+            economyConfigModule.currencyConfiguration.cachedValue?.currencies
+                ?.values
+                .orEmpty()
+                .toList()
+        },
+        dao = databaseModule.economyDao
+    )
 
-        private val preHeatService = PreHeatService(
-            getCurrencies = {
-                economyConfigModule.currencyConfiguration.cachedValue?.currencies
-                    ?.values
-                    .orEmpty()
-                    .toList()
-            },
-            dao = databaseModule.economyDao
-        )
-
-        override val lifecycle: Lifecycle = Lifecycle.Lambda(
-            onEnable = {
-                if (isVaultEnabled) {
-                    bukkitVaultService.tryPrepare()
-                }
-                if (shouldSync) preHeatService.tryPreHeat()
-            },
-            onDisable = {
-                if (isVaultEnabled) {
-                    bukkitVaultService.clear()
-                }
-                preHeatService.cancel()
+    val lifecycle: Lifecycle = Lifecycle.Lambda(
+        onEnable = {
+            if (isVaultEnabled) {
+                bukkitVaultService.tryPrepare()
             }
-        )
-    }
+            if (shouldSync) preHeatService.tryPreHeat()
+        },
+        onDisable = {
+            if (isVaultEnabled) {
+                bukkitVaultService.clear()
+            }
+            preHeatService.cancel()
+        }
+    )
 }

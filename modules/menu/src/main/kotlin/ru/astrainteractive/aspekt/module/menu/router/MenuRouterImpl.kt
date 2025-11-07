@@ -13,13 +13,13 @@ internal class MenuRouterImpl(
     private val bukkitCoreModule: BukkitCoreModule
 ) : MenuRouter {
     override fun openMenu(player: Player, menuModel: MenuModel) {
-        coreModule.scope.launch(coreModule.dispatchers.IO) {
+        coreModule.ioScope.launch(coreModule.dispatchers.IO) {
             val gui = MenuGui(
                 player = player,
                 menuModel = menuModel,
                 translation = coreModule.translation.cachedValue,
                 dispatchers = coreModule.dispatchers,
-                kyoriComponentSerializer = coreModule.kyoriComponentSerializer.cachedValue,
+                kyoriComponentSerializer = coreModule.kyoriKrate.cachedValue,
                 economyProvider = bukkitCoreModule.currencyEconomyProviderFactory.findDefault()
             )
             withContext(coreModule.dispatchers.Main) {

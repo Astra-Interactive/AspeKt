@@ -12,7 +12,7 @@ import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
 import ru.astrainteractive.klibs.kstorage.api.StateFlowMutableKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 import ru.astrainteractive.klibs.kstorage.util.asStateFlowMutableKrate
-import ru.astrainteractive.klibs.kstorage.util.update
+import ru.astrainteractive.klibs.kstorage.util.save
 import ru.astrainteractive.klibs.mikro.exposed.model.DatabaseConfiguration
 import java.io.File
 import java.nio.file.Files
@@ -46,7 +46,7 @@ class EconomyDaoTest {
             factory = { DatabaseConfiguration.H2(requireFolder.resolve("test").path) },
             loader = { DatabaseConfiguration.H2(requireFolder.resolve("test").path) }
         ).asStateFlowMutableKrate()
-        _module = EconomyDatabaseModule.Default(
+        _module = EconomyDatabaseModule(
             dbConfig = dbConfig,
             coroutineScope = CoroutineScope(scheduler),
             ioDispatcher = scheduler
@@ -61,7 +61,7 @@ class EconomyDaoTest {
     @Test
     fun `GIVEN_different_db_configs_WHEN_try_THEN_db_changed`() = runTest {
         val initialUrl = requireModule.databaseFlow.first().url
-        dbConfig.update { DatabaseConfiguration.H2(requireFolder.resolve("test1").path) }
+        dbConfig.save { DatabaseConfiguration.H2(requireFolder.resolve("test1").path) }
         requireModule.databaseFlow
             .filter { it.url != initialUrl }
             .first()
@@ -71,13 +71,13 @@ class EconomyDaoTest {
         requireModule.economyDao.updateCurrencies(currencies)
         assertEquals(1, requireModule.economyDao.getAllCurrencies().size)
 
-        dbConfig.update { DatabaseConfiguration.H2(requireFolder.resolve("test2").path) }
+        dbConfig.save { DatabaseConfiguration.H2(requireFolder.resolve("test2").path) }
         requireModule.databaseFlow
             .filter { it.url != test1Url }
             .first()
 
         assertEquals(0, requireModule.economyDao.getAllCurrencies().size)
-        dbConfig.update { DatabaseConfiguration.H2(requireFolder.resolve("test1").path) }
+        dbConfig.save { DatabaseConfiguration.H2(requireFolder.resolve("test1").path) }
         requireModule.databaseFlow
             .filter { it.url == test1Url }
             .first()

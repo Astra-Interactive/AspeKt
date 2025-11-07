@@ -6,7 +6,7 @@ import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.module.antiswear.data.krate.AntiSwearKrate
 import ru.astrainteractive.aspekt.module.antiswear.data.model.AntiSwearStorage
 import ru.astrainteractive.klibs.kstorage.suspend.SuspendMutableKrate
-import ru.astrainteractive.klibs.kstorage.util.update
+import ru.astrainteractive.klibs.kstorage.util.save
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
@@ -43,7 +43,7 @@ internal class SwearRepositoryImpl(
 
     override suspend fun setSwearFilterEnabled(player: Player, isEnabled: Boolean) = withContext(dispatchers.IO) {
         swearFilterMap[player.uniqueId] = isEnabled
-        getAntiSwearKrate(player).update { value ->
+        getAntiSwearKrate(player).save { value ->
             value.copy(isSwearFilterEnabled = isEnabled)
         }
     }

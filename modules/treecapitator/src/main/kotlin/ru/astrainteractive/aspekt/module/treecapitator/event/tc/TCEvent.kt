@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.treecapitator.event.tc
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -15,16 +16,19 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
-import ru.astrainteractive.aspekt.module.treecapitator.event.tc.di.TCDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
+import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import kotlin.random.Random
 
 internal class TCEvent(
-    dependencies: TCDependencies
-) : TCDependencies by dependencies, EventListener {
+    private val configKrate: CachedKrate<PluginConfiguration>,
+    private val ioScope: CoroutineScope,
+    private val dispatchers: KotlinDispatchers
+) : EventListener {
     private val treeCapitatorConfig: PluginConfiguration.TreeCapitator
-        get() = configuration.treeCapitator
+        get() = configKrate.cachedValue.treeCapitator
 
     @Suppress("UnusedPrivateMember")
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -56,7 +60,7 @@ internal class TCEvent(
             placeSapling(sapling, block.getRelative(BlockFace.DOWN), i + 1)
             return
         }
-        scope.launch(dispatchers.IO) {
+        ioScope.launch(dispatchers.IO) {
             delay(100)
             withContext(dispatchers.Main) {
                 airBlock.location.block.setType(sapling, true)

@@ -26,49 +26,41 @@ import ru.astrainteractive.klibs.mikro.exposed.model.DatabaseConfiguration
 import ru.astrainteractive.klibs.mikro.exposed.util.connect
 import kotlin.coroutines.CoroutineContext
 
-internal interface EconomyDatabaseModule {
-    val lifecycle: Lifecycle
+internal class EconomyDatabaseModule(
+    dbConfig: StateFlowKrate<DatabaseConfiguration>,
+    coroutineScope: CoroutineScope,
+    ioDispatcher: CoroutineContext
+) : Logger by JUtiltLogger("EconomyDatabaseModule") {
 
-    val databaseFlow: Flow<Database>
-    val economyDao: EconomyDao
-    val cachedDao: CachedDao
-
-    class Default(
-        dbConfig: StateFlowKrate<DatabaseConfiguration>,
-        coroutineScope: CoroutineScope,
-        ioDispatcher: CoroutineContext
-    ) : EconomyDatabaseModule, Logger by JUtiltLogger("EconomyDatabaseModule") {
-
-        override val databaseFlow: Flow<Database> = dbConfig.cachedStateFlow
-            .mapCached(coroutineScope) { dbConfig, previous ->
-                previous?.connector?.invoke()?.close()
-                previous?.run(TransactionManager::closeAndUnregister)
-                val database = dbConfig.connect()
-                TransactionManager.manager.defaultIsolationLevel = java.sql.Connection.TRANSACTION_SERIALIZABLE
-                transaction(database) {
-                    addLogger(Slf4jSqlDebugLogger)
-                    SchemaUtils.create(
-                        CurrencyTable,
-                        PlayerCurrencyTable
-                    )
-                }
-                database
+    val databaseFlow: Flow<Database> = dbConfig.cachedStateFlow
+        .mapCached(coroutineScope) { dbConfig, previous ->
+            previous?.connector?.invoke()?.close()
+            previous?.run(TransactionManager::closeAndUnregister)
+            val database = dbConfig.connect()
+            TransactionManager.manager.defaultIsolationLevel = java.sql.Connection.TRANSACTION_SERIALIZABLE
+            transaction(database) {
+                addLogger(Slf4jSqlDebugLogger)
+                SchemaUtils.create(
+                    CurrencyTable,
+                    PlayerCurrencyTable
+                )
             }
+            database
+        }
 
-        override val economyDao: EconomyDao = EconomyDaoImpl(databaseFlow)
+    val economyDao: EconomyDao = EconomyDaoImpl(databaseFlow)
 
-        override val cachedDao: CachedDao = CachedDaoImpl(
-            economyDao = economyDao,
-            scope = coroutineScope,
-            ioDispatcher = ioDispatcher
-        )
+    val cachedDao: CachedDao = CachedDaoImpl(
+        economyDao = economyDao,
+        scope = coroutineScope,
+        ioDispatcher = ioDispatcher
+    )
 
-        override val lifecycle: Lifecycle = Lifecycle.Lambda(
-            onReload = { cachedDao.reset() },
-            onDisable = {
-                GlobalScope.launch { TransactionManager.closeAndUnregister(databaseFlow.first()) }
-                cachedDao.reset()
-            }
-        )
-    }
+    val lifecycle: Lifecycle = Lifecycle.Lambda(
+        onReload = { cachedDao.reset() },
+        onDisable = {
+            GlobalScope.launch { TransactionManager.closeAndUnregister(databaseFlow.first()) }
+            cachedDao.reset()
+        }
+    )
 }

@@ -4,7 +4,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.command.api.executor.CommandExecutor
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.server.MinecraftNativeBridge
@@ -19,11 +18,10 @@ class RtpCommandExecutor(
     translationKrate: CachedKrate<PluginTranslation>,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     minecraftNativeBridge: MinecraftNativeBridge
-) : CommandExecutor<RtpCommand>,
-    MinecraftNativeBridge by minecraftNativeBridge,
+) : MinecraftNativeBridge by minecraftNativeBridge,
     KyoriComponentSerializer by kyoriKrate.unwrap() {
     private val translation by translationKrate
-    override fun execute(input: RtpCommand) {
+    fun execute(input: RtpCommand) {
         scope.launch {
             val player = input.player
             if (safeLocationProvider.getJobsNumber() > 0) {

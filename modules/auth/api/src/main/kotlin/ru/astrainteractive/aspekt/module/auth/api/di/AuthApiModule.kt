@@ -25,13 +25,13 @@ import ru.astrainteractive.klibs.mikro.exposed.util.connect
 import java.io.File
 
 class AuthApiModule(
-    private val scope: CoroutineScope,
+    ioScope: CoroutineScope,
     private val dataFolder: File,
     private val stringFormat: StringFormat
 ) {
     private val databaseFlow: Flow<Database> = flowOf(
         DatabaseConfiguration.H2(dataFolder.resolve("auth_database").path)
-    ).mapCached(scope) { dbConfig, previous ->
+    ).mapCached(ioScope) { dbConfig, previous ->
         previous?.connector?.invoke()?.close()
         previous?.run(TransactionManager::closeAndUnregister)
         val database = dbConfig.connect()
@@ -50,7 +50,7 @@ class AuthApiModule(
     )
     val authorizedApi: AuthorizedApi = AuthorizedApiImpl(
         authDao = authDao,
-        scope = scope
+        scope = ioScope
     )
     val translationKrate = DefaultMutableKrate(
         factory = ::AuthTranslation,

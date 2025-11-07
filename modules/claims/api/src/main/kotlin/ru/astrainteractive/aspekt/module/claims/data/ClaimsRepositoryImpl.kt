@@ -21,14 +21,14 @@ import ru.astrainteractive.aspekt.module.claims.data.krate.ClaimKrate
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.UniqueWorldKey
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
-import ru.astrainteractive.klibs.kstorage.util.update
+import ru.astrainteractive.klibs.kstorage.util.save
 import java.io.File
 import java.util.UUID
 
 internal class ClaimsRepositoryImpl(
     private val folder: File,
     private val stringFormat: StringFormat,
-    private val scope: CoroutineScope
+    private val ioScope: CoroutineScope
 ) : ClaimsRepository {
     private val mutex = Mutex()
     private val krateFilesStateFlow = MutableStateFlow(folder.listFiles().orEmpty().toList())
@@ -45,7 +45,7 @@ internal class ClaimsRepositoryImpl(
             }
         }
         .flowOn(Dispatchers.IO)
-        .stateIn(scope, SharingStarted.Eagerly, emptyList())
+        .stateIn(ioScope, SharingStarted.Eagerly, emptyList())
 
     override suspend fun requireKrate(uuid: UUID): ClaimKrate {
         krateFilesStateFlow.update { files ->
@@ -81,14 +81,14 @@ internal class ClaimsRepositoryImpl(
             }
         }
         .flowOn(Dispatchers.IO)
-        .stateIn(scope, SharingStarted.Eagerly, emptyMap())
+        .stateIn(ioScope, SharingStarted.Eagerly, emptyMap())
 
     override val chunkByKrate: Map<UniqueWorldKey, ClaimKrate>
         get() = _chunkByKrate.value
 
     override suspend fun saveChunk(uuid: UUID, chunk: ClaimChunk) = mutex.withLock {
         runCatching {
-            requireKrate(uuid).update { data ->
+            requireKrate(uuid).save { data ->
                 data.copy(
                     chunks = data.chunks.toMutableMap().apply {
                         this[chunk.uniqueWorldKey] = chunk
@@ -106,7 +106,7 @@ internal class ClaimsRepositoryImpl(
             if (!isPlayerOwnClaim(uuid, key)) {
                 throw ClaimNotOwnedException
             }
-            requireKrate(uuid).update { data ->
+            requireKrate(uuid).save { data ->
                 data.copy(
                     chunks = data.chunks
                         .toMutableMap()

@@ -24,7 +24,7 @@ internal class MoneyDropDaoTest {
     fun setup() {
         folder.mkdirs()
         folder.deleteOnExit()
-        _module = MoneyDropDaoModule.Default(
+        _module = MoneyDropDaoModule(
             dataFolder = folder,
             ioDispatcher = scheduler,
             coroutineScope = CoroutineScope(scheduler),

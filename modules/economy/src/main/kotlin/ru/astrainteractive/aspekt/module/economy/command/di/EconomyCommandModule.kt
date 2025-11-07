@@ -2,28 +2,34 @@ package ru.astrainteractive.aspekt.module.economy.command.di
 
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.economy.command.ekon.EkonCommandRegistry
+import ru.astrainteractive.aspekt.module.economy.command.ekon.EkonCommandExecutor
+import ru.astrainteractive.aspekt.module.economy.command.ekon.EkonCommandRegistrar
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
-internal interface EconomyCommandModule {
-    val lifecycle: Lifecycle
+internal class EconomyCommandModule(
+    private val coreModule: CoreModule,
+    private val databaseModule: EconomyDatabaseModule,
+    private val bukkitCoreModule: BukkitCoreModule
+) {
+    private val executor = EkonCommandExecutor(
+        kyoriKrate = coreModule.kyoriKrate,
+        translationKrate = coreModule.translation,
+        dao = databaseModule.economyDao
+    )
 
-    class Default(
-        coreModule: CoreModule,
-        databaseModule: EconomyDatabaseModule,
-        bukkitCoreModule: BukkitCoreModule
-    ) : EconomyCommandModule {
-        private val econCommandRegistry = EkonCommandRegistry(
-            plugin = bukkitCoreModule.plugin,
-            getTranslation = { coreModule.translation.cachedValue },
-            getKyori = coreModule.kyoriComponentSerializer,
-            dao = databaseModule.economyDao,
-            cachedDao = databaseModule.cachedDao
-        )
-
-        override val lifecycle: Lifecycle = Lifecycle.Lambda(
-            onEnable = { econCommandRegistry.register() }
-        )
+    private val nodes = buildList {
+        EkonCommandRegistrar(
+            cachedDao = databaseModule.cachedDao,
+            executor = executor,
+            translationKrate = coreModule.translation,
+            kyoriKrate = coreModule.kyoriKrate
+        ).createNode().run(::add)
     }
+
+    val lifecycle: Lifecycle = Lifecycle.Lambda(
+        onEnable = {
+            nodes.onEach(bukkitCoreModule.commandRegistrarContext::registerWhenReady)
+        }
+    )
 }

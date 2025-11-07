@@ -1,8 +1,6 @@
 package ru.astrainteractive.aspekt.module.claims.command.claim
 
-import ru.astrainteractive.astralibs.command.api.argumenttype.EnumArgument
-
-enum class ClaimCommandArgument(override val value: String) : EnumArgument {
+enum class ClaimCommandArgument(val value: String) {
     CLAIM("claim"),
     UNCLAIM("unclaim"),
     MAP("map"),

@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.jail.di
 import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.jail.command.JailCommandManager
+import ru.astrainteractive.aspekt.module.jail.command.di.JailCommandModule
 import ru.astrainteractive.aspekt.module.jail.controller.JailController
 import ru.astrainteractive.aspekt.module.jail.data.CachedJailApi
 import ru.astrainteractive.aspekt.module.jail.data.JailApi
@@ -23,46 +23,42 @@ class JailModule(
     )
     private val cachedJailApi: CachedJailApi = CachedJailApiImpl(
         jailApi = jailApi,
-        scope = coreModule.scope
+        scope = coreModule.ioScope
     )
     private val jailController = JailController(
         dispatchers = coreModule.dispatchers,
         jailApi = jailApi
     )
     private val jailEvent = JailEvent(
-        scope = coreModule.scope,
+        scope = coreModule.ioScope,
         jailApi = jailApi,
         cachedJailApi = cachedJailApi,
         jailController = jailController,
-        kyoriKrate = coreModule.kyoriComponentSerializer,
+        kyoriKrate = coreModule.kyoriKrate,
         translationKrate = coreModule.translation
     )
 
-    private val jailCommandManager = JailCommandManager(
-        scope = coreModule.scope,
-        plugin = bukkitCoreModule.plugin,
-        translationKrate = coreModule.translation,
-        kyoriKrate = coreModule.kyoriComponentSerializer,
+    private val jailCommandModule = JailCommandModule(
+        coreModule = coreModule,
+        bukkitCoreModule = bukkitCoreModule,
         jailApi = jailApi,
         cachedJailApi = cachedJailApi,
-        jailController = jailController,
-        commandsRegistrarFlow = bukkitCoreModule.commandsRegistrarFlow,
-        mainScope = coreModule.mainScope
+        jailController = jailController
     )
 
     private val unJailJob = UnJailJob(
-        scope = coreModule.scope,
+        scope = coreModule.ioScope,
         cachedJailApi = cachedJailApi,
         jailApi = jailApi,
         jailController = jailController,
-        kyoriKrate = coreModule.kyoriComponentSerializer,
+        kyoriKrate = coreModule.kyoriKrate,
         translationKrate = coreModule.translation
     )
 
     val lifecycle = Lifecycle.Lambda(
         onEnable = {
             jailEvent.onEnable(bukkitCoreModule.plugin)
-            jailCommandManager.register()
+            jailCommandModule.lifecycle.onEnable()
             unJailJob.onEnable()
         },
         onDisable = {

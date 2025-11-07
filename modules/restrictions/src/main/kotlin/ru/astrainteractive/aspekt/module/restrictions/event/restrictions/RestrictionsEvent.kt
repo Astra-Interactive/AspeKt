@@ -12,15 +12,15 @@ import org.bukkit.event.block.BlockSpreadEvent
 import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.entity.ExplosionPrimeEvent
 import org.bukkit.event.player.PlayerBucketEmptyEvent
-import ru.astrainteractive.aspekt.module.restrictions.event.restrictions.di.RestrictionsDependencies
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 
 internal class RestrictionsEvent(
-    dependencies: RestrictionsDependencies
-) : RestrictionsDependencies by dependencies, EventListener {
+    private val configKrate: CachedKrate<PluginConfiguration>
+) : EventListener {
     private val restrictions: PluginConfiguration.Restrictions
-        get() = configuration.restrictions
+        get() = configKrate.cachedValue.restrictions
 
     // Explosions
     @EventHandler

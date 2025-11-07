@@ -1,46 +1,41 @@
 package ru.astrainteractive.aspekt.module.sethome.di
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.serialization.StringFormat
-import net.minecraftforge.event.RegisterCommandsEvent
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.sethome.command.HomeCommandExecutor
-import ru.astrainteractive.aspekt.module.sethome.command.homes
+import ru.astrainteractive.aspekt.module.sethome.command.di.SetHomeCommandModule
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
+import ru.astrainteractive.astralibs.command.registrar.ForgeCommandRegistrarContext
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import java.io.File
 
 class HomesModule(
-    registerCommandsEventFlow: Flow<RegisterCommandsEvent>,
+    commandRegistrarContext: ForgeCommandRegistrarContext,
     dataFolder: File,
     stringFormat: StringFormat,
     coreModule: CoreModule,
 ) {
-    val homeKrateProvider = HomeKrateProvider(
+    private val homeKrateProvider = HomeKrateProvider(
         folder = dataFolder.resolve("homes").also(File::mkdirs),
         stringFormat = stringFormat
     )
-    val homeCommandExecutor = HomeCommandExecutor(
+    private val homeCommandExecutor = HomeCommandExecutor(
         homeKrateProvider = homeKrateProvider,
-        scope = coreModule.scope,
+        scope = coreModule.ioScope,
         translationKrate = coreModule.translation,
-        kyoriKrate = coreModule.kyoriComponentSerializer,
+        kyoriKrate = coreModule.kyoriKrate,
         minecraftNativeBridge = coreModule.minecraftNativeBridge
+    )
+
+    private val commandModule = SetHomeCommandModule(
+        commandRegistrarContext = commandRegistrarContext,
+        homeKrateProvider = homeKrateProvider,
+        executor = homeCommandExecutor
     )
 
     val lifecycle = Lifecycle.Lambda(
         onEnable = {
-            coreModule.scope.launch(Dispatchers.IO) {
-                registerCommandsEventFlow
-                    .first()
-                    .homes(
-                        homeKrateProvider = homeKrateProvider,
-                        homeCommandExecutor = homeCommandExecutor
-                    )
-            }
+            commandModule.lifecycle.onEnable()
         },
         onDisable = {
             homeKrateProvider.clear()

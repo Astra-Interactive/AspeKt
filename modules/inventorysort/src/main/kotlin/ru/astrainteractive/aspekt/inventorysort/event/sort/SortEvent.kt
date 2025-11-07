@@ -6,12 +6,11 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
-import ru.astrainteractive.aspekt.inventorysort.event.sort.di.SortDependencies
 import ru.astrainteractive.astralibs.event.EventListener
 
 internal class SortEvent(
-    module: SortDependencies
-) : SortDependencies by module, EventListener {
+    private val sortController: SortController
+) : EventListener {
 
     @EventHandler
     fun playerQuitEvent(e: PlayerQuitEvent) {
