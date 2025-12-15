@@ -10,7 +10,7 @@ import ru.astrainteractive.astralibs.command.util.command
 import ru.astrainteractive.astralibs.command.util.hints
 import ru.astrainteractive.astralibs.command.util.requireArgument
 import ru.astrainteractive.astralibs.command.util.runs
-import ru.astrainteractive.astralibs.server.util.ForgeUtil
+import ru.astrainteractive.astralibs.server.util.NeoForgeUtil
 import ru.astrainteractive.astralibs.server.util.asOnlineMinecraftPlayer
 import ru.astrainteractive.astralibs.server.util.getOnlinePlayer
 import ru.astrainteractive.astralibs.server.util.getOnlinePlayers
@@ -30,14 +30,14 @@ class TpaCommandRegistrar(
     private fun createTpaNode(): LiteralArgumentBuilder<CommandSourceStack> {
         return command("tpa") {
             argument("player", StringArgumentType.string()) { playerArg ->
-                hints { ForgeUtil.getOnlinePlayers().map { it.name.toPlain() } }
+                hints { NeoForgeUtil.getOnlinePlayers().map { it.name.toPlain() } }
                 runs { ctx ->
                     val targetPlayerName = ctx.requireArgument(playerArg)
                     TpaCommand.TpaTo(
                         executorPlayer = ctx.source.player
                             ?.asOnlineMinecraftPlayer()
                             ?: return@runs,
-                        targetPlayer = ForgeUtil.getOnlinePlayer(targetPlayerName)
+                        targetPlayer = NeoForgeUtil.getOnlinePlayer(targetPlayerName)
                             ?.asOnlineMinecraftPlayer()
                             ?: return@runs
                     ).run(executor::execute)
@@ -49,14 +49,14 @@ class TpaCommandRegistrar(
     private fun createTpaHerNode(): LiteralArgumentBuilder<CommandSourceStack> {
         return command("tpahere") {
             argument("player", StringArgumentType.string()) { playerArg ->
-                hints { ForgeUtil.getOnlinePlayers().map { it.name.toPlain() } }
+                hints { NeoForgeUtil.getOnlinePlayers().map { it.name.toPlain() } }
                 runs { ctx ->
                     val targetPlayerName = ctx.requireArgument(playerArg)
                     TpaCommand.TpaHere(
                         executorPlayer = ctx.source.player
                             ?.asOnlineMinecraftPlayer()
                             ?: return@runs,
-                        targetPlayer = ForgeUtil.getOnlinePlayer(targetPlayerName)
+                        targetPlayer = NeoForgeUtil.getOnlinePlayer(targetPlayerName)
                             ?.asOnlineMinecraftPlayer()
                             ?: return@runs
                     ).run(executor::execute)

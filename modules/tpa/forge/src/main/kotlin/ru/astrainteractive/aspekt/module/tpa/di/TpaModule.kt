@@ -4,12 +4,12 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.tpa.api.TpaApi
 import ru.astrainteractive.aspekt.module.tpa.command.TpaCommandExecutor
 import ru.astrainteractive.aspekt.module.tpa.command.di.TpaCommandModule
-import ru.astrainteractive.astralibs.command.registrar.ForgeCommandRegistrarContext
+import ru.astrainteractive.astralibs.command.registrar.NeoForgeCommandRegistrarContext
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class TpaModule(
     coreModule: CoreModule,
-    commandRegistrarContext: ForgeCommandRegistrarContext,
+    commandRegistrarContext: NeoForgeCommandRegistrarContext,
 ) {
     val tpaCommandExecutor = TpaCommandExecutor(
         translationKrate = coreModule.translation,

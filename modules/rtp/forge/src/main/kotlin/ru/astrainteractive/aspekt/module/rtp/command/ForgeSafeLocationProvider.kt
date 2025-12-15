@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.AirBlock
 import net.minecraft.world.level.block.LiquidBlock
 import net.minecraft.world.level.storage.ServerLevelData
 import ru.astrainteractive.astralibs.server.location.Location
-import ru.astrainteractive.astralibs.server.util.ForgeUtil
+import ru.astrainteractive.astralibs.server.util.NeoForgeUtil
 import ru.astrainteractive.astralibs.server.util.getOnlinePlayer
 import ru.astrainteractive.klibs.mikro.core.util.cast
 import java.util.UUID
@@ -78,7 +78,7 @@ class ForgeSafeLocationProvider : SafeLocationProvider {
 
     override suspend fun getLocation(scope: CoroutineScope, uuid: UUID): Location? {
         return mutex.withLock {
-            val player = ForgeUtil.getOnlinePlayer(uuid) ?: return@withLock null
+            val player = NeoForgeUtil.getOnlinePlayer(uuid) ?: return@withLock null
             val deferred = jobMap.getOrPut(uuid) {
                 scope.async { safeLocationFlow(player.level().cast<ServerLevel>()).first() }
             }

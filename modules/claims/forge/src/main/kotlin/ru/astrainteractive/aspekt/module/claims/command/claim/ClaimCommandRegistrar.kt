@@ -17,7 +17,7 @@ import ru.astrainteractive.astralibs.command.util.literal
 import ru.astrainteractive.astralibs.command.util.requireArgument
 import ru.astrainteractive.astralibs.command.util.requirePlayer
 import ru.astrainteractive.astralibs.command.util.runs
-import ru.astrainteractive.astralibs.server.util.ForgeUtil
+import ru.astrainteractive.astralibs.server.util.NeoForgeUtil
 import ru.astrainteractive.astralibs.server.util.getOnlinePlayers
 import ru.astrainteractive.astralibs.server.util.getPlayerGameProfile
 import ru.astrainteractive.astralibs.server.util.toPlain
@@ -63,11 +63,11 @@ class ClaimCommandRegistrar(
             }
             literal(ClaimCommandArgument.ADD_MEMBER.value) {
                 argument("player", StringArgumentType.string()) { playerArg ->
-                    hints { ForgeUtil.getOnlinePlayers().map { player -> player.name.toPlain() } }
+                    hints { NeoForgeUtil.getOnlinePlayers().map { player -> player.name.toPlain() } }
                     runs { ctx ->
                         val ownerPlayer = ctx.source.player ?: return@runs
                         val memberPlayerName = ctx.requireArgument(playerArg)
-                        val memberPlayer = ForgeUtil
+                        val memberPlayer = NeoForgeUtil
                             .getPlayerGameProfile(memberPlayerName)
                             ?: return@runs
                         claimCommandExecutor.execute(
@@ -93,7 +93,7 @@ class ClaimCommandRegistrar(
                     runs { ctx ->
                         val ownerPlayer = ctx.source.player ?: return@runs
                         val memberPlayerName = ctx.requireArgument(playerArg)
-                        val memberPlayer = ForgeUtil
+                        val memberPlayer = NeoForgeUtil
                             .getPlayerGameProfile(memberPlayerName)
                             ?: return@runs
                         claimCommandExecutor.execute(

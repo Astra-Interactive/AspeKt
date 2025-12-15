@@ -16,7 +16,7 @@ import ru.astrainteractive.aspekt.module.claims.di.ForgeClaimModule
 import ru.astrainteractive.aspekt.module.rtp.di.RtpModule
 import ru.astrainteractive.aspekt.module.sethome.di.HomesModule
 import ru.astrainteractive.aspekt.module.tpa.di.TpaModule
-import ru.astrainteractive.astralibs.command.registrar.ForgeCommandRegistrarContext
+import ru.astrainteractive.astralibs.command.registrar.NeoForgeCommandRegistrarContext
 import ru.astrainteractive.astralibs.coroutine.ForgeMainDispatcher
 import ru.astrainteractive.astralibs.event.flowEvent
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
@@ -56,7 +56,7 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
         .map { event -> event.server }
         .stateIn(coreModule.mainScope, SharingStarted.Eagerly, null)
 
-    private val commandRegistrarContext = ForgeCommandRegistrarContext(coreModule.mainScope)
+    private val commandRegistrarContext = NeoForgeCommandRegistrarContext(coreModule.mainScope)
 
     val authApiModule = AuthApiModule(
         ioScope = coreModule.ioScope,

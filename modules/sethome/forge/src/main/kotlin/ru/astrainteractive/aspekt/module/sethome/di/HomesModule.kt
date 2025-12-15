@@ -5,12 +5,12 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.sethome.command.HomeCommandExecutor
 import ru.astrainteractive.aspekt.module.sethome.command.di.SetHomeCommandModule
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
-import ru.astrainteractive.astralibs.command.registrar.ForgeCommandRegistrarContext
+import ru.astrainteractive.astralibs.command.registrar.NeoForgeCommandRegistrarContext
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import java.io.File
 
 class HomesModule(
-    commandRegistrarContext: ForgeCommandRegistrarContext,
+    commandRegistrarContext: NeoForgeCommandRegistrarContext,
     dataFolder: File,
     stringFormat: StringFormat,
     coreModule: CoreModule,

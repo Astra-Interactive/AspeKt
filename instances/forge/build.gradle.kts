@@ -4,7 +4,7 @@ import ru.astrainteractive.gradleplugin.property.extension.ModelPropertyValueExt
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
-    alias(libs.plugins.forgegradle)
+    alias(libs.plugins.gradle.forgegradle)
     alias(libs.plugins.klibs.minecraft.resource.processor)
     alias(libs.plugins.gradle.shadow)
 }
@@ -19,16 +19,16 @@ dependencies {
     shadow(libs.kotlin.coroutines.core)
     // AstraLibs
     shadow(libs.minecraft.astralibs.core)
-    shadow(libs.minecraft.astralibs.core.forge)
+    shadow(libs.minecraft.astralibs.core.neoforge)
     shadow(libs.minecraft.astralibs.command)
     shadow(libs.kotlin.serialization.kaml)
     shadow(libs.klibs.mikro.core)
     shadow(libs.klibs.kstorage)
     shadow(libs.driver.h2)
     shadow(libs.driver.jdbc)
-    shadow(libs.kyori.plain)
-    shadow(libs.kyori.legacy)
-    shadow(libs.kyori.gson)
+    shadow(libs.minecraft.kyori.plain)
+    shadow(libs.minecraft.kyori.legacy)
+    shadow(libs.minecraft.kyori.gson)
     // Local
     shadow(projects.modules.core.api)
     shadow(projects.modules.core.forge)

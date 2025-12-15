@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.claims.command.di
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecutor
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandRegistrar
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
-import ru.astrainteractive.astralibs.command.registrar.ForgeCommandRegistrarContext
+import ru.astrainteractive.astralibs.command.registrar.NeoForgeCommandRegistrarContext
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 /**
@@ -12,7 +12,7 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 class ClaimCommandModule(
     private val executor: ClaimCommandExecutor,
     private val claimsRepository: ClaimsRepository,
-    private val commandRegistrarContext: ForgeCommandRegistrarContext
+    private val commandRegistrarContext: NeoForgeCommandRegistrarContext
 ) {
     private val nodes = buildList {
         ClaimCommandRegistrar(

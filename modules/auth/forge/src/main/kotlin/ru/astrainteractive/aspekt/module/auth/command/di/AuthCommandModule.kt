@@ -7,7 +7,7 @@ import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.command.login.LoginCommandRegistrar
 import ru.astrainteractive.aspekt.module.auth.command.register.RegisterCommandRegistrar
 import ru.astrainteractive.aspekt.module.auth.command.unregister.UnregisterCommandRegistrar
-import ru.astrainteractive.astralibs.command.registrar.ForgeCommandRegistrarContext
+import ru.astrainteractive.astralibs.command.registrar.NeoForgeCommandRegistrarContext
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import kotlin.collections.onEach
 
@@ -19,7 +19,7 @@ class AuthCommandModule(
     private val authorizedApi: AuthorizedApi,
     private val coreModule: CoreModule,
     private val authApiModule: AuthApiModule,
-    private val forgeCommandRegistrarContext: ForgeCommandRegistrarContext
+    private val forgeCommandRegistrarContext: NeoForgeCommandRegistrarContext
 ) {
     private val nodes = buildList {
         LoginCommandRegistrar(

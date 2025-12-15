@@ -4,13 +4,13 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.command.di.AuthCommandModule
 import ru.astrainteractive.aspekt.module.auth.event.ForgeAuthEvent
-import ru.astrainteractive.astralibs.command.registrar.ForgeCommandRegistrarContext
+import ru.astrainteractive.astralibs.command.registrar.NeoForgeCommandRegistrarContext
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class ForgeAuthModule(
     authApiModule: AuthApiModule,
     coreModule: CoreModule,
-    commandRegistrarContext: ForgeCommandRegistrarContext
+    commandRegistrarContext: NeoForgeCommandRegistrarContext
 ) {
     private val authCommandModule = AuthCommandModule(
         authDao = authApiModule.authDao,

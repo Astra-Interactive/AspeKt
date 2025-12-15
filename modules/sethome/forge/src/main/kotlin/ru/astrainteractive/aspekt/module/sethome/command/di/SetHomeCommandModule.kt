@@ -4,14 +4,14 @@ import kotlinx.coroutines.flow.onEach
 import ru.astrainteractive.aspekt.module.sethome.command.HomeCommandExecutor
 import ru.astrainteractive.aspekt.module.sethome.command.SetHomeCommandRegistrar
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
-import ru.astrainteractive.astralibs.command.registrar.ForgeCommandRegistrarContext
+import ru.astrainteractive.astralibs.command.registrar.NeoForgeCommandRegistrarContext
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 /**
  * Aggregates and registers Brigadier command nodes for SetHome (Forge) module.
  */
 class SetHomeCommandModule(
-    private val commandRegistrarContext: ForgeCommandRegistrarContext,
+    private val commandRegistrarContext: NeoForgeCommandRegistrarContext,
     private val homeKrateProvider: HomeKrateProvider,
     private val executor: HomeCommandExecutor
 ) {

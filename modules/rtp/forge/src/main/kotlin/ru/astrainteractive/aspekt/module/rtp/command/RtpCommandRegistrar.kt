@@ -5,7 +5,7 @@ import net.minecraft.commands.CommandSourceStack
 import net.minecraft.server.level.ServerPlayer
 import ru.astrainteractive.astralibs.command.util.command
 import ru.astrainteractive.astralibs.command.util.runs
-import ru.astrainteractive.astralibs.server.util.ForgeUtil
+import ru.astrainteractive.astralibs.server.util.NeoForgeUtil
 import ru.astrainteractive.astralibs.server.util.asOnlineMinecraftPlayer
 import ru.astrainteractive.astralibs.server.util.getNextTickTime
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
@@ -23,7 +23,7 @@ class RtpCommandRegistrar(
                 val player = ctx.source.player?.tryCast<ServerPlayer>() ?: return@runs
                 RtpCommand(
                     player = player.asOnlineMinecraftPlayer(),
-                    nextTickTime = ForgeUtil.getNextTickTime()
+                    nextTickTime = NeoForgeUtil.getNextTickTime()
                 ).run(executor::execute)
             }
         }

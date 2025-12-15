@@ -4,11 +4,11 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecutor
 import ru.astrainteractive.aspekt.module.claims.command.di.ClaimCommandModule
 import ru.astrainteractive.aspekt.module.claims.event.ForgeClaimEvent
-import ru.astrainteractive.astralibs.command.registrar.ForgeCommandRegistrarContext
+import ru.astrainteractive.astralibs.command.registrar.NeoForgeCommandRegistrarContext
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class ForgeClaimModule(
-    commandRegistrarContext: ForgeCommandRegistrarContext,
+    commandRegistrarContext: NeoForgeCommandRegistrarContext,
     coreModule: CoreModule,
     claimModule: ClaimModule
 ) {

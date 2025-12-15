@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.Mod
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.astralibs.event.flowEvent
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.astralibs.server.util.ForgeUtil
+import ru.astrainteractive.astralibs.server.util.NeoForgeUtil
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import javax.annotation.ParametersAreNonnullByDefault
@@ -53,6 +53,6 @@ class ForgeEntryPoint :
         }.launchIn(rootModule.coreModule.mainScope)
 
     init {
-        ForgeUtil.bootstrap()
+        NeoForgeUtil.bootstrap()
     }
 }

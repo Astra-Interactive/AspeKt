@@ -18,7 +18,7 @@ import ru.astrainteractive.astralibs.command.util.requirePermission
 import ru.astrainteractive.astralibs.command.util.runs
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
-import ru.astrainteractive.astralibs.server.util.ForgeUtil
+import ru.astrainteractive.astralibs.server.util.NeoForgeUtil
 import ru.astrainteractive.astralibs.server.util.asAudience
 import ru.astrainteractive.astralibs.server.util.getOnlinePlayer
 import ru.astrainteractive.astralibs.server.util.getOnlinePlayers
@@ -45,7 +45,7 @@ class UnregisterCommandRegistrar(
                 alias = "username",
                 type = StringArgumentType.string(),
                 block = { usernameArg ->
-                    hints { ForgeUtil.getOnlinePlayers().map { player -> player.name.toPlain() } }
+                    hints { NeoForgeUtil.getOnlinePlayers().map { player -> player.name.toPlain() } }
                     runs { ctx ->
                         ctx.requirePermission(AuthPermission.Unregister)
                         val usernameToDelete = ctx.requireArgument(usernameArg)
@@ -59,7 +59,7 @@ class UnregisterCommandRegistrar(
 
                             authDao.deleteAccount(authData.uuid)
                                 .onSuccess {
-                                    val onlinePlayerLoginModel = ForgeUtil
+                                    val onlinePlayerLoginModel = NeoForgeUtil
                                         .getOnlinePlayer(usernameToDelete)
                                         ?.let { player ->
                                             PlayerLoginModel(
@@ -68,7 +68,7 @@ class UnregisterCommandRegistrar(
                                                 ip = player.ipAddress
                                             )
                                         }
-                                    val offlinePlayerLoginModel = ForgeUtil
+                                    val offlinePlayerLoginModel = NeoForgeUtil
                                         .getPlayerGameProfile(usernameToDelete)
                                         ?.let { profile ->
                                             PlayerLoginModel(
