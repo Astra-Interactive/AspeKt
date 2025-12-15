@@ -1,7 +1,6 @@
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
-    alias(libs.plugins.gradle.forgegradle)
 }
 
 dependencies {
@@ -21,16 +20,22 @@ dependencies {
 }
 
 dependencies {
-    minecraft(
-        "net.minecraftforge",
-        "forge",
-        "${libs.versions.minecraft.mojang.version.get()}-${libs.versions.minecraft.forgeversion.get()}"
+    compileOnly(
+        files(
+            rootProject.project(projects.instances.forge.path)
+                .file(".gradle")
+                .resolve("repositories")
+                .resolve("ng_dummy_ng")
+                .resolve("net")
+                .resolve("neoforged")
+                .resolve("neoforge")
+                .resolve(libs.versions.minecraft.neoforgeversion.get())
+                .resolve("neoforge-${libs.versions.minecraft.neoforgeversion.get()}.jar")
+        )
     )
-}
-minecraft {
-    mappings("official", libs.versions.minecraft.mojang.version.get())
-}
-
-configurations.runtimeElements {
-    setExtendsFrom(emptySet())
+    compileOnly(libs.minecraft.neoforgeversion)
+    compileOnly("org.joml:joml:1.10.8")
+    compileOnly("com.mojang:datafixerupper:8.0.16")
+    compileOnly("com.mojang:brigadier:1.3.10")
+    compileOnly("net.neoforged:bus:8.0.2")
 }

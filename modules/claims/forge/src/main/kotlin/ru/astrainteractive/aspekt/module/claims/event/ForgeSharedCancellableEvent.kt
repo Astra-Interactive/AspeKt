@@ -1,10 +1,10 @@
 package ru.astrainteractive.aspekt.module.claims.event
 
-import net.minecraftforge.eventbus.api.Event
+import net.neoforged.bus.api.ICancellableEvent
 
 class ForgeSharedCancellableEvent<T>(
     private val instance: T
-) : SharedCancellableEvent where T : Event {
+) : SharedCancellableEvent where T : ICancellableEvent {
     override var isCancelled: Boolean
         get() = instance.isCanceled
         set(value) {

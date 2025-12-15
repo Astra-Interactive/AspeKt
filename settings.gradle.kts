@@ -1,12 +1,13 @@
 pluginManagement {
     repositories {
+        maven("https://maven.neoforged.net/releases")
         maven("https://plugins.gradle.org/m2/")
         maven("https://jitpack.io")
         gradlePluginPortal()
         mavenCentral()
         mavenLocal()
         google()
-        maven("https://maven.minecraftforge.net")
+        maven("https://maven.neoforged.net/releases")
     }
 }
 
@@ -92,8 +93,6 @@ include(
     ":modules:rtp:api",
     ":modules:rtp:forge",
 )
-include(":modules:discordlink")
-include(":modules:towny-discord")
 include(":modules:moneydrop")
 include(":modules:money-advancements")
 include(":modules:autocrop")
@@ -101,7 +100,6 @@ include(":modules:newbee")
 include(":modules:antiswear")
 include(":modules:chatgame")
 include(":modules:economy")
-include(":modules:entities")
 include(":modules:restrictions")
 include(":modules:sit")
 include(":modules:inventorysort")

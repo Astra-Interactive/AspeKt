@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.module.rtp.command
 
 import net.minecraft.server.level.ServerPlayer
-import net.minecraftforge.event.RegisterCommandsEvent
+import net.neoforged.neoforge.event.RegisterCommandsEvent
 import ru.astrainteractive.astralibs.command.util.command
 import ru.astrainteractive.astralibs.command.util.runs
 import ru.astrainteractive.astralibs.server.util.NeoForgeUtil

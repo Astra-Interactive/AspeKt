@@ -4,16 +4,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.chunk.ChunkAccess
 import net.minecraft.world.level.storage.ServerLevelData
-import net.minecraftforge.event.entity.player.PlayerInteractEvent
-import net.minecraftforge.event.level.BlockEvent
-import net.minecraftforge.event.level.ExplosionEvent
-import net.minecraftforge.eventbus.api.Event
+import net.neoforged.bus.api.Event
+import net.neoforged.bus.api.ICancellableEvent
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
+import net.neoforged.neoforge.event.level.BlockEvent
+import net.neoforged.neoforge.event.level.ExplosionEvent
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.data.isAble
 import ru.astrainteractive.aspekt.module.claims.debounce.EventDebounce
@@ -24,7 +24,7 @@ import ru.astrainteractive.aspekt.module.claims.util.toClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.coroutine.ForgeMainDispatcher
+import ru.astrainteractive.astralibs.coroutines.NeoForgeMainDispatcher
 import ru.astrainteractive.astralibs.event.flowEvent
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.server.util.asPermissible
@@ -33,6 +33,7 @@ import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
+import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 class ForgeClaimEvent(
     private val claimsRepository: ClaimsRepository,
@@ -41,7 +42,9 @@ class ForgeClaimEvent(
 ) : Logger by JUtiltLogger("AspeKt-ForgeClaimEvent") {
     private val translation by translationKrate
     private val kyori by kyoriKrate
-    private val scope = CoroutineScope(SupervisorJob() + ForgeMainDispatcher)
+
+    // todo mainScope
+    private val scope = CoroutineScope(SupervisorJob() + NeoForgeMainDispatcher())
 
     private val debounce = EventDebounce<RetractKey>(5000L)
     private fun <T> handleDefault(
@@ -54,10 +57,10 @@ class ForgeClaimEvent(
         if (player?.asPermissible()?.hasPermission(PluginPermission.ADMIN_CLAIM) == true) {
             return false
         }
-        if (e.isCanceled) {
+        if (e.tryCast<ICancellableEvent>()?.isCanceled == true) {
             return true
         }
-        val sharedEvent = if (e.isCancelable) ForgeSharedCancellableEvent(e) else ForgeEmptyCancellableEvent()
+        val sharedEvent = if (e is ICancellableEvent) ForgeSharedCancellableEvent(e) else ForgeEmptyCancellableEvent()
         return debounce.debounceEvent(retractKey, sharedEvent) {
             val isAble = claimsRepository.isAble(
                 key = claimChunk.uniqueWorldKey,
@@ -135,13 +138,7 @@ class ForgeClaimEvent(
             val blocksPos = if (e is ExplosionEvent.Detonate) {
                 e.affectedBlocks
             } else {
-                listOf(
-                    BlockPos(
-                        e.explosion.position.x.toInt(),
-                        e.explosion.position.y.toInt(),
-                        e.explosion.position.z.toInt()
-                    )
-                )
+                e.explosion.toBlow
             }
             val isCancelled = blocksPos
                 .map { blockPos -> e.level.getChunkAt(blockPos) }

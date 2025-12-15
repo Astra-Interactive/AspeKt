@@ -1,15 +1,8 @@
 package ru.astrainteractive.aspekt
 
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import net.minecraftforge.event.RegisterCommandsEvent
-import net.minecraftforge.event.server.ServerStartedEvent
-import net.minecraftforge.event.server.ServerStoppingEvent
-import net.minecraftforge.eventbus.api.EventPriority
-import net.minecraftforge.fml.common.Mod
+import net.neoforged.fml.common.Mod
 import ru.astrainteractive.aspekt.di.RootModule
-import ru.astrainteractive.astralibs.event.flowEvent
-import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.astralibs.lifecycle.ForgeLifecycleServer
 import ru.astrainteractive.astralibs.server.util.NeoForgeUtil
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
@@ -19,7 +12,7 @@ import javax.annotation.ParametersAreNonnullByDefault
 @ParametersAreNonnullByDefault
 class ForgeEntryPoint :
     Logger by JUtiltLogger("AspeKt-ForgeEntryPoint"),
-    Lifecycle {
+    ForgeLifecycleServer() {
     private val rootModule by lazy { RootModule() }
 
     override fun onEnable() {
@@ -34,23 +27,6 @@ class ForgeEntryPoint :
     override fun onReload() {
         rootModule.lifecycle.onReload()
     }
-
-    val serverStartedEvent = flowEvent<ServerStartedEvent>(EventPriority.HIGHEST)
-        .onEach {
-            info { "#serverStartedEvent" }
-            onEnable()
-        }.launchIn(rootModule.coreModule.mainScope)
-
-    val serverStoppingEvent = flowEvent<ServerStoppingEvent>(EventPriority.HIGHEST)
-        .onEach {
-            info { "#serverStoppingEvent" }
-            onDisable()
-        }.launchIn(rootModule.coreModule.mainScope)
-
-    val registerCommandsEvent = flowEvent<RegisterCommandsEvent>(EventPriority.HIGHEST)
-        .onEach { e ->
-            info { "#registerCommandsEvent" }
-        }.launchIn(rootModule.coreModule.mainScope)
 
     init {
         NeoForgeUtil.bootstrap()

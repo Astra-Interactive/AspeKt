@@ -7,13 +7,13 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
-import net.minecraftforge.event.entity.EntityEvent
-import net.minecraftforge.event.entity.EntityJoinLevelEvent
-import net.minecraftforge.event.entity.living.LivingEvent
-import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent
-import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent
-import net.minecraftforge.event.level.BlockEvent
-import net.minecraftforge.eventbus.api.EventPriority
+import net.neoforged.bus.api.EventPriority
+import net.neoforged.bus.api.ICancellableEvent
+import net.neoforged.neoforge.event.entity.EntityEvent
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent
+import net.neoforged.neoforge.event.entity.player.PlayerEvent
+import net.neoforged.neoforge.event.level.BlockEvent
+import net.neoforged.neoforge.event.tick.EntityTickEvent
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
@@ -26,6 +26,7 @@ import ru.astrainteractive.astralibs.server.util.asAudience
 import ru.astrainteractive.astralibs.server.util.toPlain
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
+import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 class ForgeAuthEvent(
     private val authorizedApi: AuthorizedApi,
@@ -35,11 +36,11 @@ class ForgeAuthEvent(
 ) : KyoriComponentSerializer by kyoriKrate.unwrap() {
     val translation by translationKrate
 
-    val playerLoggedOutEvent = flowEvent<PlayerLoggedOutEvent>()
+    val playerLoggedOutEvent = flowEvent<PlayerEvent.PlayerLoggedOutEvent>()
         .onEach { authorizedApi.forgetUser(it.entity.uuid) }
         .launchIn(mainScope)
 
-    val playerLoggedInEvent = flowEvent<PlayerLoggedInEvent>()
+    val playerLoggedInEvent = flowEvent<PlayerEvent.PlayerLoggedInEvent>()
         .onEach {
             val playerLoginModel = PlayerLoginModel(
                 username = it.entity.name.toPlain(),
@@ -92,15 +93,14 @@ class ForgeAuthEvent(
         }.launchIn(mainScope)
 
     val playerEvent = flowEvent<EntityEvent>(EventPriority.HIGHEST)
-        .filter { it.isCancelable }
         .filter { it.entity is Player }
-        .filter { it !is LivingEvent.LivingTickEvent }
+        .filter { it !is EntityTickEvent }
         .filter { it !is EntityJoinLevelEvent }
-        .filter { it !is PlayerLoggedInEvent }
+        .filter { it !is PlayerEvent.PlayerLoggedInEvent }
         .filter { it.entity.isAlive }
         .filter { authorizedApi.getAuthState(it.entity.uuid) !is AuthorizedApi.AuthState.Authorized }
         .onEach { event ->
-            event.isCanceled = true
+            event.tryCast<ICancellableEvent>()?.isCanceled = true
             processPlayerEvent(event.entity as Player)
         }
         .launchIn(mainScope)

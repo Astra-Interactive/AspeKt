@@ -20,7 +20,7 @@ import ru.astrainteractive.aspekt.module.newbee.di.NewBeeModule
 import ru.astrainteractive.aspekt.module.restrictions.di.RestrictionModule
 import ru.astrainteractive.aspekt.module.sit.di.SitModule
 import ru.astrainteractive.aspekt.module.treecapitator.di.TreeCapitatorModule
-import ru.astrainteractive.astralibs.async.DefaultBukkitDispatchers
+import ru.astrainteractive.astralibs.coroutines.DefaultBukkitDispatchers
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.lifecycle.LifecyclePlugin
 import ru.astrainteractive.astralibs.server.BukkitMinecraftNativeBridge
