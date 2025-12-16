@@ -16,20 +16,19 @@ dependencies {
     compileOnly(libs.minecraft.kyori.plain)
     compileOnly(libs.minecraft.kyori.legacy)
     compileOnly(libs.minecraft.kyori.gson)
-    compileOnly("com.google.guava:guava:31.1-jre")
     // Test
 
     testImplementation(libs.tests.kotlin.test)
     // Local
     implementation(projects.modules.core.api)
-    implementation(projects.modules.core.forge)
-    implementation(projects.modules.tpa.api)
+    implementation(projects.modules.core.neoforge)
+    implementation(projects.modules.claims.api)
 }
 
 dependencies {
     compileOnly(
         files(
-            rootProject.project(projects.instances.forge.path)
+            rootProject.project(projects.instances.neoforge.path)
                 .file(".gradle")
                 .resolve("repositories")
                 .resolve("ng_dummy_ng")
@@ -44,5 +43,6 @@ dependencies {
     compileOnly("org.joml:joml:1.10.8")
     compileOnly("com.mojang:datafixerupper:8.0.16")
     compileOnly("com.mojang:brigadier:1.3.10")
+    compileOnly("com.mojang:authlib:6.0.54")
     compileOnly("net.neoforged:bus:8.0.2")
 }

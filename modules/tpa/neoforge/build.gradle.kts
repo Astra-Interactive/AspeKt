@@ -1,28 +1,35 @@
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.serialization")
+    id("org.jetbrains.kotlin.jvm")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 dependencies {
     // Kotlin
+    implementation(libs.kotlin.coroutines.core)
 
     // AstraLibs
     implementation(libs.minecraft.astralibs.core)
+    implementation(libs.minecraft.astralibs.core.neoforge)
     implementation(libs.minecraft.astralibs.command)
-    implementation(libs.klibs.mikro.core)
     implementation(libs.klibs.kstorage)
+    implementation(libs.klibs.mikro.core)
     compileOnly(libs.minecraft.kyori.plain)
     compileOnly(libs.minecraft.kyori.legacy)
     compileOnly(libs.minecraft.kyori.gson)
-    compileOnly(libs.minecraft.luckperms)
+    compileOnly("com.google.guava:guava:31.1-jre")
+    // Test
 
+    testImplementation(libs.tests.kotlin.test)
+    // Local
     implementation(projects.modules.core.api)
+    implementation(projects.modules.core.neoforge)
+    implementation(projects.modules.tpa.api)
 }
 
 dependencies {
     compileOnly(
         files(
-            rootProject.project(projects.instances.forge.path)
+            rootProject.project(projects.instances.neoforge.path)
                 .file(".gradle")
                 .resolve("repositories")
                 .resolve("ng_dummy_ng")

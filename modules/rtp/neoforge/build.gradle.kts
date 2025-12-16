@@ -22,14 +22,14 @@ dependencies {
     testImplementation(libs.tests.kotlin.test)
     // Local
     implementation(projects.modules.core.api)
-    implementation(projects.modules.core.forge)
+    implementation(projects.modules.core.neoforge)
     implementation(projects.modules.rtp.api)
 }
 
 dependencies {
     compileOnly(
         files(
-            rootProject.project(projects.instances.forge.path)
+            rootProject.project(projects.instances.neoforge.path)
                 .file(".gradle")
                 .resolve("repositories")
                 .resolve("ng_dummy_ng")

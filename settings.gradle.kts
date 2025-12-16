@@ -66,32 +66,32 @@ rootProject.name = "AspeKt"
 
 // Spigot
 include(":instances:bukkit")
-include(":instances:forge")
+include(":instances:neoforge")
 include(":instances:bungee")
 // Modules
 include(
     ":modules:core:api",
     ":modules:core:bukkit",
-    ":modules:core:forge",
+    ":modules:core:neoforge",
 )
 include(":modules:menu")
 include(":modules:broadcast")
 include(
     ":modules:claims:api",
     ":modules:claims:bukkit",
-    ":modules:claims:forge",
+    ":modules:claims:neoforge",
 )
 include(
     ":modules:sethome:api",
-    ":modules:sethome:forge",
+    ":modules:sethome:neoforge",
 )
 include(
     ":modules:tpa:api",
-    ":modules:tpa:forge",
+    ":modules:tpa:neoforge",
 )
 include(
     ":modules:rtp:api",
-    ":modules:rtp:forge",
+    ":modules:rtp:neoforge",
 )
 include(":modules:moneydrop")
 include(":modules:money-advancements")
@@ -107,6 +107,6 @@ include(":modules:treecapitator")
 include(":modules:jail")
 include(
     ":modules:auth:api",
-    ":modules:auth:forge"
+    ":modules:auth:neoforge"
 )
 include(":modules:invisible-item-frames")

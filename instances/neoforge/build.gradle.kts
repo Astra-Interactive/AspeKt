@@ -27,17 +27,17 @@ dependencies {
     shadow(libs.minecraft.kyori.gson)
     // Local
     shadow(projects.modules.core.api)
-    shadow(projects.modules.core.forge)
+    shadow(projects.modules.core.neoforge)
     shadow(projects.modules.auth.api)
-    shadow(projects.modules.auth.forge)
+    shadow(projects.modules.auth.neoforge)
     shadow(projects.modules.claims.api)
-    shadow(projects.modules.claims.forge)
+    shadow(projects.modules.claims.neoforge)
     shadow(projects.modules.sethome.api)
-    shadow(projects.modules.sethome.forge)
+    shadow(projects.modules.sethome.neoforge)
     shadow(projects.modules.tpa.api)
-    shadow(projects.modules.tpa.forge)
+    shadow(projects.modules.tpa.neoforge)
     shadow(projects.modules.rtp.api)
-    shadow(projects.modules.rtp.forge)
+    shadow(projects.modules.rtp.neoforge)
 }
 
 val destination = rootDir
