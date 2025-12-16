@@ -14,7 +14,7 @@ dependencies {
     implementation(libs.klibs.kstorage)
     implementation(libs.klibs.mikro.core)
     compileOnly("com.google.guava:guava:31.1-jre")
-    compileOnly(libs.kyori.plain)
+    compileOnly(libs.minecraft.kyori.plain)
     // Test
 
     testImplementation(libs.tests.kotlin.test)

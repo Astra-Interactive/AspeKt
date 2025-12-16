@@ -7,7 +7,7 @@ import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.async.withTimings
+import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate

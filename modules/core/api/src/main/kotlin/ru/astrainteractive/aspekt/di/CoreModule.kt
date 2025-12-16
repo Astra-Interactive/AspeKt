@@ -10,7 +10,7 @@ import kotlinx.serialization.json.Json
 import ru.astrainteractive.aspekt.di.factory.ConfigKrateFactory
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.async.withTimings
+import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.server.MinecraftNativeBridge

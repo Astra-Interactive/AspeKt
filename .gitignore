@@ -6,6 +6,7 @@ jars/
 .kotlin
 # BlueJ files
 *.ctxt
+**/runs/*
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

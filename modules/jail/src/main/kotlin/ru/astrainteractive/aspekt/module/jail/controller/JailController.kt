@@ -6,7 +6,7 @@ import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.module.jail.data.JailApi
 import ru.astrainteractive.aspekt.module.jail.model.JailInmate
 import ru.astrainteractive.aspekt.module.jail.util.toBukkitLocation
-import ru.astrainteractive.astralibs.async.withTimings
+import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger

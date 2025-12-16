@@ -1,12 +1,13 @@
 pluginManagement {
     repositories {
+        maven("https://maven.neoforged.net/releases")
         maven("https://plugins.gradle.org/m2/")
         maven("https://jitpack.io")
         gradlePluginPortal()
         mavenCentral()
         mavenLocal()
         google()
-        maven("https://maven.minecraftforge.net")
+        maven("https://maven.neoforged.net/releases")
     }
 }
 
@@ -65,35 +66,33 @@ rootProject.name = "AspeKt"
 
 // Spigot
 include(":instances:bukkit")
-include(":instances:forge")
+include(":instances:neoforge")
 include(":instances:bungee")
 // Modules
 include(
     ":modules:core:api",
     ":modules:core:bukkit",
-    ":modules:core:forge",
+    ":modules:core:neoforge",
 )
 include(":modules:menu")
 include(":modules:broadcast")
 include(
     ":modules:claims:api",
     ":modules:claims:bukkit",
-    ":modules:claims:forge",
+    ":modules:claims:neoforge",
 )
 include(
     ":modules:sethome:api",
-    ":modules:sethome:forge",
+    ":modules:sethome:neoforge",
 )
 include(
     ":modules:tpa:api",
-    ":modules:tpa:forge",
+    ":modules:tpa:neoforge",
 )
 include(
     ":modules:rtp:api",
-    ":modules:rtp:forge",
+    ":modules:rtp:neoforge",
 )
-include(":modules:discordlink")
-include(":modules:towny-discord")
 include(":modules:moneydrop")
 include(":modules:money-advancements")
 include(":modules:autocrop")
@@ -101,7 +100,6 @@ include(":modules:newbee")
 include(":modules:antiswear")
 include(":modules:chatgame")
 include(":modules:economy")
-include(":modules:entities")
 include(":modules:restrictions")
 include(":modules:sit")
 include(":modules:inventorysort")
@@ -109,6 +107,6 @@ include(":modules:treecapitator")
 include(":modules:jail")
 include(
     ":modules:auth:api",
-    ":modules:auth:forge"
+    ":modules:auth:neoforge"
 )
 include(":modules:invisible-item-frames")
