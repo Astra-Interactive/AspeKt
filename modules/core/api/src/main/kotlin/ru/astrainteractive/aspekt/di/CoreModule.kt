@@ -13,8 +13,7 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.astralibs.server.MinecraftNativeBridge
-import ru.astrainteractive.astralibs.server.PlatformServer
+import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.astralibs.util.YamlStringFormat
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 import ru.astrainteractive.klibs.kstorage.util.asCachedKrate
@@ -26,7 +25,6 @@ import java.io.File
 class CoreModule(
     val dataFolder: File,
     val dispatchers: KotlinDispatchers,
-    val minecraftNativeBridge: MinecraftNativeBridge,
     val platformServer: PlatformServer
 ) {
     // Core

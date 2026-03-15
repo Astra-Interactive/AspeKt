@@ -10,6 +10,11 @@ plugins {
     alias(libs.plugins.gradle.shadow)
 }
 
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
 dependencies {
     // Kotlin
     shadow(libs.kotlin.coroutines.core)

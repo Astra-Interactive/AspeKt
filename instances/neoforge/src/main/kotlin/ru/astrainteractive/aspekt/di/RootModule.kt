@@ -13,8 +13,7 @@ import ru.astrainteractive.aspekt.module.tpa.di.TpaModule
 import ru.astrainteractive.astralibs.command.registrar.NeoForgeCommandRegistrarContext
 import ru.astrainteractive.astralibs.coroutines.NeoForgeDispatchers
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.astralibs.server.NeoForgeMinecraftNativeBridge
-import ru.astrainteractive.astralibs.server.NeoForgePlatformServer
+import ru.astrainteractive.astralibs.server.bridge.NeoForgePlatformServer
 import ru.astrainteractive.astralibs.util.YamlStringFormat
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
@@ -33,7 +32,6 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
         CoreModule(
             dataFolder = dataFolder,
             dispatchers = NeoForgeDispatchers(),
-            minecraftNativeBridge = NeoForgeMinecraftNativeBridge(),
             platformServer = NeoForgePlatformServer
         )
     }

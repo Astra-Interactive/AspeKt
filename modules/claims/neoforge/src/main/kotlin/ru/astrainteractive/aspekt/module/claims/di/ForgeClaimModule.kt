@@ -20,7 +20,6 @@ class ForgeClaimModule(
         claimsRepository = claimModule.claimsRepository,
         claimErrorMapper = claimModule.claimErrorMapper,
         kyoriKrate = coreModule.kyoriKrate,
-        minecraftNativeBridge = coreModule.minecraftNativeBridge,
         platformServer = coreModule.platformServer
     )
 

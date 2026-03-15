@@ -22,7 +22,6 @@ internal class ClaimCommandModule(
         kyoriKrate = coreModule.kyoriKrate,
         claimsRepository = claimsRepository,
         claimErrorMapper = claimErrorMapper,
-        minecraftNativeBridge = coreModule.minecraftNativeBridge,
         platformServer = coreModule.platformServer
     )
 

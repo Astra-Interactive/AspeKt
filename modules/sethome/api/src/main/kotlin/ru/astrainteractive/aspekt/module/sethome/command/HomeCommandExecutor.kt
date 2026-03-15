@@ -6,7 +6,6 @@ import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
-import ru.astrainteractive.astralibs.server.MinecraftNativeBridge
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 import ru.astrainteractive.klibs.kstorage.util.save
@@ -16,9 +15,7 @@ class HomeCommandExecutor(
     private val scope: CoroutineScope,
     translationKrate: CachedKrate<PluginTranslation>,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
-    minecraftNativeBridge: MinecraftNativeBridge
-) : MinecraftNativeBridge by minecraftNativeBridge,
-    KyoriComponentSerializer by kyoriKrate.unwrap() {
+) : KyoriComponentSerializer by kyoriKrate.unwrap() {
     private val translation by translationKrate
     fun execute(input: HomeCommand) {
         when (input) {
@@ -29,12 +26,12 @@ class HomeCommandExecutor(
                         .getValue()
                         .firstOrNull { home -> home.name == input.homeName }
                     if (home == null) {
-                        input.playerData.asAudience().sendMessage(translation.homes.homeNotFound.component)
+                        input.playerData.sendMessage(translation.homes.homeNotFound.component)
                         return@launch
                     }
                     krate.save { homes -> homes.filter { home.name != input.homeName } }
 
-                    input.playerData.asAudience().sendMessage(translation.homes.homeDeleted.component)
+                    input.playerData.sendMessage(translation.homes.homeDeleted.component)
                 }
             }
 
@@ -43,7 +40,7 @@ class HomeCommandExecutor(
                 scope.launch {
                     krate.save { homes -> homes.plus(input.playerHome) }
 
-                    input.playerData.asAudience().sendMessage(translation.homes.homeCreated.component)
+                    input.playerData.sendMessage(translation.homes.homeCreated.component)
                 }
             }
 
@@ -54,13 +51,11 @@ class HomeCommandExecutor(
                         .getValue()
                         .firstOrNull { home -> home.name == input.homeName }
                     if (home == null) {
-                        input.playerData.asAudience().sendMessage(translation.homes.homeNotFound.component)
+                        input.playerData.sendMessage(translation.homes.homeNotFound.component)
                         return@launch
                     }
-                    input.playerData
-                        .asTeleportable()
-                        .teleport(home.location)
-                    input.playerData.asAudience().sendMessage(translation.homes.teleporting.component)
+                    input.playerData.teleport(home.location)
+                    input.playerData.sendMessage(translation.homes.teleporting.component)
                 }
             }
         }

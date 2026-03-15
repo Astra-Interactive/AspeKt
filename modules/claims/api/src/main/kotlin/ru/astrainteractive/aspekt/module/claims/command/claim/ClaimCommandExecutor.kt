@@ -12,8 +12,7 @@ import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
-import ru.astrainteractive.astralibs.server.MinecraftNativeBridge
-import ru.astrainteractive.astralibs.server.PlatformServer
+import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
@@ -28,10 +27,8 @@ class ClaimCommandExecutor(
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val claimsRepository: ClaimsRepository,
     private val claimErrorMapper: ClaimErrorMapper,
-    minecraftNativeBridge: MinecraftNativeBridge,
     private val platformServer: PlatformServer
-) : MinecraftNativeBridge by minecraftNativeBridge,
-    KyoriComponentSerializer by kyoriKrate.unwrap() {
+) : KyoriComponentSerializer by kyoriKrate.unwrap() {
     private val translation by translationKrate
 
     private suspend fun showMap(
@@ -44,14 +41,12 @@ class ClaimCommandExecutor(
         result.onSuccess { claims ->
             platformServer
                 .findOnlinePlayer(claimPlayer.uuid)
-                ?.asAudience()
                 ?.sendMessage(translation.claim.blockMap.component)
             claims.forEach { claim ->
                 val desc = claim.joinToString("") { if (it) "&#1cba56☒" else "&#c91e1e☒" }
                     .let(StringDesc::Raw)
                 platformServer
                     .findOnlinePlayer(claimPlayer.uuid)
-                    ?.asAudience()
                     ?.sendMessage(desc.component)
             }
         }
@@ -59,7 +54,6 @@ class ClaimCommandExecutor(
             val message = claimErrorMapper.toStringDesc(it)
             platformServer
                 .findOnlinePlayer(claimPlayer.uuid)
-                ?.asAudience()
                 ?.sendMessage(message.component)
         }
     }
@@ -74,14 +68,12 @@ class ClaimCommandExecutor(
         result.onSuccess {
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
-                ?.asAudience()
                 ?.sendMessage(translation.claim.chunkFlagChanged.component)
         }
         result.onFailure {
             val message = claimErrorMapper.toStringDesc(it)
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
-                ?.asAudience()
                 ?.sendMessage(message.component)
         }
     }
@@ -91,14 +83,12 @@ class ClaimCommandExecutor(
         result.onSuccess {
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
-                ?.asAudience()
                 ?.sendMessage(translation.claim.chunkClaimed.component)
         }
         result.onFailure {
             val message = claimErrorMapper.toStringDesc(it)
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
-                ?.asAudience()
                 ?.sendMessage(message.component)
         }
     }
@@ -108,14 +98,12 @@ class ClaimCommandExecutor(
         result.onSuccess {
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
-                ?.asAudience()
                 ?.sendMessage(translation.claim.chunkUnClaimed.component)
         }
         result.onFailure {
             val message = claimErrorMapper.toStringDesc(it)
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
-                ?.asAudience()
                 ?.sendMessage(message.component)
         }
     }
@@ -125,7 +113,6 @@ class ClaimCommandExecutor(
         if (input.member in krate.cachedStateFlow.value.members) {
             platformServer
                 .findOnlinePlayer(input.owner.uuid)
-                ?.asAudience()
                 ?.sendMessage(translation.claim.alreadyMember.component)
             return
         }
@@ -134,7 +121,6 @@ class ClaimCommandExecutor(
         }
         platformServer
             .findOnlinePlayer(input.owner.uuid)
-            ?.asAudience()
             ?.sendMessage(translation.claim.memberAdded.component)
     }
 
@@ -143,7 +129,6 @@ class ClaimCommandExecutor(
         if (input.member !in krate.cachedStateFlow.value.members) {
             platformServer
                 .findOnlinePlayer(input.owner.uuid)
-                ?.asAudience()
                 ?.sendMessage(translation.claim.notMember.component)
             return
         }
@@ -152,7 +137,6 @@ class ClaimCommandExecutor(
         }
         platformServer
             .findOnlinePlayer(input.owner.uuid)
-            ?.asAudience()
             ?.sendMessage(translation.claim.memberRemoved.component)
     }
 

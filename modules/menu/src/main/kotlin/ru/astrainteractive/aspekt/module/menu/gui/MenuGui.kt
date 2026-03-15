@@ -24,7 +24,7 @@ import ru.astrainteractive.astralibs.menu.slot.InventorySlot
 import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setIndex
 import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setItemStack
 import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setOnClickListener
-import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
+import ru.astrainteractive.astralibs.server.permission.asKPermissible
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
@@ -158,7 +158,7 @@ internal class MenuGui(
                 .setOnClickListener {
                     val permission = menuItem.permission?.let(::PluginNamedPermission)
 
-                    val hasPermission = permission?.let(playerHolder.player.toPermissible()::hasPermission) ?: true
+                    val hasPermission = permission?.let(playerHolder.player.asKPermissible()::hasPermission) ?: true
                     if (!hasPermission) {
                         translation.general.noPermission
                             .let(kyoriComponentSerializer::toComponent)

@@ -17,7 +17,6 @@ class RtpModule(
         dispatchers = coreModule.dispatchers,
         translationKrate = coreModule.translation,
         kyoriKrate = coreModule.kyoriKrate,
-        minecraftNativeBridge = coreModule.minecraftNativeBridge
     )
 
     private val commandModule = RtpCommandModule(

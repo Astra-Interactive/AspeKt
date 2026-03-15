@@ -73,12 +73,12 @@ class ForgeAuthEvent(
     val playerMoveEvent = playerMoveFlowEvent()
         .filter { event -> authorizedApi.getAuthState(event.player.uuid) !is AuthorizedApi.AuthState.Authorized }
         .onEach { event ->
-            if (event.newLocation.dist(event.oldLocation) > 0.001) {
+            if (event.newKLocation.dist(event.oldKLocation) > 0.001) {
                 processPlayerEvent(event.player)
                 event.player.teleportTo(
-                    event.oldLocation.x,
-                    event.oldLocation.y,
-                    event.oldLocation.z
+                    event.oldKLocation.x,
+                    event.oldKLocation.y,
+                    event.oldKLocation.z
                 )
             }
         }.launchIn(mainScope)

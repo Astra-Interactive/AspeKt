@@ -46,7 +46,7 @@ import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.permission.BukkitPermissibleExt.toPermissible
+import ru.astrainteractive.astralibs.server.permission.asKPermissible
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 
@@ -66,7 +66,7 @@ internal class BukkitClaimEvent(
         player: Player?,
         flag: ChunkFlag
     ) where T : Event, T : Cancellable {
-        if (player?.toPermissible()?.hasPermission(PluginPermission.ADMIN_CLAIM) == true) return
+        if (player?.asKPermissible()?.hasPermission(PluginPermission.ADMIN_CLAIM) == true) return
         if (e.isCancelled) return
         val sharedEvent = BukkitSharedCancellableEvent(e)
         debounce.debounceEvent(retractKey, sharedEvent) {
