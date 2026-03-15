@@ -15,7 +15,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.block.AirBlock
 import net.minecraft.world.level.block.LiquidBlock
 import net.minecraft.world.level.storage.ServerLevelData
-import ru.astrainteractive.astralibs.server.location.Location
+import ru.astrainteractive.astralibs.server.location.KLocation
 import ru.astrainteractive.astralibs.server.util.NeoForgeUtil
 import ru.astrainteractive.astralibs.server.util.getOnlinePlayer
 import ru.astrainteractive.klibs.mikro.core.util.cast
@@ -26,7 +26,7 @@ import kotlin.time.toJavaDuration
 
 class ForgeSafeLocationProvider : SafeLocationProvider {
     private val mutex = Mutex()
-    private val jobMap = HashMap<UUID, Deferred<Location>>()
+    private val jobMap = HashMap<UUID, Deferred<KLocation>>()
 
     private val timeout = CacheBuilder
         .newBuilder()
@@ -49,7 +49,7 @@ class ForgeSafeLocationProvider : SafeLocationProvider {
                         val block = chunk.getBlockState(blockPos).block
                         if (block is LiquidBlock) continue
                         if (block !is AirBlock) continue
-                        val location = Location(
+                        val location = KLocation(
                             x = x.toDouble(),
                             y = y.toDouble(),
                             z = z.toDouble(),
@@ -76,7 +76,7 @@ class ForgeSafeLocationProvider : SafeLocationProvider {
         return hasTimeout
     }
 
-    override suspend fun getLocation(scope: CoroutineScope, uuid: UUID): Location? {
+    override suspend fun getLocation(scope: CoroutineScope, uuid: UUID): KLocation? {
         return mutex.withLock {
             val player = NeoForgeUtil.getOnlinePlayer(uuid) ?: return@withLock null
             val deferred = jobMap.getOrPut(uuid) {

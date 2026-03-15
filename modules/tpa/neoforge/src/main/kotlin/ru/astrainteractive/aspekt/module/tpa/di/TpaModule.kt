@@ -16,7 +16,6 @@ class TpaModule(
         tpaApi = TpaApi(),
         scope = coreModule.ioScope,
         kyoriKrate = coreModule.kyoriKrate,
-        minecraftNativeBridge = coreModule.minecraftNativeBridge
     )
 
     private val commandModule = TpaCommandModule(

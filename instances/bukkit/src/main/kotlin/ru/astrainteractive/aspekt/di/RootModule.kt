@@ -23,15 +23,13 @@ import ru.astrainteractive.aspekt.module.treecapitator.di.TreeCapitatorModule
 import ru.astrainteractive.astralibs.coroutines.DefaultBukkitDispatchers
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.lifecycle.LifecyclePlugin
-import ru.astrainteractive.astralibs.server.BukkitMinecraftNativeBridge
-import ru.astrainteractive.astralibs.server.BukkitPlatformServer
+import ru.astrainteractive.astralibs.server.bridge.BukkitPlatformServer
 
 class RootModule(plugin: LifecyclePlugin) {
     private val coreModule: CoreModule by lazy {
         CoreModule(
             dataFolder = plugin.dataFolder,
             dispatchers = DefaultBukkitDispatchers(plugin),
-            minecraftNativeBridge = BukkitMinecraftNativeBridge(),
             platformServer = BukkitPlatformServer()
         )
     }

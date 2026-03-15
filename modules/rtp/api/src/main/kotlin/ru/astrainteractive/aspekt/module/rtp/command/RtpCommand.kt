@@ -1,8 +1,8 @@
 package ru.astrainteractive.aspekt.module.rtp.command
 
-import ru.astrainteractive.astralibs.server.player.OnlineMinecraftPlayer
+import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 
 class RtpCommand(
-    val player: OnlineMinecraftPlayer,
+    val player: OnlineKPlayer,
     val nextTickTime: Double
 )
