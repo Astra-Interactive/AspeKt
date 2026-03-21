@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.jail.command.di
 
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.jail.command.jail.JailCommandRegistrar
+import ru.astrainteractive.aspekt.module.jail.command.jail.JailLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.jail.controller.JailController
 import ru.astrainteractive.aspekt.module.jail.data.CachedJailApi
 import ru.astrainteractive.aspekt.module.jail.data.JailApi
@@ -19,7 +19,7 @@ internal class JailCommandModule(
     private val jailController: JailController
 ) {
     private val nodes = buildList {
-        JailCommandRegistrar(
+        JailLiteralArgumentBuilder(
             translationKrate = coreModule.translation,
             kyoriKrate = coreModule.kyoriKrate,
             scope = coreModule.ioScope,
@@ -28,7 +28,7 @@ internal class JailCommandModule(
             jailController = jailController,
             multiplatformCommand = coreModule.multiplatformCommand,
             platformServer = coreModule.platformServer
-        ).createNode().run(::add)
+        ).create().run(::add)
     }
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(

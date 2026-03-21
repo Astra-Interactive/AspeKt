@@ -19,7 +19,7 @@ import ru.astrainteractive.astralibs.server.util.toPlain
  * - /tpaccept
  * - /tpadeny
  */
-class TpaCommandRegistrar(
+class TpaLiteralArgumentBuilder(
     private val executor: TpaCommandExecutor,
     private val multiplatformCommand: MultiplatformCommand
 ) {
@@ -97,7 +97,7 @@ class TpaCommandRegistrar(
         }
     }
 
-    fun createNodes() = listOf(
+    fun create() = listOf(
         createTpaNode(),
         createTpaHerNode(),
         createTpaCancelNode(),

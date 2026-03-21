@@ -22,7 +22,7 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
 /**
  * /login <password>
  */
-class LoginCommandRegistrar(
+class LoginLiteralArgumentBuilder(
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<AuthTranslation>,
     private val ioScope: CoroutineScope,
@@ -32,7 +32,7 @@ class LoginCommandRegistrar(
 ) : KyoriComponentSerializer by kyoriKrate.unwrap() {
     private val translation by translationKrate
 
-    fun createNode(): LiteralArgumentBuilder<Any> {
+    fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("login") {
                 argument(

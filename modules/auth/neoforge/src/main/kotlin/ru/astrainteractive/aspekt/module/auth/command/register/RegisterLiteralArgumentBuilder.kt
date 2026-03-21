@@ -21,7 +21,7 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
 /**
  * /register <password> <password_confirm>
  */
-class RegisterCommandRegistrar(
+class RegisterLiteralArgumentBuilder(
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<AuthTranslation>,
     private val ioScope: CoroutineScope,
@@ -31,7 +31,7 @@ class RegisterCommandRegistrar(
 ) : KyoriComponentSerializer by kyoriKrate.unwrap() {
     private val translation by translationKrate
 
-    fun createNode(): LiteralArgumentBuilder<Any> {
+    fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("register") {
                 argument(

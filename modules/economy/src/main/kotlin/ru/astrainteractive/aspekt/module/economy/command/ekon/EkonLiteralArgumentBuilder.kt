@@ -27,7 +27,7 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
  * /ekon set <currency> <player> <amount>
  * /ekon add <currency> <player> <amount>
  */
-internal class EkonCommandRegistrar(
+internal class EkonLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val cachedDao: CachedDao,
@@ -39,7 +39,7 @@ internal class EkonCommandRegistrar(
     private fun currencyNames(): List<String> = cachedDao.getAllCurrencies().map { it.name }
 
     @Suppress("LongMethod")
-    fun createNode(): LiteralArgumentBuilder<Any> {
+    fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("ekon") {
                 runs { ctx ->

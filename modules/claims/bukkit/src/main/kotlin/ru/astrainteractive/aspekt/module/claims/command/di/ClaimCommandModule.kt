@@ -3,8 +3,8 @@ package ru.astrainteractive.aspekt.module.claims.command.di
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecutor
-import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandRegistrar
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimErrorMapper
+import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.server.location.ChunkProvider
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
@@ -28,13 +28,13 @@ internal class ClaimCommandModule(
     )
 
     private val nodes = buildList {
-        ClaimCommandRegistrar(
+        ClaimLiteralArgumentBuilder(
             executor = executor,
             translationKrate = coreModule.translation,
             kyoriKrate = coreModule.kyoriKrate,
             chunkProvider = chunkProvider,
             multiplatformCommand = coreModule.multiplatformCommand
-        ).createNode().run(::add)
+        ).create().run(::add)
     }
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(

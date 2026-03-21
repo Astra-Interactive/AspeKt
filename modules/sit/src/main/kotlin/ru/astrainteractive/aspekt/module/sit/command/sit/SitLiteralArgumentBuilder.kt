@@ -11,11 +11,11 @@ import ru.astrainteractive.klibs.mikro.core.util.cast
  * Sit command registrar. Builds Brigadier node for:
  * /sit
  */
-internal class SitCommandRegistrar(
+internal class SitLiteralArgumentBuilder(
     private val sitController: SitController,
     private val multiplatformCommand: MultiplatformCommand
 ) {
-    fun createNode(): LiteralArgumentBuilder<Any> {
+    fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("sit") {
                 runs { ctx ->

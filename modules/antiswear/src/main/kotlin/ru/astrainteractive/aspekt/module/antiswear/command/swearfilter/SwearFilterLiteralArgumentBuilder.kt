@@ -21,7 +21,7 @@ import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
-internal class SwearFilterCommandRegistrar(
+internal class SwearFilterLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val ioScope: CoroutineScope,
@@ -59,7 +59,7 @@ internal class SwearFilterCommandRegistrar(
         }
     }
 
-    fun createNode(): LiteralArgumentBuilder<Any> {
+    fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("swearfilter") {
                 argument("on_off", StringArgumentType.string()) { onOffArg ->

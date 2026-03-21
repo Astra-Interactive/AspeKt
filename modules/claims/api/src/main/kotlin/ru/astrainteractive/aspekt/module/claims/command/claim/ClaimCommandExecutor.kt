@@ -23,11 +23,11 @@ import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 class ClaimCommandExecutor(
     private val scope: CoroutineScope,
     private val dispatchers: KotlinDispatchers,
-    translationKrate: CachedKrate<PluginTranslation>,
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val claimsRepository: ClaimsRepository,
     private val claimErrorMapper: ClaimErrorMapper,
-    private val platformServer: PlatformServer
+    private val platformServer: PlatformServer,
+    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    translationKrate: CachedKrate<PluginTranslation>,
 ) : KyoriComponentSerializer by kyoriKrate.unwrap() {
     private val translation by translationKrate
 

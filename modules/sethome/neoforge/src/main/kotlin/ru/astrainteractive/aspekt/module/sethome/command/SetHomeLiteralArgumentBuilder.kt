@@ -14,7 +14,7 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
  * - /delhome <home_name>
  * - /home <home_name>
  */
-class SetHomeCommandRegistrar(
+class SetHomeLiteralArgumentBuilder(
     private val homeKrateProvider: HomeKrateProvider,
     private val executor: HomeCommandExecutor,
     private val multiplatformCommand: MultiplatformCommand
@@ -79,7 +79,7 @@ class SetHomeCommandRegistrar(
         }
     }
 
-    fun createNodes() = listOf(
+    fun create() = listOf(
         createSetHomeNode(),
         createDelHomeNode(),
         createHomeNode()

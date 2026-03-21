@@ -25,7 +25,7 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
 /**
  * /unregister <username>
  */
-class UnregisterCommandRegistrar(
+class UnregisterLiteralArgumentBuilder(
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<AuthTranslation>,
     private val ioScope: CoroutineScope,
@@ -36,7 +36,7 @@ class UnregisterCommandRegistrar(
     private val translation by translationKrate
 
     @Suppress("LongMethod")
-    fun createNode(): LiteralArgumentBuilder<Any> {
+    fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("unregister") {
                 argument(

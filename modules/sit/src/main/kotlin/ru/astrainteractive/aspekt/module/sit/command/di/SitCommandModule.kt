@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.sit.command.di
 
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.sit.command.sit.SitCommandRegistrar
+import ru.astrainteractive.aspekt.module.sit.command.sit.SitLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.sit.event.sit.SitController
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
@@ -15,10 +15,10 @@ internal class SitCommandModule(
     private val sitController: SitController,
 ) {
     private val nodes = buildList {
-        SitCommandRegistrar(
+        SitLiteralArgumentBuilder(
             sitController = sitController,
             multiplatformCommand = coreModule.multiplatformCommand,
-        ).createNode().run(::add)
+        ).create().run(::add)
     }
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(

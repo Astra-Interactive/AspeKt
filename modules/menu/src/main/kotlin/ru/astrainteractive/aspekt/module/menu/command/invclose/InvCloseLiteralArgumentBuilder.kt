@@ -14,10 +14,10 @@ import ru.astrainteractive.astralibs.command.api.brigadier.command.Multiplatform
  * - If player provided, closes their inventory.
  * - If no args, does nothing.
  */
-internal class InvCloseCommandRegistrar(
+internal class InvCloseLiteralArgumentBuilder(
     private val multiplatformCommand: MultiplatformCommand
 ) {
-    fun createNode(): LiteralArgumentBuilder<Any> {
+    fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("invclose") {
                 argument("player", StringArgumentType.string()) { playerArg ->

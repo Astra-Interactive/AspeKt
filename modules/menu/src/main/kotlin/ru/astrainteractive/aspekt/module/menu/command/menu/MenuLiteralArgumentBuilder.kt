@@ -17,7 +17,7 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
  * Menu command registrar. Builds Brigadier node for:
  * /menu [menu]
  */
-internal class MenuCommandRegistrar(
+internal class MenuLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val menuRouter: () -> MenuRouter,
@@ -26,7 +26,7 @@ internal class MenuCommandRegistrar(
 ) : KyoriComponentSerializer by kyoriKrate.unwrap() {
     private val translation by translationKrate
 
-    fun createNode(): LiteralArgumentBuilder<Any> {
+    fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("menu") {
                 runs { ctx ->

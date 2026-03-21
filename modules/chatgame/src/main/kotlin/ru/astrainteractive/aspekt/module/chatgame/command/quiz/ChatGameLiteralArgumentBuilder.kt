@@ -28,7 +28,7 @@ import kotlin.random.Random
  * - Rewards money if configured and ends the game
  */
 @Suppress("LongParameterList")
-internal class ChatGameCommandRegistrar(
+internal class ChatGameLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val chatGameStore: ChatGameStore,
@@ -75,7 +75,7 @@ internal class ChatGameCommandRegistrar(
         }
     }
 
-    fun createNode(): LiteralArgumentBuilder<Any> {
+    fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("quiz") {
                 runs { ctx ->

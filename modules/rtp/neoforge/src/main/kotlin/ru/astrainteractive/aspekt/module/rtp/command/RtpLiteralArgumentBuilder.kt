@@ -9,11 +9,11 @@ import ru.astrainteractive.astralibs.server.util.getNextTickTime
  * Forge RTP command registrar. Builds and registers Brigadier node for:
  * /rtp
  */
-class RtpCommandRegistrar(
+class RtpLiteralArgumentBuilder(
     private val executor: RtpCommandExecutor,
     private val multiplatformCommand: MultiplatformCommand
 ) {
-    fun createNode(): LiteralArgumentBuilder<Any> {
+    fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command(alias = "rtp") {
                 runs { ctx ->

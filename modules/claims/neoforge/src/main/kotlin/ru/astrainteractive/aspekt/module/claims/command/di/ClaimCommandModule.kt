@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.claims.command.di
 
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecutor
-import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandRegistrar
+import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.server.location.ChunkProvider
 import ru.astrainteractive.astralibs.command.registrar.NeoForgeCommandRegistrarContext
@@ -19,12 +19,12 @@ class ClaimCommandModule(
     private val chunkProvider: ChunkProvider
 ) {
     private val nodes = buildList {
-        ClaimCommandRegistrar(
+        ClaimLiteralArgumentBuilder(
             claimCommandExecutor = executor,
             claimsRepository = claimsRepository,
             multiplatformCommand = coreModule.multiplatformCommand,
             chunkProvider = chunkProvider
-        ).createNode().run(::add)
+        ).create().run(::add)
     }
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(

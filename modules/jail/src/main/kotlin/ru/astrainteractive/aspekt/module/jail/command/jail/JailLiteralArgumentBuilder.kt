@@ -34,7 +34,7 @@ import java.time.Instant
  * /jail inmate <jail> <player> <time>
  */
 @Suppress("LongParameterList")
-internal class JailCommandRegistrar(
+internal class JailLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val scope: CoroutineScope,
@@ -47,7 +47,7 @@ internal class JailCommandRegistrar(
     private val translation by translationKrate
 
     @Suppress("LongMethod")
-    fun createNode(): LiteralArgumentBuilder<Any> {
+    fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("jail") {
                 literal("list") {

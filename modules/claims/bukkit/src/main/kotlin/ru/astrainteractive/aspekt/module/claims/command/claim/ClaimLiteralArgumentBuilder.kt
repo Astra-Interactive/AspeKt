@@ -27,7 +27,7 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
  * /claim claim
  * /claim unclaim
  */
-internal class ClaimCommandRegistrar(
+internal class ClaimLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val executor: ClaimCommandExecutor,
@@ -37,7 +37,7 @@ internal class ClaimCommandRegistrar(
     private val translation by translationKrate
 
     @Suppress("LongMethod")
-    fun createNode(): LiteralArgumentBuilder<Any> {
+    fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("claim") {
                 // /claim flag <ChunkFlag> <bool>

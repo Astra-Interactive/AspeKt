@@ -27,7 +27,7 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
  * - /claim claim
  * - /claim unclaim
  */
-class ClaimCommandRegistrar(
+class ClaimLiteralArgumentBuilder(
     private val claimCommandExecutor: ClaimCommandExecutor,
     private val claimsRepository: ClaimsRepository,
     private val multiplatformCommand: MultiplatformCommand,
@@ -35,7 +35,7 @@ class ClaimCommandRegistrar(
 ) {
 
     @Suppress("LongMethod")
-    fun createNode(): LiteralArgumentBuilder<Any> {
+    fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("claim") {
                 literal(ClaimCommandArgument.FLAG.value) {
