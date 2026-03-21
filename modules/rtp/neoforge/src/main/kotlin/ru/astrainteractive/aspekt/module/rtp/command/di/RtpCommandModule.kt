@@ -1,8 +1,8 @@
 package ru.astrainteractive.aspekt.module.rtp.command.di
 
-import kotlinx.coroutines.flow.onEach
 import ru.astrainteractive.aspekt.module.rtp.command.RtpCommandExecutor
-import ru.astrainteractive.aspekt.module.rtp.command.RtpCommandRegistrar
+import ru.astrainteractive.aspekt.module.rtp.command.RtpLiteralArgumentBuilder
+import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.registrar.NeoForgeCommandRegistrarContext
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
@@ -11,10 +11,14 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
  */
 class RtpCommandModule(
     private val commandRegistrarContext: NeoForgeCommandRegistrarContext,
-    private val executor: RtpCommandExecutor
+    private val executor: RtpCommandExecutor,
+    private val multiplatformCommand: MultiplatformCommand
 ) {
     private val nodes = buildList {
-        RtpCommandRegistrar(executor).createNode().run(::add)
+        RtpLiteralArgumentBuilder(
+            executor = executor,
+            multiplatformCommand = multiplatformCommand
+        ).create().run(::add)
     }
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(

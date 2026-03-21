@@ -10,11 +10,13 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
+import ru.astrainteractive.astralibs.server.KAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
+import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 internal class EkonCommandExecutor(
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
@@ -27,12 +29,12 @@ internal class EkonCommandExecutor(
 
     private suspend fun addCurrency(input: EkonCommand.Model.Add) {
         val playerCurrency = dao.findPlayerCurrency(
-            playerUuid = input.otherPlayer.uniqueId.toString(),
+            playerUuid = input.otherPlayer.uuid.toString(),
             currencyId = input.currency.id
         ) ?: PlayerCurrency(
             playerModel = PlayerModel(
                 name = input.otherPlayer.name.orEmpty(),
-                uuid = input.otherPlayer.uniqueId.toString()
+                uuid = input.otherPlayer.uuid.toString()
             ),
             balance = 0.0,
             currencyModel = input.currency
@@ -43,8 +45,8 @@ internal class EkonCommandExecutor(
             dao.updatePlayerCurrency(updatedCurrency)
         }.onFailure {
             error { "#execute_Add: ${it.message}" }
-            input.sender.sendMessage(translation.economy.errorTransferMoney.component)
-        }.onSuccess { input.sender.sendMessage(translation.economy.moneyTransferred.component) }
+            input.sender.tryCast<KAudience>()?.sendMessage(translation.economy.errorTransferMoney.component)
+        }.onSuccess { input.sender.tryCast<KAudience>()?.sendMessage(translation.economy.moneyTransferred.component) }
     }
 
     private suspend fun setCurrency(input: EkonCommand.Model.Set) {
@@ -52,7 +54,7 @@ internal class EkonCommandExecutor(
             val updatedCurrency = PlayerCurrency(
                 playerModel = PlayerModel(
                     name = input.otherPlayer.name.orEmpty(),
-                    uuid = input.otherPlayer.uniqueId.toString()
+                    uuid = input.otherPlayer.uuid.toString()
                 ),
                 balance = input.amount,
                 currencyModel = input.currency
@@ -60,16 +62,16 @@ internal class EkonCommandExecutor(
             dao.updatePlayerCurrency(updatedCurrency)
         }.onFailure {
             error { "#execute_Add: ${it.message}" }
-            input.sender.sendMessage(translation.economy.errorTransferMoney.component)
-        }.onSuccess { input.sender.sendMessage(translation.economy.moneyTransferred.component) }
+            input.sender.tryCast<KAudience>()?.sendMessage(translation.economy.errorTransferMoney.component)
+        }.onSuccess { input.sender.tryCast<KAudience>()?.sendMessage(translation.economy.moneyTransferred.component) }
     }
 
     private suspend fun balance(input: EkonCommand.Model.Balance) {
         val amount = dao.findPlayerCurrency(
-            playerUuid = input.otherPlayer.uniqueId.toString(),
+            playerUuid = input.otherPlayer.uuid.toString(),
             currencyId = input.currency.id
         )?.balance ?: 0.0
-        input.sender.sendMessage(translation.economy.playerBalance(amount).component)
+        input.sender.tryCast<KAudience>()?.sendMessage(translation.economy.playerBalance(amount).component)
     }
 
     private suspend fun listCurrencies(input: EkonCommand.Model.ListCurrencies) {
@@ -77,7 +79,7 @@ internal class EkonCommandExecutor(
             .map(CurrencyModel::name)
             .joinToString(",")
 
-        input.sender.sendMessage(translation.economy.currencies(currencies).component)
+        input.sender.tryCast<KAudience>()?.sendMessage(translation.economy.currencies(currencies).component)
     }
 
     private suspend fun topPlayers(input: EkonCommand.Model.Top) {
@@ -87,11 +89,11 @@ internal class EkonCommandExecutor(
             size = 5
         )
         if (top5.isEmpty()) {
-            input.sender.sendMessage(translation.economy.topsEmpty.component)
+            input.sender.tryCast<KAudience>()?.sendMessage(translation.economy.topsEmpty.component)
         } else {
-            input.sender.sendMessage(translation.economy.topsTitle.component)
+            input.sender.tryCast<KAudience>()?.sendMessage(translation.economy.topsTitle.component)
             top5.forEachIndexed { i, topItem ->
-                input.sender.sendMessage(
+                input.sender.tryCast<KAudience>()?.sendMessage(
                     translation.economy.topItem(
                         index = i + 1,
                         name = topItem.playerModel.name,

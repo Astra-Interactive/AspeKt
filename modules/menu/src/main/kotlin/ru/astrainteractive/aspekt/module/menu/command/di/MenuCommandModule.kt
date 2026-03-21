@@ -2,8 +2,8 @@ package ru.astrainteractive.aspekt.module.menu.command.di
 
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.menu.command.invclose.InvCloseCommandRegistrar
-import ru.astrainteractive.aspekt.module.menu.command.menu.MenuCommandRegistrar
+import ru.astrainteractive.aspekt.module.menu.command.invclose.InvCloseLiteralArgumentBuilder
+import ru.astrainteractive.aspekt.module.menu.command.menu.MenuLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
@@ -17,17 +17,17 @@ internal class MenuCommandModule(
     private val menuRouter: () -> MenuRouter,
     private val menuModels: List<MenuModel>
 ) {
-    private val nodes = buildList {
-        MenuCommandRegistrar(
+    private val nodes = listOf(
+        MenuLiteralArgumentBuilder(
             translationKrate = coreModule.translation,
             kyoriKrate = coreModule.kyoriKrate,
             menuRouter = menuRouter,
-            menuModels = menuModels
-        ).createNode().run(::add)
-        InvCloseCommandRegistrar()
-            .createNode()
-            .run(::add)
-    }
+            menuModels = menuModels,
+            multiplatformCommand = coreModule.multiplatformCommand
+        ).create(),
+        InvCloseLiteralArgumentBuilder(coreModule.multiplatformCommand)
+            .create()
+    )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {

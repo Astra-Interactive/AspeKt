@@ -24,7 +24,8 @@ class SitModule(
 
     private val sitCommandModule = SitCommandModule(
         bukkitCoreModule = bukkitCoreModule,
-        sitController = sitController
+        sitController = sitController,
+        coreModule = coreModule
     )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(

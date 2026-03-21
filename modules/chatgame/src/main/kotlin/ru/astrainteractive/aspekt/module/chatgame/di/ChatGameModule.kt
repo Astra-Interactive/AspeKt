@@ -15,7 +15,6 @@ class ChatGameModule(
     coreModule: CoreModule,
     bukkitCoreModule: BukkitCoreModule
 ) {
-
     private val config = ConfigKrateFactory.fileConfigKrate(
         file = coreModule.dataFolder.resolve("chat_game.yml"),
         stringFormat = coreModule.yamlFormat,

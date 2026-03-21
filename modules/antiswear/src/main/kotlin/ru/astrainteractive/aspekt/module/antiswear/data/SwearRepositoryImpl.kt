@@ -2,9 +2,9 @@ package ru.astrainteractive.aspekt.module.antiswear.data
 
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.StringFormat
-import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.module.antiswear.data.krate.AntiSwearKrate
 import ru.astrainteractive.aspekt.module.antiswear.data.model.AntiSwearStorage
+import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.kstorage.suspend.SuspendMutableKrate
 import ru.astrainteractive.klibs.kstorage.util.save
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
@@ -21,30 +21,32 @@ internal class SwearRepositoryImpl(
     private val swearFilterMap = mutableMapOf<UUID, Boolean>()
 
     private fun getAntiSwearKrate(
-        player: Player
+        player: OnlineKPlayer
     ): SuspendMutableKrate<AntiSwearStorage> = AntiSwearKrate(
-        player = player,
+        kPlayer = player,
         stringFormat = tempFileStringFormat,
         folder = folder
     )
 
-    override suspend fun rememberPlayer(player: Player) = withContext(dispatchers.IO) {
-        swearFilterMap[player.uniqueId] = getAntiSwearKrate(player).getValue().isSwearFilterEnabled
+    override suspend fun rememberPlayer(player: OnlineKPlayer) = withContext(dispatchers.IO) {
+        swearFilterMap[player.uuid] = getAntiSwearKrate(player).getValue().isSwearFilterEnabled
     }
 
-    override suspend fun forgetPlayer(player: Player): Unit = withContext(dispatchers.IO) {
-        swearFilterMap.remove(player.uniqueId)
+    override suspend fun forgetPlayer(player: OnlineKPlayer): Unit = withContext(dispatchers.IO) {
+        swearFilterMap.remove(player.uuid)
     }
 
-    override fun isSwearFilterEnabled(player: Player): Boolean {
-        val value = swearFilterMap[player.uniqueId] ?: true
+    override fun isSwearFilterEnabled(player: OnlineKPlayer): Boolean {
+        val value = swearFilterMap[player.uuid] ?: true
         return value
     }
 
-    override suspend fun setSwearFilterEnabled(player: Player, isEnabled: Boolean) = withContext(dispatchers.IO) {
-        swearFilterMap[player.uniqueId] = isEnabled
-        getAntiSwearKrate(player).save { value ->
-            value.copy(isSwearFilterEnabled = isEnabled)
+    override suspend fun setSwearFilterEnabled(player: OnlineKPlayer, isEnabled: Boolean) {
+        return withContext(dispatchers.IO) {
+            swearFilterMap[player.uuid] = isEnabled
+            getAntiSwearKrate(player).save { value ->
+                value.copy(isSwearFilterEnabled = isEnabled)
+            }
         }
     }
 

@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.antiswear.command.di
 
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.antiswear.command.swearfilter.SwearFilterCommandRegistrar
+import ru.astrainteractive.aspekt.module.antiswear.command.swearfilter.SwearFilterLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.antiswear.data.SwearRepository
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
@@ -10,18 +10,20 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
  * Aggregates and registers Brigadier command nodes for AntiSwear module.
  */
 internal class AntiSwearCommandModule(
-    private val coreModule: CoreModule,
-    private val bukkitCoreModule: BukkitCoreModule,
-    private val swearRepository: SwearRepository
+    swearRepository: SwearRepository,
+    coreModule: CoreModule,
+    bukkitCoreModule: BukkitCoreModule,
 ) {
-    private val nodes = buildList {
-        SwearFilterCommandRegistrar(
+    private val nodes = listOf(
+        SwearFilterLiteralArgumentBuilder(
             translationKrate = coreModule.translation,
             kyoriKrate = coreModule.kyoriKrate,
             ioScope = coreModule.ioScope,
-            swearRepository = swearRepository
-        ).createNode().run(::add)
-    }
+            swearRepository = swearRepository,
+            multiplatformCommand = coreModule.multiplatformCommand,
+            platformServer = coreModule.platformServer
+        ).create()
+    )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {

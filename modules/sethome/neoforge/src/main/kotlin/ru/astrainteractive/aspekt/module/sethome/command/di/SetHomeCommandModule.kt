@@ -1,9 +1,9 @@
 package ru.astrainteractive.aspekt.module.sethome.command.di
 
-import kotlinx.coroutines.flow.onEach
 import ru.astrainteractive.aspekt.module.sethome.command.HomeCommandExecutor
-import ru.astrainteractive.aspekt.module.sethome.command.SetHomeCommandRegistrar
+import ru.astrainteractive.aspekt.module.sethome.command.SetHomeLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
+import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.registrar.NeoForgeCommandRegistrarContext
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
@@ -13,13 +13,15 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 class SetHomeCommandModule(
     private val commandRegistrarContext: NeoForgeCommandRegistrarContext,
     private val homeKrateProvider: HomeKrateProvider,
-    private val executor: HomeCommandExecutor
+    private val executor: HomeCommandExecutor,
+    private val multiplatformCommand: MultiplatformCommand
 ) {
     private val nodes = buildList {
-        SetHomeCommandRegistrar(
+        SetHomeLiteralArgumentBuilder(
             homeKrateProvider = homeKrateProvider,
-            executor = executor
-        ).createNodes().run(::addAll)
+            executor = executor,
+            multiplatformCommand = multiplatformCommand
+        ).create().run(::addAll)
     }
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(

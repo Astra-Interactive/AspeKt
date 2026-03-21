@@ -4,6 +4,7 @@ import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.claims.command.di.ClaimCommandModule
 import ru.astrainteractive.aspekt.module.claims.event.BukkitClaimEvent
+import ru.astrainteractive.aspekt.module.claims.server.location.BukkitChunkProvider
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class BukkitClaimModule(
@@ -15,7 +16,8 @@ class BukkitClaimModule(
         coreModule = coreModule,
         bukkitCoreModule = bukkitCoreModule,
         claimsRepository = claimModule.claimsRepository,
-        claimErrorMapper = claimModule.claimErrorMapper
+        claimErrorMapper = claimModule.claimErrorMapper,
+        chunkProvider = BukkitChunkProvider()
     )
 
     private val bukkitClaimEvent = BukkitClaimEvent(

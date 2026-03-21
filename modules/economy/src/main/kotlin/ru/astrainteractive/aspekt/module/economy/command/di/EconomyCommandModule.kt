@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.economy.command.di
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.economy.command.ekon.EkonCommandExecutor
-import ru.astrainteractive.aspekt.module.economy.command.ekon.EkonCommandRegistrar
+import ru.astrainteractive.aspekt.module.economy.command.ekon.EkonLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
@@ -19,12 +19,14 @@ internal class EconomyCommandModule(
     )
 
     private val nodes = buildList {
-        EkonCommandRegistrar(
+        EkonLiteralArgumentBuilder(
             cachedDao = databaseModule.cachedDao,
             executor = executor,
             translationKrate = coreModule.translation,
-            kyoriKrate = coreModule.kyoriKrate
-        ).createNode().run(::add)
+            kyoriKrate = coreModule.kyoriKrate,
+            multiplatformCommand = coreModule.multiplatformCommand,
+            platformServer = coreModule.platformServer
+        ).create().run(::add)
     }
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(

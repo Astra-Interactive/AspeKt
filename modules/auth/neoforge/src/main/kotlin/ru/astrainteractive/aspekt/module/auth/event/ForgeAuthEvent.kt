@@ -22,7 +22,7 @@ import ru.astrainteractive.astralibs.event.playerMoveFlowEvent
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.server.location.dist
-import ru.astrainteractive.astralibs.server.util.asAudience
+import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.astralibs.server.util.toPlain
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
@@ -58,13 +58,13 @@ class ForgeAuthEvent(
             AuthorizedApi.AuthState.Pending,
             AuthorizedApi.AuthState.NotAuthorized -> {
                 player
-                    .asAudience()
+                    .asKAudience()
                     .sendMessage(translation.notAuthorized.component)
             }
 
             AuthorizedApi.AuthState.NotRegistered -> {
                 player
-                    .asAudience()
+                    .asKAudience()
                     .sendMessage(translation.notRegistered.component)
             }
         }

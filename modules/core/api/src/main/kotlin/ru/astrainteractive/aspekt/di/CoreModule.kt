@@ -10,6 +10,7 @@ import kotlinx.serialization.json.Json
 import ru.astrainteractive.aspekt.di.factory.ConfigKrateFactory
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
@@ -25,7 +26,8 @@ import java.io.File
 class CoreModule(
     val dataFolder: File,
     val dispatchers: KotlinDispatchers,
-    val platformServer: PlatformServer
+    val platformServer: PlatformServer,
+    val multiplatformCommand: MultiplatformCommand
 ) {
     // Core
 

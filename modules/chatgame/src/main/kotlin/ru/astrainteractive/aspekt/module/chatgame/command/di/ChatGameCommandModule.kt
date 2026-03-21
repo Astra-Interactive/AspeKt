@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.chatgame.command.di
 
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.chatgame.command.quiz.ChatGameCommandRegistrar
+import ru.astrainteractive.aspekt.module.chatgame.command.quiz.ChatGameLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStore
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
@@ -17,14 +17,15 @@ internal class ChatGameCommandModule(
     private val chatGameConfig: ChatGameConfig
 ) {
     private val nodes = buildList {
-        ChatGameCommandRegistrar(
+        ChatGameLiteralArgumentBuilder(
             chatGameStore = chatGameStore,
             translationKrate = coreModule.translation,
             kyoriKrate = coreModule.kyoriKrate,
             chatGameConfig = chatGameConfig,
             currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory,
-            ioScope = coreModule.ioScope
-        ).createNode().run(::add)
+            ioScope = coreModule.ioScope,
+            multiplatformCommand = coreModule.multiplatformCommand
+        ).create().run(::add)
     }
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(

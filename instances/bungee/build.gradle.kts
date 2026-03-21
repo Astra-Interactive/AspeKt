@@ -10,15 +10,13 @@ plugins {
 }
 
 dependencies {
-    // Kotlin
-    implementation(libs.kotlin.coroutines.core)
-    // Spigot dependencies
     compileOnly(libs.minecraft.bungee)
-    implementation(libs.minecraft.bstats)
-    // AstraLibs
-    implementation(libs.minecraft.astralibs.core)
+
     implementation(libs.klibs.mikro.core)
+    implementation(libs.kotlin.coroutines.core)
     implementation(libs.minecraft.astralibs.command)
+    implementation(libs.minecraft.astralibs.core)
+    implementation(libs.minecraft.bstats)
 }
 val destination = rootProject
     .layout.buildDirectory.asFile.get()

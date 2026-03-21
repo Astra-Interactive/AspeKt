@@ -4,25 +4,22 @@ plugins {
 }
 
 dependencies {
-    // Kotlin
-    implementation(libs.kotlin.coroutines.core)
+    compileOnly(libs.minecraft.kyori.gson)
+    compileOnly(libs.minecraft.kyori.legacy)
+    compileOnly(libs.minecraft.kyori.plain)
 
-    // AstraLibs
-    implementation(libs.minecraft.astralibs.core)
-    implementation(libs.minecraft.astralibs.core.neoforge)
-    implementation(libs.minecraft.astralibs.command)
     implementation(libs.klibs.kstorage)
     implementation(libs.klibs.mikro.core)
-    compileOnly(libs.minecraft.kyori.plain)
-    compileOnly(libs.minecraft.kyori.legacy)
-    compileOnly(libs.minecraft.kyori.gson)
-    // Test
+    implementation(libs.kotlin.coroutines.core)
+    implementation(libs.minecraft.astralibs.command)
+    implementation(libs.minecraft.astralibs.core)
+    implementation(libs.minecraft.astralibs.core.neoforge)
 
-    testImplementation(libs.tests.kotlin.test)
-    // Local
+    implementation(projects.modules.claims.api)
     implementation(projects.modules.core.api)
     implementation(projects.modules.core.neoforge)
-    implementation(projects.modules.claims.api)
+
+    testImplementation(libs.tests.kotlin.test)
 }
 
 dependencies {
