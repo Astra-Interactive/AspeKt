@@ -1,22 +1,24 @@
 package ru.astrainteractive.aspekt.module.rtp.command
 
-import net.minecraft.server.level.ServerPlayer
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.neoforged.neoforge.event.RegisterCommandsEvent
-import ru.astrainteractive.astralibs.command.util.command
-import ru.astrainteractive.astralibs.command.util.runs
+import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.server.util.NeoForgeUtil
-import ru.astrainteractive.astralibs.server.util.asOnlineMinecraftPlayer
 import ru.astrainteractive.astralibs.server.util.getNextTickTime
-import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
-fun RegisterCommandsEvent.rtp(rtpCommandExecutor: RtpCommandExecutor) {
-    command(alias = "rtp") {
-        runs { ctx ->
-            val player = ctx.source.player?.tryCast<ServerPlayer>() ?: return@runs
-            RtpCommand(
-                player = player.asOnlineMinecraftPlayer(),
-                nextTickTime = NeoForgeUtil.getNextTickTime()
-            ).run(rtpCommandExecutor::execute)
+fun RegisterCommandsEvent.rtp(
+    rtpCommandExecutor: RtpCommandExecutor,
+    multiplatformCommand: MultiplatformCommand
+): LiteralArgumentBuilder<Any> {
+    return with(multiplatformCommand) {
+        command(alias = "rtp") {
+            runs { ctx ->
+                val player = ctx.requirePlayer()
+                RtpCommand(
+                    player = player,
+                    nextTickTime = NeoForgeUtil.getNextTickTime()
+                ).run(rtpCommandExecutor::execute)
+            }
         }
-    }.run(dispatcher::register)
+    }
 }

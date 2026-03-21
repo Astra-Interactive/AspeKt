@@ -23,7 +23,8 @@ internal class ChatGameCommandModule(
             kyoriKrate = coreModule.kyoriKrate,
             chatGameConfig = chatGameConfig,
             currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory,
-            ioScope = coreModule.ioScope
+            ioScope = coreModule.ioScope,
+            multiplatformCommand = coreModule.multiplatformCommand
         ).createNode().run(::add)
     }
 

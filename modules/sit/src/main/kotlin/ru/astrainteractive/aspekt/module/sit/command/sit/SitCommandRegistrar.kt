@@ -1,29 +1,33 @@
 package ru.astrainteractive.aspekt.module.sit.command.sit
 
-import com.mojang.brigadier.tree.LiteralCommandNode
-import io.papermc.paper.command.brigadier.CommandSourceStack
-import org.bukkit.entity.Player
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.sit.event.sit.SitController
-import ru.astrainteractive.astralibs.command.api.util.command
-import ru.astrainteractive.astralibs.command.api.util.requirePlayer
-import ru.astrainteractive.astralibs.command.api.util.runs
+import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
+import ru.astrainteractive.astralibs.server.player.BukkitOnlineKPlayer
+import ru.astrainteractive.astralibs.server.util.asBukkitLocation
+import ru.astrainteractive.klibs.mikro.core.util.cast
 
 /**
  * Sit command registrar. Builds Brigadier node for:
  * /sit
  */
 internal class SitCommandRegistrar(
-    private val sitController: SitController
+    private val sitController: SitController,
+    private val multiplatformCommand: MultiplatformCommand
 ) {
-    fun createNode(): LiteralCommandNode<CommandSourceStack> {
-        return command("sit") {
-            runs { ctx ->
-                val player: Player = ctx.requirePlayer()
-                sitController.toggleSitPlayer(
-                    player = player,
-                    locationWithOffset = player.location.add(0.0, -2.0, 0.0)
-                )
+    fun createNode(): LiteralArgumentBuilder<Any> {
+        return with(multiplatformCommand) {
+            command("sit") {
+                runs { ctx ->
+                    val player = ctx.requirePlayer()
+                    sitController.toggleSitPlayer(
+                        player = player.cast<BukkitOnlineKPlayer>().instance,
+                        locationWithOffset = player.getLocation()
+                            .asBukkitLocation()
+                            .add(0.0, -2.0, 0.0)
+                    )
+                }
             }
-        }.build()
+        }
     }
 }

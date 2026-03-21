@@ -6,6 +6,7 @@ import org.bukkit.Chunk
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
+import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 
 internal fun Chunk.asClaimChunk(): ClaimChunk = ClaimChunk(
     x = x,
@@ -17,5 +18,10 @@ internal fun Chunk.asClaimChunk(): ClaimChunk = ClaimChunk(
 
 internal fun Player.asClaimPlayer(): ClaimPlayer = ClaimPlayer(
     uuid = uniqueId,
+    username = name
+)
+
+internal fun OnlineKPlayer.asClaimPlayer(): ClaimPlayer = ClaimPlayer(
+    uuid = uuid,
     username = name
 )

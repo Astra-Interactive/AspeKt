@@ -1,25 +1,20 @@
 package ru.astrainteractive.aspekt.module.chatgame.command.quiz
 
 import com.mojang.brigadier.arguments.StringArgumentType
-import com.mojang.brigadier.tree.LiteralCommandNode
-import io.papermc.paper.command.brigadier.CommandSourceStack
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Mutex
 import org.bukkit.Bukkit
-import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.Reward
 import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStore
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.command.api.util.argument
-import ru.astrainteractive.astralibs.command.api.util.command
-import ru.astrainteractive.astralibs.command.api.util.requireArgument
-import ru.astrainteractive.astralibs.command.api.util.requirePlayer
-import ru.astrainteractive.astralibs.command.api.util.runs
+import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 import ru.astrainteractive.klibs.mikro.core.coroutines.launch
@@ -32,19 +27,21 @@ import kotlin.random.Random
  * - Checks active game, validates answer with mutex to ensure single winner
  * - Rewards money if configured and ends the game
  */
+@Suppress("LongParameterList")
 internal class ChatGameCommandRegistrar(
     translationKrate: CachedKrate<PluginTranslation>,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val chatGameStore: ChatGameStore,
     private val chatGameConfig: ChatGameConfig,
     private val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory,
-    private val ioScope: CoroutineScope
+    private val ioScope: CoroutineScope,
+    private val multiplatformCommand: MultiplatformCommand
 ) {
     private val translation by translationKrate
     private val kyori by kyoriKrate
     private val mutex = Mutex()
 
-    private fun handleAnswer(player: Player, answer: String) {
+    private fun handleAnswer(player: OnlineKPlayer, answer: String) {
         ioScope.launch(mutex) {
             supervisorScope {
                 val chatGame = chatGameStore.state.first() as? ChatGameStore.State.Started
@@ -64,7 +61,7 @@ internal class ChatGameCommandRegistrar(
                                 null -> currencyEconomyProviderFactory.findDefault()
                                 else -> currencyEconomyProviderFactory.findByCurrencyId(currencyId)
                             }
-                            economy?.addMoney(player.uniqueId, amount.toDouble())
+                            economy?.addMoney(player.uuid, amount.toDouble())
                             translation.chatGame.gameEndedMoneyReward(
                                 player.name,
                                 amount
@@ -78,19 +75,21 @@ internal class ChatGameCommandRegistrar(
         }
     }
 
-    fun createNode(): LiteralCommandNode<CommandSourceStack> {
-        return command("quiz") {
-            runs { ctx ->
-                val player: Player = ctx.requirePlayer()
-                handleAnswer(player, "")
-            }
-            argument("answer", StringArgumentType.greedyString()) { answerArg ->
+    fun createNode(): LiteralArgumentBuilder<Any> {
+        return with(multiplatformCommand) {
+            command("quiz") {
                 runs { ctx ->
-                    val player: Player = ctx.requirePlayer()
-                    val answer = ctx.requireArgument(answerArg)
-                    handleAnswer(player, answer)
+                    val player = ctx.requirePlayer()
+                    handleAnswer(player, "")
+                }
+                argument("answer", StringArgumentType.greedyString()) { answerArg ->
+                    runs { ctx ->
+                        val player = ctx.requirePlayer()
+                        val answer = ctx.requireArgument(answerArg)
+                        handleAnswer(player, answer)
+                    }
                 }
             }
-        }.build()
+        }
     }
 }

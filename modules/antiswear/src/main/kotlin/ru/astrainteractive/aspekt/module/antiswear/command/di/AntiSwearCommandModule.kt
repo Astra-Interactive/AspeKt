@@ -12,16 +12,18 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 internal class AntiSwearCommandModule(
     private val coreModule: CoreModule,
     private val bukkitCoreModule: BukkitCoreModule,
-    private val swearRepository: SwearRepository
+    private val swearRepository: SwearRepository,
 ) {
-    private val nodes = buildList {
+    private val nodes = listOf(
         SwearFilterCommandRegistrar(
             translationKrate = coreModule.translation,
             kyoriKrate = coreModule.kyoriKrate,
             ioScope = coreModule.ioScope,
-            swearRepository = swearRepository
-        ).createNode().run(::add)
-    }
+            swearRepository = swearRepository,
+            multiplatformCommand = TODO(),
+            platformServer = TODO()
+        ).createNode()
+    )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {

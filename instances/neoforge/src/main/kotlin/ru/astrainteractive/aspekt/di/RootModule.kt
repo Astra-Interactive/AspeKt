@@ -6,10 +6,12 @@ import net.neoforged.fml.loading.FMLPaths
 import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.di.ForgeAuthModule
 import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
-import ru.astrainteractive.aspekt.module.claims.di.ForgeClaimModule
+import ru.astrainteractive.aspekt.module.claims.di.NeoForgeClaimModule
 import ru.astrainteractive.aspekt.module.rtp.di.RtpModule
 import ru.astrainteractive.aspekt.module.sethome.di.HomesModule
 import ru.astrainteractive.aspekt.module.tpa.di.TpaModule
+import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
+import ru.astrainteractive.astralibs.command.brigadier.command.NeoForgeMultiplatformCommands
 import ru.astrainteractive.astralibs.command.registrar.NeoForgeCommandRegistrarContext
 import ru.astrainteractive.astralibs.coroutines.NeoForgeDispatchers
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
@@ -32,7 +34,8 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
         CoreModule(
             dataFolder = dataFolder,
             dispatchers = NeoForgeDispatchers(),
-            platformServer = NeoForgePlatformServer
+            platformServer = NeoForgePlatformServer,
+            multiplatformCommand = MultiplatformCommand(NeoForgeMultiplatformCommands())
         )
     }
 
@@ -68,8 +71,8 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
         )
     }
 
-    val forgeClaimModule by lazy {
-        ForgeClaimModule(
+    val neoForgeClaimModule by lazy {
+        NeoForgeClaimModule(
             commandRegistrarContext = commandRegistrarContext,
             coreModule = coreModule,
             claimModule = claimModule
@@ -102,7 +105,7 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
         get() = listOf(
             coreModule.lifecycle,
             forgeAuthModule.lifecycle,
-            forgeClaimModule.lifecycle,
+            neoForgeClaimModule.lifecycle,
             homesModule.lifecycle,
             tpaModule.lifecycle,
             rtpModule.lifecycle

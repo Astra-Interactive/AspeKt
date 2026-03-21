@@ -20,6 +20,8 @@ import ru.astrainteractive.aspekt.module.newbee.di.NewBeeModule
 import ru.astrainteractive.aspekt.module.restrictions.di.RestrictionModule
 import ru.astrainteractive.aspekt.module.sit.di.SitModule
 import ru.astrainteractive.aspekt.module.treecapitator.di.TreeCapitatorModule
+import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
+import ru.astrainteractive.astralibs.command.api.brigadier.command.PaperMultiplatformCommands
 import ru.astrainteractive.astralibs.coroutines.DefaultBukkitDispatchers
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.lifecycle.LifecyclePlugin
@@ -30,7 +32,8 @@ class RootModule(plugin: LifecyclePlugin) {
         CoreModule(
             dataFolder = plugin.dataFolder,
             dispatchers = DefaultBukkitDispatchers(plugin),
-            platformServer = BukkitPlatformServer()
+            platformServer = BukkitPlatformServer(),
+            multiplatformCommand = MultiplatformCommand(PaperMultiplatformCommands())
         )
     }
     private val bukkitCoreModule: BukkitCoreModule = BukkitCoreModule(
@@ -63,7 +66,10 @@ class RootModule(plugin: LifecyclePlugin) {
         AutoBroadcastModule(coreModule)
     }
     private val commonCommandModule: CommonCommandsModule by lazy {
-        CommonCommandsModule(coreModule, bukkitCoreModule)
+        CommonCommandsModule(
+            bukkitCoreModule = bukkitCoreModule,
+            coreModule = coreModule
+        )
     }
     private val moneyDropModule: MoneyDropModule by lazy {
         MoneyDropModule(coreModule, bukkitCoreModule)

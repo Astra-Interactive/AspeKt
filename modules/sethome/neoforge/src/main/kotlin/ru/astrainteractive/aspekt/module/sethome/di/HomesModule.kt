@@ -29,7 +29,8 @@ class HomesModule(
     private val commandModule = SetHomeCommandModule(
         commandRegistrarContext = commandRegistrarContext,
         homeKrateProvider = homeKrateProvider,
-        executor = homeCommandExecutor
+        executor = homeCommandExecutor,
+        multiplatformCommand = coreModule.multiplatformCommand
     )
 
     val lifecycle = Lifecycle.Lambda(

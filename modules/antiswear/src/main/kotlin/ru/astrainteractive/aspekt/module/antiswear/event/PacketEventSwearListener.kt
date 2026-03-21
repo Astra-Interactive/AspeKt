@@ -10,6 +10,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSy
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.module.antiswear.data.SwearRepository
 import ru.astrainteractive.aspekt.module.antiswear.util.SwearRuRegex
+import ru.astrainteractive.astralibs.server.util.asOnlineMinecraftPlayer
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
@@ -21,7 +22,7 @@ internal class PacketEventSwearListener(
     override fun onPacketReceive(event: PacketReceiveEvent?) {
         val uuid = event?.user?.uuid ?: return
         val player = Bukkit.getPlayer(uuid) ?: return
-        if (!swearRepository.isSwearFilterEnabled(player)) return
+        if (!swearRepository.isSwearFilterEnabled(player.asOnlineMinecraftPlayer())) return
 
         if (event.packetType == PacketType.Play.Client.CHAT_MESSAGE) {
             val wrapper = WrapperPlayClientChatMessage(event)
@@ -35,7 +36,7 @@ internal class PacketEventSwearListener(
     override fun onPacketSend(event: PacketSendEvent?) {
         val uuid = event?.user?.uuid ?: return
         val player = Bukkit.getPlayer(uuid) ?: return
-        if (!swearRepository.isSwearFilterEnabled(player)) return
+        if (!swearRepository.isSwearFilterEnabled(player.asOnlineMinecraftPlayer())) return
 
         when (event.packetType) {
             PacketType.Play.Server.SYSTEM_CHAT_MESSAGE -> {

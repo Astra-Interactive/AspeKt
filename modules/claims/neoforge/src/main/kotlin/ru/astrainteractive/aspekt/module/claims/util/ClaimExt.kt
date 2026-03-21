@@ -6,6 +6,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.storage.ServerLevelData
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
+import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.astralibs.server.util.toPlain
 
 internal fun Player.toClaimPlayer(): ClaimPlayer {
@@ -18,6 +19,13 @@ internal fun Player.toClaimPlayer(): ClaimPlayer {
 internal fun GameProfile.toClaimPlayer(): ClaimPlayer {
     return ClaimPlayer(
         uuid = id,
+        username = name
+    )
+}
+
+internal fun OnlineKPlayer.toClaimPlayer(): ClaimPlayer {
+    return ClaimPlayer(
+        uuid = uuid,
         username = name
     )
 }

@@ -6,13 +6,15 @@ import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecut
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandRegistrar
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimErrorMapper
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
+import ru.astrainteractive.aspekt.module.claims.server.location.ChunkProvider
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 internal class ClaimCommandModule(
     private val coreModule: CoreModule,
     private val bukkitCoreModule: BukkitCoreModule,
     private val claimsRepository: ClaimsRepository,
-    private val claimErrorMapper: ClaimErrorMapper
+    private val claimErrorMapper: ClaimErrorMapper,
+    private val chunkProvider: ChunkProvider
 ) {
 
     private val executor = ClaimCommandExecutor(
@@ -30,6 +32,8 @@ internal class ClaimCommandModule(
             executor = executor,
             translationKrate = coreModule.translation,
             kyoriKrate = coreModule.kyoriKrate,
+            chunkProvider = chunkProvider,
+            multiplatformCommand = coreModule.multiplatformCommand
         ).createNode().run(::add)
     }
 

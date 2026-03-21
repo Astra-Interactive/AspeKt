@@ -23,7 +23,9 @@ internal class EconomyCommandModule(
             cachedDao = databaseModule.cachedDao,
             executor = executor,
             translationKrate = coreModule.translation,
-            kyoriKrate = coreModule.kyoriKrate
+            kyoriKrate = coreModule.kyoriKrate,
+            multiplatformCommand = coreModule.multiplatformCommand,
+            platformServer = coreModule.platformServer
         ).createNode().run(::add)
     }
 

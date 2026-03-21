@@ -17,17 +17,17 @@ internal class MenuCommandModule(
     private val menuRouter: () -> MenuRouter,
     private val menuModels: List<MenuModel>
 ) {
-    private val nodes = buildList {
+    private val nodes = listOf(
         MenuCommandRegistrar(
             translationKrate = coreModule.translation,
             kyoriKrate = coreModule.kyoriKrate,
             menuRouter = menuRouter,
-            menuModels = menuModels
-        ).createNode().run(::add)
-        InvCloseCommandRegistrar()
+            menuModels = menuModels,
+            multiplatformCommand = coreModule.multiplatformCommand
+        ).createNode(),
+        InvCloseCommandRegistrar(coreModule.multiplatformCommand)
             .createNode()
-            .run(::add)
-    }
+    )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {

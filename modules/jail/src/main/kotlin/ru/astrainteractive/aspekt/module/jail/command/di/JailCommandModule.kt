@@ -25,7 +25,9 @@ internal class JailCommandModule(
             scope = coreModule.ioScope,
             jailApi = jailApi,
             cachedJailApi = cachedJailApi,
-            jailController = jailController
+            jailController = jailController,
+            multiplatformCommand = coreModule.multiplatformCommand,
+            platformServer = coreModule.platformServer
         ).createNode().run(::add)
     }
 

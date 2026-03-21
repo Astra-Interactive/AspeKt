@@ -20,7 +20,8 @@ class TpaModule(
 
     private val commandModule = TpaCommandModule(
         commandRegistrarContext = commandRegistrarContext,
-        executor = tpaCommandExecutor
+        executor = tpaCommandExecutor,
+        multiplatformCommand = coreModule.multiplatformCommand
     )
 
     val lifecycle = Lifecycle.Lambda(

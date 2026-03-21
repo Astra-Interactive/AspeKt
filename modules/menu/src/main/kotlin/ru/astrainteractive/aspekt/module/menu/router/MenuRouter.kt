@@ -1,8 +1,8 @@
 package ru.astrainteractive.aspekt.module.menu.router
 
-import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
+import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 
 internal interface MenuRouter {
-    fun openMenu(player: Player, menuModel: MenuModel)
+    fun openMenu(player: OnlineKPlayer, menuModel: MenuModel)
 }

@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.Plugin
 import ru.astrainteractive.aspekt.module.antiswear.data.SwearRepository
 import ru.astrainteractive.astralibs.event.EventListener
+import ru.astrainteractive.astralibs.server.util.asOnlineMinecraftPlayer
 
 internal class AntiSwearEventListener(
     private val swearRepository: SwearRepository,
@@ -20,20 +21,20 @@ internal class AntiSwearEventListener(
     @EventHandler
     fun onJoin(e: PlayerJoinEvent) {
         scope.launch {
-            swearRepository.rememberPlayer(e.player)
+            swearRepository.rememberPlayer(e.player.asOnlineMinecraftPlayer())
         }
     }
 
     @EventHandler
     fun onLeave(e: PlayerQuitEvent) {
         scope.launch {
-            swearRepository.forgetPlayer(e.player)
+            swearRepository.forgetPlayer(e.player.asOnlineMinecraftPlayer())
         }
     }
 
     private fun preHeatPlayers() = scope.launch {
         Bukkit.getOnlinePlayers().map { player ->
-            async { swearRepository.rememberPlayer(player) }
+            async { swearRepository.rememberPlayer(player.asOnlineMinecraftPlayer()) }
         }.awaitAll()
     }
 

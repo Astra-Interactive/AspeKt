@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import ru.astrainteractive.gradleplugin.model.Developer
 import ru.astrainteractive.gradleplugin.property.extension.ModelPropertyValueExt.requireJinfo
 import ru.astrainteractive.gradleplugin.property.extension.ModelPropertyValueExt.requireProjectInfo
 
@@ -45,12 +46,34 @@ dependencies {
     shadow(projects.modules.rtp.neoforge)
 }
 
-val destination = rootDir
-    .resolve("build")
-    .resolve("forge")
-    .resolve("mods")
-    .takeIf(File::exists)
-    ?: File(rootDir, "jars")
+tasks.named<ProcessResources>("processResources") {
+    filteringCharset = "UTF-8"
+    duplicatesStrategy = DuplicatesStrategy.WARN
+    val sourceSets = project.extensions.getByName("sourceSets") as SourceSetContainer
+    val resDirs = sourceSets
+        .map(SourceSet::getResources)
+        .map(SourceDirectorySet::getSrcDirs)
+    from(resDirs) {
+        include("META-INF/neoforge.mods.toml")
+        expand(
+            mapOf(
+                "minecraft_version" to libs.versions.minecraft.mojang.version.get(),
+                "minecraft_version_range" to listOf(libs.versions.minecraft.mojang.version.get())
+                    .joinToString(","),
+                "neo_version" to "neo_version",
+                "neo_version_range" to "[${libs.versions.minecraft.neoforgeversion.get()},)",
+                "mod_id" to requireProjectInfo.name.lowercase(),
+                "mod_name" to requireProjectInfo.name,
+                "mod_license" to "mod_license",
+                "mod_version" to requireProjectInfo.versionString,
+                "mod_authors" to requireProjectInfo.developersList
+                    .map(Developer::id)
+                    .joinToString(","),
+                "mod_description" to requireProjectInfo.description
+            )
+        )
+    }
+}
 
 val shadowJar by tasks.getting(ShadowJar::class) {
     mergeServiceFiles()
@@ -71,6 +94,7 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         // Dependencies
         exclude(dependency("org.jetbrains:annotations"))
         // Root
+        exclude("kotlin/**") // use kotlin-neoforge
         exclude("_COROUTINE/**")
         exclude("DebugProbesKt.bin")
         exclude("jetty-dir.css")
@@ -105,12 +129,14 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         exclude("META-INF/com.android.tools/**")
         exclude("META-INF/gradle-plugins/**")
         exclude("META-INF/imports/**")
+        exclude("META-INF/kotlin-reflection.kotlin_module")
         exclude("META-INF/license/**")
         exclude("META-INF/maven/**")
         exclude("META-INF/native-image/**")
         exclude("META-INF/native/**")
         exclude("META-INF/proguard/**")
         exclude("META-INF/rewrite/**")
+        exclude("META-INF/services/kotlin.reflect.**")
         exclude("META-INF/versions/**")
     }
 
@@ -138,11 +164,12 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         "okio",
         "org.apache",
         "org.h2",
-        "org.sqlite",
+        "org.jetbrains.exposed",
         "org.jetbrains.kotlin",
         "org.jetbrains.kotlinx",
         "org.json",
         "org.slf4j",
+        "org.sqlite",
         "org.telegram",
         "org.w3c.css",
         "org.w3c.dom",

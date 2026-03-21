@@ -1,11 +1,11 @@
 package ru.astrainteractive.aspekt.module.antiswear.data
 
-import org.bukkit.entity.Player
+import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 
 internal interface SwearRepository {
-    suspend fun rememberPlayer(player: Player)
-    suspend fun forgetPlayer(player: Player)
-    suspend fun setSwearFilterEnabled(player: Player, isEnabled: Boolean)
-    fun isSwearFilterEnabled(player: Player): Boolean
+    suspend fun rememberPlayer(player: OnlineKPlayer)
+    suspend fun forgetPlayer(player: OnlineKPlayer)
+    suspend fun setSwearFilterEnabled(player: OnlineKPlayer, isEnabled: Boolean)
+    fun isSwearFilterEnabled(player: OnlineKPlayer): Boolean
     fun clear()
 }

@@ -1,30 +1,28 @@
 package ru.astrainteractive.aspekt.module.rtp.command
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import net.minecraft.commands.CommandSourceStack
-import net.minecraft.server.level.ServerPlayer
-import ru.astrainteractive.astralibs.command.util.command
-import ru.astrainteractive.astralibs.command.util.runs
+import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.server.util.NeoForgeUtil
-import ru.astrainteractive.astralibs.server.util.asOnlineMinecraftPlayer
 import ru.astrainteractive.astralibs.server.util.getNextTickTime
-import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 /**
  * Forge RTP command registrar. Builds and registers Brigadier node for:
  * /rtp
  */
 class RtpCommandRegistrar(
-    private val executor: RtpCommandExecutor
+    private val executor: RtpCommandExecutor,
+    private val multiplatformCommand: MultiplatformCommand
 ) {
-    fun createNode(): LiteralArgumentBuilder<CommandSourceStack> {
-        return command(alias = "rtp") {
-            runs { ctx ->
-                val player = ctx.source.player?.tryCast<ServerPlayer>() ?: return@runs
-                RtpCommand(
-                    player = player.asOnlineMinecraftPlayer(),
-                    nextTickTime = NeoForgeUtil.getNextTickTime()
-                ).run(executor::execute)
+    fun createNode(): LiteralArgumentBuilder<Any> {
+        return with(multiplatformCommand) {
+            command(alias = "rtp") {
+                runs { ctx ->
+                    val player = ctx.requirePlayer()
+                    RtpCommand(
+                        player = player,
+                        nextTickTime = NeoForgeUtil.getNextTickTime()
+                    ).run(executor::execute)
+                }
             }
         }
     }

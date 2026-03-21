@@ -27,21 +27,24 @@ class AuthCommandModule(
             authDao = authDao,
             authorizedApi = authorizedApi,
             kyoriKrate = coreModule.kyoriKrate,
-            translationKrate = authApiModule.translationKrate
+            translationKrate = authApiModule.translationKrate,
+            multiplatformCommand = coreModule.multiplatformCommand
         ).createNode().run(::add)
         RegisterCommandRegistrar(
             ioScope = coreModule.ioScope,
             authDao = authDao,
             authorizedApi = authorizedApi,
             kyoriKrate = coreModule.kyoriKrate,
-            translationKrate = authApiModule.translationKrate
+            translationKrate = authApiModule.translationKrate,
+            multiplatformCommand = coreModule.multiplatformCommand
         ).createNode().run(::add)
         UnregisterCommandRegistrar(
             ioScope = coreModule.ioScope,
             authDao = authDao,
             authorizedApi = authorizedApi,
             kyoriKrate = coreModule.kyoriKrate,
-            translationKrate = authApiModule.translationKrate
+            translationKrate = authApiModule.translationKrate,
+            multiplatformCommand = coreModule.multiplatformCommand
         ).createNode().run(::add)
     }
 

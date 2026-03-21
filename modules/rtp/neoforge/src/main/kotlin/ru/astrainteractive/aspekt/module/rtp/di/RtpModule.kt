@@ -21,7 +21,8 @@ class RtpModule(
 
     private val commandModule = RtpCommandModule(
         commandRegistrarContext = commandRegistrarContext,
-        executor = executor
+        executor = executor,
+        multiplatformCommand = coreModule.multiplatformCommand
     )
 
     val lifecycle = Lifecycle.Lambda(

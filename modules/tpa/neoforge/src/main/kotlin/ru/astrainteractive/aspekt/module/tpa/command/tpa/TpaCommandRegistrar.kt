@@ -2,14 +2,9 @@ package ru.astrainteractive.aspekt.module.tpa.command.tpa
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import net.minecraft.commands.CommandSourceStack
 import ru.astrainteractive.aspekt.module.tpa.command.TpaCommand
 import ru.astrainteractive.aspekt.module.tpa.command.TpaCommandExecutor
-import ru.astrainteractive.astralibs.command.util.argument
-import ru.astrainteractive.astralibs.command.util.command
-import ru.astrainteractive.astralibs.command.util.hints
-import ru.astrainteractive.astralibs.command.util.requireArgument
-import ru.astrainteractive.astralibs.command.util.runs
+import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.server.util.NeoForgeUtil
 import ru.astrainteractive.astralibs.server.util.asOnlineMinecraftPlayer
 import ru.astrainteractive.astralibs.server.util.getOnlinePlayer
@@ -25,78 +20,79 @@ import ru.astrainteractive.astralibs.server.util.toPlain
  * - /tpadeny
  */
 class TpaCommandRegistrar(
-    private val executor: TpaCommandExecutor
+    private val executor: TpaCommandExecutor,
+    private val multiplatformCommand: MultiplatformCommand
 ) {
-    private fun createTpaNode(): LiteralArgumentBuilder<CommandSourceStack> {
-        return command("tpa") {
-            argument("player", StringArgumentType.string()) { playerArg ->
-                hints { NeoForgeUtil.getOnlinePlayers().map { it.name.toPlain() } }
+    private fun createTpaNode(): LiteralArgumentBuilder<Any> {
+        return with(multiplatformCommand) {
+            command("tpa") {
+                argument("player", StringArgumentType.string()) { playerArg ->
+                    hints { NeoForgeUtil.getOnlinePlayers().map { it.name.toPlain() } }
+                    runs { ctx ->
+                        val targetPlayerName = ctx.requireArgument(playerArg)
+                        TpaCommand.TpaTo(
+                            executorPlayer = ctx.requirePlayer(),
+                            targetPlayer = NeoForgeUtil.getOnlinePlayer(targetPlayerName)
+                                ?.asOnlineMinecraftPlayer()
+                                ?: return@runs
+                        ).run(executor::execute)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun createTpaHerNode(): LiteralArgumentBuilder<Any> {
+        return with(multiplatformCommand) {
+            command("tpahere") {
+                argument("player", StringArgumentType.string()) { playerArg ->
+                    hints { NeoForgeUtil.getOnlinePlayers().map { it.name.toPlain() } }
+                    runs { ctx ->
+                        val targetPlayerName = ctx.requireArgument(playerArg)
+                        TpaCommand.TpaHere(
+                            executorPlayer = ctx.requirePlayer(),
+                            targetPlayer = NeoForgeUtil.getOnlinePlayer(targetPlayerName)
+                                ?.asOnlineMinecraftPlayer()
+                                ?: return@runs
+                        ).run(executor::execute)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun createTpaCancelNode(): LiteralArgumentBuilder<Any> {
+        return with(multiplatformCommand) {
+            command("tpacancel") {
                 runs { ctx ->
-                    val targetPlayerName = ctx.requireArgument(playerArg)
-                    TpaCommand.TpaTo(
-                        executorPlayer = ctx.source.player
-                            ?.asOnlineMinecraftPlayer()
-                            ?: return@runs,
-                        targetPlayer = NeoForgeUtil.getOnlinePlayer(targetPlayerName)
-                            ?.asOnlineMinecraftPlayer()
-                            ?: return@runs
+                    TpaCommand.TpaCancel(
+                        executorPlayer = ctx.requirePlayer(),
                     ).run(executor::execute)
                 }
             }
         }
     }
 
-    private fun createTpaHerNode(): LiteralArgumentBuilder<CommandSourceStack> {
-        return command("tpahere") {
-            argument("player", StringArgumentType.string()) { playerArg ->
-                hints { NeoForgeUtil.getOnlinePlayers().map { it.name.toPlain() } }
+    private fun createTpaAcceptNode(): LiteralArgumentBuilder<Any> {
+        return with(multiplatformCommand) {
+            command("tpaccept") {
                 runs { ctx ->
-                    val targetPlayerName = ctx.requireArgument(playerArg)
-                    TpaCommand.TpaHere(
-                        executorPlayer = ctx.source.player
-                            ?.asOnlineMinecraftPlayer()
-                            ?: return@runs,
-                        targetPlayer = NeoForgeUtil.getOnlinePlayer(targetPlayerName)
-                            ?.asOnlineMinecraftPlayer()
-                            ?: return@runs
+                    TpaCommand.TpaAccept(
+                        executorPlayer = ctx.requirePlayer(),
                     ).run(executor::execute)
                 }
             }
         }
     }
 
-    private fun createTpaCancelNode(): LiteralArgumentBuilder<CommandSourceStack> {
-        return command("tpacancel") {
-            runs { ctx ->
-                TpaCommand.TpaCancel(
-                    executorPlayer = ctx.source.player
-                        ?.asOnlineMinecraftPlayer()
-                        ?: return@runs,
-                ).run(executor::execute)
-            }
-        }
-    }
-
-    private fun createTpaAcceptNode(): LiteralArgumentBuilder<CommandSourceStack> {
-        return command("tpaccept") {
-            runs { ctx ->
-                TpaCommand.TpaAccept(
-                    executorPlayer = ctx.source.player
-                        ?.asOnlineMinecraftPlayer()
-                        ?: return@runs,
-                ).run(executor::execute)
-            }
-        }
-    }
-
-    private fun createTpaDenyNode(): LiteralArgumentBuilder<CommandSourceStack> {
-        return command("tpadeny") {
-            runs { ctx ->
-                TpaCommand.TpaDeny(
-                    executorPlayer = ctx.source.player
-                        ?.asOnlineMinecraftPlayer()
-                        ?: return@runs,
-                ).run(executor::execute)
+    private fun createTpaDenyNode(): LiteralArgumentBuilder<Any> {
+        return with(multiplatformCommand) {
+            command("tpadeny") {
+                runs { ctx ->
+                    TpaCommand.TpaDeny(
+                        executorPlayer = ctx.requirePlayer(),
+                    ).run(executor::execute)
+                }
             }
         }
     }

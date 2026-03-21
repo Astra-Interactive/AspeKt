@@ -4,17 +4,15 @@ plugins {
 }
 
 dependencies {
-    // Kotlin
-
-    // AstraLibs
-    implementation(libs.minecraft.astralibs.core)
-    implementation(libs.minecraft.astralibs.command)
-    implementation(libs.klibs.mikro.core)
-    implementation(libs.klibs.kstorage)
-    compileOnly(libs.minecraft.kyori.plain)
-    compileOnly(libs.minecraft.kyori.legacy)
     compileOnly(libs.minecraft.kyori.gson)
+    compileOnly(libs.minecraft.kyori.legacy)
+    compileOnly(libs.minecraft.kyori.plain)
     compileOnly(libs.minecraft.luckperms)
+
+    implementation(libs.klibs.kstorage)
+    implementation(libs.klibs.mikro.core)
+    implementation(libs.minecraft.astralibs.command)
+    implementation(libs.minecraft.astralibs.core)
 
     implementation(projects.modules.core.api)
 }
