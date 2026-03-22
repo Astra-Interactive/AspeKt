@@ -35,6 +35,8 @@ class OnlineSimulator(private val scope: CoroutineScope) {
         OnlineRange.Default(startHour = 13, endHour = 18, min = 6, max = 15), // 13:00 - 18:59
         OnlineRange.Default(startHour = 19, endHour = 22, min = 4, max = 15) // 19:00 - 22:59
     )
+
+    @Suppress("MagicNumber")
     private val fallbackRange = OnlineRange.Fallback(2, 4)
 
     private fun OnlineRange.getRandomOnline(): Int {

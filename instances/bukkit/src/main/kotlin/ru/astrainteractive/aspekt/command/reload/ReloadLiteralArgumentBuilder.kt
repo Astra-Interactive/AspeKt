@@ -7,10 +7,8 @@ import ru.astrainteractive.astralibs.command.api.brigadier.command.Multiplatform
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.lifecycle.LifecyclePlugin
-import ru.astrainteractive.astralibs.server.KAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
-import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 class ReloadLiteralArgumentBuilder(
     private val plugin: LifecyclePlugin,
@@ -24,10 +22,10 @@ class ReloadLiteralArgumentBuilder(
             command("aesreload") {
                 runs { ctx ->
                     ctx.requirePermission(PluginPermission.RELOAD)
-                    val audience = ctx.getSender().tryCast<KAudience>()
-                    audience?.sendMessage(translation.general.reload.component)
+                    val audience = ctx.getSender()
+                    audience.sendMessage(translation.general.reload.component)
                     plugin.onReload()
-                    audience?.sendMessage(translation.general.reloadComplete.component)
+                    audience.sendMessage(translation.general.reloadComplete.component)
                 }
             }
         }

@@ -70,6 +70,7 @@ class ForgeAuthEvent(
         }
     }
 
+    @Suppress("MagicNumber")
     val playerMoveEvent = playerMoveFlowEvent()
         .filter { event -> authorizedApi.getAuthState(event.player.uuid) !is AuthorizedApi.AuthState.Authorized }
         .onEach { event ->

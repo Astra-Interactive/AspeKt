@@ -46,6 +46,7 @@ internal class NewBeeEventListener(
         )
     }
 
+    @Suppress("MagicNumber")
     private fun getNewBeeEffects(player: Player): List<PotionEffect> {
         return buildList {
             createInfinitePotionEffect(

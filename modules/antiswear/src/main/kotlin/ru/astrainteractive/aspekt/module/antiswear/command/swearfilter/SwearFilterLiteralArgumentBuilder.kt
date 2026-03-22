@@ -14,7 +14,6 @@ import ru.astrainteractive.astralibs.command.api.brigadier.sender.KCommandSender
 import ru.astrainteractive.astralibs.command.api.brigadier.sender.KPlayerKCommandSender
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
-import ru.astrainteractive.astralibs.server.KAudience
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
@@ -38,24 +37,19 @@ internal class SwearFilterLiteralArgumentBuilder(
     ) {
         val senderUuidOrNull = sender
             .tryCast<KPlayerKCommandSender>()
+            ?.instance
             ?.uuid
         ioScope.launch { swearRepository.setSwearFilterEnabled(target, isEnabled) }
         if (isEnabled) {
             if (senderUuidOrNull != target.uuid) {
-                sender
-                    .tryCast<KAudience>()
-                    ?.sendMessage(translation.swear.swearFilterEnabledFor(target.name).component)
+                sender.sendMessage(translation.swear.swearFilterEnabledFor(target.name).component)
             }
-            target.tryCast<KAudience>()?.sendMessage(translation.swear.swearFilterEnabled.component)
+            target.sendMessage(translation.swear.swearFilterEnabled.component)
         } else {
             if (senderUuidOrNull != target.uuid) {
-                sender
-                    .tryCast<KAudience>()
-                    ?.sendMessage(translation.swear.swearFilterDisabledFor(target.name).component)
+                sender.sendMessage(translation.swear.swearFilterDisabledFor(target.name).component)
             }
-            target
-                .tryCast<KAudience>()
-                ?.sendMessage(translation.swear.swearFilterDisabled.component)
+            target.sendMessage(translation.swear.swearFilterDisabled.component)
         }
     }
 

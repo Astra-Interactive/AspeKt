@@ -12,7 +12,6 @@ import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
-import ru.astrainteractive.astralibs.server.KAudience
 import ru.astrainteractive.astralibs.server.util.NeoForgeUtil
 import ru.astrainteractive.astralibs.server.util.getOnlinePlayer
 import ru.astrainteractive.astralibs.server.util.getOnlinePlayers
@@ -20,7 +19,6 @@ import ru.astrainteractive.astralibs.server.util.getPlayerGameProfile
 import ru.astrainteractive.astralibs.server.util.toPlain
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
-import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 /**
  * /unregister <username>
@@ -50,9 +48,7 @@ class UnregisterLiteralArgumentBuilder(
                             ioScope.launch {
                                 val authData = authDao.getUser(usernameToDelete)
                                     .onFailure {
-                                        ctx.getSender()
-                                            .tryCast<KAudience>()
-                                            ?.sendMessage(translation.userNotFound.component)
+                                        ctx.getSender().sendMessage(translation.userNotFound.component)
                                     }.getOrNull() ?: return@launch
 
                                 authDao.deleteAccount(authData.uuid)
@@ -80,16 +76,12 @@ class UnregisterLiteralArgumentBuilder(
                                             ?.uuid
                                             ?.let { playerLoginModel ->
                                                 authorizedApi.forgetUser(playerLoginModel)
-                                                ctx.getSender()
-                                                    .tryCast<KAudience>()
-                                                    ?.sendMessage(translation.userDeleted.component)
+                                                ctx.getSender().sendMessage(translation.userDeleted.component)
                                             }
                                         onlinePlayerLoginModel
                                             ?.let(authorizedApi::loadUserInfo)
                                     }.onFailure {
-                                        ctx.getSender()
-                                            .tryCast<KAudience>()
-                                            ?.sendMessage(translation.userCouldNotBeDeleted.component)
+                                        ctx.getSender().sendMessage(translation.userCouldNotBeDeleted.component)
                                     }
                             }
                         }

@@ -33,7 +33,7 @@ class ForgeSafeLocationProvider : SafeLocationProvider {
         .expireAfterWrite(10.seconds.toJavaDuration())
         .build<UUID, Unit>()
 
-    @Suppress("LoopWithTooManyJumpStatements")
+    @Suppress("LoopWithTooManyJumpStatements", "MagicNumber")
     private fun safeLocationFlow(level: ServerLevel) = channelFlow {
         do {
             val x = Random.nextInt(-1000000, 1000000).toDouble()

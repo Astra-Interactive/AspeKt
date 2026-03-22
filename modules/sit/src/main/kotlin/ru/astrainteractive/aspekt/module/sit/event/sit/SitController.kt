@@ -86,8 +86,9 @@ internal class SitController(
     }
 
     fun onDisable() {
-        for (player in sitPlayers.keys)
+        for (player in sitPlayers.keys) {
             sitPlayers[player]!!.remove()
+        }
         sitPlayers.clear()
     }
 

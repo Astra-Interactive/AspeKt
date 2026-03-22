@@ -14,10 +14,8 @@ import ru.astrainteractive.astralibs.command.api.argumenttype.OnlinePlayerArgume
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
-import ru.astrainteractive.astralibs.server.KAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
-import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 /**
  * /claim flag <ChunkFlag> <bool>
@@ -52,8 +50,7 @@ internal class ClaimLiteralArgumentBuilder(
                                 val flagName = ctx.requireArgument(flagArg)
                                 val flag = ChunkFlag.entries.firstOrNull { it.name.equals(flagName, true) }
                                 if (flag == null) {
-                                    ctx.getSender().tryCast<KAudience>()
-                                        ?.sendMessage(translation.general.wrongUsage.component)
+                                    ctx.getSender().sendMessage(translation.general.wrongUsage.component)
                                     return@runs
                                 }
                                 val value = ctx.requireArgument(boolArg)

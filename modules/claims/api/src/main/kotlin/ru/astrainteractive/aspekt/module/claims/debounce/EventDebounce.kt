@@ -26,6 +26,7 @@ class EventDebounce<K : RetractKey>(debounceTime: Long) {
             get() = entry.isCancelled
     }
 
+    @Suppress("MagicNumber")
     private val cache: LoadingCache<K, EntryHolder> by lazy {
         CacheBuilder.newBuilder()
             .maximumSize(100)

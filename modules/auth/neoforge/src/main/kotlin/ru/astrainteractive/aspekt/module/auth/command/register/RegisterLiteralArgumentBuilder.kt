@@ -13,10 +13,8 @@ import ru.astrainteractive.aspekt.module.auth.api.util.sha256
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
-import ru.astrainteractive.astralibs.server.KAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
-import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 /**
  * /register <password> <password_confirm>
@@ -48,9 +46,7 @@ class RegisterLiteralArgumentBuilder(
                                         val passwordSha = ctx.requireArgument(passwordArg).sha256()
                                         val isRegistered = authDao.isRegistered(player.uuid)
                                         if (isRegistered) {
-                                            ctx.getSender()
-                                                .tryCast<KAudience>()
-                                                ?.sendMessage(translation.alreadyRegistered.component)
+                                            ctx.getSender().sendMessage(translation.alreadyRegistered.component)
                                             return@launch
                                         }
                                         val authData = AuthData(
@@ -61,14 +57,10 @@ class RegisterLiteralArgumentBuilder(
                                         )
                                         authDao.createAccount(authData)
                                             .onFailure {
-                                                ctx.getSender()
-                                                    .tryCast<KAudience>()
-                                                    ?.sendMessage(translation.couldNotCreateAccount.component)
+                                                ctx.getSender().sendMessage(translation.couldNotCreateAccount.component)
                                             }
                                             .onSuccess {
-                                                ctx.getSender()
-                                                    .tryCast<KAudience>()
-                                                    ?.sendMessage(translation.accountCreated.component)
+                                                ctx.getSender().sendMessage(translation.accountCreated.component)
                                                 authorizedApi.authUser(player.uuid)
                                             }
                                     }

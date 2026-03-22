@@ -14,6 +14,7 @@ class TpaApi {
         val type: RequestType
     )
 
+    @Suppress("MagicNumber")
     private val cache = CacheBuilder
         .newBuilder()
         .expireAfterWrite(30, TimeUnit.SECONDS)

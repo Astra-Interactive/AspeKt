@@ -22,7 +22,7 @@ internal class RiddleGenerator(
         translationKrate = translationKrate
     )
 
-    @Suppress("LongMethod", "CyclomaticComplexMethod")
+    @Suppress("LongMethod", "CyclomaticComplexMethod", "MagicNumber")
     fun generate(instance: ChatGame): ChatGameData {
         return when (instance) {
             is ChatGame.EquationEasy -> {

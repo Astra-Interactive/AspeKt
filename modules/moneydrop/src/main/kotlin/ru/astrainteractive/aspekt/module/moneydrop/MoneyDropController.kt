@@ -43,6 +43,7 @@ internal class MoneyDropController(
         instant = Instant.now()
     )
 
+    @Suppress("MagicNumber")
     private fun checkForChance(entry: PluginConfiguration.MoneyDropEntry): Boolean {
         val chance = entry.chance
         return chance > Random.nextDouble(0.0, 100.0)

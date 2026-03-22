@@ -5,7 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
 import ru.astrainteractive.aspekt.module.sethome.model.PlayerHome
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
-import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
+import ru.astrainteractive.astralibs.command.api.brigadier.sender.KPlayerKCommandSender
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 /**
@@ -44,7 +44,9 @@ class SetHomeLiteralArgumentBuilder(
                 argument("home_name", StringArgumentType.string()) { homeNameArg ->
                     hints { ctx ->
 
-                        val player = ctx.getSender().tryCast<OnlineKPlayer>() ?: return@hints emptyList()
+                        val player = ctx.getSender().tryCast<KPlayerKCommandSender>()
+                            ?.instance
+                            ?: return@hints emptyList()
                         homeKrateProvider.get(player.uuid).cachedStateFlow.value.map(PlayerHome::name)
                     }
                     runs { ctx ->
@@ -64,7 +66,10 @@ class SetHomeLiteralArgumentBuilder(
             command("home") {
                 argument("home_name", StringArgumentType.string()) { homeNameArg ->
                     hints { ctx ->
-                        val player = ctx.getSender().tryCast<OnlineKPlayer>() ?: return@hints emptyList()
+                        val player = ctx.getSender()
+                            .tryCast<KPlayerKCommandSender>()
+                            ?.instance
+                            ?: return@hints emptyList()
                         homeKrateProvider.get(player.uuid).cachedStateFlow.value.map(PlayerHome::name)
                     }
                     runs { ctx ->

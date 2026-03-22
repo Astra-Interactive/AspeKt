@@ -7,6 +7,7 @@ internal interface HoeRadiusFactory {
     fun create(hoeMaybe: ItemStack): Int
 }
 
+@Suppress("MagicNumber")
 internal class HoeRadiusFactoryImpl : HoeRadiusFactory {
     override fun create(hoeMaybe: ItemStack): Int {
         return when (hoeMaybe.type) {

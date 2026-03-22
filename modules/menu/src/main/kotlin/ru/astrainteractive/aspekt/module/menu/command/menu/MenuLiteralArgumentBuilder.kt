@@ -8,10 +8,8 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
-import ru.astrainteractive.astralibs.server.KAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
-import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 /**
  * Menu command registrar. Builds Brigadier node for:
@@ -33,7 +31,7 @@ internal class MenuLiteralArgumentBuilder(
                     val player = ctx.requirePlayer()
                     val menuModel = menuModels.firstOrNull()
                     if (menuModel == null) {
-                        ctx.getSender().tryCast<KAudience>()?.sendMessage(translation.general.menuNotFound.component)
+                        ctx.getSender().sendMessage(translation.general.menuNotFound.component)
                     } else {
                         menuRouter.invoke().openMenu(player = player, menuModel = menuModel)
                     }
@@ -45,7 +43,7 @@ internal class MenuLiteralArgumentBuilder(
                         val cmd = ctx.requireArgument(menuArg)
                         val menuModel = menuModels.firstOrNull { it.command == cmd } ?: menuModels.firstOrNull()
                         if (menuModel == null) {
-                            ctx.getSender().tryCast<KAudience>()?.sendMessage(
+                            ctx.getSender().sendMessage(
                                 translation.general.menuNotFound.component
                             )
                         } else {

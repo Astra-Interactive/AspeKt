@@ -31,6 +31,7 @@ class ClaimCommandExecutor(
 ) : KyoriComponentSerializer by kyoriKrate.unwrap() {
     private val translation by translationKrate
 
+    @Suppress("MagicNumber")
     private suspend fun showMap(
         claimPlayer: ClaimPlayer,
         chunk: ClaimChunk

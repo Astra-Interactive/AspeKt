@@ -43,6 +43,7 @@ internal class SitEvent(
     }
 
     @EventHandler
+    @Suppress("MagicNumber")
     fun playerInteractEvent(e: PlayerInteractEvent) {
         if (!configuration.sit) return
         if (e.hand != EquipmentSlot.HAND) return

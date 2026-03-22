@@ -20,6 +20,7 @@ internal class SitLiteralArgumentBuilder(
             command("sit") {
                 runs { ctx ->
                     val player = ctx.requirePlayer()
+                    @Suppress("MagicNumber")
                     sitController.toggleSitPlayer(
                         player = player.cast<BukkitOnlineKPlayer>().instance,
                         locationWithOffset = player.getLocation()

@@ -46,6 +46,7 @@ class ForgeClaimEvent(
     // todo mainScope
     private val scope = CoroutineScope(SupervisorJob() + NeoForgeMainDispatcher())
 
+    @Suppress("MagicNumber")
     private val debounce = EventDebounce<RetractKey>(5000L)
     private fun <T> handleDefault(
         retractKey: RetractKey,
@@ -78,6 +79,7 @@ class ForgeClaimEvent(
         }
     }
 
+    @Suppress("MagicNumber")
     private fun ChunkAccess.toClaimChunk(level: LevelAccessor): ClaimChunk {
         val serverLevel = level as ServerLevel
         val levelData = serverLevel.levelData as ServerLevelData

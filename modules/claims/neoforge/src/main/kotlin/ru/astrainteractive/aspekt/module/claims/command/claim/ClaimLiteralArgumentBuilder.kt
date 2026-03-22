@@ -10,7 +10,7 @@ import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.server.location.ChunkProvider
 import ru.astrainteractive.aspekt.module.claims.util.toClaimPlayer
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
-import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
+import ru.astrainteractive.astralibs.command.api.brigadier.sender.KPlayerKCommandSender
 import ru.astrainteractive.astralibs.server.util.NeoForgeUtil
 import ru.astrainteractive.astralibs.server.util.getOnlinePlayers
 import ru.astrainteractive.astralibs.server.util.getPlayerGameProfile
@@ -81,7 +81,8 @@ class ClaimLiteralArgumentBuilder(
                     argument("player", StringArgumentType.string()) { playerArg ->
                         hints { ctx ->
                             ctx.getSender()
-                                .tryCast<OnlineKPlayer>()
+                                .tryCast<KPlayerKCommandSender>()
+                                ?.instance
                                 ?.uuid
                                 ?.let(claimsRepository::findKrate)
                                 ?.cachedStateFlow

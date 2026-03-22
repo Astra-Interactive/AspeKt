@@ -10,6 +10,7 @@ class ProxyPingEventListener(
     private val onlineSimulator: OnlineSimulator
 ) : KListener {
     @EventHandler(priority = EventPriority.HIGHEST)
+    @Suppress("MagicNumber")
     fun onProxyPingEvent(event: ProxyPingEvent) {
         val fakeSamplePlayerCount = onlineSimulator.currentOnlineFlow.value
         event.response.players.sample = List(fakeSamplePlayerCount) {

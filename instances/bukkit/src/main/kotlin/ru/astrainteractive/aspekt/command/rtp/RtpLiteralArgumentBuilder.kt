@@ -5,10 +5,8 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
-import ru.astrainteractive.astralibs.server.KAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
-import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 /**
  * RTP command registrar. Builds Brigadier node for:
@@ -24,9 +22,7 @@ class RtpLiteralArgumentBuilder(
         return with(multiplatformCommand) {
             command("rtp") {
                 runs { ctx ->
-                    ctx.getSender()
-                        .tryCast<KAudience>()
-                        ?.sendMessage(translation.general.maybeTpr.component)
+                    ctx.getSender().sendMessage(translation.general.maybeTpr.component)
                 }
             }
         }

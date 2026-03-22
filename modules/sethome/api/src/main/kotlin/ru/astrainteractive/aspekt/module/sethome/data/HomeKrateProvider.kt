@@ -12,8 +12,7 @@ class HomeKrateProvider(
     private val folder: File,
     private val stringFormat: StringFormat,
 ) {
-    private val cache = CacheBuilder<UUID, PlayerHomesKrate>
-        .newBuilder()
+    private val cache = CacheBuilder<UUID, PlayerHomesKrate>.newBuilder()
         .expireAfterAccess(60.seconds.toJavaDuration())
         .build<UUID, PlayerHomesKrate>()
 

@@ -26,12 +26,14 @@ internal class BalancePlaceholder(
         val currencyId: String
     )
 
+    @Suppress("MagicNumber")
     private val allCurrenciesCache = Cache.Builder<PlayerInfo, Double>()
         .maximumCacheSize(1024)
         .expireAfterWrite(30.seconds)
         .expireAfterAccess(30.seconds)
         .build()
 
+    @Suppress("MagicNumber")
     override fun asPlaceholder(executor: OfflinePlayer?, params: List<String>): String {
         val currencyId = params.getOrNull(2) ?: return null.orEmpty()
         val offlinePlayer = params.getOrNull(3)

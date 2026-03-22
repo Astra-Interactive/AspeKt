@@ -58,6 +58,8 @@ internal class BukkitClaimEvent(
 ) : EventListener {
     private val kyori by kyoriKrate
     private val translation by translationKrate
+
+    @Suppress("MagicNumber")
     private val debounce = EventDebounce<RetractKey>(5000L)
     private fun <T> handleDefault(
         retractKey: RetractKey,

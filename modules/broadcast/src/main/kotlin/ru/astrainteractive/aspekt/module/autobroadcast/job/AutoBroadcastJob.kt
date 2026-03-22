@@ -26,6 +26,7 @@ internal class AutoBroadcastJob(
     val announcements: PluginConfiguration.Announcements
         get() = configKrate.cachedValue.announcements
 
+    @Suppress("MagicNumber")
     override val delayMillis: Long
         get() = announcements.interval * 1000L
 

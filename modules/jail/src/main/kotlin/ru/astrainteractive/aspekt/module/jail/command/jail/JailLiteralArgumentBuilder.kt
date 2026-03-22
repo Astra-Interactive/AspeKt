@@ -18,12 +18,10 @@ import ru.astrainteractive.astralibs.command.api.argumenttype.OfflinePlayerArgum
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
-import ru.astrainteractive.astralibs.server.KAudience
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
-import ru.astrainteractive.klibs.mikro.core.util.tryCast
 import java.time.Instant
 
 /**
@@ -56,8 +54,7 @@ internal class JailLiteralArgumentBuilder(
                         scope.launch {
                             val jails = jailApi.getJails().getOrNull().orEmpty().map(Jail::name)
                             val jailsString = jails.joinToString()
-                            ctx.getSender().tryCast<KAudience>()
-                                ?.sendMessage(translation.jails.jailsList(jailsString).component)
+                            ctx.getSender().sendMessage(translation.jails.jailsList(jailsString).component)
                         }
                     }
                 }
@@ -73,12 +70,12 @@ internal class JailLiteralArgumentBuilder(
                             scope.launch {
                                 jailApi.addJail(jail)
                                     .onFailure {
-                                        ctx.getSender().tryCast<KAudience>()
-                                            ?.sendMessage(translation.jails.jailCreatedFail.component)
+                                        ctx.getSender().sendMessage(translation.jails.jailCreatedFail.component)
                                     }
                                     .onSuccess {
-                                        ctx.getSender().tryCast<KAudience>()
-                                            ?.sendMessage(translation.jails.jailCreatedSuccess(jail.name).component)
+                                        ctx.getSender().sendMessage(
+                                            translation.jails.jailCreatedSuccess(jail.name).component
+                                        )
                                     }
                             }
                         }
@@ -92,17 +89,16 @@ internal class JailLiteralArgumentBuilder(
                             scope.launch {
                                 val jailName = ctx.requireArgument(jailArg)
                                 if (jailApi.getJailInmates(jailName).getOrNull().orEmpty().isNotEmpty()) {
-                                    ctx.getSender().tryCast<KAudience>()
-                                        ?.sendMessage(translation.jails.jailHasInmates(jailName).component)
+                                    ctx.getSender().sendMessage(translation.jails.jailHasInmates(jailName).component)
                                 } else {
                                     jailApi.deleteJail(jailName)
                                         .onFailure {
-                                            ctx.getSender().tryCast<KAudience>()
-                                                ?.sendMessage(translation.jails.jailDeleteFail.component)
+                                            ctx.getSender().sendMessage(translation.jails.jailDeleteFail.component)
                                         }
                                         .onSuccess {
-                                            ctx.getSender().tryCast<KAudience>()
-                                                ?.sendMessage(translation.jails.jailDeleteSuccess(jailName).component)
+                                            ctx.getSender().sendMessage(
+                                                translation.jails.jailDeleteSuccess(jailName).component
+                                            )
                                         }
                                 }
                             }
@@ -122,20 +118,18 @@ internal class JailLiteralArgumentBuilder(
 
                                 jailApi.free(offlinePlayerToFree.uniqueId.toString())
                                     .onFailure {
-                                        ctx.getSender().tryCast<KAudience>()
-                                            ?.sendMessage(translation.jails.inmateFreeFail.component)
+                                        ctx.getSender().sendMessage(translation.jails.inmateFreeFail.component)
                                     }
                                     .onSuccess {
                                         jailController.free(inmate)
                                         cachedJailApi.cache(inmate.uuid)
 
                                         offlinePlayerToFree.sendMessage(translation.jails.youVeBeenFreed.component)
-                                        ctx.getSender().tryCast<KAudience>()
-                                            ?.sendMessage(
-                                                translation.jails.inmateFreeSuccess(
-                                                    offlinePlayerToFree.name.orEmpty()
-                                                ).component
-                                            )
+                                        ctx.getSender().sendMessage(
+                                            translation.jails.inmateFreeSuccess(
+                                                offlinePlayerToFree.name.orEmpty()
+                                            ).component
+                                        )
                                     }
                             }
                         }
@@ -170,9 +164,7 @@ internal class JailLiteralArgumentBuilder(
                                         )
                                         jailApi.addInmate(inmate)
                                             .onFailure {
-                                                ctx.getSender()
-                                                    .tryCast<KAudience>()
-                                                    ?.sendMessage(translation.jails.inmateAddFail.component)
+                                                ctx.getSender().sendMessage(translation.jails.inmateAddFail.component)
                                             }
                                             .onSuccess {
                                                 jailOfflinePlayer.sendMessage(
@@ -180,7 +172,7 @@ internal class JailLiteralArgumentBuilder(
                                                         jailDuration.toString()
                                                     ).component
                                                 )
-                                                ctx.getSender().tryCast<KAudience>()?.sendMessage(
+                                                ctx.getSender().sendMessage(
                                                     translation.jails.inmateAddSuccess(
                                                         name = jailOfflinePlayer.name.orEmpty(),
                                                         jail = jailName

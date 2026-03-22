@@ -26,6 +26,7 @@ class RtpCommandExecutor(
                 return@launch
             }
             if (safeLocationProvider.isActive(player.uuid)) return@launch
+            @Suppress("MagicNumber")
             if (input.nextTickTime < 18) {
                 player.sendMessage(translation.rtp.lowTickTime(input.nextTickTime).component)
                 return@launch

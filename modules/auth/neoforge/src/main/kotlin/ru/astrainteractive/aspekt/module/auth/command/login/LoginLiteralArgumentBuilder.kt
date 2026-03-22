@@ -14,10 +14,8 @@ import ru.astrainteractive.aspekt.module.auth.api.util.sha256
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
-import ru.astrainteractive.astralibs.server.KAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
-import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 /**
  * /login <password>
@@ -45,9 +43,7 @@ class LoginLiteralArgumentBuilder(
                                 val passwordSha = ctx.requireArgument(passwordArg).sha256()
                                 val isRegistered = authDao.isRegistered(player.uuid)
                                 if (!isRegistered) {
-                                    ctx.getSender()
-                                        .tryCast<KAudience>()
-                                        ?.sendMessage(translation.notRegistered.component)
+                                    ctx.getSender().sendMessage(translation.notRegistered.component)
                                     return@launch
                                 }
                                 val authData = AuthData(
@@ -57,14 +53,10 @@ class LoginLiteralArgumentBuilder(
                                     lastIpAddress = player.address.hostName
                                 )
                                 if (authDao.checkAuthDataIsValid(authData).getOrDefault(false)) {
-                                    ctx.getSender()
-                                        .tryCast<KAudience>()
-                                        ?.sendMessage(translation.authSuccess.component)
+                                    ctx.getSender().sendMessage(translation.authSuccess.component)
                                     authorizedApi.authUser(player.uuid)
                                 } else {
-                                    ctx.getSender()
-                                        .tryCast<KAudience>()
-                                        ?.sendMessage(translation.wrongPassword.component)
+                                    ctx.getSender().sendMessage(translation.wrongPassword.component)
                                 }
                             }
                         }
