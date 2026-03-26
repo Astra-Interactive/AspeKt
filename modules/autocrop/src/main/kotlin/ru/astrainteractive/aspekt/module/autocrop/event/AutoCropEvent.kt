@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.module.autocrop
+package ru.astrainteractive.aspekt.module.autocrop.event
 
 import org.bukkit.Material
 import org.bukkit.block.Block
@@ -12,8 +12,8 @@ import ru.astrainteractive.aspekt.module.autocrop.domain.HoeRadiusFactory
 import ru.astrainteractive.aspekt.module.autocrop.domain.RelativeBlockProvider
 import ru.astrainteractive.aspekt.module.autocrop.mapping.CropMaterialMapper
 import ru.astrainteractive.aspekt.module.autocrop.mapping.CropSeedMaterialMapper
+import ru.astrainteractive.aspekt.module.autocrop.model.AutoCropConfiguration
 import ru.astrainteractive.aspekt.module.autocrop.presentation.CropDupeController
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
@@ -21,7 +21,7 @@ import kotlin.random.Random
 
 @Suppress("LongParameterList")
 internal class AutoCropEvent(
-    pluginConfig: CachedKrate<PluginConfiguration>,
+    pluginConfig: CachedKrate<AutoCropConfiguration>,
     val hoeDamager: HoeDamager,
     val cropMaterialMapper: CropMaterialMapper,
     val cropSeedMaterialMapper: CropSeedMaterialMapper,
@@ -29,10 +29,9 @@ internal class AutoCropEvent(
     val hoeRadiusFactory: HoeRadiusFactory,
     val createRelativeBlockProvider: () -> RelativeBlockProvider
 ) : EventListener {
-    private val configuration by pluginConfig
+    private val autoCropConfig by pluginConfig
 
     private fun processBlock(block: Block, hoeItemStack: ItemStack?) {
-        val autoCropConfig = configuration.autoCrop
         if (block.type == Material.AIR) return
         val clickedCrop = (block.blockData as? Ageable) ?: return
 
@@ -44,7 +43,7 @@ internal class AutoCropEvent(
 
         val amount = when {
             cropDupeController.isDupingAtLocation(block.location) -> 1
-            else -> Random.nextInt(autoCropConfig.min, autoCropConfig.max)
+            else -> Random.Default.nextInt(autoCropConfig.min, autoCropConfig.max)
         }
 
         clickedCrop.age = 0
@@ -61,7 +60,6 @@ internal class AutoCropEvent(
 
     @EventHandler
     fun onCropInteract(e: PlayerInteractEvent) {
-        val autoCropConfig = configuration.autoCrop
         if (!autoCropConfig.enabled) return
 
         if (e.action != Action.RIGHT_CLICK_BLOCK) return

@@ -15,7 +15,7 @@ class MoneyAdvancementModule(
     coreModule: CoreModule,
     bukkitCoreModule: BukkitCoreModule
 ) : Logger by JUtiltLogger("MoneyAdvancementModule") {
-    val mAdvConfig = coreModule.yamlFormat
+    private val mAdvConfig = coreModule.yamlFormat
         .krateOf<MoneyAdvancementsConfiguration>(coreModule.dataFolder.resolve("money_advancements.yml"))
         .withDefault(::MoneyAdvancementsConfiguration)
         .asCachedMutableKrate()

@@ -11,10 +11,11 @@ import ru.astrainteractive.klibs.kstorage.util.withDefault
 
 class AutoBroadcastModule(coreModule: CoreModule) {
 
-    val announcementsKrate = coreModule.yamlFormat
+    private val announcementsKrate = coreModule.yamlFormat
         .krateOf<AnnouncementsConfiguration>(coreModule.dataFolder.resolve("announcements.yml"))
         .withDefault(::AnnouncementsConfiguration)
         .asCachedMutableKrate()
+
     private val autoBroadcastJob = AutoBroadcastJob(
         configKrate = announcementsKrate,
         kyoriKrate = coreModule.kyoriKrate,

@@ -7,8 +7,6 @@ import kotlinx.serialization.Serializable
 data class PluginConfiguration(
     @SerialName("sit")
     val sit: Boolean = true,
-    @SerialName("auto_crop")
-    val autoCrop: AutoCrop = AutoCrop(),
     @SerialName("tree_capitator")
     val treeCapitator: TreeCapitator = TreeCapitator(),
     @SerialName("money_drop")
@@ -41,16 +39,6 @@ data class PluginConfiguration(
         val replantMaxIterations: Int = 16,
         @SerialName("destroy_leaves")
         val destroyLeaves: Boolean = true
-    )
-
-    @Serializable
-    data class AutoCrop(
-        @SerialName("enabled")
-        val enabled: Boolean = true,
-        @SerialName("min")
-        val min: Int = 0,
-        @SerialName("max")
-        val max: Int = 0,
     )
 
 }

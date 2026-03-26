@@ -14,10 +14,11 @@ class RestrictionModule(
     coreModule: CoreModule,
     bukkitCoreModule: BukkitCoreModule
 ) {
-    val restrictionKrate = coreModule.yamlFormat
+    private val restrictionKrate = coreModule.yamlFormat
         .krateOf<RestrictionsConfiguration>(coreModule.dataFolder.resolve("restrictions.yml"))
         .withDefault(::RestrictionsConfiguration)
         .asCachedMutableKrate()
+
     private val restrictionsEvent: RestrictionsEvent by lazy {
         RestrictionsEvent(configKrate = restrictionKrate)
     }
