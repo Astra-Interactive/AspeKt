@@ -8,6 +8,7 @@ import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import ru.astrainteractive.aspekt.module.moneydrop.database.dao.MoneyDropDao
 import ru.astrainteractive.aspekt.module.moneydrop.database.model.MoneyDropLocation
+import ru.astrainteractive.aspekt.module.moneydrop.model.MoneyDropConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.coroutines.withTimings
@@ -24,13 +25,13 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 
 internal class MoneyDropController(
-    pluginConfigurationDependency: CachedKrate<PluginConfiguration>,
+    moneyDropKrate: CachedKrate<MoneyDropConfiguration>,
     translationDependency: CachedKrate<PluginTranslation>,
     kyoriComponentSerializerDependency: CachedKrate<KyoriComponentSerializer>,
     private val dao: MoneyDropDao,
     private val dispatchers: KotlinDispatchers
 ) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO).withTimings() {
-    private val pluginConfiguration by pluginConfigurationDependency
+    private val moneyDropConfig by moneyDropKrate
     private val translation by translationDependency
     private val kyoriComponentSerializer by kyoriComponentSerializerDependency
 
@@ -44,12 +45,12 @@ internal class MoneyDropController(
     )
 
     @Suppress("MagicNumber")
-    private fun checkForChance(entry: PluginConfiguration.MoneyDropEntry): Boolean {
+    private fun checkForChance(entry: MoneyDropConfiguration.MoneyDropEntry): Boolean {
         val chance = entry.chance
         return chance > Random.nextDouble(0.0, 100.0)
     }
 
-    private suspend fun drop(location: Location, entry: PluginConfiguration.MoneyDropEntry) {
+    private suspend fun drop(location: Location, entry: MoneyDropConfiguration.MoneyDropEntry) {
         if (dao.isLocationExists(location.toMoneyDropLocation(entry.from))) return
         rememberLocation(location, entry.from)
 
@@ -84,7 +85,7 @@ internal class MoneyDropController(
     }
 
     fun tryDrop(location: Location, from: String) = launch {
-        pluginConfiguration.moneyDrop.values
+        moneyDropConfig.moneyDrop.values
             .filter { it.from == from }
             .filter(::checkForChance)
             .forEach { entry -> drop(location, entry) }
