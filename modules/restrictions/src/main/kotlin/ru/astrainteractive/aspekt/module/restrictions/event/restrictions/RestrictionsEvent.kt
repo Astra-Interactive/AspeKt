@@ -13,24 +13,25 @@ import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.entity.ExplosionPrimeEvent
 import org.bukkit.event.player.PlayerBucketEmptyEvent
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
+import ru.astrainteractive.aspekt.module.restrictions.model.RestrictionsConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
+import ru.astrainteractive.klibs.kstorage.util.getValue
 
 internal class RestrictionsEvent(
-    private val configKrate: CachedKrate<PluginConfiguration>
+    private val configKrate: CachedKrate<RestrictionsConfiguration>
 ) : EventListener {
-    private val restrictions: PluginConfiguration.Restrictions
-        get() = configKrate.cachedValue.restrictions
+    private val restrictionsConfiguration by configKrate
 
     // Explosions
     @EventHandler
     fun onBlockExplode(it: BlockExplodeEvent) {
-        if (restrictions.explosion.destroy) it.isCancelled = true
+        if (restrictionsConfiguration.explosion.destroy) it.isCancelled = true
     }
 
     @EventHandler
     fun onEntityExplode(it: EntityExplodeEvent) {
-        if (!restrictions.explosion.destroy) return
+        if (!restrictionsConfiguration.explosion.destroy) return
         if (it.entityType == EntityType.WIND_CHARGE) return
         if (it.entityType == EntityType.BREEZE_WIND_CHARGE) return
         it.isCancelled = true
@@ -39,7 +40,7 @@ internal class RestrictionsEvent(
     @EventHandler
     fun onPrimeExplosion(it: ExplosionPrimeEvent) {
         it.fire = false
-        if (!restrictions.explosion.creeperDamage) return
+        if (!restrictionsConfiguration.explosion.creeperDamage) return
         if (it.entity.type == EntityType.CREEPER) it.radius = 0f
     }
 
@@ -48,7 +49,7 @@ internal class RestrictionsEvent(
     fun bucketEmptyEvent(it: PlayerBucketEmptyEvent) {
         when (it.bucket) {
             Material.LAVA_BUCKET -> {
-                if (restrictions.place.lava) it.isCancelled = true
+                if (restrictionsConfiguration.place.lava) it.isCancelled = true
             }
 
             else -> Unit
@@ -59,15 +60,15 @@ internal class RestrictionsEvent(
     fun blockPlace(it: BlockPlaceEvent) {
         when (it.blockPlaced.type) {
             Material.TNT -> {
-                if (restrictions.place.tnt) it.isCancelled = true
+                if (restrictionsConfiguration.place.tnt) it.isCancelled = true
             }
 
             Material.LAVA -> {
-                if (restrictions.place.lava) it.isCancelled = true
+                if (restrictionsConfiguration.place.lava) it.isCancelled = true
             }
 
             Material.LAVA_BUCKET -> {
-                if (restrictions.place.lava) it.isCancelled = true
+                if (restrictionsConfiguration.place.lava) it.isCancelled = true
             }
 
             else -> Unit
@@ -78,11 +79,11 @@ internal class RestrictionsEvent(
     fun blockFromTo(it: BlockFromToEvent) {
         when (it.block.type) {
             Material.LAVA -> {
-                if (restrictions.spread.lava) it.isCancelled = true
+                if (restrictionsConfiguration.spread.lava) it.isCancelled = true
             }
 
             Material.FIRE -> {
-                if (restrictions.spread.fire) it.isCancelled = true
+                if (restrictionsConfiguration.spread.fire) it.isCancelled = true
             }
 
             else -> Unit
@@ -92,23 +93,23 @@ internal class RestrictionsEvent(
     @EventHandler
     fun blockIgniteEvent(it: BlockIgniteEvent) {
         if (it.cause == BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL) return
-        if (restrictions.spread.fire) it.isCancelled = true
+        if (restrictionsConfiguration.spread.fire) it.isCancelled = true
     }
 
     @EventHandler
     fun blockBurnEvent(it: BlockBurnEvent) {
-        if (restrictions.spread.fire) it.isCancelled = true
+        if (restrictionsConfiguration.spread.fire) it.isCancelled = true
     }
 
     @EventHandler
     fun blockSpread(it: BlockSpreadEvent) {
         when (it.source.type) {
             Material.LAVA -> {
-                if (restrictions.spread.lava) it.isCancelled = true
+                if (restrictionsConfiguration.spread.lava) it.isCancelled = true
             }
 
             Material.FIRE -> {
-                if (restrictions.spread.fire) it.isCancelled = true
+                if (restrictionsConfiguration.spread.fire) it.isCancelled = true
             }
 
             else -> Unit
