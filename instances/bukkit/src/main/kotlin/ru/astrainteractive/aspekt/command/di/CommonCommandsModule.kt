@@ -19,12 +19,12 @@ class CommonCommandsModule(
 ) {
     private val nodes = listOf(
         RtpLiteralArgumentBuilder(
-            translationKrate = coreModule.translation,
+            translationKrate = coreModule.translationKrate,
             kyoriKrate = coreModule.kyoriKrate,
             multiplatformCommand = coreModule.multiplatformCommand,
         ).create(),
         ReloadLiteralArgumentBuilder(
-            translationKrate = coreModule.translation,
+            translationKrate = coreModule.translationKrate,
             kyoriKrate = coreModule.kyoriKrate,
             plugin = bukkitCoreModule.plugin,
             multiplatformCommand = coreModule.multiplatformCommand

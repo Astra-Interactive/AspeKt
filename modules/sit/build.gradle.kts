@@ -7,6 +7,8 @@ dependencies {
     compileOnly(libs.minecraft.paper.api)
 
     implementation(libs.klibs.mikro.core)
+    implementation(libs.kotlin.serialization.json)
+    implementation(libs.kotlin.serialization.kaml)
     implementation(libs.minecraft.astralibs.command)
     implementation(libs.minecraft.astralibs.command.bukkit)
     implementation(libs.minecraft.astralibs.core)

@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack
 import ru.astrainteractive.aspekt.module.moneydrop.database.dao.MoneyDropDao
 import ru.astrainteractive.aspekt.module.moneydrop.database.model.MoneyDropLocation
 import ru.astrainteractive.aspekt.module.moneydrop.model.MoneyDropConfiguration
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer

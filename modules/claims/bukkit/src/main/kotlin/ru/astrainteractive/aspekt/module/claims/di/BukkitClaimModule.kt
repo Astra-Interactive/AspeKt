@@ -23,7 +23,7 @@ class BukkitClaimModule(
     private val bukkitClaimEvent = BukkitClaimEvent(
         claimsRepository = claimModule.claimsRepository,
         kyoriKrate = coreModule.kyoriKrate,
-        translationKrate = coreModule.translation
+        translationKrate = coreModule.translationKrate
     )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(

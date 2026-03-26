@@ -22,7 +22,7 @@ class HomesModule(
     private val homeCommandExecutor = HomeCommandExecutor(
         homeKrateProvider = homeKrateProvider,
         scope = coreModule.ioScope,
-        translationKrate = coreModule.translation,
+        translationKrate = coreModule.translationKrate,
         kyoriKrate = coreModule.kyoriKrate,
     )
 

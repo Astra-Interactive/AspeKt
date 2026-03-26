@@ -13,13 +13,13 @@ class TreeCapitatorModule(
     coreModule: CoreModule,
     bukkitCoreModule: BukkitCoreModule
 ) {
-    private val configKrate = coreModule.yamlFormat
+    private val tcConfigKrate = coreModule.yamlFormat
         .krateOf<TreeCapitatorConfiguration>(coreModule.dataFolder.resolve("config.yml"))
         .withDefault(::TreeCapitatorConfiguration)
         .asCachedMutableKrate()
 
     private val tcEvent = TCEvent(
-        tcConfigKrate = configKrate,
+        tcConfigKrate = tcConfigKrate,
         ioScope = coreModule.ioScope,
         dispatchers = coreModule.dispatchers,
     )
@@ -30,6 +30,9 @@ class TreeCapitatorModule(
         },
         onDisable = {
             tcEvent.onDisable()
+        },
+        onReload = {
+            tcConfigKrate.getValue()
         }
     )
 }

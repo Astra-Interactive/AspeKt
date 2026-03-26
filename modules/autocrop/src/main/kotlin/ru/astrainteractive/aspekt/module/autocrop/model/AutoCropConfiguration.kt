@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AutoCropConfiguration(
+internal data class AutoCropConfiguration(
     @SerialName("enabled")
     val enabled: Boolean = true,
     @SerialName("min")

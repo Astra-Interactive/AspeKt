@@ -7,7 +7,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 @Serializable
-data class AnnouncementsConfiguration(
+internal data class AnnouncementsConfiguration(
     @SerialName("interval")
     val interval: Long = 1000L,
     @SerialName("announcements")

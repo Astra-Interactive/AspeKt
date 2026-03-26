@@ -18,7 +18,7 @@ import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
-class MoneyAdvancementEvent(
+internal class MoneyAdvancementEvent(
     mAdvConfigKrate: CachedKrate<MoneyAdvancementsConfiguration>,
     private val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,

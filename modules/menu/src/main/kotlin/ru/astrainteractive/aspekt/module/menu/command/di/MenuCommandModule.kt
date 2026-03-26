@@ -19,7 +19,7 @@ internal class MenuCommandModule(
 ) {
     private val nodes = listOf(
         MenuLiteralArgumentBuilder(
-            translationKrate = coreModule.translation,
+            translationKrate = coreModule.translationKrate,
             kyoriKrate = coreModule.kyoriKrate,
             menuRouter = menuRouter,
             menuModels = menuModels,

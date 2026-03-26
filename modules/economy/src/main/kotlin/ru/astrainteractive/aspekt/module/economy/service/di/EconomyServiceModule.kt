@@ -14,7 +14,7 @@ internal class EconomyServiceModule(
     databaseModule: EconomyDatabaseModule,
     private val economyConfigModule: EconomyConfigModule
 ) {
-    private val shouldSync get() = economyConfigModule.currencyConfiguration.cachedValue?.shouldSync == true
+    private val shouldSync get() = economyConfigModule.currencyConfigKrate.cachedValue?.shouldSync == true
 
     private val isVaultEnabled: Boolean
         get() = Bukkit.getPluginManager().isPluginEnabled("Vault")
@@ -23,7 +23,7 @@ internal class EconomyServiceModule(
         plugin = bukkitCoreModule.plugin,
         dao = databaseModule.economyDao,
         getCurrencies = {
-            economyConfigModule.currencyConfiguration.cachedValue?.currencies
+            economyConfigModule.currencyConfigKrate.cachedValue?.currencies
                 ?.values
                 .orEmpty()
                 .toList()
@@ -32,7 +32,7 @@ internal class EconomyServiceModule(
 
     private val preHeatService = PreHeatService(
         getCurrencies = {
-            economyConfigModule.currencyConfiguration.cachedValue?.currencies
+            economyConfigModule.currencyConfigKrate.cachedValue?.currencies
                 ?.values
                 .orEmpty()
                 .toList()

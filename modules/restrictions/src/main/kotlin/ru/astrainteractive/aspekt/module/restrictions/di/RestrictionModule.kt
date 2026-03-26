@@ -4,7 +4,6 @@ import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.restrictions.event.restrictions.RestrictionsEvent
 import ru.astrainteractive.aspekt.module.restrictions.model.RestrictionsConfiguration
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.util.asCachedMutableKrate
@@ -14,13 +13,13 @@ class RestrictionModule(
     coreModule: CoreModule,
     bukkitCoreModule: BukkitCoreModule
 ) {
-    private val restrictionKrate = coreModule.yamlFormat
+    private val restrictionConfigKrate = coreModule.yamlFormat
         .krateOf<RestrictionsConfiguration>(coreModule.dataFolder.resolve("restrictions.yml"))
         .withDefault(::RestrictionsConfiguration)
         .asCachedMutableKrate()
 
     private val restrictionsEvent: RestrictionsEvent by lazy {
-        RestrictionsEvent(configKrate = restrictionKrate)
+        RestrictionsEvent(configKrate = restrictionConfigKrate)
     }
     val lifecycle = Lifecycle.Lambda(
         onEnable = {
@@ -28,6 +27,9 @@ class RestrictionModule(
         },
         onDisable = {
             restrictionsEvent.onDisable()
+        },
+        onReload = {
+            restrictionConfigKrate.getValue()
         }
     )
 }

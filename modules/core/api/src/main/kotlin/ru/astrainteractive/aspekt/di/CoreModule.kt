@@ -7,7 +7,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
@@ -45,12 +44,7 @@ class CoreModule(
         ),
     )
 
-    val configKrate = yamlFormat
-        .krateOf<PluginConfiguration>(dataFolder.resolve("config.yml"))
-        .withDefault(::PluginConfiguration)
-        .asCachedMutableKrate()
-
-    val translation = yamlFormat
+    val translationKrate = yamlFormat
         .krateOf<PluginTranslation>(dataFolder.resolve("translations.yml"))
         .withDefault(::PluginTranslation)
         .asCachedMutableKrate()
@@ -69,8 +63,7 @@ class CoreModule(
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {},
         onReload = {
-            configKrate.getValue()
-            translation.getValue()
+            translationKrate.getValue()
         },
         onDisable = {
             ioScope.cancel()

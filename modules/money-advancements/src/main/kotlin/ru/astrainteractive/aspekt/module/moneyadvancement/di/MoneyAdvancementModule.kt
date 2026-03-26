@@ -15,7 +15,7 @@ class MoneyAdvancementModule(
     coreModule: CoreModule,
     bukkitCoreModule: BukkitCoreModule
 ) : Logger by JUtiltLogger("MoneyAdvancementModule") {
-    private val mAdvConfig = coreModule.yamlFormat
+    private val mAdvConfigKrate = coreModule.yamlFormat
         .krateOf<MoneyAdvancementsConfiguration>(coreModule.dataFolder.resolve("money_advancements.yml"))
         .withDefault(::MoneyAdvancementsConfiguration)
         .asCachedMutableKrate()
@@ -23,8 +23,8 @@ class MoneyAdvancementModule(
     private val moneyAdvancementEvent = MoneyAdvancementEvent(
         currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory,
         kyoriKrate = coreModule.kyoriKrate,
-        translationKrate = coreModule.translation,
-        mAdvConfigKrate = mAdvConfig,
+        translationKrate = coreModule.translationKrate,
+        mAdvConfigKrate = mAdvConfigKrate,
     )
 
     val lifecycle: Lifecycle by lazy {
@@ -35,6 +35,9 @@ class MoneyAdvancementModule(
             onDisable = {
                 moneyAdvancementEvent.onDisable()
             },
+            onReload = {
+                mAdvConfigKrate.getValue()
+            }
         )
     }
 }

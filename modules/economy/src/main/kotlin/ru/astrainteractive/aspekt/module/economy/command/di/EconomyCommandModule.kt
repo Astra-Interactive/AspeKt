@@ -14,7 +14,7 @@ internal class EconomyCommandModule(
 ) {
     private val executor = EkonCommandExecutor(
         kyoriKrate = coreModule.kyoriKrate,
-        translationKrate = coreModule.translation,
+        translationKrate = coreModule.translationKrate,
         dao = databaseModule.economyDao
     )
 
@@ -22,7 +22,7 @@ internal class EconomyCommandModule(
         EkonLiteralArgumentBuilder(
             cachedDao = databaseModule.cachedDao,
             executor = executor,
-            translationKrate = coreModule.translation,
+            translationKrate = coreModule.translationKrate,
             kyoriKrate = coreModule.kyoriKrate,
             multiplatformCommand = coreModule.multiplatformCommand,
             platformServer = coreModule.platformServer

@@ -6,7 +6,6 @@ import ru.astrainteractive.aspekt.module.moneydrop.MoneyDropController
 import ru.astrainteractive.aspekt.module.moneydrop.MoneyDropEvent
 import ru.astrainteractive.aspekt.module.moneydrop.database.di.MoneyDropDaoModule
 import ru.astrainteractive.aspekt.module.moneydrop.model.MoneyDropConfiguration
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.util.asCachedMutableKrate
@@ -17,7 +16,7 @@ class MoneyDropModule(
     bukkitCoreModule: BukkitCoreModule
 ) {
 
-    private val moneyDropKrate = coreModule.yamlFormat
+    private val moneyDropConfigKrate = coreModule.yamlFormat
         .krateOf<MoneyDropConfiguration>(coreModule.dataFolder.resolve("money_drop.yml"))
         .withDefault(::MoneyDropConfiguration)
         .asCachedMutableKrate()
@@ -30,15 +29,15 @@ class MoneyDropModule(
 
     private val moneyDropController = MoneyDropController(
         kyoriComponentSerializerDependency = coreModule.kyoriKrate,
-        translationDependency = coreModule.translation,
+        translationDependency = coreModule.translationKrate,
         dispatchers = coreModule.dispatchers,
-        moneyDropKrate = moneyDropKrate,
+        moneyDropKrate = moneyDropConfigKrate,
         dao = moneyDropDaoModule.dao
     )
 
     private val moneyDropEvent: MoneyDropEvent = MoneyDropEvent(
         kyoriKrate = coreModule.kyoriKrate,
-        translationKrate = coreModule.translation,
+        translationKrate = coreModule.translationKrate,
         moneyDropController = moneyDropController,
         currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory,
         ioScope = coreModule.ioScope
@@ -56,6 +55,7 @@ class MoneyDropModule(
             },
             onReload = {
                 moneyDropDaoModule.lifecycle.onReload()
+                moneyDropConfigKrate.getValue()
             }
         )
     }

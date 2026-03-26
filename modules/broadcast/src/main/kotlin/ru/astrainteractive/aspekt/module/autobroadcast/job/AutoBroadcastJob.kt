@@ -8,7 +8,6 @@ import net.kyori.adventure.bossbar.BossBar
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.job.ScheduledJob
 import ru.astrainteractive.aspekt.module.autobroadcast.model.AnnouncementsConfiguration
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
@@ -18,13 +17,13 @@ import kotlin.time.Duration.Companion.milliseconds
 import ru.astrainteractive.aspekt.module.autobroadcast.model.AnnouncementsConfiguration.Announcement.BossBar.BarColor as AspektBarColor
 
 internal class AutoBroadcastJob(
-    val configKrate: CachedKrate<AnnouncementsConfiguration>,
+    val announcementsConfigKrate: CachedKrate<AnnouncementsConfiguration>,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     val ioScope: CoroutineScope,
     val dispatchers: KotlinDispatchers
 ) : ScheduledJob("AutoBroadcast") {
     private val kyori by kyoriKrate
-    val announcementsConfiguration by configKrate
+    val announcementsConfiguration by announcementsConfigKrate
 
     @Suppress("MagicNumber")
     override val delayMillis: Long

@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MoneyAdvancementsConfiguration(
+internal data class MoneyAdvancementsConfiguration(
     @SerialName("challenge")
     @YamlComment("Money given for challenge advancemetn")
     val challenge: Int = 5000,

@@ -13,19 +13,19 @@ import ru.astrainteractive.klibs.mikro.exposed.model.DatabaseConfiguration
 internal class EconomyConfigModule(coreModule: CoreModule) : Logger by JUtiltLogger("EconomyConfigModule") {
     val folder = coreModule.dataFolder.resolve("economy")
 
-    val databaseConfiguration = coreModule.yamlFormat
+    val dbConfigKrate = coreModule.yamlFormat
         .krateOf<DatabaseConfiguration>(folder.resolve("db"))
         .withDefault { DatabaseConfiguration.H2(path = folder.resolve("db").path, arguments = emptyList()) }
         .asStateFlowKrate()
 
-    val currencyConfiguration = coreModule.yamlFormat
+    val currencyConfigKrate = coreModule.yamlFormat
         .krateOf<CurrencyConfiguration>(file = folder.resolve("currencies"))
         .asStateFlowKrate()
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onReload = {
-            databaseConfiguration.getValue()
-            currencyConfiguration.getValue()
+            dbConfigKrate.getValue()
+            currencyConfigKrate.getValue()
         }
     )
 }

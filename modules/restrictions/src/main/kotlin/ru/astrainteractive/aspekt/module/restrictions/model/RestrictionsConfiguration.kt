@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RestrictionsConfiguration(
+internal data class RestrictionsConfiguration(
     @SerialName("explosion")
     val explosion: Explosion = Explosion(),
     @SerialName("place")

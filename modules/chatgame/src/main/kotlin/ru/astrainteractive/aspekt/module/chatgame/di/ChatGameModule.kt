@@ -16,22 +16,22 @@ class ChatGameModule(
     coreModule: CoreModule,
     bukkitCoreModule: BukkitCoreModule
 ) {
-    private val config = coreModule.yamlFormat
+    private val chatGameConfigKrate = coreModule.yamlFormat
         .krateOf<ChatGameConfig>(coreModule.dataFolder.resolve("chat_game.yml"))
         .withDefault(::ChatGameConfig)
         .asCachedKrate()
 
     private val chatGameStore = ChatGameStoreImpl(
-        chatGameConfigProvider = config,
+        chatGameConfigProvider = chatGameConfigKrate,
         riddleGenerator = RiddleGenerator(
-            configKrate = config,
-            translationKrate = coreModule.translation
+            configKrate = chatGameConfigKrate,
+            translationKrate = coreModule.translationKrate
         )
     )
 
     private val chatGameJob = ChatGameJob(
         chatGameStore = chatGameStore,
-        chatGameConfigProvider = config,
+        chatGameConfigProvider = chatGameConfigKrate,
         kyoriComponentSerializerProvider = coreModule.kyoriKrate,
     )
 
@@ -39,7 +39,7 @@ class ChatGameModule(
         coreModule = coreModule,
         bukkitCoreModule = bukkitCoreModule,
         chatGameStore = chatGameStore,
-        chatGameConfig = config.cachedValue
+        chatGameConfig = chatGameConfigKrate.cachedValue
     )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
@@ -51,7 +51,7 @@ class ChatGameModule(
             chatGameJob.onDisable()
         },
         onReload = {
-            config.getValue()
+            chatGameConfigKrate.getValue()
             chatGameJob.onDisable()
             chatGameJob.onEnable()
         }

@@ -19,7 +19,7 @@ internal class ChatGameCommandModule(
     private val nodes = buildList {
         ChatGameLiteralArgumentBuilder(
             chatGameStore = chatGameStore,
-            translationKrate = coreModule.translation,
+            translationKrate = coreModule.translationKrate,
             kyoriKrate = coreModule.kyoriKrate,
             chatGameConfig = chatGameConfig,
             currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory,

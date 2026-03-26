@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MoneyDropConfiguration(
+internal data class MoneyDropConfiguration(
     @SerialName("money_drop")
     val moneyDrop: Map<String, MoneyDropEntry> = emptyMap(),
 ) {

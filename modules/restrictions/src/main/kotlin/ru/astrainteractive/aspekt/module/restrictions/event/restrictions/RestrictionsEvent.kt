@@ -12,7 +12,6 @@ import org.bukkit.event.block.BlockSpreadEvent
 import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.event.entity.ExplosionPrimeEvent
 import org.bukkit.event.player.PlayerBucketEmptyEvent
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.module.restrictions.model.RestrictionsConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
