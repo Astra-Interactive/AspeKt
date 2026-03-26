@@ -6,7 +6,7 @@ import kotlinx.coroutines.launch
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
 import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration
+import ru.astrainteractive.aspekt.module.moneyadvancement.model.MoneyAdvancementsConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.astralibs.event.EventListener
@@ -18,21 +18,21 @@ import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
-class MoneyAdvancementEvent(
-    configurationProvider: CachedKrate<PluginConfiguration>,
+internal class MoneyAdvancementEvent(
+    mAdvConfigKrate: CachedKrate<MoneyAdvancementsConfiguration>,
     private val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory,
-    kyoriComponentSerializerProvider: CachedKrate<KyoriComponentSerializer>,
-    translationProvider: CachedKrate<PluginTranslation>
+    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
+    translationKrate: CachedKrate<PluginTranslation>
 ) : EventListener,
     Logger by JUtiltLogger("MoneyAdvancementEvent"),
     CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO).withTimings(),
-    KyoriComponentSerializer by kyoriComponentSerializerProvider.unwrap() {
-    private val configuration by configurationProvider
-    private val translation by translationProvider
+    KyoriComponentSerializer by kyoriKrate.unwrap() {
+    private val mAdvConfig by mAdvConfigKrate
+    private val translation by translationKrate
 
     @EventHandler
     fun onAdvancement(e: PlayerAdvancementDoneEvent) {
-        val economy = when (val currencyId = configuration.advancementMoney.currencyId) {
+        val economy = when (val currencyId = mAdvConfig.currencyId) {
             null -> currencyEconomyProviderFactory.findDefault()
             else -> currencyEconomyProviderFactory.findByCurrencyId(currencyId)
         } ?: run {
@@ -43,19 +43,19 @@ class MoneyAdvancementEvent(
         info { "#onAdvancement ${e.advancement.key} ${e.advancement.display?.title()}" }
         when (frame) {
             AdvancementDisplay.Frame.CHALLENGE -> {
-                val amount = configuration.advancementMoney.challenge.toDouble()
+                val amount = mAdvConfig.challenge.toDouble()
                 launch { economy.addMoney(e.player.uniqueId, amount) }
                 e.player.sendMessage(translation.moneyAdvancement.challengeCompleted(amount).component)
             }
 
             AdvancementDisplay.Frame.GOAL -> {
-                val amount = configuration.advancementMoney.goal.toDouble()
+                val amount = mAdvConfig.goal.toDouble()
                 launch { economy.addMoney(e.player.uniqueId, amount) }
                 e.player.sendMessage(translation.moneyAdvancement.goalCompleted(amount).component)
             }
 
             AdvancementDisplay.Frame.TASK -> {
-                val amount = configuration.advancementMoney.task.toDouble()
+                val amount = mAdvConfig.task.toDouble()
                 launch { economy.addMoney(e.player.uniqueId, amount) }
                 e.player.sendMessage(translation.moneyAdvancement.taskCompleted(amount).component)
             }

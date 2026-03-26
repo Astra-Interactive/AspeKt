@@ -11,16 +11,16 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerTeleportEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.util.Vector
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration
+import ru.astrainteractive.aspekt.module.sit.model.SitConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 
 internal class SitEvent(
-    configKrate: CachedKrate<PluginConfiguration>,
+    sitKrate: CachedKrate<SitConfiguration>,
     private val sitController: SitController
 ) : EventListener {
-    private val configuration by configKrate
+    private val sitConfig by sitKrate
 
     @EventHandler
     fun onDeathEvent(e: PlayerDeathEvent) {
@@ -45,7 +45,7 @@ internal class SitEvent(
     @EventHandler
     @Suppress("MagicNumber")
     fun playerInteractEvent(e: PlayerInteractEvent) {
-        if (!configuration.sit) return
+        if (!sitConfig.isEnabled) return
         if (e.hand != EquipmentSlot.HAND) return
         if (e.player.isSneaking) return
         if (e.action != Action.RIGHT_CLICK_BLOCK) return

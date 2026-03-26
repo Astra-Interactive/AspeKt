@@ -35,7 +35,7 @@ class JailModule(
         cachedJailApi = cachedJailApi,
         jailController = jailController,
         kyoriKrate = coreModule.kyoriKrate,
-        translationKrate = coreModule.translation
+        translationKrate = coreModule.translationKrate
     )
 
     private val jailCommandModule = JailCommandModule(
@@ -52,7 +52,7 @@ class JailModule(
         jailApi = jailApi,
         jailController = jailController,
         kyoriKrate = coreModule.kyoriKrate,
-        translationKrate = coreModule.translation
+        translationKrate = coreModule.translationKrate
     )
 
     val lifecycle = Lifecycle.Lambda(

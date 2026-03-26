@@ -15,7 +15,7 @@ class RtpModule(
         scope = coreModule.ioScope,
         safeLocationProvider = ForgeSafeLocationProvider(),
         dispatchers = coreModule.dispatchers,
-        translationKrate = coreModule.translation,
+        translationKrate = coreModule.translationKrate,
         kyoriKrate = coreModule.kyoriKrate,
     )
 

@@ -12,7 +12,7 @@ class TpaModule(
     commandRegistrarContext: NeoForgeCommandRegistrarContext,
 ) {
     val tpaCommandExecutor = TpaCommandExecutor(
-        translationKrate = coreModule.translation,
+        translationKrate = coreModule.translationKrate,
         tpaApi = TpaApi(),
         scope = coreModule.ioScope,
         kyoriKrate = coreModule.kyoriKrate,

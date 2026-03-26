@@ -2,36 +2,36 @@ package ru.astrainteractive.aspekt.module.chatgame.di
 
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.di.factory.ConfigKrateFactory
 import ru.astrainteractive.aspekt.module.chatgame.command.di.ChatGameCommandModule
 import ru.astrainteractive.aspekt.module.chatgame.job.ChatGameJob
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStoreImpl
 import ru.astrainteractive.aspekt.module.chatgame.store.generator.RiddleGenerator
+import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.util.asCachedKrate
+import ru.astrainteractive.klibs.kstorage.util.withDefault
 
 class ChatGameModule(
     coreModule: CoreModule,
     bukkitCoreModule: BukkitCoreModule
 ) {
-    private val config = ConfigKrateFactory.fileConfigKrate(
-        file = coreModule.dataFolder.resolve("chat_game.yml"),
-        stringFormat = coreModule.yamlFormat,
-        factory = ::ChatGameConfig
-    ).asCachedKrate()
+    private val chatGameConfigKrate = coreModule.yamlFormat
+        .krateOf<ChatGameConfig>(coreModule.dataFolder.resolve("chat_game.yml"))
+        .withDefault(::ChatGameConfig)
+        .asCachedKrate()
 
     private val chatGameStore = ChatGameStoreImpl(
-        chatGameConfigProvider = config,
+        chatGameConfigProvider = chatGameConfigKrate,
         riddleGenerator = RiddleGenerator(
-            configKrate = config,
-            translationKrate = coreModule.translation
+            configKrate = chatGameConfigKrate,
+            translationKrate = coreModule.translationKrate
         )
     )
 
     private val chatGameJob = ChatGameJob(
         chatGameStore = chatGameStore,
-        chatGameConfigProvider = config,
+        chatGameConfigProvider = chatGameConfigKrate,
         kyoriComponentSerializerProvider = coreModule.kyoriKrate,
     )
 
@@ -39,7 +39,7 @@ class ChatGameModule(
         coreModule = coreModule,
         bukkitCoreModule = bukkitCoreModule,
         chatGameStore = chatGameStore,
-        chatGameConfig = config.cachedValue
+        chatGameConfig = chatGameConfigKrate.cachedValue
     )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
@@ -51,7 +51,7 @@ class ChatGameModule(
             chatGameJob.onDisable()
         },
         onReload = {
-            config.getValue()
+            chatGameConfigKrate.getValue()
             chatGameJob.onDisable()
             chatGameJob.onEnable()
         }

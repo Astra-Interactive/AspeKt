@@ -20,7 +20,7 @@ internal class MenuRouterImpl(
             val gui = MenuGui(
                 player = bukkitPlayer,
                 menuModel = menuModel,
-                translation = coreModule.translation.cachedValue,
+                translation = coreModule.translationKrate.cachedValue,
                 dispatchers = coreModule.dispatchers,
                 kyoriComponentSerializer = coreModule.kyoriKrate.cachedValue,
                 economyProvider = bukkitCoreModule.currencyEconomyProviderFactory.findDefault()

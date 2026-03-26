@@ -20,7 +20,7 @@ internal class ClaimCommandModule(
     private val executor = ClaimCommandExecutor(
         scope = coreModule.ioScope,
         dispatchers = coreModule.dispatchers,
-        translationKrate = coreModule.translation,
+        translationKrate = coreModule.translationKrate,
         kyoriKrate = coreModule.kyoriKrate,
         claimsRepository = claimsRepository,
         claimErrorMapper = claimErrorMapper,
@@ -30,7 +30,7 @@ internal class ClaimCommandModule(
     private val nodes = buildList {
         ClaimLiteralArgumentBuilder(
             executor = executor,
-            translationKrate = coreModule.translation,
+            translationKrate = coreModule.translationKrate,
             kyoriKrate = coreModule.kyoriKrate,
             chunkProvider = chunkProvider,
             multiplatformCommand = coreModule.multiplatformCommand

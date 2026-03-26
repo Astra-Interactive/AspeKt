@@ -6,19 +6,19 @@ import org.bukkit.block.BlockFace
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration
+import ru.astrainteractive.aspekt.module.sit.model.SitConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 
 internal class SitController(
-    configuration: CachedKrate<PluginConfiguration>,
+    sitKrate: CachedKrate<SitConfiguration>,
     translation: CachedKrate<PluginTranslation>,
     kyoriComponentSerializer: KyoriComponentSerializer
 ) : KyoriComponentSerializer by kyoriComponentSerializer {
     private val translation by translation
-    private val configuration by configuration
+    private val sitConfig by sitKrate
 
     private val sitPlayers = mutableMapOf<String, ArmorStand>()
 
@@ -37,7 +37,7 @@ internal class SitController(
         location: Location = player.location.clone(),
         locationWithOffset: Location = location.clone().add(0.0, -SIT_STAIR_OFFSET, 0.0)
     ) {
-        if (!configuration.sit) return
+        if (!sitConfig.isEnabled) return
         if (isFilledWithSolidBlocks(location)) {
             player.sendMessage(translation.sit.cantSitInBlock.let(::toComponent))
             return

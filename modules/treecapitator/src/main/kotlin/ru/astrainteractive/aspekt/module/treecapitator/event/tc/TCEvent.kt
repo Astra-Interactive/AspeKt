@@ -16,19 +16,19 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration
+import ru.astrainteractive.aspekt.module.treecapitator.model.TreeCapitatorConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
+import ru.astrainteractive.klibs.kstorage.util.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import kotlin.random.Random
 
 internal class TCEvent(
-    private val configKrate: CachedKrate<PluginConfiguration>,
+    private val tcConfigKrate: CachedKrate<TreeCapitatorConfiguration>,
     private val ioScope: CoroutineScope,
     private val dispatchers: KotlinDispatchers
 ) : EventListener {
-    private val treeCapitatorConfig: PluginConfiguration.TreeCapitator
-        get() = configKrate.cachedValue.treeCapitator
+    private val treeCapitatorConfigurationConfig by tcConfigKrate
 
     @Suppress("UnusedPrivateMember")
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -40,17 +40,17 @@ internal class TCEvent(
         if (e.isCancelled) return
         if (!tool.type.name.contains("AXE", true)) return
         if (!player.isSneaking) return
-        if (!treeCapitatorConfig.enabled) return
+        if (!treeCapitatorConfigurationConfig.enabled) return
         if (!isLog(block.type)) return
         breakRecursively(player, block, 0, tool)
-        if (treeCapitatorConfig.replant) {
+        if (treeCapitatorConfigurationConfig.replant) {
             val sapling = saplingFromBlock(material) ?: return
             placeSapling(sapling, block, 0)
         }
     }
 
     private tailrec fun placeSapling(sapling: Material, block: Block, i: Int) {
-        if (i >= treeCapitatorConfig.replantMaxIterations) return
+        if (i >= treeCapitatorConfigurationConfig.replantMaxIterations) return
         if (!isDirt(block.type)) {
             placeSapling(sapling, block.getRelative(BlockFace.DOWN), i + 1)
             return
@@ -70,11 +70,11 @@ internal class TCEvent(
     }
 
     private fun breakRecursively(player: Player, block: Block, i: Int, tool: ItemStack) {
-        if (i >= treeCapitatorConfig.destroyLimit) return
+        if (i >= treeCapitatorConfigurationConfig.destroyLimit) return
         val isLog = isLog(block.type)
         val isLeave = isLeaves(block.type)
         if (!isLog && !isLeave) return
-        if (isLeave && treeCapitatorConfig.destroyLeaves) {
+        if (isLeave && treeCapitatorConfigurationConfig.destroyLeaves) {
             block.breakNaturally()
         }
         if (isLog) {
@@ -107,7 +107,7 @@ internal class TCEvent(
      * Damage axe item
      */
     private fun damageItem(player: Player, tool: ItemStack) {
-        if (!treeCapitatorConfig.damageAxe) return
+        if (!treeCapitatorConfigurationConfig.damageAxe) return
         val meta: ItemMeta = tool.itemMeta ?: return
         val damageable = meta as? Damageable ?: return
         val maxDmg: Short = tool.type.maxDurability
@@ -119,7 +119,7 @@ internal class TCEvent(
         }
         tool.itemMeta = damageable
         if (dmg < maxDmg) return
-        if (treeCapitatorConfig.breakAxe) {
+        if (treeCapitatorConfigurationConfig.breakAxe) {
             tool.amount = 0
             player.playSound(player.location, Sound.ENTITY_ITEM_BREAK, 1f, 1f)
         } else {

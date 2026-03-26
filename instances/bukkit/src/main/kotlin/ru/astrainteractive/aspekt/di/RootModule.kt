@@ -46,7 +46,7 @@ class RootModule(plugin: LifecyclePlugin) {
             stringFormat = coreModule.jsonStringFormat,
             dataFolder = coreModule.dataFolder,
             ioScope = coreModule.ioScope,
-            translationKrate = coreModule.translation
+            translationKrate = coreModule.translationKrate
         )
     }
     private val bukkitClaimModule: BukkitClaimModule by lazy {

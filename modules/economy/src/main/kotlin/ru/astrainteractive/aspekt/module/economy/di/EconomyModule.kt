@@ -20,7 +20,7 @@ class EconomyModule(
     )
 
     private val databaseModule = EconomyDatabaseModule(
-        dbConfig = economyConfigModule.databaseConfiguration,
+        dbConfig = economyConfigModule.dbConfigKrate,
         coroutineScope = coreModule.ioScope,
         ioDispatcher = coreModule.dispatchers.IO
     )

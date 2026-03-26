@@ -7,28 +7,27 @@ import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.bossbar.BossBar
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.job.ScheduledJob
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration
+import ru.astrainteractive.aspekt.module.autobroadcast.model.AnnouncementsConfiguration
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.util.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.milliseconds
-import ru.astrainteractive.aspekt.plugin.PluginConfiguration.Announcements.Announcement.BossBar.BarColor as AspektBarColor
+import ru.astrainteractive.aspekt.module.autobroadcast.model.AnnouncementsConfiguration.Announcement.BossBar.BarColor as AspektBarColor
 
 internal class AutoBroadcastJob(
-    val configKrate: CachedKrate<PluginConfiguration>,
+    val announcementsConfigKrate: CachedKrate<AnnouncementsConfiguration>,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     val ioScope: CoroutineScope,
     val dispatchers: KotlinDispatchers
 ) : ScheduledJob("AutoBroadcast") {
     private val kyori by kyoriKrate
-    val announcements: PluginConfiguration.Announcements
-        get() = configKrate.cachedValue.announcements
+    val announcementsConfiguration by announcementsConfigKrate
 
     @Suppress("MagicNumber")
     override val delayMillis: Long
-        get() = announcements.interval * 1000L
+        get() = announcementsConfiguration.interval * 1000L
 
     override val initialDelayMillis: Long
         get() = 0L
@@ -55,18 +54,18 @@ internal class AutoBroadcastJob(
         ioScope.launch(dispatchers.Main) {
             i++
             if (i >= Int.MAX_VALUE) i = 0
-            val announcements = announcements.announcements.values.toList()
+            val announcements = announcementsConfiguration.announcements.values.toList()
             if (announcements.isEmpty()) return@launch
             val announcement = announcements.getOrNull(i % announcements.size) ?: return@launch
             when (announcement) {
-                is PluginConfiguration.Announcements.Announcement.ActionBar -> {
+                is AnnouncementsConfiguration.Announcement.ActionBar -> {
                     val message = announcement.text.let(kyori::toComponent)
                     Bukkit.getOnlinePlayers().forEach { player ->
                         player.sendActionBar(message)
                     }
                 }
 
-                is PluginConfiguration.Announcements.Announcement.BossBar -> {
+                is AnnouncementsConfiguration.Announcement.BossBar -> {
                     val message = announcement.text.let(kyori::toComponent)
                     val bossBar = BossBar.bossBar(
                         message,
@@ -94,7 +93,7 @@ internal class AutoBroadcastJob(
                     }
                 }
 
-                is PluginConfiguration.Announcements.Announcement.Text -> {
+                is AnnouncementsConfiguration.Announcement.Text -> {
                     val message = announcement.text.let(kyori::toComponent)
                     Bukkit.getOnlinePlayers().forEach { player ->
                         player.sendMessage(message)

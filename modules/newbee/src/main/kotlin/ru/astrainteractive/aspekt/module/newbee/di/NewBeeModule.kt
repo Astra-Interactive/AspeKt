@@ -11,7 +11,7 @@ class NewBeeModule(
 ) {
     private val newBeeEventListener = NewBeeEventListener(
         kyoriKrate = coreModule.kyoriKrate,
-        translationKrate = coreModule.translation,
+        translationKrate = coreModule.translationKrate,
         ioScope = coreModule.ioScope,
         dispatcher = coreModule.dispatchers
     )
