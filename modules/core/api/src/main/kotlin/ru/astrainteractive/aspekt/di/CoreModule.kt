@@ -7,9 +7,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
-import ru.astrainteractive.aspekt.di.factory.ConfigKrateFactory
 import ru.astrainteractive.aspekt.plugin.PluginConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
@@ -19,6 +19,7 @@ import ru.astrainteractive.astralibs.util.YamlStringFormat
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 import ru.astrainteractive.klibs.kstorage.util.asCachedKrate
 import ru.astrainteractive.klibs.kstorage.util.asCachedMutableKrate
+import ru.astrainteractive.klibs.kstorage.util.withDefault
 import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import java.io.File
@@ -44,17 +45,15 @@ class CoreModule(
         ),
     )
 
-    val configKrate = ConfigKrateFactory.fileConfigKrate(
-        file = dataFolder.resolve("config.yml"),
-        stringFormat = yamlFormat,
-        factory = ::PluginConfiguration
-    ).asCachedMutableKrate()
+    val configKrate = yamlFormat
+        .krateOf<PluginConfiguration>(dataFolder.resolve("config.yml"))
+        .withDefault(::PluginConfiguration)
+        .asCachedMutableKrate()
 
-    val translation = ConfigKrateFactory.fileConfigKrate(
-        file = dataFolder.resolve("translations.yml"),
-        stringFormat = yamlFormat,
-        factory = ::PluginTranslation
-    ).asCachedMutableKrate()
+    val translation = yamlFormat
+        .krateOf<PluginTranslation>(dataFolder.resolve("translations.yml"))
+        .withDefault(::PluginTranslation)
+        .asCachedMutableKrate()
 
     val kyoriKrate = DefaultMutableKrate<KyoriComponentSerializer>(
         loader = { null },

@@ -1,19 +1,15 @@
 package ru.astrainteractive.aspekt.plugin
 
-import com.charleskorn.kaml.YamlComment
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import ru.astrainteractive.astralibs.string.StringDesc
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 @Serializable
 data class PluginConfiguration(
     @SerialName("sit")
     val sit: Boolean = true,
-    @SerialName("discordsrv")
-    val discordSRVLink: DiscordSRVLink = DiscordSRVLink(),
     @SerialName("announcements")
     val announcements: Announcements = Announcements(),
     @SerialName("auto_crop")
@@ -24,39 +20,7 @@ data class PluginConfiguration(
     val restrictions: Restrictions = Restrictions(),
     @SerialName("money_drop")
     val moneyDrop: Map<String, MoneyDropEntry> = emptyMap(),
-    val towny: TownyConfiguration = TownyConfiguration(),
-    @SerialName("advancement_money")
-    val advancementMoney: AdvancementMoney = AdvancementMoney()
 ) {
-    @Serializable
-    data class AdvancementMoney(
-        @SerialName("challenge")
-        @YamlComment("Money given for challenge advancemetn")
-        val challenge: Int = 5000,
-        @SerialName("goal")
-        @YamlComment("Money given long-road advancement")
-        val goal: Int = 1000,
-        @SerialName("task")
-        @YamlComment("Money given for default task")
-        val task: Int = 1000,
-        @SerialName("currency_id")
-        val currencyId: String? = null
-    )
-
-    @Serializable
-    data class TownyConfiguration(
-        @SerialName("leader_role_configuration")
-        val leaderRoleConfiguration: LeaderRoleConfiguration = LeaderRoleConfiguration()
-    ) {
-        @Serializable
-        data class LeaderRoleConfiguration(
-            @SerialName("is_enabled")
-            val isEnabled: Boolean = false,
-            val initialDelay: Long = 0L,
-            val delay: Long = 1.minutes.inWholeMilliseconds,
-            val roleId: String = ""
-        )
-    }
 
     @Serializable
     data class MoneyDropEntry(
@@ -176,21 +140,4 @@ data class PluginConfiguration(
             }
         }
     }
-
-    @Serializable
-    data class DiscordSRVLink(
-        @SerialName("money_for_link")
-        val moneyForLink: Int = 0,
-        @SerialName("currency_id")
-        val currencyId: String? = null,
-        @SerialName("discord_linked_role")
-        val discordLinkedRole: String? = null,
-        @SerialName("minecraft_linked_role")
-        val minecraftLinkedRole: String? = null,
-        @SerialName("is_enabled")
-        val isEnabled: Boolean = false,
-        @SerialName("initial_delay")
-        val initialDelay: Long = 0L,
-        val delay: Long = 1.minutes.inWholeMilliseconds,
-    )
 }
