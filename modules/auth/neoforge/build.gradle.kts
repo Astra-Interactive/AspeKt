@@ -37,7 +37,7 @@ dependencies {
     compileOnly(libs.minecraft.neoforgeversion)
     compileOnly("org.joml:joml:1.10.8")
     compileOnly("com.mojang:datafixerupper:8.0.16")
-    compileOnly("com.mojang:brigadier:1.3.10")
+    compileOnly("com.mojang:brigadier:1.0.500")
     compileOnly("com.mojang:authlib:6.0.54")
-    compileOnly("net.neoforged:bus:8.0.2")
+    compileOnly("net.neoforged:bus:8.0.5")
 }
