@@ -6,7 +6,7 @@ plugins {
 dependencies {
     api(libs.klibs.kstorage)
 
-    compileOnly("com.mojang:brigadier:1.0.18")
+    compileOnly("com.mojang:brigadier:1.0.500")
     compileOnly(libs.minecraft.kyori.gson)
     compileOnly(libs.minecraft.kyori.legacy)
     compileOnly(libs.minecraft.kyori.plain)
