@@ -1,5 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import ru.astrainteractive.gradleplugin.property.extension.ModelPropertyValueExt.requireProjectInfo
+import ru.astrainteractive.gradleplugin.property.util.requireProjectInfo
 
 plugins {
     kotlin("jvm")
@@ -53,7 +53,16 @@ dependencies {
 }
 
 minecraftProcessResource {
-    bukkit()
+    bukkit(
+        customProperties = mapOf(
+            "libraries" to listOf(
+                libs.driver.h2.get(),
+                libs.driver.jdbc.get(),
+                libs.driver.mysql.get(),
+                libs.driver.mariadb.get()
+            ).joinToString("\",\"", "[\"", "\"]")
+        )
+    )
 }
 
 val shadowJar = tasks.named<ShadowJar>("shadowJar")

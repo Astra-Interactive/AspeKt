@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent
 import ru.astrainteractive.aspekt.module.restrictions.model.RestrictionsConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
-import ru.astrainteractive.klibs.kstorage.util.getValue
+import ru.astrainteractive.klibs.kstorage.api.getValue
 
 internal class RestrictionsEvent(
     private val configKrate: CachedKrate<RestrictionsConfiguration>

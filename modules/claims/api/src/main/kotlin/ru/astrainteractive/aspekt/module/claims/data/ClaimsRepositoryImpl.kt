@@ -21,7 +21,6 @@ import ru.astrainteractive.aspekt.module.claims.data.krate.ClaimKrate
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.UniqueWorldKey
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
-import ru.astrainteractive.klibs.kstorage.util.save
 import java.io.File
 import java.util.UUID
 

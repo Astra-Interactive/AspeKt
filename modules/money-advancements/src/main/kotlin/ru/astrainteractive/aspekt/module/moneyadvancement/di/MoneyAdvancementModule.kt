@@ -6,8 +6,8 @@ import ru.astrainteractive.aspekt.module.moneyadvancement.event.MoneyAdvancement
 import ru.astrainteractive.aspekt.module.moneyadvancement.model.MoneyAdvancementsConfiguration
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.klibs.kstorage.util.asCachedMutableKrate
-import ru.astrainteractive.klibs.kstorage.util.withDefault
+import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
+import ru.astrainteractive.klibs.kstorage.api.withDefault
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 

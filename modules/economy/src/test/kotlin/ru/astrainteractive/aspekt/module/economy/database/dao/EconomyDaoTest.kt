@@ -10,9 +10,8 @@ import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
 import ru.astrainteractive.klibs.kstorage.api.StateFlowMutableKrate
+import ru.astrainteractive.klibs.kstorage.api.asStateFlowMutableKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
-import ru.astrainteractive.klibs.kstorage.util.asStateFlowMutableKrate
-import ru.astrainteractive.klibs.kstorage.util.save
 import ru.astrainteractive.klibs.mikro.exposed.model.DatabaseConfiguration
 import java.io.File
 import java.nio.file.Files

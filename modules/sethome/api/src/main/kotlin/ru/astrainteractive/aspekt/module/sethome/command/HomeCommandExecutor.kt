@@ -7,8 +7,7 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
-import ru.astrainteractive.klibs.kstorage.util.getValue
-import ru.astrainteractive.klibs.kstorage.util.save
+import ru.astrainteractive.klibs.kstorage.api.getValue
 
 class HomeCommandExecutor(
     private val homeKrateProvider: HomeKrateProvider,

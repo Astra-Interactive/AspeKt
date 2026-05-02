@@ -8,8 +8,8 @@ import ru.astrainteractive.aspekt.module.sit.event.sit.SitEvent
 import ru.astrainteractive.aspekt.module.sit.model.SitConfiguration
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.klibs.kstorage.util.asCachedMutableKrate
-import ru.astrainteractive.klibs.kstorage.util.withDefault
+import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
+import ru.astrainteractive.klibs.kstorage.api.withDefault
 
 class SitModule(
     coreModule: CoreModule,

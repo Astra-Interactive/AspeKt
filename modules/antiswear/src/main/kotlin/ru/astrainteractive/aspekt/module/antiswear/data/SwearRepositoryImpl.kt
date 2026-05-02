@@ -6,7 +6,6 @@ import ru.astrainteractive.aspekt.module.antiswear.data.krate.AntiSwearKrate
 import ru.astrainteractive.aspekt.module.antiswear.data.model.AntiSwearStorage
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.kstorage.suspend.SuspendMutableKrate
-import ru.astrainteractive.klibs.kstorage.util.save
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger

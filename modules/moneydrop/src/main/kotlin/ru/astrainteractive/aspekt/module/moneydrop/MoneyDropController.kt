@@ -16,7 +16,7 @@ import ru.astrainteractive.astralibs.persistence.Persistence.getPersistentDataOr
 import ru.astrainteractive.astralibs.persistence.Persistence.hasPersistentData
 import ru.astrainteractive.astralibs.persistence.Persistence.setPersistentDataType
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
-import ru.astrainteractive.klibs.kstorage.util.getValue
+import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import java.time.Instant

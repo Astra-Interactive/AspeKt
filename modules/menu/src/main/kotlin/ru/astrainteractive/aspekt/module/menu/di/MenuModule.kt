@@ -7,8 +7,8 @@ import ru.astrainteractive.aspekt.module.menu.di.factory.MenuModelsFactory
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouterImpl
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.klibs.kstorage.api.asCachedKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
-import ru.astrainteractive.klibs.kstorage.util.asCachedKrate
 
 class MenuModule(
     private val coreModule: CoreModule,

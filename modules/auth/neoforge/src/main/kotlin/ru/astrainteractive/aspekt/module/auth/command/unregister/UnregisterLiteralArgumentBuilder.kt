@@ -18,7 +18,7 @@ import ru.astrainteractive.astralibs.server.util.getOnlinePlayers
 import ru.astrainteractive.astralibs.server.util.getPlayerGameProfile
 import ru.astrainteractive.astralibs.server.util.toPlain
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
-import ru.astrainteractive.klibs.kstorage.util.getValue
+import ru.astrainteractive.klibs.kstorage.api.getValue
 
 /**
  * /unregister <username>
