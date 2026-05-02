@@ -14,7 +14,7 @@ import org.bukkit.util.Vector
 import ru.astrainteractive.aspekt.module.sit.model.SitConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
-import ru.astrainteractive.klibs.kstorage.util.getValue
+import ru.astrainteractive.klibs.kstorage.api.getValue
 
 internal class SitEvent(
     sitKrate: CachedKrate<SitConfiguration>,

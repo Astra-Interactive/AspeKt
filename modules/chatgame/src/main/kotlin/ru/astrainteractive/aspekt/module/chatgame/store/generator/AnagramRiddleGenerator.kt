@@ -5,7 +5,7 @@ import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameData
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
-import ru.astrainteractive.klibs.kstorage.util.getValue
+import ru.astrainteractive.klibs.kstorage.api.getValue
 import kotlin.random.Random
 
 internal class AnagramRiddleGenerator(

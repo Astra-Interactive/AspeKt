@@ -6,8 +6,8 @@ import ru.astrainteractive.aspekt.module.treecapitator.event.tc.TCEvent
 import ru.astrainteractive.aspekt.module.treecapitator.model.TreeCapitatorConfiguration
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.klibs.kstorage.util.asCachedMutableKrate
-import ru.astrainteractive.klibs.kstorage.util.withDefault
+import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
+import ru.astrainteractive.klibs.kstorage.api.withDefault
 
 class TreeCapitatorModule(
     coreModule: CoreModule,

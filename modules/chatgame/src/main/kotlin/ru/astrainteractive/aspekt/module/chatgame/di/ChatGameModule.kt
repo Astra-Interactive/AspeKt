@@ -9,8 +9,8 @@ import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStoreImpl
 import ru.astrainteractive.aspekt.module.chatgame.store.generator.RiddleGenerator
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.klibs.kstorage.util.asCachedKrate
-import ru.astrainteractive.klibs.kstorage.util.withDefault
+import ru.astrainteractive.klibs.kstorage.api.asCachedKrate
+import ru.astrainteractive.klibs.kstorage.api.withDefault
 
 class ChatGameModule(
     coreModule: CoreModule,

@@ -10,7 +10,7 @@ import ru.astrainteractive.aspekt.module.sit.model.SitConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
-import ru.astrainteractive.klibs.kstorage.util.getValue
+import ru.astrainteractive.klibs.kstorage.api.getValue
 
 internal class SitController(
     sitKrate: CachedKrate<SitConfiguration>,

@@ -19,7 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta
 import ru.astrainteractive.aspekt.module.treecapitator.model.TreeCapitatorConfiguration
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
-import ru.astrainteractive.klibs.kstorage.util.getValue
+import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import kotlin.random.Random
 

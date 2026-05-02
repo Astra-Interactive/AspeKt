@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.module.moneydrop.database.table
 
-import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.sql.javatime.timestamp
+import org.jetbrains.exposed.v1.core.dao.id.LongIdTable
+import org.jetbrains.exposed.v1.javatime.timestamp
 
 internal object MoneyDropLocationTable : LongIdTable(name = "MONEY_DROP_LOCATION") {
     val x = integer("x")

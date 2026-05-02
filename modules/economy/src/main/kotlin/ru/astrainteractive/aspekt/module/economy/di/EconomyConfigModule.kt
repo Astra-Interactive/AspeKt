@@ -4,8 +4,8 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyConfiguration
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.klibs.kstorage.util.asStateFlowKrate
-import ru.astrainteractive.klibs.kstorage.util.withDefault
+import ru.astrainteractive.klibs.kstorage.api.asStateFlowKrate
+import ru.astrainteractive.klibs.kstorage.api.withDefault
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import ru.astrainteractive.klibs.mikro.exposed.model.DatabaseConfiguration

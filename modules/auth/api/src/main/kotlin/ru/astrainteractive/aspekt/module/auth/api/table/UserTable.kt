@@ -1,6 +1,6 @@
 package ru.astrainteractive.aspekt.module.auth.api.table
 
-import org.jetbrains.exposed.sql.javatime.datetime
+import org.jetbrains.exposed.v1.javatime.datetime
 import ru.astrainteractive.klibs.mikro.exposed.dao.StringIdTable
 
 internal object UserTable : StringIdTable("USER_TABLE", "uuid") {

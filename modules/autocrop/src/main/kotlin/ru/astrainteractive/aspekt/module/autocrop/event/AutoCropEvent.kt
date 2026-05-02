@@ -16,7 +16,7 @@ import ru.astrainteractive.aspekt.module.autocrop.model.AutoCropConfiguration
 import ru.astrainteractive.aspekt.module.autocrop.presentation.CropDupeController
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
-import ru.astrainteractive.klibs.kstorage.util.getValue
+import ru.astrainteractive.klibs.kstorage.api.getValue
 import kotlin.random.Random
 
 @Suppress("LongParameterList")

@@ -10,7 +10,7 @@ import ru.astrainteractive.aspekt.job.ScheduledJob
 import ru.astrainteractive.aspekt.module.autobroadcast.model.AnnouncementsConfiguration
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
-import ru.astrainteractive.klibs.kstorage.util.getValue
+import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.milliseconds
