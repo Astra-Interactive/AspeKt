@@ -26,7 +26,7 @@ internal class MenuRouterImpl(
                 economyProvider = bukkitCoreModule.currencyEconomyProviderFactory.findDefault()
             )
             withContext(coreModule.dispatchers.Main) {
-                gui.open()
+                bukkitPlayer.openInventory(gui.inventory)
             }
         }
     }

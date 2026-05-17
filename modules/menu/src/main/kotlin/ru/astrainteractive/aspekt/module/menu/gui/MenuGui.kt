@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.menu.gui
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -9,23 +10,26 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryCloseEvent
+import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.inventory.ItemStack
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.aspekt.plugin.PluginNamedPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.astralibs.economy.EconomyFacade
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.menu.core.setInventorySlot
 import ru.astrainteractive.astralibs.menu.holder.DefaultPlayerHolder
 import ru.astrainteractive.astralibs.menu.holder.PlayerHolder
-import ru.astrainteractive.astralibs.menu.inventory.InventoryMenu
+import ru.astrainteractive.astralibs.menu.inventory.api.InventoryMenu
 import ru.astrainteractive.astralibs.menu.inventory.model.InventorySize
 import ru.astrainteractive.astralibs.menu.slot.InventorySlot
-import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setIndex
-import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setItemStack
-import ru.astrainteractive.astralibs.menu.slot.util.InventorySlotBuilderExt.setOnClickListener
+import ru.astrainteractive.astralibs.menu.slot.setIndex
+import ru.astrainteractive.astralibs.menu.slot.setItemStack
+import ru.astrainteractive.astralibs.menu.slot.setOnClickListener
 import ru.astrainteractive.astralibs.server.permission.asKPermissible
 import ru.astrainteractive.astralibs.string.StringDesc
+import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 @Suppress("TooManyFunctions")
@@ -37,9 +41,11 @@ internal class MenuGui(
     private val dispatchers: KotlinDispatchers,
     private val kyoriComponentSerializer: KyoriComponentSerializer
 ) : InventoryMenu() {
+    override val menuScope: CoroutineScope = CoroutineFeature.Default(dispatchers.Main).withTimings()
+    override val childComponents: List<CoroutineScope> = emptyList()
     override val inventorySize: InventorySize = menuModel.size
     override val title: Component = StringDesc.Raw(menuModel.title).let(kyoriComponentSerializer::toComponent)
-    override val playerHolder: PlayerHolder = DefaultPlayerHolder(player)
+    private val playerHolder: PlayerHolder = DefaultPlayerHolder(player)
 
     @Suppress("VariableNaming")
     private val PLACEHOLDERS: Map<String, String>
@@ -47,7 +53,7 @@ internal class MenuGui(
             "{PLAYER}" to playerHolder.player.name
         )
 
-    override fun onInventoryCreated() {
+    override fun onInventoryOpenEvent(e: InventoryOpenEvent) {
         render()
         menuModel.updateInterval?.let(::startAutoUpdate)
     }
@@ -63,12 +69,10 @@ internal class MenuGui(
         }
     }
 
-    override fun onInventoryClicked(e: InventoryClickEvent) {
-        super.onInventoryClicked(e)
+    override fun onInventoryClickEvent(e: InventoryClickEvent) {
+        super.onInventoryClickEvent(e)
         e.isCancelled = true
     }
-
-    override fun onInventoryClosed(it: InventoryCloseEvent) = Unit
 
     private fun MenuModel.MenuItem.toItemStack(): ItemStack {
         val menuItem = this
@@ -152,32 +156,34 @@ internal class MenuGui(
     override fun render() {
         super.render()
         menuModel.items.values.filter(::isMeetVisibilityConditions).forEach { menuItem ->
-            InventorySlot.Builder()
-                .setItemStack(menuItem.toItemStack())
-                .setIndex(menuItem.index)
-                .setOnClickListener {
-                    val permission = menuItem.permission?.let(::PluginNamedPermission)
+            setInventorySlot(
+                InventorySlot.Builder()
+                    .setItemStack(menuItem.toItemStack())
+                    .setIndex(menuItem.index)
+                    .setOnClickListener {
+                        val permission = menuItem.permission?.let(::PluginNamedPermission)
 
-                    val hasPermission = permission?.let(playerHolder.player.asKPermissible()::hasPermission) ?: true
-                    if (!hasPermission) {
-                        translation.general.noPermission
-                            .let(kyoriComponentSerializer::toComponent)
-                            .run(playerHolder.player::sendMessage)
-                        return@setOnClickListener
-                    }
-
-                    if (!isMeetClickConditions(menuItem)) return@setOnClickListener
-                    menuScope.launch {
-                        if (!isMeetPriceCheck(menuItem)) {
-                            translation.general.notEnoughMoney
+                        val hasPermission = permission?.let(playerHolder.player.asKPermissible()::hasPermission) ?: true
+                        if (!hasPermission) {
+                            translation.general.noPermission
                                 .let(kyoriComponentSerializer::toComponent)
                                 .run(playerHolder.player::sendMessage)
-                            return@launch
+                            return@setOnClickListener
                         }
 
-                        processReward(menuItem)
-                    }
-                }.build().setInventorySlot()
+                        if (!isMeetClickConditions(menuItem)) return@setOnClickListener
+                        menuScope.launch {
+                            if (!isMeetPriceCheck(menuItem)) {
+                                translation.general.notEnoughMoney
+                                    .let(kyoriComponentSerializer::toComponent)
+                                    .run(playerHolder.player::sendMessage)
+                                return@launch
+                            }
+
+                            processReward(menuItem)
+                        }
+                    }.build()
+            )
         }
     }
 }
