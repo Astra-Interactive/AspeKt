@@ -4,6 +4,8 @@ plugins {
 }
 
 dependencies {
+    compileOnly(libs.minecraft.brigadier)
+    compileOnly(libs.minecraft.kyori.plain)
     implementation(libs.exposed.core)
     implementation(libs.exposed.dao)
     implementation(libs.exposed.java.time)

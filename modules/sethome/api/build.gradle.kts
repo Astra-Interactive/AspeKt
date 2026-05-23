@@ -4,7 +4,8 @@ plugins {
 }
 
 dependencies {
-    compileOnly("com.google.guava:guava:31.1-jre")
+    compileOnly(libs.guava)
+    compileOnly(libs.minecraft.brigadier)
     compileOnly(libs.minecraft.kyori.plain)
 
     implementation(libs.klibs.kstorage)

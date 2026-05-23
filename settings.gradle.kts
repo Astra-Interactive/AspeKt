@@ -1,6 +1,8 @@
 pluginManagement {
     repositories {
         maven("https://maven.neoforged.net/releases")
+        maven("https://maven.minecraftforge.net")
+        maven("https://files.minecraftforge.net/maven")
         maven("https://plugins.gradle.org/m2/")
         maven("https://jitpack.io")
         gradlePluginPortal()
@@ -20,6 +22,8 @@ dependencyResolutionManagement {
         gradlePluginPortal()
         mavenCentral()
         mavenLocal()
+        maven("https://maven.minecraftforge.net/")
+        maven("https://files.minecraftforge.net/maven")
         maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
         maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
         maven("https://papermc.io/repo/repository/maven-public/")
@@ -45,12 +49,14 @@ rootProject.name = "AspeKt"
 // Spigot
 include(":instances:bukkit")
 include(":instances:neoforge")
+include(":instances:forge")
 include(":instances:bungee")
 // Modules
 include(
     ":modules:core:api",
     ":modules:core:bukkit",
     ":modules:core:neoforge",
+    ":modules:core:forge",
 )
 include(":modules:menu")
 include(":modules:broadcast")
@@ -58,18 +64,22 @@ include(
     ":modules:claims:api",
     ":modules:claims:bukkit",
     ":modules:claims:neoforge",
+    ":modules:claims:forge",
 )
 include(
     ":modules:sethome:api",
     ":modules:sethome:neoforge",
+    ":modules:sethome:forge",
 )
 include(
     ":modules:tpa:api",
     ":modules:tpa:neoforge",
+    ":modules:tpa:forge",
 )
 include(
     ":modules:rtp:api",
     ":modules:rtp:neoforge",
+    ":modules:rtp:forge",
 )
 include(":modules:moneydrop")
 include(":modules:money-advancements")
@@ -85,6 +95,7 @@ include(":modules:treecapitator")
 include(":modules:jail")
 include(
     ":modules:auth:api",
-    ":modules:auth:neoforge"
+    ":modules:auth:neoforge",
+    ":modules:auth:forge",
 )
 include(":modules:invisible-item-frames")
