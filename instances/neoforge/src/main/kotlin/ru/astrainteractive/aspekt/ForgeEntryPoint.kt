@@ -3,7 +3,6 @@ package ru.astrainteractive.aspekt
 import net.neoforged.fml.common.Mod
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.astralibs.lifecycle.ForgeLifecycleServer
-import ru.astrainteractive.astralibs.server.util.NeoForgeUtil
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import javax.annotation.ParametersAreNonnullByDefault
@@ -26,9 +25,5 @@ class ForgeEntryPoint :
 
     override fun onReload() {
         rootModule.lifecycle.onReload()
-    }
-
-    init {
-        NeoForgeUtil.bootstrap()
     }
 }

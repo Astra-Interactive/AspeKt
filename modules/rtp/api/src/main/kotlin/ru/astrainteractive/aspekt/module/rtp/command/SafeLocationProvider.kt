@@ -12,4 +12,6 @@ interface SafeLocationProvider {
     fun isActive(uuid: UUID): Boolean
 
     fun getJobsNumber(): Int
+
+    fun getNextTickTime(): Double
 }

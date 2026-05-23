@@ -24,7 +24,7 @@ import ru.astrainteractive.aspekt.module.claims.util.toClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.coroutines.NeoForgeMainDispatcher
+import ru.astrainteractive.astralibs.coroutines.MinecraftMainDispatcher
 import ru.astrainteractive.astralibs.event.flowEvent
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.server.util.asPermissible
@@ -44,7 +44,7 @@ class ForgeClaimEvent(
     private val kyori by kyoriKrate
 
     // todo mainScope
-    private val scope = CoroutineScope(SupervisorJob() + NeoForgeMainDispatcher())
+    private val scope = CoroutineScope(SupervisorJob() + MinecraftMainDispatcher())
 
     @Suppress("MagicNumber")
     private val debounce = EventDebounce<RetractKey>(5000L)

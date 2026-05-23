@@ -11,11 +11,11 @@ import ru.astrainteractive.aspekt.module.rtp.di.RtpModule
 import ru.astrainteractive.aspekt.module.sethome.di.HomesModule
 import ru.astrainteractive.aspekt.module.tpa.di.TpaModule
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
-import ru.astrainteractive.astralibs.command.brigadier.command.NeoForgeMultiplatformCommands
+import ru.astrainteractive.astralibs.command.brigadier.command.MinecraftMultiplatformCommands
 import ru.astrainteractive.astralibs.command.registrar.NeoForgeCommandRegistrarContext
-import ru.astrainteractive.astralibs.coroutines.NeoForgeDispatchers
+import ru.astrainteractive.astralibs.coroutines.MinecraftDispatchers
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.astralibs.server.bridge.NeoForgePlatformServer
+import ru.astrainteractive.astralibs.server.bridge.MinecraftPlatformServer
 import ru.astrainteractive.astralibs.util.YamlStringFormat
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
@@ -33,9 +33,9 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
     val coreModule by lazy {
         CoreModule(
             dataFolder = dataFolder,
-            dispatchers = NeoForgeDispatchers(),
-            platformServer = NeoForgePlatformServer,
-            multiplatformCommand = MultiplatformCommand(NeoForgeMultiplatformCommands())
+            dispatchers = MinecraftDispatchers(),
+            platformServer = MinecraftPlatformServer,
+            multiplatformCommand = MultiplatformCommand(MinecraftMultiplatformCommands())
         )
     }
 
@@ -54,6 +54,7 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
             )
         )
     )
+
     val forgeAuthModule by lazy {
         ForgeAuthModule(
             authApiModule = authApiModule,
@@ -94,6 +95,7 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
             commandRegistrarContext = commandRegistrarContext,
         )
     }
+
     val rtpModule by lazy {
         RtpModule(
             coreModule = coreModule,
