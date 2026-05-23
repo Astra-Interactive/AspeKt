@@ -34,7 +34,9 @@ class CoreModule(
     val ioScope = CoroutineFeature
         .Default(Dispatchers.IO)
         .withTimings()
-    val mainScope: CoroutineScope = CoroutineFeature.Default(dispatchers.Main)
+
+    val mainScope: CoroutineScope = CoroutineFeature.Default(dispatchers.Main).withTimings()
+    val unconfinedScope = CoroutineFeature.Unconfined.withTimings()
 
     val yamlFormat: StringFormat = YamlStringFormat(
         configuration = Yaml.default.configuration.copy(

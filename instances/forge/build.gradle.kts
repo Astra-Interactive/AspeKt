@@ -91,6 +91,7 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         .takeIf(File::exists)
         ?: rootDir.resolve("jars")
     dependencies {
+        // Dependencies
         exclude(dependency("org.jetbrains:annotations"))
         exclude("ch/qos/logback/**")
         exclude("com/ibm/icu/**")
@@ -104,14 +105,18 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         exclude("org/jetbrains/annotations/**")
         exclude("org/slf4j/**")
         exclude("org/w3c/dom/**")
-        // Use kotlin-forge
-        exclude("kotlin/**")
+        // Root
+        if (project.name == "forge" || project.name == "neoforge") {
+            // Use kotlin-neoforge or kotlin-forge
+            exclude("kotlin/**")
+        }
         exclude("_COROUTINE/**")
         exclude("DebugProbesKt.bin")
         exclude("jetty-dir.css")
         exclude("license/**")
         exclude("**LICENCE**")
         exclude("**LICENSE**")
+        // Other dependencies
         exclude("club/minnced/opus/**")
         exclude("co/touchlab/stately/**")
         exclude("com/google/**")
@@ -155,10 +160,36 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         exclude("META-INF/proguard/**")
         exclude("META-INF/rewrite/**")
         exclude("META-INF/services/kotlin.reflect.**")
-        // Don't exclude META-INF/versions for forge
+        if (project.name != "forge") {
+            // Don't remove in: [forge]
+            exclude("META-INF/versions/**")
+        }
+        // DEPENDENCIES
+        if (project.name == "bukkit") {
+            exclude(dependency("com.fasterxml.jackson.core:.*"))
+            exclude(dependency("com.google.code.gson:.*"))
+            exclude(dependency("com.google.crypto.tink:.*"))
+            exclude(dependency("com.google.errorprone:.*"))
+            exclude(dependency("com.mojang:brigadier"))
+            exclude(dependency("com.mysql:mysql-connector-j"))
+            exclude(dependency("mysql:mysql-connector-java"))
+            exclude(dependency("net.java.dev.jna:.*"))
+            exclude(dependency("net.kyori:.*"))
+            exclude(dependency("org.apache.xmlgraphics:.*"))
+            exclude(dependency("org.bouncycastle:.*"))
+            exclude(dependency("org.checkerframework:.*"))
+            exclude(dependency("org.conscrypt:.*"))
+            exclude(dependency("org.eclipse.jetty.toolchain:.*"))
+            exclude(dependency("org.eclipse.jetty:.*"))
+            exclude(dependency("org.xerial:sqlite-jdbc"))
+        }
     }
 
     relocate("org.bstats", requireProjectInfo.group)
+    // Be sure to relocate EXACT PACKAGES!!
+    // For example, relocate org.some.package instead of org
+    // Becuase relocation org will break other non-relocated dependencies such as org.minecraft
+    // Don't relocate `org.jetbrains.exposed` and `kotlin`
     buildList {
         add("ch.qos.logback")
         add("club.minnced.discord")
@@ -166,7 +197,10 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         add("co.touchlab.stately")
         add("com.arkivanov")
         add("com.charleskorn.kaml")
-        add("com.fasterxml")
+        if (project.name != "bukkit") {
+            // Don't relocate on: [bukkit]
+            add("com.fasterxml")
+        }
         add("com.ibm.icu")
         add("com.neovisionaries")
         add("dev.icerock")
@@ -175,20 +209,33 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         add("io.github.reactivecircus")
         add("it.krzeminski")
         add("it.krzeminski.snakeyaml")
+        if (project.name != "bukkit") {
+            // Is present on: [bukkit]
+            add("javax.xml")
+        }
         add("kotlinx")
         add("net.dv8tion")
-        add("net.kyori")
+        if (project.name != "bukkit") {
+            // Don't relocate on: [bukkit]
+            add("net.kyori")
+        }
         add("net.thauvin")
         add("okhttp3")
         add("okio")
         add("org.apache")
-        add("org.h2")
+        if (project.name != "bukkit") {
+            // Don't relocate on: [bukkit]
+            add("org.h2")
+        }
         add("org.intellij")
         add("org.jetbrains.annotations")
+//        add("org.jetbrains.exposed") // Don't relocate on: [*]
         add("org.jetbrains.kotlinx")
         add("org.json")
-        add("org.sqlite")
+        add("org.json")
+//        add("org.sqlite")
         add("org.telegram")
+        add("org.telegram.telegrambots")
         add("org.w3c.css")
         add("org.w3c.dom")
         add("ru.astrainteractive.astralibs")

@@ -49,21 +49,24 @@ class ForgeAuthEvent(
         .launchIn(mainScope)
 
     private fun processPlayerEvent(player: Player) = mainScope.launch {
-        when (authorizedApi.getAuthState(player.uuid)) {
-            AuthorizedApi.AuthState.Authorized -> Unit
+        try {
+            when (authorizedApi.getAuthState(player.uuid)) {
+                AuthorizedApi.AuthState.Authorized -> Unit
 
-            AuthorizedApi.AuthState.Pending,
-            AuthorizedApi.AuthState.NotAuthorized -> {
-                player
-                    .asKAudience()
-                    .sendMessage(translation.notAuthorized.component)
-            }
+                AuthorizedApi.AuthState.Pending,
+                AuthorizedApi.AuthState.NotAuthorized -> {
+                    player
+                        .asKAudience()
+                        .sendMessage(translation.notAuthorized.component)
+                }
 
-            AuthorizedApi.AuthState.NotRegistered -> {
-                player
-                    .asKAudience()
-                    .sendMessage(translation.notRegistered.component)
+                AuthorizedApi.AuthState.NotRegistered -> {
+                    player
+                        .asKAudience()
+                        .sendMessage(translation.notRegistered.component)
+                }
             }
+        } catch (_: NullPointerException) {
         }
     }
 

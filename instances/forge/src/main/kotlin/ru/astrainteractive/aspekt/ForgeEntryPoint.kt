@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt
 
+import kotlinx.coroutines.cancel
 import net.minecraftforge.fml.common.Mod
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.astralibs.lifecycle.ForgeLifecycleServer
@@ -12,15 +13,15 @@ import javax.annotation.ParametersAreNonnullByDefault
 class ForgeEntryPoint :
     ForgeLifecycleServer(),
     Logger by JUtiltLogger("AspeKt-ForgeEntryPoint") {
-    private val rootModule by lazy { RootModule() }
+    private val rootModule = RootModule()
 
     override fun onEnable() {
         rootModule.lifecycle.onEnable()
     }
 
     override fun onDisable() {
-        info { "#onDisable" }
         rootModule.lifecycle.onDisable()
+        rootModule.coreModule.unconfinedScope.cancel()
     }
 
     override fun onReload() {

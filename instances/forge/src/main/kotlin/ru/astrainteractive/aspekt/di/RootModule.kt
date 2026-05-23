@@ -39,7 +39,7 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
         )
     }
 
-    private val commandRegistrarContext = ForgeCommandRegistrarContext(coreModule.mainScope)
+    private val commandRegistrarContext = ForgeCommandRegistrarContext(mainScope = coreModule.unconfinedScope)
 
     val authApiModule = AuthApiModule(
         ioScope = coreModule.ioScope,
