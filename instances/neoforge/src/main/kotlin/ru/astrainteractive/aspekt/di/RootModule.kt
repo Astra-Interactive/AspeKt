@@ -43,6 +43,7 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
 
     val authApiModule = AuthApiModule(
         ioScope = coreModule.ioScope,
+        dispatchers = coreModule.dispatchers,
         dataFolder = dataFolder
             .resolve("auth")
             .also(File::mkdirs),
@@ -52,7 +53,7 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
                 strictMode = false,
                 polymorphismStyle = PolymorphismStyle.Property
             )
-        )
+        ),
     )
 
     val forgeAuthModule by lazy {
