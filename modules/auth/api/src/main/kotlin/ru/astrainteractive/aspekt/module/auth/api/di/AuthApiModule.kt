@@ -19,6 +19,7 @@ import ru.astrainteractive.astralibs.util.parseOrWriteIntoDefault
 import ru.astrainteractive.klibs.kstorage.api.asCachedKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 import ru.astrainteractive.klibs.mikro.core.coroutines.mapCached
+import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import ru.astrainteractive.klibs.mikro.exposed.model.DatabaseConfiguration
 import ru.astrainteractive.klibs.mikro.exposed.util.connect
 import java.io.File
@@ -26,11 +27,12 @@ import java.io.File
 class AuthApiModule(
     ioScope: CoroutineScope,
     private val dataFolder: File,
-    private val stringFormat: StringFormat
+    private val stringFormat: StringFormat,
+    private val dispatchers: KotlinDispatchers
 ) {
     private val databaseFlow: Flow<Database> = flowOf(
         DatabaseConfiguration.H2(dataFolder.resolve("auth_database").path)
-    ).mapCached(ioScope) { dbConfig, previous ->
+    ).mapCached(ioScope, dispatcher = dispatchers.IO) { dbConfig, previous ->
         previous?.connector?.invoke()?.close()
         previous?.run(TransactionManager::closeAndUnregister)
         val database = dbConfig.connect()

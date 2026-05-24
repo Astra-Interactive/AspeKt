@@ -19,20 +19,20 @@ import ru.astrainteractive.aspekt.module.economy.database.table.PlayerCurrencyTa
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.StateFlowKrate
 import ru.astrainteractive.klibs.mikro.core.coroutines.mapCached
+import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import ru.astrainteractive.klibs.mikro.exposed.model.DatabaseConfiguration
 import ru.astrainteractive.klibs.mikro.exposed.util.connect
-import kotlin.coroutines.CoroutineContext
 
 internal class EconomyDatabaseModule(
     dbConfig: StateFlowKrate<DatabaseConfiguration>,
     coroutineScope: CoroutineScope,
-    ioDispatcher: CoroutineContext
+    dispatchers: KotlinDispatchers
 ) : Logger by JUtiltLogger("EconomyDatabaseModule") {
 
     val databaseFlow: Flow<Database> = dbConfig.cachedStateFlow
-        .mapCached(coroutineScope) { dbConfig, previous ->
+        .mapCached(coroutineScope, dispatcher = dispatchers.IO) { dbConfig, previous ->
             previous?.connector?.invoke()?.close()
             previous?.run(TransactionManager::closeAndUnregister)
             val database = dbConfig.connect()
@@ -52,13 +52,13 @@ internal class EconomyDatabaseModule(
     val cachedDao: CachedDao = CachedDaoImpl(
         economyDao = economyDao,
         scope = coroutineScope,
-        ioDispatcher = ioDispatcher
+        ioDispatcher = dispatchers.IO
     )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onReload = { cachedDao.reset() },
         onDisable = {
-            GlobalScope.launch { TransactionManager.closeAndUnregister(databaseFlow.first()) }
+            GlobalScope.launch(dispatchers.IO) { TransactionManager.closeAndUnregister(databaseFlow.first()) }
             cachedDao.reset()
         }
     )

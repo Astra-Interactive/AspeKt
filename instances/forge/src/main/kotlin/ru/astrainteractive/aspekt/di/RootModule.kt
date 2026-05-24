@@ -52,7 +52,8 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
                 strictMode = false,
                 polymorphismStyle = PolymorphismStyle.Property
             )
-        )
+        ),
+        dispatchers = coreModule.dispatchers
     )
 
     val forgeAuthModule by lazy {
