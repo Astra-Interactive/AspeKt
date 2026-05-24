@@ -223,10 +223,6 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         add("okhttp3")
         add("okio")
         add("org.apache")
-        if (project.name != "bukkit") {
-            // Don't relocate on: [bukkit]
-            add("org.h2")
-        }
         add("org.intellij")
         add("org.jetbrains.annotations")
         add("org.jetbrains.exposed") // Don't relocate on: [*]
