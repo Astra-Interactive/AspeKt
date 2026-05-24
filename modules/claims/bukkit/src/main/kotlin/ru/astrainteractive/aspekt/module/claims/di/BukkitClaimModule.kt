@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.module.claims.di
 
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecutor
 import ru.astrainteractive.aspekt.module.claims.command.di.ClaimCommandModule
 import ru.astrainteractive.aspekt.module.claims.event.BukkitClaimEvent
 import ru.astrainteractive.aspekt.module.claims.server.location.BukkitChunkProvider
@@ -12,11 +13,21 @@ class BukkitClaimModule(
     claimModule: ClaimModule,
     private val coreModule: CoreModule
 ) {
-    private val claimCommandModule = ClaimCommandModule(
-        coreModule = coreModule,
-        bukkitCoreModule = bukkitCoreModule,
+    private val claimCommandExecutor = ClaimCommandExecutor(
+        scope = coreModule.ioScope,
+        dispatchers = coreModule.dispatchers,
+        translationKrate = coreModule.translationKrate,
+        kyoriKrate = coreModule.kyoriKrate,
         claimsRepository = claimModule.claimsRepository,
         claimErrorMapper = claimModule.claimErrorMapper,
+        platformServer = coreModule.platformServer
+    )
+
+    private val claimCommandModule = ClaimCommandModule(
+        executor = claimCommandExecutor,
+        claimsRepository = claimModule.claimsRepository,
+        commandRegistrarContext = bukkitCoreModule.commandRegistrarContext,
+        coreModule = coreModule,
         chunkProvider = BukkitChunkProvider()
     )
 
@@ -31,8 +42,7 @@ class BukkitClaimModule(
             claimCommandModule.lifecycle.onEnable()
             bukkitClaimEvent.onEnable(bukkitCoreModule.plugin)
         },
-        onReload = {
-        },
+        onReload = {},
         onDisable = {
             bukkitClaimEvent.onDisable()
         }

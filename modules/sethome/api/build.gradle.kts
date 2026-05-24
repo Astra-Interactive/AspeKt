@@ -1,10 +1,13 @@
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.kotlin.plugin.serialization")
+    id("ru.astrainteractive.gradleplugin.detekt")
+    id("ru.astrainteractive.gradleplugin.java.version")
 }
 
 dependencies {
-    compileOnly("com.google.guava:guava:31.1-jre")
+    compileOnly(libs.guava)
+    compileOnly(libs.minecraft.brigadier)
     compileOnly(libs.minecraft.kyori.plain)
 
     implementation(libs.klibs.kstorage)

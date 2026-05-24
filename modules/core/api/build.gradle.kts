@@ -1,12 +1,14 @@
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.kotlin.plugin.serialization")
+    id("ru.astrainteractive.gradleplugin.detekt")
+    id("ru.astrainteractive.gradleplugin.java.version")
 }
 
 dependencies {
     api(libs.klibs.kstorage)
 
-    compileOnly("com.mojang:brigadier:1.0.18")
+    compileOnly(libs.minecraft.brigadier)
     compileOnly(libs.minecraft.kyori.gson)
     compileOnly(libs.minecraft.kyori.legacy)
     compileOnly(libs.minecraft.kyori.plain)

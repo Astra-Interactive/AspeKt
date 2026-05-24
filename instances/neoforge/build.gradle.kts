@@ -1,11 +1,11 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import ru.astrainteractive.gradleplugin.property.model.Developer
-import ru.astrainteractive.gradleplugin.property.util.requireJinfo
 import ru.astrainteractive.gradleplugin.property.util.requireProjectInfo
 
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.serialization")
+    id("org.jetbrains.kotlin.jvm")
+    id("org.jetbrains.kotlin.plugin.serialization")
+    id("ru.astrainteractive.gradleplugin.detekt")
+    id("ru.astrainteractive.gradleplugin.java.version")
     alias(libs.plugins.gradle.neoforgegradle)
     alias(libs.plugins.klibs.minecraft.resource.processor)
     alias(libs.plugins.gradle.shadow)
@@ -17,62 +17,42 @@ repositories {
 }
 
 dependencies {
-    // Kotlin
-    shadow(libs.kotlin.coroutines.core)
-    // AstraLibs
-    shadow(libs.minecraft.astralibs.core)
-    shadow(libs.minecraft.astralibs.core.neoforge)
-    shadow(libs.minecraft.astralibs.command)
-    shadow(libs.kotlin.serialization.kaml)
-    shadow(libs.klibs.mikro.core)
-    shadow(libs.klibs.kstorage)
     shadow(libs.driver.h2)
     shadow(libs.driver.jdbc)
-    shadow(libs.minecraft.kyori.plain)
-    shadow(libs.minecraft.kyori.legacy)
+    shadow(libs.klibs.kstorage)
+    shadow(libs.klibs.mikro.core)
+    shadow(libs.kotlin.coroutines.core)
+    shadow(libs.kotlin.serialization.kaml)
+    shadow(libs.minecraft.astralibs.command)
+    shadow(libs.minecraft.astralibs.core)
+    shadow(libs.minecraft.astralibs.core.neoforge)
     shadow(libs.minecraft.kyori.gson)
-    // Local
-    shadow(projects.modules.core.api)
-    shadow(projects.modules.core.neoforge)
+    shadow(libs.minecraft.kyori.legacy)
+    shadow(libs.minecraft.kyori.plain)
     shadow(projects.modules.auth.api)
     shadow(projects.modules.auth.neoforge)
     shadow(projects.modules.claims.api)
     shadow(projects.modules.claims.neoforge)
+    shadow(projects.modules.core.api)
+    shadow(projects.modules.core.neoforge)
+    shadow(projects.modules.rtp.api)
+    shadow(projects.modules.rtp.neoforge)
     shadow(projects.modules.sethome.api)
     shadow(projects.modules.sethome.neoforge)
     shadow(projects.modules.tpa.api)
     shadow(projects.modules.tpa.neoforge)
-    shadow(projects.modules.rtp.api)
-    shadow(projects.modules.rtp.neoforge)
 }
 
-tasks.named<ProcessResources>("processResources") {
-    filteringCharset = "UTF-8"
-    duplicatesStrategy = DuplicatesStrategy.WARN
-    val sourceSets = project.extensions.getByName("sourceSets") as SourceSetContainer
-    val resDirs = sourceSets
-        .map(SourceSet::getResources)
-        .map(SourceDirectorySet::getSrcDirs)
-    from(resDirs) {
-        include("META-INF/neoforge.mods.toml")
-        expand(
-            mapOf(
-                "minecraft_version" to libs.versions.minecraft.mojang.version.get(),
-                "minecraft_version_range" to listOf(libs.versions.minecraft.mojang.version.get())
-                    .joinToString(","),
-                "neo_version" to "neo_version",
-                "neo_version_range" to "[${libs.versions.minecraft.neoforgeversion.get()},)",
-                "mod_id" to requireProjectInfo.name.lowercase(),
-                "mod_name" to requireProjectInfo.name,
-                "mod_license" to "mod_license",
-                "mod_version" to requireProjectInfo.versionString,
-                "mod_authors" to requireProjectInfo.developersList
-                    .map(Developer::id)
-                    .joinToString(","),
-                "mod_description" to requireProjectInfo.description
-            )
+minecraftProcessResource {
+    neoForge(
+        customProperties = mapOf(
+            "minecraft_version" to libs.versions.minecraft.mojang.version.get(),
+            "minecraft_version_range" to listOf(libs.versions.minecraft.mojang.version.get())
+                .joinToString(","),
+            "neo_version" to "neo_version",
+            "neo_version_range" to "[${libs.versions.minecraft.neoforgeversion.get()},)",
         )
-    }
+    )
 }
 
 val shadowJar by tasks.getting(ShadowJar::class) {
@@ -84,17 +64,17 @@ val shadowJar by tasks.getting(ShadowJar::class) {
     archiveClassifier = null as String?
     archiveVersion = requireProjectInfo.versionString
     archiveBaseName = "${requireProjectInfo.name}-${project.name}"
-    destinationDirectory = rootDir
-        .resolve("build")
-        .resolve("neoforge")
+    destinationDirectory = rootProject.layout.buildDirectory.get()
+        .asFile
+        .resolve(project.name)
         .resolve("mods")
         .takeIf(File::exists)
-        ?: File(rootDir, "jars")
+        ?: rootDir.resolve("jars")
     dependencies {
         // Dependencies
         exclude(dependency("org.jetbrains:annotations"))
         // Root
-        exclude("kotlin/**") // use kotlin-neoforge
+//        exclude("kotlin/**") // Use kotlin-neoforge or kotlin-forge
         exclude("_COROUTINE/**")
         exclude("DebugProbesKt.bin")
         exclude("jetty-dir.css")
@@ -119,8 +99,16 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         exclude("org/bouncycastle/**")
         exclude("org/checkerframework/**")
         exclude("org/conscrypt/**")
+        exclude("org/apache/batik/**")
+        exclude("org/apache/xmlgraphics/**")
+        exclude("org/apache/xmlcommons/**")
         exclude("org/eclipse/**")
+        exclude("jdk/xml/**")
+        exclude("org/w3c/**")
         exclude("tomp2p/opuswrapper/**")
+        exclude("org/slf4j/**")
+        exclude("javax/xml/**")
+        exclude("org/xml/**")
         // META
         exclude("META-INF/**.md")
         exclude("META-INF/**.MD")
@@ -137,7 +125,7 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         exclude("META-INF/proguard/**")
         exclude("META-INF/rewrite/**")
         exclude("META-INF/services/kotlin.reflect.**")
-        exclude("META-INF/versions/**")
+//        exclude("META-INF/versions/**") // Don't remove in Forge
     }
 
     // Be sure to relocate EXACT PACKAGES!!
@@ -148,14 +136,19 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         "ch.qos.logback",
         "club.minnced.discord",
         "club.minnced.opus",
+        "co.touchlab.stately",
         "com.arkivanov",
         "com.charleskorn.kaml",
         "com.fasterxml",
+        "com.ibm.icu",
         "com.neovisionaries",
         "dev.icerock",
         "gnu.trove",
+        "google.protobuf",
+        "io.github.reactivecircus",
         "it.krzeminski",
-        "javax.xml",
+        "it.krzeminski.snakeyaml",
+//        "javax.xml", // Is present
         "kotlinx",
         "net.dv8tion",
         "net.kyori",
@@ -164,27 +157,26 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         "okio",
         "org.apache",
         "org.h2",
-        "org.jetbrains.exposed",
-        "org.jetbrains.kotlin",
+        "org.intellij",
+        "org.jetbrains.annotations",
+        "org.jetbrains.exposed", // Don't relocate
+//        "org.jetbrains.kotlin", // Don't relocate
         "org.jetbrains.kotlinx",
         "org.json",
-        "org.slf4j",
+        "org.json",
+//        "org.slf4j", // Is present
         "org.sqlite",
         "org.telegram",
+        "org.telegram.telegrambots",
         "org.w3c.css",
         "org.w3c.dom",
-        "org.xml.sax",
+//        "org.xml.sax", // Is present
         "ru.astrainteractive.astralibs",
         "ru.astrainteractive.klibs",
+        "tomp2p.opuswrapper",
     ).forEach { pattern -> relocate(pattern, "${requireProjectInfo.group}.shade.$pattern") }
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(requireJinfo.jtarget.majorVersion)
-
 dependencies {
     compileOnly(libs.minecraft.neoforgeversion)
-}
-
-configurations.runtimeElements {
-    setExtendsFrom(emptySet())
 }

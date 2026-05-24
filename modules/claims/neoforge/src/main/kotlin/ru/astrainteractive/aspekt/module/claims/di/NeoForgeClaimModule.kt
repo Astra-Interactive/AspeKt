@@ -5,11 +5,11 @@ import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecut
 import ru.astrainteractive.aspekt.module.claims.command.di.ClaimCommandModule
 import ru.astrainteractive.aspekt.module.claims.event.ForgeClaimEvent
 import ru.astrainteractive.aspekt.module.claims.ru.astrainteractive.aspekt.module.claims.server.location.NeoForgeChunkProvider
-import ru.astrainteractive.astralibs.command.registrar.NeoForgeCommandRegistrarContext
+import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class NeoForgeClaimModule(
-    commandRegistrarContext: NeoForgeCommandRegistrarContext,
+    commandRegistrarContext: CommandRegistrarContext,
     coreModule: CoreModule,
     claimModule: ClaimModule
 ) {
