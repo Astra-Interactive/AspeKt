@@ -55,6 +55,7 @@ minecraftProcessResource {
         customProperties = mapOf(
             "minecraft_version" to libs.versions.minecraft.forgeversion.get().split("-")[0],
             "forge_version" to libs.versions.minecraft.forgeversion.get().split("-")[1],
+            "mod_license" to "MIT License"
         )
     )
 }
@@ -92,7 +93,7 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         // Root
         if (project.name == "forge" || project.name == "neoforge") {
             // Use kotlin-neoforge or kotlin-forge
-            exclude("kotlin/**")
+//            exclude("kotlin/**")
         }
         exclude("_COROUTINE/**")
         exclude("DebugProbesKt.bin")
