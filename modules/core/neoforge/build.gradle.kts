@@ -1,6 +1,8 @@
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.serialization")
+    id("org.jetbrains.kotlin.jvm")
+    id("org.jetbrains.kotlin.plugin.serialization")
+    id("ru.astrainteractive.gradleplugin.detekt")
+    id("ru.astrainteractive.gradleplugin.java.version")
 }
 
 dependencies {
@@ -32,8 +34,8 @@ dependencies {
         )
     )
     compileOnly(libs.minecraft.neoforgeversion)
-    compileOnly("org.joml:joml:1.10.8")
-    compileOnly("com.mojang:datafixerupper:8.0.16")
-    compileOnly("com.mojang:brigadier:1.3.10")
-    compileOnly("net.neoforged:bus:8.0.2")
+    compileOnly(libs.joml)
+    compileOnly(libs.minecraft.datafixerupper)
+    compileOnly(libs.minecraft.brigadier)
+    compileOnly(libs.minecraft.neoforged.bus)
 }

@@ -1,11 +1,11 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import ru.astrainteractive.gradleplugin.property.model.Developer
-import ru.astrainteractive.gradleplugin.property.util.requireJinfo
 import ru.astrainteractive.gradleplugin.property.util.requireProjectInfo
 
 plugins {
-    kotlin("jvm")
-    kotlin("plugin.serialization")
+    id("org.jetbrains.kotlin.jvm")
+    id("org.jetbrains.kotlin.plugin.serialization")
+    id("ru.astrainteractive.gradleplugin.detekt")
+    id("ru.astrainteractive.gradleplugin.java.version")
     alias(libs.plugins.gradle.neoforgegradle)
     alias(libs.plugins.klibs.minecraft.resource.processor)
     alias(libs.plugins.gradle.shadow)
@@ -17,62 +17,42 @@ repositories {
 }
 
 dependencies {
-    // Kotlin
-    shadow(libs.kotlin.coroutines.core)
-    // AstraLibs
-    shadow(libs.minecraft.astralibs.core)
-    shadow(libs.minecraft.astralibs.core.neoforge)
-    shadow(libs.minecraft.astralibs.command)
-    shadow(libs.kotlin.serialization.kaml)
-    shadow(libs.klibs.mikro.core)
-    shadow(libs.klibs.kstorage)
     shadow(libs.driver.h2)
     shadow(libs.driver.jdbc)
-    shadow(libs.minecraft.kyori.plain)
-    shadow(libs.minecraft.kyori.legacy)
+    shadow(libs.klibs.kstorage)
+    shadow(libs.klibs.mikro.core)
+    shadow(libs.kotlin.coroutines.core)
+    shadow(libs.kotlin.serialization.kaml)
+    shadow(libs.minecraft.astralibs.command)
+    shadow(libs.minecraft.astralibs.core)
+    shadow(libs.minecraft.astralibs.core.neoforge)
     shadow(libs.minecraft.kyori.gson)
-    // Local
-    shadow(projects.modules.core.api)
-    shadow(projects.modules.core.neoforge)
+    shadow(libs.minecraft.kyori.legacy)
+    shadow(libs.minecraft.kyori.plain)
     shadow(projects.modules.auth.api)
     shadow(projects.modules.auth.neoforge)
     shadow(projects.modules.claims.api)
     shadow(projects.modules.claims.neoforge)
+    shadow(projects.modules.core.api)
+    shadow(projects.modules.core.neoforge)
+    shadow(projects.modules.rtp.api)
+    shadow(projects.modules.rtp.neoforge)
     shadow(projects.modules.sethome.api)
     shadow(projects.modules.sethome.neoforge)
     shadow(projects.modules.tpa.api)
     shadow(projects.modules.tpa.neoforge)
-    shadow(projects.modules.rtp.api)
-    shadow(projects.modules.rtp.neoforge)
 }
 
-tasks.named<ProcessResources>("processResources") {
-    filteringCharset = "UTF-8"
-    duplicatesStrategy = DuplicatesStrategy.WARN
-    val sourceSets = project.extensions.getByName("sourceSets") as SourceSetContainer
-    val resDirs = sourceSets
-        .map(SourceSet::getResources)
-        .map(SourceDirectorySet::getSrcDirs)
-    from(resDirs) {
-        include("META-INF/neoforge.mods.toml")
-        expand(
-            mapOf(
-                "minecraft_version" to libs.versions.minecraft.mojang.version.get(),
-                "minecraft_version_range" to listOf(libs.versions.minecraft.mojang.version.get())
-                    .joinToString(","),
-                "neo_version" to "neo_version",
-                "neo_version_range" to "[${libs.versions.minecraft.neoforgeversion.get()},)",
-                "mod_id" to requireProjectInfo.name.lowercase(),
-                "mod_name" to requireProjectInfo.name,
-                "mod_license" to "mod_license",
-                "mod_version" to requireProjectInfo.versionString,
-                "mod_authors" to requireProjectInfo.developersList
-                    .map(Developer::id)
-                    .joinToString(","),
-                "mod_description" to requireProjectInfo.description
-            )
+minecraftProcessResource {
+    neoForge(
+        customProperties = mapOf(
+            "minecraft_version" to libs.versions.minecraft.mojang.version.get(),
+            "minecraft_version_range" to listOf(libs.versions.minecraft.mojang.version.get())
+                .joinToString(","),
+            "neo_version" to "neo_version",
+            "neo_version_range" to "[${libs.versions.minecraft.neoforgeversion.get()},)",
         )
-    }
+    )
 }
 
 val shadowJar by tasks.getting(ShadowJar::class) {
@@ -197,12 +177,6 @@ val shadowJar by tasks.getting(ShadowJar::class) {
     ).forEach { pattern -> relocate(pattern, "${requireProjectInfo.group}.shade.$pattern") }
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(requireJinfo.jtarget.majorVersion)
-
 dependencies {
     compileOnly(libs.minecraft.neoforgeversion)
-}
-
-configurations.runtimeElements {
-    setExtendsFrom(emptySet())
 }

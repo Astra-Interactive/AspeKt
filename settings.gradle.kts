@@ -1,5 +1,6 @@
 pluginManagement {
     repositories {
+        mavenLocal()
         maven("https://maven.neoforged.net/releases")
         maven("https://maven.minecraftforge.net")
         maven("https://files.minecraftforge.net/maven")
@@ -19,9 +20,9 @@ buildscript {
 
 dependencyResolutionManagement {
     repositories {
+        mavenLocal()
         gradlePluginPortal()
         mavenCentral()
-        mavenLocal()
         maven("https://maven.minecraftforge.net/")
         maven("https://files.minecraftforge.net/maven")
         maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")

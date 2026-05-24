@@ -15,13 +15,3 @@ plugins {
     alias(libs.plugins.klibs.minecraft.resource.processor) apply false
     alias(libs.plugins.gradle.neoforgegradle) apply false
 }
-
-apply(plugin = "ru.astrainteractive.gradleplugin.dokka.root")
-apply(plugin = "ru.astrainteractive.gradleplugin.detekt")
-apply(plugin = "ru.astrainteractive.gradleplugin.rootinfo")
-
-subprojects.forEach { project ->
-    project.plugins.withId("org.jetbrains.kotlin.jvm") {
-        project.apply(plugin = "ru.astrainteractive.gradleplugin.java.version")
-    }
-}

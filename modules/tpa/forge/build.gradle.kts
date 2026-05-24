@@ -1,6 +1,8 @@
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.kotlin.plugin.serialization")
+    id("ru.astrainteractive.gradleplugin.detekt")
+    id("ru.astrainteractive.gradleplugin.java.version")
 }
 
 dependencies {
@@ -42,8 +44,4 @@ dependencies {
     compileOnly(libs.minecraft.datafixerupper)
     compileOnly(libs.minecraft.forge.bus)
     compileOnly(libs.joml)
-}
-
-configurations.runtimeElements {
-    setExtendsFrom(emptySet())
 }

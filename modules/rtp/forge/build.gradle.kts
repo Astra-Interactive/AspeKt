@@ -1,10 +1,12 @@
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.kotlin.plugin.serialization")
+    id("ru.astrainteractive.gradleplugin.detekt")
+    id("ru.astrainteractive.gradleplugin.java.version")
 }
 
 dependencies {
-    compileOnly("com.google.guava:guava:31.1-jre")
+    compileOnly(libs.guava)
     compileOnly(libs.minecraft.kyori.gson)
     compileOnly(libs.minecraft.kyori.legacy)
     compileOnly(libs.minecraft.kyori.plain)
@@ -42,8 +44,4 @@ dependencies {
     compileOnly(libs.minecraft.datafixerupper)
     compileOnly(libs.minecraft.forge.bus)
     compileOnly(libs.joml)
-}
-
-configurations.runtimeElements {
-    setExtendsFrom(emptySet())
 }
