@@ -12,6 +12,7 @@ import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
 import ru.astrainteractive.klibs.kstorage.api.StateFlowMutableKrate
 import ru.astrainteractive.klibs.kstorage.api.asStateFlowMutableKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
+import ru.astrainteractive.klibs.mikro.core.dispatchers.DefaultKotlinDispatchers
 import ru.astrainteractive.klibs.mikro.exposed.model.DatabaseConfiguration
 import java.io.File
 import java.nio.file.Files
@@ -48,7 +49,7 @@ class EconomyDaoTest {
         _module = EconomyDatabaseModule(
             dbConfig = dbConfig,
             coroutineScope = CoroutineScope(scheduler),
-            ioDispatcher = scheduler
+            dispatchers = DefaultKotlinDispatchers
         )
     }
 

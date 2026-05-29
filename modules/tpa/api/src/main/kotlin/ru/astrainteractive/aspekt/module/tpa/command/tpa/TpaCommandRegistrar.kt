@@ -17,7 +17,7 @@ import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
  * - /tpaccept
  * - /tpadeny
  */
-class TpaCommandRegistrar(
+internal class TpaCommandRegistrar(
     private val executor: TpaCommandExecutor,
     private val platformServer: PlatformServer,
     private val multiplatformCommand: MultiplatformCommand,

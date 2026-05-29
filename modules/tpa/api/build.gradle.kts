@@ -19,4 +19,5 @@ dependencies {
     implementation(projects.modules.core.api)
 
     testImplementation(libs.tests.kotlin.test)
+    testImplementation(libs.guava)
 }

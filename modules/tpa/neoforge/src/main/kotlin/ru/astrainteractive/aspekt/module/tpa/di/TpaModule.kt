@@ -15,6 +15,7 @@ class TpaModule(
         translationKrate = coreModule.translationKrate,
         tpaApi = TpaApi(),
         scope = coreModule.ioScope,
+        platformServer = coreModule.platformServer,
         kyoriKrate = coreModule.kyoriKrate,
     )
 

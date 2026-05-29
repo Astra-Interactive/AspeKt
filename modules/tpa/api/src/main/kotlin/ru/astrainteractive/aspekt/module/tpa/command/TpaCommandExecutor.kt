@@ -3,9 +3,11 @@ package ru.astrainteractive.aspekt.module.tpa.command
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.module.tpa.api.TpaApi
+import ru.astrainteractive.aspekt.module.tpa.model.TpaApiRequestType
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
+import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 
@@ -13,28 +15,29 @@ class TpaCommandExecutor(
     translationKrate: CachedKrate<PluginTranslation>,
     private val tpaApi: TpaApi,
     private val scope: CoroutineScope,
+    private val platformServer: PlatformServer,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
 ) : KyoriComponentSerializer by kyoriKrate.unwrap() {
     private val translation by translationKrate
 
     private suspend fun tpaCancel(input: TpaCommand.TpaCancel) {
-        if (!tpaApi.isBeingWaited(input.executorPlayer)) {
+        if (!tpaApi.isBeingWaited(input.executorPlayer.uuid)) {
             input.executorPlayer.sendMessage(translation.tpa.youHaveNoPendingTp.component)
             return
         }
-        tpaApi.cancel(input.executorPlayer)
+        tpaApi.cancel(input.executorPlayer.uuid)
         input.executorPlayer.sendMessage(translation.tpa.requestCancelled.component)
     }
 
     private suspend fun tpaDeny(input: TpaCommand.TpaDeny) {
-        if (!tpaApi.isBeingWaited(input.executorPlayer)) {
+        if (!tpaApi.isBeingWaited(input.executorPlayer.uuid)) {
             input.executorPlayer
                 .sendMessage(translation.tpa.noPendingTpToDeny.component)
             return
         }
-        tpaApi.deny(input.executorPlayer).forEach { deniedPlayerUuid ->
-            deniedPlayerUuid
-                .sendMessage(translation.tpa.requestDenied(input.executorPlayer.name).component)
+        tpaApi.deny(input.executorPlayer.uuid).forEach { deniedUuid ->
+            platformServer.findOnlinePlayer(deniedUuid)
+                ?.sendMessage(translation.tpa.requestDenied(input.executorPlayer.name).component)
         }
         input.executorPlayer
             .sendMessage(translation.tpa.requestCancelled.component)
@@ -47,8 +50,8 @@ class TpaCommandExecutor(
             return
         }
         tpaApi.tpaHere(
-            input.executorPlayer,
-            input.targetPlayer
+            input.executorPlayer.uuid,
+            input.targetPlayer.uuid
         )
         input.executorPlayer
             .sendMessage(translation.tpa.requestSent.component)
@@ -63,8 +66,8 @@ class TpaCommandExecutor(
             return
         }
         tpaApi.tpa(
-            input.executorPlayer,
-            input.targetPlayer
+            input.executorPlayer.uuid,
+            input.targetPlayer.uuid
         )
         input.executorPlayer
             .sendMessage(translation.tpa.requestSent.component)
@@ -73,20 +76,22 @@ class TpaCommandExecutor(
     }
 
     private suspend fun tpaAccept(input: TpaCommand.TpaAccept) {
-        if (!tpaApi.isBeingWaited(input.executorPlayer)) {
+        if (!tpaApi.isBeingWaited(input.executorPlayer.uuid)) {
             input.executorPlayer
                 .sendMessage(translation.tpa.noPendingTpToDeny.component)
             return
         }
-        val tpas = tpaApi.get(input.executorPlayer)
+        val tpas = tpaApi.get(input.executorPlayer.uuid)
         tpas.forEach { (executorUuid, request) ->
+            val executor = platformServer.findOnlinePlayer(executorUuid) ?: return@forEach
+            val target = platformServer.findOnlinePlayer(request.targetUuid) ?: return@forEach
             when (request.type) {
-                TpaApi.RequestType.TPA -> {
-                    executorUuid.teleport(request.player.getLocation())
+                TpaApiRequestType.TPA -> {
+                    executor.teleport(target.getLocation())
                 }
 
-                TpaApi.RequestType.TPAHERE -> {
-                    request.player.teleport(request.player.getLocation())
+                TpaApiRequestType.TPAHERE -> {
+                    target.teleport(executor.getLocation())
                 }
             }
         }
