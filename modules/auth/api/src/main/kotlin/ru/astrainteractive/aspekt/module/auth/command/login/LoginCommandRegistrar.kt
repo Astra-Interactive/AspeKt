@@ -32,9 +32,9 @@ class LoginCommandRegistrar(
 ) : KyoriComponentSerializer by kyoriKrate.unwrap() {
     private val translation by translationKrate
 
-    private fun createNode(): LiteralArgumentBuilder<Any> {
+    private fun createNode(loginAlias: String): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
-            command("login") {
+            command(loginAlias) {
                 argument(
                     alias = "password",
                     type = StringArgumentType.string(),
@@ -69,6 +69,7 @@ class LoginCommandRegistrar(
     }
 
     fun register() {
-        registrarContext.registerWhenReady(createNode())
+        registrarContext.registerWhenReady(createNode("login"))
+        registrarContext.registerWhenReady(createNode("l"))
     }
 }

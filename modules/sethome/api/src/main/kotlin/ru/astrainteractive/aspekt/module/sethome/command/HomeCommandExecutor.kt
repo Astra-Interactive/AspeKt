@@ -21,14 +21,14 @@ class HomeCommandExecutor(
             is HomeCommand.DelHome -> {
                 val krate = homeKrateProvider.get(input.playerData.uuid)
                 scope.launch {
-                    val home = krate
+                    val homeToDelete = krate
                         .getValue()
                         .firstOrNull { home -> home.name == input.homeName }
-                    if (home == null) {
+                    if (homeToDelete == null) {
                         input.playerData.sendMessage(translation.homes.homeNotFound.component)
                         return@launch
                     }
-                    krate.save { homes -> homes.filter { home.name != input.homeName } }
+                    krate.save { homes -> homes.minus(homeToDelete) }
 
                     input.playerData.sendMessage(translation.homes.homeDeleted.component)
                 }
