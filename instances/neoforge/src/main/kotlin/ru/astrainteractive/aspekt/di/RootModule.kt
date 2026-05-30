@@ -7,8 +7,9 @@ import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.di.ForgeAuthModule
 import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
 import ru.astrainteractive.aspekt.module.claims.di.NeoForgeClaimModule
+import ru.astrainteractive.aspekt.module.rtp.api.MinecraftSafeLocationProvider
 import ru.astrainteractive.aspekt.module.rtp.di.RtpModule
-import ru.astrainteractive.aspekt.module.sethome.di.HomesModule
+import ru.astrainteractive.aspekt.module.sethome.di.SetHomeModule
 import ru.astrainteractive.aspekt.module.tpa.di.TpaModule
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.brigadier.command.MinecraftMultiplatformCommands
@@ -81,8 +82,8 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
         )
     }
 
-    val homesModule by lazy {
-        HomesModule(
+    val setHomeModule by lazy {
+        SetHomeModule(
             commandRegistrarContext = commandRegistrarContext,
             dataFolder = dataFolder,
             stringFormat = coreModule.jsonStringFormat,
@@ -100,7 +101,14 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
     val rtpModule by lazy {
         RtpModule(
             coreModule = coreModule,
-            commandRegistrarContext = commandRegistrarContext
+            commandRegistrarContext = commandRegistrarContext,
+            multiplatformCommand = coreModule.multiplatformCommand,
+            safeLocationProviderFactory = { rtpConfigKrate ->
+                MinecraftSafeLocationProvider(
+                    rtpConfigKrate = rtpConfigKrate,
+                    dispatchers = coreModule.dispatchers
+                )
+            },
         )
     }
 
@@ -109,7 +117,7 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
             coreModule.lifecycle,
             forgeAuthModule.lifecycle,
             neoForgeClaimModule.lifecycle,
-            homesModule.lifecycle,
+            setHomeModule.lifecycle,
             tpaModule.lifecycle,
             rtpModule.lifecycle
         )

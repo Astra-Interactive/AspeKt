@@ -7,7 +7,7 @@ import ru.astrainteractive.astralibs.command.api.brigadier.command.Multiplatform
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
-class SetHomeCommandModule(
+internal class SetHomeCommandModule(
     private val commandRegistrarContext: CommandRegistrarContext,
     private val homeKrateProvider: HomeKrateProvider,
     private val executor: HomeCommandExecutor,

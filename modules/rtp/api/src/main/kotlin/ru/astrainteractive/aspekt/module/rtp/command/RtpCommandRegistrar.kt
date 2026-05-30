@@ -1,6 +1,7 @@
 package ru.astrainteractive.aspekt.module.rtp.command
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
+import ru.astrainteractive.aspekt.module.rtp.api.SafeLocationProvider
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 

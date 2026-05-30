@@ -7,15 +7,16 @@ import ru.astrainteractive.aspekt.module.treecapitator.model.TreeCapitatorConfig
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
-import ru.astrainteractive.klibs.kstorage.api.withDefault
 
 class TreeCapitatorModule(
     coreModule: CoreModule,
     bukkitCoreModule: BukkitCoreModule
 ) {
     private val tcConfigKrate = coreModule.yamlFormat
-        .krateOf<TreeCapitatorConfiguration>(coreModule.dataFolder.resolve("config.yml"))
-        .withDefault(::TreeCapitatorConfiguration)
+        .krateOf(
+            file = coreModule.dataFolder.resolve("config.yml"),
+            factory = ::TreeCapitatorConfiguration
+        )
         .asCachedMutableKrate()
 
     private val tcEvent = TCEvent(

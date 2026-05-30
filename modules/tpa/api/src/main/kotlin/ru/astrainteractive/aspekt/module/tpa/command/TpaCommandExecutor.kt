@@ -11,7 +11,7 @@ import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 
-class TpaCommandExecutor(
+internal class TpaCommandExecutor(
     translationKrate: CachedKrate<PluginTranslation>,
     private val tpaApi: TpaApi,
     private val scope: CoroutineScope,

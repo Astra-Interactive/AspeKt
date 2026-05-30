@@ -10,15 +10,16 @@ import ru.astrainteractive.aspekt.module.chatgame.store.generator.RiddleGenerato
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedKrate
-import ru.astrainteractive.klibs.kstorage.api.withDefault
 
 class ChatGameModule(
     coreModule: CoreModule,
     bukkitCoreModule: BukkitCoreModule
 ) {
     private val chatGameConfigKrate = coreModule.yamlFormat
-        .krateOf<ChatGameConfig>(coreModule.dataFolder.resolve("chat_game.yml"))
-        .withDefault(::ChatGameConfig)
+        .krateOf(
+            file = coreModule.dataFolder.resolve("chat_game.yml"),
+            factory = ::ChatGameConfig
+        )
         .asCachedKrate()
 
     private val chatGameStore = ChatGameStoreImpl(

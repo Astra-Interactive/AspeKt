@@ -60,6 +60,10 @@ class PluginTranslation(
         val notFoundPlace: StringDesc.Raw = prefix
             .plus("Не удалось найти место!")
             .toRaw(),
+        @SerialName("max_rtp_retries")
+        val maxRtpRetries: StringDesc.Raw = prefix
+            .plus("Не удалось найти безопасное место за отведённое число попыток!")
+            .toRaw(),
         @SerialName("searching")
         val searching: StringDesc.Raw = prefix
             .plus("Ищем для вас место...!")

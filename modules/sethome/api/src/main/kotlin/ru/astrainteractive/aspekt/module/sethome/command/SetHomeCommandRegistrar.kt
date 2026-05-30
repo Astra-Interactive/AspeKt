@@ -15,7 +15,7 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
  * - /delhome <home_name>
  * - /home <home_name>
  */
-class SetHomeCommandRegistrar(
+internal class SetHomeCommandRegistrar(
     private val homeKrateProvider: HomeKrateProvider,
     private val executor: HomeCommandExecutor,
     private val multiplatformCommand: MultiplatformCommand,

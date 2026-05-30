@@ -27,7 +27,7 @@ kotlin-serialization = "1.11.0"
 kotlin-serialization-kaml = "0.104.0"
 kotlin-version = "2.2.0"
 ktor = "3.4.3"
-minecraft-astralibs = "3.40.4"
+minecraft-astralibs = "3.40.5"
 minecraft-brigadier = "1.3.10"
 minecraft-authlib = "6.0.54"
 minecraft-bstats = "3.2.1"
@@ -108,6 +108,7 @@ minecraft-astralibs-command-bukkit = { module = "ru.astrainteractive.astralibs:c
 minecraft-astralibs-core = { module = "ru.astrainteractive.astralibs:core", version.ref = "minecraft-astralibs" }
 minecraft-astralibs-core-bukkit = { module = "ru.astrainteractive.astralibs:core-bukkit", version.ref = "minecraft-astralibs" }
 minecraft-astralibs-core-forge = { module = "ru.astrainteractive.astralibs:core-forge", version.ref = "minecraft-astralibs" }
+minecraft-astralibs-core-minecraft = { module = "ru.astrainteractive.astralibs:core-minecraft", version.ref = "minecraft-astralibs" }
 minecraft-astralibs-core-neoforge = { module = "ru.astrainteractive.astralibs:core-neoforge", version.ref = "minecraft-astralibs" }
 minecraft-astralibs-exposed = { module = "ru.astrainteractive.astralibs:exposed", version.ref = "minecraft-astralibs" }
 minecraft-astralibs-menu-bukkit = { module = "ru.astrainteractive.astralibs:menu-bukkit", version.ref = "minecraft-astralibs" }

@@ -9,7 +9,6 @@ import ru.astrainteractive.aspekt.module.moneydrop.model.MoneyDropConfiguration
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
-import ru.astrainteractive.klibs.kstorage.api.withDefault
 
 class MoneyDropModule(
     coreModule: CoreModule,
@@ -17,8 +16,10 @@ class MoneyDropModule(
 ) {
 
     private val moneyDropConfigKrate = coreModule.yamlFormat
-        .krateOf<MoneyDropConfiguration>(coreModule.dataFolder.resolve("money_drop.yml"))
-        .withDefault(::MoneyDropConfiguration)
+        .krateOf(
+            file = coreModule.dataFolder.resolve("money_drop.yml"),
+            factory = ::MoneyDropConfiguration
+        )
         .asCachedMutableKrate()
 
     private val moneyDropDaoModule = MoneyDropDaoModule(

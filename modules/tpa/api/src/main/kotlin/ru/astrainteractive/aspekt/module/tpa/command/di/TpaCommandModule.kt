@@ -7,7 +7,7 @@ import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarConte
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 
-class TpaCommandModule(
+internal class TpaCommandModule(
     private val executor: TpaCommandExecutor,
     private val platformServer: PlatformServer,
     private val commandRegistrarContext: CommandRegistrarContext,
