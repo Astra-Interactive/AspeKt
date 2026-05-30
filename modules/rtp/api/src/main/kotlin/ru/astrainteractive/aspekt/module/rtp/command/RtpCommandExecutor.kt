@@ -11,7 +11,7 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 class RtpCommandExecutor(
-    private val scope: CoroutineScope,
+    private val ioScope: CoroutineScope,
     private val safeLocationProvider: SafeLocationProvider,
     private val dispatchers: KotlinDispatchers,
     translationKrate: CachedKrate<PluginTranslation>,
@@ -19,7 +19,7 @@ class RtpCommandExecutor(
 ) : KyoriComponentSerializer by kyoriKrate.unwrap() {
     private val translation by translationKrate
     fun execute(input: RtpCommand) {
-        scope.launch {
+        ioScope.launch {
             val player = input.player
             if (safeLocationProvider.getJobsNumber() > 0) {
                 player.sendMessage(translation.rtp.maxRtpJobs.component)

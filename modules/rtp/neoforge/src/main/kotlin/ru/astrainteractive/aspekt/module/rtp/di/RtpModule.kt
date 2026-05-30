@@ -14,7 +14,7 @@ class RtpModule(
     private val safeLocationProvider = ForgeSafeLocationProvider()
 
     private val executor = RtpCommandExecutor(
-        scope = coreModule.ioScope,
+        ioScope = coreModule.ioScope,
         safeLocationProvider = safeLocationProvider,
         dispatchers = coreModule.dispatchers,
         translationKrate = coreModule.translationKrate,

@@ -79,11 +79,11 @@ class ForgeSafeLocationProvider : SafeLocationProvider {
         return hasTimeout
     }
 
-    override suspend fun getLocation(scope: CoroutineScope, uuid: UUID): KLocation? {
+    override suspend fun getLocation(ioScope: CoroutineScope, uuid: UUID): KLocation? {
         return mutex.withLock {
             val player = MinecraftUtil.getOnlinePlayer(uuid) ?: return@withLock null
             val deferred = jobMap.getOrPut(uuid) {
-                scope.async { safeLocationFlow(player.level().cast<ServerLevel>()).first() }
+                ioScope.async { safeLocationFlow(player.level().cast<ServerLevel>()).first() }
             }
             deferred.invokeOnCompletion {
                 jobMap.remove(uuid)

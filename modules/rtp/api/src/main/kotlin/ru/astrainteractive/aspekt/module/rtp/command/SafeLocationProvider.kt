@@ -5,7 +5,7 @@ import ru.astrainteractive.astralibs.server.location.KLocation
 import java.util.UUID
 
 interface SafeLocationProvider {
-    suspend fun getLocation(scope: CoroutineScope, uuid: UUID): KLocation?
+    suspend fun getLocation(ioScope: CoroutineScope, uuid: UUID): KLocation?
 
     fun hasTimeout(uuid: UUID): Boolean
 
