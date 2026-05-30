@@ -9,7 +9,7 @@ import ru.astrainteractive.klibs.kstorage.suspend.impl.DefaultStateFlowSuspendMu
 import java.io.File
 import java.util.UUID
 
-class PlayerHomesKrate(
+internal class PlayerHomesKrate(
     folder: File,
     stringFormat: StringFormat,
     uuid: UUID

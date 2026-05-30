@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.tpa.command
 
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 
-sealed interface TpaCommand {
+internal sealed interface TpaCommand {
     data class TpaTo(
         val executorPlayer: OnlineKPlayer,
         val targetPlayer: OnlineKPlayer

@@ -1,8 +1,16 @@
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.kotlin.plugin.serialization")
-    id("ru.astrainteractive.gradleplugin.detekt")
     id("ru.astrainteractive.gradleplugin.java.version")
+    id("ru.astrainteractive.gradleplugin.detekt")
+    id("ru.astrainteractive.gradleplugin.publication")
+    id("ru.astrainteractive.gradleplugin.rootinfo")
+    alias(libs.plugins.gradle.fabric.loom)
+}
+
+dependencies {
+    minecraft(libs.minecraft.fabric.mojang)
+    mappings(loom.officialMojangMappings())
 }
 
 dependencies {
@@ -16,32 +24,16 @@ dependencies {
     implementation(libs.kotlin.coroutines.core)
     implementation(libs.minecraft.astralibs.command)
     implementation(libs.minecraft.astralibs.core)
-    implementation(libs.minecraft.astralibs.core.forge)
+    implementation(libs.minecraft.astralibs.core.minecraft)
 
     implementation(projects.modules.core.api)
-    implementation(projects.modules.core.forge)
     implementation(projects.modules.rtp.api)
 
     testImplementation(libs.tests.kotlin.test)
 }
 
 dependencies {
-    compileOnly(
-        files(
-            rootProject
-                .file(".gradle")
-                .resolve("mavenizer")
-                .resolve("repo")
-                .resolve("net")
-                .resolve("minecraftforge")
-                .resolve("forge")
-                .resolve(libs.versions.minecraft.forgeversion.get())
-                .resolve("forge-${libs.versions.minecraft.forgeversion.get()}.jar")
-        )
-    )
     compileOnly(libs.minecraft.brigadier)
-    compileOnly(libs.minecraft.forgeversion)
     compileOnly(libs.minecraft.datafixerupper)
-    compileOnly(libs.minecraft.forge.bus)
     compileOnly(libs.joml)
 }

@@ -8,7 +8,7 @@ import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 
-class HomeKrateProvider(
+internal class HomeKrateProvider(
     private val folder: File,
     private val stringFormat: StringFormat,
 ) {

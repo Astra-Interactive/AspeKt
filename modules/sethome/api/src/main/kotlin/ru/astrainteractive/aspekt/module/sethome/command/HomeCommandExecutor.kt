@@ -9,7 +9,7 @@ import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 
-class HomeCommandExecutor(
+internal class HomeCommandExecutor(
     private val homeKrateProvider: HomeKrateProvider,
     private val scope: CoroutineScope,
     translationKrate: CachedKrate<PluginTranslation>,

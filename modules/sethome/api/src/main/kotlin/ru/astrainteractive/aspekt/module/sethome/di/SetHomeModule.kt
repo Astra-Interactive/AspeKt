@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.sethome.di
 
+import java.io.File
 import kotlinx.serialization.StringFormat
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.sethome.command.HomeCommandExecutor
@@ -7,9 +8,8 @@ import ru.astrainteractive.aspekt.module.sethome.command.di.SetHomeCommandModule
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import java.io.File
 
-class HomesModule(
+class SetHomeModule(
     commandRegistrarContext: CommandRegistrarContext,
     dataFolder: File,
     stringFormat: StringFormat,
@@ -26,7 +26,7 @@ class HomesModule(
         kyoriKrate = coreModule.kyoriKrate,
     )
 
-    private val commandModule = SetHomeCommandModule(
+    private val setHomeCommandModule = SetHomeCommandModule(
         commandRegistrarContext = commandRegistrarContext,
         homeKrateProvider = homeKrateProvider,
         executor = homeCommandExecutor,
@@ -35,7 +35,7 @@ class HomesModule(
 
     val lifecycle = Lifecycle.Lambda(
         onEnable = {
-            commandModule.lifecycle.onEnable()
+            setHomeCommandModule.lifecycle.onEnable()
         },
         onDisable = {
             homeKrateProvider.clear()

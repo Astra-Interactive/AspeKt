@@ -6,7 +6,7 @@ import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 // sethome <home>
 // home <home>
 // delhome <home>
-sealed interface HomeCommand {
+internal sealed interface HomeCommand {
     data class SetHome(
         val playerData: OnlineKPlayer,
         val playerHome: PlayerHome

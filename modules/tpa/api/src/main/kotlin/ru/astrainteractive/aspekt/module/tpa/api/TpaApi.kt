@@ -6,7 +6,7 @@ import ru.astrainteractive.aspekt.module.tpa.model.TpaApiRequestType
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
-class TpaApi {
+internal class TpaApi {
 
     @Suppress("MagicNumber")
     private val cache = CacheBuilder

@@ -11,7 +11,7 @@ class TpaModule(
     coreModule: CoreModule,
     commandRegistrarContext: CommandRegistrarContext,
 ) {
-    val tpaCommandExecutor = TpaCommandExecutor(
+    private val tpaCommandExecutor = TpaCommandExecutor(
         translationKrate = coreModule.translationKrate,
         tpaApi = TpaApi(),
         scope = coreModule.ioScope,

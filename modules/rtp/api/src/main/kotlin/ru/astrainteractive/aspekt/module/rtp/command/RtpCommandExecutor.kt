@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.module.rtp.command
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ru.astrainteractive.aspekt.module.rtp.api.SafeLocationProvider
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap

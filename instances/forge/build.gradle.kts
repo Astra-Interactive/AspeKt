@@ -44,11 +44,9 @@ dependencies {
     shadow(projects.modules.claims.api)
     shadow(projects.modules.claims.forge)
     shadow(projects.modules.sethome.api)
-    shadow(projects.modules.sethome.forge)
     shadow(projects.modules.tpa.api)
-    shadow(projects.modules.tpa.forge)
     shadow(projects.modules.rtp.api)
-    shadow(projects.modules.rtp.forge)
+    shadow(projects.modules.rtp.minecraft)
 }
 
 minecraftProcessResource {
