@@ -1,11 +1,10 @@
 package ru.astrainteractive.aspekt.module.rtp.api
 
-import java.util.UUID
 import kotlinx.coroutines.CoroutineScope
-import ru.astrainteractive.astralibs.server.location.KLocation
+import java.util.UUID
 
 interface SafeLocationProvider {
-    suspend fun getLocation(ioScope: CoroutineScope, uuid: UUID): KLocation?
+    suspend fun getLocation(ioScope: CoroutineScope, uuid: UUID): RtpSearchResult
 
     fun hasTimeout(uuid: UUID): Boolean
 

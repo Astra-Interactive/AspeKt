@@ -7,6 +7,7 @@ import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.di.ForgeAuthModule
 import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
 import ru.astrainteractive.aspekt.module.claims.di.NeoForgeClaimModule
+import ru.astrainteractive.aspekt.module.rtp.api.MinecraftSafeLocationProvider
 import ru.astrainteractive.aspekt.module.rtp.di.RtpModule
 import ru.astrainteractive.aspekt.module.sethome.di.SetHomeModule
 import ru.astrainteractive.aspekt.module.tpa.di.TpaModule
@@ -20,7 +21,6 @@ import ru.astrainteractive.astralibs.util.YamlStringFormat
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import java.io.File
-import ru.astrainteractive.aspekt.module.rtp.api.MinecraftSafeLocationProvider
 
 class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
     private val dataFolder by lazy {
@@ -102,8 +102,13 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
         RtpModule(
             coreModule = coreModule,
             commandRegistrarContext = commandRegistrarContext,
-            safeLocationProvider = MinecraftSafeLocationProvider(coreModule.dispatchers),
-            multiplatformCommand = coreModule.multiplatformCommand
+            multiplatformCommand = coreModule.multiplatformCommand,
+            safeLocationProviderFactory = { rtpConfigKrate ->
+                MinecraftSafeLocationProvider(
+                    rtpConfigKrate = rtpConfigKrate,
+                    dispatchers = coreModule.dispatchers
+                )
+            },
         )
     }
 

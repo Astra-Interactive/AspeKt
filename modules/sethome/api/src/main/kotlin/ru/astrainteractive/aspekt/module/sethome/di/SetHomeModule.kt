@@ -1,6 +1,5 @@
 package ru.astrainteractive.aspekt.module.sethome.di
 
-import java.io.File
 import kotlinx.serialization.StringFormat
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.sethome.command.HomeCommandExecutor
@@ -8,6 +7,7 @@ import ru.astrainteractive.aspekt.module.sethome.command.di.SetHomeCommandModule
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import java.io.File
 
 class SetHomeModule(
     commandRegistrarContext: CommandRegistrarContext,
