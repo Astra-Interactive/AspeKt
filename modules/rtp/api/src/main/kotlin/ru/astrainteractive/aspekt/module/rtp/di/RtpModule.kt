@@ -11,7 +11,6 @@ import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarConte
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.asCachedKrate
-import ru.astrainteractive.klibs.kstorage.api.withDefault
 
 class RtpModule(
     coreModule: CoreModule,
@@ -20,8 +19,10 @@ class RtpModule(
     private val multiplatformCommand: MultiplatformCommand,
 ) {
     private val rtpConfigKrate = coreModule.yamlFormat
-        .krateOf<RtpConfig>(coreModule.dataFolder.resolve("rtp.yml"))
-        .withDefault(::RtpConfig)
+        .krateOf(
+            file = coreModule.dataFolder.resolve("rtp.yml"),
+            factory = ::RtpConfig
+        )
         .asCachedKrate()
     private val safeLocationProvider = safeLocationProviderFactory.invoke(rtpConfigKrate)
     private val executor = RtpCommandExecutor(

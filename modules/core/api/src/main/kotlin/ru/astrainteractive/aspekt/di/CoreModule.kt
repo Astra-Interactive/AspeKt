@@ -19,7 +19,6 @@ import ru.astrainteractive.astralibs.util.YamlStringFormat
 import ru.astrainteractive.klibs.kstorage.api.asCachedKrate
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
-import ru.astrainteractive.klibs.kstorage.api.withDefault
 import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
@@ -58,8 +57,10 @@ class CoreModule(
     )
 
     val translationKrate = yamlFormat
-        .krateOf<PluginTranslation>(dataFolder.resolve("translations.yml"))
-        .withDefault(::PluginTranslation)
+        .krateOf(
+            file = dataFolder.resolve("translations.yml"),
+            factory = ::PluginTranslation
+        )
         .asCachedMutableKrate()
 
     val kyoriKrate = DefaultMutableKrate<KyoriComponentSerializer>(

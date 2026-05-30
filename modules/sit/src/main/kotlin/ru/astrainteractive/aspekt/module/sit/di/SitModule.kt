@@ -9,15 +9,16 @@ import ru.astrainteractive.aspekt.module.sit.model.SitConfiguration
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
-import ru.astrainteractive.klibs.kstorage.api.withDefault
 
 class SitModule(
     coreModule: CoreModule,
     private val bukkitCoreModule: BukkitCoreModule
 ) {
     private val sitConfigKrate = coreModule.yamlFormat
-        .krateOf<SitConfiguration>(coreModule.dataFolder.resolve("sit.yml"))
-        .withDefault(::SitConfiguration)
+        .krateOf(
+            file = coreModule.dataFolder.resolve("sit.yml"),
+            factory = ::SitConfiguration
+        )
         .asCachedMutableKrate()
     private val sitController: SitController = SitController(
         sitKrate = sitConfigKrate,

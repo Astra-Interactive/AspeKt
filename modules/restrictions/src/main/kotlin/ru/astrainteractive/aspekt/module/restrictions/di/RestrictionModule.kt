@@ -7,15 +7,16 @@ import ru.astrainteractive.aspekt.module.restrictions.model.RestrictionsConfigur
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
-import ru.astrainteractive.klibs.kstorage.api.withDefault
 
 class RestrictionModule(
     coreModule: CoreModule,
     bukkitCoreModule: BukkitCoreModule
 ) {
     private val restrictionConfigKrate = coreModule.yamlFormat
-        .krateOf<RestrictionsConfiguration>(coreModule.dataFolder.resolve("restrictions.yml"))
-        .withDefault(::RestrictionsConfiguration)
+        .krateOf(
+            file = coreModule.dataFolder.resolve("restrictions.yml"),
+            factory = ::RestrictionsConfiguration
+        )
         .asCachedMutableKrate()
 
     private val restrictionsEvent: RestrictionsEvent by lazy {

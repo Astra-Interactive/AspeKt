@@ -7,7 +7,6 @@ import ru.astrainteractive.aspekt.module.moneyadvancement.model.MoneyAdvancement
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
-import ru.astrainteractive.klibs.kstorage.api.withDefault
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
@@ -16,8 +15,10 @@ class MoneyAdvancementModule(
     bukkitCoreModule: BukkitCoreModule
 ) : Logger by JUtiltLogger("MoneyAdvancementModule") {
     private val mAdvConfigKrate = coreModule.yamlFormat
-        .krateOf<MoneyAdvancementsConfiguration>(coreModule.dataFolder.resolve("money_advancements.yml"))
-        .withDefault(::MoneyAdvancementsConfiguration)
+        .krateOf(
+            file = coreModule.dataFolder.resolve("money_advancements.yml"),
+            factory = ::MoneyAdvancementsConfiguration
+        )
         .asCachedMutableKrate()
 
     private val moneyAdvancementEvent = MoneyAdvancementEvent(

@@ -13,7 +13,6 @@ import ru.astrainteractive.aspekt.module.autocrop.presentation.CropDupeControlle
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
-import ru.astrainteractive.klibs.kstorage.api.withDefault
 
 class AutoCropModule(
     coreModule: CoreModule,
@@ -21,8 +20,10 @@ class AutoCropModule(
 ) {
 
     private val autoCropConfigKrate = coreModule.yamlFormat
-        .krateOf<AutoCropConfiguration>(coreModule.dataFolder.resolve("auto_crop.yml"))
-        .withDefault(::AutoCropConfiguration)
+        .krateOf(
+            file = coreModule.dataFolder.resolve("auto_crop.yml"),
+            factory = ::AutoCropConfiguration
+        )
         .asCachedMutableKrate()
 
     private val autoCropEvent: AutoCropEvent = AutoCropEvent(
