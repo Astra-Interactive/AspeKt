@@ -3,11 +3,6 @@ package ru.astrainteractive.aspekt.module.rtp.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/**
- * Configuration for the random-teleport feature, persisted to `rtp.yml`.
- *
- * All values are defaulted so the file can be generated from scratch.
- */
 @Serializable
 @Suppress("MagicNumber")
 data class RtpConfig(
