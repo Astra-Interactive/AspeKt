@@ -10,7 +10,7 @@ import ru.astrainteractive.astralibs.command.api.brigadier.command.Multiplatform
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.astralibs.server.util.asBukkitLocation
 
-class AtemFrameLiteralArgumentBuilder(
+internal class AtemFrameLiteralArgumentBuilder(
     private val multiplatformCommand: MultiplatformCommand
 ) {
 

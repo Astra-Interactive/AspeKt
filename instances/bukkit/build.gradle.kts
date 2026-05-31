@@ -52,6 +52,8 @@ dependencies {
     shadow(projects.modules.restrictions)
     shadow(projects.modules.sit)
     shadow(projects.modules.treecapitator)
+    shadow(projects.modules.command.api)
+    shadow(projects.modules.command.bukkit)
 
     testImplementation(libs.tests.kotlin.test)
 }

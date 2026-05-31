@@ -2,7 +2,6 @@ package ru.astrainteractive.aspekt.command.di
 
 import ru.astrainteractive.aspekt.command.atemframe.AtemFrameLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.command.maxonline.MaxOnlineLiteralArgumentBuilder
-import ru.astrainteractive.aspekt.command.reload.ReloadLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.command.rtp.RtpLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.command.rtpbypass.RtpBypassLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.command.tellchat.TellChatLiteralArgumentBuilder
@@ -13,7 +12,7 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 /**
  * Aggregates and registers Brigadier command nodes for the Bukkit instance module.
  */
-class CommonCommandsModule(
+class BukkitCommandsModule(
     private val bukkitCoreModule: BukkitCoreModule,
     coreModule: CoreModule,
 ) {
@@ -22,12 +21,6 @@ class CommonCommandsModule(
             translationKrate = coreModule.translationKrate,
             kyoriKrate = coreModule.kyoriKrate,
             multiplatformCommand = coreModule.multiplatformCommand,
-        ).create(),
-        ReloadLiteralArgumentBuilder(
-            translationKrate = coreModule.translationKrate,
-            kyoriKrate = coreModule.kyoriKrate,
-            plugin = bukkitCoreModule.plugin,
-            multiplatformCommand = coreModule.multiplatformCommand
         ).create(),
         AtemFrameLiteralArgumentBuilder(
             multiplatformCommand = coreModule.multiplatformCommand

@@ -12,7 +12,7 @@ import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 
-class TellChatLiteralArgumentBuilder(
+internal class TellChatLiteralArgumentBuilder(
     private val multiplatformCommand: MultiplatformCommand,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
 ) : KyoriComponentSerializer by kyoriKrate.unwrap() {

@@ -3,7 +3,8 @@ package ru.astrainteractive.aspekt.di
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
-import ru.astrainteractive.aspekt.command.di.CommonCommandsModule
+import ru.astrainteractive.aspekt.command.di.BukkitCommandsModule
+import ru.astrainteractive.aspekt.command.di.CommandsModule
 import ru.astrainteractive.aspekt.inventorysort.di.InventorySortModule
 import ru.astrainteractive.aspekt.invisibleframes.di.InvisibleItemFrameModule
 import ru.astrainteractive.aspekt.module.antiswear.di.AntiSwearModule
@@ -22,20 +23,20 @@ import ru.astrainteractive.aspekt.module.sit.di.SitModule
 import ru.astrainteractive.aspekt.module.treecapitator.di.TreeCapitatorModule
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.brigadier.command.PaperMultiplatformCommands
+import ru.astrainteractive.astralibs.command.api.registrar.PaperCommandRegistrarContext
 import ru.astrainteractive.astralibs.coroutines.DefaultBukkitDispatchers
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.lifecycle.LifecyclePlugin
 import ru.astrainteractive.astralibs.server.bridge.BukkitPlatformServer
 
 class RootModule(plugin: LifecyclePlugin) {
-    private val coreModule: CoreModule by lazy {
-        CoreModule(
-            dataFolder = plugin.dataFolder,
-            dispatchers = DefaultBukkitDispatchers(plugin),
-            platformServer = BukkitPlatformServer(),
-            multiplatformCommand = MultiplatformCommand(PaperMultiplatformCommands())
-        )
-    }
+    private val coreModule: CoreModule = CoreModule(
+        dataFolder = plugin.dataFolder,
+        dispatchers = DefaultBukkitDispatchers(plugin),
+        platformServer = BukkitPlatformServer(),
+        multiplatformCommand = MultiplatformCommand(PaperMultiplatformCommands()),
+        commandRegistrarContextFactory = { coroutineScope -> PaperCommandRegistrarContext(coroutineScope, plugin) }
+    )
     private val bukkitCoreModule: BukkitCoreModule = BukkitCoreModule(
         plugin = plugin,
         ioScope = coreModule.ioScope,
@@ -65,10 +66,16 @@ class RootModule(plugin: LifecyclePlugin) {
     private val autoBroadcastModule by lazy {
         AutoBroadcastModule(coreModule)
     }
-    private val commonCommandModule: CommonCommandsModule by lazy {
-        CommonCommandsModule(
+    private val bukkitCommandsModule by lazy {
+        BukkitCommandsModule(
             bukkitCoreModule = bukkitCoreModule,
             coreModule = coreModule
+        )
+    }
+    private val commandModule by lazy {
+        CommandsModule(
+            coreModule = coreModule,
+            lifecyclePlugin = plugin
         )
     }
     private val moneyDropModule: MoneyDropModule by lazy {
@@ -112,7 +119,8 @@ class RootModule(plugin: LifecyclePlugin) {
             menuModule.lifecycle,
             autoBroadcastModule.lifecycle,
             sitModule.lifecycle,
-            commonCommandModule.lifecycle,
+            bukkitCommandsModule.lifecycle,
+            commandModule.lifecycle,
             bukkitClaimModule.lifecycle,
             moneyDropModule.lifecycle,
             autoCropModule.lifecycle,

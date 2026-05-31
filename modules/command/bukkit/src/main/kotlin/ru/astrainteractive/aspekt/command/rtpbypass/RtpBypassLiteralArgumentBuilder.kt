@@ -15,7 +15,7 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
  * RTP Bypassed command registrar. Builds Brigadier node for:
  * /rtpbypass <player>
  */
-class RtpBypassLiteralArgumentBuilder(
+internal class RtpBypassLiteralArgumentBuilder(
     private val multiplatformCommand: MultiplatformCommand
 ) {
     private val essentials: Essentials?

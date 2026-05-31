@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.di
 import com.charleskorn.kaml.PolymorphismStyle
 import com.charleskorn.kaml.Yaml
 import net.minecraftforge.fml.loading.FMLPaths
+import ru.astrainteractive.aspekt.command.di.CommandsModule
 import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.di.ForgeAuthModule
 import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
@@ -15,6 +16,7 @@ import ru.astrainteractive.astralibs.command.api.brigadier.command.Multiplatform
 import ru.astrainteractive.astralibs.command.brigadier.command.MinecraftMultiplatformCommands
 import ru.astrainteractive.astralibs.command.registrar.ForgeCommandRegistrarContext
 import ru.astrainteractive.astralibs.coroutines.MinecraftDispatchers
+import ru.astrainteractive.astralibs.lifecycle.ForgeLifecycleServer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.server.bridge.MinecraftPlatformServer
 import ru.astrainteractive.astralibs.util.YamlStringFormat
@@ -22,7 +24,7 @@ import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import java.io.File
 
-class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
+class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
     private val dataFolder by lazy {
         FMLPaths.CONFIGDIR.get()
             .resolve("AspeKt")
@@ -31,17 +33,19 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
             .also(File::mkdirs)
     }
 
-    val coreModule by lazy {
-        CoreModule(
-            dataFolder = dataFolder,
-            dispatchers = MinecraftDispatchers(),
-            platformServer = MinecraftPlatformServer,
-            multiplatformCommand = MultiplatformCommand(MinecraftMultiplatformCommands())
+    val coreModule = CoreModule(
+        dataFolder = dataFolder,
+        dispatchers = MinecraftDispatchers(),
+        platformServer = MinecraftPlatformServer,
+        multiplatformCommand = MultiplatformCommand(MinecraftMultiplatformCommands()),
+        commandRegistrarContextFactory = ::ForgeCommandRegistrarContext
+    )
+    private val commandModule by lazy {
+        CommandsModule(
+            coreModule = coreModule,
+            lifecyclePlugin = forgeLifecycleServer
         )
     }
-
-    private val commandRegistrarContext = ForgeCommandRegistrarContext(mainScope = coreModule.unconfinedScope)
-
     val authApiModule = AuthApiModule(
         ioScope = coreModule.ioScope,
         dataFolder = dataFolder
@@ -61,7 +65,7 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
         ForgeAuthModule(
             authApiModule = authApiModule,
             coreModule = coreModule,
-            commandRegistrarContext = commandRegistrarContext
+            commandRegistrarContext = coreModule.commandRegistrarContext
         )
     }
 
@@ -76,7 +80,7 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
 
     val forgeClaimModule by lazy {
         ForgeClaimModule(
-            commandRegistrarContext = commandRegistrarContext,
+            commandRegistrarContext = coreModule.commandRegistrarContext,
             coreModule = coreModule,
             claimModule = claimModule
         )
@@ -84,7 +88,7 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
 
     val setHomeModule by lazy {
         SetHomeModule(
-            commandRegistrarContext = commandRegistrarContext,
+            commandRegistrarContext = coreModule.commandRegistrarContext,
             dataFolder = dataFolder,
             stringFormat = coreModule.jsonStringFormat,
             coreModule = coreModule
@@ -94,14 +98,14 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
     val tpaModule by lazy {
         TpaModule(
             coreModule = coreModule,
-            commandRegistrarContext = commandRegistrarContext,
+            commandRegistrarContext = coreModule.commandRegistrarContext,
         )
     }
 
     val rtpModule by lazy {
         RtpModule(
             coreModule = coreModule,
-            commandRegistrarContext = commandRegistrarContext,
+            commandRegistrarContext = coreModule.commandRegistrarContext,
             multiplatformCommand = coreModule.multiplatformCommand,
             safeLocationProviderFactory = { rtpConfigKrate ->
                 MinecraftSafeLocationProvider(
@@ -115,6 +119,7 @@ class RootModule : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
     private val lifecycles: List<Lifecycle>
         get() = listOf(
             coreModule.lifecycle,
+            commandModule.lifecycle,
             forgeAuthModule.lifecycle,
             forgeClaimModule.lifecycle,
             setHomeModule.lifecycle,

@@ -12,7 +12,7 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
  * RTP command registrar. Builds Brigadier node for:
  * /rtp
  */
-class RtpLiteralArgumentBuilder(
+internal class RtpLiteralArgumentBuilder(
     private val multiplatformCommand: MultiplatformCommand,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<PluginTranslation>,

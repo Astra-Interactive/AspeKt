@@ -7,7 +7,7 @@ import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 
-class MaxOnlineLiteralArgumentBuilder(
+internal class MaxOnlineLiteralArgumentBuilder(
     private val multiplatformCommand: MultiplatformCommand
 ) {
     fun create(): LiteralArgumentBuilder<Any> {

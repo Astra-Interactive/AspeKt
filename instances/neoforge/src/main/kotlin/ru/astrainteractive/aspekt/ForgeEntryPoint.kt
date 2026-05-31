@@ -12,7 +12,7 @@ import javax.annotation.ParametersAreNonnullByDefault
 class ForgeEntryPoint :
     Logger by JUtiltLogger("AspeKt-ForgeEntryPoint"),
     ForgeLifecycleServer() {
-    private val rootModule by lazy { RootModule() }
+    private val rootModule = RootModule(this)
 
     override fun onEnable() {
         rootModule.lifecycle.onEnable()

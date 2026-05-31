@@ -93,6 +93,8 @@ include(":modules:sit")
 include(":modules:inventorysort")
 include(":modules:treecapitator")
 include(":modules:jail")
+include(":modules:command:api")
+include(":modules:command:bukkit")
 include(
     ":modules:auth:api",
     ":modules:auth:neoforge",

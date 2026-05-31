@@ -47,6 +47,7 @@ dependencies {
     shadow(projects.modules.tpa.api)
     shadow(projects.modules.rtp.api)
     shadow(projects.modules.rtp.minecraft)
+    shadow(projects.modules.command.api)
 }
 
 minecraftProcessResource {

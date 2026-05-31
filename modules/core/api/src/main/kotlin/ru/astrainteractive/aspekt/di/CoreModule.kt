@@ -11,6 +11,7 @@ import kotlinx.serialization.json.Json
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
+import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
@@ -28,25 +29,29 @@ class CoreModule(
     val dataFolder: File,
     val dispatchers: KotlinDispatchers,
     val platformServer: PlatformServer,
-    val multiplatformCommand: MultiplatformCommand
+    val multiplatformCommand: MultiplatformCommand,
+    commandRegistrarContextFactory: (mainScope: CoroutineScope) -> CommandRegistrarContext
 ) {
-
-    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+    private fun createCoroutineExceptionHandler() = CoroutineExceptionHandler { _, throwable ->
         val logger = JUtiltLogger("CoroutineExceptionHandler-AspeKt")
         logger.error(throwable) { "Error happened inside global coroutine scope!" }
     }
 
     val ioScope = CoroutineFeature
-        .Default(dispatchers.IO + SupervisorJob() + coroutineExceptionHandler)
+        .Default(dispatchers.IO + SupervisorJob() + createCoroutineExceptionHandler())
         .withTimings()
 
-    val mainScope: CoroutineScope = CoroutineFeature
-        .Default(dispatchers.Main + SupervisorJob() + coroutineExceptionHandler)
-        .withTimings()
+    val mainScope: CoroutineScope by lazy {
+        CoroutineFeature
+            .Default(dispatchers.Main + SupervisorJob() + createCoroutineExceptionHandler())
+            .withTimings()
+    }
 
     val unconfinedScope = CoroutineFeature
-        .Default(dispatchers.Unconfined + SupervisorJob() + coroutineExceptionHandler)
+        .Default(dispatchers.Unconfined + SupervisorJob() + createCoroutineExceptionHandler())
         .withTimings()
+
+    val commandRegistrarContext = commandRegistrarContextFactory.invoke(unconfinedScope)
 
     val yamlFormat: StringFormat = YamlStringFormat(
         configuration = Yaml.default.configuration.copy(
