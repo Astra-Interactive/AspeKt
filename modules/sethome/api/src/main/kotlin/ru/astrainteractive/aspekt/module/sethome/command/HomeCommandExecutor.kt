@@ -37,7 +37,11 @@ internal class HomeCommandExecutor(
             is HomeCommand.SetHome -> {
                 val krate = homeKrateProvider.get(input.playerData.uuid)
                 scope.launch {
-                    krate.save { homes -> homes.plus(input.playerHome) }
+                    krate.save { homes ->
+                        homes
+                            .filter { home -> home.name != input.playerHome.name }
+                            .plus(input.playerHome)
+                    }
 
                     input.playerData.sendMessage(translation.homes.homeCreated.component)
                 }
