@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.oregeneration.model
 
+import com.charleskorn.kaml.YamlComment
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,6 +10,7 @@ internal data class OreGenerationConfiguration(
     @SerialName("enabled")
     val enabled: Boolean = true,
     @SerialName("ores")
+    @YamlComment("The chance in range [0.0, 1.0] of the ore will be excluded")
     val ores: Map<String, Double> = listOf(
         "COAL_ORE",
         "DEEPSLATE_COAL_ORE",

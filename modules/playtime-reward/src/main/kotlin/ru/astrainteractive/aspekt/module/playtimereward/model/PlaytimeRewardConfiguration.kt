@@ -12,7 +12,7 @@ internal data class PlaytimeRewardConfiguration(
     @SerialName("enabled")
     val enabled: Boolean = true,
     @SerialName("reward_amount")
-    val rewardAmount: Double = 100.0,
+    val rewardAmount: Double = 10.0,
     @SerialName("required_minutes")
     @Serializable(DurationSerializer::class)
     val requiredDuration: Duration = 60.minutes,

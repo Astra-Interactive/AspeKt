@@ -26,12 +26,10 @@ class OreGenerationModule(
         oreHostMaterialMapper = OreHostMaterialMapper()
     )
 
-    private val oreGenerationEvent: OreGenerationEvent by lazy {
-        OreGenerationEvent(
-            server = bukkitCoreModule.plugin.server,
-            populator = oreGenerationBlockPopulator
-        )
-    }
+    private val oreGenerationEvent: OreGenerationEvent = OreGenerationEvent(
+        server = bukkitCoreModule.plugin.server,
+        populator = oreGenerationBlockPopulator
+    )
 
     val lifecycle = Lifecycle.Lambda(
         onEnable = {
