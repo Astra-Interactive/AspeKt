@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.restrictions.di
 
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.restrictions.event.restrictions.RestrictionsEvent
+import ru.astrainteractive.aspekt.module.restrictions.event.RestrictionsEvent
 import ru.astrainteractive.aspekt.module.restrictions.model.RestrictionsConfiguration
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle

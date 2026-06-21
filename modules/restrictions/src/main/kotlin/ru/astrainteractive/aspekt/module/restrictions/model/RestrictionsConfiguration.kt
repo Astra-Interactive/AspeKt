@@ -13,28 +13,38 @@ internal data class RestrictionsConfiguration(
     val spread: Spread = Spread()
 ) {
     @Serializable
+    internal data class RestrictionRule(
+        @SerialName("is_enabled")
+        val isEnabled: Boolean = true,
+        @SerialName("restricted_in_worlds")
+        val restrictedInWorlds: List<String> = emptyList(),
+        @SerialName("invert")
+        val invert: Boolean = false
+    )
+
+    @Serializable
     data class Explosion(
         @SerialName("damage_creeper")
-        val creeperDamage: Boolean = true,
+        val creeperDamage: RestrictionRule = RestrictionRule(),
         @SerialName("damage_other")
-        val otherDamage: Boolean = true,
+        val otherDamage: RestrictionRule = RestrictionRule(),
         @SerialName("destroy")
-        val destroy: Boolean = true
+        val destroy: RestrictionRule = RestrictionRule()
     )
 
     @Serializable
     data class Place(
         @SerialName("tnt")
-        val tnt: Boolean = true,
+        val tnt: RestrictionRule = RestrictionRule(),
         @SerialName("lava")
-        val lava: Boolean = true,
+        val lava: RestrictionRule = RestrictionRule(),
     )
 
     @Serializable
     data class Spread(
         @SerialName("lava")
-        val lava: Boolean = true,
+        val lava: RestrictionRule = RestrictionRule(),
         @SerialName("fire")
-        val fire: Boolean = true
+        val fire: RestrictionRule = RestrictionRule()
     )
 }
