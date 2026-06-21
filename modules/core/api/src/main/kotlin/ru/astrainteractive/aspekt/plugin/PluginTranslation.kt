@@ -39,7 +39,20 @@ class PluginTranslation(
     val tpa: Tpa = Tpa(),
     @SerialName("rtp")
     val rtp: Rtp = Rtp(),
+    @SerialName("playtime_reward")
+    val playtimeReward: PlaytimeReward = PlaytimeReward(),
 ) {
+
+    @Serializable
+    data class PlaytimeReward(
+        val prefix: StringDesc.Raw = StringDesc.Raw("&7[&#DBB72BНАГРАДА&7] "),
+        @SerialName("rewarded")
+        private val rewarded: StringDesc.Raw = prefix
+            .plus("&#42f596Вы получили &6%amount% &#42f596монет за время, проведённое на сервере!")
+            .toRaw(),
+    ) {
+        fun rewarded(amount: Number) = rewarded.replace("%amount%", DecimalFormat("0.00").format(amount))
+    }
 
     @Serializable
     data class Rtp(

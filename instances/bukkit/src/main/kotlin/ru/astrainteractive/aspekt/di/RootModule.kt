@@ -18,6 +18,8 @@ import ru.astrainteractive.aspekt.module.menu.di.MenuModule
 import ru.astrainteractive.aspekt.module.moneyadvancement.di.MoneyAdvancementModule
 import ru.astrainteractive.aspekt.module.moneydrop.di.MoneyDropModule
 import ru.astrainteractive.aspekt.module.newbee.di.NewBeeModule
+import ru.astrainteractive.aspekt.module.oregeneration.di.OreGenerationModule
+import ru.astrainteractive.aspekt.module.playtimereward.di.PlaytimeRewardModule
 import ru.astrainteractive.aspekt.module.restrictions.di.RestrictionModule
 import ru.astrainteractive.aspekt.module.sit.di.SitModule
 import ru.astrainteractive.aspekt.module.treecapitator.di.TreeCapitatorModule
@@ -81,6 +83,9 @@ class RootModule(plugin: LifecyclePlugin) {
     private val moneyDropModule: MoneyDropModule by lazy {
         MoneyDropModule(coreModule, bukkitCoreModule)
     }
+    private val playtimeRewardModule: PlaytimeRewardModule by lazy {
+        PlaytimeRewardModule(coreModule, bukkitCoreModule)
+    }
     private val autoCropModule: AutoCropModule by lazy {
         AutoCropModule(coreModule, bukkitCoreModule)
     }
@@ -98,6 +103,9 @@ class RootModule(plugin: LifecyclePlugin) {
     }
     private val restrictionModule: RestrictionModule by lazy {
         RestrictionModule(coreModule, bukkitCoreModule)
+    }
+    private val oreGenerationModule: OreGenerationModule by lazy {
+        OreGenerationModule(coreModule, bukkitCoreModule)
     }
     private val treeCapitatorModule: TreeCapitatorModule by lazy {
         TreeCapitatorModule(coreModule, bukkitCoreModule)
@@ -123,6 +131,7 @@ class RootModule(plugin: LifecyclePlugin) {
             commandModule.lifecycle,
             bukkitClaimModule.lifecycle,
             moneyDropModule.lifecycle,
+            playtimeRewardModule.lifecycle,
             autoCropModule.lifecycle,
             newBeeModule.lifecycle,
             antiSwearModule.lifecycle,
@@ -130,6 +139,7 @@ class RootModule(plugin: LifecyclePlugin) {
             chatGameModule.lifecycle,
             treeCapitatorModule.lifecycle,
             restrictionModule.lifecycle,
+            oreGenerationModule.lifecycle,
             inventorySortModule.lifecycle,
             jailModule.lifecycle,
             invisibleItemFrameModule.lifecycle
