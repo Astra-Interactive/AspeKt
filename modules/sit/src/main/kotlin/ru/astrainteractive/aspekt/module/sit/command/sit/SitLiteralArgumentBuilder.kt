@@ -5,7 +5,7 @@ import ru.astrainteractive.aspekt.module.sit.event.sit.SitController
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.server.player.BukkitOnlineKPlayer
 import ru.astrainteractive.astralibs.server.util.asBukkitLocation
-import ru.astrainteractive.klibs.mikro.core.util.cast
+import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 /**
  * Sit command registrar. Builds Brigadier node for:
@@ -19,11 +19,21 @@ internal class SitLiteralArgumentBuilder(
         return with(multiplatformCommand) {
             command("sit") {
                 runs { ctx ->
-                    val player = ctx.requirePlayer()
+                    val onlineKPlayer = ctx.requirePlayer()
+
+                    @Suppress("MaxLineLength")
+                    val player = onlineKPlayer
+                        .tryCast<BukkitOnlineKPlayer>()
+                        ?.instance
+                        ?: error(
+                            "Could not convert OnlineKPlayer into MinecraftOnlineKPlayer. " +
+                                "This should not happen. Contact developer."
+                        )
+
                     @Suppress("MagicNumber")
                     sitController.toggleSitPlayer(
-                        player = player.cast<BukkitOnlineKPlayer>().instance,
-                        locationWithOffset = player.getLocation()
+                        player = player,
+                        locationWithOffset = onlineKPlayer.getLocation()
                             .asBukkitLocation()
                             .add(0.0, -2.0, 0.0)
                     )

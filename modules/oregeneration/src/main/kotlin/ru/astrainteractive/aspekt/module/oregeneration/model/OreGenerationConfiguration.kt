@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.module.oregeneration.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Suppress("MagicNumber")
 @Serializable
 internal data class OreGenerationConfiguration(
     @SerialName("enabled")
