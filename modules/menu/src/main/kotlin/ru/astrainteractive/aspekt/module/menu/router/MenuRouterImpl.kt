@@ -8,14 +8,20 @@ import ru.astrainteractive.aspekt.module.menu.gui.MenuGui
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.astralibs.server.player.BukkitOnlineKPlayer
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
-import ru.astrainteractive.klibs.mikro.core.util.cast
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
+import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 internal class MenuRouterImpl(
     private val coreModule: CoreModule,
     private val bukkitCoreModule: BukkitCoreModule
-) : MenuRouter {
+) : MenuRouter, Logger by JUtiltLogger("AspeKt-MenuRouter") {
     override fun openMenu(player: OnlineKPlayer, menuModel: MenuModel) {
-        val bukkitPlayer = player.cast<BukkitOnlineKPlayer>().instance
+        val bukkitPlayer = player.tryCast<BukkitOnlineKPlayer>()?.instance
+        if (bukkitPlayer == null) {
+            info { "#openMenu bukkitPlayer is null" }
+            return
+        }
         coreModule.ioScope.launch(coreModule.dispatchers.IO) {
             val gui = MenuGui(
                 player = bukkitPlayer,

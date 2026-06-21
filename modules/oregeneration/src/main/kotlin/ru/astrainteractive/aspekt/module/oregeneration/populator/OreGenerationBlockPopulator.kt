@@ -9,7 +9,6 @@ import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import java.util.Random
 
-
 internal class OreGenerationBlockPopulator(
     configKrate: CachedKrate<OreGenerationConfiguration>,
     private val oreHostMaterialMapper: OreHostMaterialMapper
