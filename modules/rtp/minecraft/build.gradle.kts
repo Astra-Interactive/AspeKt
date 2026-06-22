@@ -8,6 +8,10 @@ plugins {
     alias(libs.plugins.gradle.fabric.loom)
 }
 
+repositories {
+    mavenLocal()
+}
+
 dependencies {
     minecraft(libs.minecraft.fabric.mojang)
     mappings(loom.officialMojangMappings())
@@ -22,7 +26,6 @@ dependencies {
     implementation(libs.klibs.kstorage)
     implementation(libs.klibs.mikro.core)
     implementation(libs.kotlin.coroutines.core)
-    implementation(libs.minecraft.astralibs.command)
     implementation(libs.minecraft.astralibs.core)
     implementation(libs.minecraft.astralibs.core.minecraft)
 

@@ -11,22 +11,29 @@ import ru.astrainteractive.astralibs.server.util.getNextTickTime
 import ru.astrainteractive.astralibs.server.util.getOnlinePlayer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
-import ru.astrainteractive.klibs.mikro.core.util.cast
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
+import ru.astrainteractive.klibs.mikro.core.util.tryCast
 import java.util.UUID
 
 class MinecraftSafeLocationProvider(
     dispatchers: KotlinDispatchers,
     private val rtpConfigKrate: CachedKrate<RtpConfig>,
-) : SafeLocationProvider {
+) : SafeLocationProvider, Logger by JUtiltLogger("AspeKt-MinecraftSafeLocationProvider") {
     private val jobRegistry: RtpSearchJobRegistry = RtpSearchJobRegistry()
     private val cooldownRegistry: RtpCooldownRegistry = RtpCooldownRegistry()
     private val searcher: SafeLocationSearcher = SafeLocationSearcher(dispatchers)
 
     override suspend fun getLocation(ioScope: CoroutineScope, uuid: UUID): RtpSearchResult {
         val player = MinecraftUtil.getOnlinePlayer(uuid) ?: return RtpSearchResult.NotFound
+        val level = player.level().tryCast<ServerLevel>()
+        if (level == null) {
+            error { "#getLocation could not get level" }
+            return RtpSearchResult.NotFound
+        }
         return jobRegistry.await(uuid, ioScope) {
             searcher.findSafeLocation(
-                level = player.level().cast<ServerLevel>(),
+                level = level,
                 config = rtpConfigKrate.cachedValue,
             )
         }

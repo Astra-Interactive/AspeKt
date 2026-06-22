@@ -10,7 +10,7 @@ import ru.astrainteractive.aspekt.module.rtp.model.RtpConfig
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
-import ru.astrainteractive.klibs.mikro.core.util.cast
+import ru.astrainteractive.klibs.mikro.core.util.tryCast
 import kotlin.random.Random
 
 internal class SafeLocationSearcher(
@@ -23,7 +23,11 @@ internal class SafeLocationSearcher(
 
     @Suppress("LoopWithTooManyJumpStatements", "ReturnCount")
     suspend fun findSafeLocation(level: ServerLevel, config: RtpConfig): RtpSearchResult {
-        val worldName = level.levelData.cast<ServerLevelData>().levelName
+        val worldName = level.levelData.tryCast<ServerLevelData>()?.levelName
+        if (worldName == null) {
+            error { "#findSafeLocation could not get world name" }
+            return RtpSearchResult.NotFound
+        }
         repeat(config.maxRetryCount) { attempt ->
             val chunkX = SectionPos.blockToSectionCoord(Random.nextInt(config.minX, config.maxX))
             val chunkZ = SectionPos.blockToSectionCoord(Random.nextInt(config.minZ, config.maxZ))
