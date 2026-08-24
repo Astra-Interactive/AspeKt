@@ -34,17 +34,18 @@ minecraftProcessResource {
 tasks.named<ProcessResources>("processResources").configure {
     filteringCharset = "UTF-8"
     duplicatesStrategy = DuplicatesStrategy.WARN
+    val bungeeYmlProperties = mapOf(
+        "main" to "${requireProjectInfo.group}.${requireProjectInfo.name}",
+        "name" to requireProjectInfo.name,
+        "prefix" to requireProjectInfo.name,
+        "version" to requireProjectInfo.versionString,
+        "description" to requireProjectInfo.description,
+        "authors" to requireProjectInfo.developersList
+            .map(Developer::id)
+            .joinToString("\",\""),
+    )
     filesMatching("bungee.yml") {
-        expand(
-            "main" to "${requireProjectInfo.group}.${requireProjectInfo.name}",
-            "name" to requireProjectInfo.name,
-            "prefix" to requireProjectInfo.name,
-            "version" to requireProjectInfo.versionString,
-            "description" to requireProjectInfo.description,
-            "authors" to requireProjectInfo.developersList
-                .map(Developer::id)
-                .joinToString("\",\""),
-        )
+        expand(bungeeYmlProperties)
     }
 }
 
