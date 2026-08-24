@@ -223,9 +223,7 @@ val shadowJar by tasks.getting(ShadowJar::class) {
         add("okhttp3")
         add("okio")
         add("org.apache")
-        if (project.name != "bukkit") {
-            add("org.h2") // Don't relocate on: [bukkit]
-        }
+//        add("org.h2") // H2 ships unrelocated in the mods folder - relocated driver name would not resolve
 
         add("org.intellij")
         add("org.jetbrains.annotations")

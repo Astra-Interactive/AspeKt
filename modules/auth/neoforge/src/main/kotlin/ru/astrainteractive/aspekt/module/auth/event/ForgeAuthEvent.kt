@@ -3,17 +3,23 @@ package ru.astrainteractive.aspekt.module.auth.event
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
+import net.neoforged.bus.api.Event
 import net.neoforged.bus.api.EventPriority
 import net.neoforged.bus.api.ICancellableEvent
+import net.neoforged.neoforge.common.util.TriState
 import net.neoforged.neoforge.event.entity.EntityEvent
-import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent
+import net.neoforged.neoforge.event.entity.item.ItemTossEvent
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent
+import net.neoforged.neoforge.event.entity.player.AttackEntityEvent
+import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent
 import net.neoforged.neoforge.event.entity.player.PlayerEvent
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.level.BlockEvent
-import net.neoforged.neoforge.event.tick.EntityTickEvent
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
@@ -26,6 +32,7 @@ import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.astralibs.server.util.toPlain
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
+import ru.astrainteractive.klibs.mikro.core.coroutines.merge
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 class ForgeAuthEvent(
@@ -93,16 +100,27 @@ class ForgeAuthEvent(
             processPlayerEvent(event.player)
         }.launchIn(mainScope)
 
-    val playerEvent = flowEvent<EntityEvent>(EventPriority.HIGHEST)
-        .filter { it.entity is Player }
-        .filter { it !is EntityTickEvent }
-        .filter { it !is EntityJoinLevelEvent }
-        .filter { it !is PlayerEvent.PlayerLoggedInEvent }
-        .filter { it.entity.isAlive }
-        .filter { authorizedApi.getAuthState(it.entity.uuid) !is AuthorizedApi.AuthState.Authorized }
+    private fun Event.isPlayerInvolved(): Player? = when (this) {
+        is ItemTossEvent -> player
+        is ItemEntityPickupEvent -> player
+        is EntityEvent -> entity as? Player
+        else -> null
+    }
+
+    val playerEvent = flowEvent<PlayerInteractEvent>(EventPriority.HIGHEST)
+        .merge(flowEvent<AttackEntityEvent>(EventPriority.HIGHEST))
+        .merge(flowEvent<LivingEntityUseItemEvent>(EventPriority.HIGHEST))
+        .merge(flowEvent<ItemTossEvent>(EventPriority.HIGHEST))
+        .merge(flowEvent<ItemEntityPickupEvent>(EventPriority.HIGHEST))
+        .filter { event -> event.isPlayerInvolved()?.isAlive == true }
+        .filter { event ->
+            val player = event.isPlayerInvolved() ?: return@filter false
+            authorizedApi.getAuthState(player.uuid) !is AuthorizedApi.AuthState.Authorized
+        }
         .onEach { event ->
             event.tryCast<ICancellableEvent>()?.isCanceled = true
-            processPlayerEvent(event.entity as Player)
+            event.tryCast<ItemEntityPickupEvent.Pre>()?.setCanPickup(TriState.FALSE)
+            event.isPlayerInvolved()?.let(::processPlayerEvent)
         }
         .launchIn(mainScope)
 }
