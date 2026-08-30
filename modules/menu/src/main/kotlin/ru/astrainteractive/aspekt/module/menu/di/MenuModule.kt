@@ -9,6 +9,7 @@ import ru.astrainteractive.aspekt.module.menu.router.MenuRouterImpl
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
+import java.io.File
 
 class MenuModule(
     private val coreModule: CoreModule,
@@ -42,5 +43,9 @@ class MenuModule(
                 menuModels.getValue()
             }
         )
+    }
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("menu.yml")
     }
 }

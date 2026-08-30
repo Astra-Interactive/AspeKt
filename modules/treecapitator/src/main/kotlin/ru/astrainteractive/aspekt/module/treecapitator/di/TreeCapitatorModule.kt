@@ -7,6 +7,7 @@ import ru.astrainteractive.aspekt.module.treecapitator.model.TreeCapitatorConfig
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
+import java.io.File
 
 class TreeCapitatorModule(
     coreModule: CoreModule,
@@ -14,7 +15,7 @@ class TreeCapitatorModule(
 ) {
     private val tcConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = coreModule.dataFolder.resolve("config.yml"),
+            file = getConfigurationFile(coreModule.dataFolder),
             factory = ::TreeCapitatorConfiguration
         )
         .asCachedMutableKrate()
@@ -36,4 +37,8 @@ class TreeCapitatorModule(
             tcConfigKrate.getValue()
         }
     )
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("config.yml")
+    }
 }

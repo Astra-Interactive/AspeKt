@@ -35,6 +35,7 @@ dependencies {
     shadow(projects.modules.claims.api)
     shadow(projects.modules.claims.neoforge)
     shadow(projects.modules.core.api)
+    shadow(projects.modules.core.feature)
     shadow(projects.modules.core.neoforge)
     shadow(projects.modules.rtp.api)
     shadow(projects.modules.rtp.minecraft)

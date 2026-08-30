@@ -40,6 +40,7 @@ dependencies {
     shadow(projects.modules.claims.api)
     shadow(projects.modules.claims.bukkit)
     shadow(projects.modules.core.api)
+    shadow(projects.modules.core.feature)
     shadow(projects.modules.core.bukkit)
     shadow(projects.modules.economy)
     shadow(projects.modules.inventorysort)

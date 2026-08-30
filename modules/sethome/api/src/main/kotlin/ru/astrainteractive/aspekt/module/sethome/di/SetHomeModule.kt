@@ -41,4 +41,8 @@ class SetHomeModule(
             homeKrateProvider.clear()
         }
     )
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("sethome.yml")
+    }
 }

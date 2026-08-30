@@ -21,6 +21,7 @@ internal data class ChatGameConfig(
     ),
     @SerialName("timer")
     val timer: Timer = Timer(),
+    @SerialName("is_enabled")
     val isEnabled: Boolean = false,
     @Suppress("MagicNumber")
     val defaultReward: Reward = Reward.Money(0.0, 100.0),

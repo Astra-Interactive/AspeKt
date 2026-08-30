@@ -9,6 +9,7 @@ import ru.astrainteractive.aspekt.module.antiswear.di.factory.PacketEventSwearLi
 import ru.astrainteractive.aspekt.module.antiswear.event.AntiSwearEventListener
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import java.io.File
 
 class AntiSwearModule(
     coreModule: CoreModule,
@@ -53,4 +54,8 @@ class AntiSwearModule(
             if (isPacketEventsEnabled) packetEventSwearListener?.onDisable()
         }
     )
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("antiswear.yml")
+    }
 }

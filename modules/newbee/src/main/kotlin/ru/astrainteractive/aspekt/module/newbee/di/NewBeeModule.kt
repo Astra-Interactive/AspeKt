@@ -4,6 +4,7 @@ import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.newbee.event.NewBeeEventListener
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import java.io.File
 
 class NewBeeModule(
     coreModule: CoreModule,
@@ -24,4 +25,8 @@ class NewBeeModule(
             newBeeEventListener.onDisable()
         }
     )
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("newbee.yml")
+    }
 }

@@ -10,7 +10,7 @@ import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import ru.astrainteractive.klibs.mikro.exposed.model.DatabaseConfiguration
 
 internal class EconomyConfigModule(coreModule: CoreModule) : Logger by JUtiltLogger("EconomyConfigModule") {
-    val folder = coreModule.dataFolder.resolve("economy")
+    private val folder = coreModule.dataFolder.resolve("economy")
 
     val dbConfigKrate = coreModule.yamlFormat
         .krateOf<DatabaseConfiguration>(

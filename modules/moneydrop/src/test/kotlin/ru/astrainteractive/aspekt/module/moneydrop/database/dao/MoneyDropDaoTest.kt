@@ -27,7 +27,7 @@ internal class MoneyDropDaoTest {
         _module = MoneyDropDaoModule(
             dataFolder = folder,
             ioDispatcher = scheduler,
-            coroutineScope = CoroutineScope(scheduler),
+            ioScope = CoroutineScope(scheduler),
         )
     }
 

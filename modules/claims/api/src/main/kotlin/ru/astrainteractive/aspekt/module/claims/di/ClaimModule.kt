@@ -25,4 +25,8 @@ class ClaimModule(
     )
     val claimErrorMapper = ClaimErrorMapper(translationKrate = translationKrate)
     val lifecycle = Lifecycle.Empty
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("claims.yml")
+    }
 }

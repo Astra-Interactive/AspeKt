@@ -11,6 +11,7 @@ import ru.astrainteractive.aspekt.module.oregeneration.populator.OreGenerationBl
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
+import java.io.File
 
 class OreGenerationModule(
     coreModule: CoreModule,
@@ -18,7 +19,7 @@ class OreGenerationModule(
 ) {
     private val oreGenerationConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = coreModule.dataFolder.resolve("ore-generation.yml"),
+            file = getConfigurationFile(coreModule.dataFolder),
             factory = ::OreGenerationConfiguration
         )
         .asCachedMutableKrate()
@@ -55,4 +56,8 @@ class OreGenerationModule(
             lootGenerationConfigKrate.getValue()
         }
     )
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("ore-generation.yml")
+    }
 }

@@ -4,6 +4,7 @@ import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.inventorysort.event.sort.SortController
 import ru.astrainteractive.aspekt.inventorysort.event.sort.SortEvent
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import java.io.File
 
 class InventorySortModule(
     bukkitCoreModule: BukkitCoreModule
@@ -19,4 +20,8 @@ class InventorySortModule(
             sortEvent.onDisable()
         }
     )
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("inventory_sort.yml")
+    }
 }

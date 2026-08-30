@@ -5,6 +5,8 @@ import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
 import ru.astrainteractive.aspekt.command.di.BukkitCommandsModule
 import ru.astrainteractive.aspekt.command.di.CommandsModule
+import ru.astrainteractive.aspekt.feature.flagreader.FileFeatureFlagReader
+import ru.astrainteractive.aspekt.feature.gate.FeatureGate
 import ru.astrainteractive.aspekt.inventorysort.di.InventorySortModule
 import ru.astrainteractive.aspekt.invisibleframes.di.InvisibleItemFrameModule
 import ru.astrainteractive.aspekt.module.antiswear.di.AntiSwearModule
@@ -41,33 +43,174 @@ class RootModule(plugin: LifecyclePlugin) {
     )
     private val bukkitCoreModule: BukkitCoreModule = BukkitCoreModule(
         plugin = plugin,
-        ioScope = coreModule.ioScope,
         mainScope = coreModule.mainScope
     )
-    private val claimModule by lazy {
-        ClaimModule(
-            stringFormat = coreModule.jsonStringFormat,
-            dataFolder = coreModule.dataFolder,
-            ioScope = coreModule.ioScope,
-            translationKrate = coreModule.translationKrate
-        )
-    }
-    private val bukkitClaimModule: BukkitClaimModule by lazy {
-        BukkitClaimModule(
-            coreModule = coreModule,
-            bukkitCoreModule = bukkitCoreModule,
-            claimModule = claimModule
-        )
-    }
-    private val menuModule: MenuModule by lazy {
-        MenuModule(coreModule, bukkitCoreModule)
-    }
-    private val sitModule: SitModule by lazy {
-        SitModule(coreModule, bukkitCoreModule)
-    }
-    private val autoBroadcastModule by lazy {
-        AutoBroadcastModule(coreModule)
-    }
+
+    private val menuModuleGate = FeatureGate(
+        featureClass = MenuModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = MenuModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = { MenuModule(coreModule, bukkitCoreModule) },
+        lifecycleSelector = MenuModule::lifecycle
+    )
+    private val autoBroadcastModuleGate = FeatureGate(
+        featureClass = AutoBroadcastModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = AutoBroadcastModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = { AutoBroadcastModule(coreModule) },
+        lifecycleSelector = AutoBroadcastModule::lifecycle
+    )
+    private val sitModuleGate = FeatureGate(
+        featureClass = SitModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = SitModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = { SitModule(coreModule, bukkitCoreModule) },
+        lifecycleSelector = SitModule::lifecycle
+    )
+    private val claimModuleGate = FeatureGate(
+        featureClass = BukkitClaimModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = ClaimModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = {
+            BukkitClaimModule(
+                coreModule = coreModule,
+                bukkitCoreModule = bukkitCoreModule,
+                claimModule = ClaimModule(
+                    stringFormat = coreModule.jsonStringFormat,
+                    dataFolder = coreModule.dataFolder,
+                    ioScope = coreModule.ioScope,
+                    translationKrate = coreModule.translationKrate
+                )
+            )
+        },
+        lifecycleSelector = BukkitClaimModule::lifecycle
+    )
+    private val moneyDropModuleGate = FeatureGate(
+        featureClass = MoneyDropModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = MoneyDropModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = { MoneyDropModule(coreModule, bukkitCoreModule) },
+        lifecycleSelector = MoneyDropModule::lifecycle
+    )
+    private val playtimeRewardModuleGate = FeatureGate(
+        featureClass = PlaytimeRewardModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = PlaytimeRewardModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = { PlaytimeRewardModule(coreModule, bukkitCoreModule) },
+        lifecycleSelector = PlaytimeRewardModule::lifecycle
+    )
+    private val autoCropModuleGate = FeatureGate(
+        featureClass = AutoCropModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = AutoCropModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = { AutoCropModule(coreModule, bukkitCoreModule) },
+        lifecycleSelector = AutoCropModule::lifecycle
+    )
+    private val newBeeModuleGate = FeatureGate(
+        featureClass = NewBeeModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = NewBeeModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = { NewBeeModule(coreModule, bukkitCoreModule) },
+        lifecycleSelector = NewBeeModule::lifecycle
+    )
+    private val antiSwearModuleGate = FeatureGate(
+        featureClass = AntiSwearModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = AntiSwearModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = { AntiSwearModule(coreModule, bukkitCoreModule) },
+        lifecycleSelector = AntiSwearModule::lifecycle
+    )
+    private val moneyAdvancementModuleGate = FeatureGate(
+        featureClass = MoneyAdvancementModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = MoneyAdvancementModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = { MoneyAdvancementModule(coreModule, bukkitCoreModule) },
+        lifecycleSelector = MoneyAdvancementModule::lifecycle
+    )
+    private val chatGameModuleGate = FeatureGate(
+        featureClass = ChatGameModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = ChatGameModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = { ChatGameModule(coreModule, bukkitCoreModule) },
+        lifecycleSelector = ChatGameModule::lifecycle
+    )
+    private val restrictionModuleGate = FeatureGate(
+        featureClass = RestrictionModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = RestrictionModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = { RestrictionModule(coreModule, bukkitCoreModule) },
+        lifecycleSelector = RestrictionModule::lifecycle
+    )
+    private val oreGenerationModuleGate = FeatureGate(
+        featureClass = OreGenerationModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = OreGenerationModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = { OreGenerationModule(coreModule, bukkitCoreModule) },
+        lifecycleSelector = OreGenerationModule::lifecycle
+    )
+    private val treeCapitatorModuleGate = FeatureGate(
+        featureClass = TreeCapitatorModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = TreeCapitatorModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = { TreeCapitatorModule(coreModule, bukkitCoreModule) },
+        lifecycleSelector = TreeCapitatorModule::lifecycle
+    )
+    private val inventorySortModuleGate = FeatureGate(
+        featureClass = InventorySortModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = InventorySortModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = { InventorySortModule(bukkitCoreModule) },
+        lifecycleSelector = InventorySortModule::lifecycle
+    )
+    private val jailModuleGate = FeatureGate(
+        featureClass = JailModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = JailModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = { JailModule(coreModule, bukkitCoreModule) },
+        lifecycleSelector = JailModule::lifecycle
+    )
+    private val invisibleItemFrameModuleGate = FeatureGate(
+        featureClass = InvisibleItemFrameModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = InvisibleItemFrameModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = { InvisibleItemFrameModule(bukkitCoreModule) },
+        lifecycleSelector = InvisibleItemFrameModule::lifecycle
+    )
+
     private val bukkitCommandsModule by lazy {
         BukkitCommandsModule(
             bukkitCoreModule = bukkitCoreModule,
@@ -80,69 +223,30 @@ class RootModule(plugin: LifecyclePlugin) {
             lifecyclePlugin = plugin
         )
     }
-    private val moneyDropModule: MoneyDropModule by lazy {
-        MoneyDropModule(coreModule, bukkitCoreModule)
-    }
-    private val playtimeRewardModule: PlaytimeRewardModule by lazy {
-        PlaytimeRewardModule(coreModule, bukkitCoreModule)
-    }
-    private val autoCropModule: AutoCropModule by lazy {
-        AutoCropModule(coreModule, bukkitCoreModule)
-    }
-    private val newBeeModule: NewBeeModule by lazy {
-        NewBeeModule(coreModule, bukkitCoreModule)
-    }
-    private val antiSwearModule: AntiSwearModule by lazy {
-        AntiSwearModule(coreModule, bukkitCoreModule)
-    }
-    private val moneyAdvancementModule: MoneyAdvancementModule by lazy {
-        MoneyAdvancementModule(coreModule, bukkitCoreModule)
-    }
-    private val chatGameModule: ChatGameModule by lazy {
-        ChatGameModule(coreModule, bukkitCoreModule)
-    }
-    private val restrictionModule: RestrictionModule by lazy {
-        RestrictionModule(coreModule, bukkitCoreModule)
-    }
-    private val oreGenerationModule: OreGenerationModule by lazy {
-        OreGenerationModule(coreModule, bukkitCoreModule)
-    }
-    private val treeCapitatorModule: TreeCapitatorModule by lazy {
-        TreeCapitatorModule(coreModule, bukkitCoreModule)
-    }
-    private val inventorySortModule: InventorySortModule by lazy {
-        InventorySortModule(bukkitCoreModule)
-    }
-    private val jailModule: JailModule by lazy {
-        JailModule(coreModule, bukkitCoreModule)
-    }
-    private val invisibleItemFrameModule by lazy {
-        InvisibleItemFrameModule(bukkitCoreModule)
-    }
 
     private val lifecycles: List<Lifecycle>
-        get() = listOfNotNull(
+        get() = listOf(
             coreModule.lifecycle,
             bukkitCoreModule.lifecycle,
-            menuModule.lifecycle,
-            autoBroadcastModule.lifecycle,
-            sitModule.lifecycle,
             bukkitCommandsModule.lifecycle,
             commandModule.lifecycle,
-            bukkitClaimModule.lifecycle,
-            moneyDropModule.lifecycle,
-            playtimeRewardModule.lifecycle,
-            autoCropModule.lifecycle,
-            newBeeModule.lifecycle,
-            antiSwearModule.lifecycle,
-            moneyAdvancementModule.lifecycle,
-            chatGameModule.lifecycle,
-            treeCapitatorModule.lifecycle,
-            restrictionModule.lifecycle,
-            oreGenerationModule.lifecycle,
-            inventorySortModule.lifecycle,
-            jailModule.lifecycle,
-            invisibleItemFrameModule.lifecycle
+            menuModuleGate,
+            autoBroadcastModuleGate,
+            sitModuleGate,
+            claimModuleGate,
+            moneyDropModuleGate,
+            playtimeRewardModuleGate,
+            autoCropModuleGate,
+            newBeeModuleGate,
+            antiSwearModuleGate,
+            moneyAdvancementModuleGate,
+            chatGameModuleGate,
+            treeCapitatorModuleGate,
+            restrictionModuleGate,
+            oreGenerationModuleGate,
+            inventorySortModuleGate,
+            jailModuleGate,
+            invisibleItemFrameModuleGate
         )
 
     val lifecycle = Lifecycle.Lambda(

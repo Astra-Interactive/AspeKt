@@ -21,7 +21,7 @@ class EconomyModule(
 
     private val databaseModule = EconomyDatabaseModule(
         dbConfig = economyConfigModule.dbConfigKrate,
-        coroutineScope = coreModule.ioScope,
+        ioScope = coreModule.ioScope,
         dispatchers = coreModule.dispatchers
     )
 

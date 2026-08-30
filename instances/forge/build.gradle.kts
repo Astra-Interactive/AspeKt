@@ -39,6 +39,7 @@ dependencies {
     shadow(libs.minecraft.kyori.gson)
     // Local
     shadow(projects.modules.core.api)
+    shadow(projects.modules.core.feature)
     shadow(projects.modules.core.forge)
     shadow(projects.modules.auth.api)
     shadow(projects.modules.auth.forge)

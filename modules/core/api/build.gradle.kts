@@ -7,6 +7,7 @@ plugins {
 
 dependencies {
     api(libs.klibs.kstorage)
+    api(libs.minecraft.astralibs.core)
 
     compileOnly(libs.minecraft.brigadier)
     compileOnly(libs.minecraft.kyori.gson)
@@ -19,5 +20,4 @@ dependencies {
     implementation(libs.kotlin.serialization.json)
     implementation(libs.kotlin.serialization.kaml)
     implementation(libs.minecraft.astralibs.command)
-    implementation(libs.minecraft.astralibs.core)
 }

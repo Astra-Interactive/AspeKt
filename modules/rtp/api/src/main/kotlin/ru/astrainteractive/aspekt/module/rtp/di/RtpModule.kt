@@ -11,6 +11,7 @@ import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarConte
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.asCachedKrate
+import java.io.File
 
 class RtpModule(
     coreModule: CoreModule,
@@ -20,7 +21,7 @@ class RtpModule(
 ) {
     private val rtpConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = coreModule.dataFolder.resolve("rtp.yml"),
+            file = getConfigurationFile(coreModule.dataFolder),
             factory = ::RtpConfig
         )
         .asCachedKrate()
@@ -47,4 +48,8 @@ class RtpModule(
             rtpConfigKrate.getValue()
         }
     )
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("rtp.yml")
+    }
 }

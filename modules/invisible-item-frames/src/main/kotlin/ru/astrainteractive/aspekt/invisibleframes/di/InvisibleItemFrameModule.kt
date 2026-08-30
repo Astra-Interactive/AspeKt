@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.invisibleframes.di
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.invisibleframes.event.InvisibleFramesEvent
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import java.io.File
 
 class InvisibleItemFrameModule(
     bukkitCoreModule: BukkitCoreModule
@@ -16,4 +17,8 @@ class InvisibleItemFrameModule(
             invisibleFramesEvent.onDisable()
         }
     )
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("invisible_frames.yml")
+    }
 }
