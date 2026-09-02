@@ -48,7 +48,7 @@ class EconomyDaoTest {
         ).asStateFlowMutableKrate()
         _module = EconomyDatabaseModule(
             dbConfig = dbConfig,
-            coroutineScope = CoroutineScope(scheduler),
+            ioScope = CoroutineScope(scheduler),
             dispatchers = DefaultKotlinDispatchers
         )
     }

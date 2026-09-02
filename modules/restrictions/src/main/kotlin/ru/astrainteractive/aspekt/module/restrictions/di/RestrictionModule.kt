@@ -7,6 +7,7 @@ import ru.astrainteractive.aspekt.module.restrictions.model.RestrictionsConfigur
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
+import java.io.File
 
 class RestrictionModule(
     coreModule: CoreModule,
@@ -14,7 +15,7 @@ class RestrictionModule(
 ) {
     private val restrictionConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = coreModule.dataFolder.resolve("restrictions.yml"),
+            file = getConfigurationFile(coreModule.dataFolder),
             factory = ::RestrictionsConfiguration
         )
         .asCachedMutableKrate()
@@ -33,4 +34,8 @@ class RestrictionModule(
             restrictionConfigKrate.getValue()
         }
     )
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("restrictions.yml")
+    }
 }

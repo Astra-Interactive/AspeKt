@@ -11,7 +11,7 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 class ForgeClaimModule(
     commandRegistrarContext: CommandRegistrarContext,
     coreModule: CoreModule,
-    claimModule: ClaimModule
+    private val claimModule: ClaimModule
 ) {
 
     private val claimCommandExecutor = ClaimCommandExecutor(
@@ -40,7 +40,13 @@ class ForgeClaimModule(
     )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
-        onEnable = { claimCommandModule.lifecycle.onEnable() },
-        onDisable = { claimCommandModule.lifecycle.onDisable() }
+        onEnable = {
+            claimModule.lifecycle.onEnable()
+            claimCommandModule.lifecycle.onEnable()
+        },
+        onDisable = {
+            claimCommandModule.lifecycle.onDisable()
+            claimModule.lifecycle.onDisable()
+        }
     )
 }

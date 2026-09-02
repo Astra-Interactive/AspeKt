@@ -9,6 +9,7 @@ import ru.astrainteractive.aspekt.module.menu.router.MenuRouterImpl
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
+import java.io.File
 
 class MenuModule(
     private val coreModule: CoreModule,
@@ -30,7 +31,7 @@ class MenuModule(
         coreModule = coreModule,
         bukkitCoreModule = bukkitCoreModule,
         menuRouter = { menuRouter },
-        menuModels = menuModels.cachedValue
+        menuModelsKrate = menuModels
     )
 
     val lifecycle: Lifecycle by lazy {
@@ -40,7 +41,14 @@ class MenuModule(
             },
             onReload = {
                 menuModels.getValue()
+            },
+            onDisable = {
+                menuCommandModule.lifecycle.onDisable()
             }
         )
+    }
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("menu.yml")
     }
 }

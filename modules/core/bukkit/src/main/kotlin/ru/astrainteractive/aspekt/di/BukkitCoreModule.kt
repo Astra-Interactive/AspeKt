@@ -11,12 +11,11 @@ import ru.astrainteractive.astralibs.menu.event.DefaultInventoryClickEvent
 
 class BukkitCoreModule(
     val plugin: LifecyclePlugin,
-    val ioScope: CoroutineScope,
-    val mainScope: CoroutineScope
+    private val mainScope: CoroutineScope
 ) {
-    val eventListener = EventListener.Default()
+    private val eventListener = EventListener.Default()
+    private val inventoryClickEventListener = DefaultInventoryClickEvent()
     val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory = CurrencyEconomyProviderFactoryImpl()
-    val inventoryClickEventListener = DefaultInventoryClickEvent()
     val commandRegistrarContext = PaperCommandRegistrarContext(
         mainScope = mainScope,
         plugin = plugin
@@ -28,8 +27,8 @@ class BukkitCoreModule(
             eventListener.onEnable(plugin)
         },
         onDisable = {
-            inventoryClickEventListener.onDisable()
             eventListener.onDisable()
+            inventoryClickEventListener.onDisable()
         }
     )
 }

@@ -10,8 +10,12 @@ import ru.astrainteractive.aspekt.module.jail.data.JailApi
 import ru.astrainteractive.aspekt.module.jail.data.internal.CachedJailApiImpl
 import ru.astrainteractive.aspekt.module.jail.data.internal.JailApiImpl
 import ru.astrainteractive.aspekt.module.jail.event.JailEvent
-import ru.astrainteractive.aspekt.module.jail.job.UnJailJob
+import ru.astrainteractive.aspekt.module.jail.service.UnJailServiceTask
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.astralibs.service.IntervalService
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import java.io.File
+import kotlin.time.Duration.Companion.seconds
 
 class JailModule(
     coreModule: CoreModule,
@@ -46,25 +50,36 @@ class JailModule(
         jailController = jailController
     )
 
-    private val unJailJob = UnJailJob(
+    private val unJailService = IntervalService(
+        interval = UN_JAIL_CHECK_INTERVAL,
         scope = coreModule.ioScope,
-        cachedJailApi = cachedJailApi,
-        jailApi = jailApi,
-        jailController = jailController,
-        kyoriKrate = coreModule.kyoriKrate,
-        translationKrate = coreModule.translationKrate
+        logger = JUtiltLogger("UnJailService"),
+        task = UnJailServiceTask(
+            cachedJailApi = cachedJailApi,
+            jailApi = jailApi,
+            jailController = jailController,
+            kyoriKrate = coreModule.kyoriKrate,
+            translationKrate = coreModule.translationKrate
+        )
     )
 
     val lifecycle = Lifecycle.Lambda(
         onEnable = {
             jailEvent.onEnable(bukkitCoreModule.plugin)
             jailCommandModule.lifecycle.onEnable()
-            unJailJob.onEnable()
+            unJailService.onEnable()
         },
         onDisable = {
+            unJailService.onDisable()
+            jailCommandModule.lifecycle.onDisable()
             jailEvent.onDisable()
-            unJailJob.onDisable()
             jailController.cancel()
         }
     )
+
+    companion object {
+        private val UN_JAIL_CHECK_INTERVAL = 10.seconds
+
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("jail.yml")
+    }
 }

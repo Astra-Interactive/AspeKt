@@ -9,6 +9,7 @@ import ru.astrainteractive.aspekt.module.moneydrop.model.MoneyDropConfiguration
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
+import java.io.File
 
 class MoneyDropModule(
     coreModule: CoreModule,
@@ -17,7 +18,7 @@ class MoneyDropModule(
 
     private val moneyDropConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = coreModule.dataFolder.resolve("money_drop.yml"),
+            file = getConfigurationFile(coreModule.dataFolder),
             factory = ::MoneyDropConfiguration
         )
         .asCachedMutableKrate()
@@ -25,7 +26,7 @@ class MoneyDropModule(
     private val moneyDropDaoModule = MoneyDropDaoModule(
         dataFolder = coreModule.dataFolder,
         ioDispatcher = coreModule.dispatchers.IO,
-        coroutineScope = coreModule.ioScope
+        ioScope = coreModule.ioScope
     )
 
     private val moneyDropController = MoneyDropController(
@@ -47,17 +48,21 @@ class MoneyDropModule(
     val lifecycle: Lifecycle by lazy {
         Lifecycle.Lambda(
             onEnable = {
-                moneyDropEvent.onEnable(bukkitCoreModule.plugin)
                 moneyDropDaoModule.lifecycle.onEnable()
-            },
-            onDisable = {
-                moneyDropDaoModule.lifecycle.onDisable()
-                moneyDropEvent.onDisable()
+                moneyDropEvent.onEnable(bukkitCoreModule.plugin)
             },
             onReload = {
                 moneyDropDaoModule.lifecycle.onReload()
                 moneyDropConfigKrate.getValue()
+            },
+            onDisable = {
+                moneyDropEvent.onDisable()
+                moneyDropDaoModule.lifecycle.onDisable()
             }
         )
+    }
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("money_drop.yml")
     }
 }

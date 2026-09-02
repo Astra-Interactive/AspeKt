@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.auth.command.di
 import kotlinx.coroutines.CoroutineScope
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
-import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
+import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.aspekt.module.auth.command.login.LoginCommandRegistrar
 import ru.astrainteractive.aspekt.module.auth.command.register.RegisterCommandRegistrar
 import ru.astrainteractive.aspekt.module.auth.command.unregister.UnregisterCommandRegistrar
@@ -17,7 +17,7 @@ import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 class AuthCommandModule(
     private val authDao: AuthDao,
     private val authorizedApi: AuthorizedApi,
-    private val authApiModule: AuthApiModule,
+    private val translationKrate: CachedKrate<AuthTranslation>,
     private val ioScope: CoroutineScope,
     private val kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val platformServer: PlatformServer,
@@ -31,7 +31,7 @@ class AuthCommandModule(
                 authDao = authDao,
                 authorizedApi = authorizedApi,
                 kyoriKrate = kyoriKrate,
-                translationKrate = authApiModule.translationKrate,
+                translationKrate = translationKrate,
                 multiplatformCommand = multiplatformCommand,
                 registrarContext = commandRegistrarContext
             ).register()
@@ -40,7 +40,7 @@ class AuthCommandModule(
                 authDao = authDao,
                 authorizedApi = authorizedApi,
                 kyoriKrate = kyoriKrate,
-                translationKrate = authApiModule.translationKrate,
+                translationKrate = translationKrate,
                 multiplatformCommand = multiplatformCommand,
                 registrarContext = commandRegistrarContext
             ).register()
@@ -50,7 +50,7 @@ class AuthCommandModule(
                 authorizedApi = authorizedApi,
                 platformServer = platformServer,
                 kyoriKrate = kyoriKrate,
-                translationKrate = authApiModule.translationKrate,
+                translationKrate = translationKrate,
                 multiplatformCommand = multiplatformCommand,
                 registrarContext = commandRegistrarContext
             ).register()

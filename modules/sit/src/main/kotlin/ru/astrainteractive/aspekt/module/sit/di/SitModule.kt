@@ -9,6 +9,7 @@ import ru.astrainteractive.aspekt.module.sit.model.SitConfiguration
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
+import java.io.File
 
 class SitModule(
     coreModule: CoreModule,
@@ -16,7 +17,7 @@ class SitModule(
 ) {
     private val sitConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = coreModule.dataFolder.resolve("sit.yml"),
+            file = getConfigurationFile(coreModule.dataFolder),
             factory = ::SitConfiguration
         )
         .asCachedMutableKrate()
@@ -38,17 +39,22 @@ class SitModule(
     )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
-        onDisable = {
-            sitController.onDisable()
-            sitEvent.onDisable()
+        onEnable = {
+            sitEvent.onEnable(bukkitCoreModule.plugin)
+            sitCommandModule.lifecycle.onEnable()
         },
         onReload = {
             sitController.onDisable()
             sitConfigKrate.getValue()
         },
-        onEnable = {
-            sitEvent.onEnable(bukkitCoreModule.plugin)
-            sitCommandModule.lifecycle.onEnable()
+        onDisable = {
+            sitCommandModule.lifecycle.onDisable()
+            sitEvent.onDisable()
+            sitController.onDisable()
         }
     )
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("sit.yml")
+    }
 }

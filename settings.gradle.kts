@@ -59,6 +59,7 @@ include(":instances:bungee")
 // Modules
 include(
     ":modules:core:api",
+    ":modules:core:feature",
     ":modules:core:bukkit",
     ":modules:core:neoforge",
     ":modules:core:forge",

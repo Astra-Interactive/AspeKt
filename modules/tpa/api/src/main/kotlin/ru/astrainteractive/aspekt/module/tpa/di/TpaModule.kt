@@ -6,6 +6,7 @@ import ru.astrainteractive.aspekt.module.tpa.command.TpaCommandExecutor
 import ru.astrainteractive.aspekt.module.tpa.command.di.TpaCommandModule
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import java.io.File
 
 class TpaModule(
     coreModule: CoreModule,
@@ -30,5 +31,12 @@ class TpaModule(
         onEnable = {
             commandModule.lifecycle.onEnable()
         },
+        onDisable = {
+            commandModule.lifecycle.onDisable()
+        }
     )
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("tpa.yml")
+    }
 }

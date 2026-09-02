@@ -1,6 +1,5 @@
 package ru.astrainteractive.aspekt
 
-import kotlinx.coroutines.cancel
 import net.minecraftforge.fml.common.Mod
 import ru.astrainteractive.aspekt.di.RootModule
 import ru.astrainteractive.astralibs.lifecycle.ForgeLifecycleServer
@@ -21,7 +20,6 @@ class ForgeEntryPoint :
 
     override fun onDisable() {
         rootModule.lifecycle.onDisable()
-        rootModule.coreModule.unconfinedScope.cancel()
     }
 
     override fun onReload() {

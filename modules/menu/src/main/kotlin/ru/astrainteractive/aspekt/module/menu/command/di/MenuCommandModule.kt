@@ -7,6 +7,7 @@ import ru.astrainteractive.aspekt.module.menu.command.menu.MenuLiteralArgumentBu
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 
 /**
  * Aggregates and registers Brigadier command nodes for Menu module.
@@ -15,14 +16,14 @@ internal class MenuCommandModule(
     private val coreModule: CoreModule,
     private val bukkitCoreModule: BukkitCoreModule,
     private val menuRouter: () -> MenuRouter,
-    private val menuModels: List<MenuModel>
+    private val menuModelsKrate: CachedKrate<List<MenuModel>>
 ) {
     private val nodes = listOf(
         MenuLiteralArgumentBuilder(
             translationKrate = coreModule.translationKrate,
             kyoriKrate = coreModule.kyoriKrate,
             menuRouter = menuRouter,
-            menuModels = menuModels,
+            menuModelsKrate = menuModelsKrate,
             multiplatformCommand = coreModule.multiplatformCommand
         ).create(),
         InvCloseLiteralArgumentBuilder(coreModule.multiplatformCommand)

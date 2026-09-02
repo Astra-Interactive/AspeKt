@@ -21,7 +21,7 @@ class EconomyModule(
 
     private val databaseModule = EconomyDatabaseModule(
         dbConfig = economyConfigModule.dbConfigKrate,
-        coroutineScope = coreModule.ioScope,
+        ioScope = coreModule.ioScope,
         dispatchers = coreModule.dispatchers
     )
 
@@ -57,6 +57,6 @@ class EconomyModule(
             lifecycles.forEach(Lifecycle::onReload)
             error { "#onReload - reload of economy module may break everything! Consider full server reload." }
         },
-        onDisable = { lifecycles.forEach(Lifecycle::onDisable) }
+        onDisable = { lifecycles.reversed().forEach(Lifecycle::onDisable) }
     )
 }

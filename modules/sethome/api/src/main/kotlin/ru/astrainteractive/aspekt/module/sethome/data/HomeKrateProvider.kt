@@ -27,6 +27,6 @@ internal class HomeKrateProvider(
     }
 
     fun clear() {
-        cache.cleanUp()
+        cache.invalidateAll()
     }
 }

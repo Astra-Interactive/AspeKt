@@ -38,7 +38,12 @@ class SetHomeModule(
             setHomeCommandModule.lifecycle.onEnable()
         },
         onDisable = {
+            setHomeCommandModule.lifecycle.onDisable()
             homeKrateProvider.clear()
         }
     )
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("sethome.yml")
+    }
 }

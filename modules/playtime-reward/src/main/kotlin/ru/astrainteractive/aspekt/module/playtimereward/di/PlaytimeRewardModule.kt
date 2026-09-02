@@ -2,7 +2,6 @@
 
 package ru.astrainteractive.aspekt.module.playtimereward.di
 
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.map
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
@@ -10,11 +9,12 @@ import ru.astrainteractive.aspekt.module.playtimereward.controller.PlaytimeRewar
 import ru.astrainteractive.aspekt.module.playtimereward.event.PlaytimeRewardEventListener
 import ru.astrainteractive.aspekt.module.playtimereward.krate.PlaytimeRewardKrate
 import ru.astrainteractive.aspekt.module.playtimereward.model.PlaytimeRewardConfiguration
-import ru.astrainteractive.aspekt.module.playtimereward.service.PlaytimeServiceExecutor
+import ru.astrainteractive.aspekt.module.playtimereward.service.PlaytimeServiceTask
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
-import ru.astrainteractive.astralibs.service.TickFlowService
+import ru.astrainteractive.astralibs.service.IntervalService
 import ru.astrainteractive.klibs.kstorage.api.asStateFlowMutableKrate
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import java.io.File
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
@@ -25,7 +25,7 @@ class PlaytimeRewardModule(
 ) {
     private val configKrate = coreModule.yamlFormat
         .krateOf(
-            file = coreModule.dataFolder.resolve("playtime_reward.yml"),
+            file = getConfigurationFile(coreModule.dataFolder),
             factory = ::PlaytimeRewardConfiguration
         )
         .asStateFlowMutableKrate()
@@ -49,10 +49,11 @@ class PlaytimeRewardModule(
         ioScope = coreModule.ioScope
     )
 
-    private val expireService = TickFlowService(
-        coroutineContext = SupervisorJob() + coreModule.dispatchers.IO,
-        delay = configKrate.cachedStateFlow.map { rewardConfiguration -> rewardConfiguration.checkInterval },
-        executor = PlaytimeServiceExecutor(
+    private val expireService = IntervalService(
+        interval = configKrate.cachedStateFlow.map { rewardConfiguration -> rewardConfiguration.checkInterval },
+        scope = coreModule.ioScope,
+        logger = JUtiltLogger("PlaytimeRewardService"),
+        task = PlaytimeServiceTask(
             playtimeRewardController = playtimeRewardController,
             platformServer = coreModule.platformServer
         )
@@ -62,15 +63,19 @@ class PlaytimeRewardModule(
         Lifecycle.Lambda(
             onEnable = {
                 eventListener.onEnable(bukkitCoreModule.plugin)
-                expireService.onCreate()
+                expireService.onEnable()
             },
             onDisable = {
-                expireService.onDestroy()
+                expireService.onDisable()
                 eventListener.onDisable()
             },
             onReload = {
                 configKrate.getValue()
             }
         )
+    }
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("playtime_reward.yml")
     }
 }

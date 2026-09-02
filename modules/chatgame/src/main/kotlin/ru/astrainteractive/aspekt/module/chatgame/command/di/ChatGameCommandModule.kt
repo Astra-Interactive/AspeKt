@@ -6,6 +6,7 @@ import ru.astrainteractive.aspekt.module.chatgame.command.quiz.ChatGameLiteralAr
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStore
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 
 /**
  * Aggregates and registers Brigadier command nodes for ChatGame module.
@@ -14,14 +15,14 @@ internal class ChatGameCommandModule(
     private val coreModule: CoreModule,
     private val bukkitCoreModule: BukkitCoreModule,
     private val chatGameStore: ChatGameStore,
-    private val chatGameConfig: ChatGameConfig
+    private val chatGameConfigKrate: CachedKrate<ChatGameConfig>
 ) {
     private val nodes = buildList {
         ChatGameLiteralArgumentBuilder(
             chatGameStore = chatGameStore,
             translationKrate = coreModule.translationKrate,
             kyoriKrate = coreModule.kyoriKrate,
-            chatGameConfig = chatGameConfig,
+            chatGameConfigKrate = chatGameConfigKrate,
             currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory,
             ioScope = coreModule.ioScope,
             multiplatformCommand = coreModule.multiplatformCommand

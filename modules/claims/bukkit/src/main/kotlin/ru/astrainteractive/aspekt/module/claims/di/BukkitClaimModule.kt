@@ -10,7 +10,7 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class BukkitClaimModule(
     bukkitCoreModule: BukkitCoreModule,
-    claimModule: ClaimModule,
+    private val claimModule: ClaimModule,
     private val coreModule: CoreModule
 ) {
     private val claimCommandExecutor = ClaimCommandExecutor(
@@ -39,12 +39,14 @@ class BukkitClaimModule(
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {
+            claimModule.lifecycle.onEnable()
             claimCommandModule.lifecycle.onEnable()
             bukkitClaimEvent.onEnable(bukkitCoreModule.plugin)
         },
-        onReload = {},
         onDisable = {
             bukkitClaimEvent.onDisable()
+            claimCommandModule.lifecycle.onDisable()
+            claimModule.lifecycle.onDisable()
         }
     )
 }

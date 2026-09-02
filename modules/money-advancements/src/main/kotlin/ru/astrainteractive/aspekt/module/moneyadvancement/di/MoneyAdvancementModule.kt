@@ -9,6 +9,7 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
+import java.io.File
 
 class MoneyAdvancementModule(
     coreModule: CoreModule,
@@ -16,7 +17,7 @@ class MoneyAdvancementModule(
 ) : Logger by JUtiltLogger("MoneyAdvancementModule") {
     private val mAdvConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = coreModule.dataFolder.resolve("money_advancements.yml"),
+            file = getConfigurationFile(coreModule.dataFolder),
             factory = ::MoneyAdvancementsConfiguration
         )
         .asCachedMutableKrate()
@@ -40,5 +41,9 @@ class MoneyAdvancementModule(
                 mAdvConfigKrate.getValue()
             }
         )
+    }
+
+    companion object {
+        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("money_advancements.yml")
     }
 }

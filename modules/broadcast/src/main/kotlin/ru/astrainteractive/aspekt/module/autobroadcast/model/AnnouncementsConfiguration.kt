@@ -9,28 +9,33 @@ import kotlin.time.Duration.Companion.seconds
 @Serializable
 internal data class AnnouncementsConfiguration(
     @SerialName("interval")
-    val interval: Long = 1000L,
+    val intervalSeconds: Long = 1000L,
     @SerialName("announcements")
     val announcements: Map<String, Announcement> = emptyMap()
 ) {
+    val interval: Duration
+        get() = intervalSeconds.seconds
+
     @Serializable
     sealed interface Announcement {
+        val text: StringDesc.Raw
+
         @Serializable
         @SerialName("TEXT")
         data class Text(
-            val text: StringDesc.Raw,
+            override val text: StringDesc.Raw,
         ) : Announcement
 
         @Serializable
         @SerialName("ACTION_BAR")
         data class ActionBar(
-            val text: StringDesc.Raw,
+            override val text: StringDesc.Raw,
         ) : Announcement
 
         @Serializable
         @SerialName("BOSS_BAR")
         data class BossBar(
-            val text: StringDesc.Raw,
+            override val text: StringDesc.Raw,
             val barColor: BarColor = BarColor.BLUE,
             @SerialName("duration_seconds")
             val durationSeconds: Long = 5,

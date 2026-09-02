@@ -4,6 +4,9 @@ import com.charleskorn.kaml.PolymorphismStyle
 import com.charleskorn.kaml.Yaml
 import net.minecraftforge.fml.loading.FMLPaths
 import ru.astrainteractive.aspekt.command.di.CommandsModule
+import ru.astrainteractive.aspekt.feature.flagreader.FileFeatureFlagReader
+import ru.astrainteractive.aspekt.feature.gate.FeatureGate
+import ru.astrainteractive.aspekt.feature.gate.mapEnabled
 import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.di.ForgeAuthModule
 import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
@@ -33,7 +36,7 @@ class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltL
             .also(File::mkdirs)
     }
 
-    val coreModule = CoreModule(
+    private val coreModule = CoreModule(
         dataFolder = dataFolder,
         dispatchers = MinecraftDispatchers(),
         platformServer = MinecraftPlatformServer,
@@ -46,85 +49,135 @@ class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltL
             lifecyclePlugin = forgeLifecycleServer
         )
     }
-    val authApiModule = AuthApiModule(
-        ioScope = coreModule.ioScope,
-        dataFolder = dataFolder
+    private val authDataFolder by lazy {
+        dataFolder
             .resolve("auth")
-            .also(File::mkdirs),
-        stringFormat = YamlStringFormat(
-            configuration = Yaml.default.configuration.copy(
-                encodeDefaults = true,
-                strictMode = false,
-                polymorphismStyle = PolymorphismStyle.Property
-            )
+            .also(File::mkdirs)
+    }
+    private val authStringFormat = YamlStringFormat(
+        configuration = Yaml.default.configuration.copy(
+            encodeDefaults = true,
+            strictMode = false,
+            polymorphismStyle = PolymorphismStyle.Property
+        )
+    )
+    private val authApiModuleGate = FeatureGate(
+        featureClass = AuthApiModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = authStringFormat,
+            file = AuthApiModule.getConfigurationFile(authDataFolder)
         ),
-        dispatchers = coreModule.dispatchers
+        featureFactory = {
+            AuthApiModule(
+                ioScope = coreModule.ioScope,
+                dataFolder = authDataFolder,
+                stringFormat = authStringFormat
+            )
+        },
+        lifecycleSelector = AuthApiModule::lifecycle
     )
 
-    val forgeAuthModule by lazy {
-        ForgeAuthModule(
-            authApiModule = authApiModule,
-            coreModule = coreModule,
-            commandRegistrarContext = coreModule.commandRegistrarContext
-        )
-    }
+    private val forgeAuthModuleGate = authApiModuleGate.mapEnabled(
+        featureClass = ForgeAuthModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = authStringFormat,
+            file = ForgeAuthModule.getConfigurationFile(authDataFolder)
+        ),
+        lifecycleSelector = ForgeAuthModule::lifecycle,
+        transform = { authApiModule ->
+            ForgeAuthModule(
+                authApiModule = authApiModule,
+                coreModule = coreModule,
+                commandRegistrarContext = coreModule.commandRegistrarContext
+            )
+        }
+    )
 
-    val claimModule by lazy {
-        ClaimModule(
-            stringFormat = coreModule.jsonStringFormat,
-            dataFolder = dataFolder,
-            ioScope = coreModule.ioScope,
-            translationKrate = coreModule.translationKrate
-        )
-    }
-
-    val forgeClaimModule by lazy {
-        ForgeClaimModule(
-            commandRegistrarContext = coreModule.commandRegistrarContext,
-            coreModule = coreModule,
-            claimModule = claimModule
-        )
-    }
-
-    val setHomeModule by lazy {
-        SetHomeModule(
-            commandRegistrarContext = coreModule.commandRegistrarContext,
-            dataFolder = dataFolder,
-            stringFormat = coreModule.jsonStringFormat,
-            coreModule = coreModule
-        )
-    }
-
-    val tpaModule by lazy {
-        TpaModule(
-            coreModule = coreModule,
-            commandRegistrarContext = coreModule.commandRegistrarContext,
-        )
-    }
-
-    val rtpModule by lazy {
-        RtpModule(
-            coreModule = coreModule,
-            commandRegistrarContext = coreModule.commandRegistrarContext,
-            multiplatformCommand = coreModule.multiplatformCommand,
-            safeLocationProviderFactory = { rtpConfigKrate ->
-                MinecraftSafeLocationProvider(
-                    rtpConfigKrate = rtpConfigKrate,
-                    dispatchers = coreModule.dispatchers
+    private val forgeClaimModuleGate = FeatureGate(
+        featureClass = ForgeClaimModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = ClaimModule.getConfigurationFile(dataFolder)
+        ),
+        featureFactory = {
+            ForgeClaimModule(
+                commandRegistrarContext = coreModule.commandRegistrarContext,
+                coreModule = coreModule,
+                claimModule = ClaimModule(
+                    stringFormat = coreModule.jsonStringFormat,
+                    dataFolder = dataFolder,
+                    ioScope = coreModule.ioScope,
+                    translationKrate = coreModule.translationKrate
                 )
-            },
-        )
-    }
+            )
+        },
+        lifecycleSelector = ForgeClaimModule::lifecycle
+    )
+
+    private val setHomeModuleGate = FeatureGate(
+        featureClass = SetHomeModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = SetHomeModule.getConfigurationFile(dataFolder)
+        ),
+        featureFactory = {
+            SetHomeModule(
+                commandRegistrarContext = coreModule.commandRegistrarContext,
+                dataFolder = dataFolder,
+                stringFormat = coreModule.jsonStringFormat,
+                coreModule = coreModule
+            )
+        },
+        lifecycleSelector = SetHomeModule::lifecycle
+    )
+
+    private val tpaModuleGate = FeatureGate(
+        featureClass = TpaModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = TpaModule.getConfigurationFile(dataFolder)
+        ),
+        featureFactory = {
+            TpaModule(
+                coreModule = coreModule,
+                commandRegistrarContext = coreModule.commandRegistrarContext,
+            )
+        },
+        lifecycleSelector = TpaModule::lifecycle
+    )
+
+    private val rtpModuleGate = FeatureGate(
+        featureClass = RtpModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = RtpModule.getConfigurationFile(dataFolder)
+        ),
+        featureFactory = {
+            RtpModule(
+                coreModule = coreModule,
+                commandRegistrarContext = coreModule.commandRegistrarContext,
+                multiplatformCommand = coreModule.multiplatformCommand,
+                safeLocationProviderFactory = { rtpConfigKrate ->
+                    MinecraftSafeLocationProvider(
+                        rtpConfigKrate = rtpConfigKrate,
+                        dispatchers = coreModule.dispatchers
+                    )
+                },
+            )
+        },
+        lifecycleSelector = RtpModule::lifecycle
+    )
 
     private val lifecycles: List<Lifecycle>
         get() = listOf(
             coreModule.lifecycle,
             commandModule.lifecycle,
-            forgeAuthModule.lifecycle,
-            forgeClaimModule.lifecycle,
-            setHomeModule.lifecycle,
-            tpaModule.lifecycle,
-            rtpModule.lifecycle
+            authApiModuleGate,
+            forgeAuthModuleGate,
+            forgeClaimModuleGate,
+            setHomeModuleGate,
+            tpaModuleGate,
+            rtpModuleGate
         )
 
     val lifecycle = Lifecycle.Lambda(
@@ -135,7 +188,7 @@ class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltL
             lifecycles.forEach(Lifecycle::onReload)
         },
         onDisable = {
-            lifecycles.forEach(Lifecycle::onDisable)
+            lifecycles.reversed().forEach(Lifecycle::onDisable)
         }
     )
 }
