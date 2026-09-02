@@ -31,6 +31,9 @@ class TpaModule(
         onEnable = {
             commandModule.lifecycle.onEnable()
         },
+        onDisable = {
+            commandModule.lifecycle.onDisable()
+        }
     )
 
     companion object {

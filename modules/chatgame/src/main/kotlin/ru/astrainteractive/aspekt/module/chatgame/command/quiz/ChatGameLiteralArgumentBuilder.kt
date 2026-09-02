@@ -32,13 +32,14 @@ internal class ChatGameLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val chatGameStore: ChatGameStore,
-    private val chatGameConfig: ChatGameConfig,
+    chatGameConfigKrate: CachedKrate<ChatGameConfig>,
     private val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory,
     private val ioScope: CoroutineScope,
     private val multiplatformCommand: MultiplatformCommand
 ) {
     private val translation by translationKrate
     private val kyori by kyoriKrate
+    private val chatGameConfig by chatGameConfigKrate
     private val mutex = Mutex()
 
     private fun handleAnswer(player: OnlineKPlayer, answer: String) {

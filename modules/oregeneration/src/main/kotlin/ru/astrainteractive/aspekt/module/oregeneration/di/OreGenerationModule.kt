@@ -48,8 +48,8 @@ class OreGenerationModule(
             lootGenerationEvent.onEnable(bukkitCoreModule.plugin)
         },
         onDisable = {
-            oreGenerationEvent.onDisable()
             lootGenerationEvent.onDisable()
+            oreGenerationEvent.onDisable()
         },
         onReload = {
             oreGenerationConfigKrate.getValue()

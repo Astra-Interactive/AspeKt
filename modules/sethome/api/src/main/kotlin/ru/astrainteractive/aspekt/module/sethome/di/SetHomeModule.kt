@@ -38,6 +38,7 @@ class SetHomeModule(
             setHomeCommandModule.lifecycle.onEnable()
         },
         onDisable = {
+            setHomeCommandModule.lifecycle.onDisable()
             homeKrateProvider.clear()
         }
     )

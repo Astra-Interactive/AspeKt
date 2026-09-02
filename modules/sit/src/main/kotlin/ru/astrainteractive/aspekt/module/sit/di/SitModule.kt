@@ -39,17 +39,18 @@ class SitModule(
     )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
-        onDisable = {
-            sitController.onDisable()
-            sitEvent.onDisable()
+        onEnable = {
+            sitEvent.onEnable(bukkitCoreModule.plugin)
+            sitCommandModule.lifecycle.onEnable()
         },
         onReload = {
             sitController.onDisable()
             sitConfigKrate.getValue()
         },
-        onEnable = {
-            sitEvent.onEnable(bukkitCoreModule.plugin)
-            sitCommandModule.lifecycle.onEnable()
+        onDisable = {
+            sitCommandModule.lifecycle.onDisable()
+            sitEvent.onDisable()
+            sitController.onDisable()
         }
     )
 

@@ -48,10 +48,10 @@ internal class EconomyServiceModule(
             if (shouldSync) preHeatService.tryPreHeat()
         },
         onDisable = {
+            preHeatService.cancel()
             if (isVaultEnabled) {
                 bukkitVaultService.clear()
             }
-            preHeatService.cancel()
         }
     )
 }

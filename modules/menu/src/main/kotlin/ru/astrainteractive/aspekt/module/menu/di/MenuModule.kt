@@ -31,7 +31,7 @@ class MenuModule(
         coreModule = coreModule,
         bukkitCoreModule = bukkitCoreModule,
         menuRouter = { menuRouter },
-        menuModels = menuModels.cachedValue
+        menuModelsKrate = menuModels
     )
 
     val lifecycle: Lifecycle by lazy {
@@ -41,6 +41,9 @@ class MenuModule(
             },
             onReload = {
                 menuModels.getValue()
+            },
+            onDisable = {
+                menuCommandModule.lifecycle.onDisable()
             }
         )
     }

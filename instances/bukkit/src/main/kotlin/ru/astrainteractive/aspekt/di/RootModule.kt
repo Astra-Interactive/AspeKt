@@ -258,7 +258,7 @@ class RootModule(plugin: LifecyclePlugin) {
             Bukkit.getOnlinePlayers().forEach(Player::closeInventory)
         },
         onDisable = {
-            lifecycles.forEach(Lifecycle::onDisable)
+            lifecycles.reversed().forEach(Lifecycle::onDisable)
             HandlerList.unregisterAll(bukkitCoreModule.plugin)
             Bukkit.getOnlinePlayers().forEach(Player::closeInventory)
         }

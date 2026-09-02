@@ -49,9 +49,10 @@ class AntiSwearModule(
             if (isPacketEventsEnabled) packetEventSwearListener?.onEnable(bukkitCoreModule.plugin)
         },
         onDisable = {
+            if (isPacketEventsEnabled) packetEventSwearListener?.onDisable()
+            antiSwearCommandModule.lifecycle.onDisable()
             antiSwearEventListener.onDisable()
             swearRepository.clear()
-            if (isPacketEventsEnabled) packetEventSwearListener?.onDisable()
         }
     )
 

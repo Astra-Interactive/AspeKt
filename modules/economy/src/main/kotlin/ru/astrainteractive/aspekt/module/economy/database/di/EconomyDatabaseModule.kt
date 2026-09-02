@@ -67,8 +67,8 @@ internal class EconomyDatabaseModule(
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onReload = { cachedDao.reset() },
         onDisable = {
-            moduleIoScope.cancel()
             cachedDao.reset()
+            moduleIoScope.cancel()
         }
     )
 }

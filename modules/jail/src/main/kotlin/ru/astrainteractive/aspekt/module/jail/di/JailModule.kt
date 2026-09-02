@@ -70,8 +70,9 @@ class JailModule(
             unJailService.onEnable()
         },
         onDisable = {
-            jailEvent.onDisable()
             unJailService.onDisable()
+            jailCommandModule.lifecycle.onDisable()
+            jailEvent.onDisable()
             jailController.cancel()
         }
     )

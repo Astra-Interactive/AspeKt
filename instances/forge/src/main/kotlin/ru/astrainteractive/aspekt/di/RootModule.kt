@@ -36,7 +36,7 @@ class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltL
             .also(File::mkdirs)
     }
 
-    val coreModule = CoreModule(
+    private val coreModule = CoreModule(
         dataFolder = dataFolder,
         dispatchers = MinecraftDispatchers(),
         platformServer = MinecraftPlatformServer,

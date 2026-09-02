@@ -48,16 +48,16 @@ class MoneyDropModule(
     val lifecycle: Lifecycle by lazy {
         Lifecycle.Lambda(
             onEnable = {
-                moneyDropEvent.onEnable(bukkitCoreModule.plugin)
                 moneyDropDaoModule.lifecycle.onEnable()
-            },
-            onDisable = {
-                moneyDropDaoModule.lifecycle.onDisable()
-                moneyDropEvent.onDisable()
+                moneyDropEvent.onEnable(bukkitCoreModule.plugin)
             },
             onReload = {
                 moneyDropDaoModule.lifecycle.onReload()
                 moneyDropConfigKrate.getValue()
+            },
+            onDisable = {
+                moneyDropEvent.onDisable()
+                moneyDropDaoModule.lifecycle.onDisable()
             }
         )
     }

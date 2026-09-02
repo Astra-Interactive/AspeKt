@@ -27,8 +27,8 @@ class BukkitCoreModule(
             eventListener.onEnable(plugin)
         },
         onDisable = {
-            inventoryClickEventListener.onDisable()
             eventListener.onDisable()
+            inventoryClickEventListener.onDisable()
         }
     )
 }

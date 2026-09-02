@@ -52,7 +52,7 @@ class ChatGameModule(
         coreModule = coreModule,
         bukkitCoreModule = bukkitCoreModule,
         chatGameStore = chatGameStore,
-        chatGameConfig = chatGameConfigKrate.cachedValue
+        chatGameConfigKrate = chatGameConfigKrate
     )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
@@ -60,12 +60,13 @@ class ChatGameModule(
             chatGameService.onEnable()
             chatGameCommandModule.lifecycle.onEnable()
         },
-        onDisable = {
-            chatGameService.onDisable()
-        },
         onReload = {
             chatGameConfigKrate.getValue()
             chatGameService.onReload()
+        },
+        onDisable = {
+            chatGameCommandModule.lifecycle.onDisable()
+            chatGameService.onDisable()
         }
     )
 
