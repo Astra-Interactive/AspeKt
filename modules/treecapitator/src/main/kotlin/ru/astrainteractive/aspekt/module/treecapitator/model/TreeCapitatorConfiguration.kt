@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Suppress("LongParameterList")
 internal data class TreeCapitatorConfiguration(
-    @SerialName("enabled")
-    val enabled: Boolean = true,
+    @SerialName("is_enabled")
+    val isEnabled: Boolean = false,
     @SerialName("destroy_limit")
     val destroyLimit: Int = 16,
     @SerialName("damage_axe")

@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class MoneyAdvancementsConfiguration(
+    @SerialName("is_enabled")
+    val isEnabled: Boolean = false,
     @SerialName("challenge")
     @YamlComment("Money given for challenge advancemetn")
     val challenge: Int = 5000,

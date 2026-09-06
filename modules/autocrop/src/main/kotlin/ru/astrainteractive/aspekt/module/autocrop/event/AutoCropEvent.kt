@@ -60,7 +60,7 @@ internal class AutoCropEvent(
 
     @EventHandler
     fun onCropInteract(e: PlayerInteractEvent) {
-        if (!autoCropConfig.enabled) return
+        if (!autoCropConfig.isEnabled) return
 
         if (e.action != Action.RIGHT_CLICK_BLOCK) return
         val clickedBlock = e.clickedBlock ?: return

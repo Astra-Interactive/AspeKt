@@ -439,7 +439,7 @@ Pays a fixed reward every time a player accumulates the configured amount of pla
 **Config** (`playtime_reward.yml`):
 
 ```yaml
-enabled: true
+is_enabled: true
 reward_amount: 10.0            # Amount paid per completed period
 required_minutes: "0d1h"       # Playtime needed per reward (duration string)
 check_interval_seconds: "0d1m" # How often progress is checked (duration string)
@@ -458,7 +458,7 @@ Thins out ore veins and chest loot to make resources scarcer on survival servers
 **World generation** (`ore-generation.yml`) — in **newly generated chunks**, each configured ore block is replaced by its host stone (stone/deepslate/netherrack) with the given chance:
 
 ```yaml
-enabled: true
+is_enabled: true
 # The chance in range [0.0, 1.0] of the ore will be excluded
 ores:
   "COAL_ORE": 0.5

@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data class SitConfiguration(
     @SerialName("is_enabled")
-    val isEnabled: Boolean = true
+    val isEnabled: Boolean = false
 )

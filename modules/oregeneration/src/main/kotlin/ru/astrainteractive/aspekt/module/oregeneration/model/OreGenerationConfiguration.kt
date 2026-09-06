@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 @Suppress("MagicNumber")
 @Serializable
 internal data class OreGenerationConfiguration(
-    @SerialName("enabled")
-    val enabled: Boolean = true,
+    @SerialName("is_enabled")
+    val isEnabled: Boolean = false,
     @SerialName("ores")
     @YamlComment("The chance in range [0.0, 1.0] of the ore will be excluded")
     val ores: Map<String, Double> = listOf(

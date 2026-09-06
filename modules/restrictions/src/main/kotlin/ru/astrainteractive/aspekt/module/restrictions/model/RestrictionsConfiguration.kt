@@ -5,6 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class RestrictionsConfiguration(
+    @SerialName("is_enabled")
+    val isEnabled: Boolean = false,
     @SerialName("explosion")
     val explosion: Explosion = Explosion(),
     @SerialName("place")

@@ -46,7 +46,7 @@ internal class OreGenerationBlockPopulator(
         limitedRegion: LimitedRegion
     ) {
         val currentConfiguration = configuration
-        if (!currentConfiguration.enabled) return
+        if (!currentConfiguration.isEnabled) return
         val ores = currentConfiguration.ores
         if (ores.isEmpty()) return
 

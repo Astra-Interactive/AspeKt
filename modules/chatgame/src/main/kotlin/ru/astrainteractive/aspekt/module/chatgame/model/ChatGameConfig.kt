@@ -9,6 +9,8 @@ import kotlin.time.Duration.Companion.seconds
 
 @Serializable
 internal data class ChatGameConfig(
+    @SerialName("is_enabled")
+    val isEnabled: Boolean = false,
     @SerialName("chat_games")
     val chatGames: List<ChatGame> = listOf(
         ChatGame.Riddle(
@@ -21,8 +23,6 @@ internal data class ChatGameConfig(
     ),
     @SerialName("timer")
     val timer: Timer = Timer(),
-    @SerialName("is_enabled")
-    val isEnabled: Boolean = false,
     @Suppress("MagicNumber")
     val defaultReward: Reward = Reward.Money(0.0, 100.0),
 ) {

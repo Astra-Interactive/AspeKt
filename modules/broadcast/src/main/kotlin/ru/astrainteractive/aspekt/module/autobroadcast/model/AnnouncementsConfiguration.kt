@@ -8,6 +8,8 @@ import kotlin.time.Duration.Companion.seconds
 
 @Serializable
 internal data class AnnouncementsConfiguration(
+    @SerialName("is_enabled")
+    val isEnabled: Boolean = false,
     @SerialName("interval")
     val intervalSeconds: Long = 1000L,
     @SerialName("announcements")

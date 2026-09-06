@@ -9,8 +9,8 @@ import kotlin.time.Duration.Companion.seconds
 
 @Serializable
 internal data class PlaytimeRewardConfiguration(
-    @SerialName("enabled")
-    val enabled: Boolean = true,
+    @SerialName("is_enabled")
+    val isEnabled: Boolean = false,
     @SerialName("reward_amount")
     val rewardAmount: Double = 10.0,
     @SerialName("required_minutes")

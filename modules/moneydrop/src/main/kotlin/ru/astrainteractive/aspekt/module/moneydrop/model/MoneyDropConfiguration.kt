@@ -5,6 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class MoneyDropConfiguration(
+    @SerialName("is_enabled")
+    val isEnabled: Boolean = false,
     @SerialName("money_drop")
     val moneyDrop: Map<String, MoneyDropEntry> = emptyMap(),
 ) {

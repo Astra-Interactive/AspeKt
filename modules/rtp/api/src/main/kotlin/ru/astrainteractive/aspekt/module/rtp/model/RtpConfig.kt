@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Suppress("MagicNumber")
 data class RtpConfig(
+    @SerialName("is_enabled")
+    val isEnabled: Boolean = false,
     @SerialName("min_x")
     val minX: Int = -100_000,
     @SerialName("max_x")

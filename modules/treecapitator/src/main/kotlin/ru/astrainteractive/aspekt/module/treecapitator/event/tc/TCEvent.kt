@@ -40,7 +40,7 @@ internal class TCEvent(
         if (e.isCancelled) return
         if (!tool.type.name.contains("AXE", true)) return
         if (!player.isSneaking) return
-        if (!treeCapitatorConfigurationConfig.enabled) return
+        if (!treeCapitatorConfigurationConfig.isEnabled) return
         if (!isLog(block.type)) return
         breakRecursively(player, block, 0, tool)
         if (treeCapitatorConfigurationConfig.replant) {
