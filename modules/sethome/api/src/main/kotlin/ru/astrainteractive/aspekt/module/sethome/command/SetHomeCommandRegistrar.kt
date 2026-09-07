@@ -92,15 +92,11 @@ internal class SetHomeCommandRegistrar(
                     runs(onFailure = ::reportFailure) { ctx ->
                         executeSetHome(ctx, homeNameArg, force = false)
                     }
-                    // The DSL builds literals only under literals, so the trailing `force`
-                    // node is created through the platform factory and attached by hand.
-                    then(
-                        command("force") {
-                            runs(onFailure = ::reportFailure) { ctx ->
-                                executeSetHome(ctx, homeNameArg, force = true)
-                            }
+                    literal("force") {
+                        runs(onFailure = ::reportFailure) { ctx ->
+                            executeSetHome(ctx, homeNameArg, force = true)
                         }
-                    )
+                    }
                 }
             }
         }
