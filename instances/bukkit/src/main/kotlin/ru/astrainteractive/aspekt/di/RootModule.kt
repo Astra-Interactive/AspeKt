@@ -23,6 +23,7 @@ import ru.astrainteractive.aspekt.module.newbee.di.NewBeeModule
 import ru.astrainteractive.aspekt.module.oregeneration.di.OreGenerationModule
 import ru.astrainteractive.aspekt.module.playtimereward.di.PlaytimeRewardModule
 import ru.astrainteractive.aspekt.module.restrictions.di.RestrictionModule
+import ru.astrainteractive.aspekt.module.sethome.di.SetHomeModule
 import ru.astrainteractive.aspekt.module.sit.di.SitModule
 import ru.astrainteractive.aspekt.module.treecapitator.di.TreeCapitatorModule
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
@@ -210,6 +211,22 @@ class RootModule(plugin: LifecyclePlugin) {
         featureFactory = { InvisibleItemFrameModule(bukkitCoreModule) },
         lifecycleSelector = InvisibleItemFrameModule::lifecycle
     )
+    private val setHomeModuleGate = FeatureGate(
+        featureClass = SetHomeModule::class,
+        flagReader = FileFeatureFlagReader(
+            yamlFormat = coreModule.yamlFormat,
+            file = SetHomeModule.getConfigurationFile(coreModule.dataFolder)
+        ),
+        featureFactory = {
+            SetHomeModule(
+                commandRegistrarContext = coreModule.commandRegistrarContext,
+                dataFolder = coreModule.dataFolder,
+                stringFormat = coreModule.jsonStringFormat,
+                coreModule = coreModule
+            )
+        },
+        lifecycleSelector = SetHomeModule::lifecycle
+    )
 
     private val bukkitCommandsModule by lazy {
         BukkitCommandsModule(
@@ -246,7 +263,8 @@ class RootModule(plugin: LifecyclePlugin) {
             oreGenerationModuleGate,
             inventorySortModuleGate,
             jailModuleGate,
-            invisibleItemFrameModuleGate
+            invisibleItemFrameModuleGate,
+            setHomeModuleGate
         )
 
     val lifecycle = Lifecycle.Lambda(

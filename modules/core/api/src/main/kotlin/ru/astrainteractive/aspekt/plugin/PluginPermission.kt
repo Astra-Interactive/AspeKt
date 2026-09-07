@@ -17,6 +17,11 @@ enum class PluginPermission(override val value: String) : Permission {
     FORCE_PLAYER_SWEAR("aspekt.set_swear.admin"),
     SET_BALANCE("aspekt.economy.set"),
     RTP_BYPASS("aspekt.rtpbypass"),
+
+    /** Also carries the per-role home limit as `aspekt.sethome.<count>`. */
+    SET_HOME("aspekt.sethome"),
+    DEL_HOME("aspekt.delhome"),
+    HOME("aspekt.home"),
 }
 
 data class PluginNamedPermission(override val value: String) : Permission

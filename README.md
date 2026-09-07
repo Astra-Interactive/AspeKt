@@ -555,17 +555,32 @@ On Paper, `/rtpbypass <player>` (see Admin Commands) provides Essentials-backed 
 
 ### 🏡 SetHome
 
-> **Platform:** Forge · NeoForge
+> **Platform:** Paper · Forge · NeoForge
 
 Personal named home locations that persist across sessions.
 
-| Command           | Permission | Description                                                               |
-|-------------------|------------|---------------------------------------------------------------------------|
-| `/sethome <name>` | —          | Save your current location (overwrites an existing home of the same name) |
-| `/home <name>`    | —          | Teleport to a saved home                                                  |
-| `/delhome <name>` | —          | Delete a saved home                                                       |
+| Command                 | Permission       | Description                                 |
+|-------------------------|------------------|---------------------------------------------|
+| `/sethome <name>`       | `aspekt.sethome` | Save your current location under a new name |
+| `/sethome <name> force` | `aspekt.sethome` | Overwrite the existing home of that name    |
+| `/home <name>`          | `aspekt.home`    | Teleport to a saved home                    |
+| `/delhome <name>`       | `aspekt.delhome` | Delete a saved home                         |
 
-Tab completion lists your saved home names. There is no home-count limit.
+`/sethome <name>` refuses to replace a home that already exists — repeat the command with a
+trailing `force` to overwrite it deliberately.
+
+Tab completion lists your saved home names, and only for players who hold the matching permission.
+
+**Config** (`sethome.yml`):
+
+```yaml
+is_enabled: true
+max_homes: 1              # Server-wide default number of homes per player
+```
+
+Grant `aspekt.sethome.<count>` to raise the limit for a rank — for example `aspekt.sethome.5`
+lets that group keep five homes. The highest such node a player holds wins over `max_homes`.
+Overwriting an existing home is always allowed, even at the limit.
 
 ---
 
