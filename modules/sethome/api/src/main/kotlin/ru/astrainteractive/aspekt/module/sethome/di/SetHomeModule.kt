@@ -31,7 +31,9 @@ class SetHomeModule(
         commandRegistrarContext = commandRegistrarContext,
         homeKrateProvider = homeKrateProvider,
         executor = homeCommandExecutor,
-        multiplatformCommand = coreModule.multiplatformCommand
+        multiplatformCommand = coreModule.multiplatformCommand,
+        translationKrate = coreModule.translationKrate,
+        kyoriKrate = coreModule.kyoriKrate
     )
 
     val lifecycle = Lifecycle.Lambda(
