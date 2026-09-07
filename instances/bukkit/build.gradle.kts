@@ -53,6 +53,7 @@ dependencies {
     shadow(projects.modules.newbee)
     shadow(projects.modules.oregeneration)
     shadow(projects.modules.restrictions)
+    shadow(projects.modules.sethome.api)
     shadow(projects.modules.sit)
     shadow(projects.modules.treecapitator)
     shadow(projects.modules.command.api)
