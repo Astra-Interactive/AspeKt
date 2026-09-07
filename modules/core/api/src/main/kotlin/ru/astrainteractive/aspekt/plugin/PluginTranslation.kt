@@ -142,6 +142,12 @@ class PluginTranslation(
         val homeCreated: StringDesc.Raw = prefix
             .plus("Дом создан!")
             .toRaw(),
+        val homeOverridden: StringDesc.Raw = prefix
+            .plus("Дом перезаписан!")
+            .toRaw(),
+        val homeAlreadyExists: StringDesc.Raw = prefix
+            .plus("Дом с таким именем уже существует! Добавьте force в конец команды, чтобы перезаписать его")
+            .toRaw(),
         val homeNotFound: StringDesc.Raw = prefix
             .plus("Такой дом не найден!")
             .toRaw(),

@@ -21,14 +21,22 @@ internal class HomeCommandExecutor(
     private val translation by translationKrate
 
     private suspend fun setHome(input: HomeCommand.SetHome) {
-        homeKrateProvider
-            .get(input.playerData.uuid)
-            .save { homes ->
-                homes
-                    .filterNot { home -> home.name == input.playerHome.name }
-                    .plus(input.playerHome)
-            }
-        input.playerData.sendMessage(translation.homes.homeCreated.component)
+        val krate = homeKrateProvider.get(input.playerData.uuid)
+        val isOverride = krate.getValue().any { home -> home.name == input.playerHome.name }
+        if (isOverride && !input.force) {
+            input.playerData.sendMessage(translation.homes.homeAlreadyExists.component)
+            return
+        }
+        krate.save { savedHomes ->
+            savedHomes
+                .filterNot { home -> home.name == input.playerHome.name }
+                .plus(input.playerHome)
+        }
+        val message = when {
+            isOverride -> translation.homes.homeOverridden
+            else -> translation.homes.homeCreated
+        }
+        input.playerData.sendMessage(message.component)
     }
 
     private suspend fun delHome(input: HomeCommand.DelHome) {

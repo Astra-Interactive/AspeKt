@@ -23,7 +23,7 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 /**
  * Platform-agnostic SetHome command registrar. Registers:
- * - /sethome <home_name>
+ * - /sethome <home_name> [force]
  * - /delhome <home_name>
  * - /home <home_name>
  *
@@ -66,21 +66,41 @@ internal class SetHomeCommandRegistrar(
             .map(PlayerHome::name)
     }
 
+    private fun executeSetHome(
+        ctx: CommandContext<Any>,
+        homeNameArg: MultiplatformCommand.BrigadierArgument<String>,
+        force: Boolean
+    ) {
+        with(multiplatformCommand) {
+            ctx.requirePermission(PluginPermission.SET_HOME)
+            val player = ctx.requirePlayer()
+            HomeCommand.SetHome(
+                playerData = player,
+                playerHome = PlayerHome(
+                    location = player.getLocation(),
+                    name = ctx.requireArgument(homeNameArg)
+                ),
+                force = force
+            ).run(executor::execute)
+        }
+    }
+
     private fun createSetHomeNode(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("sethome") {
                 argument("home_name", StringArgumentType.string()) { homeNameArg ->
                     runs(onFailure = ::reportFailure) { ctx ->
-                        ctx.requirePermission(PluginPermission.SET_HOME)
-                        val player = ctx.requirePlayer()
-                        HomeCommand.SetHome(
-                            playerData = player,
-                            playerHome = PlayerHome(
-                                location = player.getLocation(),
-                                name = ctx.requireArgument(homeNameArg)
-                            )
-                        ).run(executor::execute)
+                        executeSetHome(ctx, homeNameArg, force = false)
                     }
+                    // The DSL builds literals only under literals, so the trailing `force`
+                    // node is created through the platform factory and attached by hand.
+                    then(
+                        command("force") {
+                            runs(onFailure = ::reportFailure) { ctx ->
+                                executeSetHome(ctx, homeNameArg, force = true)
+                            }
+                        }
+                    )
                 }
             }
         }
