@@ -5,7 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
 import ru.astrainteractive.aspekt.module.sethome.model.PlayerHome
-import ru.astrainteractive.aspekt.module.sethome.plugin.SetHomePermission
+import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.brigadier.sender.KPlayerKCommandSender
@@ -27,7 +27,7 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
  * - /delhome <home_name>
  * - /home <home_name>
  *
- * Every node is player-only and guarded by its own [SetHomePermission] node.
+ * Every node is player-only and guarded by its own [PluginPermission] node.
  */
 @Suppress("LongParameterList")
 internal class SetHomeCommandRegistrar(
@@ -71,7 +71,7 @@ internal class SetHomeCommandRegistrar(
             command("sethome") {
                 argument("home_name", StringArgumentType.string()) { homeNameArg ->
                     runs(onFailure = ::reportFailure) { ctx ->
-                        ctx.requirePermission(SetHomePermission.SetHome)
+                        ctx.requirePermission(PluginPermission.SET_HOME)
                         val player = ctx.requirePlayer()
                         HomeCommand.SetHome(
                             playerData = player,
@@ -90,9 +90,9 @@ internal class SetHomeCommandRegistrar(
         return with(multiplatformCommand) {
             command("delhome") {
                 argument("home_name", StringArgumentType.string()) { homeNameArg ->
-                    hints { ctx -> homeNameHints(ctx, SetHomePermission.DelHome) }
+                    hints { ctx -> homeNameHints(ctx, PluginPermission.DEL_HOME) }
                     runs(onFailure = ::reportFailure) { ctx ->
-                        ctx.requirePermission(SetHomePermission.DelHome)
+                        ctx.requirePermission(PluginPermission.DEL_HOME)
                         HomeCommand.DelHome(
                             playerData = ctx.requirePlayer(),
                             homeName = ctx.requireArgument(homeNameArg)
@@ -107,9 +107,9 @@ internal class SetHomeCommandRegistrar(
         return with(multiplatformCommand) {
             command("home") {
                 argument("home_name", StringArgumentType.string()) { homeNameArg ->
-                    hints { ctx -> homeNameHints(ctx, SetHomePermission.Home) }
+                    hints { ctx -> homeNameHints(ctx, PluginPermission.HOME) }
                     runs(onFailure = ::reportFailure) { ctx ->
-                        ctx.requirePermission(SetHomePermission.Home)
+                        ctx.requirePermission(PluginPermission.HOME)
                         HomeCommand.TpHome(
                             playerData = ctx.requirePlayer(),
                             homeName = ctx.requireArgument(homeNameArg)

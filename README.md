@@ -555,17 +555,18 @@ On Paper, `/rtpbypass <player>` (see Admin Commands) provides Essentials-backed 
 
 ### 🏡 SetHome
 
-> **Platform:** Forge · NeoForge
+> **Platform:** Paper · Forge · NeoForge
 
 Personal named home locations that persist across sessions.
 
-| Command           | Permission | Description                                                               |
-|-------------------|------------|---------------------------------------------------------------------------|
-| `/sethome <name>` | —          | Save your current location (overwrites an existing home of the same name) |
-| `/home <name>`    | —          | Teleport to a saved home                                                  |
-| `/delhome <name>` | —          | Delete a saved home                                                       |
+| Command           | Permission       | Description                                                               |
+|-------------------|------------------|---------------------------------------------------------------------------|
+| `/sethome <name>` | `aspekt.sethome` | Save your current location (overwrites an existing home of the same name) |
+| `/home <name>`    | `aspekt.home`    | Teleport to a saved home                                                  |
+| `/delhome <name>` | `aspekt.delhome` | Delete a saved home                                                       |
 
-Tab completion lists your saved home names. There is no home-count limit.
+Tab completion lists your saved home names, and only for players who hold the matching
+permission. There is no home-count limit.
 
 ---
 
