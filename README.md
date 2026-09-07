@@ -569,8 +569,18 @@ Personal named home locations that persist across sessions.
 `/sethome <name>` refuses to replace a home that already exists — repeat the command with a
 trailing `force` to overwrite it deliberately.
 
-Tab completion lists your saved home names, and only for players who hold the matching
-permission. There is no home-count limit.
+Tab completion lists your saved home names, and only for players who hold the matching permission.
+
+**Config** (`sethome.yml`):
+
+```yaml
+is_enabled: true
+max_homes: 1              # Server-wide default number of homes per player
+```
+
+Grant `aspekt.sethome.<count>` to raise the limit for a rank — for example `aspekt.sethome.5`
+lets that group keep five homes. The highest such node a player holds wins over `max_homes`.
+Overwriting an existing home is always allowed, even at the limit.
 
 ---
 

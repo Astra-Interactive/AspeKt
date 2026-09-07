@@ -34,6 +34,7 @@ class SetHomeModule(
         scope = coreModule.ioScope,
         dispatchers = coreModule.dispatchers,
         translationKrate = coreModule.translationKrate,
+        setHomeConfigKrate = setHomeConfigKrate,
         kyoriKrate = coreModule.kyoriKrate,
     )
 

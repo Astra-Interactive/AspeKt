@@ -148,6 +148,9 @@ class PluginTranslation(
         val homeAlreadyExists: StringDesc.Raw = prefix
             .plus("Дом с таким именем уже существует! Добавьте force в конец команды, чтобы перезаписать его")
             .toRaw(),
+        private val homeLimitReached: StringDesc.Raw = prefix
+            .plus("Вы достигли лимита домов: %limit%")
+            .toRaw(),
         val homeNotFound: StringDesc.Raw = prefix
             .plus("Такой дом не найден!")
             .toRaw(),
@@ -157,7 +160,9 @@ class PluginTranslation(
         val teleporting: StringDesc.Raw = prefix
             .plus("Вы были телепортированы домой")
             .toRaw(),
-    )
+    ) {
+        fun homeLimitReached(limit: Int) = homeLimitReached.replace("%limit%", limit.toString())
+    }
 
     @Serializable
     data class Jails(
