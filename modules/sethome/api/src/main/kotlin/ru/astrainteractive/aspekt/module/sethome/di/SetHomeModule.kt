@@ -22,6 +22,7 @@ class SetHomeModule(
     private val homeCommandExecutor = HomeCommandExecutor(
         homeKrateProvider = homeKrateProvider,
         scope = coreModule.ioScope,
+        dispatchers = coreModule.dispatchers,
         translationKrate = coreModule.translationKrate,
         kyoriKrate = coreModule.kyoriKrate,
     )
