@@ -41,6 +41,7 @@ minecraft-fabric-yarn = "1.20.1+build.10" # https://github.com/FabricMC/yarn
 minecraft-forge-bus = "6.0.5" # https://github.com/MinecraftForge/EventBus
 minecraft-forge-jarjar = "0.2.3" # https://github.com/MinecraftForge/JarJar
 minecraft-forgegradle = "7.0.40" # https://github.com/MinecraftForge/ForgeGradle
+minecraft-forgerenamer = "1.1.7" # https://github.com/MinecraftForge/renamer
 minecraft-forgeversion = "1.21.1-52.1.16" # https://github.com/MinecraftForge/MinecraftForge
 minecraft-kyori = "5.2.0" # https://github.com/KyoriPowered/adventure
 minecraft-luckperms = "5.5" # https://github.com/LuckPerms/LuckPerms
@@ -158,6 +159,7 @@ gradle-buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "grad
 gradle-fabric-loom = { id = "fabric-loom", version.ref = "minecraft-fabric-loom" }
 gradle-forge-jarjar = { id = "net.minecraftforge.jarjar", version.ref = "minecraft-forge-jarjar" }
 gradle-forgegradle = { id = "net.minecraftforge.gradle", version.ref = "minecraft-forgegradle" }
+gradle-forgerenamer = { id = "net.minecraftforge.renamer", version.ref = "minecraft-forgerenamer" }
 gradle-ftp = { id = "ru.astrainteractive.ftpplugin.gradleftp", version.ref = "gradle-ftp" }
 gradle-neoforgegradle = { id = "net.neoforged.gradle.userdev", version.ref = "minecraft-neoforgegradle" }
 gradle-shadow = { id = "com.gradleup.shadow", version.ref = "gradle-shadow" }
