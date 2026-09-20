@@ -5,8 +5,8 @@ import kotlinx.coroutines.withContext
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.TicketType
 import net.minecraft.world.level.ChunkPos
-import net.minecraft.world.level.chunk.ChunkStatus
 import net.minecraft.world.level.chunk.LevelChunk
+import net.minecraft.world.level.chunk.status.ChunkStatus
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
@@ -22,14 +22,14 @@ internal class ChunkLoader(
         withContext(dispatchers.Main) {
             level.chunkSource.addRegionTicket(RTP_TICKET, chunkPos, 0, chunkPos)
         }
-        return level.chunkSource.getChunkFuture(chunkX, chunkZ, ChunkStatus.FULL, true)
+        val chunkResult = level.chunkSource
+            .getChunkFuture(chunkX, chunkZ, ChunkStatus.FULL, true)
             .await()
-            .ifRight { failure ->
-                error { "#loadChunkToFull fail: $failure" }
-            }
-            .left()
-            .orElse(null)
-            ?.tryCast<LevelChunk>()
+        if (!chunkResult.isSuccess) {
+            error { "#loadChunkToFull fail: ${chunkResult.error}" }
+            return null
+        }
+        return chunkResult.orElse(null)?.tryCast<LevelChunk>()
     }
 
     private companion object {
