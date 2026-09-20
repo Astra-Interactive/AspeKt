@@ -26,6 +26,7 @@ class ForgeAuthModule(
         kyoriKrate = coreModule.kyoriKrate,
         platformServer = coreModule.platformServer,
         multiplatformCommand = coreModule.multiplatformCommand,
+        unconfinedScope = coreModule.unconfinedScope,
         commandRegistrarContext = commandRegistrarContext
     )
 

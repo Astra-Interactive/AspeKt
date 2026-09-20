@@ -11,7 +11,6 @@ import ru.astrainteractive.astralibs.command.api.brigadier.command.Multiplatform
 import ru.astrainteractive.astralibs.command.api.brigadier.sender.KPlayerKCommandSender
 import ru.astrainteractive.astralibs.command.api.exception.NoPermissionException
 import ru.astrainteractive.astralibs.command.api.exception.NotPlayerExecutorException
-import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.server.permission.Permission
@@ -34,7 +33,6 @@ internal class SetHomeCommandRegistrar(
     private val homeKrateProvider: HomeKrateProvider,
     private val executor: HomeCommandExecutor,
     private val multiplatformCommand: MultiplatformCommand,
-    private val registrarContext: CommandRegistrarContext,
     translationKrate: CachedKrate<PluginTranslation>,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>
 ) : KyoriComponentSerializer by kyoriKrate.unwrap(),
@@ -136,11 +134,11 @@ internal class SetHomeCommandRegistrar(
         }
     }
 
-    fun register() {
-        listOf(
+    fun createNodes(): List<LiteralArgumentBuilder<Any>> {
+        return listOf(
             createSetHomeNode(),
             createDelHomeNode(),
             createHomeNode()
-        ).forEach(registrarContext::registerWhenReady)
+        )
     }
 }

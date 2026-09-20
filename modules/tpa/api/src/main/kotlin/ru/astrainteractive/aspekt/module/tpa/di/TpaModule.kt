@@ -24,7 +24,8 @@ class TpaModule(
         commandRegistrarContext = commandRegistrarContext,
         executor = tpaCommandExecutor,
         platformServer = coreModule.platformServer,
-        multiplatformCommand = coreModule.multiplatformCommand
+        multiplatformCommand = coreModule.multiplatformCommand,
+        unconfinedScope = coreModule.unconfinedScope
     )
 
     val lifecycle = Lifecycle.Lambda(

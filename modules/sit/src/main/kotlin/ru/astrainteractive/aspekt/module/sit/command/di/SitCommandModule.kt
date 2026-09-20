@@ -1,9 +1,13 @@
 package ru.astrainteractive.aspekt.module.sit.command.di
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.sit.command.sit.SitLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.sit.event.sit.SitController
+import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 /**
@@ -14,6 +18,8 @@ internal class SitCommandModule(
     private val coreModule: CoreModule,
     private val sitController: SitController,
 ) {
+    private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())
+
     private val nodes = buildList {
         SitLiteralArgumentBuilder(
             sitController = sitController,
@@ -23,7 +29,10 @@ internal class SitCommandModule(
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {
-            nodes.onEach(bukkitCoreModule.commandRegistrarContext::registerWhenReady)
+            bukkitCoreModule.commandRegistrarContext.registerWhenReady(nodes, moduleUnconfinedScope)
+        },
+        onDisable = {
+            moduleUnconfinedScope.cancel()
         }
     )
 }

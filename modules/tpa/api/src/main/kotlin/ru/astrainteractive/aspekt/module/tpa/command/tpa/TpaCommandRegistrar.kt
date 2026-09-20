@@ -5,7 +5,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.tpa.command.TpaCommand
 import ru.astrainteractive.aspekt.module.tpa.command.TpaCommandExecutor
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
-import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 
@@ -20,8 +19,7 @@ import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 internal class TpaCommandRegistrar(
     private val executor: TpaCommandExecutor,
     private val platformServer: PlatformServer,
-    private val multiplatformCommand: MultiplatformCommand,
-    private val registrarContext: CommandRegistrarContext
+    private val multiplatformCommand: MultiplatformCommand
 ) {
     private fun createTpaNode(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
@@ -95,13 +93,13 @@ internal class TpaCommandRegistrar(
         }
     }
 
-    fun register() {
-        listOf(
+    fun createNodes(): List<LiteralArgumentBuilder<Any>> {
+        return listOf(
             createTpaNode(),
             createTpaHereNode(),
             createTpaCancelNode(),
             createTpaAcceptNode(),
             createTpaDenyNode()
-        ).forEach(registrarContext::registerWhenReady)
+        )
     }
 }
