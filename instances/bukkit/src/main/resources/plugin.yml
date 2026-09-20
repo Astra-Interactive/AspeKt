@@ -11,19 +11,3 @@ softdepend: [ DiscordSRV, LuckPerms, Vault, Esssentials, Towny, PlaceholderAPI, 
 depend: [ ]
 loadbefore: [ Towny ]
 libraries: ${libraries}
-commands:
-  swearfilter:
-  rtpbypass:
-  quiz:
-  sit:
-  tellchat:
-  rtp:
-  atemframe:
-  maxonline:
-  entities:
-  aesreload:
-  claim:
-  menu:
-  invclose:
-  ekon:
-  jail:
