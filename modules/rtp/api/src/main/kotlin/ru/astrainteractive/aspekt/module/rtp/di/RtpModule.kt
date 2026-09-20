@@ -1,5 +1,8 @@
 package ru.astrainteractive.aspekt.module.rtp.di
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.rtp.api.SafeLocationProvider
 import ru.astrainteractive.aspekt.module.rtp.command.RtpCommandExecutor
@@ -8,6 +11,7 @@ import ru.astrainteractive.aspekt.module.rtp.model.RtpConfig
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
+import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.asCachedKrate
@@ -16,9 +20,11 @@ import java.io.File
 class RtpModule(
     coreModule: CoreModule,
     private val commandRegistrarContext: CommandRegistrarContext,
-    private val safeLocationProviderFactory: (CachedKrate<RtpConfig>) -> SafeLocationProvider,
-    private val multiplatformCommand: MultiplatformCommand,
+    safeLocationProviderFactory: (CachedKrate<RtpConfig>) -> SafeLocationProvider,
+    multiplatformCommand: MultiplatformCommand,
 ) {
+    private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())
+
     private val rtpConfigKrate = coreModule.yamlFormat
         .krateOf(
             file = getConfigurationFile(coreModule.dataFolder),
@@ -35,17 +41,21 @@ class RtpModule(
         rtpConfigKrate = rtpConfigKrate,
     )
 
+    private val nodes = RtpCommandRegistrar(
+        executor = executor,
+        safeLocationProvider = safeLocationProvider,
+        multiplatformCommand = multiplatformCommand
+    ).createNodes()
+
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {
-            RtpCommandRegistrar(
-                executor = executor,
-                safeLocationProvider = safeLocationProvider,
-                multiplatformCommand = multiplatformCommand,
-                registrarContext = commandRegistrarContext
-            ).register()
+            commandRegistrarContext.registerWhenReady(nodes, moduleUnconfinedScope)
         },
         onReload = {
             rtpConfigKrate.getValue()
+        },
+        onDisable = {
+            moduleUnconfinedScope.cancel()
         }
     )
 

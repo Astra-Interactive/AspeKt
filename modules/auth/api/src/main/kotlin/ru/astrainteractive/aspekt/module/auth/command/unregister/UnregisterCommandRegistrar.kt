@@ -10,7 +10,6 @@ import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthPermission
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
-import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
@@ -27,8 +26,7 @@ class UnregisterCommandRegistrar(
     private val authDao: AuthDao,
     private val authorizedApi: AuthorizedApi,
     private val platformServer: PlatformServer,
-    private val multiplatformCommand: MultiplatformCommand,
-    private val registrarContext: CommandRegistrarContext
+    private val multiplatformCommand: MultiplatformCommand
 ) : KyoriComponentSerializer by kyoriKrate.unwrap() {
     private val translation by translationKrate
 
@@ -89,7 +87,7 @@ class UnregisterCommandRegistrar(
         }
     }
 
-    fun register() {
-        registrarContext.registerWhenReady(createNode())
+    fun createNodes(): List<LiteralArgumentBuilder<Any>> {
+        return listOf(createNode())
     }
 }

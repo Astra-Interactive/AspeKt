@@ -44,7 +44,8 @@ class SetHomeModule(
         executor = homeCommandExecutor,
         multiplatformCommand = coreModule.multiplatformCommand,
         translationKrate = coreModule.translationKrate,
-        kyoriKrate = coreModule.kyoriKrate
+        kyoriKrate = coreModule.kyoriKrate,
+        unconfinedScope = coreModule.unconfinedScope
     )
 
     val lifecycle = Lifecycle.Lambda(

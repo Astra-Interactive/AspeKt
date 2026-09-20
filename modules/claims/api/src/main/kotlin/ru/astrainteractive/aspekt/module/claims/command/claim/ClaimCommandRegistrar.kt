@@ -12,7 +12,6 @@ import ru.astrainteractive.aspekt.module.claims.util.toClaimPlayer
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.brigadier.sender.KPlayerKCommandSender
-import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
@@ -31,7 +30,6 @@ class ClaimCommandRegistrar(
     private val claimsRepository: ClaimsRepository,
     private val platformServer: PlatformServer,
     private val multiplatformCommand: MultiplatformCommand,
-    private val registrarContext: CommandRegistrarContext,
     private val chunkProvider: ChunkProvider
 ) {
 
@@ -154,7 +152,7 @@ class ClaimCommandRegistrar(
         }
     }
 
-    fun register() {
-        registrarContext.registerWhenReady(createNode())
+    fun createNodes(): List<LiteralArgumentBuilder<Any>> {
+        return listOf(createNode())
     }
 }

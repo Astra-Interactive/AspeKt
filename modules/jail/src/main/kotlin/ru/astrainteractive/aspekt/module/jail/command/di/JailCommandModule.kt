@@ -1,11 +1,15 @@
 package ru.astrainteractive.aspekt.module.jail.command.di
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.jail.command.jail.JailLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.jail.controller.JailController
 import ru.astrainteractive.aspekt.module.jail.data.CachedJailApi
 import ru.astrainteractive.aspekt.module.jail.data.JailApi
+import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 /**
@@ -18,6 +22,8 @@ internal class JailCommandModule(
     private val cachedJailApi: CachedJailApi,
     private val jailController: JailController
 ) {
+    private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())
+
     private val nodes = buildList {
         JailLiteralArgumentBuilder(
             translationKrate = coreModule.translationKrate,
@@ -33,7 +39,10 @@ internal class JailCommandModule(
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {
-            nodes.onEach(bukkitCoreModule.commandRegistrarContext::registerWhenReady)
+            bukkitCoreModule.commandRegistrarContext.registerWhenReady(nodes, moduleUnconfinedScope)
+        },
+        onDisable = {
+            moduleUnconfinedScope.cancel()
         }
     )
 }

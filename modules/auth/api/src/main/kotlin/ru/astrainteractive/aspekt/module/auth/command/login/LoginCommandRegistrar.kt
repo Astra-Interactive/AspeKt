@@ -12,7 +12,6 @@ import ru.astrainteractive.aspekt.module.auth.api.model.AuthData
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.aspekt.module.auth.api.util.sha256
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
-import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
@@ -27,8 +26,7 @@ class LoginCommandRegistrar(
     private val ioScope: CoroutineScope,
     private val authDao: AuthDao,
     private val authorizedApi: AuthorizedApi,
-    private val multiplatformCommand: MultiplatformCommand,
-    private val registrarContext: CommandRegistrarContext
+    private val multiplatformCommand: MultiplatformCommand
 ) : KyoriComponentSerializer by kyoriKrate.unwrap() {
     private val translation by translationKrate
 
@@ -68,8 +66,7 @@ class LoginCommandRegistrar(
         }
     }
 
-    fun register() {
-        registrarContext.registerWhenReady(createNode("login"))
-        registrarContext.registerWhenReady(createNode("l"))
+    fun createNodes(): List<LiteralArgumentBuilder<Any>> {
+        return listOf(createNode("login"), createNode("l"))
     }
 }
