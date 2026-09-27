@@ -13,6 +13,7 @@ import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.coroutines.withTimings
+import ru.astrainteractive.astralibs.kyori.AutoComponentSerializer
 import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
@@ -70,7 +71,7 @@ class CoreModule(
 
     val kyoriKrate = DefaultMutableKrate<KyoriComponentSerializer>(
         loader = { null },
-        factory = { KyoriComponentSerializer.Legacy }
+        factory = { AutoComponentSerializer }
     ).asCachedKrate()
 
     val jsonStringFormat: StringFormat = Json {
