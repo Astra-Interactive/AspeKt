@@ -51,7 +51,7 @@ internal class JailLiteralArgumentBuilder(
                         scope.launch {
                             val jails = jailApi.getJails().getOrNull().orEmpty().map(Jail::name)
                             val jailsString = jails.joinToString()
-                            ctx.getSender().sendMessage(translation.jails.jailsList(jailsString))
+                            ctx.getSender().sendMessage(translation.jails.list(jailsString))
                         }
                     }
                 }
@@ -67,11 +67,11 @@ internal class JailLiteralArgumentBuilder(
                             scope.launch {
                                 jailApi.addJail(jail)
                                     .onFailure {
-                                        ctx.getSender().sendMessage(translation.jails.jailCreatedFail)
+                                        ctx.getSender().sendMessage(translation.jails.creationFailed)
                                     }
                                     .onSuccess {
                                         ctx.getSender().sendMessage(
-                                            translation.jails.jailCreatedSuccess(jail.name)
+                                            translation.jails.created(jail.name)
                                         )
                                     }
                             }
@@ -86,15 +86,15 @@ internal class JailLiteralArgumentBuilder(
                             scope.launch {
                                 val jailName = ctx.requireArgument(jailArg)
                                 if (jailApi.getJailInmates(jailName).getOrNull().orEmpty().isNotEmpty()) {
-                                    ctx.getSender().sendMessage(translation.jails.jailHasInmates(jailName))
+                                    ctx.getSender().sendMessage(translation.jails.hasInmates(jailName))
                                 } else {
                                     jailApi.deleteJail(jailName)
                                         .onFailure {
-                                            ctx.getSender().sendMessage(translation.jails.jailDeleteFail)
+                                            ctx.getSender().sendMessage(translation.jails.deletionFailed)
                                         }
                                         .onSuccess {
                                             ctx.getSender().sendMessage(
-                                                translation.jails.jailDeleteSuccess(jailName)
+                                                translation.jails.deleted(jailName)
                                             )
                                         }
                                 }
@@ -115,15 +115,15 @@ internal class JailLiteralArgumentBuilder(
 
                                 jailApi.free(offlinePlayerToFree.uniqueId.toString())
                                     .onFailure {
-                                        ctx.getSender().sendMessage(translation.jails.inmateFreeFail)
+                                        ctx.getSender().sendMessage(translation.jails.releaseFailed)
                                     }
                                     .onSuccess {
                                         jailController.free(inmate)
                                         cachedJailApi.cache(inmate.uuid)
 
-                                        offlinePlayerToFree.sendMessage(translation.jails.youVeBeenFreed)
+                                        offlinePlayerToFree.sendMessage(translation.jails.released)
                                         ctx.getSender().sendMessage(
-                                            translation.jails.inmateFreeSuccess(
+                                            translation.jails.inmateReleased(
                                                 offlinePlayerToFree.name.orEmpty()
                                             )
                                         )
@@ -161,16 +161,16 @@ internal class JailLiteralArgumentBuilder(
                                         )
                                         jailApi.addInmate(inmate)
                                             .onFailure {
-                                                ctx.getSender().sendMessage(translation.jails.inmateAddFail)
+                                                ctx.getSender().sendMessage(translation.jails.jailingFailed)
                                             }
                                             .onSuccess {
                                                 jailOfflinePlayer.sendMessage(
-                                                    translation.jails.youVeBeenJailed(
+                                                    translation.jails.jailed(
                                                         jailDuration.toString()
                                                     )
                                                 )
                                                 ctx.getSender().sendMessage(
-                                                    translation.jails.inmateAddSuccess(
+                                                    translation.jails.inmateJailed(
                                                         name = jailOfflinePlayer.name.orEmpty(),
                                                         jail = jailName
                                                     )

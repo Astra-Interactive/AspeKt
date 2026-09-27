@@ -39,7 +39,7 @@ internal class EkonLiteralArgumentBuilder(
             command("ekon") {
                 runs { ctx ->
                     ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
-                    ctx.getSender().sendMessage(translation.general.wrongUsage)
+                    ctx.getSender().sendMessage(translation.commandError.wrongUsage)
                 }
                 literal("list") {
                     runs { ctx ->

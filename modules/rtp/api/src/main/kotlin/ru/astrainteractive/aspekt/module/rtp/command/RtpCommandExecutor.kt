@@ -25,7 +25,7 @@ class RtpCommandExecutor(
         ioScope.launch {
             val player = input.player
             if (safeLocationProvider.getJobsNumber() >= rtpConfig.maxSearchJobs) {
-                player.sendMessage(translation.rtp.maxRtpJobs)
+                player.sendMessage(translation.rtp.maxJobs)
                 return@launch
             }
             if (safeLocationProvider.isActive(player.uuid)) return@launch
@@ -48,7 +48,7 @@ class RtpCommandExecutor(
                 }
 
                 RtpSearchResult.MaxRetriesReached -> {
-                    player.sendMessage(translation.rtp.maxRtpRetries)
+                    player.sendMessage(translation.rtp.maxRetries)
                 }
 
                 RtpSearchResult.NotFound -> {

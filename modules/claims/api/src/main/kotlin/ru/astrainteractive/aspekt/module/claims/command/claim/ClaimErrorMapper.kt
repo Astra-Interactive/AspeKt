@@ -17,15 +17,15 @@ class ClaimErrorMapper(
     fun toMessage(throwable: Throwable): LocalizedText {
         when (throwable) {
             is UnderClaimException -> {
-                return translation.claim.chunkUnderClaim
+                return translation.claim.alreadyClaimed
             }
 
             is ClaimNotFoundException -> {
-                return translation.claim.noClaimHere
+                return translation.claim.noneHere
             }
 
             is ClaimNotOwnedException -> {
-                return translation.claim.notClaimOwner
+                return translation.claim.notOwner
             }
 
             else -> {

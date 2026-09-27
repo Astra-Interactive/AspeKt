@@ -61,7 +61,7 @@ internal class ChatGameLiteralArgumentBuilder(
                                 else -> currencyEconomyProviderFactory.findByCurrencyId(currencyId)
                             }
                             economy?.addMoney(player.uuid, amount.toDouble())
-                            val message = translation.chatGame.gameEndedMoneyReward(
+                            val message = translation.chatGame.moneyRewarded(
                                 player.name,
                                 amount
                             )

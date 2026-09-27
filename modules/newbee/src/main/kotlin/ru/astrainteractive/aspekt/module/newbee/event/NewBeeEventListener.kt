@@ -79,10 +79,10 @@ internal class NewBeeEventListener(
         withContext(dispatcher.IO) { delay(5.seconds) }
         val effects = getNewBeeEffects(this@giveNewBeeEffects)
         addPotionEffects(effects)
-        asKAudience().sendMessage(translation.newBee.youAreNewBee)
+        asKAudience().sendMessage(translation.newBee.welcome)
         Title.title(
-            translation.newBee.newBeeTitle.toComponent(locale()),
-            translation.newBee.newBeeSubtitle.toComponent(locale()),
+            translation.newBee.title.toComponent(locale()),
+            translation.newBee.subtitle.toComponent(locale()),
             Title.Times.times(
                 1.seconds.toJavaDuration(),
                 3.seconds.toJavaDuration(),
@@ -94,7 +94,7 @@ internal class NewBeeEventListener(
     private fun Player.takeNewBeeEffects() = ioScope.launch(dispatcher.Main) {
         if (this@takeNewBeeEffects.activePotionEffects.isEmpty()) return@launch
         getNewBeeEffects(this@takeNewBeeEffects).map(PotionEffect::getType).forEach(::removePotionEffect)
-        asKAudience().sendMessage(translation.newBee.newBeeShieldForceDisabled)
+        asKAudience().sendMessage(translation.newBee.protectionRemoved)
     }
 
     @EventHandler

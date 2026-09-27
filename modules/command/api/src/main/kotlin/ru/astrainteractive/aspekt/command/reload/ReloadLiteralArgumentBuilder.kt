@@ -20,9 +20,9 @@ internal class ReloadLiteralArgumentBuilder(
                 runs { ctx ->
                     ctx.requirePermission(PluginPermission.RELOAD)
                     val audience = ctx.getSender()
-                    audience.sendMessage(translation.general.reload)
+                    audience.sendMessage(translation.reload.started)
                     lifecyclePlugin.onReload()
-                    audience.sendMessage(translation.general.reloadComplete)
+                    audience.sendMessage(translation.reload.completed)
                 }
             }
         }

@@ -39,14 +39,14 @@ internal class SwearFilterLiteralArgumentBuilder(
         ioScope.launch { swearRepository.setSwearFilterEnabled(target, isEnabled) }
         if (isEnabled) {
             if (senderUuidOrNull != target.uuid) {
-                sender.sendMessage(translation.swear.swearFilterEnabledFor(target.name))
+                sender.sendMessage(translation.swear.enabledFor(target.name))
             }
-            target.sendMessage(translation.swear.swearFilterEnabled)
+            target.sendMessage(translation.swear.enabled)
         } else {
             if (senderUuidOrNull != target.uuid) {
-                sender.sendMessage(translation.swear.swearFilterDisabledFor(target.name))
+                sender.sendMessage(translation.swear.disabledFor(target.name))
             }
-            target.sendMessage(translation.swear.swearFilterDisabled)
+            target.sendMessage(translation.swear.disabled)
         }
     }
 

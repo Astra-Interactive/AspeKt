@@ -38,7 +38,7 @@ internal class SitController(
     ) {
         if (!sitConfig.isEnabled) return
         if (isFilledWithSolidBlocks(location)) {
-            player.asKAudience().sendMessage(translation.sit.cantSitInBlock)
+            player.asKAudience().sendMessage(translation.sit.insideBlock)
             return
         }
         if (player.location.distance(location) > MAX_DISTANCE) {
@@ -47,17 +47,17 @@ internal class SitController(
         }
         // Сидит ли уже игрок
         if (sitPlayers.contains(player.uniqueId.toString())) {
-            player.asKAudience().sendMessage(translation.sit.sitAlready)
+            player.asKAudience().sendMessage(translation.sit.already)
             return
         }
         // Находится ли игрок в воздухе
         if (player.isFlying) {
-            player.asKAudience().sendMessage(translation.sit.sitInAir)
+            player.asKAudience().sendMessage(translation.sit.inAir)
             return
         }
         // Находится ли игрок в воздухе
         if (player.location.block.getRelative(BlockFace.DOWN).type == Material.AIR) {
-            player.asKAudience().sendMessage(translation.sit.sitInAir)
+            player.asKAudience().sendMessage(translation.sit.inAir)
             return
         }
         // Создаем стул

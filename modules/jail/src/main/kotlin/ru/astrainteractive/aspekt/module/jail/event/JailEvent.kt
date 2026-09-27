@@ -40,7 +40,7 @@ internal class JailEvent(
     fun playerCommandPreprocessEvent(e: PlayerCommandPreprocessEvent) {
         if (!cachedJailApi.isInJail(e.player)) return
         e.isCancelled = true
-        e.player.sendMessage(translation.jails.jailedCommandBlocked)
+        e.player.sendMessage(translation.jails.commandBlocked)
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -61,7 +61,7 @@ internal class JailEvent(
                 .getOrNull()
                 ?: return@launch
             jailController.tryTeleportToJail(player.uniqueId)
-            player.sendMessage(translation.jails.youInJail)
+            player.sendMessage(translation.jails.inJail)
         }
     }
 

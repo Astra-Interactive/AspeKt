@@ -42,8 +42,8 @@ internal class SetHomeCommandRegistrar(
     private fun reportFailure(ctx: CommandContext<Any>, throwable: Throwable) {
         val sender = with(multiplatformCommand) { ctx.getSender() }
         when (throwable) {
-            is NoPermissionException -> sender.sendMessage(translation.general.noPermission)
-            is NotPlayerExecutorException -> sender.sendMessage(translation.general.onlyPlayerCommand)
+            is NoPermissionException -> sender.sendMessage(translation.commandError.noPermission)
+            is NotPlayerExecutorException -> sender.sendMessage(translation.commandError.onlyPlayerCommand)
             else -> error(throwable) { "Could not execute home command" }
         }
     }

@@ -60,7 +60,7 @@ internal class MoneyDropEvent(
             }
             economyProvider?.addMoney(player.uniqueId, money * amount)
         }
-        player.asKAudience().sendMessage(translation.general.pickedUpMoney(amount * money))
+        player.asKAudience().sendMessage(translation.moneyDrop.pickedUp(amount * money))
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)

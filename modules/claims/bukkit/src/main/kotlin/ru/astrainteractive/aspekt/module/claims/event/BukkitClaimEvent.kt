@@ -77,7 +77,7 @@ internal class BukkitClaimEvent(
             )
             val isCancelled = !isAble
             if (isCancelled) {
-                player?.asKAudience()?.sendMessage(translation.claim.actionIsBlockByAdminClaim(flag.name))
+                player?.asKAudience()?.sendMessage(translation.claim.actionBlocked(flag.name))
             }
             isCancelled
         }

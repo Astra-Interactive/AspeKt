@@ -19,7 +19,7 @@ internal class RtpLiteralArgumentBuilder(
         return with(multiplatformCommand) {
             command("rtp") {
                 runs { ctx ->
-                    ctx.getSender().sendMessage(translation.general.maybeTpr)
+                    ctx.getSender().sendMessage(translation.rtp.didYouMeanTpr)
                 }
             }
         }

@@ -29,7 +29,7 @@ internal class MenuLiteralArgumentBuilder(
                     val player = ctx.requirePlayer()
                     val menuModel = menuModels.firstOrNull()
                     if (menuModel == null) {
-                        ctx.getSender().sendMessage(translation.general.menuNotFound)
+                        ctx.getSender().sendMessage(translation.menu.notFound)
                     } else {
                         menuRouter.invoke().openMenu(player = player, menuModel = menuModel)
                     }
@@ -42,7 +42,7 @@ internal class MenuLiteralArgumentBuilder(
                         val menuModel = menuModels.firstOrNull { it.command == cmd } ?: menuModels.firstOrNull()
                         if (menuModel == null) {
                             ctx.getSender().sendMessage(
-                                translation.general.menuNotFound
+                                translation.menu.notFound
                             )
                         } else {
                             menuRouter.invoke().openMenu(player = player, menuModel = menuModel)

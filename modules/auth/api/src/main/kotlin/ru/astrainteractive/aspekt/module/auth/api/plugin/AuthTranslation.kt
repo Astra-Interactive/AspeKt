@@ -23,13 +23,6 @@ data class AuthTranslation(
             translation(MinecraftLocales.EN_US, "You are not registered! /register PASSWORD PASSWORD")
         }
     ),
-    @SerialName("only_player_command")
-    val onlyPlayerCommand: LocalizedText = prefix.concat(
-        LocalizedText.build {
-            translation(MinecraftLocales.RU_RU, "Команда только для игроков!")
-            translation(MinecraftLocales.EN_US, "This command is for players only!")
-        }
-    ),
     @SerialName("auth_success")
     val authSuccess: LocalizedText = prefix.concat(
         LocalizedText.build {

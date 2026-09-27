@@ -55,7 +55,7 @@ internal class MoneyDropController(
         val material = Material.RAW_GOLD
         val itemStack = ItemStack(material)
         // Every nearby player sees the same dropped item, so its name is in the default language
-        val name = translation.general.droppedMoney.toComponent(Locale.ROOT)
+        val name = translation.moneyDrop.itemName.toComponent(Locale.ROOT)
         itemStack.editMeta {
             it.displayName(name)
             it.setPersistentDataType(MoneyDropFlag.Flag, true)

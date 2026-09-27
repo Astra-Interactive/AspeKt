@@ -40,7 +40,7 @@ class ClaimCommandExecutor(
         result.onSuccess { claims ->
             platformServer
                 .findOnlinePlayer(claimPlayer.uuid)
-                ?.sendMessage(translation.claim.blockMap)
+                ?.sendMessage(translation.claim.mapTitle)
             claims.forEach { claim ->
                 val desc = claim.joinToString("") { if (it) "&#1cba56☒" else "&#c91e1e☒" }
                     .let(kyori::toComponent)
@@ -67,7 +67,7 @@ class ClaimCommandExecutor(
         result.onSuccess {
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
-                ?.sendMessage(translation.claim.chunkFlagChanged)
+                ?.sendMessage(translation.claim.flagChanged)
         }
         result.onFailure {
             val message = claimErrorMapper.toMessage(it)
@@ -82,7 +82,7 @@ class ClaimCommandExecutor(
         result.onSuccess {
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
-                ?.sendMessage(translation.claim.chunkClaimed)
+                ?.sendMessage(translation.claim.claimed)
         }
         result.onFailure {
             val message = claimErrorMapper.toMessage(it)
@@ -97,7 +97,7 @@ class ClaimCommandExecutor(
         result.onSuccess {
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
-                ?.sendMessage(translation.claim.chunkUnClaimed)
+                ?.sendMessage(translation.claim.unclaimed)
         }
         result.onFailure {
             val message = claimErrorMapper.toMessage(it)

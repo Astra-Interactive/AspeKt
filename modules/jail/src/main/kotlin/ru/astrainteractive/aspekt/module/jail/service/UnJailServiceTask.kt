@@ -29,7 +29,7 @@ internal class UnJailServiceTask(
         jailApi.free(inmate.uuid)
         cachedJailApi.cache(inmate.uuid)
         jailController.free(inmate)
-        inmate.offlinePlayer.sendMessage(translation.jails.youVeBeenFreed)
+        inmate.offlinePlayer.sendMessage(translation.jails.released)
     }
 
     override suspend fun execute() {

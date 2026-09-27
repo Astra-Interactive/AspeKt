@@ -165,14 +165,14 @@ internal class MenuGui(
 
                         val hasPermission = permission?.let(playerHolder.player.asKPermissible()::hasPermission) ?: true
                         if (!hasPermission) {
-                            playerHolder.player.asKAudience().sendMessage(translation.general.noPermission)
+                            playerHolder.player.asKAudience().sendMessage(translation.commandError.noPermission)
                             return@setOnClickListener
                         }
 
                         if (!isMeetClickConditions(menuItem)) return@setOnClickListener
                         menuScope.launch {
                             if (!isMeetPriceCheck(menuItem)) {
-                                playerHolder.player.asKAudience().sendMessage(translation.general.notEnoughMoney)
+                                playerHolder.player.asKAudience().sendMessage(translation.menu.notEnoughMoney)
                                 return@launch
                             }
 

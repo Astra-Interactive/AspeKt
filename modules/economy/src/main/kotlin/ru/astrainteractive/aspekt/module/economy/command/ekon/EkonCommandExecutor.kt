@@ -39,8 +39,8 @@ internal class EkonCommandExecutor(
             dao.updatePlayerCurrency(updatedCurrency)
         }.onFailure {
             error { "#execute_Add: ${it.message}" }
-            input.sender.sendMessage(translation.economy.errorTransferMoney)
-        }.onSuccess { input.sender.sendMessage(translation.economy.moneyTransferred) }
+            input.sender.sendMessage(translation.economy.transferFailed)
+        }.onSuccess { input.sender.sendMessage(translation.economy.transferred) }
     }
 
     private suspend fun setCurrency(input: EkonCommand.Model.Set) {
@@ -56,8 +56,8 @@ internal class EkonCommandExecutor(
             dao.updatePlayerCurrency(updatedCurrency)
         }.onFailure {
             error { "#execute_Add: ${it.message}" }
-            input.sender.sendMessage(translation.economy.errorTransferMoney)
-        }.onSuccess { input.sender.sendMessage(translation.economy.moneyTransferred) }
+            input.sender.sendMessage(translation.economy.transferFailed)
+        }.onSuccess { input.sender.sendMessage(translation.economy.transferred) }
     }
 
     private suspend fun balance(input: EkonCommand.Model.Balance) {
@@ -65,7 +65,7 @@ internal class EkonCommandExecutor(
             playerUuid = input.otherPlayer.uuid.toString(),
             currencyId = input.currency.id
         )?.balance ?: 0.0
-        input.sender.sendMessage(translation.economy.playerBalance(amount))
+        input.sender.sendMessage(translation.economy.balance(amount))
     }
 
     private suspend fun listCurrencies(input: EkonCommand.Model.ListCurrencies) {
@@ -83,9 +83,9 @@ internal class EkonCommandExecutor(
             size = 5
         )
         if (top5.isEmpty()) {
-            input.sender.sendMessage(translation.economy.topsEmpty)
+            input.sender.sendMessage(translation.economy.topEmpty)
         } else {
-            input.sender.sendMessage(translation.economy.topsTitle)
+            input.sender.sendMessage(translation.economy.topTitle)
             top5.forEachIndexed { i, topItem ->
                 input.sender.sendMessage(
                     translation.economy.topItem(
