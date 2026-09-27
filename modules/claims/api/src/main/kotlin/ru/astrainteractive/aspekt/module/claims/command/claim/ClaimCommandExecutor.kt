@@ -49,8 +49,8 @@ class ClaimCommandExecutor(
                     ?.sendMessage(desc)
             }
         }
-        result.onFailure {
-            val message = claimErrorMapper.toMessage(it)
+        result.onFailure { error ->
+            val message = claimErrorMapper.toMessage(error)
             platformServer
                 .findOnlinePlayer(claimPlayer.uuid)
                 ?.sendMessage(message)
@@ -69,8 +69,8 @@ class ClaimCommandExecutor(
                 .findOnlinePlayer(input.claimPlayer.uuid)
                 ?.sendMessage(translation.claim.flagChanged)
         }
-        result.onFailure {
-            val message = claimErrorMapper.toMessage(it)
+        result.onFailure { error ->
+            val message = claimErrorMapper.toMessage(error)
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
                 ?.sendMessage(message)
@@ -84,8 +84,8 @@ class ClaimCommandExecutor(
                 .findOnlinePlayer(input.claimPlayer.uuid)
                 ?.sendMessage(translation.claim.claimed)
         }
-        result.onFailure {
-            val message = claimErrorMapper.toMessage(it)
+        result.onFailure { error ->
+            val message = claimErrorMapper.toMessage(error)
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
                 ?.sendMessage(message)
@@ -99,8 +99,8 @@ class ClaimCommandExecutor(
                 .findOnlinePlayer(input.claimPlayer.uuid)
                 ?.sendMessage(translation.claim.unclaimed)
         }
-        result.onFailure {
-            val message = claimErrorMapper.toMessage(it)
+        result.onFailure { error ->
+            val message = claimErrorMapper.toMessage(error)
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
                 ?.sendMessage(message)
