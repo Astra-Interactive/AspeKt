@@ -29,6 +29,7 @@ dependencies {
     shadow(libs.minecraft.astralibs.core.neoforge)
     shadow(libs.minecraft.kyori.gson)
     shadow(libs.minecraft.kyori.legacy)
+    shadow(libs.minecraft.kyori.minimessage)
     shadow(libs.minecraft.kyori.plain)
     shadow(projects.modules.auth.api)
     shadow(projects.modules.auth.neoforge)
