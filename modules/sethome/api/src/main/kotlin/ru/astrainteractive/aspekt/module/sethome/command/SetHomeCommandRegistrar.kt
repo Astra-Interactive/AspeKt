@@ -11,8 +11,6 @@ import ru.astrainteractive.astralibs.command.api.brigadier.command.Multiplatform
 import ru.astrainteractive.astralibs.command.api.brigadier.sender.KPlayerKCommandSender
 import ru.astrainteractive.astralibs.command.api.exception.NoPermissionException
 import ru.astrainteractive.astralibs.command.api.exception.NotPlayerExecutorException
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.server.permission.Permission
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
@@ -33,10 +31,8 @@ internal class SetHomeCommandRegistrar(
     private val homeKrateProvider: HomeKrateProvider,
     private val executor: HomeCommandExecutor,
     private val multiplatformCommand: MultiplatformCommand,
-    translationKrate: CachedKrate<PluginTranslation>,
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>
-) : KyoriComponentSerializer by kyoriKrate.unwrap(),
-    Logger by JUtiltLogger("AspeKt-SetHomeCommandRegistrar") {
+    translationKrate: CachedKrate<PluginTranslation>
+) : Logger by JUtiltLogger("AspeKt-SetHomeCommandRegistrar") {
     private val translation by translationKrate
 
     /**
@@ -46,8 +42,8 @@ internal class SetHomeCommandRegistrar(
     private fun reportFailure(ctx: CommandContext<Any>, throwable: Throwable) {
         val sender = with(multiplatformCommand) { ctx.getSender() }
         when (throwable) {
-            is NoPermissionException -> sender.sendMessage(translation.general.noPermission.component)
-            is NotPlayerExecutorException -> sender.sendMessage(translation.general.onlyPlayerCommand.component)
+            is NoPermissionException -> sender.sendMessage(translation.general.noPermission)
+            is NotPlayerExecutorException -> sender.sendMessage(translation.general.onlyPlayerCommand)
             else -> error(throwable) { "Could not execute home command" }
         }
     }

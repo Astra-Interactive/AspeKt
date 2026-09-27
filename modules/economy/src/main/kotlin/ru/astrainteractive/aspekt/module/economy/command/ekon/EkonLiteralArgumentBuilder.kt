@@ -11,8 +11,6 @@ import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.argumenttype.KPlayerArgumentConverter
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
@@ -27,12 +25,11 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
  */
 internal class EkonLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val cachedDao: CachedDao,
     private val executor: EkonCommandExecutor,
     private val multiplatformCommand: MultiplatformCommand,
     private val platformServer: PlatformServer
-) : KyoriComponentSerializer by kyoriKrate.unwrap() {
+) {
     private val translation by translationKrate
     private fun currencyNames(): List<String> = cachedDao.getAllCurrencies().map { it.name }
 
@@ -42,7 +39,7 @@ internal class EkonLiteralArgumentBuilder(
             command("ekon") {
                 runs { ctx ->
                     ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
-                    ctx.getSender().sendMessage(translation.general.wrongUsage.component)
+                    ctx.getSender().sendMessage(translation.general.wrongUsage)
                 }
                 literal("list") {
                     runs { ctx ->
@@ -61,7 +58,7 @@ internal class EkonLiteralArgumentBuilder(
                             val currency =
                                 cachedDao.getAllCurrencies().firstOrNull { it.name.equals(currencyName, true) }
                             if (currency == null) {
-                                ctx.getSender().sendMessage(translation.economy.currencyNotFound.component)
+                                ctx.getSender().sendMessage(translation.economy.currencyNotFound)
                                 return@runs
                             }
                             EkonCommand.Model.Top(
@@ -82,7 +79,7 @@ internal class EkonLiteralArgumentBuilder(
                                     )
                                 }
                                 if (currency == null) {
-                                    ctx.getSender().sendMessage(translation.economy.currencyNotFound.component)
+                                    ctx.getSender().sendMessage(translation.economy.currencyNotFound)
                                     return@runs
                                 }
                                 EkonCommand.Model.Top(
@@ -109,7 +106,7 @@ internal class EkonLiteralArgumentBuilder(
                                     )
                                 }
                                 if (currency == null) {
-                                    ctx.getSender().sendMessage(translation.economy.currencyNotFound.component)
+                                    ctx.getSender().sendMessage(translation.economy.currencyNotFound)
                                     return@runs
                                 }
                                 val offlinePlayer = ctx.requireArgument(
@@ -141,7 +138,7 @@ internal class EkonLiteralArgumentBuilder(
                                         )
                                     }
                                     if (currency == null) {
-                                        ctx.getSender().sendMessage(translation.economy.currencyNotFound.component)
+                                        ctx.getSender().sendMessage(translation.economy.currencyNotFound)
                                         return@runs
                                     }
                                     val offlinePlayer = ctx.requireArgument(
@@ -176,7 +173,7 @@ internal class EkonLiteralArgumentBuilder(
                                         )
                                     }
                                     if (currency == null) {
-                                        ctx.getSender().sendMessage(translation.economy.currencyNotFound.component)
+                                        ctx.getSender().sendMessage(translation.economy.currencyNotFound)
                                         return@runs
                                     }
                                     val offlinePlayer = ctx.requireArgument(

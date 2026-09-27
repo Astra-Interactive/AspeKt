@@ -6,8 +6,6 @@ import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 
@@ -17,11 +15,10 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
  */
 internal class MenuLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val menuRouter: () -> MenuRouter,
     menuModelsKrate: CachedKrate<List<MenuModel>>,
     private val multiplatformCommand: MultiplatformCommand
-) : KyoriComponentSerializer by kyoriKrate.unwrap() {
+) {
     private val translation by translationKrate
     private val menuModels by menuModelsKrate
 
@@ -32,7 +29,7 @@ internal class MenuLiteralArgumentBuilder(
                     val player = ctx.requirePlayer()
                     val menuModel = menuModels.firstOrNull()
                     if (menuModel == null) {
-                        ctx.getSender().sendMessage(translation.general.menuNotFound.component)
+                        ctx.getSender().sendMessage(translation.general.menuNotFound)
                     } else {
                         menuRouter.invoke().openMenu(player = player, menuModel = menuModel)
                     }
@@ -45,7 +42,7 @@ internal class MenuLiteralArgumentBuilder(
                         val menuModel = menuModels.firstOrNull { it.command == cmd } ?: menuModels.firstOrNull()
                         if (menuModel == null) {
                             ctx.getSender().sendMessage(
-                                translation.general.menuNotFound.component
+                                translation.general.menuNotFound
                             )
                         } else {
                             menuRouter.invoke().openMenu(player = player, menuModel = menuModel)

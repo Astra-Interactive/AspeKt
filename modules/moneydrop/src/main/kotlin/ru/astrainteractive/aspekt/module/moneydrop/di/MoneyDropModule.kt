@@ -30,7 +30,6 @@ class MoneyDropModule(
     )
 
     private val moneyDropController = MoneyDropController(
-        kyoriComponentSerializerDependency = coreModule.kyoriKrate,
         translationDependency = coreModule.translationKrate,
         dispatchers = coreModule.dispatchers,
         moneyDropKrate = moneyDropConfigKrate,
@@ -38,7 +37,6 @@ class MoneyDropModule(
     )
 
     private val moneyDropEvent: MoneyDropEvent = MoneyDropEvent(
-        kyoriKrate = coreModule.kyoriKrate,
         translationKrate = coreModule.translationKrate,
         moneyDropController = moneyDropController,
         currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory,

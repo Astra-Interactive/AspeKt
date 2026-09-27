@@ -24,7 +24,6 @@ class MoneyAdvancementModule(
 
     private val moneyAdvancementEvent = MoneyAdvancementEvent(
         currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory,
-        kyoriKrate = coreModule.kyoriKrate,
         translationKrate = coreModule.translationKrate,
         mAdvConfigKrate = mAdvConfigKrate,
     )

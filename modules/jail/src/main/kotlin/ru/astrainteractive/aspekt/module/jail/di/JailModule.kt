@@ -38,7 +38,6 @@ class JailModule(
         jailApi = jailApi,
         cachedJailApi = cachedJailApi,
         jailController = jailController,
-        kyoriKrate = coreModule.kyoriKrate,
         translationKrate = coreModule.translationKrate
     )
 
@@ -58,7 +57,6 @@ class JailModule(
             cachedJailApi = cachedJailApi,
             jailApi = jailApi,
             jailController = jailController,
-            kyoriKrate = coreModule.kyoriKrate,
             translationKrate = coreModule.translationKrate
         )
     )

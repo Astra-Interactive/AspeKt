@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.chatgame.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import ru.astrainteractive.astralibs.string.StringDesc
+import ru.astrainteractive.astralibs.localization.text.LocalizedText
 
 @Serializable
 @SerialName("CHAT_GAME")
@@ -12,7 +12,7 @@ internal sealed interface ChatGame {
     @SerialName("RIDDLE")
     @Serializable
     class Riddle(
-        val question: StringDesc.Raw,
+        val question: LocalizedText,
         val answer: String,
         override val reward: Reward? = null
     ) : ChatGame

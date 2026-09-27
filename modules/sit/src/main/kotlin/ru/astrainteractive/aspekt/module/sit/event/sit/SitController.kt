@@ -8,15 +8,14 @@ import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.module.sit.model.SitConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 
 internal class SitController(
     sitKrate: CachedKrate<SitConfiguration>,
-    translation: CachedKrate<PluginTranslation>,
-    kyoriComponentSerializer: KyoriComponentSerializer
-) : KyoriComponentSerializer by kyoriComponentSerializer {
+    translation: CachedKrate<PluginTranslation>
+) {
     private val translation by translation
     private val sitConfig by sitKrate
 
@@ -39,26 +38,26 @@ internal class SitController(
     ) {
         if (!sitConfig.isEnabled) return
         if (isFilledWithSolidBlocks(location)) {
-            player.sendMessage(translation.sit.cantSitInBlock.let(::toComponent))
+            player.asKAudience().sendMessage(translation.sit.cantSitInBlock)
             return
         }
         if (player.location.distance(location) > MAX_DISTANCE) {
-            player.sendMessage(translation.sit.tooFar.let(::toComponent))
+            player.asKAudience().sendMessage(translation.sit.tooFar)
             return
         }
         // Сидит ли уже игрок
         if (sitPlayers.contains(player.uniqueId.toString())) {
-            player.sendMessage(translation.sit.sitAlready.let(::toComponent))
+            player.asKAudience().sendMessage(translation.sit.sitAlready)
             return
         }
         // Находится ли игрок в воздухе
         if (player.isFlying) {
-            player.sendMessage(translation.sit.sitInAir.let(::toComponent))
+            player.asKAudience().sendMessage(translation.sit.sitInAir)
             return
         }
         // Находится ли игрок в воздухе
         if (player.location.block.getRelative(BlockFace.DOWN).type == Material.AIR) {
-            player.sendMessage(translation.sit.sitInAir.let(::toComponent))
+            player.asKAudience().sendMessage(translation.sit.sitInAir)
             return
         }
         // Создаем стул

@@ -17,8 +17,6 @@ import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.astralibs.event.flowEvent
 import ru.astrainteractive.astralibs.event.playerMoveFlowEvent
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.server.location.dist
 import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.astralibs.server.util.toPlain
@@ -27,10 +25,9 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
 
 class ForgeAuthEvent(
     private val authorizedApi: AuthorizedApi,
-    private val kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val mainScope: CoroutineScope,
     translationKrate: CachedKrate<AuthTranslation>
-) : KyoriComponentSerializer by kyoriKrate.unwrap() {
+) {
     val translation by translationKrate
 
     val playerLoggedOutEvent = flowEvent<PlayerEvent.PlayerLoggedOutEvent>()
@@ -49,21 +46,23 @@ class ForgeAuthEvent(
         .launchIn(mainScope)
 
     private fun processPlayerEvent(player: Player) = mainScope.launch {
+        // Only a server-side player has a client to send the message to
+        val serverPlayer = player as? ServerPlayer ?: return@launch
         try {
             when (authorizedApi.getAuthState(player.uuid)) {
                 AuthorizedApi.AuthState.Authorized -> Unit
 
                 AuthorizedApi.AuthState.Pending,
                 AuthorizedApi.AuthState.NotAuthorized -> {
-                    player
+                    serverPlayer
                         .asKAudience()
-                        .sendMessage(translation.notAuthorized.component)
+                        .sendMessage(translation.notAuthorized)
                 }
 
                 AuthorizedApi.AuthState.NotRegistered -> {
-                    player
+                    serverPlayer
                         .asKAudience()
-                        .sendMessage(translation.notRegistered.component)
+                        .sendMessage(translation.notRegistered)
                 }
             }
         } catch (_: NullPointerException) {

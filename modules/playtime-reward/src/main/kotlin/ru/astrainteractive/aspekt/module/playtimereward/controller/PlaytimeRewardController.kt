@@ -7,8 +7,6 @@ import ru.astrainteractive.aspekt.module.playtimereward.model.PlaytimeReward
 import ru.astrainteractive.aspekt.module.playtimereward.model.PlaytimeRewardConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.economy.EconomyFacade
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.MutableKrate
@@ -24,10 +22,8 @@ internal class PlaytimeRewardController(
     private val playtimeRewardKrateFactory: PlaytimeRewardKrate.Factory,
     private val economyFacade: EconomyFacade?,
     playtimeRewardConfigurationKrate: CachedKrate<PlaytimeRewardConfiguration>,
-    pluginTranslationKrate: CachedKrate<PluginTranslation>,
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>
-) : Logger by JUtiltLogger("AspeKt-PlaytimeRewardController"),
-    KyoriComponentSerializer by kyoriKrate.unwrap() {
+    pluginTranslationKrate: CachedKrate<PluginTranslation>
+) : Logger by JUtiltLogger("AspeKt-PlaytimeRewardController") {
     private val playtimeRewardConfiguration by playtimeRewardConfigurationKrate
     private val pluginTranslation by pluginTranslationKrate
     private val mutex = Mutex()
@@ -66,7 +62,6 @@ internal class PlaytimeRewardController(
             playtimeRewardStoreKrate.reset()
             economyFacade?.addMoney(onlineKPlayer.uuid, playtimeRewardConfiguration.rewardAmount)
             pluginTranslation.playtimeReward.rewarded(playtimeRewardConfiguration.rewardAmount)
-                .component
                 .run(onlineKPlayer::sendMessage)
         }
     }

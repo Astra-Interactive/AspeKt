@@ -11,7 +11,6 @@ class NewBeeModule(
     bukkitCoreModule: BukkitCoreModule
 ) {
     private val newBeeEventListener = NewBeeEventListener(
-        kyoriKrate = coreModule.kyoriKrate,
         translationKrate = coreModule.translationKrate,
         ioScope = coreModule.ioScope,
         dispatcher = coreModule.dispatchers

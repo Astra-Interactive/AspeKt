@@ -23,8 +23,7 @@ class SitModule(
         .asCachedMutableKrate()
     private val sitController: SitController = SitController(
         sitKrate = sitConfigKrate,
-        translation = coreModule.translationKrate,
-        kyoriComponentSerializer = coreModule.kyoriKrate.cachedValue
+        translation = coreModule.translationKrate
     )
 
     private val sitEvent: SitEvent = SitEvent(

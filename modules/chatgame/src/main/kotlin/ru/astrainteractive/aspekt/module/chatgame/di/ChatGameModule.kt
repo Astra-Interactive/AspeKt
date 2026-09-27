@@ -37,7 +37,6 @@ class ChatGameModule(
     private val chatGameServiceTask = ChatGameServiceTask(
         chatGameStore = chatGameStore,
         chatGameConfigKrate = chatGameConfigKrate,
-        kyoriKrate = coreModule.kyoriKrate,
     )
 
     private val chatGameService = IntervalService(

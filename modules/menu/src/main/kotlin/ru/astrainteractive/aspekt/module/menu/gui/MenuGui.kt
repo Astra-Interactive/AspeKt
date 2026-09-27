@@ -17,7 +17,7 @@ import ru.astrainteractive.aspekt.plugin.PluginNamedPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.astralibs.economy.EconomyFacade
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.localization.markup.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.menu.core.setInventorySlot
 import ru.astrainteractive.astralibs.menu.holder.DefaultPlayerHolder
 import ru.astrainteractive.astralibs.menu.holder.PlayerHolder
@@ -28,7 +28,7 @@ import ru.astrainteractive.astralibs.menu.slot.setIndex
 import ru.astrainteractive.astralibs.menu.slot.setItemStack
 import ru.astrainteractive.astralibs.menu.slot.setOnClickListener
 import ru.astrainteractive.astralibs.server.permission.asKPermissible
-import ru.astrainteractive.astralibs.string.StringDesc
+import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
@@ -44,7 +44,7 @@ internal class MenuGui(
     override val menuScope: CoroutineScope = CoroutineFeature.Default(dispatchers.Main).withTimings()
     override val childComponents: List<CoroutineScope> = emptyList()
     override val inventorySize: InventorySize = menuModel.size
-    override val title: Component = StringDesc.Raw(menuModel.title).let(kyoriComponentSerializer::toComponent)
+    override val title: Component = kyoriComponentSerializer.toComponent(menuModel.title)
     private val playerHolder: PlayerHolder = DefaultPlayerHolder(player)
 
     @Suppress("VariableNaming")
@@ -165,18 +165,14 @@ internal class MenuGui(
 
                         val hasPermission = permission?.let(playerHolder.player.asKPermissible()::hasPermission) ?: true
                         if (!hasPermission) {
-                            translation.general.noPermission
-                                .let(kyoriComponentSerializer::toComponent)
-                                .run(playerHolder.player::sendMessage)
+                            playerHolder.player.asKAudience().sendMessage(translation.general.noPermission)
                             return@setOnClickListener
                         }
 
                         if (!isMeetClickConditions(menuItem)) return@setOnClickListener
                         menuScope.launch {
                             if (!isMeetPriceCheck(menuItem)) {
-                                translation.general.notEnoughMoney
-                                    .let(kyoriComponentSerializer::toComponent)
-                                    .run(playerHolder.player::sendMessage)
+                                playerHolder.player.asKAudience().sendMessage(translation.general.notEnoughMoney)
                                 return@launch
                             }
 

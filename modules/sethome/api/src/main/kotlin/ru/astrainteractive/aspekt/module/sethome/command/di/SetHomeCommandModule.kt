@@ -10,7 +10,6 @@ import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 
@@ -20,7 +19,6 @@ internal class SetHomeCommandModule(
     executor: HomeCommandExecutor,
     multiplatformCommand: MultiplatformCommand,
     translationKrate: CachedKrate<PluginTranslation>,
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     unconfinedScope: CoroutineScope,
     private val commandRegistrarContext: CommandRegistrarContext
 ) {
@@ -30,8 +28,7 @@ internal class SetHomeCommandModule(
         homeKrateProvider = homeKrateProvider,
         executor = executor,
         multiplatformCommand = multiplatformCommand,
-        translationKrate = translationKrate,
-        kyoriKrate = kyoriKrate
+        translationKrate = translationKrate
     ).createNodes()
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(

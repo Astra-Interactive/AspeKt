@@ -41,7 +41,7 @@ internal class RiddleGenerator(
             }
 
             is ChatGame.Riddle -> ChatGameData(
-                question = translation.chatGame.solveRiddle(instance.question.raw),
+                question = translation.chatGame.solveRiddle(instance.question),
                 answers = listOf(instance.answer),
                 reward = instance.reward ?: config.defaultReward
             )

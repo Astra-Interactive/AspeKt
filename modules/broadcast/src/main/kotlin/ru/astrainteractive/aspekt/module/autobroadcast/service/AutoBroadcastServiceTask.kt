@@ -9,11 +9,11 @@ import net.kyori.adventure.bossbar.BossBar
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.module.autobroadcast.model.AnnouncementsConfiguration
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.service.ServiceTask
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
+import java.util.Locale
 import kotlin.random.Random
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -21,11 +21,9 @@ import ru.astrainteractive.aspekt.module.autobroadcast.model.AnnouncementsConfig
 
 internal class AutoBroadcastServiceTask(
     announcementsConfigKrate: CachedKrate<AnnouncementsConfiguration>,
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val ioScope: CoroutineScope,
     private val dispatchers: KotlinDispatchers
 ) : ServiceTask {
-    private val kyori by kyoriKrate
     private val announcementsConfiguration by announcementsConfigKrate
 
     /**
@@ -87,18 +85,22 @@ internal class AutoBroadcastServiceTask(
     }
 
     private fun broadcast(announcement: AnnouncementsConfiguration.Announcement) {
-        val message = announcement.text.let(kyori::toComponent)
         when (announcement) {
             is AnnouncementsConfiguration.Announcement.ActionBar -> {
-                Bukkit.getOnlinePlayers().forEach { player -> player.sendActionBar(message) }
+                Bukkit.getOnlinePlayers().forEach { player ->
+                    player.sendActionBar(announcement.text.toComponent(player.locale()))
+                }
             }
 
             is AnnouncementsConfiguration.Announcement.BossBar -> {
-                showBossBar(announcement = announcement, message = message)
+                // Every player watches the same bar, so its title is in the default language
+                showBossBar(announcement = announcement, message = announcement.text.toComponent(Locale.ROOT))
             }
 
             is AnnouncementsConfiguration.Announcement.Text -> {
-                Bukkit.getOnlinePlayers().forEach { player -> player.sendMessage(message) }
+                Bukkit.getOnlinePlayers().forEach { player ->
+                    player.sendMessage(announcement.text.toComponent(player.locale()))
+                }
             }
         }
     }

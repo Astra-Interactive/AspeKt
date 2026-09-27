@@ -27,7 +27,6 @@ class NeoForgeClaimModule(
     @Suppress("UnusedPrivateProperty")
     private val forgeClaimEvent = ForgeClaimEvent(
         translationKrate = coreModule.translationKrate,
-        kyoriKrate = coreModule.kyoriKrate,
         claimsRepository = claimModule.claimsRepository
     )
 

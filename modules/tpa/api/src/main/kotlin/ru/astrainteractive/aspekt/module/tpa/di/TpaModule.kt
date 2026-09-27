@@ -17,7 +17,6 @@ class TpaModule(
         tpaApi = TpaApi(),
         scope = coreModule.ioScope,
         platformServer = coreModule.platformServer,
-        kyoriKrate = coreModule.kyoriKrate,
     )
 
     private val commandModule = TpaCommandModule(

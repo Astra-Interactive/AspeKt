@@ -45,18 +45,16 @@ import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.event.EventListener
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.server.permission.asKPermissible
+import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 
 @Suppress("TooManyFunctions")
 internal class BukkitClaimEvent(
     translationKrate: CachedKrate<PluginTranslation>,
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val claimsRepository: ClaimsRepository
 ) : EventListener {
-    private val kyori by kyoriKrate
     private val translation by translationKrate
 
     @Suppress("MagicNumber")
@@ -79,9 +77,7 @@ internal class BukkitClaimEvent(
             )
             val isCancelled = !isAble
             if (isCancelled) {
-                translation.claim.actionIsBlockByAdminClaim(flag.name)
-                    .let(kyori::toComponent)
-                    .run { player?.sendMessage(this) }
+                player?.asKAudience()?.sendMessage(translation.claim.actionIsBlockByAdminClaim(flag.name))
             }
             isCancelled
         }

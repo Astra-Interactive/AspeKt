@@ -7,8 +7,6 @@ import ru.astrainteractive.aspekt.module.jail.model.JailInmate
 import ru.astrainteractive.aspekt.module.jail.util.offlinePlayer
 import ru.astrainteractive.aspekt.module.jail.util.sendMessage
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.service.ServiceTask
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
@@ -18,10 +16,8 @@ internal class UnJailServiceTask(
     private val cachedJailApi: CachedJailApi,
     private val jailApi: JailApi,
     private val jailController: JailController,
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<PluginTranslation>
-) : ServiceTask,
-    KyoriComponentSerializer by kyoriKrate.unwrap() {
+) : ServiceTask {
     private val translation by translationKrate
 
     private fun JailInmate.isSentenceOver(): Boolean {
@@ -33,7 +29,7 @@ internal class UnJailServiceTask(
         jailApi.free(inmate.uuid)
         cachedJailApi.cache(inmate.uuid)
         jailController.free(inmate)
-        inmate.offlinePlayer.sendMessage(translation.jails.youVeBeenFreed.component)
+        inmate.offlinePlayer.sendMessage(translation.jails.youVeBeenFreed)
     }
 
     override suspend fun execute() {

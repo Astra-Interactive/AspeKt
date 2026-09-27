@@ -10,10 +10,10 @@ import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.Reward
+import ru.astrainteractive.aspekt.module.chatgame.service.broadcast
 import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStore
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
@@ -30,7 +30,6 @@ import kotlin.random.Random
 @Suppress("LongParameterList")
 internal class ChatGameLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val chatGameStore: ChatGameStore,
     chatGameConfigKrate: CachedKrate<ChatGameConfig>,
     private val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory,
@@ -38,7 +37,6 @@ internal class ChatGameLiteralArgumentBuilder(
     private val multiplatformCommand: MultiplatformCommand
 ) {
     private val translation by translationKrate
-    private val kyori by kyoriKrate
     private val chatGameConfig by chatGameConfigKrate
     private val mutex = Mutex()
 
@@ -48,11 +46,11 @@ internal class ChatGameLiteralArgumentBuilder(
                 val chatGame = chatGameStore.state.first() as? ChatGameStore.State.Started
                 val reward = chatGame?.chatGame?.reward ?: chatGameConfig.defaultReward
                 if (chatGame == null) {
-                    player.sendMessage(kyori.toComponent(translation.chatGame.noQuizAvailable))
+                    player.sendMessage(translation.chatGame.noQuizAvailable)
                     return@supervisorScope
                 }
                 if (!chatGameStore.isAnswerCorrect(answer)) {
-                    player.sendMessage(kyori.toComponent(translation.chatGame.wrongAnswer))
+                    player.sendMessage(translation.chatGame.wrongAnswer)
                     return@supervisorScope
                 } else {
                     when (reward) {
@@ -63,10 +61,11 @@ internal class ChatGameLiteralArgumentBuilder(
                                 else -> currencyEconomyProviderFactory.findByCurrencyId(currencyId)
                             }
                             economy?.addMoney(player.uuid, amount.toDouble())
-                            translation.chatGame.gameEndedMoneyReward(
+                            val message = translation.chatGame.gameEndedMoneyReward(
                                 player.name,
                                 amount
-                            ).let(kyori::toComponent).run(Bukkit::broadcast)
+                            )
+                            Bukkit.getServer().broadcast(message)
                         }
                     }
                     chatGameStore.endCurrentGame()

@@ -16,14 +16,13 @@ import org.bukkit.event.inventory.InventoryPickupItemEvent
 import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.event.EventListener
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
 internal class MoneyDropEvent(
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<PluginTranslation>,
     val moneyDropController: MoneyDropController,
     val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory,
@@ -31,7 +30,6 @@ internal class MoneyDropEvent(
 ) : EventListener,
     Logger by JUtiltLogger("AspeKt-MoneyDropEvent") {
     private val translation by translationKrate
-    private val kyori by kyoriKrate
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     fun entityDeathEvent(e: EntityDeathEvent) {
@@ -62,9 +60,7 @@ internal class MoneyDropEvent(
             }
             economyProvider?.addMoney(player.uniqueId, money * amount)
         }
-        translation.general.pickedUpMoney(amount * money)
-            .let(kyori::toComponent)
-            .run(player::sendMessage)
+        player.asKAudience().sendMessage(translation.general.pickedUpMoney(amount * money))
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)

@@ -37,7 +37,6 @@ class RtpModule(
         safeLocationProvider = safeLocationProvider,
         dispatchers = coreModule.dispatchers,
         translationKrate = coreModule.translationKrate,
-        kyoriKrate = coreModule.kyoriKrate,
         rtpConfigKrate = rtpConfigKrate,
     )
 

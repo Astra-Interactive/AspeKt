@@ -10,8 +10,6 @@ import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthPermission
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
@@ -20,14 +18,13 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
  * /unregister <username>
  */
 class UnregisterCommandRegistrar(
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<AuthTranslation>,
     private val ioScope: CoroutineScope,
     private val authDao: AuthDao,
     private val authorizedApi: AuthorizedApi,
     private val platformServer: PlatformServer,
     private val multiplatformCommand: MultiplatformCommand
-) : KyoriComponentSerializer by kyoriKrate.unwrap() {
+) {
     private val translation by translationKrate
 
     @Suppress("LongMethod")
@@ -45,7 +42,7 @@ class UnregisterCommandRegistrar(
                             ioScope.launch {
                                 val authData = authDao.getUser(usernameToDelete)
                                     .onFailure {
-                                        ctx.getSender().sendMessage(translation.userNotFound.component)
+                                        ctx.getSender().sendMessage(translation.userNotFound)
                                     }.getOrNull() ?: return@launch
 
                                 authDao.deleteAccount(authData.uuid)
@@ -72,12 +69,12 @@ class UnregisterCommandRegistrar(
                                             ?.uuid
                                             ?.let { uuid ->
                                                 authorizedApi.forgetUser(uuid)
-                                                ctx.getSender().sendMessage(translation.userDeleted.component)
+                                                ctx.getSender().sendMessage(translation.userDeleted)
                                             }
                                         onlinePlayerLoginModel
                                             ?.let(authorizedApi::loadUserInfo)
                                     }.onFailure {
-                                        ctx.getSender().sendMessage(translation.userCouldNotBeDeleted.component)
+                                        ctx.getSender().sendMessage(translation.userCouldNotBeDeleted)
                                     }
                             }
                         }

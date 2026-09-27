@@ -12,8 +12,6 @@ import ru.astrainteractive.aspekt.module.auth.api.model.AuthData
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.aspekt.module.auth.api.util.sha256
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 
@@ -21,13 +19,12 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
  * /login <password>
  */
 class LoginCommandRegistrar(
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<AuthTranslation>,
     private val ioScope: CoroutineScope,
     private val authDao: AuthDao,
     private val authorizedApi: AuthorizedApi,
     private val multiplatformCommand: MultiplatformCommand
-) : KyoriComponentSerializer by kyoriKrate.unwrap() {
+) {
     private val translation by translationKrate
 
     private fun createNode(loginAlias: String): LiteralArgumentBuilder<Any> {
@@ -43,7 +40,7 @@ class LoginCommandRegistrar(
                                 val passwordSha = ctx.requireArgument(passwordArg).sha256()
                                 val isRegistered = authDao.isRegistered(player.uuid)
                                 if (!isRegistered) {
-                                    ctx.getSender().sendMessage(translation.notRegistered.component)
+                                    ctx.getSender().sendMessage(translation.notRegistered)
                                     return@launch
                                 }
                                 val authData = AuthData(
@@ -53,10 +50,10 @@ class LoginCommandRegistrar(
                                     lastIpAddress = player.address.hostName
                                 )
                                 if (authDao.checkAuthDataIsValid(authData).getOrDefault(false)) {
-                                    ctx.getSender().sendMessage(translation.authSuccess.component)
+                                    ctx.getSender().sendMessage(translation.authSuccess)
                                     authorizedApi.authUser(player.uuid)
                                 } else {
-                                    ctx.getSender().sendMessage(translation.wrongPassword.component)
+                                    ctx.getSender().sendMessage(translation.wrongPassword)
                                 }
                             }
                         }

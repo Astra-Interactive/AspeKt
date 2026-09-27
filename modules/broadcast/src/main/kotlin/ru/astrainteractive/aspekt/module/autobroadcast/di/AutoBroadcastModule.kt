@@ -22,7 +22,6 @@ class AutoBroadcastModule(coreModule: CoreModule) {
 
     private val autoBroadcastServiceTask = AutoBroadcastServiceTask(
         announcementsConfigKrate = announcementsConfigKrate,
-        kyoriKrate = coreModule.kyoriKrate,
         ioScope = coreModule.ioScope,
         dispatchers = coreModule.dispatchers
     )

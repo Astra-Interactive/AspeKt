@@ -23,7 +23,6 @@ internal class AntiSwearCommandModule(
     private val nodes = listOf(
         SwearFilterLiteralArgumentBuilder(
             translationKrate = coreModule.translationKrate,
-            kyoriKrate = coreModule.kyoriKrate,
             ioScope = coreModule.ioScope,
             swearRepository = swearRepository,
             multiplatformCommand = coreModule.multiplatformCommand,
