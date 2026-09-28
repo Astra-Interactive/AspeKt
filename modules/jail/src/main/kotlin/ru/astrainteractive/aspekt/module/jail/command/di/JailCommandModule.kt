@@ -27,7 +27,6 @@ internal class JailCommandModule(
     private val nodes = buildList {
         JailLiteralArgumentBuilder(
             translationKrate = coreModule.translationKrate,
-            kyoriKrate = coreModule.kyoriKrate,
             scope = coreModule.ioScope,
             jailApi = jailApi,
             cachedJailApi = cachedJailApi,

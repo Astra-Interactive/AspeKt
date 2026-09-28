@@ -11,7 +11,6 @@ import ru.astrainteractive.aspekt.module.moneydrop.database.model.MoneyDropLocat
 import ru.astrainteractive.aspekt.module.moneydrop.model.MoneyDropConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.coroutines.withTimings
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.persistence.Persistence.getPersistentDataOrNull
 import ru.astrainteractive.astralibs.persistence.Persistence.hasPersistentData
 import ru.astrainteractive.astralibs.persistence.Persistence.setPersistentDataType
@@ -20,19 +19,18 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import java.time.Instant
+import java.util.Locale
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
 internal class MoneyDropController(
     moneyDropKrate: CachedKrate<MoneyDropConfiguration>,
     translationDependency: CachedKrate<PluginTranslation>,
-    kyoriComponentSerializerDependency: CachedKrate<KyoriComponentSerializer>,
     private val dao: MoneyDropDao,
     private val dispatchers: KotlinDispatchers
 ) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO).withTimings() {
     private val moneyDropConfig by moneyDropKrate
     private val translation by translationDependency
-    private val kyoriComponentSerializer by kyoriComponentSerializerDependency
 
     private fun Location.toMoneyDropLocation(additionalConstraint: String?) = MoneyDropLocation(
         x = this.x.roundToInt(),
@@ -56,7 +54,8 @@ internal class MoneyDropController(
         val amount = Random.nextDouble(entry.min, entry.max)
         val material = Material.RAW_GOLD
         val itemStack = ItemStack(material)
-        val name = translation.general.droppedMoney.let(kyoriComponentSerializer::toComponent)
+        // Every nearby player sees the same dropped item, so its name is in the default language
+        val name = translation.moneyDrop.itemName.toComponent(Locale.ROOT)
         itemStack.editMeta {
             it.displayName(name)
             it.setPersistentDataType(MoneyDropFlag.Flag, true)

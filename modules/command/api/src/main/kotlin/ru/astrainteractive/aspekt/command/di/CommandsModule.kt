@@ -17,7 +17,6 @@ class CommandsModule(
     private val nodes = listOf(
         ReloadLiteralArgumentBuilder(
             translationKrate = coreModule.translationKrate,
-            kyoriKrate = coreModule.kyoriKrate,
             lifecyclePlugin = lifecyclePlugin,
             multiplatformCommand = coreModule.multiplatformCommand
         ).create(),

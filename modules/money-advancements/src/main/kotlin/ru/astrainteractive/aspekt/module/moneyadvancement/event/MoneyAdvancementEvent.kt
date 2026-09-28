@@ -10,8 +10,7 @@ import ru.astrainteractive.aspekt.module.moneyadvancement.model.MoneyAdvancement
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.astralibs.event.EventListener
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.kyori.unwrap
+import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
@@ -21,12 +20,10 @@ import ru.astrainteractive.klibs.mikro.core.logging.Logger
 internal class MoneyAdvancementEvent(
     mAdvConfigKrate: CachedKrate<MoneyAdvancementsConfiguration>,
     private val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory,
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<PluginTranslation>
 ) : EventListener,
     Logger by JUtiltLogger("MoneyAdvancementEvent"),
-    CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO).withTimings(),
-    KyoriComponentSerializer by kyoriKrate.unwrap() {
+    CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO).withTimings() {
     private val mAdvConfig by mAdvConfigKrate
     private val translation by translationKrate
 
@@ -45,19 +42,19 @@ internal class MoneyAdvancementEvent(
             AdvancementDisplay.Frame.CHALLENGE -> {
                 val amount = mAdvConfig.challenge.toDouble()
                 launch { economy.addMoney(e.player.uniqueId, amount) }
-                e.player.sendMessage(translation.moneyAdvancement.challengeCompleted(amount).component)
+                e.player.asKAudience().sendMessage(translation.moneyAdvancement.challengeCompleted(amount))
             }
 
             AdvancementDisplay.Frame.GOAL -> {
                 val amount = mAdvConfig.goal.toDouble()
                 launch { economy.addMoney(e.player.uniqueId, amount) }
-                e.player.sendMessage(translation.moneyAdvancement.goalCompleted(amount).component)
+                e.player.asKAudience().sendMessage(translation.moneyAdvancement.goalCompleted(amount))
             }
 
             AdvancementDisplay.Frame.TASK -> {
                 val amount = mAdvConfig.task.toDouble()
                 launch { economy.addMoney(e.player.uniqueId, amount) }
-                e.player.sendMessage(translation.moneyAdvancement.taskCompleted(amount).component)
+                e.player.asKAudience().sendMessage(translation.moneyAdvancement.taskCompleted(amount))
             }
         }
     }

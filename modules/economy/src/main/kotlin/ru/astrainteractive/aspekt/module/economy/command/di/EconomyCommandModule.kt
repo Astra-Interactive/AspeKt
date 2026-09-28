@@ -19,7 +19,6 @@ internal class EconomyCommandModule(
     private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())
 
     private val executor = EkonCommandExecutor(
-        kyoriKrate = coreModule.kyoriKrate,
         translationKrate = coreModule.translationKrate,
         dao = databaseModule.economyDao
     )
@@ -29,7 +28,6 @@ internal class EconomyCommandModule(
             cachedDao = databaseModule.cachedDao,
             executor = executor,
             translationKrate = coreModule.translationKrate,
-            kyoriKrate = coreModule.kyoriKrate,
             multiplatformCommand = coreModule.multiplatformCommand,
             platformServer = coreModule.platformServer
         ).create().run(::add)

@@ -5,8 +5,6 @@ import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.module.tpa.api.TpaApi
 import ru.astrainteractive.aspekt.module.tpa.model.TpaApiRequestType
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
@@ -15,38 +13,37 @@ internal class TpaCommandExecutor(
     translationKrate: CachedKrate<PluginTranslation>,
     private val tpaApi: TpaApi,
     private val scope: CoroutineScope,
-    private val platformServer: PlatformServer,
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
-) : KyoriComponentSerializer by kyoriKrate.unwrap() {
+    private val platformServer: PlatformServer
+) {
     private val translation by translationKrate
 
     private suspend fun tpaCancel(input: TpaCommand.TpaCancel) {
         if (!tpaApi.isBeingWaited(input.executorPlayer.uuid)) {
-            input.executorPlayer.sendMessage(translation.tpa.youHaveNoPendingTp.component)
+            input.executorPlayer.sendMessage(translation.tpa.youHaveNoPendingTp)
             return
         }
         tpaApi.cancel(input.executorPlayer.uuid)
-        input.executorPlayer.sendMessage(translation.tpa.requestCancelled.component)
+        input.executorPlayer.sendMessage(translation.tpa.requestCancelled)
     }
 
     private suspend fun tpaDeny(input: TpaCommand.TpaDeny) {
         if (!tpaApi.isBeingWaited(input.executorPlayer.uuid)) {
             input.executorPlayer
-                .sendMessage(translation.tpa.noPendingTpToDeny.component)
+                .sendMessage(translation.tpa.noPendingTpToDeny)
             return
         }
         tpaApi.deny(input.executorPlayer.uuid).forEach { deniedUuid ->
             platformServer.findOnlinePlayer(deniedUuid)
-                ?.sendMessage(translation.tpa.requestDenied(input.executorPlayer.name).component)
+                ?.sendMessage(translation.tpa.requestDenied(input.executorPlayer.name))
         }
         input.executorPlayer
-            .sendMessage(translation.tpa.requestCancelled.component)
+            .sendMessage(translation.tpa.requestCancelled)
     }
 
     private suspend fun tpaHere(input: TpaCommand.TpaHere) {
         if (input.executorPlayer.uuid == input.targetPlayer.uuid) {
             input.executorPlayer
-                .sendMessage(translation.tpa.cantTpSelf.component)
+                .sendMessage(translation.tpa.cantTpSelf)
             return
         }
         tpaApi.tpaHere(
@@ -54,15 +51,15 @@ internal class TpaCommandExecutor(
             input.targetPlayer.uuid
         )
         input.executorPlayer
-            .sendMessage(translation.tpa.requestSent.component)
+            .sendMessage(translation.tpa.requestSent)
         input.targetPlayer
-            .sendMessage(translation.tpa.requestTpaHere(input.executorPlayer.name).component)
+            .sendMessage(translation.tpa.requestTpaHere(input.executorPlayer.name))
     }
 
     private suspend fun tpaTo(input: TpaCommand.TpaTo) {
         if (input.executorPlayer.uuid == input.targetPlayer.uuid) {
             input.executorPlayer
-                .sendMessage(translation.tpa.cantTpSelf.component)
+                .sendMessage(translation.tpa.cantTpSelf)
             return
         }
         tpaApi.tpa(
@@ -70,15 +67,15 @@ internal class TpaCommandExecutor(
             input.targetPlayer.uuid
         )
         input.executorPlayer
-            .sendMessage(translation.tpa.requestSent.component)
+            .sendMessage(translation.tpa.requestSent)
         input.targetPlayer
-            .sendMessage(translation.tpa.requestTpa(input.executorPlayer.name).component)
+            .sendMessage(translation.tpa.requestTpa(input.executorPlayer.name))
     }
 
     private suspend fun tpaAccept(input: TpaCommand.TpaAccept) {
         if (!tpaApi.isBeingWaited(input.executorPlayer.uuid)) {
             input.executorPlayer
-                .sendMessage(translation.tpa.noPendingTpToDeny.component)
+                .sendMessage(translation.tpa.noPendingTpToDeny)
             return
         }
         val tpas = tpaApi.get(input.executorPlayer.uuid)
@@ -97,7 +94,7 @@ internal class TpaCommandExecutor(
         }
 
         input.executorPlayer
-            .sendMessage(translation.tpa.requestAccepted.component)
+            .sendMessage(translation.tpa.requestAccepted)
     }
 
     fun execute(input: TpaCommand) {

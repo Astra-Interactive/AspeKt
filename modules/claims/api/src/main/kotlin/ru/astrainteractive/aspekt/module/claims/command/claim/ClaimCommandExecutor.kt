@@ -10,10 +10,8 @@ import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.kyori.unwrap
+import ru.astrainteractive.astralibs.localization.markup.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
-import ru.astrainteractive.astralibs.string.StringDesc
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
@@ -27,7 +25,8 @@ class ClaimCommandExecutor(
     private val platformServer: PlatformServer,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<PluginTranslation>,
-) : KyoriComponentSerializer by kyoriKrate.unwrap() {
+) {
+    private val kyori by kyoriKrate
     private val translation by translationKrate
 
     @Suppress("MagicNumber")
@@ -41,20 +40,20 @@ class ClaimCommandExecutor(
         result.onSuccess { claims ->
             platformServer
                 .findOnlinePlayer(claimPlayer.uuid)
-                ?.sendMessage(translation.claim.blockMap.component)
+                ?.sendMessage(translation.claim.mapTitle)
             claims.forEach { claim ->
                 val desc = claim.joinToString("") { if (it) "&#1cba56☒" else "&#c91e1e☒" }
-                    .let(StringDesc::Raw)
+                    .let(kyori::toComponent)
                 platformServer
                     .findOnlinePlayer(claimPlayer.uuid)
-                    ?.sendMessage(desc.component)
+                    ?.sendMessage(desc)
             }
         }
-        result.onFailure {
-            val message = claimErrorMapper.toStringDesc(it)
+        result.onFailure { error ->
+            val message = claimErrorMapper.toMessage(error)
             platformServer
                 .findOnlinePlayer(claimPlayer.uuid)
-                ?.sendMessage(message.component)
+                ?.sendMessage(message)
         }
     }
 
@@ -68,13 +67,13 @@ class ClaimCommandExecutor(
         result.onSuccess {
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
-                ?.sendMessage(translation.claim.chunkFlagChanged.component)
+                ?.sendMessage(translation.claim.flagChanged)
         }
-        result.onFailure {
-            val message = claimErrorMapper.toStringDesc(it)
+        result.onFailure { error ->
+            val message = claimErrorMapper.toMessage(error)
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
-                ?.sendMessage(message.component)
+                ?.sendMessage(message)
         }
     }
 
@@ -83,13 +82,13 @@ class ClaimCommandExecutor(
         result.onSuccess {
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
-                ?.sendMessage(translation.claim.chunkClaimed.component)
+                ?.sendMessage(translation.claim.claimed)
         }
-        result.onFailure {
-            val message = claimErrorMapper.toStringDesc(it)
+        result.onFailure { error ->
+            val message = claimErrorMapper.toMessage(error)
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
-                ?.sendMessage(message.component)
+                ?.sendMessage(message)
         }
     }
 
@@ -98,13 +97,13 @@ class ClaimCommandExecutor(
         result.onSuccess {
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
-                ?.sendMessage(translation.claim.chunkUnClaimed.component)
+                ?.sendMessage(translation.claim.unclaimed)
         }
-        result.onFailure {
-            val message = claimErrorMapper.toStringDesc(it)
+        result.onFailure { error ->
+            val message = claimErrorMapper.toMessage(error)
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
-                ?.sendMessage(message.component)
+                ?.sendMessage(message)
         }
     }
 
@@ -113,7 +112,7 @@ class ClaimCommandExecutor(
         if (input.member in krate.cachedStateFlow.value.members) {
             platformServer
                 .findOnlinePlayer(input.owner.uuid)
-                ?.sendMessage(translation.claim.alreadyMember.component)
+                ?.sendMessage(translation.claim.alreadyMember)
             return
         }
         krate.save { data ->
@@ -121,7 +120,7 @@ class ClaimCommandExecutor(
         }
         platformServer
             .findOnlinePlayer(input.owner.uuid)
-            ?.sendMessage(translation.claim.memberAdded.component)
+            ?.sendMessage(translation.claim.memberAdded)
     }
 
     private suspend fun removeMember(input: Claimommand.Model.RemoveMember) {
@@ -129,7 +128,7 @@ class ClaimCommandExecutor(
         if (input.member !in krate.cachedStateFlow.value.members) {
             platformServer
                 .findOnlinePlayer(input.owner.uuid)
-                ?.sendMessage(translation.claim.notMember.component)
+                ?.sendMessage(translation.claim.notMember)
             return
         }
         krate.save { data ->
@@ -137,7 +136,7 @@ class ClaimCommandExecutor(
         }
         platformServer
             .findOnlinePlayer(input.owner.uuid)
-            ?.sendMessage(translation.claim.memberRemoved.component)
+            ?.sendMessage(translation.claim.memberRemoved)
     }
 
     fun execute(input: Claimommand.Model) {

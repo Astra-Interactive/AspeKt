@@ -21,8 +21,6 @@ import ru.astrainteractive.aspekt.module.jail.data.isInJail
 import ru.astrainteractive.aspekt.module.jail.util.sendMessage
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.event.EventListener
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
@@ -33,18 +31,16 @@ internal class JailEvent(
     private val cachedJailApi: CachedJailApi,
     private val jailController: JailController,
     private val scope: CoroutineScope,
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<PluginTranslation>
 ) : EventListener,
-    Logger by JUtiltLogger("AspeKt-JailEvent"),
-    KyoriComponentSerializer by kyoriKrate.unwrap() {
+    Logger by JUtiltLogger("AspeKt-JailEvent") {
     private val translation by translationKrate
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun playerCommandPreprocessEvent(e: PlayerCommandPreprocessEvent) {
         if (!cachedJailApi.isInJail(e.player)) return
         e.isCancelled = true
-        e.player.sendMessage(translation.jails.jailedCommandBlocked.component)
+        e.player.sendMessage(translation.jails.commandBlocked)
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -65,7 +61,7 @@ internal class JailEvent(
                 .getOrNull()
                 ?: return@launch
             jailController.tryTeleportToJail(player.uniqueId)
-            player.sendMessage(translation.jails.youInJail.component)
+            player.sendMessage(translation.jails.inJail)
         }
     }
 

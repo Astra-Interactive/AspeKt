@@ -7,15 +7,16 @@ import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.api.argumenttype.OnlinePlayerArgumentConverter
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.kyori.unwrap
-import ru.astrainteractive.astralibs.string.StringDesc
+import ru.astrainteractive.astralibs.localization.markup.KyoriComponentSerializer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
+import ru.astrainteractive.klibs.kstorage.api.getValue
 
 internal class TellChatLiteralArgumentBuilder(
     private val multiplatformCommand: MultiplatformCommand,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
-) : KyoriComponentSerializer by kyoriKrate.unwrap() {
+) {
+    private val kyori by kyoriKrate
+
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("tellchat") {
@@ -32,17 +33,17 @@ internal class TellChatLiteralArgumentBuilder(
                             val target = ctx.requireArgument(targetArg)
                             val message = ctx
                                 .requireArgument(messageArg)
-                                .let(StringDesc::Raw)
+                                .let(kyori::toComponent)
                             when (target) {
                                 "*" -> {
                                     Bukkit.getOnlinePlayers().forEach { player ->
-                                        player.sendMessage(message.component)
+                                        player.sendMessage(message)
                                     }
                                 }
 
                                 else -> {
                                     val targetPlayer = OnlinePlayerArgumentConverter.transform(target)
-                                    targetPlayer.sendMessage(message.component)
+                                    targetPlayer.sendMessage(message)
                                 }
                             }
                         }

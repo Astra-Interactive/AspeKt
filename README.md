@@ -630,7 +630,16 @@ No commands or configuration.
 
 ## Localization
 
-All player-facing messages live in `translations.yml` in the plugin data folder (Auth uses its own `auth/translation.yml`). Defaults are in **Russian**; every string can be freely rewritten. Messages support legacy `&` color codes and `&#RRGGBB` hex.
+All player-facing messages live in `translations.yml` in the plugin data folder (Auth uses its own `auth/translation.yml`). Every player reads them in their client language. Defaults ship in **English** and Russian; English is the default language, read by the console and by every client language without a translation of its own. A message is either one string for every language or a map of language codes, and every string can be freely rewritten:
+
+```yaml
+command_error:
+  no_permission:
+    en_us: "&7[&#DBB72BAspeKt&7] &#db2c18You don't have permission!"
+    ru_ru: "&7[&#DBB72BAspeKt&7] &#db2c18У вас нет прав!"
+```
+
+Messages support MiniMessage tags as well as legacy `&` color codes and `&#RRGGBB` hex.
 
 ---
 

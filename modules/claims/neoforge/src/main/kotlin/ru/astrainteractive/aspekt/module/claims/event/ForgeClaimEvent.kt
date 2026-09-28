@@ -26,9 +26,8 @@ import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.coroutines.MinecraftMainDispatcher
 import ru.astrainteractive.astralibs.event.flowEvent
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
+import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.astralibs.server.util.asPermissible
-import ru.astrainteractive.astralibs.server.util.toNative
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
@@ -37,11 +36,9 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 class ForgeClaimEvent(
     private val claimsRepository: ClaimsRepository,
-    translationKrate: CachedKrate<PluginTranslation>,
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>
+    translationKrate: CachedKrate<PluginTranslation>
 ) : Logger by JUtiltLogger("AspeKt-ForgeClaimEvent") {
     private val translation by translationKrate
-    private val kyori by kyoriKrate
 
     // todo mainScope
     private val scope = CoroutineScope(SupervisorJob() + MinecraftMainDispatcher())
@@ -70,10 +67,7 @@ class ForgeClaimEvent(
             )
             val isCancelled = !isAble
             if (isCancelled && player != null) {
-                translation.claim.actionIsBlockByAdminClaim(flag.name)
-                    .let(kyori::toComponent)
-                    .toNative()
-                    .run(player::sendSystemMessage)
+                player.asKAudience().sendMessage(translation.claim.actionBlocked(flag.name))
             }
             isCancelled
         }

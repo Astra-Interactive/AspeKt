@@ -25,7 +25,6 @@ class BukkitCommandsModule(
     private val nodes = listOf(
         RtpLiteralArgumentBuilder(
             translationKrate = coreModule.translationKrate,
-            kyoriKrate = coreModule.kyoriKrate,
             multiplatformCommand = coreModule.multiplatformCommand,
         ).create(),
         AtemFrameLiteralArgumentBuilder(

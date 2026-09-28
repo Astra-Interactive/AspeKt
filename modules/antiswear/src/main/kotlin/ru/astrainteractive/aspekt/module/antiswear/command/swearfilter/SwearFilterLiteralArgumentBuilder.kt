@@ -12,8 +12,6 @@ import ru.astrainteractive.astralibs.command.api.argumenttype.OnlineKPlayerArgum
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.brigadier.sender.KCommandSender
 import ru.astrainteractive.astralibs.command.api.brigadier.sender.KPlayerKCommandSender
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
-import ru.astrainteractive.astralibs.kyori.unwrap
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
@@ -22,12 +20,11 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 internal class SwearFilterLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     private val ioScope: CoroutineScope,
     private val swearRepository: SwearRepository,
     private val multiplatformCommand: MultiplatformCommand,
     private val platformServer: PlatformServer
-) : KyoriComponentSerializer by kyoriKrate.unwrap() {
+) {
     private val translation by translationKrate
 
     private fun execute(
@@ -42,14 +39,14 @@ internal class SwearFilterLiteralArgumentBuilder(
         ioScope.launch { swearRepository.setSwearFilterEnabled(target, isEnabled) }
         if (isEnabled) {
             if (senderUuidOrNull != target.uuid) {
-                sender.sendMessage(translation.swear.swearFilterEnabledFor(target.name).component)
+                sender.sendMessage(translation.swear.enabledFor(target.name))
             }
-            target.sendMessage(translation.swear.swearFilterEnabled.component)
+            target.sendMessage(translation.swear.enabled)
         } else {
             if (senderUuidOrNull != target.uuid) {
-                sender.sendMessage(translation.swear.swearFilterDisabledFor(target.name).component)
+                sender.sendMessage(translation.swear.disabledFor(target.name))
             }
-            target.sendMessage(translation.swear.swearFilterDisabled.component)
+            target.sendMessage(translation.swear.disabled)
         }
     }
 

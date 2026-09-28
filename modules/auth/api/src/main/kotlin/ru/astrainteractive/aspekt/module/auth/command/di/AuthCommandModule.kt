@@ -12,7 +12,6 @@ import ru.astrainteractive.aspekt.module.auth.command.unregister.UnregisterComma
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
-import ru.astrainteractive.astralibs.kyori.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
@@ -23,7 +22,6 @@ class AuthCommandModule(
     authorizedApi: AuthorizedApi,
     translationKrate: CachedKrate<AuthTranslation>,
     ioScope: CoroutineScope,
-    kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     platformServer: PlatformServer,
     multiplatformCommand: MultiplatformCommand,
     unconfinedScope: CoroutineScope,
@@ -36,7 +34,6 @@ class AuthCommandModule(
             ioScope = ioScope,
             authDao = authDao,
             authorizedApi = authorizedApi,
-            kyoriKrate = kyoriKrate,
             translationKrate = translationKrate,
             multiplatformCommand = multiplatformCommand
         ).createNodes().run(::addAll)
@@ -44,7 +41,6 @@ class AuthCommandModule(
             ioScope = ioScope,
             authDao = authDao,
             authorizedApi = authorizedApi,
-            kyoriKrate = kyoriKrate,
             translationKrate = translationKrate,
             multiplatformCommand = multiplatformCommand
         ).createNodes().run(::addAll)
@@ -53,7 +49,6 @@ class AuthCommandModule(
             authDao = authDao,
             authorizedApi = authorizedApi,
             platformServer = platformServer,
-            kyoriKrate = kyoriKrate,
             translationKrate = translationKrate,
             multiplatformCommand = multiplatformCommand
         ).createNodes().run(::addAll)

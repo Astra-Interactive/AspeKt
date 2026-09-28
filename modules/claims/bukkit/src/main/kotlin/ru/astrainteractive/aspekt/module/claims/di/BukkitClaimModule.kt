@@ -33,7 +33,6 @@ class BukkitClaimModule(
 
     private val bukkitClaimEvent = BukkitClaimEvent(
         claimsRepository = claimModule.claimsRepository,
-        kyoriKrate = coreModule.kyoriKrate,
         translationKrate = coreModule.translationKrate
     )
 

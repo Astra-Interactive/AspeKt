@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.chatgame.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import ru.astrainteractive.astralibs.string.StringDesc
+import ru.astrainteractive.astralibs.localization.text.LocalizedText
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
@@ -14,7 +14,7 @@ internal data class ChatGameConfig(
     @SerialName("chat_games")
     val chatGames: List<ChatGame> = listOf(
         ChatGame.Riddle(
-            question = StringDesc.Raw("Висит груша нельзя скушать"),
+            question = LocalizedText.shared("Висит груша нельзя скушать"),
             answer = "Лампа",
         ),
         ChatGame.SumOfTwo(),

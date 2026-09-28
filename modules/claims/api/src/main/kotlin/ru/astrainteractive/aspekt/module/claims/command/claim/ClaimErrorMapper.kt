@@ -4,7 +4,7 @@ import ru.astrainteractive.aspekt.module.claims.data.exception.ClaimNotFoundExce
 import ru.astrainteractive.aspekt.module.claims.data.exception.ClaimNotOwnedException
 import ru.astrainteractive.aspekt.module.claims.data.exception.UnderClaimException
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
-import ru.astrainteractive.astralibs.string.StringDesc
+import ru.astrainteractive.astralibs.localization.text.LocalizedText
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
@@ -14,22 +14,22 @@ class ClaimErrorMapper(
     translationKrate: CachedKrate<PluginTranslation>
 ) : Logger by JUtiltLogger("AspeKt-ClaimErrorMapper") {
     private val translation by translationKrate
-    fun toStringDesc(throwable: Throwable): StringDesc.Raw {
+    fun toMessage(throwable: Throwable): LocalizedText {
         when (throwable) {
             is UnderClaimException -> {
-                return translation.claim.chunkUnderClaim
+                return translation.claim.alreadyClaimed
             }
 
             is ClaimNotFoundException -> {
-                return translation.claim.noClaimHere
+                return translation.claim.noneHere
             }
 
             is ClaimNotOwnedException -> {
-                return translation.claim.notClaimOwner
+                return translation.claim.notOwner
             }
 
             else -> {
-                error(throwable) { "#toStringDesc" }
+                error(throwable) { "#toMessage" }
                 return translation.claim.error
             }
         }

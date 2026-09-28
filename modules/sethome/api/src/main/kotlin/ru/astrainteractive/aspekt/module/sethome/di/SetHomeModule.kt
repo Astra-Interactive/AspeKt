@@ -35,7 +35,6 @@ class SetHomeModule(
         dispatchers = coreModule.dispatchers,
         translationKrate = coreModule.translationKrate,
         setHomeConfigKrate = setHomeConfigKrate,
-        kyoriKrate = coreModule.kyoriKrate,
     )
 
     private val setHomeCommandModule = SetHomeCommandModule(
@@ -44,7 +43,6 @@ class SetHomeModule(
         executor = homeCommandExecutor,
         multiplatformCommand = coreModule.multiplatformCommand,
         translationKrate = coreModule.translationKrate,
-        kyoriKrate = coreModule.kyoriKrate,
         unconfinedScope = coreModule.unconfinedScope
     )
 

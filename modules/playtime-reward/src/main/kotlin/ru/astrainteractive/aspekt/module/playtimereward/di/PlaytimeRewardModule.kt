@@ -40,8 +40,7 @@ class PlaytimeRewardModule(
         ),
         economyFacade = bukkitCoreModule.currencyEconomyProviderFactory.findDefault(),
         playtimeRewardConfigurationKrate = configKrate,
-        pluginTranslationKrate = coreModule.translationKrate,
-        kyoriKrate = coreModule.kyoriKrate
+        pluginTranslationKrate = coreModule.translationKrate
     )
 
     private val eventListener = PlaytimeRewardEventListener(

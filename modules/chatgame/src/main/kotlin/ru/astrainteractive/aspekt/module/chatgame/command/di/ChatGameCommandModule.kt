@@ -27,7 +27,6 @@ internal class ChatGameCommandModule(
         ChatGameLiteralArgumentBuilder(
             chatGameStore = chatGameStore,
             translationKrate = coreModule.translationKrate,
-            kyoriKrate = coreModule.kyoriKrate,
             chatGameConfigKrate = chatGameConfigKrate,
             currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory,
             ioScope = coreModule.ioScope,

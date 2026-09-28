@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.autobroadcast.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import ru.astrainteractive.astralibs.string.StringDesc
+import ru.astrainteractive.astralibs.localization.text.LocalizedText
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -20,24 +20,24 @@ internal data class AnnouncementsConfiguration(
 
     @Serializable
     sealed interface Announcement {
-        val text: StringDesc.Raw
+        val text: LocalizedText
 
         @Serializable
         @SerialName("TEXT")
         data class Text(
-            override val text: StringDesc.Raw,
+            override val text: LocalizedText,
         ) : Announcement
 
         @Serializable
         @SerialName("ACTION_BAR")
         data class ActionBar(
-            override val text: StringDesc.Raw,
+            override val text: LocalizedText,
         ) : Announcement
 
         @Serializable
         @SerialName("BOSS_BAR")
         data class BossBar(
-            override val text: StringDesc.Raw,
+            override val text: LocalizedText,
             val barColor: BarColor = BarColor.BLUE,
             @SerialName("duration_seconds")
             val durationSeconds: Long = 5,

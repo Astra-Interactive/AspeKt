@@ -23,7 +23,6 @@ class ForgeAuthModule(
         authorizedApi = authApiModule.authorizedApi,
         translationKrate = authApiModule.translationKrate,
         ioScope = coreModule.ioScope,
-        kyoriKrate = coreModule.kyoriKrate,
         platformServer = coreModule.platformServer,
         multiplatformCommand = coreModule.multiplatformCommand,
         unconfinedScope = coreModule.unconfinedScope,
@@ -33,7 +32,6 @@ class ForgeAuthModule(
     @Suppress("UnusedPrivateProperty")
     private val forgeAuthEvent = ForgeAuthEvent(
         authorizedApi = authApiModule.authorizedApi,
-        kyoriKrate = coreModule.kyoriKrate,
         translationKrate = authApiModule.translationKrate,
         mainScope = moduleMainScope
     )
