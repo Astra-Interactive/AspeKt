@@ -59,22 +59,22 @@ data class PluginTranslation(
         @SerialName("no_permission")
         val noPermission: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#db2c18У вас нет прав!")
                 translation(MinecraftLocales.EN_US, "&#db2c18You don't have permission!")
+                translation(MinecraftLocales.RU_RU, "&#db2c18У вас нет прав!")
             }
         ),
         @SerialName("wrong_usage")
         val wrongUsage: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#db2c18Неверное использование!")
                 translation(MinecraftLocales.EN_US, "&#db2c18Wrong usage!")
+                translation(MinecraftLocales.RU_RU, "&#db2c18Неверное использование!")
             }
         ),
         @SerialName("only_player_command")
         val onlyPlayerCommand: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#db2c18Эта команда только для игроков!")
                 translation(MinecraftLocales.EN_US, "&#db2c18This command is for players only!")
+                translation(MinecraftLocales.RU_RU, "&#db2c18Эта команда только для игроков!")
             }
         ),
     )
@@ -86,15 +86,15 @@ data class PluginTranslation(
         @SerialName("started")
         val started: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#dbbb18Перезагрузка плагина")
                 translation(MinecraftLocales.EN_US, "&#dbbb18Reloading the plugin")
+                translation(MinecraftLocales.RU_RU, "&#dbbb18Перезагрузка плагина")
             }
         ),
         @SerialName("completed")
         val completed: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#42f596Перезагрузка успешно завершена")
                 translation(MinecraftLocales.EN_US, "&#42f596Reload complete")
+                translation(MinecraftLocales.RU_RU, "&#42f596Перезагрузка успешно завершена")
             }
         ),
     )
@@ -106,12 +106,12 @@ data class PluginTranslation(
         private val rewarded: LocalizedText = prefix.concat(
             LocalizedText.build {
                 translation(
-                    MinecraftLocales.RU_RU,
-                    "&#42f596Вы получили &6%amount% &#42f596монет за время, проведённое на сервере!"
-                )
-                translation(
                     MinecraftLocales.EN_US,
                     "&#42f596You received &6%amount% &#42f596coins for the time spent on the server!"
+                )
+                translation(
+                    MinecraftLocales.RU_RU,
+                    "&#42f596Вы получили &6%amount% &#42f596монет за время, проведённое на сервере!"
                 )
             }
         ),
@@ -128,60 +128,60 @@ data class PluginTranslation(
         @SerialName("max_rtp_jobs")
         val maxJobs: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Достигнуто максимальное количество одновременных телепортов!")
                 translation(MinecraftLocales.EN_US, "Too many teleports are running at once!")
+                translation(MinecraftLocales.RU_RU, "Достигнуто максимальное количество одновременных телепортов!")
             }
         ),
         @SerialName("timeout")
         val timeout: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Подождите немного прежде чем телепортироваться!")
                 translation(MinecraftLocales.EN_US, "Wait a little before teleporting again!")
+                translation(MinecraftLocales.RU_RU, "Подождите немного прежде чем телепортироваться!")
             }
         ),
         @SerialName("found_place")
         val foundPlace: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Найдено место для вас!")
                 translation(MinecraftLocales.EN_US, "Found a place for you!")
+                translation(MinecraftLocales.RU_RU, "Найдено место для вас!")
             }
         ),
         @SerialName("not_found_place")
         val notFoundPlace: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Не удалось найти место!")
                 translation(MinecraftLocales.EN_US, "Could not find a place!")
+                translation(MinecraftLocales.RU_RU, "Не удалось найти место!")
             }
         ),
         @SerialName("max_rtp_retries")
         val maxRetries: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Не удалось найти безопасное место за отведённое число попыток!")
                 translation(
                     MinecraftLocales.EN_US,
                     "Could not find a safe place within the allowed number of attempts!"
                 )
+                translation(MinecraftLocales.RU_RU, "Не удалось найти безопасное место за отведённое число попыток!")
             }
         ),
         @SerialName("searching")
         val searching: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Ищем для вас место...")
                 translation(MinecraftLocales.EN_US, "Looking for a place for you...")
+                translation(MinecraftLocales.RU_RU, "Ищем для вас место...")
             }
         ),
         @SerialName("low_tick_time")
         private val lowTickTime: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Слишком маленький TPS: %tps%!")
                 translation(MinecraftLocales.EN_US, "TPS is too low: %tps%!")
+                translation(MinecraftLocales.RU_RU, "Слишком маленький TPS: %tps%!")
             }
         ),
         @SerialName("did_you_mean_tpr")
         val didYouMeanTpr: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#db2c18Возможно, вы хотели ввести /tpr")
                 translation(MinecraftLocales.EN_US, "&#db2c18Maybe you meant /tpr")
+                translation(MinecraftLocales.RU_RU, "&#db2c18Возможно, вы хотели ввести /tpr")
             }
         ),
     ) {
@@ -194,64 +194,64 @@ data class PluginTranslation(
         @SerialName("you_have_no_pending_tp")
         val youHaveNoPendingTp: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Вы не ожидаете телепортации к игроку")
                 translation(MinecraftLocales.EN_US, "You are not waiting to teleport to anyone")
+                translation(MinecraftLocales.RU_RU, "Вы не ожидаете телепортации к игроку")
             }
         ),
         @SerialName("request_cancelled")
         val requestCancelled: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Запрос отменен")
                 translation(MinecraftLocales.EN_US, "Request cancelled")
+                translation(MinecraftLocales.RU_RU, "Запрос отменен")
             }
         ),
         @SerialName("no_pending_tp_to_deny")
         val noPendingTpToDeny: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "У вас нет активных запросов")
                 translation(MinecraftLocales.EN_US, "You have no active requests")
+                translation(MinecraftLocales.RU_RU, "У вас нет активных запросов")
             }
         ),
         @SerialName("cant_tp_self")
         val cantTpSelf: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Нельзя отправить запрос самому себе")
                 translation(MinecraftLocales.EN_US, "You cannot send a request to yourself")
+                translation(MinecraftLocales.RU_RU, "Нельзя отправить запрос самому себе")
             }
         ),
         @SerialName("request_sent")
         val requestSent: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Запрос отправлен")
                 translation(MinecraftLocales.EN_US, "Request sent")
+                translation(MinecraftLocales.RU_RU, "Запрос отправлен")
             }
         ),
         @SerialName("request_accepted")
         val requestAccepted: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Запрос принят")
                 translation(MinecraftLocales.EN_US, "Request accepted")
+                translation(MinecraftLocales.RU_RU, "Запрос принят")
             }
         ),
         @SerialName("request_denied")
         private val requestDenied: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Игрок %player% отменил запрос")
                 translation(MinecraftLocales.EN_US, "%player% denied the request")
+                translation(MinecraftLocales.RU_RU, "Игрок %player% отменил запрос")
             }
         ),
         @SerialName("request_tpa")
         private val requestTpa: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Игрок %player% хочет телепортировать вас к себе")
                 translation(MinecraftLocales.EN_US, "%player% wants to teleport you to them")
+                translation(MinecraftLocales.RU_RU, "Игрок %player% хочет телепортировать вас к себе")
             }
         ),
         @SerialName("request_tpa_here")
         private val requestTpaHere: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Игрок %player% хочет к вам телепортироваться")
                 translation(MinecraftLocales.EN_US, "%player% wants to teleport to you")
+                translation(MinecraftLocales.RU_RU, "Игрок %player% хочет к вам телепортироваться")
             }
         ),
     ) {
@@ -266,56 +266,56 @@ data class PluginTranslation(
         @SerialName("homeCreated")
         val created: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Дом создан!")
                 translation(MinecraftLocales.EN_US, "Home created!")
+                translation(MinecraftLocales.RU_RU, "Дом создан!")
             }
         ),
         @SerialName("homeOverridden")
         val overwritten: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Дом перезаписан!")
                 translation(MinecraftLocales.EN_US, "Home overwritten!")
+                translation(MinecraftLocales.RU_RU, "Дом перезаписан!")
             }
         ),
         @SerialName("homeAlreadyExists")
         val alreadyExists: LocalizedText = prefix.concat(
             LocalizedText.build {
                 translation(
-                    MinecraftLocales.RU_RU,
-                    "Дом с таким именем уже существует! Добавьте force в конец команды, чтобы перезаписать его"
-                )
-                translation(
                     MinecraftLocales.EN_US,
                     "A home with this name already exists! Add force to the end of the command to overwrite it"
+                )
+                translation(
+                    MinecraftLocales.RU_RU,
+                    "Дом с таким именем уже существует! Добавьте force в конец команды, чтобы перезаписать его"
                 )
             }
         ),
         @SerialName("homeLimitReached")
         private val limitReached: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Вы достигли лимита домов: %limit%")
                 translation(MinecraftLocales.EN_US, "You have reached the home limit: %limit%")
+                translation(MinecraftLocales.RU_RU, "Вы достигли лимита домов: %limit%")
             }
         ),
         @SerialName("homeNotFound")
         val notFound: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Такой дом не найден!")
                 translation(MinecraftLocales.EN_US, "Home not found!")
+                translation(MinecraftLocales.RU_RU, "Такой дом не найден!")
             }
         ),
         @SerialName("homeDeleted")
         val deleted: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Дом удален!")
                 translation(MinecraftLocales.EN_US, "Home deleted!")
+                translation(MinecraftLocales.RU_RU, "Дом удален!")
             }
         ),
         @SerialName("teleporting")
         val teleported: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Вы были телепортированы домой")
                 translation(MinecraftLocales.EN_US, "You have been teleported home")
+                translation(MinecraftLocales.RU_RU, "Вы были телепортированы домой")
             }
         ),
     ) {
@@ -328,108 +328,108 @@ data class PluginTranslation(
         @SerialName("jailsList")
         private val list: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Список: %jails%")
                 translation(MinecraftLocales.EN_US, "Jails: %jails%")
+                translation(MinecraftLocales.RU_RU, "Список: %jails%")
             }
         ),
         @SerialName("jailCreatedSuccess")
         private val created: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Тюрьма создана: %jail%")
                 translation(MinecraftLocales.EN_US, "Jail created: %jail%")
+                translation(MinecraftLocales.RU_RU, "Тюрьма создана: %jail%")
             }
         ),
         @SerialName("jailCreatedFail")
         val creationFailed: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Не удалось создать тюрьму. Смотрите консоль для подробностей.")
                 translation(MinecraftLocales.EN_US, "Could not create the jail. See the console for details.")
+                translation(MinecraftLocales.RU_RU, "Не удалось создать тюрьму. Смотрите консоль для подробностей.")
             }
         ),
         @SerialName("jailDeleteSuccess")
         private val deleted: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Тюрьма удалена: %jail%")
                 translation(MinecraftLocales.EN_US, "Jail deleted: %jail%")
+                translation(MinecraftLocales.RU_RU, "Тюрьма удалена: %jail%")
             }
         ),
         @SerialName("jailDeleteFail")
         val deletionFailed: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Не удалось удалить тюрьму. Смотрите консоль для подробностей.")
                 translation(MinecraftLocales.EN_US, "Could not delete the jail. See the console for details.")
+                translation(MinecraftLocales.RU_RU, "Не удалось удалить тюрьму. Смотрите консоль для подробностей.")
             }
         ),
         @SerialName("inmateAddSuccess")
         private val inmateJailed: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Заключенный %name% посажен в %jail%")
                 translation(MinecraftLocales.EN_US, "%name% has been jailed in %jail%")
+                translation(MinecraftLocales.RU_RU, "Заключенный %name% посажен в %jail%")
             }
         ),
         @SerialName("inmateAddFail")
         val jailingFailed: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Не удалось посадить в тюрьму. Смотрите консоль для подробностей.")
                 translation(MinecraftLocales.EN_US, "Could not jail the player. See the console for details.")
+                translation(MinecraftLocales.RU_RU, "Не удалось посадить в тюрьму. Смотрите консоль для подробностей.")
             }
         ),
         @SerialName("inmateFreeSuccess")
         private val inmateReleased: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Заключенный %name% освобожден")
                 translation(MinecraftLocales.EN_US, "%name% has been released")
+                translation(MinecraftLocales.RU_RU, "Заключенный %name% освобожден")
             }
         ),
         @SerialName("inmateFreeFail")
         val releaseFailed: LocalizedText = prefix.concat(
             LocalizedText.build {
                 translation(
-                    MinecraftLocales.RU_RU,
-                    "Не удалось освободить из тюрьмы. Смотрите консоль для подробностей."
-                )
-                translation(
                     MinecraftLocales.EN_US,
                     "Could not release the player from jail. See the console for details."
+                )
+                translation(
+                    MinecraftLocales.RU_RU,
+                    "Не удалось освободить из тюрьмы. Смотрите консоль для подробностей."
                 )
             }
         ),
         @SerialName("jailHasInmates")
         private val hasInmates: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Тюрьма %jail% содержит в себе заключенных!")
                 translation(MinecraftLocales.EN_US, "Jail %jail% still has inmates!")
+                translation(MinecraftLocales.RU_RU, "Тюрьма %jail% содержит в себе заключенных!")
             }
         ),
         @SerialName("youVeBeenFreed")
         val released: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Вы были освобождены из тюрьмы!")
                 translation(MinecraftLocales.EN_US, "You have been released from jail!")
+                translation(MinecraftLocales.RU_RU, "Вы были освобождены из тюрьмы!")
             }
         ),
         @SerialName("youVeBeenJailed")
         private val jailed: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Вы были посажены в тюрьму на %time%!")
                 translation(MinecraftLocales.EN_US, "You have been jailed for %time%!")
+                translation(MinecraftLocales.RU_RU, "Вы были посажены в тюрьму на %time%!")
             }
         ),
         @SerialName("youInJail")
         val inJail: LocalizedText = prefix.concat(
             LocalizedText.build {
+                translation(MinecraftLocales.EN_US, "You broke a rule, so you are in jail! Commands are unavailable!")
                 translation(
                     MinecraftLocales.RU_RU,
                     "Вы что-то нарушили, поэтому находитесь в тюрьме! Команды недоступны!"
                 )
-                translation(MinecraftLocales.EN_US, "You broke a rule, so you are in jail! Commands are unavailable!")
             }
         ),
         @SerialName("jailedCommandBlocked")
         val commandBlocked: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Команды недоступны, пока вы находитесь в тюрьме!")
                 translation(MinecraftLocales.EN_US, "Commands are unavailable while you are in jail!")
+                translation(MinecraftLocales.RU_RU, "Команды недоступны, пока вы находитесь в тюрьме!")
             }
         ),
     ) {
@@ -452,43 +452,43 @@ data class PluginTranslation(
         @SerialName("errorTransferMoney")
         val transferFailed: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#db2c18Не удалось выдать валюту")
                 translation(MinecraftLocales.EN_US, "&#db2c18Could not give the currency")
+                translation(MinecraftLocales.RU_RU, "&#db2c18Не удалось выдать валюту")
             }
         ),
         @SerialName("moneyTransferred")
         val transferred: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#42f596Валюта успешно выдана игроку")
                 translation(MinecraftLocales.EN_US, "&#42f596The currency was given to the player")
+                translation(MinecraftLocales.RU_RU, "&#42f596Валюта успешно выдана игроку")
             }
         ),
         @SerialName("playerBalance")
         private val balance: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#42f596Баланс игрока %balance%")
                 translation(MinecraftLocales.EN_US, "&#42f596Player balance: %balance%")
+                translation(MinecraftLocales.RU_RU, "&#42f596Баланс игрока %balance%")
             }
         ),
         @SerialName("currencies")
         private val currencies: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#42f596Доступные валюты: %currencies%")
                 translation(MinecraftLocales.EN_US, "&#42f596Available currencies: %currencies%")
+                translation(MinecraftLocales.RU_RU, "&#42f596Доступные валюты: %currencies%")
             }
         ),
         @SerialName("topsTitle")
         val topTitle: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#42f596Топ игроков по балансу:")
                 translation(MinecraftLocales.EN_US, "&#42f596Top players by balance:")
+                translation(MinecraftLocales.RU_RU, "&#42f596Топ игроков по балансу:")
             }
         ),
         @SerialName("topsEmpty")
         val topEmpty: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#42f596Топ игроков пуст!")
                 translation(MinecraftLocales.EN_US, "&#42f596The top is empty!")
+                translation(MinecraftLocales.RU_RU, "&#42f596Топ игроков пуст!")
             }
         ),
         @SerialName("topItem")
@@ -496,8 +496,8 @@ data class PluginTranslation(
         @SerialName("currency_not_found")
         val currencyNotFound: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#db2c18Валюта не найдена!")
                 translation(MinecraftLocales.EN_US, "&#db2c18Currency not found!")
+                translation(MinecraftLocales.RU_RU, "&#db2c18Валюта не найдена!")
             }
         ),
     ) {
@@ -522,15 +522,15 @@ data class PluginTranslation(
         @SerialName("not_found")
         val notFound: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#db2c18Меню с заданным ID не найдено")
                 translation(MinecraftLocales.EN_US, "&#db2c18No menu with this ID was found")
+                translation(MinecraftLocales.RU_RU, "&#db2c18Меню с заданным ID не найдено")
             }
         ),
         @SerialName("not_enough_money")
         val notEnoughMoney: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#db2c18Недостаточно средств!")
                 translation(MinecraftLocales.EN_US, "&#db2c18Not enough money!")
+                translation(MinecraftLocales.RU_RU, "&#db2c18Недостаточно средств!")
             }
         ),
     )
@@ -541,59 +541,59 @@ data class PluginTranslation(
         @SerialName("solve_riddle")
         private val solveRiddle: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Загадка: %quiz% → &2/quiz ОТВЕТ")
                 translation(MinecraftLocales.EN_US, "Riddle: %quiz% → &2/quiz ANSWER")
+                translation(MinecraftLocales.RU_RU, "Загадка: %quiz% → &2/quiz ОТВЕТ")
             }
         ),
         @SerialName("solve_example")
         private val solveExample: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Пример: %quiz% → &2/quiz ОТВЕТ")
                 translation(MinecraftLocales.EN_US, "Solve: %quiz% → &2/quiz ANSWER")
+                translation(MinecraftLocales.RU_RU, "Пример: %quiz% → &2/quiz ОТВЕТ")
             }
         ),
         @SerialName("solve_anagram")
         private val solveAnagram: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Анаграмма: %quiz% → &2/quiz ОТВЕТ")
                 translation(MinecraftLocales.EN_US, "Anagram: %quiz% → &2/quiz ANSWER")
+                translation(MinecraftLocales.RU_RU, "Анаграмма: %quiz% → &2/quiz ОТВЕТ")
             }
         ),
         @SerialName("solve_quadratic")
         private val solveQuadratic: LocalizedText = prefix.concat(
             LocalizedText.build {
                 translation(
-                    MinecraftLocales.RU_RU,
-                    "Квадратное уравнение: %quiz% → &2/quiz ОТВЕТ &7Любой вариант ответа с точностью до сотой. Например: 0.02, 0.3, 1.0"
-                )
-                translation(
                     MinecraftLocales.EN_US,
                     "Quadratic equation: %quiz% → &2/quiz ANSWER &7Any root, rounded to hundredths. For example: 0.02, 0.3, 1.0"
+                )
+                translation(
+                    MinecraftLocales.RU_RU,
+                    "Квадратное уравнение: %quiz% → &2/quiz ОТВЕТ &7Любой вариант ответа с точностью до сотой. Например: 0.02, 0.3, 1.0"
                 )
             }
         ),
         @SerialName("no_quiz_available")
         val noQuizAvailable: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#db2c18В данный момент нет активного квиза!")
                 translation(MinecraftLocales.EN_US, "&#db2c18There is no active quiz right now!")
+                translation(MinecraftLocales.RU_RU, "&#db2c18В данный момент нет активного квиза!")
             }
         ),
         @SerialName("wrong_answer")
         val wrongAnswer: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#db2c18Ответ неверный!")
                 translation(MinecraftLocales.EN_US, "&#db2c18Wrong answer!")
+                translation(MinecraftLocales.RU_RU, "&#db2c18Ответ неверный!")
             }
         ),
         @SerialName("game_ended")
         private val moneyRewarded: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&6%player% &7угадал верный ответ! И получил &6%amount% &7монет!")
                 translation(
                     MinecraftLocales.EN_US,
                     "&6%player% &7guessed the right answer and received &6%amount% &7coins!"
                 )
+                translation(MinecraftLocales.RU_RU, "&6%player% &7угадал верный ответ! И получил &6%amount% &7монет!")
             }
         ),
     ) {
@@ -614,25 +614,25 @@ data class PluginTranslation(
         @SerialName("challenge_completed")
         private val challengeCompleted: LocalizedText = prefix.concat(
             LocalizedText.build {
+                translation(MinecraftLocales.EN_US, "You completed a challenge advancement and received %money% coins")
                 translation(
                     MinecraftLocales.RU_RU,
                     "Вы выполнили достижение-челлендж и получили награду: %money% монет"
                 )
-                translation(MinecraftLocales.EN_US, "You completed a challenge advancement and received %money% coins")
             }
         ),
         @SerialName("goal_completed")
         private val goalCompleted: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Вы выполнили целевое достижение и получили награду: %money% монет")
                 translation(MinecraftLocales.EN_US, "You completed a goal advancement and received %money% coins")
+                translation(MinecraftLocales.RU_RU, "Вы выполнили целевое достижение и получили награду: %money% монет")
             }
         ),
         @SerialName("task_completed")
         private val taskCompleted: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Вы выполнили достижение и получили награду: %money% монет")
                 translation(MinecraftLocales.EN_US, "You completed an advancement and received %money% coins")
+                translation(MinecraftLocales.RU_RU, "Вы выполнили достижение и получили награду: %money% монет")
             }
         ),
     ) {
@@ -658,14 +658,14 @@ data class PluginTranslation(
         val prefix: LocalizedText = LocalizedText.shared("&7[&#DBB72BAspeKt&7] "),
         @SerialName("item_name")
         val itemName: LocalizedText = LocalizedText.build {
-            translation(MinecraftLocales.RU_RU, "&6Монетка")
             translation(MinecraftLocales.EN_US, "&6Coin")
+            translation(MinecraftLocales.RU_RU, "&6Монетка")
         },
         @SerialName("picked_up")
         private val pickedUp: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#42f596Вы подобрали {AMOUNT} загадочных монет")
                 translation(MinecraftLocales.EN_US, "&#42f596You picked up {AMOUNT} mysterious coins")
+                translation(MinecraftLocales.RU_RU, "&#42f596Вы подобрали {AMOUNT} загадочных монет")
             }
         ),
     ) {
@@ -681,92 +681,92 @@ data class PluginTranslation(
         @SerialName("flag_changed")
         val flagChanged: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Флаг чанка изменен!")
                 translation(MinecraftLocales.EN_US, "Chunk flag changed!")
+                translation(MinecraftLocales.RU_RU, "Флаг чанка изменен!")
             }
         ),
         @SerialName("claimed")
         val claimed: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Вы заняли чанк!")
                 translation(MinecraftLocales.EN_US, "You claimed the chunk!")
+                translation(MinecraftLocales.RU_RU, "Вы заняли чанк!")
             }
         ),
         @SerialName("unclaimed")
         val unclaimed: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Чанк свободен!")
                 translation(MinecraftLocales.EN_US, "The chunk is free!")
+                translation(MinecraftLocales.RU_RU, "Чанк свободен!")
             }
         ),
         @SerialName("error")
         val error: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Ошибка! Смотрите консоль")
                 translation(MinecraftLocales.EN_US, "Error! See the console")
+                translation(MinecraftLocales.RU_RU, "Ошибка! Смотрите консоль")
             }
         ),
         @SerialName("map")
         val mapTitle: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Карта блоков:")
                 translation(MinecraftLocales.EN_US, "Chunk map:")
+                translation(MinecraftLocales.RU_RU, "Карта блоков:")
             }
         ),
         @SerialName("member_added")
         val memberAdded: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Участник добавлен")
                 translation(MinecraftLocales.EN_US, "Member added")
+                translation(MinecraftLocales.RU_RU, "Участник добавлен")
             }
         ),
         @SerialName("member_removed")
         val memberRemoved: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Участник удален")
                 translation(MinecraftLocales.EN_US, "Member removed")
+                translation(MinecraftLocales.RU_RU, "Участник удален")
             }
         ),
         @SerialName("action_blocked")
         private val actionBlocked: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Ошибка! Действие %action% заблокировано на этом чанке!")
                 translation(MinecraftLocales.EN_US, "Error! %action% is blocked in this chunk!")
+                translation(MinecraftLocales.RU_RU, "Ошибка! Действие %action% заблокировано на этом чанке!")
             }
         ),
         @SerialName("chunk_under_claim")
         val alreadyClaimed: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Этот чанк уже запривачен!")
                 translation(MinecraftLocales.EN_US, "This chunk is already claimed!")
+                translation(MinecraftLocales.RU_RU, "Этот чанк уже запривачен!")
             }
         ),
         @SerialName("no_claim_here")
         val noneHere: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "На этом месте нет привата!")
                 translation(MinecraftLocales.EN_US, "There is no claim here!")
+                translation(MinecraftLocales.RU_RU, "На этом месте нет привата!")
             }
         ),
         @SerialName("not_claim_owner")
         val notOwner: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Вы не владелец привата!")
                 translation(MinecraftLocales.EN_US, "You are not the owner of this claim!")
+                translation(MinecraftLocales.RU_RU, "Вы не владелец привата!")
             }
         ),
         @SerialName("already_member")
         val alreadyMember: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Игрок уже участник привата!")
                 translation(MinecraftLocales.EN_US, "The player is already a member of the claim!")
+                translation(MinecraftLocales.RU_RU, "Игрок уже участник привата!")
             }
         ),
         @SerialName("not_member")
         val notMember: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Игрок не участник привата!")
                 translation(MinecraftLocales.EN_US, "The player is not a member of the claim!")
+                translation(MinecraftLocales.RU_RU, "Игрок не участник привата!")
             }
         ),
     ) {
@@ -780,29 +780,29 @@ data class PluginTranslation(
         @SerialName("already")
         val already: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#dbbb18Вы уже сидите")
                 translation(MinecraftLocales.EN_US, "&#dbbb18You are already sitting")
+                translation(MinecraftLocales.RU_RU, "&#dbbb18Вы уже сидите")
             }
         ),
         @SerialName("air")
         val inAir: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#dbbb18Нельзя сидеть в воздухе")
                 translation(MinecraftLocales.EN_US, "&#dbbb18You cannot sit in the air")
+                translation(MinecraftLocales.RU_RU, "&#dbbb18Нельзя сидеть в воздухе")
             }
         ),
         @SerialName("too_far")
         val tooFar: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#dbbb18Слишком далеко")
                 translation(MinecraftLocales.EN_US, "&#dbbb18Too far away")
+                translation(MinecraftLocales.RU_RU, "&#dbbb18Слишком далеко")
             }
         ),
         @SerialName("cant_sit_in_block")
         val insideBlock: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "&#dbbb18Нельзя сидеть в блоке")
                 translation(MinecraftLocales.EN_US, "&#dbbb18You cannot sit inside a block")
+                translation(MinecraftLocales.RU_RU, "&#dbbb18Нельзя сидеть в блоке")
             }
         )
     )
@@ -815,33 +815,33 @@ data class PluginTranslation(
         val welcome: LocalizedText = prefix.concat(
             LocalizedText.build {
                 translation(
-                    MinecraftLocales.RU_RU,
-                    "&#1D72F2Вы новичок! &6Поэтому в первые 50 минут вам будет играть легче! Наслаждайтесь игрой!"
-                )
-                translation(
                     MinecraftLocales.EN_US,
                     "&#1D72F2You are a newcomer! &6So the game is easier for you during the first 50 minutes! Enjoy!"
+                )
+                translation(
+                    MinecraftLocales.RU_RU,
+                    "&#1D72F2Вы новичок! &6Поэтому в первые 50 минут вам будет играть легче! Наслаждайтесь игрой!"
                 )
             }
         ),
         @SerialName("newBeeTitle")
         val title: LocalizedText = LocalizedText.build {
-            translation(MinecraftLocales.RU_RU, "&#DBB72BЗащита новичка")
             translation(MinecraftLocales.EN_US, "&#DBB72BNewcomer protection")
+            translation(MinecraftLocales.RU_RU, "&#DBB72BЗащита новичка")
         },
         @SerialName("newBeeSubtitle")
         val subtitle: LocalizedText = LocalizedText.build {
-            translation(MinecraftLocales.RU_RU, "&#db2c18Включена")
             translation(MinecraftLocales.EN_US, "&#db2c18Enabled")
+            translation(MinecraftLocales.RU_RU, "&#db2c18Включена")
         },
         @SerialName("newBeeShieldForceDisabled")
         val protectionRemoved: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Вы вступили в бой с игроком. Защита новичка была удалена")
                 translation(
                     MinecraftLocales.EN_US,
                     "You started a fight with a player. Your newcomer protection has been removed"
                 )
+                translation(MinecraftLocales.RU_RU, "Вы вступили в бой с игроком. Защита новичка была удалена")
             }
         )
     )
@@ -852,29 +852,29 @@ data class PluginTranslation(
         @SerialName("swearFilterEnabled")
         val enabled: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Фильтр плохих слов включен")
                 translation(MinecraftLocales.EN_US, "Swear filter enabled")
+                translation(MinecraftLocales.RU_RU, "Фильтр плохих слов включен")
             }
         ),
         @SerialName("swearFilterDisabled")
         val disabled: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Фильтр плохих слов выключен")
                 translation(MinecraftLocales.EN_US, "Swear filter disabled")
+                translation(MinecraftLocales.RU_RU, "Фильтр плохих слов выключен")
             }
         ),
         @SerialName("swearFilterEnabledFor")
         private val enabledFor: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Фильтр плохих слов включен для {player}")
                 translation(MinecraftLocales.EN_US, "Swear filter enabled for {player}")
+                translation(MinecraftLocales.RU_RU, "Фильтр плохих слов включен для {player}")
             }
         ),
         @SerialName("swearFilterDisabledFor")
         private val disabledFor: LocalizedText = prefix.concat(
             LocalizedText.build {
-                translation(MinecraftLocales.RU_RU, "Фильтр плохих слов выключен для {player}")
                 translation(MinecraftLocales.EN_US, "Swear filter disabled for {player}")
+                translation(MinecraftLocales.RU_RU, "Фильтр плохих слов выключен для {player}")
             }
         ),
     ) {
