@@ -17,13 +17,6 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
-/**
- * Tells the sender why their command failed. [MultiplatformCommand.runs] swallows every exception of a command,
- * so a command without this handler fails silently.
- *
- * Expected failures are not logged. Logs name only the command, never its input: `/login` and `/register` carry
- * passwords.
- */
 class CommandExceptionHandler(
     private val multiplatformCommand: MultiplatformCommand,
     translationKrate: CachedKrate<PluginTranslation>

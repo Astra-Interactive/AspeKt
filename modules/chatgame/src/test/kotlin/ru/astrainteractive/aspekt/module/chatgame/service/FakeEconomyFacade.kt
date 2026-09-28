@@ -3,7 +3,6 @@ package ru.astrainteractive.aspekt.module.chatgame.service
 import ru.astrainteractive.astralibs.economy.EconomyFacade
 import java.util.UUID
 
-/** Keeps every accepted deposit; [acceptsDeposits] set to `false` refuses them like a failing economy plugin. */
 internal class FakeEconomyFacade(
     private val acceptsDeposits: Boolean
 ) : EconomyFacade {

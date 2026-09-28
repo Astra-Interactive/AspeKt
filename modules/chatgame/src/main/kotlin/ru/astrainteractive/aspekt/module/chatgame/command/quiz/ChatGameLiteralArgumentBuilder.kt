@@ -25,7 +25,7 @@ import ru.astrainteractive.klibs.mikro.core.coroutines.launch
  * - Player-only
  * - With or without an answer argument (no-args uses empty string)
  * - Checks active game, validates answer with mutex to ensure single winner
- * - Rewards money if configured and ends the game; a reward that could not be paid is not announced
+ * - Rewards money if configured and ends the game
  */
 @Suppress("LongParameterList")
 internal class ChatGameLiteralArgumentBuilder(

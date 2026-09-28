@@ -7,7 +7,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class RewardTest {
-    /** Enough draws that every amount of a small range shows up. */
     private val drawCount = 1_000
 
     private fun drawnAmounts(minAmount: Double, maxAmount: Double): Set<Int> {
