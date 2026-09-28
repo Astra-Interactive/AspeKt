@@ -607,6 +607,19 @@ data class PluginTranslation(
                 translation(MinecraftLocales.RU_RU, "&#db2c18Ответ неверный!")
             }
         ),
+        @SerialName("reward_not_paid")
+        val rewardNotPaid: LocalizedText = prefix.concat(
+            LocalizedText.build {
+                translation(
+                    MinecraftLocales.EN_US,
+                    "&#db2c18Your answer is right, but the reward could not be paid. Please tell an administrator."
+                )
+                translation(
+                    MinecraftLocales.RU_RU,
+                    "&#db2c18Ответ верный, но награду не удалось выплатить. Сообщите администратору."
+                )
+            }
+        ),
         @SerialName("game_ended")
         private val moneyRewarded: LocalizedText = prefix.concat(
             LocalizedText.build {

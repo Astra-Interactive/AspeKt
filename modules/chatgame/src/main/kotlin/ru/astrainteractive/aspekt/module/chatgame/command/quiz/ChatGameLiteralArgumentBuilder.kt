@@ -8,10 +8,9 @@ import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Mutex
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
-import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.Reward
-import ru.astrainteractive.aspekt.module.chatgame.model.randomAmount
+import ru.astrainteractive.aspekt.module.chatgame.service.MoneyRewardPayer
 import ru.astrainteractive.aspekt.module.chatgame.service.broadcast
 import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStore
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -20,21 +19,20 @@ import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.coroutines.launch
-import kotlin.random.Random
 
 /**
  * ChatGame /quiz command registrar. Preserves legacy behavior:
  * - Player-only
  * - With or without an answer argument (no-args uses empty string)
  * - Checks active game, validates answer with mutex to ensure single winner
- * - Rewards money if configured and ends the game
+ * - Rewards money if configured and ends the game; a reward that could not be paid is not announced
  */
 @Suppress("LongParameterList")
 internal class ChatGameLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
     private val chatGameStore: ChatGameStore,
     chatGameConfigKrate: CachedKrate<ChatGameConfig>,
-    private val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory,
+    private val moneyRewardPayer: MoneyRewardPayer,
     private val ioScope: CoroutineScope,
     private val multiplatformCommand: MultiplatformCommand,
     private val commandExceptionHandler: CommandExceptionHandler
@@ -58,17 +56,12 @@ internal class ChatGameLiteralArgumentBuilder(
                 } else {
                     when (reward) {
                         is Reward.Money -> {
-                            val amount = reward.randomAmount(Random)
-                            val economy = when (val currencyId = reward.currencyId) {
-                                null -> currencyEconomyProviderFactory.findDefault()
-                                else -> currencyEconomyProviderFactory.findByCurrencyId(currencyId)
+                            val amount = moneyRewardPayer.pay(player.uuid, reward)
+                            if (amount == null) {
+                                player.sendMessage(translation.chatGame.rewardNotPaid)
+                            } else {
+                                Bukkit.getServer().broadcast(translation.chatGame.moneyRewarded(player.name, amount))
                             }
-                            economy?.addMoney(player.uuid, amount.toDouble())
-                            val message = translation.chatGame.moneyRewarded(
-                                player.name,
-                                amount
-                            )
-                            Bukkit.getServer().broadcast(message)
                         }
                     }
                     chatGameStore.endCurrentGame()

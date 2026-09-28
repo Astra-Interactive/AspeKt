@@ -24,5 +24,6 @@ dependencies {
     implementation(projects.modules.core.api)
     implementation(projects.modules.core.bukkit)
 
+    testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.tests.kotlin.test)
 }
