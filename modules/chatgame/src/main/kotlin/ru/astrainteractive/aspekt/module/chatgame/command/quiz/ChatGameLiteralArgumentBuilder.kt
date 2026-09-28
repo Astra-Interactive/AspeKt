@@ -11,6 +11,7 @@ import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.Reward
+import ru.astrainteractive.aspekt.module.chatgame.model.randomAmount
 import ru.astrainteractive.aspekt.module.chatgame.service.broadcast
 import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStore
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -57,7 +58,7 @@ internal class ChatGameLiteralArgumentBuilder(
                 } else {
                     when (reward) {
                         is Reward.Money -> {
-                            val amount = Random.nextInt(reward.minAmount.toInt(), reward.maxAmount.toInt())
+                            val amount = reward.randomAmount(Random)
                             val economy = when (val currencyId = reward.currencyId) {
                                 null -> currencyEconomyProviderFactory.findDefault()
                                 else -> currencyEconomyProviderFactory.findByCurrencyId(currencyId)
