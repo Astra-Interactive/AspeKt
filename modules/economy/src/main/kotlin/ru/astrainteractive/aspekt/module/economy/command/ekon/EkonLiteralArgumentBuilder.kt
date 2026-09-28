@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.economy.database.dao.CachedDao
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -28,7 +29,8 @@ internal class EkonLiteralArgumentBuilder(
     private val cachedDao: CachedDao,
     private val executor: EkonCommandExecutor,
     private val multiplatformCommand: MultiplatformCommand,
-    private val platformServer: PlatformServer
+    private val platformServer: PlatformServer,
+    private val commandExceptionHandler: CommandExceptionHandler
 ) {
     private val translation by translationKrate
     private fun currencyNames(): List<String> = cachedDao.getAllCurrencies().map { it.name }
@@ -37,12 +39,12 @@ internal class EkonLiteralArgumentBuilder(
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("ekon") {
-                runs { ctx ->
+                runs(commandExceptionHandler::handle) { ctx ->
                     ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                     ctx.getSender().sendMessage(translation.commandError.wrongUsage)
                 }
                 literal("list") {
-                    runs { ctx ->
+                    runs(commandExceptionHandler::handle) { ctx ->
                         ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                         EkonCommand.Model
                             .ListCurrencies(ctx.getSender())
@@ -52,7 +54,7 @@ internal class EkonLiteralArgumentBuilder(
                 literal("top") {
                     argument("currency", StringArgumentType.string()) { currencyArg ->
                         hints { currencyNames() }
-                        runs { ctx ->
+                        runs(commandExceptionHandler::handle) { ctx ->
                             ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                             val currencyName = ctx.requireArgument(currencyArg)
                             val currency =
@@ -68,7 +70,7 @@ internal class EkonLiteralArgumentBuilder(
                             ).run(executor::execute)
                         }
                         argument("page", IntegerArgumentType.integer(0)) { pageArg ->
-                            runs { ctx ->
+                            runs(commandExceptionHandler::handle) { ctx ->
                                 ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                                 val currencyName = ctx.requireArgument(currencyArg)
                                 val page = ctx.requireArgument(pageArg)
@@ -96,7 +98,7 @@ internal class EkonLiteralArgumentBuilder(
                         hints { currencyNames() }
                         argument("player", StringArgumentType.string()) { playerArg ->
                             hints { Bukkit.getOnlinePlayers().map(Player::getName) }
-                            runs { ctx ->
+                            runs(commandExceptionHandler::handle) { ctx ->
                                 ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                                 val currencyName = ctx.requireArgument(currencyArg)
                                 val currency = cachedDao.getAllCurrencies().firstOrNull {
@@ -128,7 +130,7 @@ internal class EkonLiteralArgumentBuilder(
                         argument("player", StringArgumentType.string()) { playerArg ->
                             hints { Bukkit.getOnlinePlayers().map(Player::getName) }
                             argument("amount", DoubleArgumentType.doubleArg()) { amountArg ->
-                                runs { ctx ->
+                                runs(commandExceptionHandler::handle) { ctx ->
                                     ctx.requirePermission(PluginPermission.SET_BALANCE)
                                     val currencyName = ctx.requireArgument(currencyArg)
                                     val currency = cachedDao.getAllCurrencies().firstOrNull {
@@ -163,7 +165,7 @@ internal class EkonLiteralArgumentBuilder(
                         argument("player", StringArgumentType.string()) { playerArg ->
                             hints { Bukkit.getOnlinePlayers().map(Player::getName) }
                             argument("amount", DoubleArgumentType.doubleArg()) { amountArg ->
-                                runs { ctx ->
+                                runs(commandExceptionHandler::handle) { ctx ->
                                     ctx.requirePermission(PluginPermission.SET_BALANCE)
                                     val currencyName = ctx.requireArgument(currencyArg)
                                     val currency = cachedDao.getAllCurrencies().firstOrNull {

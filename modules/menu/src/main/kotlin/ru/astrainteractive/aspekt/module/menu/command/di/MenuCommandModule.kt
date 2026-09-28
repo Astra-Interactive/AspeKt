@@ -29,10 +29,13 @@ internal class MenuCommandModule(
             translationKrate = coreModule.translationKrate,
             menuRouter = menuRouter,
             menuModelsKrate = menuModelsKrate,
-            multiplatformCommand = coreModule.multiplatformCommand
+            multiplatformCommand = coreModule.multiplatformCommand,
+            commandExceptionHandler = coreModule.commandExceptionHandler
         ).create(),
-        InvCloseLiteralArgumentBuilder(coreModule.multiplatformCommand)
-            .create()
+        InvCloseLiteralArgumentBuilder(
+            multiplatformCommand = coreModule.multiplatformCommand,
+            commandExceptionHandler = coreModule.commandExceptionHandler
+        ).create()
     )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(

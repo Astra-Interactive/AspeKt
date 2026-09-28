@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.module.menu.command.menu
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
+import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -17,7 +18,8 @@ internal class MenuLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
     private val menuRouter: () -> MenuRouter,
     menuModelsKrate: CachedKrate<List<MenuModel>>,
-    private val multiplatformCommand: MultiplatformCommand
+    private val multiplatformCommand: MultiplatformCommand,
+    private val commandExceptionHandler: CommandExceptionHandler
 ) {
     private val translation by translationKrate
     private val menuModels by menuModelsKrate
@@ -25,7 +27,7 @@ internal class MenuLiteralArgumentBuilder(
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("menu") {
-                runs { ctx ->
+                runs(commandExceptionHandler::handle) { ctx ->
                     val player = ctx.requirePlayer()
                     val menuModel = menuModels.firstOrNull()
                     if (menuModel == null) {
@@ -36,7 +38,7 @@ internal class MenuLiteralArgumentBuilder(
                 }
                 argument("menu", StringArgumentType.string()) { menuArg ->
                     hints { menuModels.map(MenuModel::command) }
-                    runs { ctx ->
+                    runs(commandExceptionHandler::handle) { ctx ->
                         val player = ctx.requirePlayer()
                         val cmd = ctx.requireArgument(menuArg)
                         val menuModel = menuModels.firstOrNull { it.command == cmd } ?: menuModels.firstOrNull()

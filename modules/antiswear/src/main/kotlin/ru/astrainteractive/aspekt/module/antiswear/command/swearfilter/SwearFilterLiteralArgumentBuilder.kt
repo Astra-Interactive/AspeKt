@@ -6,6 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.antiswear.data.SwearRepository
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.argumenttype.OnlineKPlayerArgumentConverter
@@ -23,7 +24,8 @@ internal class SwearFilterLiteralArgumentBuilder(
     private val ioScope: CoroutineScope,
     private val swearRepository: SwearRepository,
     private val multiplatformCommand: MultiplatformCommand,
-    private val platformServer: PlatformServer
+    private val platformServer: PlatformServer,
+    private val commandExceptionHandler: CommandExceptionHandler
 ) {
     private val translation by translationKrate
 
@@ -55,7 +57,7 @@ internal class SwearFilterLiteralArgumentBuilder(
             command("swearfilter") {
                 argument("on_off", StringArgumentType.string()) { onOffArg ->
                     hints { listOf("on", "off") }
-                    runs { ctx ->
+                    runs(commandExceptionHandler::handle) { ctx ->
                         val value = ctx.requireArgument(onOffArg, OnOffArgumentConverter)
                         execute(
                             sender = ctx.getSender(),
@@ -65,7 +67,7 @@ internal class SwearFilterLiteralArgumentBuilder(
                     }
                     argument("player", StringArgumentType.string()) { playerArg ->
                         hints { Bukkit.getOnlinePlayers().map(Player::getName) }
-                        runs { ctx ->
+                        runs(commandExceptionHandler::handle) { ctx ->
                             val targetPlayer = ctx.requireArgument(
                                 bArgument = playerArg,
                                 converter = OnlineKPlayerArgumentConverter(platformServer)

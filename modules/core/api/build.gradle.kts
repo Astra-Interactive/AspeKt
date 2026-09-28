@@ -20,4 +20,8 @@ dependencies {
     implementation(libs.kotlin.serialization.json)
     implementation(libs.kotlin.serialization.kaml)
     implementation(libs.minecraft.astralibs.command)
+
+    testImplementation(libs.minecraft.brigadier)
+    testImplementation(libs.minecraft.kyori.api)
+    testImplementation(libs.tests.kotlin.test)
 }

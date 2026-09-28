@@ -18,7 +18,8 @@ class CommandsModule(
         ReloadLiteralArgumentBuilder(
             translationKrate = coreModule.translationKrate,
             lifecyclePlugin = lifecyclePlugin,
-            multiplatformCommand = coreModule.multiplatformCommand
+            multiplatformCommand = coreModule.multiplatformCommand,
+            commandExceptionHandler = coreModule.commandExceptionHandler
         ).create(),
     )
 

@@ -32,7 +32,8 @@ internal class JailCommandModule(
             cachedJailApi = cachedJailApi,
             jailController = jailController,
             multiplatformCommand = coreModule.multiplatformCommand,
-            platformServer = coreModule.platformServer
+            platformServer = coreModule.platformServer,
+            commandExceptionHandler = coreModule.commandExceptionHandler
         ).create().run(::add)
     }
 

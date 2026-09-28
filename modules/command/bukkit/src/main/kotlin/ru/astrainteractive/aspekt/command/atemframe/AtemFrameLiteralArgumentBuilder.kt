@@ -5,13 +5,15 @@ import com.mojang.brigadier.arguments.DoubleArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.ItemFrame
+import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.astralibs.server.util.asBukkitLocation
 
 internal class AtemFrameLiteralArgumentBuilder(
-    private val multiplatformCommand: MultiplatformCommand
+    private val multiplatformCommand: MultiplatformCommand,
+    private val commandExceptionHandler: CommandExceptionHandler
 ) {
 
     private fun execute(
@@ -37,12 +39,12 @@ internal class AtemFrameLiteralArgumentBuilder(
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("atemframe") {
-                runs { ctx ->
+                runs(commandExceptionHandler::handle) { ctx ->
                     ctx.requirePermission(PluginPermission.ATEM_FRAME)
                     execute(player = ctx.requirePlayer())
                 }
                 argument("isVisible", BoolArgumentType.bool()) { isVisibleArg ->
-                    runs { ctx ->
+                    runs(commandExceptionHandler::handle) { ctx ->
                         ctx.requirePermission(PluginPermission.ATEM_FRAME)
                         execute(
                             player = ctx.requirePlayer(),
@@ -50,7 +52,7 @@ internal class AtemFrameLiteralArgumentBuilder(
                         )
                     }
                     argument("isFixed", BoolArgumentType.bool()) { isFixedArg ->
-                        runs { ctx ->
+                        runs(commandExceptionHandler::handle) { ctx ->
                             ctx.requirePermission(PluginPermission.ATEM_FRAME)
                             execute(
                                 player = ctx.requirePlayer(),
@@ -59,7 +61,7 @@ internal class AtemFrameLiteralArgumentBuilder(
                             )
                         }
                         argument("radius", DoubleArgumentType.doubleArg(0.0)) { radiusArg ->
-                            runs { ctx ->
+                            runs(commandExceptionHandler::handle) { ctx ->
                                 ctx.requirePermission(PluginPermission.ATEM_FRAME)
                                 execute(
                                     player = ctx.requirePlayer(),

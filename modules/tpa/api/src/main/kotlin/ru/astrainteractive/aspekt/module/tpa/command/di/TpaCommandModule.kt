@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.module.tpa.command.di
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.tpa.command.TpaCommandExecutor
 import ru.astrainteractive.aspekt.module.tpa.command.tpa.TpaCommandRegistrar
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
@@ -15,6 +16,7 @@ internal class TpaCommandModule(
     executor: TpaCommandExecutor,
     platformServer: PlatformServer,
     multiplatformCommand: MultiplatformCommand,
+    commandExceptionHandler: CommandExceptionHandler,
     unconfinedScope: CoroutineScope,
     private val commandRegistrarContext: CommandRegistrarContext
 ) {
@@ -23,7 +25,8 @@ internal class TpaCommandModule(
     private val nodes = TpaCommandRegistrar(
         executor = executor,
         platformServer = platformServer,
-        multiplatformCommand = multiplatformCommand
+        multiplatformCommand = multiplatformCommand,
+        commandExceptionHandler = commandExceptionHandler
     ).createNodes()
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(

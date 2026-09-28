@@ -26,19 +26,24 @@ class BukkitCommandsModule(
         RtpLiteralArgumentBuilder(
             translationKrate = coreModule.translationKrate,
             multiplatformCommand = coreModule.multiplatformCommand,
+            commandExceptionHandler = coreModule.commandExceptionHandler
         ).create(),
         AtemFrameLiteralArgumentBuilder(
-            multiplatformCommand = coreModule.multiplatformCommand
+            multiplatformCommand = coreModule.multiplatformCommand,
+            commandExceptionHandler = coreModule.commandExceptionHandler
         ).create(),
         MaxOnlineLiteralArgumentBuilder(
-            multiplatformCommand = coreModule.multiplatformCommand
+            multiplatformCommand = coreModule.multiplatformCommand,
+            commandExceptionHandler = coreModule.commandExceptionHandler
         ).create(),
         TellChatLiteralArgumentBuilder(
             multiplatformCommand = coreModule.multiplatformCommand,
-            kyoriKrate = coreModule.kyoriKrate
+            kyoriKrate = coreModule.kyoriKrate,
+            commandExceptionHandler = coreModule.commandExceptionHandler
         ).create(),
         RtpBypassLiteralArgumentBuilder(
-            multiplatformCommand = coreModule.multiplatformCommand
+            multiplatformCommand = coreModule.multiplatformCommand,
+            commandExceptionHandler = coreModule.commandExceptionHandler
         ).create()
     )
 

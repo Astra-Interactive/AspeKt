@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
+import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.api.argumenttype.OnlinePlayerArgumentConverter
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
@@ -16,7 +17,8 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
  * /rtpbypass <player>
  */
 internal class RtpBypassLiteralArgumentBuilder(
-    private val multiplatformCommand: MultiplatformCommand
+    private val multiplatformCommand: MultiplatformCommand,
+    private val commandExceptionHandler: CommandExceptionHandler
 ) {
     private val essentials: Essentials?
         get() = Bukkit.getPluginManager()
@@ -28,7 +30,7 @@ internal class RtpBypassLiteralArgumentBuilder(
             command("rtpbypass") {
                 argument("player", StringArgumentType.string()) { playerArg ->
                     hints { Bukkit.getOnlinePlayers().map(Player::getName) }
-                    runs { ctx ->
+                    runs(commandExceptionHandler::handle) { ctx ->
                         ctx.requirePermission(PluginPermission.RTP_BYPASS)
                         val player = ctx.requireArgument(playerArg, OnlinePlayerArgumentConverter)
                         val randomTeleport = RandomTeleport(essentials)

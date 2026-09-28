@@ -24,6 +24,7 @@ internal class SitCommandModule(
         SitLiteralArgumentBuilder(
             sitController = sitController,
             multiplatformCommand = coreModule.multiplatformCommand,
+            commandExceptionHandler = coreModule.commandExceptionHandler
         ).create().run(::add)
     }
 

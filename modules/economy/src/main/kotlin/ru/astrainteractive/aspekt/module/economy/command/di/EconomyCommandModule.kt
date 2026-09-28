@@ -29,7 +29,8 @@ internal class EconomyCommandModule(
             executor = executor,
             translationKrate = coreModule.translationKrate,
             multiplatformCommand = coreModule.multiplatformCommand,
-            platformServer = coreModule.platformServer
+            platformServer = coreModule.platformServer,
+            commandExceptionHandler = coreModule.commandExceptionHandler
         ).create().run(::add)
     }
 

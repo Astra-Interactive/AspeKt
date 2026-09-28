@@ -77,6 +77,27 @@ data class PluginTranslation(
                 translation(MinecraftLocales.RU_RU, "&#db2c18Эта команда только для игроков!")
             }
         ),
+        @SerialName("player_not_found")
+        val playerNotFound: LocalizedText = prefix.concat(
+            LocalizedText.build {
+                translation(MinecraftLocales.EN_US, "&#db2c18Player not found!")
+                translation(MinecraftLocales.RU_RU, "&#db2c18Игрок не найден!")
+            }
+        ),
+        @SerialName("invalid_argument")
+        val invalidArgument: LocalizedText = prefix.concat(
+            LocalizedText.build {
+                translation(MinecraftLocales.EN_US, "&#db2c18Invalid argument value!")
+                translation(MinecraftLocales.RU_RU, "&#db2c18Неверное значение аргумента!")
+            }
+        ),
+        @SerialName("unknown_error")
+        val unknownError: LocalizedText = prefix.concat(
+            LocalizedText.build {
+                translation(MinecraftLocales.EN_US, "&#db2c18The command failed with an unknown error")
+                translation(MinecraftLocales.RU_RU, "&#db2c18Команда завершилась с неизвестной ошибкой")
+            }
+        ),
     )
 
     @Serializable
@@ -584,6 +605,19 @@ data class PluginTranslation(
             LocalizedText.build {
                 translation(MinecraftLocales.EN_US, "&#db2c18Wrong answer!")
                 translation(MinecraftLocales.RU_RU, "&#db2c18Ответ неверный!")
+            }
+        ),
+        @SerialName("reward_not_paid")
+        val rewardNotPaid: LocalizedText = prefix.concat(
+            LocalizedText.build {
+                translation(
+                    MinecraftLocales.EN_US,
+                    "&#db2c18Your answer is right, but the reward could not be paid. Please tell an administrator."
+                )
+                translation(
+                    MinecraftLocales.RU_RU,
+                    "&#db2c18Ответ верный, но награду не удалось выплатить. Сообщите администратору."
+                )
             }
         ),
         @SerialName("game_ended")

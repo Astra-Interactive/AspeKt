@@ -26,7 +26,8 @@ class ClaimCommandModule(
         claimsRepository = claimsRepository,
         platformServer = coreModule.platformServer,
         multiplatformCommand = coreModule.multiplatformCommand,
-        chunkProvider = chunkProvider
+        chunkProvider = chunkProvider,
+        commandExceptionHandler = coreModule.commandExceptionHandler
     ).createNodes()
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(

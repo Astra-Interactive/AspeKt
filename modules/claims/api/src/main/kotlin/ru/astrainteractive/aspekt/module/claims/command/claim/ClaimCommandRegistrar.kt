@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.module.claims.command.claim
 import com.mojang.brigadier.arguments.BoolArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
+import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlagArgumentConverter
@@ -30,7 +31,8 @@ class ClaimCommandRegistrar(
     private val claimsRepository: ClaimsRepository,
     private val platformServer: PlatformServer,
     private val multiplatformCommand: MultiplatformCommand,
-    private val chunkProvider: ChunkProvider
+    private val chunkProvider: ChunkProvider,
+    private val commandExceptionHandler: CommandExceptionHandler
 ) {
 
     @Suppress("LongMethod")
@@ -42,7 +44,7 @@ class ClaimCommandRegistrar(
                         hints { ChunkFlag.entries.map(ChunkFlag::name) }
                         argument("bool", BoolArgumentType.bool()) { boolArg ->
                             hints { listOf("true", "false") }
-                            runs { ctx ->
+                            runs(commandExceptionHandler::handle) { ctx ->
                                 ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                                 val flag = ctx.requireArgument(chunkFlagArg, ChunkFlagArgumentConverter)
                                 val value = ctx.requireArgument(boolArg)
@@ -62,7 +64,7 @@ class ClaimCommandRegistrar(
                 literal(ClaimCommandArgument.ADD_MEMBER.value) {
                     argument("player", StringArgumentType.string()) { playerArg ->
                         hints { platformServer.getOnlinePlayers().map { it.name } }
-                        runs { ctx ->
+                        runs(commandExceptionHandler::handle) { ctx ->
                             ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                             val ownerPlayer = ctx.requirePlayer()
                             val memberPlayerName = ctx.requireArgument(playerArg)
@@ -94,7 +96,7 @@ class ClaimCommandRegistrar(
                                 ?.map(ClaimPlayer::username)
                                 .orEmpty()
                         }
-                        runs { ctx ->
+                        runs(commandExceptionHandler::handle) { ctx ->
                             ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                             val ownerPlayer = ctx.requirePlayer()
                             val memberPlayerName = ctx.requireArgument(playerArg)
@@ -113,7 +115,7 @@ class ClaimCommandRegistrar(
                     }
                 }
                 literal(ClaimCommandArgument.MAP.value) {
-                    runs { ctx ->
+                    runs(commandExceptionHandler::handle) { ctx ->
                         ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                         val player = ctx.requirePlayer()
                         claimCommandExecutor.execute(
@@ -125,7 +127,7 @@ class ClaimCommandRegistrar(
                     }
                 }
                 literal(ClaimCommandArgument.CLAIM.value) {
-                    runs { ctx ->
+                    runs(commandExceptionHandler::handle) { ctx ->
                         ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                         val player = ctx.requirePlayer()
                         claimCommandExecutor.execute(
@@ -137,7 +139,7 @@ class ClaimCommandRegistrar(
                     }
                 }
                 literal(ClaimCommandArgument.UNCLAIM.value) {
-                    runs { ctx ->
+                    runs(commandExceptionHandler::handle) { ctx ->
                         ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                         val player = ctx.requirePlayer()
                         claimCommandExecutor.execute(

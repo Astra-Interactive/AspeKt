@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.isRegistered
@@ -22,7 +23,8 @@ class RegisterCommandRegistrar(
     private val ioScope: CoroutineScope,
     private val authDao: AuthDao,
     private val authorizedApi: AuthorizedApi,
-    private val multiplatformCommand: MultiplatformCommand
+    private val multiplatformCommand: MultiplatformCommand,
+    private val commandExceptionHandler: CommandExceptionHandler
 ) {
     private val translation by translationKrate
 
@@ -37,7 +39,7 @@ class RegisterCommandRegistrar(
                             alias = "password_confirm",
                             type = StringArgumentType.string(),
                             block = {
-                                runs { ctx ->
+                                runs(commandExceptionHandler::handle) { ctx ->
                                     ioScope.launch {
                                         val player = ctx.requirePlayer()
                                         val passwordSha = ctx.requireArgument(passwordArg).sha256()

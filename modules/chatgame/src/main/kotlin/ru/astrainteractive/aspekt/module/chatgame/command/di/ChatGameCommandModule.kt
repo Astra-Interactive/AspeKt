@@ -7,10 +7,12 @@ import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.chatgame.command.quiz.ChatGameLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
+import ru.astrainteractive.aspekt.module.chatgame.service.MoneyRewardPayer
 import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStore
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
+import kotlin.random.Random
 
 /**
  * Aggregates and registers Brigadier command nodes for ChatGame module.
@@ -28,9 +30,13 @@ internal class ChatGameCommandModule(
             chatGameStore = chatGameStore,
             translationKrate = coreModule.translationKrate,
             chatGameConfigKrate = chatGameConfigKrate,
-            currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory,
+            moneyRewardPayer = MoneyRewardPayer(
+                currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory,
+                random = Random.Default
+            ),
             ioScope = coreModule.ioScope,
-            multiplatformCommand = coreModule.multiplatformCommand
+            multiplatformCommand = coreModule.multiplatformCommand,
+            commandExceptionHandler = coreModule.commandExceptionHandler
         ).create().run(::add)
     }
 
