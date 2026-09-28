@@ -30,7 +30,8 @@ internal class ChatGameCommandModule(
             chatGameConfigKrate = chatGameConfigKrate,
             currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory,
             ioScope = coreModule.ioScope,
-            multiplatformCommand = coreModule.multiplatformCommand
+            multiplatformCommand = coreModule.multiplatformCommand,
+            commandExceptionHandler = coreModule.commandExceptionHandler
         ).create().run(::add)
     }
 

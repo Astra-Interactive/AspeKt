@@ -24,6 +24,7 @@ class TpaModule(
         executor = tpaCommandExecutor,
         platformServer = coreModule.platformServer,
         multiplatformCommand = coreModule.multiplatformCommand,
+        commandExceptionHandler = coreModule.commandExceptionHandler,
         unconfinedScope = coreModule.unconfinedScope
     )
 

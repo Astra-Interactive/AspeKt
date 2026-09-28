@@ -43,7 +43,8 @@ class RtpModule(
     private val nodes = RtpCommandRegistrar(
         executor = executor,
         safeLocationProvider = safeLocationProvider,
-        multiplatformCommand = multiplatformCommand
+        multiplatformCommand = multiplatformCommand,
+        commandExceptionHandler = coreModule.commandExceptionHandler
     ).createNodes()
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(

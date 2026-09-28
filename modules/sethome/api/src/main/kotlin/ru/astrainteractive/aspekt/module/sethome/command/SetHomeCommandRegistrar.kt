@@ -3,19 +3,13 @@ package ru.astrainteractive.aspekt.module.sethome.command
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
+import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
 import ru.astrainteractive.aspekt.module.sethome.model.PlayerHome
 import ru.astrainteractive.aspekt.plugin.PluginPermission
-import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.brigadier.sender.KPlayerKCommandSender
-import ru.astrainteractive.astralibs.command.api.exception.NoPermissionException
-import ru.astrainteractive.astralibs.command.api.exception.NotPlayerExecutorException
 import ru.astrainteractive.astralibs.server.permission.Permission
-import ru.astrainteractive.klibs.kstorage.api.CachedKrate
-import ru.astrainteractive.klibs.kstorage.api.getValue
-import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
-import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 /**
@@ -31,23 +25,8 @@ internal class SetHomeCommandRegistrar(
     private val homeKrateProvider: HomeKrateProvider,
     private val executor: HomeCommandExecutor,
     private val multiplatformCommand: MultiplatformCommand,
-    translationKrate: CachedKrate<PluginTranslation>
-) : Logger by JUtiltLogger("AspeKt-SetHomeCommandRegistrar") {
-    private val translation by translationKrate
-
-    /**
-     * [MultiplatformCommand.runs] never lets an exception reach Brigadier, so a rejected
-     * command stays silent unless the sender is told why here.
-     */
-    private fun reportFailure(ctx: CommandContext<Any>, throwable: Throwable) {
-        val sender = with(multiplatformCommand) { ctx.getSender() }
-        when (throwable) {
-            is NoPermissionException -> sender.sendMessage(translation.commandError.noPermission)
-            is NotPlayerExecutorException -> sender.sendMessage(translation.commandError.onlyPlayerCommand)
-            else -> error(throwable) { "Could not execute home command" }
-        }
-    }
-
+    private val commandExceptionHandler: CommandExceptionHandler
+) {
     private fun homeNameHints(ctx: CommandContext<Any>, permission: Permission): List<String> {
         val player = with(multiplatformCommand) { ctx.getSender() }
             .tryCast<KPlayerKCommandSender>()
@@ -83,11 +62,11 @@ internal class SetHomeCommandRegistrar(
         return with(multiplatformCommand) {
             command("sethome") {
                 argument("home_name", StringArgumentType.string()) { homeNameArg ->
-                    runs(onFailure = ::reportFailure) { ctx ->
+                    runs(commandExceptionHandler::handle) { ctx ->
                         executeSetHome(ctx, homeNameArg, force = false)
                     }
                     literal("force") {
-                        runs(onFailure = ::reportFailure) { ctx ->
+                        runs(commandExceptionHandler::handle) { ctx ->
                             executeSetHome(ctx, homeNameArg, force = true)
                         }
                     }
@@ -101,7 +80,7 @@ internal class SetHomeCommandRegistrar(
             command("delhome") {
                 argument("home_name", StringArgumentType.string()) { homeNameArg ->
                     hints { ctx -> homeNameHints(ctx, PluginPermission.DEL_HOME) }
-                    runs(onFailure = ::reportFailure) { ctx ->
+                    runs(commandExceptionHandler::handle) { ctx ->
                         ctx.requirePermission(PluginPermission.DEL_HOME)
                         HomeCommand.DelHome(
                             playerData = ctx.requirePlayer(),
@@ -118,7 +97,7 @@ internal class SetHomeCommandRegistrar(
             command("home") {
                 argument("home_name", StringArgumentType.string()) { homeNameArg ->
                     hints { ctx -> homeNameHints(ctx, PluginPermission.HOME) }
-                    runs(onFailure = ::reportFailure) { ctx ->
+                    runs(commandExceptionHandler::handle) { ctx ->
                         ctx.requirePermission(PluginPermission.HOME)
                         HomeCommand.TpHome(
                             playerData = ctx.requirePlayer(),

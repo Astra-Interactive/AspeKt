@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Mutex
 import org.bukkit.Bukkit
+import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.Reward
@@ -34,7 +35,8 @@ internal class ChatGameLiteralArgumentBuilder(
     chatGameConfigKrate: CachedKrate<ChatGameConfig>,
     private val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory,
     private val ioScope: CoroutineScope,
-    private val multiplatformCommand: MultiplatformCommand
+    private val multiplatformCommand: MultiplatformCommand,
+    private val commandExceptionHandler: CommandExceptionHandler
 ) {
     private val translation by translationKrate
     private val chatGameConfig by chatGameConfigKrate
@@ -78,12 +80,12 @@ internal class ChatGameLiteralArgumentBuilder(
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("quiz") {
-                runs { ctx ->
+                runs(commandExceptionHandler::handle) { ctx ->
                     val player = ctx.requirePlayer()
                     handleAnswer(player, "")
                 }
                 argument("answer", StringArgumentType.greedyString()) { answerArg ->
-                    runs { ctx ->
+                    runs(commandExceptionHandler::handle) { ctx ->
                         val player = ctx.requirePlayer()
                         val answer = ctx.requireArgument(answerArg)
                         handleAnswer(player, answer)

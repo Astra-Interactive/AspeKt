@@ -19,4 +19,6 @@ dependencies {
     implementation(libs.kotlin.serialization.json)
     implementation(libs.minecraft.astralibs.command)
     implementation(libs.minecraft.astralibs.core)
+
+    implementation(projects.modules.core.api)
 }

@@ -26,7 +26,8 @@ internal class AntiSwearCommandModule(
             ioScope = coreModule.ioScope,
             swearRepository = swearRepository,
             multiplatformCommand = coreModule.multiplatformCommand,
-            platformServer = coreModule.platformServer
+            platformServer = coreModule.platformServer,
+            commandExceptionHandler = coreModule.commandExceptionHandler
         ).create()
     )
 

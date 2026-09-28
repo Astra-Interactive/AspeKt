@@ -25,6 +25,7 @@ class ForgeAuthModule(
         ioScope = coreModule.ioScope,
         platformServer = coreModule.platformServer,
         multiplatformCommand = coreModule.multiplatformCommand,
+        commandExceptionHandler = coreModule.commandExceptionHandler,
         unconfinedScope = coreModule.unconfinedScope,
         commandRegistrarContext = commandRegistrarContext
     )

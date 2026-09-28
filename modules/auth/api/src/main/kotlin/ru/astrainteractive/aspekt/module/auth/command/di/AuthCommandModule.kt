@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.module.auth.command.di
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
@@ -24,6 +25,7 @@ class AuthCommandModule(
     ioScope: CoroutineScope,
     platformServer: PlatformServer,
     multiplatformCommand: MultiplatformCommand,
+    commandExceptionHandler: CommandExceptionHandler,
     unconfinedScope: CoroutineScope,
     private val commandRegistrarContext: CommandRegistrarContext
 ) {
@@ -35,14 +37,16 @@ class AuthCommandModule(
             authDao = authDao,
             authorizedApi = authorizedApi,
             translationKrate = translationKrate,
-            multiplatformCommand = multiplatformCommand
+            multiplatformCommand = multiplatformCommand,
+            commandExceptionHandler = commandExceptionHandler
         ).createNodes().run(::addAll)
         RegisterCommandRegistrar(
             ioScope = ioScope,
             authDao = authDao,
             authorizedApi = authorizedApi,
             translationKrate = translationKrate,
-            multiplatformCommand = multiplatformCommand
+            multiplatformCommand = multiplatformCommand,
+            commandExceptionHandler = commandExceptionHandler
         ).createNodes().run(::addAll)
         UnregisterCommandRegistrar(
             ioScope = ioScope,
@@ -50,7 +54,8 @@ class AuthCommandModule(
             authorizedApi = authorizedApi,
             platformServer = platformServer,
             translationKrate = translationKrate,
-            multiplatformCommand = multiplatformCommand
+            multiplatformCommand = multiplatformCommand,
+            commandExceptionHandler = commandExceptionHandler
         ).createNodes().run(::addAll)
     }
 

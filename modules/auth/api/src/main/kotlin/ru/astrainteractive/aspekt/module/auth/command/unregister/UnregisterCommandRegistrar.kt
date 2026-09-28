@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
@@ -23,7 +24,8 @@ class UnregisterCommandRegistrar(
     private val authDao: AuthDao,
     private val authorizedApi: AuthorizedApi,
     private val platformServer: PlatformServer,
-    private val multiplatformCommand: MultiplatformCommand
+    private val multiplatformCommand: MultiplatformCommand,
+    private val commandExceptionHandler: CommandExceptionHandler
 ) {
     private val translation by translationKrate
 
@@ -36,7 +38,7 @@ class UnregisterCommandRegistrar(
                     type = StringArgumentType.string(),
                     block = { usernameArg ->
                         hints { platformServer.getOnlinePlayers().map { it.name } }
-                        runs { ctx ->
+                        runs(commandExceptionHandler::handle) { ctx ->
                             ctx.requirePermission(AuthPermission.Unregister)
                             val usernameToDelete = ctx.requireArgument(usernameArg)
                             ioScope.launch {

@@ -1,6 +1,7 @@
 package ru.astrainteractive.aspekt.module.sit.command.sit
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
+import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.sit.event.sit.SitController
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.server.player.BukkitOnlineKPlayer
@@ -13,12 +14,13 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
  */
 internal class SitLiteralArgumentBuilder(
     private val sitController: SitController,
-    private val multiplatformCommand: MultiplatformCommand
+    private val multiplatformCommand: MultiplatformCommand,
+    private val commandExceptionHandler: CommandExceptionHandler
 ) {
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("sit") {
-                runs { ctx ->
+                runs(commandExceptionHandler::handle) { ctx ->
                     val onlineKPlayer = ctx.requirePlayer()
 
                     @Suppress("MaxLineLength")

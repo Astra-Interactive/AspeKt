@@ -42,7 +42,7 @@ class SetHomeModule(
         homeKrateProvider = homeKrateProvider,
         executor = homeCommandExecutor,
         multiplatformCommand = coreModule.multiplatformCommand,
-        translationKrate = coreModule.translationKrate,
+        commandExceptionHandler = coreModule.commandExceptionHandler,
         unconfinedScope = coreModule.unconfinedScope
     )
 

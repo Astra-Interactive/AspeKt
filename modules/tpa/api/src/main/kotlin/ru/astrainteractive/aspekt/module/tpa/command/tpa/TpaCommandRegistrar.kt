@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.module.tpa.command.tpa
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
+import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.tpa.command.TpaCommand
 import ru.astrainteractive.aspekt.module.tpa.command.TpaCommandExecutor
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
@@ -19,14 +20,15 @@ import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 internal class TpaCommandRegistrar(
     private val executor: TpaCommandExecutor,
     private val platformServer: PlatformServer,
-    private val multiplatformCommand: MultiplatformCommand
+    private val multiplatformCommand: MultiplatformCommand,
+    private val commandExceptionHandler: CommandExceptionHandler
 ) {
     private fun createTpaNode(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("tpa") {
                 argument("player", StringArgumentType.string()) { playerArg ->
                     hints { platformServer.getOnlinePlayers().map(OnlineKPlayer::name) }
-                    runs { ctx ->
+                    runs(commandExceptionHandler::handle) { ctx ->
                         val targetPlayerName = ctx.requireArgument(playerArg)
                         TpaCommand.TpaTo(
                             executorPlayer = ctx.requirePlayer(),
@@ -44,7 +46,7 @@ internal class TpaCommandRegistrar(
             command("tpahere") {
                 argument("player", StringArgumentType.string()) { playerArg ->
                     hints { platformServer.getOnlinePlayers().map(OnlineKPlayer::name) }
-                    runs { ctx ->
+                    runs(commandExceptionHandler::handle) { ctx ->
                         val targetPlayerName = ctx.requireArgument(playerArg)
                         TpaCommand.TpaHere(
                             executorPlayer = ctx.requirePlayer(),
@@ -60,7 +62,7 @@ internal class TpaCommandRegistrar(
     private fun createTpaCancelNode(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("tpacancel") {
-                runs { ctx ->
+                runs(commandExceptionHandler::handle) { ctx ->
                     TpaCommand.TpaCancel(
                         executorPlayer = ctx.requirePlayer()
                     ).run(executor::execute)
@@ -72,7 +74,7 @@ internal class TpaCommandRegistrar(
     private fun createTpaAcceptNode(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("tpaccept") {
-                runs { ctx ->
+                runs(commandExceptionHandler::handle) { ctx ->
                     TpaCommand.TpaAccept(
                         executorPlayer = ctx.requirePlayer()
                     ).run(executor::execute)
@@ -84,7 +86,7 @@ internal class TpaCommandRegistrar(
     private fun createTpaDenyNode(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("tpadeny") {
-                runs { ctx ->
+                runs(commandExceptionHandler::handle) { ctx ->
                     TpaCommand.TpaDeny(
                         executorPlayer = ctx.requirePlayer()
                     ).run(executor::execute)
