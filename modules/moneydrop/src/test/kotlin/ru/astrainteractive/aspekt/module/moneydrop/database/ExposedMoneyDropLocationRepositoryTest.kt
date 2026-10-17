@@ -1,3 +1,5 @@
+@file:Suppress("FunctionNaming")
+
 package ru.astrainteractive.aspekt.module.moneydrop.database
 
 import kotlinx.coroutines.CoroutineScope
@@ -37,7 +39,7 @@ internal class ExposedMoneyDropLocationRepositoryTest {
     }
 
     @Test
-    fun testAll() = runTest(scheduler) {
+    fun GIVEN_new_location_WHEN_added_THEN_it_exists() = runTest(scheduler) {
         val location = MoneyDropLocation(
             x = 0,
             y = 0,

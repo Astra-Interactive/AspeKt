@@ -1,3 +1,5 @@
+@file:Suppress("FunctionNaming")
+
 package ru.astrainteractive.aspekt.module.claims.util
 
 import kotlinx.coroutines.test.TestScope
@@ -47,7 +49,7 @@ internal class ClaimsRepositoryExtTest {
     }
 
     @Test
-    fun testClaimAndUnclaim(): Unit = runTest {
+    fun GIVEN_free_chunk_WHEN_claimed_and_deleted_THEN_chunk_count_follows(): Unit = runTest {
         val repository = getRepository()
         randomChunk.let { chunk ->
             assertEquals(0, repository.getAllChunks().size)
@@ -60,7 +62,7 @@ internal class ClaimsRepositoryExtTest {
     }
 
     @Test
-    fun testSetFlag(): Unit = runTest {
+    fun GIVEN_claimed_chunk_WHEN_flag_is_set_THEN_chunk_keeps_the_flag_value(): Unit = runTest {
         val repository = getRepository()
         randomChunk.let { chunk ->
             repository.claim(claimPlayer.uuid, chunk)
@@ -78,7 +80,7 @@ internal class ClaimsRepositoryExtTest {
     }
 
     @Test
-    fun testIsAble(): Unit = runTest {
+    fun GIVEN_chunk_WHEN_claimed_and_flag_changes_THEN_action_permission_follows(): Unit = runTest {
         val repository = getRepository()
         randomChunk.let { chunk ->
             assertTrue { repository.isAble(chunk.uniqueWorldKey, ChunkFlag.ALLOW_BREAK) }
@@ -92,7 +94,7 @@ internal class ClaimsRepositoryExtTest {
     }
 
     @Test
-    fun testMapThree(): Unit = runTest {
+    fun GIVEN_claimed_chunk_WHEN_mapped_with_size_three_THEN_only_center_is_claimed(): Unit = runTest {
         val repository = getRepository()
         randomChunk.let { chunk ->
             repository.claim(claimPlayer.uuid, chunk)

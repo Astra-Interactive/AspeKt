@@ -217,7 +217,7 @@ class FeatureGateExtTest {
     }
 
     @Test
-    fun GIVEN_disabled_gate_WHEN_withFeature_THEN_returns_null() {
+    fun GIVEN_disabled_gate_WHEN_with_feature_THEN_returns_null() {
         val parentGate = createParentGate(FakeFeatureFlagReader(isEnabled = false), mutableListOf())
 
         parentGate.onEnable()
@@ -226,7 +226,7 @@ class FeatureGateExtTest {
     }
 
     @Test
-    fun GIVEN_enabled_gate_WHEN_withFeature_THEN_returns_block_result() {
+    fun GIVEN_enabled_gate_WHEN_with_feature_THEN_returns_block_result() {
         val parentGate = createParentGate(FakeFeatureFlagReader(isEnabled = true), mutableListOf())
 
         parentGate.onEnable()
