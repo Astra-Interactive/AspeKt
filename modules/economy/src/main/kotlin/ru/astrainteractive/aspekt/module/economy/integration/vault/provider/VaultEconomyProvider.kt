@@ -12,8 +12,8 @@ import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import ru.astrainteractive.aspekt.module.economy.api.EconomyRepository
 import ru.astrainteractive.aspekt.module.economy.model.Currency
-import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.module.economy.model.EconomyPlayer
+import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import java.text.DecimalFormat
@@ -128,7 +128,9 @@ internal class VaultEconomyProvider(
                 "Player doesn't have enough amount to withdraw"
             )
         }
-        runIoBlocking { repository.updatePlayerCurrency(playerCurrency.copy(balance = playerCurrency.balance - amount)) }
+        runIoBlocking {
+            repository.updatePlayerCurrency(playerCurrency.copy(balance = playerCurrency.balance - amount))
+        }
         return EconomyResponse(
             amount,
             playerCurrency.balance - amount,
@@ -153,16 +155,19 @@ internal class VaultEconomyProvider(
             return EconomyResponse(0.0, 0.0, EconomyResponse.ResponseType.FAILURE, "Player is null")
         }
         val playerCurrency = runIoBlocking {
-            repository.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id) ?: PlayerCurrency(
-                playerModel = EconomyPlayer(
-                    name = playerName,
-                    uuid = player.uniqueId.toString()
-                ),
-                balance = 0.0,
-                currencyModel = primaryCurrencyModel
-            )
+            repository.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id)
+                ?: PlayerCurrency(
+                    playerModel = EconomyPlayer(
+                        name = playerName,
+                        uuid = player.uniqueId.toString()
+                    ),
+                    balance = 0.0,
+                    currencyModel = primaryCurrencyModel
+                )
         }
-        runIoBlocking { repository.updatePlayerCurrency(playerCurrency.copy(balance = playerCurrency.balance + amount)) }
+        runIoBlocking {
+            repository.updatePlayerCurrency(playerCurrency.copy(balance = playerCurrency.balance + amount))
+        }
         return EconomyResponse(
             amount,
             playerCurrency.balance + amount,

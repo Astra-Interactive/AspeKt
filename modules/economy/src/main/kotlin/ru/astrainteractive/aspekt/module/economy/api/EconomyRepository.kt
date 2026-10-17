@@ -1,8 +1,8 @@
 package ru.astrainteractive.aspekt.module.economy.api
 
 import ru.astrainteractive.aspekt.module.economy.model.Currency
-import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.module.economy.model.EconomyPlayer
+import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 
 internal interface EconomyRepository {
     /**

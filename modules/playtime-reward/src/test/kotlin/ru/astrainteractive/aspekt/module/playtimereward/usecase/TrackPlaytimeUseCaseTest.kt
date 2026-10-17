@@ -26,14 +26,20 @@ class TrackPlaytimeUseCaseTest {
     private val folder = Files.createTempDirectory("playtime_test").toFile()
     private val clock = FakeClock(Instant.fromEpochSeconds(0))
     private val economy = FakeEconomyFacade()
-    private val player = FakeOnlineKPlayer(uuid = UUID.fromString("550e8400-e29b-41d4-a716-446655440001"), name = "Player")
+    private val player = FakeOnlineKPlayer(
+        uuid = UUID.fromString("550e8400-e29b-41d4-a716-446655440001"),
+        name = "Player"
+    )
     private val configuration = PlaytimeRewardConfiguration(rewardAmount = 5.0, requiredDuration = 60.minutes)
     private val repository = KratePlaytimeRewardRepository(tempDataFolder = folder, stringFormat = Json, clock = clock)
     private val useCase = TrackPlaytimeUseCase(
         clock = clock,
         playtimeRewardRepository = repository,
         economyFacade = economy,
-        playtimeRewardConfigurationKrate = DefaultMutableKrate(factory = { configuration }, loader = { null }).asCachedKrate(),
+        playtimeRewardConfigurationKrate = DefaultMutableKrate(
+            factory = { configuration },
+            loader = { null }
+        ).asCachedKrate(),
         pluginTranslationKrate = DefaultMutableKrate(factory = ::PluginTranslation, loader = { null }).asCachedKrate()
     )
 

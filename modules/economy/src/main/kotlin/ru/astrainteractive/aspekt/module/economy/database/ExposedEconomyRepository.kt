@@ -21,8 +21,8 @@ import ru.astrainteractive.aspekt.module.economy.api.EconomyRepository
 import ru.astrainteractive.aspekt.module.economy.database.table.CurrencyTable
 import ru.astrainteractive.aspekt.module.economy.database.table.PlayerCurrencyTable
 import ru.astrainteractive.aspekt.module.economy.model.Currency
-import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.module.economy.model.EconomyPlayer
+import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 

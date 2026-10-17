@@ -21,7 +21,10 @@ import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class FreeInmateUseCaseTest {
-    private val repository = FakeJailRepository(jails = listOf(JailTestData.jail), inmates = listOf(JailTestData.inmate))
+    private val repository = FakeJailRepository(
+        jails = listOf(JailTestData.jail),
+        inmates = listOf(JailTestData.inmate)
+    )
     private val player = FakeOnlineKPlayer(uuid = JailTestData.inmateUuid, name = "Prisoner")
 
     private fun useCase(onlinePlayers: List<FakeOnlineKPlayer>) = FreeInmateUseCase(

@@ -7,8 +7,8 @@ import ru.astrainteractive.aspekt.module.rtp.search.ChunkHazardDetector
 import ru.astrainteractive.aspekt.module.rtp.search.ChunkLoader
 import ru.astrainteractive.aspekt.module.rtp.search.DestinationPreparer
 import ru.astrainteractive.aspekt.module.rtp.search.RtpCooldownRegistry
-import ru.astrainteractive.aspekt.module.rtp.search.SafeColumnScanner
 import ru.astrainteractive.aspekt.module.rtp.search.RtpSearchJobRegistry
+import ru.astrainteractive.aspekt.module.rtp.search.SafeColumnScanner
 import ru.astrainteractive.aspekt.module.rtp.search.SafeLocationSearcher
 import ru.astrainteractive.astralibs.server.util.MinecraftUtil
 import ru.astrainteractive.astralibs.server.util.getNextTickTime

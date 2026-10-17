@@ -4,8 +4,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.module.economy.api.EconomyRepository
 import ru.astrainteractive.aspekt.module.economy.model.Currency
-import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.module.economy.model.EconomyPlayer
+import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate

@@ -7,7 +7,6 @@ import ru.astrainteractive.aspekt.module.claims.krate.KrateClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
-import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.astralibs.util.YamlStringFormat
 import ru.astrainteractive.klibs.mikro.core.coroutines.awaitForCompletion
 import java.io.File
