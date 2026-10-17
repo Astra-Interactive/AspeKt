@@ -1,0 +1,1 @@
+KindShape	src/main/kotlin/ru/astrainteractive/aspekt/module/economy/integration/vault/provider/VaultEconomyProvider.kt	VaultEconomyProvider

@@ -1,0 +1,1 @@
+KindShape	src/main/kotlin/ru/astrainteractive/aspekt/module/oregeneration/populator/OreGenerationBlockPopulator.kt	OreGenerationBlockPopulator
