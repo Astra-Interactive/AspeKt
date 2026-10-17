@@ -4,12 +4,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
-import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.aspekt.module.auth.command.login.LoginCommandRegistrar
 import ru.astrainteractive.aspekt.module.auth.command.register.RegisterCommandRegistrar
 import ru.astrainteractive.aspekt.module.auth.command.unregister.UnregisterCommandRegistrar
+import ru.astrainteractive.aspekt.module.auth.dao.api.AuthRepository
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
@@ -19,7 +19,7 @@ import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 
 @Suppress("LongParameterList")
 class AuthCommandModule(
-    authDao: AuthDao,
+    authRepository: AuthRepository,
     authorizedApi: AuthorizedApi,
     translationKrate: CachedKrate<AuthTranslation>,
     ioScope: CoroutineScope,
@@ -34,7 +34,7 @@ class AuthCommandModule(
     private val nodes = buildList {
         LoginCommandRegistrar(
             ioScope = ioScope,
-            authDao = authDao,
+            authRepository = authRepository,
             authorizedApi = authorizedApi,
             translationKrate = translationKrate,
             multiplatformCommand = multiplatformCommand,
@@ -42,7 +42,7 @@ class AuthCommandModule(
         ).createNodes().run(::addAll)
         RegisterCommandRegistrar(
             ioScope = ioScope,
-            authDao = authDao,
+            authRepository = authRepository,
             authorizedApi = authorizedApi,
             translationKrate = translationKrate,
             multiplatformCommand = multiplatformCommand,
@@ -50,7 +50,7 @@ class AuthCommandModule(
         ).createNodes().run(::addAll)
         UnregisterCommandRegistrar(
             ioScope = ioScope,
-            authDao = authDao,
+            authRepository = authRepository,
             authorizedApi = authorizedApi,
             platformServer = platformServer,
             translationKrate = translationKrate,

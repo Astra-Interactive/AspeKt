@@ -42,6 +42,8 @@ dependencies {
     shadow(projects.modules.core.feature)
     shadow(projects.modules.core.forge)
     shadow(projects.modules.auth.api)
+    shadow(projects.modules.auth.dao)
+    shadow(projects.modules.auth.exposed)
     shadow(projects.modules.auth.forge)
     shadow(projects.modules.claims.api)
     shadow(projects.modules.claims.forge)

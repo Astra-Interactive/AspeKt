@@ -19,7 +19,7 @@ class ForgeAuthModule(
     private val moduleMainScope = CoroutineScope(coreModule.mainScope.coroutineContext + SupervisorJob())
 
     private val authCommandModule = AuthCommandModule(
-        authDao = authApiModule.authDao,
+        authRepository = authApiModule.authRepository,
         authorizedApi = authApiModule.authorizedApi,
         translationKrate = authApiModule.translationKrate,
         ioScope = coreModule.ioScope,

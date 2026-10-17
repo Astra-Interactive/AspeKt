@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.minecraft.astralibs.core.neoforge)
 
     implementation(projects.modules.auth.api)
+    implementation(projects.modules.auth.dao)
     implementation(projects.modules.core.api)
     implementation(projects.modules.core.neoforge)
 }

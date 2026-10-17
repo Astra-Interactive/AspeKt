@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.module.auth.api.model
+package ru.astrainteractive.aspekt.module.auth.dao.model
 
 import java.util.UUID
 

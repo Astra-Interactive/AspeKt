@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.module.auth.api.table
+package ru.astrainteractive.aspekt.module.auth.exposed.table
 
 import org.jetbrains.exposed.v1.javatime.datetime
 import ru.astrainteractive.klibs.mikro.exposed.dao.StringIdTable

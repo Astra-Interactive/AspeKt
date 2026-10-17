@@ -5,11 +5,11 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
-import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthPermission
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
+import ru.astrainteractive.aspekt.module.auth.dao.api.AuthRepository
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
@@ -21,7 +21,7 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
 class UnregisterCommandRegistrar(
     translationKrate: CachedKrate<AuthTranslation>,
     private val ioScope: CoroutineScope,
-    private val authDao: AuthDao,
+    private val authRepository: AuthRepository,
     private val authorizedApi: AuthorizedApi,
     private val platformServer: PlatformServer,
     private val multiplatformCommand: MultiplatformCommand,
@@ -42,12 +42,12 @@ class UnregisterCommandRegistrar(
                             ctx.requirePermission(AuthPermission.Unregister)
                             val usernameToDelete = ctx.requireArgument(usernameArg)
                             ioScope.launch {
-                                val authData = authDao.getUser(usernameToDelete)
+                                val authData = authRepository.getUser(usernameToDelete)
                                     .onFailure {
                                         ctx.getSender().sendMessage(translation.userNotFound)
                                     }.getOrNull() ?: return@launch
 
-                                authDao.deleteAccount(authData.uuid)
+                                authRepository.deleteAccount(authData.uuid)
                                     .onSuccess {
                                         val onlinePlayer = platformServer.findOnlinePlayer(usernameToDelete)
                                         val onlinePlayerLoginModel = onlinePlayer?.let { player ->

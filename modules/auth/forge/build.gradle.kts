@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.minecraft.astralibs.core.forge)
 
     implementation(projects.modules.auth.api)
+    implementation(projects.modules.auth.dao)
     implementation(projects.modules.core.api)
     implementation(projects.modules.core.forge)
 }

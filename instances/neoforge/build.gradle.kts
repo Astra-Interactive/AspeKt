@@ -32,6 +32,8 @@ dependencies {
     shadow(libs.minecraft.kyori.minimessage)
     shadow(libs.minecraft.kyori.plain)
     shadow(projects.modules.auth.api)
+    shadow(projects.modules.auth.dao)
+    shadow(projects.modules.auth.exposed)
     shadow(projects.modules.auth.neoforge)
     shadow(projects.modules.claims.api)
     shadow(projects.modules.claims.neoforge)

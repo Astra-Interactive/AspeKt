@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.module.auth.api.internal
+package ru.astrainteractive.aspekt.module.auth.exposed.account
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -9,13 +9,13 @@ import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.update
-import ru.astrainteractive.aspekt.module.auth.api.AuthDao
-import ru.astrainteractive.aspekt.module.auth.api.model.AuthData
-import ru.astrainteractive.aspekt.module.auth.api.table.UserTable
+import ru.astrainteractive.aspekt.module.auth.dao.api.AuthRepository
+import ru.astrainteractive.aspekt.module.auth.dao.model.AuthData
+import ru.astrainteractive.aspekt.module.auth.exposed.table.UserTable
 import java.time.LocalDateTime
 import java.util.UUID
 
-internal class AuthDaoImpl(private val databaseFlow: Flow<Database>) : AuthDao {
+internal class ExposedAuthRepository(private val databaseFlow: Flow<Database>) : AuthRepository {
     private suspend fun requireDatabase() = databaseFlow.first()
     override suspend fun createAccount(authData: AuthData): Result<Unit> {
         return runCatching {

@@ -5,12 +5,12 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
-import ru.astrainteractive.aspekt.module.auth.api.AuthDao
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
-import ru.astrainteractive.aspekt.module.auth.api.isRegistered
-import ru.astrainteractive.aspekt.module.auth.api.model.AuthData
 import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
 import ru.astrainteractive.aspekt.module.auth.api.util.sha256
+import ru.astrainteractive.aspekt.module.auth.dao.api.AuthRepository
+import ru.astrainteractive.aspekt.module.auth.dao.model.AuthData
+import ru.astrainteractive.aspekt.module.auth.dao.util.isRegistered
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
@@ -21,7 +21,7 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
 class RegisterCommandRegistrar(
     translationKrate: CachedKrate<AuthTranslation>,
     private val ioScope: CoroutineScope,
-    private val authDao: AuthDao,
+    private val authRepository: AuthRepository,
     private val authorizedApi: AuthorizedApi,
     private val multiplatformCommand: MultiplatformCommand,
     private val commandExceptionHandler: CommandExceptionHandler
@@ -43,7 +43,7 @@ class RegisterCommandRegistrar(
                                     ioScope.launch {
                                         val player = ctx.requirePlayer()
                                         val passwordSha = ctx.requireArgument(passwordArg).sha256()
-                                        val isRegistered = authDao.isRegistered(player.uuid)
+                                        val isRegistered = authRepository.isRegistered(player.uuid)
                                         if (isRegistered) {
                                             ctx.getSender().sendMessage(translation.alreadyRegistered)
                                             return@launch
@@ -54,7 +54,7 @@ class RegisterCommandRegistrar(
                                             passwordSha256 = passwordSha,
                                             lastIpAddress = player.address.hostName
                                         )
-                                        authDao.createAccount(authData)
+                                        authRepository.createAccount(authData)
                                             .onFailure {
                                                 ctx.getSender().sendMessage(translation.couldNotCreateAccount)
                                             }
