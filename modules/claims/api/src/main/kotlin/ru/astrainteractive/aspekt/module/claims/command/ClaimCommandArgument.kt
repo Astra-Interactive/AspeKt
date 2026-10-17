@@ -1,6 +1,6 @@
 package ru.astrainteractive.aspekt.module.claims.command
 
-enum class ClaimCommandArgument(val value: String) {
+internal enum class ClaimCommandArgument(val value: String) {
     CLAIM("claim"),
     UNCLAIM("unclaim"),
     MAP("map"),

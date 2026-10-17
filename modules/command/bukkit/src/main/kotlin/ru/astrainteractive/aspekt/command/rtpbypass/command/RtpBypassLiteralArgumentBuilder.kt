@@ -6,7 +6,7 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
 import ru.astrainteractive.aspekt.plugin.model.PluginPermission
 import ru.astrainteractive.astralibs.command.api.argumenttype.OnlinePlayerArgumentConverter
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand

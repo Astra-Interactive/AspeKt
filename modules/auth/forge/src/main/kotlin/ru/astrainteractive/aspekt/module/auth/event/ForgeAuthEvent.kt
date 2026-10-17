@@ -23,7 +23,7 @@ import ru.astrainteractive.astralibs.server.util.toPlain
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 
-class ForgeAuthEvent(
+internal class ForgeAuthEvent(
     private val authorizedApi: AuthorizedApi,
     private val mainScope: CoroutineScope,
     translationKrate: CachedKrate<AuthTranslation>

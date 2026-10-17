@@ -10,7 +10,7 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
-class ClaimErrorMapper(
+internal class ClaimErrorMapper(
     translationKrate: CachedKrate<PluginTranslation>
 ) : Logger by JUtiltLogger("AspeKt-ClaimErrorMapper") {
     private val translation by translationKrate

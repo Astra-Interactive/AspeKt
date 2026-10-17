@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Mutex
 import org.bukkit.Bukkit
-import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.chatgame.api.ChatGameStore
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.Reward

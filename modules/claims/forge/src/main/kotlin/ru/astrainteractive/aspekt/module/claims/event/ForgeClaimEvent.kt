@@ -32,7 +32,7 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
-class ForgeClaimEvent(
+internal class ForgeClaimEvent(
     private val claimsRepository: ClaimsRepository,
     translationKrate: CachedKrate<PluginTranslation>
 ) : Logger by JUtiltLogger("AspeKt-ForgeClaimEvent") {

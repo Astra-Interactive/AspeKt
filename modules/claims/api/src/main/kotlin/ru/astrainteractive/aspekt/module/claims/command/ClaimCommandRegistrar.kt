@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.claims.command
 import com.mojang.brigadier.arguments.BoolArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.claims.api.ChunkProvider
 import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
@@ -27,7 +27,7 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
  * - /claim claim
  * - /claim unclaim
  */
-class ClaimCommandRegistrar(
+internal class ClaimCommandRegistrar(
     private val claimCommandExecutor: ClaimCommandExecutor,
     private val claimsRepository: ClaimsRepository,
     private val platformServer: PlatformServer,

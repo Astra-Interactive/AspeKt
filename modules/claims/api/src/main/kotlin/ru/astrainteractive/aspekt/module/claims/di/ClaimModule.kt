@@ -27,7 +27,7 @@ class ClaimModule(
         stringFormat = stringFormat,
         ioScope = moduleIoScope
     )
-    val claimErrorMapper = ClaimErrorMapper(translationKrate = translationKrate)
+    internal val claimErrorMapper = ClaimErrorMapper(translationKrate = translationKrate)
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onDisable = { moduleIoScope.cancel() }

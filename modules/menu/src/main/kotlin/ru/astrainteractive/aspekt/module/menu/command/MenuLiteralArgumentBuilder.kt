@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.menu.command
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation

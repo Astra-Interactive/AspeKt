@@ -1,6 +1,6 @@
 @file:Suppress("FunctionNaming")
 
-package ru.astrainteractive.aspekt.core.command
+package ru.astrainteractive.aspekt.core.command.error
 
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.CommandDispatcher
@@ -24,14 +24,14 @@ import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class CommandExceptionHandlerTest {
+class TranslationCommandExceptionHandlerTest {
     private val sender = RecordingConsoleKCommandSender()
     private val multiplatformCommand = MultiplatformCommand(FakeMultiplatformCommands(sender))
     private val translationKrate = DefaultMutableKrate(
         factory = ::PluginTranslation,
         loader = { null }
     ).asCachedMutableKrate()
-    private val handler = CommandExceptionHandler(
+    private val handler = TranslationCommandExceptionHandler(
         multiplatformCommand = multiplatformCommand,
         translationKrate = translationKrate
     )
@@ -174,7 +174,7 @@ class CommandExceptionHandlerTest {
     @Test
     fun GIVEN_sender_that_can_not_be_resolved_WHEN_command_fails_THEN_command_still_completes() {
         val unresolvableCommand = MultiplatformCommand(FakeMultiplatformCommands(sender = null))
-        val unresolvableHandler = CommandExceptionHandler(
+        val unresolvableHandler = TranslationCommandExceptionHandler(
             multiplatformCommand = unresolvableCommand,
             translationKrate = translationKrate
         )

@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.claims.event
 
 import net.neoforged.bus.api.ICancellableEvent
 
-class ForgeSharedCancellableEvent<T>(
+internal class ForgeSharedCancellableEvent<T>(
     private val instance: T
 ) : SharedCancellableEvent where T : ICancellableEvent {
     override var isCancelled: Boolean

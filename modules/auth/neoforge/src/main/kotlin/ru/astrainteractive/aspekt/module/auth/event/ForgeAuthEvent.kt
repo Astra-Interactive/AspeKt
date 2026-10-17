@@ -33,7 +33,7 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.coroutines.merge
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
-class ForgeAuthEvent(
+internal class ForgeAuthEvent(
     private val authorizedApi: AuthorizedApi,
     private val mainScope: CoroutineScope,
     translationKrate: CachedKrate<AuthTranslation>

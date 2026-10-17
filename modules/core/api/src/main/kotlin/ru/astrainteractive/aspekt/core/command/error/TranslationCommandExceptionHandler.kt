@@ -1,6 +1,7 @@
-package ru.astrainteractive.aspekt.core.command
+package ru.astrainteractive.aspekt.core.command.error
 
 import com.mojang.brigadier.context.CommandContext
+import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.exception.ArgumentConverterException
@@ -17,10 +18,11 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
-class CommandExceptionHandler(
+internal class TranslationCommandExceptionHandler(
     private val multiplatformCommand: MultiplatformCommand,
     translationKrate: CachedKrate<PluginTranslation>
-) : Logger by JUtiltLogger("AspeKt-CommandExceptionHandler") {
+) : CommandExceptionHandler,
+    Logger by JUtiltLogger("AspeKt-CommandExceptionHandler") {
     private val translation by translationKrate
 
     private fun messageOf(throwable: Throwable, commandName: String): LocalizableComponent = when (throwable) {
@@ -39,7 +41,7 @@ class CommandExceptionHandler(
         }
     }
 
-    fun handle(ctx: CommandContext<Any>, throwable: Throwable) {
+    override fun handle(ctx: CommandContext<Any>, throwable: Throwable) {
         val commandName = ctx.input.substringBefore(' ')
         val sender = runCatching { with(multiplatformCommand) { ctx.getSender() } }
             .getOrElse { senderError ->

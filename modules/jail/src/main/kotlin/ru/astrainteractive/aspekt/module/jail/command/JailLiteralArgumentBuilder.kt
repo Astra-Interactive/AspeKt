@@ -5,7 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
-import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.jail.api.JailCache
 import ru.astrainteractive.aspekt.module.jail.api.JailRepository
 import ru.astrainteractive.aspekt.module.jail.model.Jail

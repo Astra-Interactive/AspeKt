@@ -10,7 +10,7 @@ import java.util.EnumSet.range
 import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
 
-class OnlineSimulator(private val scope: CoroutineScope) {
+internal class OnlineSimulator(private val scope: CoroutineScope) {
     private sealed interface OnlineRange {
         val min: Int
         val max: Int

@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.command.rtp.command
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate

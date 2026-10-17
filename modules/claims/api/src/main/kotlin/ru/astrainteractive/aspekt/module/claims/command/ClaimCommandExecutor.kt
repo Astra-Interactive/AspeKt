@@ -19,7 +19,7 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 @Suppress("LongParameterList")
-class ClaimCommandExecutor(
+internal class ClaimCommandExecutor(
     private val scope: CoroutineScope,
     private val dispatchers: KotlinDispatchers,
     private val claimsRepository: ClaimsRepository,

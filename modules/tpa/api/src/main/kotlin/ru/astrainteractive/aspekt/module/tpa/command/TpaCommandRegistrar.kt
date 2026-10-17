@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.tpa.command
 
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer

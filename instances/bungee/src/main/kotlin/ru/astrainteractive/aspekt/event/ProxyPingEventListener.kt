@@ -6,7 +6,7 @@ import net.md_5.bungee.event.EventHandler
 import net.md_5.bungee.event.EventPriority
 import java.util.UUID
 
-class ProxyPingEventListener(
+internal class ProxyPingEventListener(
     private val onlineSimulator: OnlineSimulator
 ) : KListener {
     @EventHandler(priority = EventPriority.HIGHEST)

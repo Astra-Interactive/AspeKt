@@ -11,7 +11,7 @@ import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
-class RtpCommandExecutor(
+internal class RtpCommandExecutor(
     private val ioScope: CoroutineScope,
     private val safeLocationProvider: SafeLocationProvider,
     private val dispatchers: KotlinDispatchers,

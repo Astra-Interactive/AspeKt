@@ -8,7 +8,8 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
-import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.command.error.TranslationCommandExceptionHandler
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
@@ -70,7 +71,7 @@ class CoreModule(
         )
         .asCachedMutableKrate()
 
-    val commandExceptionHandler = CommandExceptionHandler(
+    val commandExceptionHandler: CommandExceptionHandler = TranslationCommandExceptionHandler(
         multiplatformCommand = multiplatformCommand,
         translationKrate = translationKrate
     )

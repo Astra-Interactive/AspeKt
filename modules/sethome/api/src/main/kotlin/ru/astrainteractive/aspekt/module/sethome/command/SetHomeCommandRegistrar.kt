@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.sethome.command
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
-import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.sethome.api.PlayerHomesRepository
 import ru.astrainteractive.aspekt.module.sethome.model.PlayerHome
 import ru.astrainteractive.aspekt.plugin.model.PluginPermission

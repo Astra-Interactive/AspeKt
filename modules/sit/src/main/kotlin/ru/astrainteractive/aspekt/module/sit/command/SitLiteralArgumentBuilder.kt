@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.module.sit.command
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.sit.event.SitController
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.server.player.BukkitOnlineKPlayer

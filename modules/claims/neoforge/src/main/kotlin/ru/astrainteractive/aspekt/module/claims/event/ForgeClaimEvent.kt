@@ -34,7 +34,7 @@ import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
-class ForgeClaimEvent(
+internal class ForgeClaimEvent(
     private val claimsRepository: ClaimsRepository,
     translationKrate: CachedKrate<PluginTranslation>
 ) : Logger by JUtiltLogger("AspeKt-ForgeClaimEvent") {

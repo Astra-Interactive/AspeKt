@@ -4,7 +4,7 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.dao.api.AuthRepository
 import ru.astrainteractive.aspekt.module.auth.dao.model.AuthData
@@ -18,7 +18,7 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
 /**
  * /register <password> <password_confirm>
  */
-class RegisterCommandRegistrar(
+internal class RegisterCommandRegistrar(
     translationKrate: CachedKrate<AuthTranslation>,
     private val ioScope: CoroutineScope,
     private val authRepository: AuthRepository,

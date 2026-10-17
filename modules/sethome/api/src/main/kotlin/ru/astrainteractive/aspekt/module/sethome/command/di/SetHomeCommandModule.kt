@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.sethome.command.di
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.sethome.api.PlayerHomesRepository
 import ru.astrainteractive.aspekt.module.sethome.command.HomeCommandExecutor
 import ru.astrainteractive.aspekt.module.sethome.command.SetHomeCommandRegistrar

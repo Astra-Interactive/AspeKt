@@ -4,7 +4,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
-import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
 import ru.astrainteractive.aspekt.plugin.model.PluginPermission
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 

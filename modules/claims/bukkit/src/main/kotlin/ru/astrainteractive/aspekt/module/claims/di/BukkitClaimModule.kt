@@ -3,7 +3,6 @@ package ru.astrainteractive.aspekt.module.claims.di
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.claims.bukkit.BukkitChunkProvider
-import ru.astrainteractive.aspekt.module.claims.command.ClaimCommandExecutor
 import ru.astrainteractive.aspekt.module.claims.command.di.ClaimCommandModule
 import ru.astrainteractive.aspekt.module.claims.event.BukkitClaimEvent
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
@@ -13,19 +12,8 @@ class BukkitClaimModule(
     private val claimModule: ClaimModule,
     private val coreModule: CoreModule
 ) {
-    private val claimCommandExecutor = ClaimCommandExecutor(
-        scope = coreModule.ioScope,
-        dispatchers = coreModule.dispatchers,
-        translationKrate = coreModule.translationKrate,
-        kyoriKrate = coreModule.kyoriKrate,
-        claimsRepository = claimModule.claimsRepository,
-        claimErrorMapper = claimModule.claimErrorMapper,
-        platformServer = coreModule.platformServer
-    )
-
     private val claimCommandModule = ClaimCommandModule(
-        executor = claimCommandExecutor,
-        claimsRepository = claimModule.claimsRepository,
+        claimModule = claimModule,
         commandRegistrarContext = bukkitCoreModule.commandRegistrarContext,
         coreModule = coreModule,
         chunkProvider = BukkitChunkProvider()
