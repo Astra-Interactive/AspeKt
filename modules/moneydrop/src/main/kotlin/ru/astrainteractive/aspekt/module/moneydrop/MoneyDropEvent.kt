@@ -13,7 +13,7 @@ import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.inventory.InventoryMoveItemEvent
 import org.bukkit.event.inventory.InventoryPickupItemEvent
-import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
+import ru.astrainteractive.aspekt.economy.api.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.server.util.asKAudience

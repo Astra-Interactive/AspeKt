@@ -1,6 +1,6 @@
 package ru.astrainteractive.aspekt.feature.gate
 
-import ru.astrainteractive.aspekt.feature.flagreader.FeatureFlagReader
+import ru.astrainteractive.aspekt.feature.api.FeatureFlagReader
 import ru.astrainteractive.aspekt.feature.flagreader.ParentGatedFeatureFlagReader
 import ru.astrainteractive.aspekt.feature.model.ModuleState
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle

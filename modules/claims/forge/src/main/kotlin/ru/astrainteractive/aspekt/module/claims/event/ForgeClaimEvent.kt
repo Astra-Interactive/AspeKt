@@ -13,8 +13,8 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent
 import net.minecraftforge.event.level.BlockEvent
 import net.minecraftforge.event.level.ExplosionEvent
 import net.minecraftforge.eventbus.api.Event
-import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
-import ru.astrainteractive.aspekt.module.claims.data.isAble
+import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
+import ru.astrainteractive.aspekt.module.claims.api.isAble
 import ru.astrainteractive.aspekt.module.claims.debounce.EventDebounce
 import ru.astrainteractive.aspekt.module.claims.debounce.RetractKey
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag

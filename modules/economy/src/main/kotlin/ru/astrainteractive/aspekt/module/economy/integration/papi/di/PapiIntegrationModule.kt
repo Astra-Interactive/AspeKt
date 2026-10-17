@@ -17,7 +17,7 @@ internal class PapiIntegrationModule(
 
     private val economyPlaceholderExtension: PlaceholderExpansionApi by lazy {
         PapiFactory(
-            economyDao = databaseModule.economyDao,
+            economyRepository = databaseModule.economyRepository,
             scope = coreModule.ioScope
         ).create()
     }

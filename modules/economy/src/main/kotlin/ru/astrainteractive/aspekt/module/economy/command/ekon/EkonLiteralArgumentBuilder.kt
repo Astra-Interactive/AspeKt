@@ -7,7 +7,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
-import ru.astrainteractive.aspekt.module.economy.database.dao.CachedDao
+import ru.astrainteractive.aspekt.module.economy.api.CurrencyCache
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.argumenttype.KPlayerArgumentConverter
@@ -26,14 +26,14 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
  */
 internal class EkonLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
-    private val cachedDao: CachedDao,
+    private val currencyCache: CurrencyCache,
     private val executor: EkonCommandExecutor,
     private val multiplatformCommand: MultiplatformCommand,
     private val platformServer: PlatformServer,
     private val commandExceptionHandler: CommandExceptionHandler
 ) {
     private val translation by translationKrate
-    private fun currencyNames(): List<String> = cachedDao.getAllCurrencies().map { it.name }
+    private fun currencyNames(): List<String> = currencyCache.getAllCurrencies().map { it.name }
 
     @Suppress("LongMethod")
     fun create(): LiteralArgumentBuilder<Any> {
@@ -58,7 +58,7 @@ internal class EkonLiteralArgumentBuilder(
                             ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                             val currencyName = ctx.requireArgument(currencyArg)
                             val currency =
-                                cachedDao.getAllCurrencies().firstOrNull { it.name.equals(currencyName, true) }
+                                currencyCache.getAllCurrencies().firstOrNull { it.name.equals(currencyName, true) }
                             if (currency == null) {
                                 ctx.getSender().sendMessage(translation.economy.currencyNotFound)
                                 return@runs
@@ -74,7 +74,7 @@ internal class EkonLiteralArgumentBuilder(
                                 ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                                 val currencyName = ctx.requireArgument(currencyArg)
                                 val page = ctx.requireArgument(pageArg)
-                                val currency = cachedDao.getAllCurrencies().firstOrNull {
+                                val currency = currencyCache.getAllCurrencies().firstOrNull {
                                     it.name.equals(
                                         currencyName,
                                         true
@@ -101,7 +101,7 @@ internal class EkonLiteralArgumentBuilder(
                             runs(commandExceptionHandler::handle) { ctx ->
                                 ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                                 val currencyName = ctx.requireArgument(currencyArg)
-                                val currency = cachedDao.getAllCurrencies().firstOrNull {
+                                val currency = currencyCache.getAllCurrencies().firstOrNull {
                                     it.name.equals(
                                         currencyName,
                                         true
@@ -133,7 +133,7 @@ internal class EkonLiteralArgumentBuilder(
                                 runs(commandExceptionHandler::handle) { ctx ->
                                     ctx.requirePermission(PluginPermission.SET_BALANCE)
                                     val currencyName = ctx.requireArgument(currencyArg)
-                                    val currency = cachedDao.getAllCurrencies().firstOrNull {
+                                    val currency = currencyCache.getAllCurrencies().firstOrNull {
                                         it.name.equals(
                                             currencyName,
                                             true
@@ -168,7 +168,7 @@ internal class EkonLiteralArgumentBuilder(
                                 runs(commandExceptionHandler::handle) { ctx ->
                                     ctx.requirePermission(PluginPermission.SET_BALANCE)
                                     val currencyName = ctx.requireArgument(currencyArg)
-                                    val currency = cachedDao.getAllCurrencies().firstOrNull {
+                                    val currency = currencyCache.getAllCurrencies().firstOrNull {
                                         it.name.equals(
                                             currencyName,
                                             true

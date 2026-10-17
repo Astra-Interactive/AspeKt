@@ -4,7 +4,7 @@ import com.charleskorn.kaml.PolymorphismStyle
 import com.charleskorn.kaml.Yaml
 import net.minecraftforge.fml.loading.FMLPaths
 import ru.astrainteractive.aspekt.command.di.CommandsModule
-import ru.astrainteractive.aspekt.feature.flagreader.FileFeatureFlagReader
+import ru.astrainteractive.aspekt.feature.file.FileFeatureFlagReader
 import ru.astrainteractive.aspekt.feature.gate.FeatureGate
 import ru.astrainteractive.aspekt.feature.gate.mapEnabled
 import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule

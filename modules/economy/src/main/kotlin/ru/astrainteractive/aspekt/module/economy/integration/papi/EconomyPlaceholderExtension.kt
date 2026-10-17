@@ -2,13 +2,13 @@ package ru.astrainteractive.aspekt.module.economy.integration.papi
 
 import kotlinx.coroutines.CoroutineScope
 import org.bukkit.OfflinePlayer
-import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
+import ru.astrainteractive.aspekt.module.economy.api.EconomyRepository
 import ru.astrainteractive.aspekt.module.economy.integration.papi.core.Placeholder
 import ru.astrainteractive.aspekt.module.economy.integration.papi.placeholder.BalancePlaceholder
 import ru.astrainteractive.astralibs.expansion.KPlaceholderExpansion
 
 internal class EconomyPlaceholderExtension(
-    dao: EconomyDao,
+    repository: EconomyRepository,
     scope: CoroutineScope
 ) : PlaceholderExpansionApi, KPlaceholderExpansion(
     "aspekt",
@@ -17,7 +17,7 @@ internal class EconomyPlaceholderExtension(
 ) {
     private val placeholders = listOf<Placeholder>(
         BalancePlaceholder(
-            dao = dao,
+            repository = repository,
             scope = scope
         ),
     )

@@ -20,12 +20,12 @@ internal class EconomyCommandModule(
 
     private val executor = EkonCommandExecutor(
         translationKrate = coreModule.translationKrate,
-        dao = databaseModule.economyDao
+        repository = databaseModule.economyRepository
     )
 
     private val nodes = buildList {
         EkonLiteralArgumentBuilder(
-            cachedDao = databaseModule.cachedDao,
+            currencyCache = databaseModule.currencyCache,
             executor = executor,
             translationKrate = coreModule.translationKrate,
             multiplatformCommand = coreModule.multiplatformCommand,

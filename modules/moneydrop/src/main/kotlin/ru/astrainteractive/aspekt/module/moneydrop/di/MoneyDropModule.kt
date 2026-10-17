@@ -33,7 +33,7 @@ class MoneyDropModule(
         translationDependency = coreModule.translationKrate,
         dispatchers = coreModule.dispatchers,
         moneyDropKrate = moneyDropConfigKrate,
-        dao = moneyDropDaoModule.dao
+        repository = moneyDropDaoModule.repository
     )
 
     private val moneyDropEvent: MoneyDropEvent = MoneyDropEvent(

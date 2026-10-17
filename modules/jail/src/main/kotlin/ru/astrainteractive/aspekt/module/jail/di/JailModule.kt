@@ -3,13 +3,13 @@ package ru.astrainteractive.aspekt.module.jail.di
 import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.module.jail.api.JailCache
+import ru.astrainteractive.aspekt.module.jail.api.JailRepository
 import ru.astrainteractive.aspekt.module.jail.command.di.JailCommandModule
 import ru.astrainteractive.aspekt.module.jail.controller.JailController
-import ru.astrainteractive.aspekt.module.jail.data.CachedJailApi
-import ru.astrainteractive.aspekt.module.jail.data.JailApi
-import ru.astrainteractive.aspekt.module.jail.data.internal.CachedJailApiImpl
-import ru.astrainteractive.aspekt.module.jail.data.internal.JailApiImpl
 import ru.astrainteractive.aspekt.module.jail.event.JailEvent
+import ru.astrainteractive.aspekt.module.jail.file.FileJailRepository
+import ru.astrainteractive.aspekt.module.jail.memory.InMemoryJailCache
 import ru.astrainteractive.aspekt.module.jail.service.UnJailServiceTask
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.service.IntervalService
@@ -21,22 +21,22 @@ class JailModule(
     coreModule: CoreModule,
     bukkitCoreModule: BukkitCoreModule
 ) {
-    private val jailApi: JailApi = JailApiImpl(
+    private val jailRepository: JailRepository = FileJailRepository(
         folder = coreModule.dataFolder.resolve("jail"),
         stringFormat = coreModule.yamlFormat
     )
-    private val cachedJailApi: CachedJailApi = CachedJailApiImpl(
-        jailApi = jailApi,
+    private val jailCache: JailCache = InMemoryJailCache(
+        jailRepository = jailRepository,
         scope = coreModule.ioScope
     )
     private val jailController = JailController(
         dispatchers = coreModule.dispatchers,
-        jailApi = jailApi
+        jailRepository = jailRepository
     )
     private val jailEvent = JailEvent(
         scope = coreModule.ioScope,
-        jailApi = jailApi,
-        cachedJailApi = cachedJailApi,
+        jailRepository = jailRepository,
+        jailCache = jailCache,
         jailController = jailController,
         translationKrate = coreModule.translationKrate
     )
@@ -44,8 +44,8 @@ class JailModule(
     private val jailCommandModule = JailCommandModule(
         coreModule = coreModule,
         bukkitCoreModule = bukkitCoreModule,
-        jailApi = jailApi,
-        cachedJailApi = cachedJailApi,
+        jailRepository = jailRepository,
+        jailCache = jailCache,
         jailController = jailController
     )
 
@@ -54,8 +54,8 @@ class JailModule(
         scope = coreModule.ioScope,
         logger = JUtiltLogger("UnJailService"),
         task = UnJailServiceTask(
-            cachedJailApi = cachedJailApi,
-            jailApi = jailApi,
+            jailCache = jailCache,
+            jailRepository = jailRepository,
             jailController = jailController,
             translationKrate = coreModule.translationKrate
         )

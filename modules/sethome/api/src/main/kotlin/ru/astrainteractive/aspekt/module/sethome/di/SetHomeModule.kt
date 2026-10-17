@@ -4,7 +4,7 @@ import kotlinx.serialization.StringFormat
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.sethome.command.HomeCommandExecutor
 import ru.astrainteractive.aspekt.module.sethome.command.di.SetHomeCommandModule
-import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
+import ru.astrainteractive.aspekt.module.sethome.krate.HomeKrateProvider
 import ru.astrainteractive.aspekt.module.sethome.model.SetHomeConfiguration
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext

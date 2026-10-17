@@ -6,9 +6,9 @@ import kotlinx.coroutines.withContext
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
-import ru.astrainteractive.aspekt.module.moneydrop.database.dao.MoneyDropDao
-import ru.astrainteractive.aspekt.module.moneydrop.database.model.MoneyDropLocation
+import ru.astrainteractive.aspekt.module.moneydrop.api.MoneyDropLocationRepository
 import ru.astrainteractive.aspekt.module.moneydrop.model.MoneyDropConfiguration
+import ru.astrainteractive.aspekt.module.moneydrop.model.MoneyDropLocation
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.astralibs.persistence.Persistence.getPersistentDataOrNull
@@ -26,7 +26,7 @@ import kotlin.random.Random
 internal class MoneyDropController(
     moneyDropKrate: CachedKrate<MoneyDropConfiguration>,
     translationDependency: CachedKrate<PluginTranslation>,
-    private val dao: MoneyDropDao,
+    private val repository: MoneyDropLocationRepository,
     private val dispatchers: KotlinDispatchers
 ) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO).withTimings() {
     private val moneyDropConfig by moneyDropKrate
@@ -48,7 +48,7 @@ internal class MoneyDropController(
     }
 
     private suspend fun drop(location: Location, entry: MoneyDropConfiguration.MoneyDropEntry) {
-        if (dao.isLocationExists(location.toMoneyDropLocation(entry.from))) return
+        if (repository.isLocationExists(location.toMoneyDropLocation(entry.from))) return
         rememberLocation(location, entry.from)
 
         val amount = Random.nextDouble(entry.min, entry.max)
@@ -90,6 +90,6 @@ internal class MoneyDropController(
     }
 
     fun rememberLocation(location: Location, additionalConstraint: String? = null) {
-        launch { dao.addLocation(location.toMoneyDropLocation(additionalConstraint)) }
+        launch { repository.addLocation(location.toMoneyDropLocation(additionalConstraint)) }
     }
 }

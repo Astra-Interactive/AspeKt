@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.sethome.command
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
+import ru.astrainteractive.aspekt.module.sethome.krate.HomeKrateProvider
 import ru.astrainteractive.aspekt.module.sethome.model.SetHomeConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation

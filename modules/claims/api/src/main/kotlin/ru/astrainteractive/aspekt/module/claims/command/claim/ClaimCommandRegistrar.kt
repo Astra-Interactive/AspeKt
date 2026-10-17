@@ -4,11 +4,11 @@ import com.mojang.brigadier.arguments.BoolArgumentType
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
-import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
+import ru.astrainteractive.aspekt.module.claims.api.ChunkProvider
+import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlagArgumentConverter
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
-import ru.astrainteractive.aspekt.module.claims.server.location.ChunkProvider
 import ru.astrainteractive.aspekt.module.claims.util.toClaimPlayer
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand

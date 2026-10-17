@@ -4,7 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
-import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
+import ru.astrainteractive.aspekt.module.economy.api.EconomyRepository
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
@@ -13,7 +13,7 @@ import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
 internal class PreHeatService(
     private val getCurrencies: () -> List<CurrencyModel>,
-    private val dao: EconomyDao
+    private val repository: EconomyRepository
 ) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO).withTimings(),
     Logger by JUtiltLogger("PreHeatService") {
     private var lastJob: Job? = null
@@ -21,7 +21,7 @@ internal class PreHeatService(
     fun tryPreHeat() = launch {
         lastJob?.join()
         lastJob = coroutineContext.job
-        dao.updateCurrencies(getCurrencies.invoke())
+        repository.updateCurrencies(getCurrencies.invoke())
         lastJob = null
     }
 }

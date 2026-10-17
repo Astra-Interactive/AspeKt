@@ -10,7 +10,7 @@ import net.milkbowl.vault.economy.Economy
 import net.milkbowl.vault.economy.EconomyResponse
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
-import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
+import ru.astrainteractive.aspekt.module.economy.api.EconomyRepository
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
@@ -22,7 +22,7 @@ import kotlin.time.Duration.Companion.seconds
 @Suppress("TooManyFunctions")
 internal class VaultEconomyProvider(
     private val primaryCurrencyModel: CurrencyModel,
-    private val dao: EconomyDao
+    private val repository: EconomyRepository
 ) : Economy, Logger by JUtiltLogger("Economy-${primaryCurrencyModel.id}") {
     /**
      * Run blocking function but try not to block main thread
@@ -69,7 +69,7 @@ internal class VaultEconomyProvider(
 
     override fun hasAccount(player: OfflinePlayer?): Boolean = runIoBlocking {
         player ?: return@runIoBlocking false
-        dao.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id) != null
+        repository.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id) != null
     }
 
     override fun hasAccount(playerName: String?, worldName: String?): Boolean {
@@ -82,7 +82,7 @@ internal class VaultEconomyProvider(
 
     override fun getBalance(player: OfflinePlayer?): Double = runIoBlocking {
         player ?: return@runIoBlocking 0.0
-        dao.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id)?.balance ?: 0.0
+        repository.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id)?.balance ?: 0.0
     }
 
     override fun getBalance(playerName: String?, world: String?): Double {
@@ -115,7 +115,7 @@ internal class VaultEconomyProvider(
             return EconomyResponse(0.0, 0.0, EconomyResponse.ResponseType.FAILURE, "Player is null")
         }
         val playerCurrency = runIoBlocking {
-            dao.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id)
+            repository.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id)
         }
         if (playerCurrency == null) {
             return EconomyResponse(0.0, 0.0, EconomyResponse.ResponseType.FAILURE, "Player is null")
@@ -128,7 +128,7 @@ internal class VaultEconomyProvider(
                 "Player doesn't have enough amount to withdraw"
             )
         }
-        runIoBlocking { dao.updatePlayerCurrency(playerCurrency.copy(balance = playerCurrency.balance - amount)) }
+        runIoBlocking { repository.updatePlayerCurrency(playerCurrency.copy(balance = playerCurrency.balance - amount)) }
         return EconomyResponse(
             amount,
             playerCurrency.balance - amount,
@@ -153,7 +153,7 @@ internal class VaultEconomyProvider(
             return EconomyResponse(0.0, 0.0, EconomyResponse.ResponseType.FAILURE, "Player is null")
         }
         val playerCurrency = runIoBlocking {
-            dao.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id) ?: PlayerCurrency(
+            repository.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id) ?: PlayerCurrency(
                 playerModel = PlayerModel(
                     name = playerName,
                     uuid = player.uniqueId.toString()
@@ -162,7 +162,7 @@ internal class VaultEconomyProvider(
                 currencyModel = primaryCurrencyModel
             )
         }
-        runIoBlocking { dao.updatePlayerCurrency(playerCurrency.copy(balance = playerCurrency.balance + amount)) }
+        runIoBlocking { repository.updatePlayerCurrency(playerCurrency.copy(balance = playerCurrency.balance + amount)) }
         return EconomyResponse(
             amount,
             playerCurrency.balance + amount,

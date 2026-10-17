@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.feature.flagreader
 
+import ru.astrainteractive.aspekt.feature.api.FeatureFlagReader
 import ru.astrainteractive.aspekt.feature.gate.FeatureGate
 import ru.astrainteractive.aspekt.feature.model.FeatureFlag
 import ru.astrainteractive.aspekt.feature.model.ModuleState

@@ -4,9 +4,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.StringFormat
+import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimErrorMapper
-import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
-import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepositoryImpl
+import ru.astrainteractive.aspekt.module.claims.krate.KrateClaimsRepository
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
@@ -20,7 +20,7 @@ class ClaimModule(
 ) {
     private val moduleIoScope = CoroutineScope(ioScope.coroutineContext + SupervisorJob())
 
-    val claimsRepository: ClaimsRepository = ClaimsRepositoryImpl(
+    val claimsRepository: ClaimsRepository = KrateClaimsRepository(
         folder = dataFolder
             .resolve("claims")
             .also(File::mkdirs),

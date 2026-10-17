@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.economy.command.ekon
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
+import ru.astrainteractive.aspekt.module.economy.api.EconomyRepository
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
@@ -16,13 +16,13 @@ import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
 internal class EkonCommandExecutor(
     translationKrate: CachedKrate<PluginTranslation>,
-    private val dao: EconomyDao
+    private val repository: EconomyRepository
 ) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO).withTimings(),
     Logger by JUtiltLogger("EkonCommandExecutor") {
     private val translation by translationKrate
 
     private suspend fun addCurrency(input: EkonCommand.Model.Add) {
-        val playerCurrency = dao.findPlayerCurrency(
+        val playerCurrency = repository.findPlayerCurrency(
             playerUuid = input.otherPlayer.uuid.toString(),
             currencyId = input.currency.id
         ) ?: PlayerCurrency(
@@ -36,7 +36,7 @@ internal class EkonCommandExecutor(
 
         kotlin.runCatching {
             val updatedCurrency = playerCurrency.copy(balance = playerCurrency.balance + input.amount)
-            dao.updatePlayerCurrency(updatedCurrency)
+            repository.updatePlayerCurrency(updatedCurrency)
         }.onFailure {
             error { "#execute_Add: ${it.message}" }
             input.sender.sendMessage(translation.economy.transferFailed)
@@ -53,7 +53,7 @@ internal class EkonCommandExecutor(
                 balance = input.amount,
                 currencyModel = input.currency
             )
-            dao.updatePlayerCurrency(updatedCurrency)
+            repository.updatePlayerCurrency(updatedCurrency)
         }.onFailure {
             error { "#execute_Add: ${it.message}" }
             input.sender.sendMessage(translation.economy.transferFailed)
@@ -61,7 +61,7 @@ internal class EkonCommandExecutor(
     }
 
     private suspend fun balance(input: EkonCommand.Model.Balance) {
-        val amount = dao.findPlayerCurrency(
+        val amount = repository.findPlayerCurrency(
             playerUuid = input.otherPlayer.uuid.toString(),
             currencyId = input.currency.id
         )?.balance ?: 0.0
@@ -69,7 +69,7 @@ internal class EkonCommandExecutor(
     }
 
     private suspend fun listCurrencies(input: EkonCommand.Model.ListCurrencies) {
-        val currencies = dao.getAllCurrencies()
+        val currencies = repository.getAllCurrencies()
             .map(CurrencyModel::name)
             .joinToString(",")
 
@@ -77,7 +77,7 @@ internal class EkonCommandExecutor(
     }
 
     private suspend fun topPlayers(input: EkonCommand.Model.Top) {
-        val top5 = dao.topCurrency(
+        val top5 = repository.topCurrency(
             id = input.currency.id,
             page = input.page,
             size = 5

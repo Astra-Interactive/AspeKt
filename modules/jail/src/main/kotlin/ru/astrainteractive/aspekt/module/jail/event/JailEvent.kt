@@ -12,12 +12,12 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.event.server.ServerLoadEvent
+import ru.astrainteractive.aspekt.module.jail.api.JailCache
+import ru.astrainteractive.aspekt.module.jail.api.JailRepository
 import ru.astrainteractive.aspekt.module.jail.controller.JailController
-import ru.astrainteractive.aspekt.module.jail.data.CachedJailApi
-import ru.astrainteractive.aspekt.module.jail.data.JailApi
-import ru.astrainteractive.aspekt.module.jail.data.cache
-import ru.astrainteractive.aspekt.module.jail.data.forget
-import ru.astrainteractive.aspekt.module.jail.data.isInJail
+import ru.astrainteractive.aspekt.module.jail.util.cache
+import ru.astrainteractive.aspekt.module.jail.util.forget
+import ru.astrainteractive.aspekt.module.jail.util.isInJail
 import ru.astrainteractive.aspekt.module.jail.util.sendMessage
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.event.EventListener
@@ -27,8 +27,8 @@ import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
 internal class JailEvent(
-    private val jailApi: JailApi,
-    private val cachedJailApi: CachedJailApi,
+    private val jailRepository: JailRepository,
+    private val jailCache: JailCache,
     private val jailController: JailController,
     private val scope: CoroutineScope,
     translationKrate: CachedKrate<PluginTranslation>
@@ -38,26 +38,26 @@ internal class JailEvent(
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun playerCommandPreprocessEvent(e: PlayerCommandPreprocessEvent) {
-        if (!cachedJailApi.isInJail(e.player)) return
+        if (!jailCache.isInJail(e.player)) return
         e.isCancelled = true
         e.player.sendMessage(translation.jails.commandBlocked)
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onInteract(e: PlayerInteractEvent) {
-        cachedJailApi.cache(e.player)
-        if (!cachedJailApi.isInJail(e.player)) return
+        jailCache.cache(e.player)
+        if (!jailCache.isInJail(e.player)) return
         e.isCancelled = true
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onQuit(e: PlayerQuitEvent) {
-        cachedJailApi.forget(e.player)
+        jailCache.forget(e.player)
     }
 
     private fun teleportBackToJail(player: Player) {
         scope.launch {
-            jailApi.getInmate(player.uniqueId.toString())
+            jailRepository.getInmate(player.uniqueId.toString())
                 .getOrNull()
                 ?: return@launch
             jailController.tryTeleportToJail(player.uniqueId)
@@ -79,6 +79,6 @@ internal class JailEvent(
     @Suppress("UnusedParameter")
     fun onStart(e: ServerLoadEvent) {
         Bukkit.getOnlinePlayers()
-            .forEach { player -> cachedJailApi.cache(player) }
+            .forEach { player -> jailCache.cache(player) }
     }
 }

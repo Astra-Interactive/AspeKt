@@ -6,7 +6,7 @@ import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.sethome.command.HomeCommandExecutor
 import ru.astrainteractive.aspekt.module.sethome.command.SetHomeCommandRegistrar
-import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
+import ru.astrainteractive.aspekt.module.sethome.krate.HomeKrateProvider
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady

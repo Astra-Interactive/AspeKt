@@ -2,10 +2,10 @@ package ru.astrainteractive.aspekt.module.claims.command.claim
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
-import ru.astrainteractive.aspekt.module.claims.data.claim
-import ru.astrainteractive.aspekt.module.claims.data.map
-import ru.astrainteractive.aspekt.module.claims.data.setFlag
+import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
+import ru.astrainteractive.aspekt.module.claims.api.claim
+import ru.astrainteractive.aspekt.module.claims.api.map
+import ru.astrainteractive.aspekt.module.claims.api.setFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey

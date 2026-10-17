@@ -1,6 +1,6 @@
 package ru.astrainteractive.aspekt.module.chatgame.service
 
-import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
+import ru.astrainteractive.aspekt.economy.api.CurrencyEconomyProviderFactory
 import ru.astrainteractive.astralibs.economy.EconomyFacade
 
 internal class FakeCurrencyEconomyProviderFactory(

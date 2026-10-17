@@ -1,7 +1,6 @@
 package ru.astrainteractive.aspekt.module.jail.model
 
 import kotlinx.serialization.Serializable
-import ru.astrainteractive.aspekt.module.jail.serialization.InstantSerializer
 import java.time.Instant
 import kotlin.time.Duration
 

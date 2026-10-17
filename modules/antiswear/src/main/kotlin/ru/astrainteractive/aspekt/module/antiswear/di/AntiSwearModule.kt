@@ -4,9 +4,9 @@ import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.antiswear.command.di.AntiSwearCommandModule
-import ru.astrainteractive.aspekt.module.antiswear.data.SwearRepositoryImpl
 import ru.astrainteractive.aspekt.module.antiswear.di.factory.PacketEventSwearListenerFactory
 import ru.astrainteractive.aspekt.module.antiswear.event.AntiSwearEventListener
+import ru.astrainteractive.aspekt.module.antiswear.krate.KrateSwearRepository
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import java.io.File
@@ -15,7 +15,7 @@ class AntiSwearModule(
     coreModule: CoreModule,
     bukkitCoreModule: BukkitCoreModule
 ) {
-    private val swearRepository = SwearRepositoryImpl(
+    private val swearRepository = KrateSwearRepository(
         dispatchers = coreModule.dispatchers,
         tempFileStringFormat = coreModule.jsonStringFormat
     )

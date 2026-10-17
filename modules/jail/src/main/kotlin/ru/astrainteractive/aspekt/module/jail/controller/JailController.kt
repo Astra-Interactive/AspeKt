@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.jail.controller
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.bukkit.Bukkit
-import ru.astrainteractive.aspekt.module.jail.data.JailApi
+import ru.astrainteractive.aspekt.module.jail.api.JailRepository
 import ru.astrainteractive.aspekt.module.jail.model.JailInmate
 import ru.astrainteractive.aspekt.module.jail.util.toBukkitLocation
 import ru.astrainteractive.astralibs.coroutines.withTimings
@@ -15,13 +15,13 @@ import java.util.UUID
 
 internal class JailController(
     private val dispatchers: KotlinDispatchers,
-    private val jailApi: JailApi
+    private val jailRepository: JailRepository
 ) : CoroutineFeature by CoroutineFeature.Default(dispatchers.Default).withTimings(),
     Logger by JUtiltLogger("AspeKt-JailController") {
 
     fun onJailed(inmate: JailInmate) {
         launch {
-            val jail = jailApi.getJail(inmate.jailName)
+            val jail = jailRepository.getJail(inmate.jailName)
                 .onFailure { error(it) { "#onJailed could not find jail ${inmate.jailName}" } }
                 .getOrNull()
                 ?: return@launch
@@ -39,7 +39,7 @@ internal class JailController(
                 error { "#onJailed could not find player ${inmate.uuid}" }
                 return@launch
             }
-            jailApi.free(player.uniqueId.toString())
+            jailRepository.free(player.uniqueId.toString())
                 .onFailure { error { "#onJailed could not free player ${inmate.uuid}" } }
                 .onSuccess {
                     withContext(dispatchers.Main) { player.teleport(inmate.lastLocation.toBukkitLocation()) }
@@ -49,7 +49,7 @@ internal class JailController(
 
     fun tryTeleportToJail(uuid: UUID) {
         launch {
-            val inmate = jailApi.getInmate(uuid.toString())
+            val inmate = jailRepository.getInmate(uuid.toString())
                 .getOrNull()
                 ?: return@launch
             onJailed(inmate)

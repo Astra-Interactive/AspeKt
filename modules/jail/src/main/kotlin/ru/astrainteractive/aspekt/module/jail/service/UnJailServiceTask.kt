@@ -1,8 +1,8 @@
 package ru.astrainteractive.aspekt.module.jail.service
 
+import ru.astrainteractive.aspekt.module.jail.api.JailCache
+import ru.astrainteractive.aspekt.module.jail.api.JailRepository
 import ru.astrainteractive.aspekt.module.jail.controller.JailController
-import ru.astrainteractive.aspekt.module.jail.data.CachedJailApi
-import ru.astrainteractive.aspekt.module.jail.data.JailApi
 import ru.astrainteractive.aspekt.module.jail.model.JailInmate
 import ru.astrainteractive.aspekt.module.jail.util.offlinePlayer
 import ru.astrainteractive.aspekt.module.jail.util.sendMessage
@@ -13,8 +13,8 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
 import java.time.Instant
 
 internal class UnJailServiceTask(
-    private val cachedJailApi: CachedJailApi,
-    private val jailApi: JailApi,
+    private val jailCache: JailCache,
+    private val jailRepository: JailRepository,
     private val jailController: JailController,
     translationKrate: CachedKrate<PluginTranslation>
 ) : ServiceTask {
@@ -26,14 +26,14 @@ internal class UnJailServiceTask(
     }
 
     private suspend fun free(inmate: JailInmate) {
-        jailApi.free(inmate.uuid)
-        cachedJailApi.cache(inmate.uuid)
+        jailRepository.free(inmate.uuid)
+        jailCache.cache(inmate.uuid)
         jailController.free(inmate)
         inmate.offlinePlayer.sendMessage(translation.jails.released)
     }
 
     override suspend fun execute() {
-        jailApi.getInmates()
+        jailRepository.getInmates()
             .getOrNull()
             .orEmpty()
             .filter { inmate -> inmate.isSentenceOver() }

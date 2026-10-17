@@ -33,8 +33,8 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent
 import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.world.PortalCreateEvent
-import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
-import ru.astrainteractive.aspekt.module.claims.data.isAble
+import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
+import ru.astrainteractive.aspekt.module.claims.api.isAble
 import ru.astrainteractive.aspekt.module.claims.debounce.EventDebounce
 import ru.astrainteractive.aspekt.module.claims.debounce.RetractKey
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag

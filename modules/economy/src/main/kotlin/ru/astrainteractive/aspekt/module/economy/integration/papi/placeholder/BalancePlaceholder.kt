@@ -5,7 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
-import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
+import ru.astrainteractive.aspekt.module.economy.api.EconomyRepository
 import ru.astrainteractive.aspekt.module.economy.integration.papi.core.Placeholder
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
@@ -16,7 +16,7 @@ import kotlin.time.Duration.Companion.seconds
  * aspekt_balance_<currency>_<player>
  */
 internal class BalancePlaceholder(
-    private val dao: EconomyDao,
+    private val repository: EconomyRepository,
     private val scope: CoroutineScope
 ) : Placeholder, Logger by JUtiltLogger("BalancePlaceholder") {
     override val key: String = "balance"
@@ -47,7 +47,7 @@ internal class BalancePlaceholder(
         val cachedAmount = allCurrenciesCache.get(playerInfo)
         if (cachedAmount == null) {
             scope.launch {
-                val currency = dao.findPlayerCurrency(playerInfo.uuid.toString(), playerInfo.currencyId)
+                val currency = repository.findPlayerCurrency(playerInfo.uuid.toString(), playerInfo.currencyId)
                 allCurrenciesCache.put(playerInfo, currency?.balance ?: 0.0)
             }
         }
