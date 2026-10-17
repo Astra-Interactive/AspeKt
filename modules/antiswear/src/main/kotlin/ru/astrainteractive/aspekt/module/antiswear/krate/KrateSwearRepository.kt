@@ -15,7 +15,7 @@ import java.util.UUID
 internal class KrateSwearRepository(
     private val dispatchers: KotlinDispatchers,
     private val tempFileStringFormat: StringFormat,
-    private val folder: File = File("./.temp/antiswear"),
+    private val folder: File,
 ) : SwearRepository, Logger by JUtiltLogger("AspeKt-KrateSwearRepository") {
     private val swearFilterMap = mutableMapOf<UUID, Boolean>()
 

@@ -15,7 +15,8 @@ class AntiSwearModule(
 ) {
     private val swearRepository = KrateSwearRepository(
         dispatchers = coreModule.dispatchers,
-        tempFileStringFormat = coreModule.jsonStringFormat
+        tempFileStringFormat = coreModule.jsonStringFormat,
+        folder = File("./.temp/antiswear")
     )
     private val antiSwearEventListener = AntiSwearEventListener(
         swearRepository = swearRepository,

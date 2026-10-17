@@ -15,10 +15,10 @@ import kotlin.random.Random
 
 internal class SafeLocationSearcher(
     private val dispatchers: KotlinDispatchers,
-    private val chunkLoader: ChunkLoader = ChunkLoader(dispatchers),
-    private val hazardDetector: ChunkHazardDetector = ChunkHazardDetector(),
-    private val columnScanner: SafeColumnScanner = SafeColumnScanner(),
-    private val destinationPreparer: DestinationPreparer = DestinationPreparer(chunkLoader),
+    private val chunkLoader: ChunkLoader,
+    private val hazardDetector: ChunkHazardDetector,
+    private val columnScanner: SafeColumnScanner,
+    private val destinationPreparer: DestinationPreparer,
 ) : Logger by JUtiltLogger("SafeLocationProvider") {
 
     @Suppress("LoopWithTooManyJumpStatements", "ReturnCount")
