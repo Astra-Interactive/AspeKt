@@ -5,7 +5,7 @@ import kotlinx.coroutines.withContext
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.menu.gui.MenuGui
-import ru.astrainteractive.aspekt.module.menu.model.MenuModel
+import ru.astrainteractive.aspekt.module.menu.model.MenuConfiguration
 import ru.astrainteractive.astralibs.server.player.BukkitOnlineKPlayer
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
@@ -16,7 +16,7 @@ internal class BukkitMenuRouter(
     private val coreModule: CoreModule,
     private val bukkitCoreModule: BukkitCoreModule
 ) : MenuRouter, Logger by JUtiltLogger("AspeKt-MenuRouter") {
-    override fun openMenu(player: OnlineKPlayer, menuModel: MenuModel) {
+    override fun openMenu(player: OnlineKPlayer, menuModel: MenuConfiguration) {
         val bukkitPlayer = player.tryCast<BukkitOnlineKPlayer>()?.instance
         if (bukkitPlayer == null) {
             info { "#openMenu bukkitPlayer is null" }

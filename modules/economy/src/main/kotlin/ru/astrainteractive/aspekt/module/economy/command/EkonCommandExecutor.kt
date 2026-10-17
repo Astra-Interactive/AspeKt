@@ -3,9 +3,9 @@ package ru.astrainteractive.aspekt.module.economy.command
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.module.economy.api.EconomyRepository
-import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
+import ru.astrainteractive.aspekt.module.economy.model.Currency
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
-import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
+import ru.astrainteractive.aspekt.module.economy.model.EconomyPlayer
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
@@ -26,7 +26,7 @@ internal class EkonCommandExecutor(
             playerUuid = input.otherPlayer.uuid.toString(),
             currencyId = input.currency.id
         ) ?: PlayerCurrency(
-            playerModel = PlayerModel(
+            playerModel = EconomyPlayer(
                 name = input.otherPlayer.name.orEmpty(),
                 uuid = input.otherPlayer.uuid.toString()
             ),
@@ -46,7 +46,7 @@ internal class EkonCommandExecutor(
     private suspend fun setCurrency(input: EkonCommand.Model.Set) {
         kotlin.runCatching {
             val updatedCurrency = PlayerCurrency(
-                playerModel = PlayerModel(
+                playerModel = EconomyPlayer(
                     name = input.otherPlayer.name.orEmpty(),
                     uuid = input.otherPlayer.uuid.toString()
                 ),
@@ -70,7 +70,7 @@ internal class EkonCommandExecutor(
 
     private suspend fun listCurrencies(input: EkonCommand.Model.ListCurrencies) {
         val currencies = repository.getAllCurrencies()
-            .map(CurrencyModel::name)
+            .map(Currency::name)
             .joinToString(",")
 
         input.sender.sendMessage(translation.economy.currencies(currencies))

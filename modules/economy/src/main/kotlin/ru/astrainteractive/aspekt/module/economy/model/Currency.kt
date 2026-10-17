@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class CurrencyModel(
+internal data class Currency(
     @SerialName("id")
     val id: String,
     @SerialName("name")

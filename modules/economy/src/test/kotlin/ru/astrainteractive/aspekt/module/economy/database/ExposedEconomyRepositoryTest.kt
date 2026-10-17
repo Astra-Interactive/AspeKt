@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.runTest
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
-import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
+import ru.astrainteractive.aspekt.module.economy.model.Currency
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
-import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
+import ru.astrainteractive.aspekt.module.economy.model.EconomyPlayer
 import ru.astrainteractive.klibs.kstorage.api.StateFlowMutableKrate
 import ru.astrainteractive.klibs.kstorage.api.asStateFlowMutableKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
@@ -67,7 +67,7 @@ class ExposedEconomyRepositoryTest {
             .first()
         val test1Url = requireModule.databaseFlow.first().url
 
-        val currencies = listOf(CurrencyModel(id = "0", name = "name", priority = 0))
+        val currencies = listOf(Currency(id = "0", name = "name", priority = 0))
         requireModule.economyRepository.updateCurrencies(currencies)
         assertEquals(1, requireModule.economyRepository.getAllCurrencies().size)
 
@@ -86,7 +86,7 @@ class ExposedEconomyRepositoryTest {
 
     @Test
     fun `GIVEN_currency_WHEN_try_find_THEN_found`() = runTest(scheduler) {
-        val currencies = listOf(CurrencyModel(id = "0", name = "name", priority = 0))
+        val currencies = listOf(Currency(id = "0", name = "name", priority = 0))
         requireModule.economyRepository.updateCurrencies(currencies)
         assertEquals(1, requireModule.economyRepository.getAllCurrencies().size)
         assertEquals(currencies.first(), requireModule.economyRepository.findCurrency(currencies.first().id))
@@ -94,9 +94,9 @@ class ExposedEconomyRepositoryTest {
 
     @Test
     fun `GIVEN_multiple_currencies_WHEN_change_list_THEN_changed`() = runTest(scheduler) {
-        val currencies = listOf(CurrencyModel(id = "0", name = "name", priority = 0))
+        val currencies = listOf(Currency(id = "0", name = "name", priority = 0))
         requireModule.economyRepository.updateCurrencies(currencies)
-        val newCurrencies = List(2) { CurrencyModel(id = "$it", name = "name$it", priority = 0) }
+        val newCurrencies = List(2) { Currency(id = "$it", name = "name$it", priority = 0) }
         requireModule.economyRepository.updateCurrencies(newCurrencies)
         assertContentEquals(newCurrencies, requireModule.economyRepository.getAllCurrencies())
         newCurrencies.forEach {
@@ -106,10 +106,10 @@ class ExposedEconomyRepositoryTest {
 
     @Test
     fun `GIVEN_currency_WHEN_add_to_player_THEN_added`() = runTest(scheduler) {
-        val currencies = List(2) { CurrencyModel(id = "$it", name = "name$it", priority = 0) }
+        val currencies = List(2) { Currency(id = "$it", name = "name$it", priority = 0) }
         requireModule.economyRepository.updateCurrencies(currencies)
         val playerCurrency = PlayerCurrency(
-            playerModel = PlayerModel(
+            playerModel = EconomyPlayer(
                 name = "player1",
                 uuid = "uuid1",
             ),
@@ -131,17 +131,17 @@ class ExposedEconomyRepositoryTest {
 
     @Test
     fun `GIVEN_currency_WHEN_transfer_to_player_THEN_transfered`() = runTest(scheduler) {
-        val currencies = List(2) { CurrencyModel(id = "$it", name = "name$it", priority = 0) }
+        val currencies = List(2) { Currency(id = "$it", name = "name$it", priority = 0) }
         requireModule.economyRepository.updateCurrencies(currencies)
         val playerCurrency = PlayerCurrency(
-            playerModel = PlayerModel(
+            playerModel = EconomyPlayer(
                 name = "player1",
                 uuid = "uuid1",
             ),
             balance = 100.0,
             currencyModel = currencies.first()
         )
-        val otherPlayerModel = PlayerModel(
+        val otherPlayerModel = EconomyPlayer(
             name = "player2",
             uuid = "uuid2",
         )

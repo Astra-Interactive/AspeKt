@@ -6,13 +6,13 @@ import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.module.economy.api.EconomyRepository
 import ru.astrainteractive.aspekt.module.economy.integration.vault.provider.VaultEconomyProvider
-import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
+import ru.astrainteractive.aspekt.module.economy.model.Currency
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
 internal class BukkitVaultService(
     private val plugin: JavaPlugin,
-    private val getCurrencies: () -> List<CurrencyModel>,
+    private val getCurrencies: () -> List<Currency>,
     private val repository: EconomyRepository
 ) : Logger by JUtiltLogger("BukkitService") {
 

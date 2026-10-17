@@ -4,7 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.dao.api.AuthRepository
-import ru.astrainteractive.aspekt.module.auth.model.PlayerLoginModel
+import ru.astrainteractive.aspekt.module.auth.model.PlayerLogin
 import java.util.UUID
 
 internal class InMemoryAuthorizedApi(
@@ -17,7 +17,7 @@ internal class InMemoryAuthorizedApi(
         return authorizedMap.getOrDefault(uuid, AuthorizedApi.AuthState.Pending)
     }
 
-    override fun loadUserInfo(player: PlayerLoginModel) {
+    override fun loadUserInfo(player: PlayerLogin) {
         scope.launch {
             authRepository.getUser(player.uuid)
                 .onFailure {

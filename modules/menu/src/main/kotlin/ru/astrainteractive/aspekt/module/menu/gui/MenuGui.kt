@@ -12,7 +12,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.inventory.ItemStack
-import ru.astrainteractive.aspekt.module.menu.model.MenuModel
+import ru.astrainteractive.aspekt.module.menu.model.MenuConfiguration
 import ru.astrainteractive.aspekt.plugin.model.PluginNamedPermission
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.coroutines.withTimings
@@ -37,7 +37,7 @@ internal class MenuGui(
     player: Player,
     private val economyProvider: EconomyFacade?,
     private val translation: PluginTranslation,
-    private val menuModel: MenuModel,
+    private val menuModel: MenuConfiguration,
     private val dispatchers: KotlinDispatchers,
     private val kyoriComponentSerializer: KyoriComponentSerializer
 ) : InventoryMenu() {
@@ -74,7 +74,7 @@ internal class MenuGui(
         e.isCancelled = true
     }
 
-    private fun MenuModel.MenuItem.toItemStack(): ItemStack {
+    private fun MenuConfiguration.MenuItem.toItemStack(): ItemStack {
         val menuItem = this
         val material = Material.getMaterial(menuItem.material) ?: error("No material found named ${menuItem.material}")
         return ItemStack(material, menuItem.amount).apply {
@@ -86,11 +86,11 @@ internal class MenuGui(
         }
     }
 
-    private fun isMeetConditions(conditions: List<MenuModel.Condition>): Boolean {
+    private fun isMeetConditions(conditions: List<MenuConfiguration.Condition>): Boolean {
         if (conditions.isEmpty()) return true
         return conditions.any {
             when (it) {
-                is MenuModel.Condition.Permission -> {
+                is MenuConfiguration.Condition.Permission -> {
                     val hasPermission = playerHolder.player.hasPermission(it.permission)
                     if (it.isInverted) {
                         !hasPermission
@@ -102,17 +102,17 @@ internal class MenuGui(
         }
     }
 
-    private fun isMeetClickConditions(menuItem: MenuModel.MenuItem): Boolean {
+    private fun isMeetClickConditions(menuItem: MenuConfiguration.MenuItem): Boolean {
         return isMeetConditions(menuItem.clickableConditions)
     }
 
-    private fun isMeetVisibilityConditions(menuItem: MenuModel.MenuItem): Boolean {
+    private fun isMeetVisibilityConditions(menuItem: MenuConfiguration.MenuItem): Boolean {
         return isMeetConditions(menuItem.visibilityConditions)
     }
 
-    private fun processReward(menuItem: MenuModel.MenuItem) {
+    private fun processReward(menuItem: MenuConfiguration.MenuItem) {
         when (val reward = menuItem.reward) {
-            is MenuModel.Reward.ConsoleCommands -> {
+            is MenuConfiguration.Reward.ConsoleCommands -> {
                 val consoleSender = Bukkit.getConsoleSender()
                 val server = Bukkit.getServer()
                 reward.commands.forEach { cmd ->
@@ -124,7 +124,7 @@ internal class MenuGui(
                 }
             }
 
-            is MenuModel.Reward.PlayerCommands -> {
+            is MenuConfiguration.Reward.PlayerCommands -> {
                 val sender = playerHolder.player
                 reward.commands.forEach { cmd ->
                     var command = cmd
@@ -135,20 +135,20 @@ internal class MenuGui(
                 }
             }
 
-            MenuModel.Reward.Nothing -> Unit
+            MenuConfiguration.Reward.Nothing -> Unit
         }
     }
 
-    private suspend fun isMeetPriceCheck(menuItem: MenuModel.MenuItem): Boolean {
+    private suspend fun isMeetPriceCheck(menuItem: MenuConfiguration.MenuItem): Boolean {
         return when (val price = menuItem.price) {
-            is MenuModel.Price.Money -> {
+            is MenuConfiguration.Price.Money -> {
                 economyProvider?.takeMoney(
                     playerHolder.player.uniqueId,
                     price.amount
                 ) ?: false
             }
 
-            MenuModel.Price.Nothing -> true
+            MenuConfiguration.Price.Nothing -> true
         }
     }
 

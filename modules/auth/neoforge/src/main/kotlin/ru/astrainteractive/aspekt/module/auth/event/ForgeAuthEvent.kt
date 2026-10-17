@@ -22,7 +22,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.level.BlockEvent
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.model.AuthTranslation
-import ru.astrainteractive.aspekt.module.auth.model.PlayerLoginModel
+import ru.astrainteractive.aspekt.module.auth.model.PlayerLogin
 import ru.astrainteractive.astralibs.event.flowEvent
 import ru.astrainteractive.astralibs.event.playerMoveFlowEvent
 import ru.astrainteractive.astralibs.server.location.dist
@@ -46,7 +46,7 @@ internal class ForgeAuthEvent(
 
     val playerLoggedInEvent = flowEvent<PlayerEvent.PlayerLoggedInEvent>()
         .onEach {
-            val playerLoginModel = PlayerLoginModel(
+            val playerLoginModel = PlayerLogin(
                 username = it.entity.name.toPlain(),
                 uuid = it.entity.uuid,
                 ip = (it.entity as ServerPlayer).ipAddress

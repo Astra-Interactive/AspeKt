@@ -9,7 +9,7 @@ import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
 import ru.astrainteractive.aspekt.module.auth.dao.api.AuthRepository
 import ru.astrainteractive.aspekt.module.auth.model.AuthPermission
 import ru.astrainteractive.aspekt.module.auth.model.AuthTranslation
-import ru.astrainteractive.aspekt.module.auth.model.PlayerLoginModel
+import ru.astrainteractive.aspekt.module.auth.model.PlayerLogin
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
@@ -51,7 +51,7 @@ internal class UnregisterCommandRegistrar(
                                     .onSuccess {
                                         val onlinePlayer = platformServer.findOnlinePlayer(usernameToDelete)
                                         val onlinePlayerLoginModel = onlinePlayer?.let { player ->
-                                            PlayerLoginModel(
+                                            PlayerLogin(
                                                 username = player.name,
                                                 uuid = player.uuid,
                                                 ip = player.address.hostName
@@ -60,7 +60,7 @@ internal class UnregisterCommandRegistrar(
                                         val offlinePlayerLoginModel = platformServer
                                             .findOfflinePlayer(usernameToDelete)
                                             ?.let { profile ->
-                                                PlayerLoginModel(
+                                                PlayerLogin(
                                                     username = profile.name ?: usernameToDelete,
                                                     uuid = profile.uuid,
                                                     ip = ""

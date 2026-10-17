@@ -20,9 +20,9 @@ import org.jetbrains.exposed.v1.jdbc.update
 import ru.astrainteractive.aspekt.module.economy.api.EconomyRepository
 import ru.astrainteractive.aspekt.module.economy.database.table.CurrencyTable
 import ru.astrainteractive.aspekt.module.economy.database.table.PlayerCurrencyTable
-import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
+import ru.astrainteractive.aspekt.module.economy.model.Currency
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
-import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
+import ru.astrainteractive.aspekt.module.economy.model.EconomyPlayer
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
@@ -41,38 +41,38 @@ internal class ExposedEconomyRepository(
         return databaseFlow.first()
     }
 
-    private fun ResultRow.toCurrency() = CurrencyModel(
+    private fun ResultRow.toCurrency() = Currency(
         id = this[CurrencyTable.id].value,
         name = this[CurrencyTable.name],
         priority = this[CurrencyTable.priority],
     )
 
     private fun ResultRow.toPlayerCurrency() = PlayerCurrency(
-        playerModel = PlayerModel(
+        playerModel = EconomyPlayer(
             name = this[PlayerCurrencyTable.lastUsername],
             uuid = this[PlayerCurrencyTable.uuid],
         ),
         balance = this[PlayerCurrencyTable.amount],
-        currencyModel = CurrencyModel(
+        currencyModel = Currency(
             id = this[CurrencyTable.id].value,
             name = this[CurrencyTable.name],
             priority = this[CurrencyTable.priority],
         )
     )
 
-    override suspend fun getAllCurrencies(): List<CurrencyModel> {
+    override suspend fun getAllCurrencies(): List<Currency> {
         return newSuspendedTransaction(db = currentDatabase()) {
             CurrencyTable.selectAll()
                 .map { it.toCurrency() }
         }
     }
 
-    override suspend fun updateCurrencies(currencies: List<CurrencyModel>) = withMutex {
+    override suspend fun updateCurrencies(currencies: List<Currency>) = withMutex {
         val existingCurrencies = getAllCurrencies()
         val nonExistingCurrencies = existingCurrencies
-            .map(CurrencyModel::id)
+            .map(Currency::id)
             .toSet()
-            .minus(currencies.map(CurrencyModel::id).toSet())
+            .minus(currencies.map(Currency::id).toSet())
         if (currencies.isEmpty()) {
             error { "#updateCurrencies you didn't setup any currencies! Economy may break!" }
         }
@@ -100,7 +100,7 @@ internal class ExposedEconomyRepository(
         }
     }
 
-    override suspend fun findCurrency(id: String): CurrencyModel? {
+    override suspend fun findCurrency(id: String): Currency? {
         return newSuspendedTransaction(db = currentDatabase()) {
             CurrencyTable.selectAll()
                 .where { CurrencyTable.id eq id }
@@ -184,8 +184,8 @@ internal class ExposedEconomyRepository(
     }
 
     override suspend fun transfer(
-        from: PlayerModel,
-        to: PlayerModel,
+        from: EconomyPlayer,
+        to: EconomyPlayer,
         amount: Double,
         currencyId: String
     ): Boolean = withMutex {
@@ -194,7 +194,7 @@ internal class ExposedEconomyRepository(
                 findPlayerCurrency(from.uuid, currencyId) ?: return@newSuspendedTransaction false
             if (fromPlayerCurrency.balance - amount < 0) return@newSuspendedTransaction false
             val toPlayerCurrency = PlayerCurrency(
-                playerModel = PlayerModel(
+                playerModel = EconomyPlayer(
                     name = to.name,
                     uuid = to.uuid,
                 ),

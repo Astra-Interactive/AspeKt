@@ -5,7 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.module.economy.api.CurrencyCache
 import ru.astrainteractive.aspekt.module.economy.api.EconomyRepository
-import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
+import ru.astrainteractive.aspekt.module.economy.model.Currency
 import kotlin.coroutines.CoroutineContext
 import kotlin.time.Duration.Companion.minutes
 
@@ -15,12 +15,12 @@ internal class InMemoryCurrencyCache(
     private val ioDispatcher: CoroutineContext
 ) : CurrencyCache {
 
-    private val allCurrenciesCache = Cache.Builder<Unit, List<CurrencyModel>>()
+    private val allCurrenciesCache = Cache.Builder<Unit, List<Currency>>()
         .maximumCacheSize(1)
         .expireAfterWrite(1.minutes)
         .build()
 
-    override fun getAllCurrencies(): List<CurrencyModel> {
+    override fun getAllCurrencies(): List<Currency> {
         val cacheValue = allCurrenciesCache.get(Unit)
         if (cacheValue == null) {
             scope.launch(ioDispatcher) {

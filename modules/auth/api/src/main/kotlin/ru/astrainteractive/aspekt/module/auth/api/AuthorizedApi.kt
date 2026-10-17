@@ -1,6 +1,6 @@
 package ru.astrainteractive.aspekt.module.auth.api
 
-import ru.astrainteractive.aspekt.module.auth.model.PlayerLoginModel
+import ru.astrainteractive.aspekt.module.auth.model.PlayerLogin
 import java.util.UUID
 
 interface AuthorizedApi {
@@ -19,7 +19,7 @@ interface AuthorizedApi {
     /**
      * Remember user on join so we can call [getAuthState]
      */
-    fun loadUserInfo(player: PlayerLoginModel)
+    fun loadUserInfo(player: PlayerLogin)
 
     fun authUser(uuid: UUID)
 

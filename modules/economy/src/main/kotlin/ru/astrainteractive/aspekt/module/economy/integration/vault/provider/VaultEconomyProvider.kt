@@ -11,9 +11,9 @@ import net.milkbowl.vault.economy.EconomyResponse
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import ru.astrainteractive.aspekt.module.economy.api.EconomyRepository
-import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
+import ru.astrainteractive.aspekt.module.economy.model.Currency
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
-import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
+import ru.astrainteractive.aspekt.module.economy.model.EconomyPlayer
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import java.text.DecimalFormat
@@ -21,7 +21,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @Suppress("TooManyFunctions")
 internal class VaultEconomyProvider(
-    private val primaryCurrencyModel: CurrencyModel,
+    private val primaryCurrencyModel: Currency,
     private val repository: EconomyRepository
 ) : Economy, Logger by JUtiltLogger("Economy-${primaryCurrencyModel.id}") {
     /**
@@ -154,7 +154,7 @@ internal class VaultEconomyProvider(
         }
         val playerCurrency = runIoBlocking {
             repository.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id) ?: PlayerCurrency(
-                playerModel = PlayerModel(
+                playerModel = EconomyPlayer(
                     name = playerName,
                     uuid = player.uniqueId.toString()
                 ),

@@ -1,26 +1,26 @@
 package ru.astrainteractive.aspekt.module.economy.api
 
-import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
+import ru.astrainteractive.aspekt.module.economy.model.Currency
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
-import ru.astrainteractive.aspekt.module.economy.model.PlayerModel
+import ru.astrainteractive.aspekt.module.economy.model.EconomyPlayer
 
 internal interface EconomyRepository {
     /**
      * Fetch all available currencies from database
      */
-    suspend fun getAllCurrencies(): List<CurrencyModel>
+    suspend fun getAllCurrencies(): List<Currency>
 
     /**
      * Insert or update currencies in database
      *
      * If currency is present in database and not present in [currencies] it will be deleted!
      */
-    suspend fun updateCurrencies(currencies: List<CurrencyModel>)
+    suspend fun updateCurrencies(currencies: List<Currency>)
 
     /**
      * Find currency by its id
      */
-    suspend fun findCurrency(id: String): CurrencyModel?
+    suspend fun findCurrency(id: String): Currency?
 
     /**
      * Find player currency amount
@@ -44,7 +44,7 @@ internal interface EconomyRepository {
      * Transfer money in transaction from player [from] to player [to]
      * @return true if success false if not
      */
-    suspend fun transfer(from: PlayerModel, to: PlayerModel, amount: Double, currencyId: String): Boolean
+    suspend fun transfer(from: EconomyPlayer, to: EconomyPlayer, amount: Double, currencyId: String): Boolean
 
     /**
      * Updates player currency amount
