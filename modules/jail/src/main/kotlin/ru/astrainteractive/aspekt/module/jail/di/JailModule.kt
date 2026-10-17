@@ -1,16 +1,16 @@
 package ru.astrainteractive.aspekt.module.jail.di
 
-import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.jail.api.JailCache
 import ru.astrainteractive.aspekt.module.jail.api.JailRepository
 import ru.astrainteractive.aspekt.module.jail.command.di.JailCommandModule
-import ru.astrainteractive.aspekt.module.jail.controller.JailController
 import ru.astrainteractive.aspekt.module.jail.event.JailEvent
 import ru.astrainteractive.aspekt.module.jail.file.FileJailRepository
 import ru.astrainteractive.aspekt.module.jail.memory.InMemoryJailCache
 import ru.astrainteractive.aspekt.module.jail.service.UnJailServiceTask
+import ru.astrainteractive.aspekt.module.jail.usecase.FreeInmateUseCase
+import ru.astrainteractive.aspekt.module.jail.usecase.TeleportInmateToJailUseCase
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.service.IntervalService
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
@@ -29,15 +29,21 @@ class JailModule(
         jailRepository = jailRepository,
         scope = coreModule.ioScope
     )
-    private val jailController = JailController(
-        dispatchers = coreModule.dispatchers,
-        jailRepository = jailRepository
+    private val freeInmateUseCase = FreeInmateUseCase(
+        jailRepository = jailRepository,
+        platformServer = coreModule.platformServer,
+        dispatchers = coreModule.dispatchers
+    )
+    private val teleportInmateToJailUseCase = TeleportInmateToJailUseCase(
+        jailRepository = jailRepository,
+        platformServer = coreModule.platformServer,
+        dispatchers = coreModule.dispatchers
     )
     private val jailEvent = JailEvent(
         scope = coreModule.ioScope,
         jailRepository = jailRepository,
         jailCache = jailCache,
-        jailController = jailController,
+        teleportInmateToJailUseCase = teleportInmateToJailUseCase,
         translationKrate = coreModule.translationKrate
     )
 
@@ -46,7 +52,8 @@ class JailModule(
         bukkitCoreModule = bukkitCoreModule,
         jailRepository = jailRepository,
         jailCache = jailCache,
-        jailController = jailController
+        freeInmateUseCase = freeInmateUseCase,
+        teleportInmateToJailUseCase = teleportInmateToJailUseCase
     )
 
     private val unJailService = IntervalService(
@@ -56,7 +63,7 @@ class JailModule(
         task = UnJailServiceTask(
             jailCache = jailCache,
             jailRepository = jailRepository,
-            jailController = jailController,
+            freeInmateUseCase = freeInmateUseCase,
             translationKrate = coreModule.translationKrate
         )
     )
@@ -71,7 +78,6 @@ class JailModule(
             unJailService.onDisable()
             jailCommandModule.lifecycle.onDisable()
             jailEvent.onDisable()
-            jailController.cancel()
         }
     )
 

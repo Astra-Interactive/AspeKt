@@ -13,4 +13,6 @@ internal data class JailInmate(
     @Serializable(InstantSerializer::class)
     val start: Instant,
     val lastLocation: JailLocation
-)
+) {
+    fun isSentenceOver(now: Instant): Boolean = now.epochSecond - start.epochSecond > duration.inWholeSeconds
+}

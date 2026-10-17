@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.event.server.ServerLoadEvent
 import ru.astrainteractive.aspekt.module.jail.api.JailCache
 import ru.astrainteractive.aspekt.module.jail.api.JailRepository
-import ru.astrainteractive.aspekt.module.jail.controller.JailController
+import ru.astrainteractive.aspekt.module.jail.usecase.TeleportInmateToJailUseCase
 import ru.astrainteractive.aspekt.module.jail.util.cache
 import ru.astrainteractive.aspekt.module.jail.util.forget
 import ru.astrainteractive.aspekt.module.jail.util.isInJail
@@ -29,7 +29,7 @@ import ru.astrainteractive.klibs.mikro.core.logging.Logger
 internal class JailEvent(
     private val jailRepository: JailRepository,
     private val jailCache: JailCache,
-    private val jailController: JailController,
+    private val teleportInmateToJailUseCase: TeleportInmateToJailUseCase,
     private val scope: CoroutineScope,
     translationKrate: CachedKrate<PluginTranslation>
 ) : EventListener,
@@ -57,10 +57,10 @@ internal class JailEvent(
 
     private fun teleportBackToJail(player: Player) {
         scope.launch {
-            jailRepository.getInmate(player.uniqueId.toString())
+            val inmate = jailRepository.getInmate(player.uniqueId.toString())
                 .getOrNull()
                 ?: return@launch
-            jailController.tryTeleportToJail(player.uniqueId)
+            teleportInmateToJailUseCase.invoke(inmate)
             player.sendMessage(translation.jails.inJail)
         }
     }

@@ -8,7 +8,8 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.jail.api.JailCache
 import ru.astrainteractive.aspekt.module.jail.api.JailRepository
 import ru.astrainteractive.aspekt.module.jail.command.jail.JailLiteralArgumentBuilder
-import ru.astrainteractive.aspekt.module.jail.controller.JailController
+import ru.astrainteractive.aspekt.module.jail.usecase.FreeInmateUseCase
+import ru.astrainteractive.aspekt.module.jail.usecase.TeleportInmateToJailUseCase
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
@@ -20,7 +21,8 @@ internal class JailCommandModule(
     private val bukkitCoreModule: BukkitCoreModule,
     private val jailRepository: JailRepository,
     private val jailCache: JailCache,
-    private val jailController: JailController
+    private val freeInmateUseCase: FreeInmateUseCase,
+    private val teleportInmateToJailUseCase: TeleportInmateToJailUseCase
 ) {
     private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())
 
@@ -30,7 +32,8 @@ internal class JailCommandModule(
             scope = coreModule.ioScope,
             jailRepository = jailRepository,
             jailCache = jailCache,
-            jailController = jailController,
+            freeInmateUseCase = freeInmateUseCase,
+            teleportInmateToJailUseCase = teleportInmateToJailUseCase,
             multiplatformCommand = coreModule.multiplatformCommand,
             platformServer = coreModule.platformServer,
             commandExceptionHandler = coreModule.commandExceptionHandler

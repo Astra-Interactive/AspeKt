@@ -11,6 +11,8 @@ import ru.astrainteractive.aspekt.module.jail.api.JailRepository
 import ru.astrainteractive.aspekt.module.jail.command.argumenttype.DurationArgumentType
 import ru.astrainteractive.aspekt.module.jail.model.Jail
 import ru.astrainteractive.aspekt.module.jail.model.JailInmate
+import ru.astrainteractive.aspekt.module.jail.usecase.FreeInmateUseCase
+import ru.astrainteractive.aspekt.module.jail.usecase.TeleportInmateToJailUseCase
 import ru.astrainteractive.aspekt.module.jail.util.sendMessage
 import ru.astrainteractive.aspekt.module.jail.util.toJailLocation
 import ru.astrainteractive.aspekt.plugin.PluginPermission
@@ -36,7 +38,8 @@ internal class JailLiteralArgumentBuilder(
     private val scope: CoroutineScope,
     private val jailRepository: JailRepository,
     private val jailCache: JailCache,
-    private val jailController: ru.astrainteractive.aspekt.module.jail.controller.JailController,
+    private val freeInmateUseCase: FreeInmateUseCase,
+    private val teleportInmateToJailUseCase: TeleportInmateToJailUseCase,
     private val multiplatformCommand: MultiplatformCommand,
     private val platformServer: PlatformServer,
     private val commandExceptionHandler: CommandExceptionHandler
@@ -115,12 +118,11 @@ internal class JailLiteralArgumentBuilder(
                                     .getOrNull()
                                     ?: return@launch
 
-                                jailRepository.free(offlinePlayerToFree.uniqueId.toString())
+                                freeInmateUseCase.invoke(inmate)
                                     .onFailure {
                                         ctx.getSender().sendMessage(translation.jails.releaseFailed)
                                     }
                                     .onSuccess {
-                                        jailController.free(inmate)
                                         jailCache.cache(inmate.uuid)
 
                                         offlinePlayerToFree.sendMessage(translation.jails.released)
@@ -178,7 +180,7 @@ internal class JailLiteralArgumentBuilder(
                                                     )
                                                 )
                                                 jailCache.cache(inmate.uuid)
-                                                jailController.onJailed(inmate)
+                                                teleportInmateToJailUseCase.invoke(inmate)
                                             }
                                     }
                                 }

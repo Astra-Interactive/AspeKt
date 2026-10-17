@@ -22,4 +22,13 @@ internal data class PlaytimeReward(
     @SerialName("latest_join")
     @Serializable(KInstantSerializer::class)
     val latestJoin: Instant
-)
+) {
+    fun joinedAt(now: Instant): PlaytimeReward = copy(latestJoin = now)
+
+    fun countedUntil(now: Instant): PlaytimeReward = copy(
+        latestJoin = now,
+        timePlayed = timePlayed + (now - latestJoin)
+    )
+
+    fun isRewardDue(requiredDuration: Duration): Boolean = timePlayed >= requiredDuration
+}

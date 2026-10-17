@@ -17,5 +17,8 @@ dependencies {
     implementation(projects.modules.core.api)
     implementation(projects.modules.core.bukkit)
     testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.minecraft.kyori.api)
+    testImplementation(libs.minecraft.kyori.legacy)
+    testImplementation(libs.minecraft.kyori.minimessage)
     testImplementation(libs.tests.kotlin.test)
 }
