@@ -23,7 +23,7 @@ internal class TpaApi {
     }
 
     fun get(playerUuid: UUID): Map<UUID, TpaApiRequest> {
-        return cache.asMap().filter { it.value.targetUuid == playerUuid }
+        return cache.asMap().filter { entry -> entry.value.targetUuid == playerUuid }
     }
 
     fun cancel(playerUuid: UUID) {
@@ -32,7 +32,7 @@ internal class TpaApi {
 
     fun deny(playerUuid: UUID): Set<UUID> {
         val requesters = cache.asMap()
-            .filter { it.value.targetUuid == playerUuid }
+            .filter { entry -> entry.value.targetUuid == playerUuid }
             .keys
         requesters.forEach(::cancel)
         return requesters

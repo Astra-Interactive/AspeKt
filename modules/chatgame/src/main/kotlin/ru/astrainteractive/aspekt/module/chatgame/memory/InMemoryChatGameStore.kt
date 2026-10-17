@@ -34,7 +34,7 @@ internal class InMemoryChatGameStore(
 
     override fun isAnswerCorrect(answer: String): Boolean {
         val currentGame = state.value as? ChatGameStore.State.Started ?: return false
-        return currentGame.chatGame.answers.any { it.equals(answer, true) }
+        return currentGame.chatGame.answers.any { correctAnswer -> correctAnswer.equals(answer, true) }
     }
 
     override fun isGameStarted(): Boolean {

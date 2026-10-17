@@ -44,7 +44,7 @@ internal class ClaimCommandExecutor(
                 .findOnlinePlayer(claimPlayer.uuid)
                 ?.sendMessage(translation.claim.mapTitle)
             claims.forEach { claim ->
-                val desc = claim.joinToString("") { if (it) "&#1cba56☒" else "&#c91e1e☒" }
+                val desc = claim.joinToString("") { isClaimed -> if (isClaimed) "&#1cba56☒" else "&#c91e1e☒" }
                     .let(kyori::toComponent)
                 platformServer
                     .findOnlinePlayer(claimPlayer.uuid)

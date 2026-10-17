@@ -37,8 +37,8 @@ internal class EkonCommandExecutor(
         kotlin.runCatching {
             val updatedCurrency = playerCurrency.copy(balance = playerCurrency.balance + input.amount)
             repository.updatePlayerCurrency(updatedCurrency)
-        }.onFailure {
-            error { "#execute_Add: ${it.message}" }
+        }.onFailure { throwable ->
+            error { "#execute_Add: ${throwable.message}" }
             input.sender.sendMessage(translation.economy.transferFailed)
         }.onSuccess { input.sender.sendMessage(translation.economy.transferred) }
     }
@@ -54,8 +54,8 @@ internal class EkonCommandExecutor(
                 currencyModel = input.currency
             )
             repository.updatePlayerCurrency(updatedCurrency)
-        }.onFailure {
-            error { "#execute_Add: ${it.message}" }
+        }.onFailure { throwable ->
+            error { "#execute_Add: ${throwable.message}" }
             input.sender.sendMessage(translation.economy.transferFailed)
         }.onSuccess { input.sender.sendMessage(translation.economy.transferred) }
     }

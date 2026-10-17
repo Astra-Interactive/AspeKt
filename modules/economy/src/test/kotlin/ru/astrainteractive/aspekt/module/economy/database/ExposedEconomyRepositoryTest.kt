@@ -63,7 +63,7 @@ class ExposedEconomyRepositoryTest {
         val initialUrl = requireModule.databaseFlow.first().url
         dbConfig.save { DatabaseConfiguration.H2(requireFolder.resolve("test1").path) }
         requireModule.databaseFlow
-            .filter { it.url != initialUrl }
+            .filter { database -> database.url != initialUrl }
             .first()
         val test1Url = requireModule.databaseFlow.first().url
 
@@ -73,13 +73,13 @@ class ExposedEconomyRepositoryTest {
 
         dbConfig.save { DatabaseConfiguration.H2(requireFolder.resolve("test2").path) }
         requireModule.databaseFlow
-            .filter { it.url != test1Url }
+            .filter { database -> database.url != test1Url }
             .first()
 
         assertEquals(0, requireModule.economyRepository.getAllCurrencies().size)
         dbConfig.save { DatabaseConfiguration.H2(requireFolder.resolve("test1").path) }
         requireModule.databaseFlow
-            .filter { it.url == test1Url }
+            .filter { database -> database.url == test1Url }
             .first()
         assertEquals(1, requireModule.economyRepository.getAllCurrencies().size)
     }
@@ -96,17 +96,17 @@ class ExposedEconomyRepositoryTest {
     fun `GIVEN_multiple_currencies_WHEN_change_list_THEN_changed`() = runTest(scheduler) {
         val currencies = listOf(Currency(id = "0", name = "name", priority = 0))
         requireModule.economyRepository.updateCurrencies(currencies)
-        val newCurrencies = List(2) { Currency(id = "$it", name = "name$it", priority = 0) }
+        val newCurrencies = List(2) { index -> Currency(id = "$index", name = "name$index", priority = 0) }
         requireModule.economyRepository.updateCurrencies(newCurrencies)
         assertContentEquals(newCurrencies, requireModule.economyRepository.getAllCurrencies())
-        newCurrencies.forEach {
-            assertEquals(it, requireModule.economyRepository.findCurrency(it.id))
+        newCurrencies.forEach { currency ->
+            assertEquals(currency, requireModule.economyRepository.findCurrency(currency.id))
         }
     }
 
     @Test
     fun `GIVEN_currency_WHEN_add_to_player_THEN_added`() = runTest(scheduler) {
-        val currencies = List(2) { Currency(id = "$it", name = "name$it", priority = 0) }
+        val currencies = List(2) { index -> Currency(id = "$index", name = "name$index", priority = 0) }
         requireModule.economyRepository.updateCurrencies(currencies)
         val playerCurrency = PlayerCurrency(
             playerModel = EconomyPlayer(
@@ -131,7 +131,7 @@ class ExposedEconomyRepositoryTest {
 
     @Test
     fun `GIVEN_currency_WHEN_transfer_to_player_THEN_transfered`() = runTest(scheduler) {
-        val currencies = List(2) { Currency(id = "$it", name = "name$it", priority = 0) }
+        val currencies = List(2) { index -> Currency(id = "$index", name = "name$index", priority = 0) }
         requireModule.economyRepository.updateCurrencies(currencies)
         val playerCurrency = PlayerCurrency(
             playerModel = EconomyPlayer(

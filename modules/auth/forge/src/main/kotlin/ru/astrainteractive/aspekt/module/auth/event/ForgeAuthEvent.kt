@@ -31,15 +31,15 @@ internal class ForgeAuthEvent(
     val translation by translationKrate
 
     val playerLoggedOutEvent = flowEvent<PlayerEvent.PlayerLoggedOutEvent>()
-        .onEach { authorizedApi.forgetUser(it.entity.uuid) }
+        .onEach { event -> authorizedApi.forgetUser(event.entity.uuid) }
         .launchIn(mainScope)
 
     val playerLoggedInEvent = flowEvent<PlayerEvent.PlayerLoggedInEvent>()
-        .onEach {
+        .onEach { event ->
             val playerLoginModel = PlayerLogin(
-                username = it.entity.name.toPlain(),
-                uuid = it.entity.uuid,
-                ip = (it.entity as ServerPlayer).ipAddress
+                username = event.entity.name.toPlain(),
+                uuid = event.entity.uuid,
+                ip = (event.entity as ServerPlayer).ipAddress
             )
             authorizedApi.loadUserInfo(playerLoginModel)
         }
@@ -60,8 +60,8 @@ internal class ForgeAuthEvent(
         }.launchIn(mainScope)
 
     val breakEvent = flowEvent<BlockEvent.BreakEvent>(EventPriority.HIGHEST)
-        .filter { it.player.isAlive }
-        .filter { authorizedApi.getAuthState(it.player.uuid) !is AuthorizedApi.AuthState.Authorized }
+        .filter { event -> event.player.isAlive }
+        .filter { event -> authorizedApi.getAuthState(event.player.uuid) !is AuthorizedApi.AuthState.Authorized }
         .onEach { event ->
             println(event)
             event.isCanceled = true
@@ -69,11 +69,11 @@ internal class ForgeAuthEvent(
         }.launchIn(mainScope)
 
     val playerEvent = flowEvent<EntityEvent>(EventPriority.HIGHEST)
-        .filter { it.entity is Player }
-        .filter { it !is EntityJoinLevelEvent }
-        .filter { it !is PlayerEvent.PlayerLoggedInEvent }
-        .filter { it.entity.isAlive }
-        .filter { authorizedApi.getAuthState(it.entity.uuid) !is AuthorizedApi.AuthState.Authorized }
+        .filter { event -> event.entity is Player }
+        .filter { event -> event !is EntityJoinLevelEvent }
+        .filter { event -> event !is PlayerEvent.PlayerLoggedInEvent }
+        .filter { event -> event.entity.isAlive }
+        .filter { event -> authorizedApi.getAuthState(event.entity.uuid) !is AuthorizedApi.AuthState.Authorized }
         .onEach { event ->
             if (event.isCancelable) event.isCanceled = true
             processPlayerEvent(event.entity as Player)

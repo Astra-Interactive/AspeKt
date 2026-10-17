@@ -63,7 +63,7 @@ internal class ExposedEconomyRepository(
     override suspend fun getAllCurrencies(): List<Currency> {
         return newSuspendedTransaction(db = currentDatabase()) {
             CurrencyTable.selectAll()
-                .map { it.toCurrency() }
+                .map { item -> item.toCurrency() }
         }
     }
 
@@ -84,16 +84,16 @@ internal class ExposedEconomyRepository(
         }
         newSuspendedTransaction(db = currentDatabase()) {
             currencies.forEach { currency ->
-                if (existingCurrencies.find { currency.id == it.id } != null) {
-                    CurrencyTable.update(where = { CurrencyTable.id eq currency.id }) {
-                        it[CurrencyTable.name] = currency.name
-                        it[CurrencyTable.priority] = currency.priority
+                if (existingCurrencies.find { existingCurrency -> currency.id == existingCurrency.id } != null) {
+                    CurrencyTable.update(where = { CurrencyTable.id eq currency.id }) { statement ->
+                        statement[CurrencyTable.name] = currency.name
+                        statement[CurrencyTable.priority] = currency.priority
                     }
                 } else {
-                    CurrencyTable.insert {
-                        it[CurrencyTable.id] = currency.id
-                        it[CurrencyTable.name] = currency.name
-                        it[CurrencyTable.priority] = currency.priority
+                    CurrencyTable.insert { statement ->
+                        statement[CurrencyTable.id] = currency.id
+                        statement[CurrencyTable.name] = currency.name
+                        statement[CurrencyTable.priority] = currency.priority
                     }
                 }
             }
@@ -104,7 +104,7 @@ internal class ExposedEconomyRepository(
         return newSuspendedTransaction(db = currentDatabase()) {
             CurrencyTable.selectAll()
                 .where { CurrencyTable.id eq id }
-                .map { it.toCurrency() }
+                .map { item -> item.toCurrency() }
                 .firstOrNull()
         }
     }
@@ -120,7 +120,7 @@ internal class ExposedEconomyRepository(
                 .selectAll()
                 .where { PlayerCurrencyTable.uuid eq playerUuid }
                 .andWhere { PlayerCurrencyTable.currencyId eq currencyId }
-                .map { it.toPlayerCurrency() }
+                .map { item -> item.toPlayerCurrency() }
                 .firstOrNull()
         }
     }
@@ -135,7 +135,7 @@ internal class ExposedEconomyRepository(
             )
                 .selectAll()
                 .where { PlayerCurrencyTable.uuid eq playerUuid }
-                .map { it.toPlayerCurrency() }
+                .map { item -> item.toPlayerCurrency() }
         }
     }
 
@@ -152,7 +152,7 @@ internal class ExposedEconomyRepository(
                 .where { CurrencyTable.id eq id }
                 .limit(size)
                 .offset((page * size).toLong())
-                .map { it.toPlayerCurrency() }
+                .map { item -> item.toPlayerCurrency() }
         }
     }
 
@@ -162,11 +162,11 @@ internal class ExposedEconomyRepository(
             .andWhere { PlayerCurrencyTable.uuid eq currency.playerModel.uuid }
             .firstOrNull()
         if (isPlayerCurrencyExists == null) {
-            PlayerCurrencyTable.insert {
-                it[PlayerCurrencyTable.amount] = currency.balance
-                it[PlayerCurrencyTable.lastUsername] = currency.playerModel.name
-                it[PlayerCurrencyTable.uuid] = currency.playerModel.uuid
-                it[PlayerCurrencyTable.currencyId] = currency.currencyModel.id
+            PlayerCurrencyTable.insert { statement ->
+                statement[PlayerCurrencyTable.amount] = currency.balance
+                statement[PlayerCurrencyTable.lastUsername] = currency.playerModel.name
+                statement[PlayerCurrencyTable.uuid] = currency.playerModel.uuid
+                statement[PlayerCurrencyTable.currencyId] = currency.currencyModel.id
             }
         } else {
             PlayerCurrencyTable.update(
@@ -175,9 +175,9 @@ internal class ExposedEconomyRepository(
                         PlayerCurrencyTable.uuid.eq(currency.playerModel.uuid)
                     }
                 },
-                body = {
-                    it[PlayerCurrencyTable.amount] = currency.balance
-                    it[PlayerCurrencyTable.lastUsername] = currency.playerModel.name
+                body = { statement ->
+                    statement[PlayerCurrencyTable.amount] = currency.balance
+                    statement[PlayerCurrencyTable.lastUsername] = currency.playerModel.name
                 }
             )
         }

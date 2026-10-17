@@ -18,14 +18,14 @@ suspend fun ClaimsRepository.isPlayerOwnClaim(uuid: UUID, key: UniqueWorldKey): 
 }
 
 suspend fun ClaimsRepository.getAllChunks(uuid: UUID): List<ClaimChunk> {
-    return requireKrate(uuid).getValue().chunks.map { it.value }
+    return requireKrate(uuid).getValue().chunks.map { entry -> entry.value }
 }
 
 suspend fun ClaimsRepository.getChunk(
     uuid: UUID,
     key: UniqueWorldKey
-): ClaimChunk? = getAllChunks(uuid).firstOrNull {
-    it.uniqueWorldKey == key
+): ClaimChunk? = getAllChunks(uuid).firstOrNull { claimChunk ->
+    claimChunk.uniqueWorldKey == key
 }
 
 suspend fun ClaimsRepository.setFlag(
@@ -71,10 +71,10 @@ fun ClaimsRepository.map(size: Int, chunk: ClaimChunk): Array<Array<Boolean>> {
     val chunks = getAllChunks()
     for (i in 0 until size) {
         for (j in 0 until size) {
-            m[i][j] = chunks.any {
+            m[i][j] = chunks.any { claimChunk ->
                 val x = chunk.x - size / 2 + i
                 val z = chunk.z + size / 2 - j
-                it.x == x && it.z == z
+                claimChunk.x == x && claimChunk.z == z
             }
         }
     }
@@ -87,7 +87,7 @@ fun ClaimsRepository.isAble(
     claimPlayer: ClaimPlayer? = null
 ): Boolean {
     val chunkValue = getAllChunks()
-        .firstOrNull { it.uniqueWorldKey == key }
+        .firstOrNull { claimChunk -> claimChunk.uniqueWorldKey == key }
         ?.flags
         ?.get(chunkFlag)
         ?: true

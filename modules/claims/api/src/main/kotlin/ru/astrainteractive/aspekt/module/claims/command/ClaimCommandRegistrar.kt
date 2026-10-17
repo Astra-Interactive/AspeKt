@@ -64,7 +64,7 @@ internal class ClaimCommandRegistrar(
                 }
                 literal(ClaimCommandArgument.ADD_MEMBER.value) {
                     argument("player", StringArgumentType.string()) { playerArg ->
-                        hints { platformServer.getOnlinePlayers().map { it.name } }
+                        hints { platformServer.getOnlinePlayers().map { player -> player.name } }
                         runs(commandExceptionHandler::handle) { ctx ->
                             ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                             val ownerPlayer = ctx.requirePlayer()

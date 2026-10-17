@@ -41,7 +41,8 @@ internal class MenuLiteralArgumentBuilder(
                     runs(commandExceptionHandler::handle) { ctx ->
                         val player = ctx.requirePlayer()
                         val cmd = ctx.requireArgument(menuArg)
-                        val menuModel = menuModels.firstOrNull { it.command == cmd } ?: menuModels.firstOrNull()
+                        val menuModel = menuModels.firstOrNull { menu -> menu.command == cmd }
+                            ?: menuModels.firstOrNull()
                         if (menuModel == null) {
                             ctx.getSender().sendMessage(
                                 translation.menu.notFound

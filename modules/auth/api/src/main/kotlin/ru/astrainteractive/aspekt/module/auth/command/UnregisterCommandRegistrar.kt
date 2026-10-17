@@ -37,7 +37,7 @@ internal class UnregisterCommandRegistrar(
                     alias = "username",
                     type = StringArgumentType.string(),
                     block = { usernameArg ->
-                        hints { platformServer.getOnlinePlayers().map { it.name } }
+                        hints { platformServer.getOnlinePlayers().map { player -> player.name } }
                         runs(commandExceptionHandler::handle) { ctx ->
                             ctx.requirePermission(AuthPermission.Unregister)
                             val usernameToDelete = ctx.requireArgument(usernameArg)

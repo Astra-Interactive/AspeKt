@@ -132,8 +132,8 @@ internal class TCEvent(
             block.breakNaturally()
             damageItem(player, tool)
         }
-        BlockFace.entries.forEach {
-            breakRecursively(player, block.getRelative(it), i + 1, tool)
+        BlockFace.entries.forEach { blockFace ->
+            breakRecursively(player, block.getRelative(blockFace), i + 1, tool)
         }
     }
 

@@ -53,9 +53,9 @@ internal class KrateClaimsRepository(
 
     private val _chunkByKrate = krates
         .flatMapLatest { claimKrates ->
-            combine(claimKrates.map { it.cachedStateFlow }) {
+            combine(claimKrates.map { krate -> krate.cachedStateFlow }) { claimDataList ->
                 buildMap {
-                    it.forEachIndexed { i, data ->
+                    claimDataList.forEachIndexed { i, data ->
                         val krate = claimKrates[i]
                         data.chunks.forEach { chunk ->
                             put(chunk.key, krate)
@@ -72,19 +72,21 @@ internal class KrateClaimsRepository(
 
     override suspend fun requireKrate(uuid: UUID): ClaimKrate {
         krateFilesStateFlow.update { files ->
-            if (files.none { it.nameWithoutExtension == uuid.toString() }) {
+            if (files.none { file -> file.nameWithoutExtension == uuid.toString() }) {
                 files + folder.resolve("$uuid.yml")
             } else {
                 files
             }
         }
         return krates
-            .mapNotNull { it.firstOrNull { it.cachedStateFlow.value.ownerUUID == uuid } }
+            .mapNotNull { claimKrates ->
+                claimKrates.firstOrNull { krate -> krate.cachedStateFlow.value.ownerUUID == uuid }
+            }
             .first()
     }
 
     override fun findKrate(uuid: UUID): ClaimKrate? {
-        return krates.value.firstOrNull { it.cachedStateFlow.value.ownerUUID == uuid }
+        return krates.value.firstOrNull { krate -> krate.cachedStateFlow.value.ownerUUID == uuid }
     }
 
     override suspend fun saveChunk(uuid: UUID, chunk: ClaimChunk) = mutex.withLock {
@@ -114,6 +116,6 @@ internal class KrateClaimsRepository(
                         .minus(key)
                 )
             }
-        }.onFailure { it.printStackTrace() }
+        }.onFailure { throwable -> throwable.printStackTrace() }
     }
 }

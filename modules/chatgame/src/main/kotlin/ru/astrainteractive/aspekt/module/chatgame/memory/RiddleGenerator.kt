@@ -98,7 +98,7 @@ internal class RiddleGenerator(
                 val root2 = (-b - sqrtD).div(2 * a).roundDec(2)
                 ChatGameData(
                     question = translation.chatGame.solveQuadratic(equation),
-                    answers = listOf(root1.toString(), root2.toString()).also { println(it) },
+                    answers = listOf(root1.toString(), root2.toString()).also { answers -> println(answers) },
                     reward = instance.reward ?: config.defaultReward
                 )
             }

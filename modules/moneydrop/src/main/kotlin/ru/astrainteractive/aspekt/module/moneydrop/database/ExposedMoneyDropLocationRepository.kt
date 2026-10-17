@@ -61,13 +61,13 @@ internal class ExposedMoneyDropLocationRepository(
         runCatching {
             withContext(ioDispatcher) {
                 transaction(databaseFlow.first()) {
-                    MoneyDropLocationTable.insert {
-                        it[MoneyDropLocationTable.x] = location.x
-                        it[MoneyDropLocationTable.y] = location.y
-                        it[MoneyDropLocationTable.z] = location.z
-                        it[MoneyDropLocationTable.world] = location.world
-                        it[MoneyDropLocationTable.additionalConstraint] = location.additionalConstraint
-                        it[MoneyDropLocationTable.instant] = location.instant
+                    MoneyDropLocationTable.insert { statement ->
+                        statement[MoneyDropLocationTable.x] = location.x
+                        statement[MoneyDropLocationTable.y] = location.y
+                        statement[MoneyDropLocationTable.z] = location.z
+                        statement[MoneyDropLocationTable.world] = location.world
+                        statement[MoneyDropLocationTable.additionalConstraint] = location.additionalConstraint
+                        statement[MoneyDropLocationTable.instant] = location.instant
                     }
                 }
             }

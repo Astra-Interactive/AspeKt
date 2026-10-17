@@ -74,11 +74,11 @@ internal class MenuGui(
 
     private fun isMeetConditions(conditions: List<MenuConfiguration.Condition>): Boolean {
         if (conditions.isEmpty()) return true
-        return conditions.any {
-            when (it) {
+        return conditions.any { condition ->
+            when (condition) {
                 is MenuConfiguration.Condition.Permission -> {
-                    val hasPermission = playerHolder.player.hasPermission(it.permission)
-                    if (it.isInverted) {
+                    val hasPermission = playerHolder.player.hasPermission(condition.permission)
+                    if (condition.isInverted) {
                         !hasPermission
                     } else {
                         hasPermission

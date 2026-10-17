@@ -60,12 +60,12 @@ internal class MoneyDropController(
         val itemStack = ItemStack(material)
         // Every nearby player sees the same dropped item, so its name is in the default language
         val name = translation.moneyDrop.itemName.toComponent(Locale.ROOT)
-        itemStack.editMeta {
-            it.displayName(name)
-            it.setPersistentDataType(MoneyDropFlag.Flag, true)
-            it.setPersistentDataType(MoneyDropFlag.Amount, amount)
+        itemStack.editMeta { meta ->
+            meta.displayName(name)
+            meta.setPersistentDataType(MoneyDropFlag.Flag, true)
+            meta.setPersistentDataType(MoneyDropFlag.Amount, amount)
             entry.currencyId?.let { currencyId ->
-                it.setPersistentDataType(MoneyDropFlag.CurrencyId, currencyId)
+                meta.setPersistentDataType(MoneyDropFlag.CurrencyId, currencyId)
             }
         }
         val item = withContext(dispatchers.Main) { location.world.dropItemNaturally(location, itemStack) }
@@ -88,7 +88,7 @@ internal class MoneyDropController(
 
     fun tryDrop(location: Location, from: String) = launch {
         moneyDropConfig.moneyDrop.values
-            .filter { it.from == from }
+            .filter { entry -> entry.from == from }
             .filter(::checkForChance)
             .forEach { entry -> drop(location, entry) }
     }

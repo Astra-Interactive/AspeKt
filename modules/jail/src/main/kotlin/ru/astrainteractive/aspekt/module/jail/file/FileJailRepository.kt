@@ -64,7 +64,7 @@ internal class FileJailRepository(
         val file = folder.resolve("jail.inmates.yml")
         return runCatching {
             stringFormat.parseOrDefault(file = file, factory = { emptyList<JailInmate>() })
-                .first { it.uuid == uuid }
+                .first { inmate -> inmate.uuid == uuid }
         }
     }
 
@@ -73,7 +73,7 @@ internal class FileJailRepository(
         return runCatching {
             val newInmatesList = stringFormat
                 .parseOrDefault(file = file, factory = { emptyList<JailInmate>() })
-                .filter { it.uuid != uuid }
+                .filter { inmate -> inmate.uuid != uuid }
             stringFormat.writeIntoFile(newInmatesList, file)
         }
     }

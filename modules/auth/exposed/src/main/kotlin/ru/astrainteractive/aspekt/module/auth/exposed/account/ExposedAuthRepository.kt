@@ -20,13 +20,13 @@ internal class ExposedAuthRepository(private val databaseFlow: Flow<Database>) :
     override suspend fun createAccount(authData: AuthData): Result<Unit> {
         return runCatching {
             transaction(requireDatabase()) {
-                UserTable.insert {
-                    it[UserTable.id] = authData.uuid.toString()
-                    it[UserTable.lastUsername] = authData.lastUsername
-                    it[UserTable.passwordHash] = authData.passwordSha256
-                    it[UserTable.createdAt] = LocalDateTime.now()
-                    it[UserTable.updatedAt] = LocalDateTime.now()
-                    it[UserTable.lastIpAddress] = authData.lastIpAddress
+                UserTable.insert { statement ->
+                    statement[UserTable.id] = authData.uuid.toString()
+                    statement[UserTable.lastUsername] = authData.lastUsername
+                    statement[UserTable.passwordHash] = authData.passwordSha256
+                    statement[UserTable.createdAt] = LocalDateTime.now()
+                    statement[UserTable.updatedAt] = LocalDateTime.now()
+                    statement[UserTable.lastIpAddress] = authData.lastIpAddress
                 }
             }
         }
@@ -49,11 +49,11 @@ internal class ExposedAuthRepository(private val databaseFlow: Flow<Database>) :
                     where = {
                         UserTable.id eq authData.uuid.toString()
                     },
-                    body = {
-                        it[UserTable.passwordHash] = authData.passwordSha256
-                        it[UserTable.lastUsername] = authData.lastUsername
-                        it[UserTable.updatedAt] = LocalDateTime.now()
-                        it[UserTable.lastIpAddress] = authData.lastIpAddress
+                    body = { statement ->
+                        statement[UserTable.passwordHash] = authData.passwordSha256
+                        statement[UserTable.lastUsername] = authData.lastUsername
+                        statement[UserTable.updatedAt] = LocalDateTime.now()
+                        statement[UserTable.lastIpAddress] = authData.lastIpAddress
                     }
                 )
             }
@@ -65,12 +65,12 @@ internal class ExposedAuthRepository(private val databaseFlow: Flow<Database>) :
             transaction(requireDatabase()) {
                 UserTable.selectAll()
                     .where { UserTable.id eq uuid.toString() }
-                    .map {
+                    .map { row ->
                         AuthData(
-                            lastUsername = it[UserTable.lastUsername],
-                            uuid = UUID.fromString(it[UserTable.id].value),
-                            passwordSha256 = it[UserTable.passwordHash],
-                            lastIpAddress = it[UserTable.lastIpAddress]
+                            lastUsername = row[UserTable.lastUsername],
+                            uuid = UUID.fromString(row[UserTable.id].value),
+                            passwordSha256 = row[UserTable.passwordHash],
+                            lastIpAddress = row[UserTable.lastIpAddress]
                         )
                     }
                     .first()
@@ -83,12 +83,12 @@ internal class ExposedAuthRepository(private val databaseFlow: Flow<Database>) :
             transaction(requireDatabase()) {
                 UserTable.selectAll()
                     .where { UserTable.lastUsername eq username }
-                    .map {
+                    .map { row ->
                         AuthData(
-                            lastUsername = it[UserTable.lastUsername],
-                            uuid = UUID.fromString(it[UserTable.id].value),
-                            passwordSha256 = it[UserTable.passwordHash],
-                            lastIpAddress = it[UserTable.lastIpAddress]
+                            lastUsername = row[UserTable.lastUsername],
+                            uuid = UUID.fromString(row[UserTable.id].value),
+                            passwordSha256 = row[UserTable.passwordHash],
+                            lastIpAddress = row[UserTable.lastIpAddress]
                         )
                     }
                     .first()

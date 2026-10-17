@@ -41,15 +41,15 @@ internal class ForgeAuthEvent(
     val translation by translationKrate
 
     val playerLoggedOutEvent = flowEvent<PlayerEvent.PlayerLoggedOutEvent>()
-        .onEach { authorizedApi.forgetUser(it.entity.uuid) }
+        .onEach { event -> authorizedApi.forgetUser(event.entity.uuid) }
         .launchIn(mainScope)
 
     val playerLoggedInEvent = flowEvent<PlayerEvent.PlayerLoggedInEvent>()
-        .onEach {
+        .onEach { event ->
             val playerLoginModel = PlayerLogin(
-                username = it.entity.name.toPlain(),
-                uuid = it.entity.uuid,
-                ip = (it.entity as ServerPlayer).ipAddress
+                username = event.entity.name.toPlain(),
+                uuid = event.entity.uuid,
+                ip = (event.entity as ServerPlayer).ipAddress
             )
             authorizedApi.loadUserInfo(playerLoginModel)
         }
@@ -70,8 +70,8 @@ internal class ForgeAuthEvent(
         }.launchIn(mainScope)
 
     val breakEvent = flowEvent<BlockEvent.BreakEvent>(EventPriority.HIGHEST)
-        .filter { it.player.isAlive }
-        .filter { authorizedApi.getAuthState(it.player.uuid) !is AuthorizedApi.AuthState.Authorized }
+        .filter { event -> event.player.isAlive }
+        .filter { event -> authorizedApi.getAuthState(event.player.uuid) !is AuthorizedApi.AuthState.Authorized }
         .onEach { event ->
             println(event)
             event.isCanceled = true

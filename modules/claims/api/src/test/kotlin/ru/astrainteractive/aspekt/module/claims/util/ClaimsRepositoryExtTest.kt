@@ -101,7 +101,7 @@ internal class ClaimsRepositoryExtTest {
                 listOf(false, true, false),
                 listOf(false, false, false)
             )
-            assertContentEquals(expectArray, repository.map(3, chunk).map { it.toList() }.toList())
+            assertContentEquals(expectArray, repository.map(3, chunk).map { row -> row.toList() }.toList())
         }
     }
 }

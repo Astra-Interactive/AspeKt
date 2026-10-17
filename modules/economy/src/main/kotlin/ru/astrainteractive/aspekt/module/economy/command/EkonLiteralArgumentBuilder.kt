@@ -33,7 +33,7 @@ internal class EkonLiteralArgumentBuilder(
     private val commandExceptionHandler: CommandExceptionHandler
 ) {
     private val translation by translationKrate
-    private fun currencyNames(): List<String> = currencyCache.getAllCurrencies().map { it.name }
+    private fun currencyNames(): List<String> = currencyCache.getAllCurrencies().map { currency -> currency.name }
 
     @Suppress("LongMethod")
     fun create(): LiteralArgumentBuilder<Any> {
@@ -57,8 +57,8 @@ internal class EkonLiteralArgumentBuilder(
                         runs(commandExceptionHandler::handle) { ctx ->
                             ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                             val currencyName = ctx.requireArgument(currencyArg)
-                            val currency =
-                                currencyCache.getAllCurrencies().firstOrNull { it.name.equals(currencyName, true) }
+                            val currency = currencyCache.getAllCurrencies()
+                                .firstOrNull { candidate -> candidate.name.equals(currencyName, true) }
                             if (currency == null) {
                                 ctx.getSender().sendMessage(translation.economy.currencyNotFound)
                                 return@runs
@@ -74,8 +74,8 @@ internal class EkonLiteralArgumentBuilder(
                                 ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                                 val currencyName = ctx.requireArgument(currencyArg)
                                 val page = ctx.requireArgument(pageArg)
-                                val currency = currencyCache.getAllCurrencies().firstOrNull {
-                                    it.name.equals(
+                                val currency = currencyCache.getAllCurrencies().firstOrNull { candidate ->
+                                    candidate.name.equals(
                                         currencyName,
                                         true
                                     )
@@ -101,8 +101,8 @@ internal class EkonLiteralArgumentBuilder(
                             runs(commandExceptionHandler::handle) { ctx ->
                                 ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                                 val currencyName = ctx.requireArgument(currencyArg)
-                                val currency = currencyCache.getAllCurrencies().firstOrNull {
-                                    it.name.equals(
+                                val currency = currencyCache.getAllCurrencies().firstOrNull { candidate ->
+                                    candidate.name.equals(
                                         currencyName,
                                         true
                                     )
@@ -133,8 +133,8 @@ internal class EkonLiteralArgumentBuilder(
                                 runs(commandExceptionHandler::handle) { ctx ->
                                     ctx.requirePermission(PluginPermission.SET_BALANCE)
                                     val currencyName = ctx.requireArgument(currencyArg)
-                                    val currency = currencyCache.getAllCurrencies().firstOrNull {
-                                        it.name.equals(
+                                    val currency = currencyCache.getAllCurrencies().firstOrNull { candidate ->
+                                        candidate.name.equals(
                                             currencyName,
                                             true
                                         )
@@ -168,8 +168,8 @@ internal class EkonLiteralArgumentBuilder(
                                 runs(commandExceptionHandler::handle) { ctx ->
                                     ctx.requirePermission(PluginPermission.SET_BALANCE)
                                     val currencyName = ctx.requireArgument(currencyArg)
-                                    val currency = currencyCache.getAllCurrencies().firstOrNull {
-                                        it.name.equals(
+                                    val currency = currencyCache.getAllCurrencies().firstOrNull { candidate ->
+                                        candidate.name.equals(
                                             currencyName,
                                             true
                                         )

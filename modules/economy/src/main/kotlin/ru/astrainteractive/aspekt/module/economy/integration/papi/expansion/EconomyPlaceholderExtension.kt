@@ -23,7 +23,7 @@ internal class EconomyPlaceholderExtension(
 
     override fun onRequest(player: OfflinePlayer?, params: String): String {
         val args = params.split("_")
-        val placeholder = placeholders.firstOrNull { it.key == args.getOrNull(1) }
+        val placeholder = placeholders.firstOrNull { placeholder -> placeholder.key == args.getOrNull(1) }
         return placeholder?.asPlaceholder(player, args).orEmpty()
     }
 }
