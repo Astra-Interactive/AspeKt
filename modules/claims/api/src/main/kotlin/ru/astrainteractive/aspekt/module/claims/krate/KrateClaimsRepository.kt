@@ -18,9 +18,9 @@ import kotlinx.serialization.StringFormat
 import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.api.isPlayerOwnClaim
 import ru.astrainteractive.aspekt.module.claims.api.map
-import ru.astrainteractive.aspekt.module.claims.data.exception.ClaimNotFoundException
-import ru.astrainteractive.aspekt.module.claims.data.exception.ClaimNotOwnedException
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
+import ru.astrainteractive.aspekt.module.claims.model.ClaimNotFoundException
+import ru.astrainteractive.aspekt.module.claims.model.ClaimNotOwnedException
 import ru.astrainteractive.aspekt.module.claims.model.UniqueWorldKey
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import java.io.File

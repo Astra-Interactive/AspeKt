@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.module.claims.data.exception
+package ru.astrainteractive.aspekt.module.claims.model
 
 import java.util.UUID
 

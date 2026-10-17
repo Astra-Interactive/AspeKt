@@ -1,8 +1,8 @@
 package ru.astrainteractive.aspekt.module.claims.command.claim
 
-import ru.astrainteractive.aspekt.module.claims.data.exception.ClaimNotFoundException
-import ru.astrainteractive.aspekt.module.claims.data.exception.ClaimNotOwnedException
-import ru.astrainteractive.aspekt.module.claims.data.exception.UnderClaimException
+import ru.astrainteractive.aspekt.module.claims.model.ClaimNotFoundException
+import ru.astrainteractive.aspekt.module.claims.model.ClaimNotOwnedException
+import ru.astrainteractive.aspekt.module.claims.model.UnderClaimException
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
 import ru.astrainteractive.astralibs.localization.text.LocalizedText
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
