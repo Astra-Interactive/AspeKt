@@ -4,10 +4,8 @@ import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.antiswear.command.di.AntiSwearCommandModule
-import ru.astrainteractive.aspekt.module.antiswear.di.factory.PacketEventSwearListenerFactory
 import ru.astrainteractive.aspekt.module.antiswear.event.AntiSwearEventListener
 import ru.astrainteractive.aspekt.module.antiswear.krate.KrateSwearRepository
-import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import java.io.File
 
@@ -32,11 +30,12 @@ class AntiSwearModule(
     private val isPacketEventsEnabled: Boolean
         get() = Bukkit.getPluginManager().isPluginEnabled("packetevents")
 
-    private val packetEventSwearListener: EventListener? by lazy {
+    private val packetEventsSwearModule: PacketEventsSwearModule? by lazy {
         if (isPacketEventsEnabled) {
-            PacketEventSwearListenerFactory(
-                swearRepository = swearRepository
-            ).create()
+            PacketEventsSwearModule(
+                swearRepository = swearRepository,
+                plugin = bukkitCoreModule.plugin
+            )
         } else {
             null
         }
@@ -46,10 +45,10 @@ class AntiSwearModule(
         onEnable = {
             antiSwearEventListener.onEnable(bukkitCoreModule.plugin)
             antiSwearCommandModule.lifecycle.onEnable()
-            if (isPacketEventsEnabled) packetEventSwearListener?.onEnable(bukkitCoreModule.plugin)
+            if (isPacketEventsEnabled) packetEventsSwearModule?.lifecycle?.onEnable()
         },
         onDisable = {
-            if (isPacketEventsEnabled) packetEventSwearListener?.onDisable()
+            if (isPacketEventsEnabled) packetEventsSwearModule?.lifecycle?.onDisable()
             antiSwearCommandModule.lifecycle.onDisable()
             antiSwearEventListener.onDisable()
             swearRepository.clear()

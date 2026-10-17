@@ -3,15 +3,14 @@ package ru.astrainteractive.aspekt.module.oregeneration.populator
 import org.bukkit.generator.BlockPopulator
 import org.bukkit.generator.LimitedRegion
 import org.bukkit.generator.WorldInfo
-import ru.astrainteractive.aspekt.module.oregeneration.mapping.OreHostMaterialMapper
 import ru.astrainteractive.aspekt.module.oregeneration.model.OreGenerationConfiguration
+import ru.astrainteractive.aspekt.module.oregeneration.util.toOreHostMaterial
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import java.util.Random
 
 internal class OreGenerationBlockPopulator(
-    configKrate: CachedKrate<OreGenerationConfiguration>,
-    private val oreHostMaterialMapper: OreHostMaterialMapper
+    configKrate: CachedKrate<OreGenerationConfiguration>
 ) : BlockPopulator() {
     private val configuration by configKrate
 
@@ -35,7 +34,7 @@ internal class OreGenerationBlockPopulator(
         val material = region.getType(x, y, z)
         if (!ores.containsKey(material.name)) return
         if (!shouldRemove(material.name, ores, random.nextDouble())) return
-        region.setType(x, y, z, oreHostMaterialMapper.map(material))
+        region.setType(x, y, z, material.toOreHostMaterial())
     }
 
     override fun populate(

@@ -13,10 +13,9 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import ru.astrainteractive.aspekt.module.newbee.util.NewBeeConstants
-import ru.astrainteractive.aspekt.module.newbee.util.NewBeeExt.isNewBee
-import ru.astrainteractive.aspekt.module.newbee.util.NewBeeExt.newBeeShieldDurationLeft
-import ru.astrainteractive.aspekt.module.newbee.util.NewBeeExt.ticks
+import ru.astrainteractive.aspekt.module.newbee.util.isNewBee
+import ru.astrainteractive.aspekt.module.newbee.util.newBeeShieldDurationLeft
+import ru.astrainteractive.aspekt.module.newbee.util.ticks
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.server.util.asKAudience
@@ -101,7 +100,7 @@ internal class NewBeeEventListener(
     fun onNewBeeAttacked(e: EntityDamageEvent) {
         val player = e.entity as? Player ?: return
         if (!player.isNewBee) return
-        e.damage *= NewBeeConstants.NEW_BEE_DAMAGED_PERCENT
+        e.damage *= NEW_BEE_DAMAGED_PERCENT
     }
 
     @EventHandler
@@ -135,5 +134,9 @@ internal class NewBeeEventListener(
         } else {
             player.giveNewBeeEffects()
         }
+    }
+
+    companion object {
+        private const val NEW_BEE_DAMAGED_PERCENT = 0.7f
     }
 }

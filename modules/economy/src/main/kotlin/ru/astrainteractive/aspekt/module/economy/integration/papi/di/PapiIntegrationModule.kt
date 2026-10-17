@@ -4,7 +4,7 @@ import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
 import ru.astrainteractive.aspekt.module.economy.integration.papi.api.PlaceholderExpansionApi
-import ru.astrainteractive.aspekt.module.economy.integration.papi.di.factory.PapiFactory
+import ru.astrainteractive.aspekt.module.economy.integration.papi.expansion.EconomyPlaceholderExtension
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 internal class PapiIntegrationModule(
@@ -16,10 +16,10 @@ internal class PapiIntegrationModule(
         get() = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")
 
     private val economyPlaceholderExtension: PlaceholderExpansionApi by lazy {
-        PapiFactory(
-            economyRepository = databaseModule.economyRepository,
+        EconomyPlaceholderExtension(
+            repository = databaseModule.economyRepository,
             scope = coreModule.ioScope
-        ).create()
+        )
     }
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {

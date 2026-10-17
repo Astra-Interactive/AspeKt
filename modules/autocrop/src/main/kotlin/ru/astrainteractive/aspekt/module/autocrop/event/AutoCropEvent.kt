@@ -7,26 +7,20 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
-import ru.astrainteractive.aspekt.module.autocrop.domain.HoeDamager
-import ru.astrainteractive.aspekt.module.autocrop.domain.HoeRadiusFactory
-import ru.astrainteractive.aspekt.module.autocrop.domain.RelativeBlockProvider
-import ru.astrainteractive.aspekt.module.autocrop.mapping.CropMaterialMapper
-import ru.astrainteractive.aspekt.module.autocrop.mapping.CropSeedMaterialMapper
 import ru.astrainteractive.aspekt.module.autocrop.model.AutoCropConfiguration
+import ru.astrainteractive.aspekt.module.autocrop.util.applyHoeDamage
+import ru.astrainteractive.aspekt.module.autocrop.util.hoeRadius
+import ru.astrainteractive.aspekt.module.autocrop.util.relativeBlocks
+import ru.astrainteractive.aspekt.module.autocrop.util.toCropMaterial
+import ru.astrainteractive.aspekt.module.autocrop.util.toCropSeedMaterial
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import kotlin.random.Random
 
-@Suppress("LongParameterList")
 internal class AutoCropEvent(
     pluginConfig: CachedKrate<AutoCropConfiguration>,
-    val hoeDamager: HoeDamager,
-    val cropMaterialMapper: CropMaterialMapper,
-    val cropSeedMaterialMapper: CropSeedMaterialMapper,
-    val cropDupeController: CropDupeController,
-    val hoeRadiusFactory: HoeRadiusFactory,
-    val createRelativeBlockProvider: () -> RelativeBlockProvider
+    private val cropDupeController: CropDupeController
 ) : EventListener {
     private val autoCropConfig by pluginConfig
 
@@ -35,10 +29,10 @@ internal class AutoCropEvent(
         val clickedCrop = (block.blockData as? Ageable) ?: return
 
         if (clickedCrop.age != clickedCrop.maximumAge) return
-        hoeItemStack?.let(hoeDamager::applyDamage)?.onFailure { return }
+        hoeItemStack?.applyHoeDamage()?.onFailure { return }
 
-        val cropMaterial = cropMaterialMapper.toMaterial(clickedCrop.material) ?: return
-        val cropSeedMaterial = cropSeedMaterialMapper.toMaterial(clickedCrop.material)
+        val cropMaterial = clickedCrop.material.toCropMaterial() ?: return
+        val cropSeedMaterial = clickedCrop.material.toCropSeedMaterial()
 
         val amount = when {
             cropDupeController.isDupingAtLocation(block.location) -> 1
@@ -64,10 +58,10 @@ internal class AutoCropEvent(
         if (e.action != Action.RIGHT_CLICK_BLOCK) return
         val clickedBlock = e.clickedBlock ?: return
         val hoeMaybe = e.player.inventory.itemInMainHand
-        val radius = hoeRadiusFactory.create(hoeMaybe)
+        val radius = hoeMaybe.hoeRadius()
         val hoeItemStack = hoeMaybe.takeIf { radius > 1 }
-        createRelativeBlockProvider.invoke()
-            .provide(clickedBlock, radius)
+        clickedBlock
+            .relativeBlocks(radius)
             .forEach { block ->
                 processBlock(block, hoeItemStack)
             }

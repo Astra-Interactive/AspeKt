@@ -4,7 +4,6 @@ import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.oregeneration.event.LootGenerationEvent
 import ru.astrainteractive.aspekt.module.oregeneration.event.OreGenerationEvent
-import ru.astrainteractive.aspekt.module.oregeneration.mapping.OreHostMaterialMapper
 import ru.astrainteractive.aspekt.module.oregeneration.model.LootGenerationConfiguration
 import ru.astrainteractive.aspekt.module.oregeneration.model.OreGenerationConfiguration
 import ru.astrainteractive.aspekt.module.oregeneration.populator.OreGenerationBlockPopulator
@@ -25,8 +24,7 @@ class OreGenerationModule(
         .asCachedMutableKrate()
 
     private val oreGenerationBlockPopulator = OreGenerationBlockPopulator(
-        configKrate = oreGenerationConfigKrate,
-        oreHostMaterialMapper = OreHostMaterialMapper()
+        configKrate = oreGenerationConfigKrate
     )
 
     private val lootGenerationConfigKrate = coreModule.yamlFormat
