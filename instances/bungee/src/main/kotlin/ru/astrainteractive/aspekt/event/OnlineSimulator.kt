@@ -39,6 +39,10 @@ internal class OnlineSimulator(private val scope: CoroutineScope) {
     @Suppress("MagicNumber")
     private val fallbackRange = OnlineRange.Fallback(2, 4)
 
+    val currentOnlineFlow = TickFlow(30.seconds)
+        .map { generateOnline() }
+        .stateIn(scope, SharingStarted.Eagerly, 1)
+
     private fun OnlineRange.getRandomOnline(): Int {
         if (max == min) return max
         return Random.nextInt(min, max)
@@ -51,8 +55,4 @@ internal class OnlineSimulator(private val scope: CoroutineScope) {
             ?: fallbackRange
         return currentRange.getRandomOnline()
     }
-
-    val currentOnlineFlow = TickFlow(30.seconds)
-        .map { generateOnline() }
-        .stateIn(scope, SharingStarted.Eagerly, 1)
 }

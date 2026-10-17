@@ -45,30 +45,6 @@ internal class ForgeAuthEvent(
         }
         .launchIn(mainScope)
 
-    private fun processPlayerEvent(player: Player) = mainScope.launch {
-        // Only a server-side player has a client to send the message to
-        val serverPlayer = player as? ServerPlayer ?: return@launch
-        try {
-            when (authorizedApi.getAuthState(player.uuid)) {
-                AuthorizedApi.AuthState.Authorized -> Unit
-
-                AuthorizedApi.AuthState.Pending,
-                AuthorizedApi.AuthState.NotAuthorized -> {
-                    serverPlayer
-                        .asKAudience()
-                        .sendMessage(translation.notAuthorized)
-                }
-
-                AuthorizedApi.AuthState.NotRegistered -> {
-                    serverPlayer
-                        .asKAudience()
-                        .sendMessage(translation.notRegistered)
-                }
-            }
-        } catch (_: NullPointerException) {
-        }
-    }
-
     @Suppress("MagicNumber")
     val playerMoveEvent = playerMoveFlowEvent()
         .filter { event -> authorizedApi.getAuthState(event.player.uuid) !is AuthorizedApi.AuthState.Authorized }
@@ -103,4 +79,28 @@ internal class ForgeAuthEvent(
             processPlayerEvent(event.entity as Player)
         }
         .launchIn(mainScope)
+
+    private fun processPlayerEvent(player: Player) = mainScope.launch {
+        // Only a server-side player has a client to send the message to
+        val serverPlayer = player as? ServerPlayer ?: return@launch
+        try {
+            when (authorizedApi.getAuthState(player.uuid)) {
+                AuthorizedApi.AuthState.Authorized -> Unit
+
+                AuthorizedApi.AuthState.Pending,
+                AuthorizedApi.AuthState.NotAuthorized -> {
+                    serverPlayer
+                        .asKAudience()
+                        .sendMessage(translation.notAuthorized)
+                }
+
+                AuthorizedApi.AuthState.NotRegistered -> {
+                    serverPlayer
+                        .asKAudience()
+                        .sendMessage(translation.notRegistered)
+                }
+            }
+        } catch (_: NullPointerException) {
+        }
+    }
 }

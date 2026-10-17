@@ -19,26 +19,6 @@ internal class SortController {
         sortTypes.remove(player.uniqueId)
     }
 
-    fun trySortInventory(clickedInventory: Inventory, player: Player) {
-        val contents = clickedInventory.storageContents
-        val sortType = sortTypes[player.uniqueId]?.next(Sort.values()) ?: Sort.values().first()
-        sortTypes[player.uniqueId] = sortType
-        clickedInventory.storageContents = when (sortType) {
-            Sort.TYPE_ASC -> sortByType(contents, sortType.desc)
-            Sort.TYPE_DESC -> sortByType(contents, sortType.desc)
-            Sort.NAME_ASC -> sortByName(contents, sortType.desc)
-            Sort.NAME_DESC -> sortByName(contents, sortType.desc)
-            Sort.WOOL_ASC -> sortByWool(contents, sortType.desc)
-            Sort.WOOL_DESC -> sortByWool(contents, sortType.desc)
-            Sort.GLASS_ASC -> sortByGlass(contents, sortType.desc)
-            Sort.GLASS_DESC -> sortByGlass(contents, sortType.desc)
-            Sort.BLOCK_ASC -> sortByBlock(contents, sortType.desc)
-            Sort.BLOCK_DESC -> sortByBlock(contents, sortType.desc)
-            Sort.TOOL_ASC -> sortByTool(contents, sortType.desc)
-            Sort.TOOLS_DESC -> sortByTool(contents, sortType.desc)
-        }
-    }
-
     private fun sortBy(
         content: Array<out ItemStack?>,
         desc: Boolean,
@@ -92,5 +72,25 @@ internal class SortController {
             { it?.type?.name?.contains("sword", ignoreCase = true) },
             { it?.type?.name?.contains("hoe", ignoreCase = true) },
         )
+    }
+
+    fun trySortInventory(clickedInventory: Inventory, player: Player) {
+        val contents = clickedInventory.storageContents
+        val sortType = sortTypes[player.uniqueId]?.next(Sort.values()) ?: Sort.values().first()
+        sortTypes[player.uniqueId] = sortType
+        clickedInventory.storageContents = when (sortType) {
+            Sort.TYPE_ASC -> sortByType(contents, sortType.desc)
+            Sort.TYPE_DESC -> sortByType(contents, sortType.desc)
+            Sort.NAME_ASC -> sortByName(contents, sortType.desc)
+            Sort.NAME_DESC -> sortByName(contents, sortType.desc)
+            Sort.WOOL_ASC -> sortByWool(contents, sortType.desc)
+            Sort.WOOL_DESC -> sortByWool(contents, sortType.desc)
+            Sort.GLASS_ASC -> sortByGlass(contents, sortType.desc)
+            Sort.GLASS_DESC -> sortByGlass(contents, sortType.desc)
+            Sort.BLOCK_ASC -> sortByBlock(contents, sortType.desc)
+            Sort.BLOCK_DESC -> sortByBlock(contents, sortType.desc)
+            Sort.TOOL_ASC -> sortByTool(contents, sortType.desc)
+            Sort.TOOLS_DESC -> sortByTool(contents, sortType.desc)
+        }
     }
 }

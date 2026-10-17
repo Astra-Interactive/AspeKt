@@ -48,23 +48,6 @@ internal class KrateClaimsRepository(
         .flowOn(Dispatchers.IO)
         .stateIn(ioScope, SharingStarted.Eagerly, emptyList())
 
-    override suspend fun requireKrate(uuid: UUID): ClaimKrate {
-        krateFilesStateFlow.update { files ->
-            if (files.none { it.nameWithoutExtension == uuid.toString() }) {
-                files + folder.resolve("$uuid.yml")
-            } else {
-                files
-            }
-        }
-        return krates
-            .mapNotNull { it.firstOrNull { it.cachedStateFlow.value.ownerUUID == uuid } }
-            .first()
-    }
-
-    override fun findKrate(uuid: UUID): ClaimKrate? {
-        return krates.value.firstOrNull { it.cachedStateFlow.value.ownerUUID == uuid }
-    }
-
     override val allKrates: List<ClaimKrate>
         get() = krates.value
 
@@ -86,6 +69,23 @@ internal class KrateClaimsRepository(
 
     override val chunkByKrate: Map<UniqueWorldKey, ClaimKrate>
         get() = _chunkByKrate.value
+
+    override suspend fun requireKrate(uuid: UUID): ClaimKrate {
+        krateFilesStateFlow.update { files ->
+            if (files.none { it.nameWithoutExtension == uuid.toString() }) {
+                files + folder.resolve("$uuid.yml")
+            } else {
+                files
+            }
+        }
+        return krates
+            .mapNotNull { it.firstOrNull { it.cachedStateFlow.value.ownerUUID == uuid } }
+            .first()
+    }
+
+    override fun findKrate(uuid: UUID): ClaimKrate? {
+        return krates.value.firstOrNull { it.cachedStateFlow.value.ownerUUID == uuid }
+    }
 
     override suspend fun saveChunk(uuid: UUID, chunk: ClaimChunk) = mutex.withLock {
         runCatching {

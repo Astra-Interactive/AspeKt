@@ -45,48 +45,6 @@ internal class ForgeClaimEvent(
     @Suppress("MagicNumber")
     private val debounce = EventDebounce<RetractKey>(5.seconds)
 
-    private fun <T : Event> handleDefault(
-        retractKey: RetractKey,
-        e: T,
-        claimChunk: ClaimChunk,
-        player: ServerPlayer?,
-        flag: ChunkFlag
-    ): Boolean {
-        if (player?.asPermissible()?.hasPermission(PluginPermission.ADMIN_CLAIM) == true) {
-            return false
-        }
-        if (e.isCanceled) {
-            return true
-        }
-        val sharedEvent = if (e.isCancelable) ForgeSharedCancellableEvent(e) else ForgeEmptyCancellableEvent()
-        return debounce.debounceEvent(retractKey, sharedEvent) {
-            val isAble = claimsRepository.isAble(
-                key = claimChunk.uniqueWorldKey,
-                chunkFlag = flag,
-                claimPlayer = player?.toClaimPlayer()
-            )
-            val isCancelled = !isAble
-            if (isCancelled && player != null) {
-                player.asKAudience().sendMessage(translation.claim.actionBlocked(flag.name))
-            }
-            isCancelled
-        }
-    }
-
-    @Suppress("MagicNumber")
-    private fun ChunkAccess.toClaimChunk(level: LevelAccessor): ClaimChunk {
-        val serverLevel = level as ServerLevel
-        val levelData = serverLevel.levelData as ServerLevelData
-        val chunkKey = pos.x.toLong() and 0xffffffffL or ((pos.z.toLong() and 0xffffffffL) shl 32)
-        return ClaimChunk(
-            x = pos.x,
-            z = pos.z,
-            worldName = levelData.levelName,
-            flags = emptyMap(),
-            chunkKey = chunkKey
-        )
-    }
-
     val breakEvent = flowEvent<BlockEvent.BreakEvent>()
         .onEach { e ->
             val serverPlayer = e.player as? ServerPlayer ?: return@onEach
@@ -158,4 +116,46 @@ internal class ForgeClaimEvent(
                 e.affectedEntities.clear()
             }
         }.launchIn(scope)
+
+    private fun <T : Event> handleDefault(
+        retractKey: RetractKey,
+        e: T,
+        claimChunk: ClaimChunk,
+        player: ServerPlayer?,
+        flag: ChunkFlag
+    ): Boolean {
+        if (player?.asPermissible()?.hasPermission(PluginPermission.ADMIN_CLAIM) == true) {
+            return false
+        }
+        if (e.isCanceled) {
+            return true
+        }
+        val sharedEvent = if (e.isCancelable) ForgeSharedCancellableEvent(e) else ForgeEmptyCancellableEvent()
+        return debounce.debounceEvent(retractKey, sharedEvent) {
+            val isAble = claimsRepository.isAble(
+                key = claimChunk.uniqueWorldKey,
+                chunkFlag = flag,
+                claimPlayer = player?.toClaimPlayer()
+            )
+            val isCancelled = !isAble
+            if (isCancelled && player != null) {
+                player.asKAudience().sendMessage(translation.claim.actionBlocked(flag.name))
+            }
+            isCancelled
+        }
+    }
+
+    @Suppress("MagicNumber")
+    private fun ChunkAccess.toClaimChunk(level: LevelAccessor): ClaimChunk {
+        val serverLevel = level as ServerLevel
+        val levelData = serverLevel.levelData as ServerLevelData
+        val chunkKey = pos.x.toLong() and 0xffffffffL or ((pos.z.toLong() and 0xffffffffL) shl 32)
+        return ClaimChunk(
+            x = pos.x,
+            z = pos.z,
+            worldName = levelData.levelName,
+            flags = emptyMap(),
+            chunkKey = chunkKey
+        )
+    }
 }

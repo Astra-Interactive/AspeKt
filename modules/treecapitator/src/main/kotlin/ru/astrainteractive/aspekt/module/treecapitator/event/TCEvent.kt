@@ -30,62 +30,6 @@ internal class TCEvent(
 ) : EventListener {
     private val treeCapitatorConfigurationConfig by tcConfigKrate
 
-    @Suppress("UnusedPrivateMember")
-    @EventHandler(priority = EventPriority.HIGHEST)
-    private fun onBlockBreak(e: BlockBreakEvent) {
-        val block = e.block
-        val material = block.type
-        val player = e.player
-        val tool = player.inventory.itemInMainHand
-        if (e.isCancelled) return
-        if (!tool.type.name.contains("AXE", true)) return
-        if (!player.isSneaking) return
-        if (!treeCapitatorConfigurationConfig.isEnabled) return
-        if (!isLog(block.type)) return
-        breakRecursively(player, block, 0, tool)
-        if (treeCapitatorConfigurationConfig.replant) {
-            val sapling = saplingFromBlock(material) ?: return
-            placeSapling(sapling, block, 0)
-        }
-    }
-
-    private tailrec fun placeSapling(sapling: Material, block: Block, i: Int) {
-        if (i >= treeCapitatorConfigurationConfig.replantMaxIterations) return
-        if (!isDirt(block.type)) {
-            placeSapling(sapling, block.getRelative(BlockFace.DOWN), i + 1)
-            return
-        }
-        val airBlock = block.getRelative(BlockFace.UP)
-        if (airBlock.type != Material.AIR) {
-            placeSapling(sapling, block.getRelative(BlockFace.DOWN), i + 1)
-            return
-        }
-        @Suppress("MagicNumber")
-        ioScope.launch(dispatchers.IO) {
-            delay(100)
-            withContext(dispatchers.Main) {
-                airBlock.location.block.setType(sapling, true)
-            }
-        }
-    }
-
-    private fun breakRecursively(player: Player, block: Block, i: Int, tool: ItemStack) {
-        if (i >= treeCapitatorConfigurationConfig.destroyLimit) return
-        val isLog = isLog(block.type)
-        val isLeave = isLeaves(block.type)
-        if (!isLog && !isLeave) return
-        if (isLeave && treeCapitatorConfigurationConfig.destroyLeaves) {
-            block.breakNaturally()
-        }
-        if (isLog) {
-            block.breakNaturally()
-            damageItem(player, tool)
-        }
-        BlockFace.entries.forEach {
-            breakRecursively(player, block.getRelative(it), i + 1, tool)
-        }
-    }
-
     private fun isDirt(mat: Material): Boolean {
         return mat == Material.GRASS_BLOCK ||
             mat == Material.DIRT ||
@@ -153,6 +97,62 @@ internal class TCEvent(
             Material.JUNGLE_LOG -> Material.JUNGLE_SAPLING
             Material.MANGROVE_LOG -> null
             else -> null
+        }
+    }
+
+    private tailrec fun placeSapling(sapling: Material, block: Block, i: Int) {
+        if (i >= treeCapitatorConfigurationConfig.replantMaxIterations) return
+        if (!isDirt(block.type)) {
+            placeSapling(sapling, block.getRelative(BlockFace.DOWN), i + 1)
+            return
+        }
+        val airBlock = block.getRelative(BlockFace.UP)
+        if (airBlock.type != Material.AIR) {
+            placeSapling(sapling, block.getRelative(BlockFace.DOWN), i + 1)
+            return
+        }
+        @Suppress("MagicNumber")
+        ioScope.launch(dispatchers.IO) {
+            delay(100)
+            withContext(dispatchers.Main) {
+                airBlock.location.block.setType(sapling, true)
+            }
+        }
+    }
+
+    private fun breakRecursively(player: Player, block: Block, i: Int, tool: ItemStack) {
+        if (i >= treeCapitatorConfigurationConfig.destroyLimit) return
+        val isLog = isLog(block.type)
+        val isLeave = isLeaves(block.type)
+        if (!isLog && !isLeave) return
+        if (isLeave && treeCapitatorConfigurationConfig.destroyLeaves) {
+            block.breakNaturally()
+        }
+        if (isLog) {
+            block.breakNaturally()
+            damageItem(player, tool)
+        }
+        BlockFace.entries.forEach {
+            breakRecursively(player, block.getRelative(it), i + 1, tool)
+        }
+    }
+
+    @Suppress("UnusedPrivateMember")
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private fun onBlockBreak(e: BlockBreakEvent) {
+        val block = e.block
+        val material = block.type
+        val player = e.player
+        val tool = player.inventory.itemInMainHand
+        if (e.isCancelled) return
+        if (!tool.type.name.contains("AXE", true)) return
+        if (!player.isSneaking) return
+        if (!treeCapitatorConfigurationConfig.isEnabled) return
+        if (!isLog(block.type)) return
+        breakRecursively(player, block, 0, tool)
+        if (treeCapitatorConfigurationConfig.replant) {
+            val sapling = saplingFromBlock(material) ?: return
+            placeSapling(sapling, block, 0)
         }
     }
 }

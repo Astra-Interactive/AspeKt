@@ -55,22 +55,6 @@ internal class MenuGui(
             "{PLAYER}" to playerHolder.player.name
         )
 
-    override fun onInventoryOpenEvent(e: InventoryOpenEvent) {
-        render()
-        menuModel.updateInterval?.milliseconds?.let(::startAutoUpdate)
-    }
-
-    private fun startAutoUpdate(interval: Duration) {
-        menuScope.launch(dispatchers.IO) {
-            while (isActive) {
-                delay(interval)
-                withContext(dispatchers.Main) {
-                    render()
-                }
-            }
-        }
-    }
-
     override fun onInventoryClickEvent(e: InventoryClickEvent) {
         super.onInventoryClickEvent(e)
         e.isCancelled = true
@@ -183,5 +167,21 @@ internal class MenuGui(
                     }.build()
             )
         }
+    }
+
+    private fun startAutoUpdate(interval: Duration) {
+        menuScope.launch(dispatchers.IO) {
+            while (isActive) {
+                delay(interval)
+                withContext(dispatchers.Main) {
+                    render()
+                }
+            }
+        }
+    }
+
+    override fun onInventoryOpenEvent(e: InventoryOpenEvent) {
+        render()
+        menuModel.updateInterval?.milliseconds?.let(::startAutoUpdate)
     }
 }

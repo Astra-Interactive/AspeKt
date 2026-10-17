@@ -24,22 +24,8 @@ internal class ExposedMoneyDropLocationRepository(
     private val databaseFlow: Flow<Database>,
     private val ioDispatcher: CoroutineContext
 ) : MoneyDropLocationRepository, Logger by JUtiltLogger("MoneyDropLocationRepository") {
-    override suspend fun addLocation(location: MoneyDropLocation) {
-        if (isLocationExists(location)) return
-        runCatching {
-            withContext(ioDispatcher) {
-                transaction(databaseFlow.first()) {
-                    MoneyDropLocationTable.insert {
-                        it[MoneyDropLocationTable.x] = location.x
-                        it[MoneyDropLocationTable.y] = location.y
-                        it[MoneyDropLocationTable.z] = location.z
-                        it[MoneyDropLocationTable.world] = location.world
-                        it[MoneyDropLocationTable.additionalConstraint] = location.additionalConstraint
-                        it[MoneyDropLocationTable.instant] = location.instant
-                    }
-                }
-            }
-        }.onFailure { throwable -> error(throwable) { "#addLocation -> ${throwable.message}" } }
+    operator fun Instant.minus(duration: Duration): Instant {
+        return this.minusMillis(duration.inWholeMilliseconds)
     }
 
     override suspend fun isLocationExists(location: MoneyDropLocation): Boolean {
@@ -70,8 +56,22 @@ internal class ExposedMoneyDropLocationRepository(
             .getOrElse { false }
     }
 
-    operator fun Instant.minus(duration: Duration): Instant {
-        return this.minusMillis(duration.inWholeMilliseconds)
+    override suspend fun addLocation(location: MoneyDropLocation) {
+        if (isLocationExists(location)) return
+        runCatching {
+            withContext(ioDispatcher) {
+                transaction(databaseFlow.first()) {
+                    MoneyDropLocationTable.insert {
+                        it[MoneyDropLocationTable.x] = location.x
+                        it[MoneyDropLocationTable.y] = location.y
+                        it[MoneyDropLocationTable.z] = location.z
+                        it[MoneyDropLocationTable.world] = location.world
+                        it[MoneyDropLocationTable.additionalConstraint] = location.additionalConstraint
+                        it[MoneyDropLocationTable.instant] = location.instant
+                    }
+                }
+            }
+        }.onFailure { throwable -> error(throwable) { "#addLocation -> ${throwable.message}" } }
     }
 
     companion object {

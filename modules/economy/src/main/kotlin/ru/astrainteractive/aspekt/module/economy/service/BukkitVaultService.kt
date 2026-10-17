@@ -16,6 +16,12 @@ internal class BukkitVaultService(
     private val repository: EconomyRepository
 ) : Logger by JUtiltLogger("BukkitService") {
 
+    fun clear() {
+        plugin.server.servicesManager.getRegistrations(plugin)
+            .filter { it.service == Economy::class.java }
+            .onEach { Bukkit.getServer().servicesManager.unregister(it.provider) }
+    }
+
     fun tryPrepare() {
         clear()
 
@@ -38,11 +44,5 @@ internal class BukkitVaultService(
                 )
             )
         }
-    }
-
-    fun clear() {
-        plugin.server.servicesManager.getRegistrations(plugin)
-            .filter { it.service == Economy::class.java }
-            .onEach { Bukkit.getServer().servicesManager.unregister(it.provider) }
     }
 }

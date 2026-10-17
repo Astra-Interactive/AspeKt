@@ -55,27 +55,6 @@ internal class ForgeAuthEvent(
         }
         .launchIn(mainScope)
 
-    private fun processPlayerEvent(player: Player) = mainScope.launch {
-        // Only a server-side player has a client to send the message to
-        val serverPlayer = player as? ServerPlayer ?: return@launch
-        when (authorizedApi.getAuthState(player.uuid)) {
-            AuthorizedApi.AuthState.Authorized -> Unit
-
-            AuthorizedApi.AuthState.Pending,
-            AuthorizedApi.AuthState.NotAuthorized -> {
-                serverPlayer
-                    .asKAudience()
-                    .sendMessage(translation.notAuthorized)
-            }
-
-            AuthorizedApi.AuthState.NotRegistered -> {
-                serverPlayer
-                    .asKAudience()
-                    .sendMessage(translation.notRegistered)
-            }
-        }
-    }
-
     @Suppress("MagicNumber")
     val playerMoveEvent = playerMoveFlowEvent()
         .filter { event -> authorizedApi.getAuthState(event.player.uuid) !is AuthorizedApi.AuthState.Authorized }
@@ -99,13 +78,6 @@ internal class ForgeAuthEvent(
             processPlayerEvent(event.player)
         }.launchIn(mainScope)
 
-    private fun Event.isPlayerInvolved(): Player? = when (this) {
-        is ItemTossEvent -> player
-        is ItemEntityPickupEvent -> player
-        is EntityEvent -> entity as? Player
-        else -> null
-    }
-
     val playerEvent = flowEvent<PlayerInteractEvent>(EventPriority.HIGHEST)
         .merge(flowEvent<AttackEntityEvent>(EventPriority.HIGHEST))
         .merge(flowEvent<LivingEntityUseItemEvent>(EventPriority.HIGHEST))
@@ -122,4 +94,32 @@ internal class ForgeAuthEvent(
             event.isPlayerInvolved()?.let(::processPlayerEvent)
         }
         .launchIn(mainScope)
+
+    private fun processPlayerEvent(player: Player) = mainScope.launch {
+        // Only a server-side player has a client to send the message to
+        val serverPlayer = player as? ServerPlayer ?: return@launch
+        when (authorizedApi.getAuthState(player.uuid)) {
+            AuthorizedApi.AuthState.Authorized -> Unit
+
+            AuthorizedApi.AuthState.Pending,
+            AuthorizedApi.AuthState.NotAuthorized -> {
+                serverPlayer
+                    .asKAudience()
+                    .sendMessage(translation.notAuthorized)
+            }
+
+            AuthorizedApi.AuthState.NotRegistered -> {
+                serverPlayer
+                    .asKAudience()
+                    .sendMessage(translation.notRegistered)
+            }
+        }
+    }
+
+    private fun Event.isPlayerInvolved(): Player? = when (this) {
+        is ItemTossEvent -> player
+        is ItemEntityPickupEvent -> player
+        is EntityEvent -> entity as? Player
+        else -> null
+    }
 }

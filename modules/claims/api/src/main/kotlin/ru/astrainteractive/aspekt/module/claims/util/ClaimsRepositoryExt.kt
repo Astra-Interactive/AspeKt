@@ -17,6 +17,17 @@ suspend fun ClaimsRepository.isPlayerOwnClaim(uuid: UUID, key: UniqueWorldKey): 
     return claimOwnerUuid(key) == uuid
 }
 
+suspend fun ClaimsRepository.getAllChunks(uuid: UUID): List<ClaimChunk> {
+    return requireKrate(uuid).getValue().chunks.map { it.value }
+}
+
+suspend fun ClaimsRepository.getChunk(
+    uuid: UUID,
+    key: UniqueWorldKey
+): ClaimChunk? = getAllChunks(uuid).firstOrNull {
+    it.uniqueWorldKey == key
+}
+
 suspend fun ClaimsRepository.setFlag(
     uuid: UUID,
     flag: ChunkFlag,
@@ -33,17 +44,6 @@ suspend fun ClaimsRepository.setFlag(
         }
     )
     return saveChunk(uuid, updatedChunk)
-}
-
-suspend fun ClaimsRepository.getChunk(
-    uuid: UUID,
-    key: UniqueWorldKey
-): ClaimChunk? = getAllChunks(uuid).firstOrNull {
-    it.uniqueWorldKey == key
-}
-
-suspend fun ClaimsRepository.getAllChunks(uuid: UUID): List<ClaimChunk> {
-    return requireKrate(uuid).getValue().chunks.map { it.value }
 }
 
 suspend fun ClaimsRepository.claim(uuid: UUID, claimChunk: ClaimChunk): Result<Unit> {

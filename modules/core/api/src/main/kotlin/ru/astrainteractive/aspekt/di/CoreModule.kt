@@ -35,11 +35,6 @@ class CoreModule(
     val multiplatformCommand: MultiplatformCommand,
     commandRegistrarContextFactory: (mainScope: CoroutineScope) -> CommandRegistrarContext
 ) {
-    private fun createCoroutineExceptionHandler() = CoroutineExceptionHandler { _, throwable ->
-        val logger = JUtiltLogger("CoroutineExceptionHandler-AspeKt")
-        logger.error(throwable) { "Error happened inside global coroutine scope!" }
-    }
-
     val ioScope = CoroutineFeature
         .Default(dispatchers.IO + SupervisorJob() + createCoroutineExceptionHandler())
         .withTimings()
@@ -98,4 +93,9 @@ class CoreModule(
             ioScope.cancel()
         }
     )
+
+    private fun createCoroutineExceptionHandler() = CoroutineExceptionHandler { _, throwable ->
+        val logger = JUtiltLogger("CoroutineExceptionHandler-AspeKt")
+        logger.error(throwable) { "Error happened inside global coroutine scope!" }
+    }
 }

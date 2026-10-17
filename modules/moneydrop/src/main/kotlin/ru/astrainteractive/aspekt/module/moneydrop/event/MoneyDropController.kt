@@ -47,6 +47,10 @@ internal class MoneyDropController(
         return chance > Random.nextDouble(0.0, 100.0)
     }
 
+    fun rememberLocation(location: Location, additionalConstraint: String? = null) {
+        launch { repository.addLocation(location.toMoneyDropLocation(additionalConstraint)) }
+    }
+
     private suspend fun drop(location: Location, entry: MoneyDropConfiguration.MoneyDropEntry) {
         if (repository.isLocationExists(location.toMoneyDropLocation(entry.from))) return
         rememberLocation(location, entry.from)
@@ -87,9 +91,5 @@ internal class MoneyDropController(
             .filter { it.from == from }
             .filter(::checkForChance)
             .forEach { entry -> drop(location, entry) }
-    }
-
-    fun rememberLocation(location: Location, additionalConstraint: String? = null) {
-        launch { repository.addLocation(location.toMoneyDropLocation(additionalConstraint)) }
     }
 }
