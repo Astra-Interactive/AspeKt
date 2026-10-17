@@ -14,11 +14,11 @@ import net.minecraftforge.event.level.BlockEvent
 import net.minecraftforge.event.level.ExplosionEvent
 import net.minecraftforge.eventbus.api.Event
 import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
-import ru.astrainteractive.aspekt.module.claims.api.isAble
 import ru.astrainteractive.aspekt.module.claims.debounce.EventDebounce
 import ru.astrainteractive.aspekt.module.claims.debounce.RetractKey
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
+import ru.astrainteractive.aspekt.module.claims.util.isAble
 import ru.astrainteractive.aspekt.module.claims.util.toClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.aspekt.plugin.PluginPermission

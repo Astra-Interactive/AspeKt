@@ -15,11 +15,11 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.level.BlockEvent
 import net.neoforged.neoforge.event.level.ExplosionEvent
 import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
-import ru.astrainteractive.aspekt.module.claims.api.isAble
 import ru.astrainteractive.aspekt.module.claims.debounce.EventDebounce
 import ru.astrainteractive.aspekt.module.claims.debounce.RetractKey
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
+import ru.astrainteractive.aspekt.module.claims.util.isAble
 import ru.astrainteractive.aspekt.module.claims.util.toClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.aspekt.plugin.PluginPermission

@@ -4,9 +4,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
+import ru.astrainteractive.aspekt.module.sethome.api.PlayerHomesRepository
 import ru.astrainteractive.aspekt.module.sethome.command.HomeCommandExecutor
 import ru.astrainteractive.aspekt.module.sethome.command.SetHomeCommandRegistrar
-import ru.astrainteractive.aspekt.module.sethome.krate.HomeKrateProvider
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
@@ -14,7 +14,7 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 @Suppress("LongParameterList")
 internal class SetHomeCommandModule(
-    homeKrateProvider: HomeKrateProvider,
+    playerHomesRepository: PlayerHomesRepository,
     executor: HomeCommandExecutor,
     multiplatformCommand: MultiplatformCommand,
     commandExceptionHandler: CommandExceptionHandler,
@@ -24,7 +24,7 @@ internal class SetHomeCommandModule(
     private val moduleUnconfinedScope = CoroutineScope(unconfinedScope.coroutineContext + SupervisorJob())
 
     private val nodes = SetHomeCommandRegistrar(
-        homeKrateProvider = homeKrateProvider,
+        playerHomesRepository = playerHomesRepository,
         executor = executor,
         multiplatformCommand = multiplatformCommand,
         commandExceptionHandler = commandExceptionHandler

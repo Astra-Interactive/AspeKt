@@ -4,7 +4,7 @@ import kotlinx.serialization.StringFormat
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.sethome.command.HomeCommandExecutor
 import ru.astrainteractive.aspekt.module.sethome.command.di.SetHomeCommandModule
-import ru.astrainteractive.aspekt.module.sethome.krate.HomeKrateProvider
+import ru.astrainteractive.aspekt.module.sethome.krate.KratePlayerHomesRepository
 import ru.astrainteractive.aspekt.module.sethome.model.SetHomeConfiguration
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
@@ -25,12 +25,12 @@ class SetHomeModule(
         )
         .asCachedKrate()
 
-    private val homeKrateProvider = HomeKrateProvider(
+    private val playerHomesRepository = KratePlayerHomesRepository(
         folder = dataFolder.resolve("homes").also(File::mkdirs),
         stringFormat = stringFormat
     )
     private val homeCommandExecutor = HomeCommandExecutor(
-        homeKrateProvider = homeKrateProvider,
+        playerHomesRepository = playerHomesRepository,
         scope = coreModule.ioScope,
         dispatchers = coreModule.dispatchers,
         translationKrate = coreModule.translationKrate,
@@ -39,7 +39,7 @@ class SetHomeModule(
 
     private val setHomeCommandModule = SetHomeCommandModule(
         commandRegistrarContext = commandRegistrarContext,
-        homeKrateProvider = homeKrateProvider,
+        playerHomesRepository = playerHomesRepository,
         executor = homeCommandExecutor,
         multiplatformCommand = coreModule.multiplatformCommand,
         commandExceptionHandler = coreModule.commandExceptionHandler,
@@ -55,7 +55,7 @@ class SetHomeModule(
         },
         onDisable = {
             setHomeCommandModule.lifecycle.onDisable()
-            homeKrateProvider.clear()
+            playerHomesRepository.clear()
         }
     )
 

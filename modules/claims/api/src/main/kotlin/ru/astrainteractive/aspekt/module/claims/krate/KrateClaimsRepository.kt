@@ -16,12 +16,12 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.StringFormat
 import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
-import ru.astrainteractive.aspekt.module.claims.api.isPlayerOwnClaim
-import ru.astrainteractive.aspekt.module.claims.api.map
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimNotFoundException
 import ru.astrainteractive.aspekt.module.claims.model.ClaimNotOwnedException
 import ru.astrainteractive.aspekt.module.claims.model.UniqueWorldKey
+import ru.astrainteractive.aspekt.module.claims.util.isPlayerOwnClaim
+import ru.astrainteractive.aspekt.module.claims.util.map
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import java.io.File
 import java.util.UUID

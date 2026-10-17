@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.module.claims.api
+package ru.astrainteractive.aspekt.module.claims.util
 
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -19,7 +19,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-internal class ClaimsRepositoryTest {
+internal class ClaimsRepositoryExtTest {
     private val claimPlayer = ClaimPlayer(
         uuid = UUID.randomUUID(),
         username = "username"

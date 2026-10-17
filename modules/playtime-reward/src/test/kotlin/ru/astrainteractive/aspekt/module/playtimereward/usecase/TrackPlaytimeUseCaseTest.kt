@@ -7,7 +7,7 @@ import kotlinx.serialization.json.Json
 import ru.astrainteractive.aspekt.module.playtimereward.fake.FakeClock
 import ru.astrainteractive.aspekt.module.playtimereward.fake.FakeEconomyFacade
 import ru.astrainteractive.aspekt.module.playtimereward.fake.FakeOnlineKPlayer
-import ru.astrainteractive.aspekt.module.playtimereward.krate.PlaytimeRewardKrate
+import ru.astrainteractive.aspekt.module.playtimereward.krate.KratePlaytimeRewardRepository
 import ru.astrainteractive.aspekt.module.playtimereward.model.PlaytimeEvent
 import ru.astrainteractive.aspekt.module.playtimereward.model.PlaytimeRewardConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -28,10 +28,10 @@ class TrackPlaytimeUseCaseTest {
     private val economy = FakeEconomyFacade()
     private val player = FakeOnlineKPlayer(uuid = UUID.fromString("550e8400-e29b-41d4-a716-446655440001"), name = "Player")
     private val configuration = PlaytimeRewardConfiguration(rewardAmount = 5.0, requiredDuration = 60.minutes)
-    private val krateFactory = PlaytimeRewardKrate.Factory(tempDataFolder = folder, stringFormat = Json, clock = clock)
+    private val repository = KratePlaytimeRewardRepository(tempDataFolder = folder, stringFormat = Json, clock = clock)
     private val useCase = TrackPlaytimeUseCase(
         clock = clock,
-        playtimeRewardKrateFactory = krateFactory,
+        playtimeRewardRepository = repository,
         economyFacade = economy,
         playtimeRewardConfigurationKrate = DefaultMutableKrate(factory = { configuration }, loader = { null }).asCachedKrate(),
         pluginTranslationKrate = DefaultMutableKrate(factory = ::PluginTranslation, loader = { null }).asCachedKrate()
@@ -51,7 +51,7 @@ class TrackPlaytimeUseCaseTest {
 
         assertEquals(5.0, economy.deposits[player.uuid])
         assertEquals(1, player.messages.size)
-        assertEquals(0.minutes, krateFactory.create(player).getValue().timePlayed)
+        assertEquals(0.minutes, repository.krateOf(player).getValue().timePlayed)
     }
 
     @Test
@@ -63,7 +63,7 @@ class TrackPlaytimeUseCaseTest {
 
         assertTrue(economy.deposits.isEmpty())
         assertTrue(player.messages.isEmpty())
-        assertEquals(30.minutes, krateFactory.create(player).getValue().timePlayed)
+        assertEquals(30.minutes, repository.krateOf(player).getValue().timePlayed)
     }
 
     @Test
@@ -78,6 +78,6 @@ class TrackPlaytimeUseCaseTest {
         useCase.invoke(player, PlaytimeEvent.Checked)
 
         assertTrue(economy.deposits.isEmpty())
-        assertEquals(50.minutes, krateFactory.create(player).getValue().timePlayed)
+        assertEquals(50.minutes, repository.krateOf(player).getValue().timePlayed)
     }
 }

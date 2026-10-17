@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.sethome.command
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.astrainteractive.aspekt.module.sethome.krate.HomeKrateProvider
+import ru.astrainteractive.aspekt.module.sethome.api.PlayerHomesRepository
 import ru.astrainteractive.aspekt.module.sethome.model.SetHomeConfiguration
 import ru.astrainteractive.aspekt.plugin.PluginPermission
 import ru.astrainteractive.aspekt.plugin.PluginTranslation
@@ -14,7 +14,7 @@ import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 @Suppress("LongParameterList")
 internal class HomeCommandExecutor(
-    private val homeKrateProvider: HomeKrateProvider,
+    private val playerHomesRepository: PlayerHomesRepository,
     private val scope: CoroutineScope,
     private val dispatchers: KotlinDispatchers,
     translationKrate: CachedKrate<PluginTranslation>,
@@ -32,7 +32,7 @@ internal class HomeCommandExecutor(
     }
 
     private suspend fun setHome(input: HomeCommand.SetHome) {
-        val krate = homeKrateProvider.get(input.playerData.uuid)
+        val krate = playerHomesRepository.homesOf(input.playerData.uuid)
         val homes = krate.getValue()
         val isOverride = homes.any { home -> home.name == input.playerHome.name }
         if (isOverride && !input.force) {
@@ -57,7 +57,7 @@ internal class HomeCommandExecutor(
     }
 
     private suspend fun delHome(input: HomeCommand.DelHome) {
-        val krate = homeKrateProvider.get(input.playerData.uuid)
+        val krate = playerHomesRepository.homesOf(input.playerData.uuid)
         val homeExists = krate.getValue().any { home -> home.name == input.homeName }
         if (!homeExists) {
             input.playerData.sendMessage(translation.homes.notFound)
@@ -68,8 +68,8 @@ internal class HomeCommandExecutor(
     }
 
     private suspend fun tpHome(input: HomeCommand.TpHome) {
-        val home = homeKrateProvider
-            .get(input.playerData.uuid)
+        val home = playerHomesRepository
+            .homesOf(input.playerData.uuid)
             .getValue()
             .firstOrNull { home -> home.name == input.homeName }
         if (home == null) {

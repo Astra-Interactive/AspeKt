@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.map
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.playtimereward.event.PlaytimeRewardEventListener
-import ru.astrainteractive.aspekt.module.playtimereward.krate.PlaytimeRewardKrate
+import ru.astrainteractive.aspekt.module.playtimereward.krate.KratePlaytimeRewardRepository
 import ru.astrainteractive.aspekt.module.playtimereward.model.PlaytimeRewardConfiguration
 import ru.astrainteractive.aspekt.module.playtimereward.service.PlaytimeServiceTask
 import ru.astrainteractive.aspekt.module.playtimereward.usecase.TrackPlaytimeUseCase
@@ -32,7 +32,7 @@ class PlaytimeRewardModule(
 
     private val trackPlaytimeUseCase = TrackPlaytimeUseCase(
         clock = Clock.System,
-        playtimeRewardKrateFactory = PlaytimeRewardKrate.Factory(
+        playtimeRewardRepository = KratePlaytimeRewardRepository(
             tempDataFolder = coreModule.dataFolder
                 .resolve(".temp")
                 .also(File::mkdirs),
