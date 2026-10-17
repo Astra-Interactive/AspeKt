@@ -30,8 +30,8 @@ internal class RtpCommandExecutor(
             }
             if (safeLocationProvider.isActive(player.uuid)) return@launch
             @Suppress("MagicNumber")
-            if (input.nextTickTime < 18) {
-                player.sendMessage(translation.rtp.lowTickTime(input.nextTickTime))
+            if (input.ticksPerSecond < 18) {
+                player.sendMessage(translation.rtp.lowTickTime(input.ticksPerSecond))
                 return@launch
             }
             if (safeLocationProvider.hasTimeout(player.uuid)) {

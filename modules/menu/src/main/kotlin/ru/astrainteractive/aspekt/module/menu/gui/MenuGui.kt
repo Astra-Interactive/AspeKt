@@ -31,6 +31,8 @@ import ru.astrainteractive.astralibs.server.permission.asKPermissible
 import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 @Suppress("TooManyFunctions")
 internal class MenuGui(
@@ -55,10 +57,10 @@ internal class MenuGui(
 
     override fun onInventoryOpenEvent(e: InventoryOpenEvent) {
         render()
-        menuModel.updateInterval?.let(::startAutoUpdate)
+        menuModel.updateInterval?.milliseconds?.let(::startAutoUpdate)
     }
 
-    private fun startAutoUpdate(interval: Long) {
+    private fun startAutoUpdate(interval: Duration) {
         menuScope.launch(dispatchers.IO) {
             while (isActive) {
                 delay(interval)

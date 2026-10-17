@@ -49,6 +49,7 @@ import ru.astrainteractive.astralibs.server.permission.asKPermissible
 import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
+import kotlin.time.Duration.Companion.seconds
 
 @Suppress("TooManyFunctions")
 internal class BukkitClaimEvent(
@@ -58,7 +59,7 @@ internal class BukkitClaimEvent(
     private val translation by translationKrate
 
     @Suppress("MagicNumber")
-    private val debounce = EventDebounce<RetractKey>(5000L)
+    private val debounce = EventDebounce<RetractKey>(5.seconds)
     private fun <T> handleDefault(
         retractKey: RetractKey,
         e: T,

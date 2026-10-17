@@ -22,7 +22,7 @@ internal class RtpCommandRegistrar(
                     val player = ctx.requirePlayer()
                     RtpCommand(
                         player = player,
-                        nextTickTime = safeLocationProvider.getNextTickTime()
+                        ticksPerSecond = safeLocationProvider.getNextTickTime()
                     ).run(executor::execute)
                 }
             }

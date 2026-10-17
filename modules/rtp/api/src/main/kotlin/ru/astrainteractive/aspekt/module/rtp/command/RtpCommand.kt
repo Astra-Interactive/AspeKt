@@ -4,5 +4,5 @@ import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 
 internal class RtpCommand(
     val player: OnlineKPlayer,
-    val nextTickTime: Double
+    val ticksPerSecond: Double
 )

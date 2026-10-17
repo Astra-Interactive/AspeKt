@@ -5,17 +5,14 @@ import com.google.common.cache.CacheLoader
 import com.google.common.cache.LoadingCache
 import ru.astrainteractive.aspekt.module.claims.event.SharedCancellableEvent
 import java.util.concurrent.TimeUnit
+import kotlin.time.Duration
 
 /*
  * WorldGuard, a suite of tools for Minecraft
  * Copyright (C) sk89q <http://www.sk89q.com>
  * Copyright (C) WorldGuard team and contributors
  */
-class EventDebounce<K : RetractKey>(debounceTime: Long) {
-    private inner class LocalCacheLoader : CacheLoader<K, EntryHolder>() {
-        override fun load(key: K): EntryHolder = EntryHolder()
-    }
-
+class EventDebounce<K : RetractKey>(debounceTime: Duration) {
     sealed class Entry(val isCancelled: Boolean) {
         data object Pending : Entry(false)
         class Loaded(isCancelled: Boolean) : Entry(isCancelled)
@@ -30,9 +27,9 @@ class EventDebounce<K : RetractKey>(debounceTime: Long) {
     private val cache: LoadingCache<K, EntryHolder> by lazy {
         CacheBuilder.newBuilder()
             .maximumSize(100)
-            .expireAfterWrite(debounceTime, TimeUnit.MILLISECONDS)
+            .expireAfterWrite(debounceTime.inWholeMilliseconds, TimeUnit.MILLISECONDS)
             .concurrencyLevel(2)
-            .build(LocalCacheLoader())
+            .build(EntryHolderLoader<K>())
     }
 
     fun <T : SharedCancellableEvent> debounceEvent(
@@ -45,5 +42,9 @@ class EventDebounce<K : RetractKey>(debounceTime: Long) {
         val isCancelled = entryHolder.isCancelled
         if (isCancelled) originalEvent.isCancelled = isCancelled
         return isCancelled
+    }
+
+    private class EntryHolderLoader<K : Any> : CacheLoader<K, EntryHolder>() {
+        override fun load(key: K): EntryHolder = EntryHolder()
     }
 }

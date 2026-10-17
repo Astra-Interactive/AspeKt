@@ -33,6 +33,7 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
+import kotlin.time.Duration.Companion.seconds
 
 internal class ForgeClaimEvent(
     private val claimsRepository: ClaimsRepository,
@@ -44,7 +45,7 @@ internal class ForgeClaimEvent(
     private val scope = CoroutineScope(SupervisorJob() + MinecraftMainDispatcher())
 
     @Suppress("MagicNumber")
-    private val debounce = EventDebounce<RetractKey>(5000L)
+    private val debounce = EventDebounce<RetractKey>(5.seconds)
     private fun <T> handleDefault(
         retractKey: RetractKey,
         e: T,
