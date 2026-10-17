@@ -2,10 +2,10 @@ package ru.astrainteractive.aspekt.module.claims.di
 
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecutor
+import ru.astrainteractive.aspekt.module.claims.bukkit.BukkitChunkProvider
+import ru.astrainteractive.aspekt.module.claims.command.ClaimCommandExecutor
 import ru.astrainteractive.aspekt.module.claims.command.di.ClaimCommandModule
 import ru.astrainteractive.aspekt.module.claims.event.BukkitClaimEvent
-import ru.astrainteractive.aspekt.module.claims.server.location.BukkitChunkProvider
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class BukkitClaimModule(

@@ -6,7 +6,7 @@ import com.mojang.brigadier.context.CommandContext
 import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.sethome.api.PlayerHomesRepository
 import ru.astrainteractive.aspekt.module.sethome.model.PlayerHome
-import ru.astrainteractive.aspekt.plugin.PluginPermission
+import ru.astrainteractive.aspekt.plugin.model.PluginPermission
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.brigadier.sender.KPlayerKCommandSender
 import ru.astrainteractive.astralibs.server.permission.Permission

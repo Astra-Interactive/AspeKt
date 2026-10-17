@@ -5,8 +5,8 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.economy.command.ekon.EkonCommandExecutor
-import ru.astrainteractive.aspekt.module.economy.command.ekon.EkonLiteralArgumentBuilder
+import ru.astrainteractive.aspekt.module.economy.command.EkonCommandExecutor
+import ru.astrainteractive.aspekt.module.economy.command.EkonLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle

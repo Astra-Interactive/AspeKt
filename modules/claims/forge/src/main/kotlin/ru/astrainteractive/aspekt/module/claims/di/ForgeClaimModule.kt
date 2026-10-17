@@ -1,10 +1,10 @@
 package ru.astrainteractive.aspekt.module.claims.di
 
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecutor
+import ru.astrainteractive.aspekt.module.claims.command.ClaimCommandExecutor
 import ru.astrainteractive.aspekt.module.claims.command.di.ClaimCommandModule
 import ru.astrainteractive.aspekt.module.claims.event.ForgeClaimEvent
-import ru.astrainteractive.aspekt.module.claims.server.location.ForgeChunkProvider
+import ru.astrainteractive.aspekt.module.claims.forge.ForgeChunkProvider
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 

@@ -5,11 +5,11 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
-import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
-import ru.astrainteractive.aspekt.module.auth.command.login.LoginCommandRegistrar
-import ru.astrainteractive.aspekt.module.auth.command.register.RegisterCommandRegistrar
-import ru.astrainteractive.aspekt.module.auth.command.unregister.UnregisterCommandRegistrar
+import ru.astrainteractive.aspekt.module.auth.command.LoginCommandRegistrar
+import ru.astrainteractive.aspekt.module.auth.command.RegisterCommandRegistrar
+import ru.astrainteractive.aspekt.module.auth.command.UnregisterCommandRegistrar
 import ru.astrainteractive.aspekt.module.auth.dao.api.AuthRepository
+import ru.astrainteractive.aspekt.module.auth.model.AuthTranslation
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady

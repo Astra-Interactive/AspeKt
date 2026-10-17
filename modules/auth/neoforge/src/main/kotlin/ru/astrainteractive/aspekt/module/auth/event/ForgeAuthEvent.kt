@@ -21,8 +21,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.level.BlockEvent
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
-import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
-import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
+import ru.astrainteractive.aspekt.module.auth.model.AuthTranslation
+import ru.astrainteractive.aspekt.module.auth.model.PlayerLoginModel
 import ru.astrainteractive.astralibs.event.flowEvent
 import ru.astrainteractive.astralibs.event.playerMoveFlowEvent
 import ru.astrainteractive.astralibs.server.location.dist

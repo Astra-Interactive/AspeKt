@@ -6,10 +6,10 @@ import ru.astrainteractive.aspekt.module.autocrop.domain.HoeDamagerImpl
 import ru.astrainteractive.aspekt.module.autocrop.domain.HoeRadiusFactoryImpl
 import ru.astrainteractive.aspekt.module.autocrop.domain.RelativeBlockProvider
 import ru.astrainteractive.aspekt.module.autocrop.event.AutoCropEvent
+import ru.astrainteractive.aspekt.module.autocrop.event.CropDupeController
 import ru.astrainteractive.aspekt.module.autocrop.mapping.CropMaterialMapperImpl
 import ru.astrainteractive.aspekt.module.autocrop.mapping.CropSeedMaterialMapperImpl
 import ru.astrainteractive.aspekt.module.autocrop.model.AutoCropConfiguration
-import ru.astrainteractive.aspekt.module.autocrop.presentation.CropDupeController
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate

@@ -13,8 +13,8 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.inventory.ItemStack
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
-import ru.astrainteractive.aspekt.plugin.PluginNamedPermission
-import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.model.PluginNamedPermission
+import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.astralibs.economy.EconomyFacade
 import ru.astrainteractive.astralibs.localization.markup.KyoriComponentSerializer

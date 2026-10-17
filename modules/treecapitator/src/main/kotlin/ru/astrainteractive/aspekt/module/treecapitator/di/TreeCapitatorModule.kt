@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.module.treecapitator.di
 
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.treecapitator.event.tc.TCEvent
+import ru.astrainteractive.aspekt.module.treecapitator.event.TCEvent
 import ru.astrainteractive.aspekt.module.treecapitator.model.TreeCapitatorConfiguration
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle

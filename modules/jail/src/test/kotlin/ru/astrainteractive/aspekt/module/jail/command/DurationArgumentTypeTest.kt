@@ -1,7 +1,6 @@
 package ru.astrainteractive.aspekt.module.jail.command
 
 import org.junit.Test
-import ru.astrainteractive.aspekt.module.jail.command.argumenttype.DurationArgumentType
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours

@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.module.economy.integration.papi.di
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
-import ru.astrainteractive.aspekt.module.economy.integration.papi.PlaceholderExpansionApi
+import ru.astrainteractive.aspekt.module.economy.integration.papi.api.PlaceholderExpansionApi
 import ru.astrainteractive.aspekt.module.economy.integration.papi.di.factory.PapiFactory
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 

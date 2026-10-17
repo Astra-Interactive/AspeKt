@@ -2,9 +2,9 @@ package ru.astrainteractive.aspekt.module.moneydrop.di
 
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.moneydrop.MoneyDropController
-import ru.astrainteractive.aspekt.module.moneydrop.MoneyDropEvent
 import ru.astrainteractive.aspekt.module.moneydrop.database.di.MoneyDropDaoModule
+import ru.astrainteractive.aspekt.module.moneydrop.event.MoneyDropController
+import ru.astrainteractive.aspekt.module.moneydrop.event.MoneyDropEvent
 import ru.astrainteractive.aspekt.module.moneydrop.model.MoneyDropConfiguration
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle

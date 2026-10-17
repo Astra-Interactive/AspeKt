@@ -6,7 +6,7 @@ import kotlinx.coroutines.withContext
 import ru.astrainteractive.aspekt.module.rtp.api.RtpSearchResult
 import ru.astrainteractive.aspekt.module.rtp.api.SafeLocationProvider
 import ru.astrainteractive.aspekt.module.rtp.model.RtpConfig
-import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers

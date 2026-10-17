@@ -13,7 +13,6 @@ import ru.astrainteractive.aspekt.module.autocrop.domain.RelativeBlockProvider
 import ru.astrainteractive.aspekt.module.autocrop.mapping.CropMaterialMapper
 import ru.astrainteractive.aspekt.module.autocrop.mapping.CropSeedMaterialMapper
 import ru.astrainteractive.aspekt.module.autocrop.model.AutoCropConfiguration
-import ru.astrainteractive.aspekt.module.autocrop.presentation.CropDupeController
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue

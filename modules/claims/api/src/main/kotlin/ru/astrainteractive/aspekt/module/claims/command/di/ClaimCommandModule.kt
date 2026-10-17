@@ -6,8 +6,8 @@ import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.claims.api.ChunkProvider
 import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
-import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecutor
-import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandRegistrar
+import ru.astrainteractive.aspekt.module.claims.command.ClaimCommandExecutor
+import ru.astrainteractive.aspekt.module.claims.command.ClaimCommandRegistrar
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle

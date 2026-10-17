@@ -6,7 +6,7 @@ import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.chatgame.api.ChatGameStore
-import ru.astrainteractive.aspekt.module.chatgame.command.quiz.ChatGameLiteralArgumentBuilder
+import ru.astrainteractive.aspekt.module.chatgame.command.ChatGameLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.service.MoneyRewardPayer
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady

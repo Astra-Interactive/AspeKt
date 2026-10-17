@@ -40,3 +40,7 @@ dependencies {
     compileOnly(libs.minecraft.datafixerupper)
     compileOnly(libs.joml)
 }
+
+linter {
+    unitKind.set("technology")
+}

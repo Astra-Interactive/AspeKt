@@ -6,7 +6,7 @@ import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.antiswear.api.SwearRepository
-import ru.astrainteractive.aspekt.module.antiswear.command.swearfilter.SwearFilterLiteralArgumentBuilder
+import ru.astrainteractive.aspekt.module.antiswear.command.SwearFilterLiteralArgumentBuilder
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 

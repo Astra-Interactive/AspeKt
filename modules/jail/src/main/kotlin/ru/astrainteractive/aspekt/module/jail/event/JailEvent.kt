@@ -19,7 +19,7 @@ import ru.astrainteractive.aspekt.module.jail.util.cache
 import ru.astrainteractive.aspekt.module.jail.util.forget
 import ru.astrainteractive.aspekt.module.jail.util.isInJail
 import ru.astrainteractive.aspekt.module.jail.util.sendMessage
-import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue

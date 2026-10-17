@@ -9,7 +9,7 @@ import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerCh
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSystemChatMessage
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.module.antiswear.api.SwearRepository
-import ru.astrainteractive.aspekt.module.antiswear.util.SwearRuRegex
+import ru.astrainteractive.aspekt.module.antiswear.model.SwearRuRegex
 import ru.astrainteractive.astralibs.server.util.asOnlineMinecraftPlayer
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger

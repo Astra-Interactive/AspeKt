@@ -6,7 +6,7 @@ import ru.astrainteractive.aspekt.module.playtimereward.api.PlaytimeRewardReposi
 import ru.astrainteractive.aspekt.module.playtimereward.model.PlaytimeEvent
 import ru.astrainteractive.aspekt.module.playtimereward.model.PlaytimeReward
 import ru.astrainteractive.aspekt.module.playtimereward.model.PlaytimeRewardConfiguration
-import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.economy.EconomyFacade
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate

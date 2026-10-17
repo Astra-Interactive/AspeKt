@@ -5,7 +5,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.tpa.command.TpaCommandExecutor
-import ru.astrainteractive.aspekt.module.tpa.command.tpa.TpaCommandRegistrar
+import ru.astrainteractive.aspekt.module.tpa.command.TpaCommandRegistrar
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady

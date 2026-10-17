@@ -7,7 +7,7 @@ import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.jail.api.JailCache
 import ru.astrainteractive.aspekt.module.jail.api.JailRepository
-import ru.astrainteractive.aspekt.module.jail.command.jail.JailLiteralArgumentBuilder
+import ru.astrainteractive.aspekt.module.jail.command.JailLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.jail.usecase.FreeInmateUseCase
 import ru.astrainteractive.aspekt.module.jail.usecase.TeleportInmateToJailUseCase
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady

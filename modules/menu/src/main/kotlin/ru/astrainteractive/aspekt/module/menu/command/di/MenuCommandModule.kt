@@ -5,8 +5,8 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.menu.command.invclose.InvCloseLiteralArgumentBuilder
-import ru.astrainteractive.aspekt.module.menu.command.menu.MenuLiteralArgumentBuilder
+import ru.astrainteractive.aspekt.module.menu.command.InvCloseLiteralArgumentBuilder
+import ru.astrainteractive.aspekt.module.menu.command.MenuLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.menu.model.MenuModel
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady

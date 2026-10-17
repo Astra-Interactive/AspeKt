@@ -17,7 +17,7 @@ import ru.astrainteractive.aspekt.module.newbee.util.NewBeeConstants
 import ru.astrainteractive.aspekt.module.newbee.util.NewBeeExt.isNewBee
 import ru.astrainteractive.aspekt.module.newbee.util.NewBeeExt.newBeeShieldDurationLeft
 import ru.astrainteractive.aspekt.module.newbee.util.NewBeeExt.ticks
-import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
