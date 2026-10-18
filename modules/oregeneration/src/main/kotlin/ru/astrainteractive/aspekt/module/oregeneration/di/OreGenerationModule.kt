@@ -3,10 +3,10 @@ package ru.astrainteractive.aspekt.module.oregeneration.di
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.oregeneration.event.LootGenerationEvent
+import ru.astrainteractive.aspekt.module.oregeneration.event.OreGenerationBlockPopulator
 import ru.astrainteractive.aspekt.module.oregeneration.event.OreGenerationEvent
 import ru.astrainteractive.aspekt.module.oregeneration.model.LootGenerationConfiguration
 import ru.astrainteractive.aspekt.module.oregeneration.model.OreGenerationConfiguration
-import ru.astrainteractive.aspekt.module.oregeneration.populator.OreGenerationBlockPopulator
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate

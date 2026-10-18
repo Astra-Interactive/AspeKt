@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.module.oregeneration.populator
+package ru.astrainteractive.aspekt.module.oregeneration.event
 
 import org.bukkit.generator.BlockPopulator
 import org.bukkit.generator.LimitedRegion
