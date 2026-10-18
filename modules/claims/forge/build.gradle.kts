@@ -45,3 +45,7 @@ dependencies {
     compileOnly(libs.minecraft.forge.bus)
     compileOnly(libs.joml)
 }
+
+linter {
+    unitKind.set("technology")
+}

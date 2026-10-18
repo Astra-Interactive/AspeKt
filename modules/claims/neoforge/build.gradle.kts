@@ -51,3 +51,7 @@ dependencies {
 tasks.withType<KotlinCompile>().configureEach {
     dependsOn(":instances:neoforge:generateNeoforgeJar")
 }
+
+linter {
+    unitKind.set("technology")
+}

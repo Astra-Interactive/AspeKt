@@ -23,3 +23,7 @@ dependencies {
 
     testImplementation(libs.tests.kotlin.test)
 }
+
+linter {
+    unitKind.set("technology")
+}
