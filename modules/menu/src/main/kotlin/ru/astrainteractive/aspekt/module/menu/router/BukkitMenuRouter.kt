@@ -1,0 +1,39 @@
+package ru.astrainteractive.aspekt.module.menu.router
+
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import ru.astrainteractive.aspekt.di.BukkitCoreModule
+import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.module.menu.gui.MenuGui
+import ru.astrainteractive.aspekt.module.menu.model.MenuConfiguration
+import ru.astrainteractive.astralibs.server.player.BukkitOnlineKPlayer
+import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
+import ru.astrainteractive.klibs.mikro.core.util.tryCast
+
+internal class BukkitMenuRouter(
+    private val coreModule: CoreModule,
+    private val bukkitCoreModule: BukkitCoreModule
+) : MenuRouter, Logger by JUtiltLogger("AspeKt-MenuRouter") {
+    override fun openMenu(player: OnlineKPlayer, menuModel: MenuConfiguration) {
+        val bukkitPlayer = player.tryCast<BukkitOnlineKPlayer>()?.instance
+        if (bukkitPlayer == null) {
+            info { "#openMenu bukkitPlayer is null" }
+            return
+        }
+        coreModule.ioScope.launch(coreModule.dispatchers.IO) {
+            val gui = MenuGui(
+                player = bukkitPlayer,
+                menuModel = menuModel,
+                translation = coreModule.translationKrate.cachedValue,
+                dispatchers = coreModule.dispatchers,
+                kyoriComponentSerializer = coreModule.kyoriKrate.cachedValue,
+                economyProvider = bukkitCoreModule.currencyEconomyProviderFactory.findDefault()
+            )
+            withContext(coreModule.dispatchers.Main) {
+                bukkitPlayer.openInventory(gui.inventory)
+            }
+        }
+    }
+}

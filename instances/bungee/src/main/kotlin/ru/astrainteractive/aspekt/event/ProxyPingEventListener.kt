@@ -6,15 +6,15 @@ import net.md_5.bungee.event.EventHandler
 import net.md_5.bungee.event.EventPriority
 import java.util.UUID
 
-class ProxyPingEventListener(
+internal class ProxyPingEventListener(
     private val onlineSimulator: OnlineSimulator
 ) : KListener {
     @EventHandler(priority = EventPriority.HIGHEST)
     @Suppress("MagicNumber")
     fun onProxyPingEvent(event: ProxyPingEvent) {
         val fakeSamplePlayerCount = onlineSimulator.currentOnlineFlow.value
-        event.response.players.sample = List(fakeSamplePlayerCount) {
-            ServerPing.PlayerInfo("Empire$it", UUID.randomUUID())
+        event.response.players.sample = List(fakeSamplePlayerCount) { index ->
+            ServerPing.PlayerInfo("Empire$index", UUID.randomUUID())
         }.toTypedArray()
         event.response.players.max = fakeSamplePlayerCount + 5
         event.response.players.online = fakeSamplePlayerCount

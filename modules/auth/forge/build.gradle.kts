@@ -1,7 +1,7 @@
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.kotlin.plugin.serialization")
-    id("ru.astrainteractive.gradleplugin.detekt")
+    alias(libs.plugins.klibs.gradle.linter)
     id("ru.astrainteractive.gradleplugin.java.version")
 }
 
@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.minecraft.astralibs.core.forge)
 
     implementation(projects.modules.auth.api)
+    implementation(projects.modules.auth.dao)
     implementation(projects.modules.core.api)
     implementation(projects.modules.core.forge)
 }

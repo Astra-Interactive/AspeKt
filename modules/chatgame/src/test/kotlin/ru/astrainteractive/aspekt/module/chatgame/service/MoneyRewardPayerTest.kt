@@ -3,6 +3,8 @@
 package ru.astrainteractive.aspekt.module.chatgame.service
 
 import kotlinx.coroutines.test.runTest
+import ru.astrainteractive.aspekt.module.chatgame.fake.FakeCurrencyEconomyProviderFactory
+import ru.astrainteractive.aspekt.module.chatgame.fake.FakeEconomyFacade
 import ru.astrainteractive.aspekt.module.chatgame.model.Reward
 import java.util.UUID
 import kotlin.random.Random

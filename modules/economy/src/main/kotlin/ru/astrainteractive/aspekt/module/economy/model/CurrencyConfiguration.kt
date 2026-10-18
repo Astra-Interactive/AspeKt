@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class CurrencyConfiguration(
-    val currencies: Map<String, CurrencyModel> = emptyMap(),
+    val currencies: Map<String, Currency> = emptyMap(),
     @SerialName("should_sync")
     val shouldSync: Boolean = false
 )

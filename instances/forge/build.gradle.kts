@@ -6,7 +6,7 @@ import ru.astrainteractive.gradleplugin.property.util.requireProjectInfo
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.kotlin.plugin.serialization")
-    id("ru.astrainteractive.gradleplugin.detekt")
+    alias(libs.plugins.klibs.gradle.linter)
     id("ru.astrainteractive.gradleplugin.java.version")
     alias(libs.plugins.gradle.forgegradle)
     alias(libs.plugins.gradle.shadow)
@@ -42,6 +42,8 @@ dependencies {
     shadow(projects.modules.core.feature)
     shadow(projects.modules.core.forge)
     shadow(projects.modules.auth.api)
+    shadow(projects.modules.auth.dao)
+    shadow(projects.modules.auth.exposed)
     shadow(projects.modules.auth.forge)
     shadow(projects.modules.claims.api)
     shadow(projects.modules.claims.forge)

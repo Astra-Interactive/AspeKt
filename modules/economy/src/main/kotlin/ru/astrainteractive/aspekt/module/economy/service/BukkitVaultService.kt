@@ -4,17 +4,23 @@ import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
-import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
-import ru.astrainteractive.aspekt.module.economy.integration.vault.VaultEconomyProvider
-import ru.astrainteractive.aspekt.module.economy.model.CurrencyModel
+import ru.astrainteractive.aspekt.module.economy.api.EconomyRepository
+import ru.astrainteractive.aspekt.module.economy.integration.vault.service.VaultEconomyProvider
+import ru.astrainteractive.aspekt.module.economy.model.Currency
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
 internal class BukkitVaultService(
     private val plugin: JavaPlugin,
-    private val getCurrencies: () -> List<CurrencyModel>,
-    private val dao: EconomyDao
+    private val getCurrencies: () -> List<Currency>,
+    private val repository: EconomyRepository
 ) : Logger by JUtiltLogger("BukkitService") {
+
+    fun clear() {
+        plugin.server.servicesManager.getRegistrations(plugin)
+            .filter { registration -> registration.service == Economy::class.java }
+            .onEach { registration -> Bukkit.getServer().servicesManager.unregister(registration.provider) }
+    }
 
     fun tryPrepare() {
         clear()
@@ -29,7 +35,7 @@ internal class BukkitVaultService(
                 Economy::class.java,
                 VaultEconomyProvider(
                     primaryCurrencyModel = currency,
-                    dao = dao
+                    repository = repository
                 ),
                 plugin,
                 ServicePriority.entries.getOrElse(
@@ -38,11 +44,5 @@ internal class BukkitVaultService(
                 )
             )
         }
-    }
-
-    fun clear() {
-        plugin.server.servicesManager.getRegistrations(plugin)
-            .filter { it.service == Economy::class.java }
-            .onEach { Bukkit.getServer().servicesManager.unregister(it.provider) }
     }
 }

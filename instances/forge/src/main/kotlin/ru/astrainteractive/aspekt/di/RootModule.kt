@@ -4,15 +4,16 @@ import com.charleskorn.kaml.PolymorphismStyle
 import com.charleskorn.kaml.Yaml
 import net.minecraftforge.fml.loading.FMLPaths
 import ru.astrainteractive.aspekt.command.di.CommandsModule
-import ru.astrainteractive.aspekt.feature.flagreader.FileFeatureFlagReader
-import ru.astrainteractive.aspekt.feature.gate.FeatureGate
-import ru.astrainteractive.aspekt.feature.gate.mapEnabled
+import ru.astrainteractive.aspekt.feature.di.FeatureGate
+import ru.astrainteractive.aspekt.feature.di.mapEnabled
+import ru.astrainteractive.aspekt.feature.file.FileFeatureFlagReader
 import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.di.ForgeAuthModule
+import ru.astrainteractive.aspekt.module.auth.exposed.di.AuthExposedModule
 import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
 import ru.astrainteractive.aspekt.module.claims.di.ForgeClaimModule
-import ru.astrainteractive.aspekt.module.rtp.api.MinecraftSafeLocationProvider
 import ru.astrainteractive.aspekt.module.rtp.di.RtpModule
+import ru.astrainteractive.aspekt.module.rtp.search.MinecraftSafeLocationProvider
 import ru.astrainteractive.aspekt.module.sethome.di.SetHomeModule
 import ru.astrainteractive.aspekt.module.tpa.di.TpaModule
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
@@ -61,20 +62,35 @@ class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltL
             polymorphismStyle = PolymorphismStyle.Property
         )
     )
-    private val authApiModuleGate = FeatureGate(
-        featureClass = AuthApiModule::class,
-        flagReader = FileFeatureFlagReader(
-            yamlFormat = authStringFormat,
-            file = AuthApiModule.getConfigurationFile(authDataFolder)
-        ),
+    private val authApiFlagReader = FileFeatureFlagReader(
+        yamlFormat = authStringFormat,
+        file = AuthApiModule.getConfigurationFile(authDataFolder)
+    )
+
+    private val authExposedModuleGate = FeatureGate(
+        featureClass = AuthExposedModule::class,
+        flagReader = authApiFlagReader,
         featureFactory = {
+            AuthExposedModule(
+                ioScope = coreModule.ioScope,
+                dataFolder = authDataFolder
+            )
+        },
+        lifecycleSelector = AuthExposedModule::lifecycle
+    )
+
+    private val authApiModuleGate = authExposedModuleGate.mapEnabled(
+        featureClass = AuthApiModule::class,
+        flagReader = authApiFlagReader,
+        lifecycleSelector = AuthApiModule::lifecycle,
+        transform = { authExposedModule ->
             AuthApiModule(
+                authRepository = authExposedModule.authRepository,
                 ioScope = coreModule.ioScope,
                 dataFolder = authDataFolder,
                 stringFormat = authStringFormat
             )
-        },
-        lifecycleSelector = AuthApiModule::lifecycle
+        }
     )
 
     private val forgeAuthModuleGate = authApiModuleGate.mapEnabled(
@@ -172,6 +188,7 @@ class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltL
         get() = listOf(
             coreModule.lifecycle,
             commandModule.lifecycle,
+            authExposedModuleGate,
             authApiModuleGate,
             forgeAuthModuleGate,
             forgeClaimModuleGate,

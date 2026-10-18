@@ -13,9 +13,9 @@ fun <E : LifecycleEvent> JavaPlugin.lifecycleEventFlow(
     configuration: LifecycleEventType.Prioritizable<LifecycleEventOwner, E>
 ) = channelFlow {
     var isEnabled = true
-    val eventHandler: LifecycleEventHandler<E> = LifecycleEventHandler<E> {
+    val eventHandler: LifecycleEventHandler<E> = LifecycleEventHandler<E> { event ->
         if (!isEnabled) return@LifecycleEventHandler
-        launch { send(it) }
+        launch { send(event) }
     }
     lifecycleManager.registerEventHandler(configuration, eventHandler)
 

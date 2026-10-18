@@ -5,10 +5,11 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.jail.command.jail.JailLiteralArgumentBuilder
-import ru.astrainteractive.aspekt.module.jail.controller.JailController
-import ru.astrainteractive.aspekt.module.jail.data.CachedJailApi
-import ru.astrainteractive.aspekt.module.jail.data.JailApi
+import ru.astrainteractive.aspekt.module.jail.api.JailCache
+import ru.astrainteractive.aspekt.module.jail.api.JailRepository
+import ru.astrainteractive.aspekt.module.jail.command.JailLiteralArgumentBuilder
+import ru.astrainteractive.aspekt.module.jail.usecase.FreeInmateUseCase
+import ru.astrainteractive.aspekt.module.jail.usecase.TeleportInmateToJailUseCase
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
@@ -18,9 +19,10 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 internal class JailCommandModule(
     private val coreModule: CoreModule,
     private val bukkitCoreModule: BukkitCoreModule,
-    private val jailApi: JailApi,
-    private val cachedJailApi: CachedJailApi,
-    private val jailController: JailController
+    private val jailRepository: JailRepository,
+    private val jailCache: JailCache,
+    private val freeInmateUseCase: FreeInmateUseCase,
+    private val teleportInmateToJailUseCase: TeleportInmateToJailUseCase
 ) {
     private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())
 
@@ -28,9 +30,10 @@ internal class JailCommandModule(
         JailLiteralArgumentBuilder(
             translationKrate = coreModule.translationKrate,
             scope = coreModule.ioScope,
-            jailApi = jailApi,
-            cachedJailApi = cachedJailApi,
-            jailController = jailController,
+            jailRepository = jailRepository,
+            jailCache = jailCache,
+            freeInmateUseCase = freeInmateUseCase,
+            teleportInmateToJailUseCase = teleportInmateToJailUseCase,
             multiplatformCommand = coreModule.multiplatformCommand,
             platformServer = coreModule.platformServer,
             commandExceptionHandler = coreModule.commandExceptionHandler

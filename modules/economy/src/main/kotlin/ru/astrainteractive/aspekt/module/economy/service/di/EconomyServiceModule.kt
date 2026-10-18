@@ -21,7 +21,7 @@ internal class EconomyServiceModule(
 
     private val bukkitVaultService = BukkitVaultService(
         plugin = bukkitCoreModule.plugin,
-        dao = databaseModule.economyDao,
+        repository = databaseModule.economyRepository,
         getCurrencies = {
             economyConfigModule.currencyConfigKrate.cachedValue?.currencies
                 ?.values
@@ -37,7 +37,7 @@ internal class EconomyServiceModule(
                 .orEmpty()
                 .toList()
         },
-        dao = databaseModule.economyDao
+        repository = databaseModule.economyRepository
     )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(

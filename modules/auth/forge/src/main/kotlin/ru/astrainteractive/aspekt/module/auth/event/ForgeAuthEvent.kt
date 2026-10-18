@@ -13,8 +13,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent
 import net.minecraftforge.event.level.BlockEvent
 import net.minecraftforge.eventbus.api.EventPriority
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
-import ru.astrainteractive.aspekt.module.auth.api.model.PlayerLoginModel
-import ru.astrainteractive.aspekt.module.auth.api.plugin.AuthTranslation
+import ru.astrainteractive.aspekt.module.auth.model.AuthTranslation
+import ru.astrainteractive.aspekt.module.auth.model.PlayerLogin
 import ru.astrainteractive.astralibs.event.flowEvent
 import ru.astrainteractive.astralibs.event.playerMoveFlowEvent
 import ru.astrainteractive.astralibs.server.location.dist
@@ -23,7 +23,7 @@ import ru.astrainteractive.astralibs.server.util.toPlain
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 
-class ForgeAuthEvent(
+internal class ForgeAuthEvent(
     private val authorizedApi: AuthorizedApi,
     private val mainScope: CoroutineScope,
     translationKrate: CachedKrate<AuthTranslation>
@@ -31,17 +31,52 @@ class ForgeAuthEvent(
     val translation by translationKrate
 
     val playerLoggedOutEvent = flowEvent<PlayerEvent.PlayerLoggedOutEvent>()
-        .onEach { authorizedApi.forgetUser(it.entity.uuid) }
+        .onEach { event -> authorizedApi.forgetUser(event.entity.uuid) }
         .launchIn(mainScope)
 
     val playerLoggedInEvent = flowEvent<PlayerEvent.PlayerLoggedInEvent>()
-        .onEach {
-            val playerLoginModel = PlayerLoginModel(
-                username = it.entity.name.toPlain(),
-                uuid = it.entity.uuid,
-                ip = (it.entity as ServerPlayer).ipAddress
+        .onEach { event ->
+            val playerLoginModel = PlayerLogin(
+                username = event.entity.name.toPlain(),
+                uuid = event.entity.uuid,
+                ip = (event.entity as ServerPlayer).ipAddress
             )
             authorizedApi.loadUserInfo(playerLoginModel)
+        }
+        .launchIn(mainScope)
+
+    @Suppress("MagicNumber")
+    val playerMoveEvent = playerMoveFlowEvent()
+        .filter { event -> authorizedApi.getAuthState(event.player.uuid) !is AuthorizedApi.AuthState.Authorized }
+        .onEach { event ->
+            if (event.newKLocation.dist(event.oldKLocation) > 0.001) {
+                processPlayerEvent(event.player)
+                event.player.teleportTo(
+                    event.oldKLocation.x,
+                    event.oldKLocation.y,
+                    event.oldKLocation.z
+                )
+            }
+        }.launchIn(mainScope)
+
+    val breakEvent = flowEvent<BlockEvent.BreakEvent>(EventPriority.HIGHEST)
+        .filter { event -> event.player.isAlive }
+        .filter { event -> authorizedApi.getAuthState(event.player.uuid) !is AuthorizedApi.AuthState.Authorized }
+        .onEach { event ->
+            println(event)
+            event.isCanceled = true
+            processPlayerEvent(event.player)
+        }.launchIn(mainScope)
+
+    val playerEvent = flowEvent<EntityEvent>(EventPriority.HIGHEST)
+        .filter { event -> event.entity is Player }
+        .filter { event -> event !is EntityJoinLevelEvent }
+        .filter { event -> event !is PlayerEvent.PlayerLoggedInEvent }
+        .filter { event -> event.entity.isAlive }
+        .filter { event -> authorizedApi.getAuthState(event.entity.uuid) !is AuthorizedApi.AuthState.Authorized }
+        .onEach { event ->
+            if (event.isCancelable) event.isCanceled = true
+            processPlayerEvent(event.entity as Player)
         }
         .launchIn(mainScope)
 
@@ -68,39 +103,4 @@ class ForgeAuthEvent(
         } catch (_: NullPointerException) {
         }
     }
-
-    @Suppress("MagicNumber")
-    val playerMoveEvent = playerMoveFlowEvent()
-        .filter { event -> authorizedApi.getAuthState(event.player.uuid) !is AuthorizedApi.AuthState.Authorized }
-        .onEach { event ->
-            if (event.newKLocation.dist(event.oldKLocation) > 0.001) {
-                processPlayerEvent(event.player)
-                event.player.teleportTo(
-                    event.oldKLocation.x,
-                    event.oldKLocation.y,
-                    event.oldKLocation.z
-                )
-            }
-        }.launchIn(mainScope)
-
-    val breakEvent = flowEvent<BlockEvent.BreakEvent>(EventPriority.HIGHEST)
-        .filter { it.player.isAlive }
-        .filter { authorizedApi.getAuthState(it.player.uuid) !is AuthorizedApi.AuthState.Authorized }
-        .onEach { event ->
-            println(event)
-            event.isCanceled = true
-            processPlayerEvent(event.player)
-        }.launchIn(mainScope)
-
-    val playerEvent = flowEvent<EntityEvent>(EventPriority.HIGHEST)
-        .filter { it.entity is Player }
-        .filter { it !is EntityJoinLevelEvent }
-        .filter { it !is PlayerEvent.PlayerLoggedInEvent }
-        .filter { it.entity.isAlive }
-        .filter { authorizedApi.getAuthState(it.entity.uuid) !is AuthorizedApi.AuthState.Authorized }
-        .onEach { event ->
-            if (event.isCancelable) event.isCanceled = true
-            processPlayerEvent(event.entity as Player)
-        }
-        .launchIn(mainScope)
 }

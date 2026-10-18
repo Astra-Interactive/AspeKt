@@ -33,22 +33,23 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent
 import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.world.PortalCreateEvent
-import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
-import ru.astrainteractive.aspekt.module.claims.data.isAble
-import ru.astrainteractive.aspekt.module.claims.debounce.EventDebounce
-import ru.astrainteractive.aspekt.module.claims.debounce.RetractKey
+import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
+import ru.astrainteractive.aspekt.module.claims.debounce.memory.EventDebounce
+import ru.astrainteractive.aspekt.module.claims.debounce.model.RetractKey
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.util.asClaimChunk
 import ru.astrainteractive.aspekt.module.claims.util.asClaimPlayer
+import ru.astrainteractive.aspekt.module.claims.util.isAble
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
-import ru.astrainteractive.aspekt.plugin.PluginPermission
-import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.model.PluginPermission
+import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.server.permission.asKPermissible
 import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
+import kotlin.time.Duration.Companion.seconds
 
 @Suppress("TooManyFunctions")
 internal class BukkitClaimEvent(
@@ -58,7 +59,7 @@ internal class BukkitClaimEvent(
     private val translation by translationKrate
 
     @Suppress("MagicNumber")
-    private val debounce = EventDebounce<RetractKey>(5000L)
+    private val debounce = EventDebounce<RetractKey>(5.seconds)
     private fun <T> handleDefault(
         retractKey: RetractKey,
         e: T,

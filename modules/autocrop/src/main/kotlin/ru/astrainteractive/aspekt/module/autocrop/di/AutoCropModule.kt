@@ -2,14 +2,9 @@ package ru.astrainteractive.aspekt.module.autocrop.di
 
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.autocrop.domain.HoeDamagerImpl
-import ru.astrainteractive.aspekt.module.autocrop.domain.HoeRadiusFactoryImpl
-import ru.astrainteractive.aspekt.module.autocrop.domain.RelativeBlockProvider
 import ru.astrainteractive.aspekt.module.autocrop.event.AutoCropEvent
-import ru.astrainteractive.aspekt.module.autocrop.mapping.CropMaterialMapperImpl
-import ru.astrainteractive.aspekt.module.autocrop.mapping.CropSeedMaterialMapperImpl
+import ru.astrainteractive.aspekt.module.autocrop.event.CropDupeController
 import ru.astrainteractive.aspekt.module.autocrop.model.AutoCropConfiguration
-import ru.astrainteractive.aspekt.module.autocrop.presentation.CropDupeController
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
@@ -29,12 +24,7 @@ class AutoCropModule(
 
     private val autoCropEvent: AutoCropEvent = AutoCropEvent(
         pluginConfig = autoCropConfigKrate,
-        hoeDamager = HoeDamagerImpl(),
-        cropMaterialMapper = CropMaterialMapperImpl(),
-        cropSeedMaterialMapper = CropSeedMaterialMapperImpl(),
-        cropDupeController = CropDupeController(),
-        hoeRadiusFactory = HoeRadiusFactoryImpl(),
-        createRelativeBlockProvider = { RelativeBlockProvider() }
+        cropDupeController = CropDupeController()
     )
 
     val lifecycle: Lifecycle by lazy {

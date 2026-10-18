@@ -3,9 +3,9 @@ package ru.astrainteractive.aspekt.module.menu.di
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.menu.command.di.MenuCommandModule
-import ru.astrainteractive.aspekt.module.menu.di.factory.MenuModelsFactory
+import ru.astrainteractive.aspekt.module.menu.file.readMenuModels
+import ru.astrainteractive.aspekt.module.menu.router.BukkitMenuRouter
 import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
-import ru.astrainteractive.aspekt.module.menu.router.MenuRouterImpl
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
@@ -17,15 +17,15 @@ class MenuModule(
 ) {
     private val menuModels = DefaultMutableKrate(
         loader = {
-            MenuModelsFactory(
-                bukkitCoreModule.plugin.dataFolder,
-                coreModule.yamlFormat
-            ).create()
+            readMenuModels(
+                dataFolder = bukkitCoreModule.plugin.dataFolder,
+                yamlFormat = coreModule.yamlFormat
+            )
         },
         factory = { emptyList() }
     ).asCachedKrate()
 
-    private val menuRouter: MenuRouter = MenuRouterImpl(coreModule, bukkitCoreModule)
+    private val menuRouter: MenuRouter = BukkitMenuRouter(coreModule, bukkitCoreModule)
 
     private val menuCommandModule = MenuCommandModule(
         coreModule = coreModule,

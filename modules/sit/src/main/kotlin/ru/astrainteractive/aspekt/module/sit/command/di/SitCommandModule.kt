@@ -5,8 +5,8 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.sit.command.sit.SitLiteralArgumentBuilder
-import ru.astrainteractive.aspekt.module.sit.event.sit.SitController
+import ru.astrainteractive.aspekt.module.sit.command.SitLiteralArgumentBuilder
+import ru.astrainteractive.aspekt.module.sit.event.SitController
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 

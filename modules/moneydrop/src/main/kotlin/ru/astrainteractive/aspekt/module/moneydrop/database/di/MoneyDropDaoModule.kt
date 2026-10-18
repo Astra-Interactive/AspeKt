@@ -12,8 +12,8 @@ import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.transactions.TransactionManager
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
-import ru.astrainteractive.aspekt.module.moneydrop.database.dao.MoneyDropDao
-import ru.astrainteractive.aspekt.module.moneydrop.database.dao.impl.MoneyDropDaoImpl
+import ru.astrainteractive.aspekt.module.moneydrop.api.MoneyDropLocationRepository
+import ru.astrainteractive.aspekt.module.moneydrop.database.ExposedMoneyDropLocationRepository
 import ru.astrainteractive.aspekt.module.moneydrop.database.table.MoneyDropLocationTable
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.mikro.exposed.model.DatabaseConfiguration
@@ -42,7 +42,7 @@ class MoneyDropDaoModule(
         }
         .shareIn(moduleIoScope, SharingStarted.Lazily, replay = 1)
 
-    internal val dao: MoneyDropDao = MoneyDropDaoImpl(
+    internal val repository: MoneyDropLocationRepository = ExposedMoneyDropLocationRepository(
         databaseFlow = databaseFlow,
         ioDispatcher = ioDispatcher
     )

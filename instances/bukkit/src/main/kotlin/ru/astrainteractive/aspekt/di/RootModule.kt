@@ -5,8 +5,8 @@ import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
 import ru.astrainteractive.aspekt.command.di.BukkitCommandsModule
 import ru.astrainteractive.aspekt.command.di.CommandsModule
-import ru.astrainteractive.aspekt.feature.flagreader.FileFeatureFlagReader
-import ru.astrainteractive.aspekt.feature.gate.FeatureGate
+import ru.astrainteractive.aspekt.feature.di.FeatureGate
+import ru.astrainteractive.aspekt.feature.file.FileFeatureFlagReader
 import ru.astrainteractive.aspekt.inventorysort.di.InventorySortModule
 import ru.astrainteractive.aspekt.invisibleframes.di.InvisibleItemFrameModule
 import ru.astrainteractive.aspekt.module.antiswear.di.AntiSwearModule

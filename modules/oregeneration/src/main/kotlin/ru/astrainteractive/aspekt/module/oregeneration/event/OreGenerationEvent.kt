@@ -5,7 +5,6 @@ import org.bukkit.World
 import org.bukkit.event.EventHandler
 import org.bukkit.event.world.WorldInitEvent
 import org.bukkit.plugin.Plugin
-import ru.astrainteractive.aspekt.module.oregeneration.populator.OreGenerationBlockPopulator
 import ru.astrainteractive.astralibs.event.EventListener
 
 internal class OreGenerationEvent(

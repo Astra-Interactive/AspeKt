@@ -3,11 +3,11 @@ package ru.astrainteractive.aspekt.command.di
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import ru.astrainteractive.aspekt.command.atemframe.AtemFrameLiteralArgumentBuilder
-import ru.astrainteractive.aspekt.command.maxonline.MaxOnlineLiteralArgumentBuilder
-import ru.astrainteractive.aspekt.command.rtp.RtpLiteralArgumentBuilder
-import ru.astrainteractive.aspekt.command.rtpbypass.RtpBypassLiteralArgumentBuilder
-import ru.astrainteractive.aspekt.command.tellchat.TellChatLiteralArgumentBuilder
+import ru.astrainteractive.aspekt.command.atemframe.command.AtemFrameLiteralArgumentBuilder
+import ru.astrainteractive.aspekt.command.maxonline.command.MaxOnlineLiteralArgumentBuilder
+import ru.astrainteractive.aspekt.command.rtp.command.RtpLiteralArgumentBuilder
+import ru.astrainteractive.aspekt.command.rtpbypass.command.RtpBypassLiteralArgumentBuilder
+import ru.astrainteractive.aspekt.command.tellchat.command.TellChatLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady

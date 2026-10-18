@@ -2,7 +2,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.kotlin.plugin.serialization")
     id("ru.astrainteractive.gradleplugin.java.version")
-    id("ru.astrainteractive.gradleplugin.detekt")
+    alias(libs.plugins.klibs.gradle.linter)
     id("ru.astrainteractive.gradleplugin.publication")
     id("ru.astrainteractive.gradleplugin.rootinfo")
     alias(libs.plugins.gradle.fabric.loom)
@@ -39,4 +39,9 @@ dependencies {
     compileOnly(libs.minecraft.brigadier)
     compileOnly(libs.minecraft.datafixerupper)
     compileOnly(libs.joml)
+}
+
+linter {
+    unitKind.set("technology")
+    rootPackage.set("ru.astrainteractive.aspekt.module.rtp")
 }

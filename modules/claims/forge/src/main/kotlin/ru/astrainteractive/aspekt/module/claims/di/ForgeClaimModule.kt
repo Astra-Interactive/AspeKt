@@ -1,10 +1,9 @@
 package ru.astrainteractive.aspekt.module.claims.di
 
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecutor
 import ru.astrainteractive.aspekt.module.claims.command.di.ClaimCommandModule
 import ru.astrainteractive.aspekt.module.claims.event.ForgeClaimEvent
-import ru.astrainteractive.aspekt.module.claims.server.location.ForgeChunkProvider
+import ru.astrainteractive.aspekt.module.claims.forge.ForgeChunkProvider
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
@@ -14,16 +13,6 @@ class ForgeClaimModule(
     private val claimModule: ClaimModule
 ) {
 
-    private val claimCommandExecutor = ClaimCommandExecutor(
-        scope = coreModule.ioScope,
-        dispatchers = coreModule.dispatchers,
-        translationKrate = coreModule.translationKrate,
-        claimsRepository = claimModule.claimsRepository,
-        claimErrorMapper = claimModule.claimErrorMapper,
-        kyoriKrate = coreModule.kyoriKrate,
-        platformServer = coreModule.platformServer
-    )
-
     @Suppress("UnusedPrivateProperty")
     private val forgeClaimEvent = ForgeClaimEvent(
         translationKrate = coreModule.translationKrate,
@@ -31,8 +20,7 @@ class ForgeClaimModule(
     )
 
     private val claimCommandModule = ClaimCommandModule(
-        executor = claimCommandExecutor,
-        claimsRepository = claimModule.claimsRepository,
+        claimModule = claimModule,
         commandRegistrarContext = commandRegistrarContext,
         coreModule = coreModule,
         chunkProvider = ForgeChunkProvider()

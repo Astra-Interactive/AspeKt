@@ -100,6 +100,8 @@ include(":modules:command:api")
 include(":modules:command:bukkit")
 include(
     ":modules:auth:api",
+    ":modules:auth:dao",
+    ":modules:auth:exposed",
     ":modules:auth:neoforge",
     ":modules:auth:forge",
 )

@@ -15,12 +15,12 @@ import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.transactions.TransactionManager
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
-import ru.astrainteractive.aspekt.module.economy.database.dao.CachedDao
-import ru.astrainteractive.aspekt.module.economy.database.dao.EconomyDao
-import ru.astrainteractive.aspekt.module.economy.database.dao.impl.CachedDaoImpl
-import ru.astrainteractive.aspekt.module.economy.database.dao.impl.EconomyDaoImpl
+import ru.astrainteractive.aspekt.module.economy.api.CurrencyCache
+import ru.astrainteractive.aspekt.module.economy.api.EconomyRepository
+import ru.astrainteractive.aspekt.module.economy.database.ExposedEconomyRepository
 import ru.astrainteractive.aspekt.module.economy.database.table.CurrencyTable
 import ru.astrainteractive.aspekt.module.economy.database.table.PlayerCurrencyTable
+import ru.astrainteractive.aspekt.module.economy.memory.InMemoryCurrencyCache
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.StateFlowKrate
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
@@ -56,18 +56,18 @@ internal class EconomyDatabaseModule(
         .flowOn(dispatchers.IO)
         .shareIn(moduleIoScope, SharingStarted.Lazily, replay = 1)
 
-    val economyDao: EconomyDao = EconomyDaoImpl(databaseFlow)
+    val economyRepository: EconomyRepository = ExposedEconomyRepository(databaseFlow)
 
-    val cachedDao: CachedDao = CachedDaoImpl(
-        economyDao = economyDao,
+    val currencyCache: CurrencyCache = InMemoryCurrencyCache(
+        economyRepository = economyRepository,
         scope = moduleIoScope,
         ioDispatcher = dispatchers.IO
     )
 
     val lifecycle: Lifecycle = Lifecycle.Lambda(
-        onReload = { cachedDao.reset() },
+        onReload = { currencyCache.reset() },
         onDisable = {
-            cachedDao.reset()
+            currencyCache.reset()
             moduleIoScope.cancel()
         }
     )

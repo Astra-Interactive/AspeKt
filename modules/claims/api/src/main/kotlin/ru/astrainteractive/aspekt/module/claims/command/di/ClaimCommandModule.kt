@@ -4,26 +4,34 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.di.CoreModule
-import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandExecutor
-import ru.astrainteractive.aspekt.module.claims.command.claim.ClaimCommandRegistrar
-import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
-import ru.astrainteractive.aspekt.module.claims.server.location.ChunkProvider
+import ru.astrainteractive.aspekt.module.claims.api.ChunkProvider
+import ru.astrainteractive.aspekt.module.claims.command.ClaimCommandExecutor
+import ru.astrainteractive.aspekt.module.claims.command.ClaimCommandRegistrar
+import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class ClaimCommandModule(
-    executor: ClaimCommandExecutor,
-    claimsRepository: ClaimsRepository,
+    claimModule: ClaimModule,
     private val commandRegistrarContext: CommandRegistrarContext,
     coreModule: CoreModule,
     chunkProvider: ChunkProvider
 ) {
+    private val claimCommandExecutor = ClaimCommandExecutor(
+        scope = coreModule.ioScope,
+        dispatchers = coreModule.dispatchers,
+        translationKrate = coreModule.translationKrate,
+        claimsRepository = claimModule.claimsRepository,
+        claimErrorMapper = claimModule.claimErrorMapper,
+        kyoriKrate = coreModule.kyoriKrate,
+        platformServer = coreModule.platformServer
+    )
     private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())
 
     private val nodes = ClaimCommandRegistrar(
-        claimCommandExecutor = executor,
-        claimsRepository = claimsRepository,
+        claimCommandExecutor = claimCommandExecutor,
+        claimsRepository = claimModule.claimsRepository,
         platformServer = coreModule.platformServer,
         multiplatformCommand = coreModule.multiplatformCommand,
         chunkProvider = chunkProvider,

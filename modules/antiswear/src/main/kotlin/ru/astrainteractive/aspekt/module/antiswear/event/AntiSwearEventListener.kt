@@ -9,7 +9,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.Plugin
-import ru.astrainteractive.aspekt.module.antiswear.data.SwearRepository
+import ru.astrainteractive.aspekt.module.antiswear.api.SwearRepository
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.server.util.asOnlineMinecraftPlayer
 

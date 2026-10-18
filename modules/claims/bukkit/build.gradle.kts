@@ -1,7 +1,7 @@
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.kotlin.plugin.serialization")
-    id("ru.astrainteractive.gradleplugin.detekt")
+    alias(libs.plugins.klibs.gradle.linter)
     id("ru.astrainteractive.gradleplugin.java.version")
 }
 
@@ -22,4 +22,8 @@ dependencies {
     implementation(projects.modules.core.bukkit)
 
     testImplementation(libs.tests.kotlin.test)
+}
+
+linter {
+    unitKind.set("technology")
 }

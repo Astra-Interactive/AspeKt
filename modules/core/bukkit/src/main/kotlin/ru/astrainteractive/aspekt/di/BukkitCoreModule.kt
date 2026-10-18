@@ -1,8 +1,8 @@
 package ru.astrainteractive.aspekt.di
 
 import kotlinx.coroutines.CoroutineScope
-import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactory
-import ru.astrainteractive.aspekt.di.factory.CurrencyEconomyProviderFactoryImpl
+import ru.astrainteractive.aspekt.economy.api.CurrencyEconomyProviderFactory
+import ru.astrainteractive.aspekt.economy.vault.VaultCurrencyEconomyProviderFactory
 import ru.astrainteractive.astralibs.command.api.registrar.PaperCommandRegistrarContext
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
@@ -15,7 +15,7 @@ class BukkitCoreModule(
 ) {
     private val eventListener = EventListener.Default()
     private val inventoryClickEventListener = DefaultInventoryClickEvent()
-    val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory = CurrencyEconomyProviderFactoryImpl()
+    val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory = VaultCurrencyEconomyProviderFactory()
     val commandRegistrarContext = PaperCommandRegistrarContext(
         mainScope = mainScope,
         plugin = plugin

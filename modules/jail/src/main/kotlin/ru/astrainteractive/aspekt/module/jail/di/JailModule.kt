@@ -1,16 +1,16 @@
 package ru.astrainteractive.aspekt.module.jail.di
 
-import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.module.jail.api.JailCache
+import ru.astrainteractive.aspekt.module.jail.api.JailRepository
 import ru.astrainteractive.aspekt.module.jail.command.di.JailCommandModule
-import ru.astrainteractive.aspekt.module.jail.controller.JailController
-import ru.astrainteractive.aspekt.module.jail.data.CachedJailApi
-import ru.astrainteractive.aspekt.module.jail.data.JailApi
-import ru.astrainteractive.aspekt.module.jail.data.internal.CachedJailApiImpl
-import ru.astrainteractive.aspekt.module.jail.data.internal.JailApiImpl
 import ru.astrainteractive.aspekt.module.jail.event.JailEvent
+import ru.astrainteractive.aspekt.module.jail.file.FileJailRepository
+import ru.astrainteractive.aspekt.module.jail.memory.InMemoryJailCache
 import ru.astrainteractive.aspekt.module.jail.service.UnJailServiceTask
+import ru.astrainteractive.aspekt.module.jail.usecase.FreeInmateUseCase
+import ru.astrainteractive.aspekt.module.jail.usecase.TeleportInmateToJailUseCase
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.service.IntervalService
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
@@ -21,32 +21,39 @@ class JailModule(
     coreModule: CoreModule,
     bukkitCoreModule: BukkitCoreModule
 ) {
-    private val jailApi: JailApi = JailApiImpl(
+    private val jailRepository: JailRepository = FileJailRepository(
         folder = coreModule.dataFolder.resolve("jail"),
         stringFormat = coreModule.yamlFormat
     )
-    private val cachedJailApi: CachedJailApi = CachedJailApiImpl(
-        jailApi = jailApi,
+    private val jailCache: JailCache = InMemoryJailCache(
+        jailRepository = jailRepository,
         scope = coreModule.ioScope
     )
-    private val jailController = JailController(
-        dispatchers = coreModule.dispatchers,
-        jailApi = jailApi
+    private val freeInmateUseCase = FreeInmateUseCase(
+        jailRepository = jailRepository,
+        platformServer = coreModule.platformServer,
+        dispatchers = coreModule.dispatchers
+    )
+    private val teleportInmateToJailUseCase = TeleportInmateToJailUseCase(
+        jailRepository = jailRepository,
+        platformServer = coreModule.platformServer,
+        dispatchers = coreModule.dispatchers
     )
     private val jailEvent = JailEvent(
         scope = coreModule.ioScope,
-        jailApi = jailApi,
-        cachedJailApi = cachedJailApi,
-        jailController = jailController,
+        jailRepository = jailRepository,
+        jailCache = jailCache,
+        teleportInmateToJailUseCase = teleportInmateToJailUseCase,
         translationKrate = coreModule.translationKrate
     )
 
     private val jailCommandModule = JailCommandModule(
         coreModule = coreModule,
         bukkitCoreModule = bukkitCoreModule,
-        jailApi = jailApi,
-        cachedJailApi = cachedJailApi,
-        jailController = jailController
+        jailRepository = jailRepository,
+        jailCache = jailCache,
+        freeInmateUseCase = freeInmateUseCase,
+        teleportInmateToJailUseCase = teleportInmateToJailUseCase
     )
 
     private val unJailService = IntervalService(
@@ -54,9 +61,9 @@ class JailModule(
         scope = coreModule.ioScope,
         logger = JUtiltLogger("UnJailService"),
         task = UnJailServiceTask(
-            cachedJailApi = cachedJailApi,
-            jailApi = jailApi,
-            jailController = jailController,
+            jailCache = jailCache,
+            jailRepository = jailRepository,
+            freeInmateUseCase = freeInmateUseCase,
             translationKrate = coreModule.translationKrate
         )
     )
@@ -71,7 +78,6 @@ class JailModule(
             unJailService.onDisable()
             jailCommandModule.lifecycle.onDisable()
             jailEvent.onDisable()
-            jailController.cancel()
         }
     )
 

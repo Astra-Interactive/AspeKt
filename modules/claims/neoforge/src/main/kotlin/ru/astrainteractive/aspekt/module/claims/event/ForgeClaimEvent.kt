@@ -14,16 +14,16 @@ import net.neoforged.bus.api.ICancellableEvent
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.level.BlockEvent
 import net.neoforged.neoforge.event.level.ExplosionEvent
-import ru.astrainteractive.aspekt.module.claims.data.ClaimsRepository
-import ru.astrainteractive.aspekt.module.claims.data.isAble
-import ru.astrainteractive.aspekt.module.claims.debounce.EventDebounce
-import ru.astrainteractive.aspekt.module.claims.debounce.RetractKey
+import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
+import ru.astrainteractive.aspekt.module.claims.debounce.memory.EventDebounce
+import ru.astrainteractive.aspekt.module.claims.debounce.model.RetractKey
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
+import ru.astrainteractive.aspekt.module.claims.util.isAble
 import ru.astrainteractive.aspekt.module.claims.util.toClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
-import ru.astrainteractive.aspekt.plugin.PluginPermission
-import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.model.PluginPermission
+import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.coroutines.MinecraftMainDispatcher
 import ru.astrainteractive.astralibs.event.flowEvent
 import ru.astrainteractive.astralibs.server.util.asKAudience
@@ -33,8 +33,9 @@ import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
+import kotlin.time.Duration.Companion.seconds
 
-class ForgeClaimEvent(
+internal class ForgeClaimEvent(
     private val claimsRepository: ClaimsRepository,
     translationKrate: CachedKrate<PluginTranslation>
 ) : Logger by JUtiltLogger("AspeKt-ForgeClaimEvent") {
@@ -44,49 +45,7 @@ class ForgeClaimEvent(
     private val scope = CoroutineScope(SupervisorJob() + MinecraftMainDispatcher())
 
     @Suppress("MagicNumber")
-    private val debounce = EventDebounce<RetractKey>(5000L)
-    private fun <T> handleDefault(
-        retractKey: RetractKey,
-        e: T,
-        claimChunk: ClaimChunk,
-        player: ServerPlayer?,
-        flag: ChunkFlag
-    ): Boolean where T : Event {
-        if (player?.asPermissible()?.hasPermission(PluginPermission.ADMIN_CLAIM) == true) {
-            return false
-        }
-        if (e.tryCast<ICancellableEvent>()?.isCanceled == true) {
-            return true
-        }
-        val sharedEvent = if (e is ICancellableEvent) ForgeSharedCancellableEvent(e) else ForgeEmptyCancellableEvent()
-        return debounce.debounceEvent(retractKey, sharedEvent) {
-            val isAble = claimsRepository.isAble(
-                key = claimChunk.uniqueWorldKey,
-                chunkFlag = flag,
-                claimPlayer = player?.toClaimPlayer()
-            )
-            val isCancelled = !isAble
-            if (isCancelled && player != null) {
-                player.asKAudience().sendMessage(translation.claim.actionBlocked(flag.name))
-            }
-            isCancelled
-        }
-    }
-
-    @Suppress("MagicNumber")
-    private fun ChunkAccess.toClaimChunk(level: LevelAccessor): ClaimChunk {
-        val serverLevel = level as ServerLevel
-        val levelData = serverLevel.levelData as ServerLevelData
-        val chunkKey = pos.x.toLong() and 0xffffffffL or ((pos.z.toLong() and 0xffffffffL) shl 32)
-        return ClaimChunk(
-            x = pos.x,
-            z = pos.z,
-            worldName = levelData.levelName,
-            flags = emptyMap(),
-            chunkKey = chunkKey
-        )
-    }
-
+    private val debounce = EventDebounce<RetractKey>(5.seconds)
     val breakEvent = flowEvent<BlockEvent.BreakEvent>()
         .onEach { e ->
             val serverPlayer = e.player as? ServerPlayer ?: return@onEach
@@ -158,4 +117,46 @@ class ForgeClaimEvent(
                 e.affectedEntities.clear()
             }
         }.launchIn(scope)
+
+    private fun <T> handleDefault(
+        retractKey: RetractKey,
+        e: T,
+        claimChunk: ClaimChunk,
+        player: ServerPlayer?,
+        flag: ChunkFlag
+    ): Boolean where T : Event {
+        if (player?.asPermissible()?.hasPermission(PluginPermission.ADMIN_CLAIM) == true) {
+            return false
+        }
+        if (e.tryCast<ICancellableEvent>()?.isCanceled == true) {
+            return true
+        }
+        val sharedEvent = if (e is ICancellableEvent) ForgeSharedCancellableEvent(e) else ForgeEmptyCancellableEvent()
+        return debounce.debounceEvent(retractKey, sharedEvent) {
+            val isAble = claimsRepository.isAble(
+                key = claimChunk.uniqueWorldKey,
+                chunkFlag = flag,
+                claimPlayer = player?.toClaimPlayer()
+            )
+            val isCancelled = !isAble
+            if (isCancelled && player != null) {
+                player.asKAudience().sendMessage(translation.claim.actionBlocked(flag.name))
+            }
+            isCancelled
+        }
+    }
+
+    @Suppress("MagicNumber")
+    private fun ChunkAccess.toClaimChunk(level: LevelAccessor): ClaimChunk {
+        val serverLevel = level as ServerLevel
+        val levelData = serverLevel.levelData as ServerLevelData
+        val chunkKey = pos.x.toLong() and 0xffffffffL or ((pos.z.toLong() and 0xffffffffL) shl 32)
+        return ClaimChunk(
+            x = pos.x,
+            z = pos.z,
+            worldName = levelData.levelName,
+            flags = emptyMap(),
+            chunkKey = chunkKey
+        )
+    }
 }

@@ -8,8 +8,9 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
-import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
-import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.command.error.TranslationCommandExceptionHandler
+import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
@@ -34,11 +35,6 @@ class CoreModule(
     val multiplatformCommand: MultiplatformCommand,
     commandRegistrarContextFactory: (mainScope: CoroutineScope) -> CommandRegistrarContext
 ) {
-    private fun createCoroutineExceptionHandler() = CoroutineExceptionHandler { _, throwable ->
-        val logger = JUtiltLogger("CoroutineExceptionHandler-AspeKt")
-        logger.error(throwable) { "Error happened inside global coroutine scope!" }
-    }
-
     val ioScope = CoroutineFeature
         .Default(dispatchers.IO + SupervisorJob() + createCoroutineExceptionHandler())
         .withTimings()
@@ -70,7 +66,7 @@ class CoreModule(
         )
         .asCachedMutableKrate()
 
-    val commandExceptionHandler = CommandExceptionHandler(
+    val commandExceptionHandler: CommandExceptionHandler = TranslationCommandExceptionHandler(
         multiplatformCommand = multiplatformCommand,
         translationKrate = translationKrate
     )
@@ -97,4 +93,9 @@ class CoreModule(
             ioScope.cancel()
         }
     )
+
+    private fun createCoroutineExceptionHandler() = CoroutineExceptionHandler { _, throwable ->
+        val logger = JUtiltLogger("CoroutineExceptionHandler-AspeKt")
+        logger.error(throwable) { "Error happened inside global coroutine scope!" }
+    }
 }

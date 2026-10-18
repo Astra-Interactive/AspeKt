@@ -3,10 +3,10 @@ package ru.astrainteractive.aspekt.module.sethome.command
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
-import ru.astrainteractive.aspekt.core.command.CommandExceptionHandler
-import ru.astrainteractive.aspekt.module.sethome.data.HomeKrateProvider
+import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
+import ru.astrainteractive.aspekt.module.sethome.api.PlayerHomesRepository
 import ru.astrainteractive.aspekt.module.sethome.model.PlayerHome
-import ru.astrainteractive.aspekt.plugin.PluginPermission
+import ru.astrainteractive.aspekt.plugin.model.PluginPermission
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.brigadier.sender.KPlayerKCommandSender
 import ru.astrainteractive.astralibs.server.permission.Permission
@@ -22,7 +22,7 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
  */
 @Suppress("LongParameterList")
 internal class SetHomeCommandRegistrar(
-    private val homeKrateProvider: HomeKrateProvider,
+    private val playerHomesRepository: PlayerHomesRepository,
     private val executor: HomeCommandExecutor,
     private val multiplatformCommand: MultiplatformCommand,
     private val commandExceptionHandler: CommandExceptionHandler
@@ -33,7 +33,7 @@ internal class SetHomeCommandRegistrar(
             ?.takeIf { sender -> sender.hasPermission(permission) }
             ?.instance
             ?: return emptyList()
-        return homeKrateProvider.get(player.uuid)
+        return playerHomesRepository.homesOf(player.uuid)
             .cachedStateFlow
             .value
             .map(PlayerHome::name)

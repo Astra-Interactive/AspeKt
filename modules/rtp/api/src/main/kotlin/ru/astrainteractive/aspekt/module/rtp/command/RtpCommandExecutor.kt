@@ -6,12 +6,12 @@ import kotlinx.coroutines.withContext
 import ru.astrainteractive.aspekt.module.rtp.api.RtpSearchResult
 import ru.astrainteractive.aspekt.module.rtp.api.SafeLocationProvider
 import ru.astrainteractive.aspekt.module.rtp.model.RtpConfig
-import ru.astrainteractive.aspekt.plugin.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
-class RtpCommandExecutor(
+internal class RtpCommandExecutor(
     private val ioScope: CoroutineScope,
     private val safeLocationProvider: SafeLocationProvider,
     private val dispatchers: KotlinDispatchers,
@@ -30,8 +30,8 @@ class RtpCommandExecutor(
             }
             if (safeLocationProvider.isActive(player.uuid)) return@launch
             @Suppress("MagicNumber")
-            if (input.nextTickTime < 18) {
-                player.sendMessage(translation.rtp.lowTickTime(input.nextTickTime))
+            if (input.ticksPerSecond < 18) {
+                player.sendMessage(translation.rtp.lowTickTime(input.ticksPerSecond))
                 return@launch
             }
             if (safeLocationProvider.hasTimeout(player.uuid)) {

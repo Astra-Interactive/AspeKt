@@ -3,7 +3,7 @@ package ru.astrainteractive.aspekt.command.di
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import ru.astrainteractive.aspekt.command.reload.ReloadLiteralArgumentBuilder
+import ru.astrainteractive.aspekt.command.reload.command.ReloadLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle

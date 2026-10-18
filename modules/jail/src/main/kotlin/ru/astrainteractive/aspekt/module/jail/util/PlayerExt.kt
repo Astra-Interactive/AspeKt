@@ -7,9 +7,9 @@ import ru.astrainteractive.astralibs.localization.component.LocalizableComponent
 import ru.astrainteractive.astralibs.server.util.asKAudience
 import java.util.UUID
 
+internal val JailInmate.offlinePlayer: OfflinePlayer
+    get() = Bukkit.getOfflinePlayer(UUID.fromString(uuid))
+
 internal fun OfflinePlayer.sendMessage(message: LocalizableComponent) {
     Bukkit.getPlayer(uniqueId)?.asKAudience()?.sendMessage(message)
 }
-
-internal val JailInmate.offlinePlayer: OfflinePlayer
-    get() = Bukkit.getOfflinePlayer(UUID.fromString(uuid))

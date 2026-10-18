@@ -4,10 +4,10 @@ import kotlinx.coroutines.flow.map
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.chatgame.command.di.ChatGameCommandModule
+import ru.astrainteractive.aspekt.module.chatgame.memory.InMemoryChatGameStore
+import ru.astrainteractive.aspekt.module.chatgame.memory.RiddleGenerator
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.service.ChatGameServiceTask
-import ru.astrainteractive.aspekt.module.chatgame.store.ChatGameStoreImpl
-import ru.astrainteractive.aspekt.module.chatgame.store.generator.RiddleGenerator
 import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.service.IntervalService
@@ -26,7 +26,7 @@ class ChatGameModule(
         )
         .asStateFlowKrate()
 
-    private val chatGameStore = ChatGameStoreImpl(
+    private val chatGameStore = InMemoryChatGameStore(
         chatGameConfigProvider = chatGameConfigKrate,
         riddleGenerator = RiddleGenerator(
             configKrate = chatGameConfigKrate,
