@@ -1,2 +1,0 @@
-KindShape	src/main/kotlin/ru/astrainteractive/aspekt/feature/lifecycle/FeatureGate.kt	FeatureGate
-KindShape	src/main/kotlin/ru/astrainteractive/aspekt/feature/lifecycle/ParentGatedFeatureFlagReader.kt	ParentGatedFeatureFlagReader

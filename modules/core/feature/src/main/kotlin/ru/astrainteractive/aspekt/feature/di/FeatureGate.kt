@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.feature.lifecycle
+package ru.astrainteractive.aspekt.feature.di
 
 import ru.astrainteractive.aspekt.feature.api.FeatureFlagReader
 import ru.astrainteractive.aspekt.feature.model.ModuleState
