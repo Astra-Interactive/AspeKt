@@ -22,3 +22,7 @@ dependencies {
 
     implementation(projects.modules.core.api)
 }
+
+linter {
+    unitKind.set("technology")
+}
