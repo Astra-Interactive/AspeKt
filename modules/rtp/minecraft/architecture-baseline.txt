@@ -1,7 +1,0 @@
-KindImportDirection	src/main/kotlin/ru/astrainteractive/aspekt/module/rtp/api/MinecraftSafeLocationProvider.kt	ru.astrainteractive.aspekt.module.rtp.search.ChunkHazardDetector
-KindImportDirection	src/main/kotlin/ru/astrainteractive/aspekt/module/rtp/api/MinecraftSafeLocationProvider.kt	ru.astrainteractive.aspekt.module.rtp.search.ChunkLoader
-KindImportDirection	src/main/kotlin/ru/astrainteractive/aspekt/module/rtp/api/MinecraftSafeLocationProvider.kt	ru.astrainteractive.aspekt.module.rtp.search.DestinationPreparer
-KindImportDirection	src/main/kotlin/ru/astrainteractive/aspekt/module/rtp/api/MinecraftSafeLocationProvider.kt	ru.astrainteractive.aspekt.module.rtp.search.RtpCooldownRegistry
-KindImportDirection	src/main/kotlin/ru/astrainteractive/aspekt/module/rtp/api/MinecraftSafeLocationProvider.kt	ru.astrainteractive.aspekt.module.rtp.search.RtpSearchJobRegistry
-KindImportDirection	src/main/kotlin/ru/astrainteractive/aspekt/module/rtp/api/MinecraftSafeLocationProvider.kt	ru.astrainteractive.aspekt.module.rtp.search.SafeColumnScanner
-KindImportDirection	src/main/kotlin/ru/astrainteractive/aspekt/module/rtp/api/MinecraftSafeLocationProvider.kt	ru.astrainteractive.aspekt.module.rtp.search.SafeLocationSearcher

@@ -12,8 +12,8 @@ import ru.astrainteractive.aspekt.module.auth.di.ForgeAuthModule
 import ru.astrainteractive.aspekt.module.auth.exposed.di.AuthExposedModule
 import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
 import ru.astrainteractive.aspekt.module.claims.di.NeoForgeClaimModule
-import ru.astrainteractive.aspekt.module.rtp.api.MinecraftSafeLocationProvider
 import ru.astrainteractive.aspekt.module.rtp.di.RtpModule
+import ru.astrainteractive.aspekt.module.rtp.search.MinecraftSafeLocationProvider
 import ru.astrainteractive.aspekt.module.sethome.di.SetHomeModule
 import ru.astrainteractive.aspekt.module.tpa.di.TpaModule
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand

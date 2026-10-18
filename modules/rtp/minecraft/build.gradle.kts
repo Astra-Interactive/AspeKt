@@ -43,4 +43,5 @@ dependencies {
 
 linter {
     unitKind.set("technology")
+    rootPackage.set("ru.astrainteractive.aspekt.module.rtp")
 }
