@@ -14,8 +14,8 @@ import net.minecraftforge.event.level.BlockEvent
 import net.minecraftforge.event.level.ExplosionEvent
 import net.minecraftforge.eventbus.api.Event
 import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
-import ru.astrainteractive.aspekt.module.claims.debounce.guava.EventDebounce
-import ru.astrainteractive.aspekt.module.claims.debounce.guava.RetractKey
+import ru.astrainteractive.aspekt.module.claims.debounce.memory.EventDebounce
+import ru.astrainteractive.aspekt.module.claims.debounce.model.RetractKey
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.util.isAble

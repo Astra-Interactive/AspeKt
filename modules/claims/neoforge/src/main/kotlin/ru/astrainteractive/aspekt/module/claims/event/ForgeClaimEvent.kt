@@ -15,8 +15,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.level.BlockEvent
 import net.neoforged.neoforge.event.level.ExplosionEvent
 import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
-import ru.astrainteractive.aspekt.module.claims.debounce.guava.EventDebounce
-import ru.astrainteractive.aspekt.module.claims.debounce.guava.RetractKey
+import ru.astrainteractive.aspekt.module.claims.debounce.memory.EventDebounce
+import ru.astrainteractive.aspekt.module.claims.debounce.model.RetractKey
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.util.isAble

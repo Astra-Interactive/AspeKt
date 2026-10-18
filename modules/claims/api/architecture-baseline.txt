@@ -1,2 +1,0 @@
-KindShape	src/main/kotlin/ru/astrainteractive/aspekt/module/claims/debounce/guava/EventDebounce.kt	EventDebounce
-KindShape	src/main/kotlin/ru/astrainteractive/aspekt/module/claims/debounce/guava/RetractKey.kt	RetractKey

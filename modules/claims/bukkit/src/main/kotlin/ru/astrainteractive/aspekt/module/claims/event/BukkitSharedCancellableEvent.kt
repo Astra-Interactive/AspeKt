@@ -2,6 +2,7 @@ package ru.astrainteractive.aspekt.module.claims.event
 
 import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
+import ru.astrainteractive.aspekt.module.claims.debounce.api.SharedCancellableEvent
 
 internal class BukkitSharedCancellableEvent<T>(private val instance: T) :
     SharedCancellableEvent where T : Event, T : Cancellable {

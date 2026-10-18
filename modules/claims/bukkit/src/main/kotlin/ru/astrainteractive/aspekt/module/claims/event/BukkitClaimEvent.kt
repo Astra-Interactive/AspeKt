@@ -34,8 +34,8 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.world.PortalCreateEvent
 import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
-import ru.astrainteractive.aspekt.module.claims.debounce.guava.EventDebounce
-import ru.astrainteractive.aspekt.module.claims.debounce.guava.RetractKey
+import ru.astrainteractive.aspekt.module.claims.debounce.memory.EventDebounce
+import ru.astrainteractive.aspekt.module.claims.debounce.model.RetractKey
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.util.asClaimChunk

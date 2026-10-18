@@ -1,9 +1,10 @@
-package ru.astrainteractive.aspekt.module.claims.debounce.guava
+package ru.astrainteractive.aspekt.module.claims.debounce.memory
 
 import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
 import com.google.common.cache.LoadingCache
-import ru.astrainteractive.aspekt.module.claims.event.SharedCancellableEvent
+import ru.astrainteractive.aspekt.module.claims.debounce.api.SharedCancellableEvent
+import ru.astrainteractive.aspekt.module.claims.debounce.model.RetractKey
 import java.util.concurrent.TimeUnit
 import kotlin.time.Duration
 
