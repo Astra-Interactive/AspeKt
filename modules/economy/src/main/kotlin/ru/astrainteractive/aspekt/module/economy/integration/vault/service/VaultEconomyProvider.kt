@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.module.economy.integration.vault.provider
+package ru.astrainteractive.aspekt.module.economy.integration.vault.service
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
