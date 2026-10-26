@@ -80,7 +80,7 @@ internal class TpaApiTest {
     @Test
     fun GIVEN_no_requests_WHEN_get_THEN_returns_empty_map() {
         val api = tpaApi()
-        assertTrue(api.get(UUID.randomUUID()).isEmpty())
+        assertTrue(api.findRequests(UUID.randomUUID()).isEmpty())
     }
 
     @Test
@@ -89,7 +89,7 @@ internal class TpaApiTest {
         val executor = UUID.randomUUID()
         val target = UUID.randomUUID()
         api.tpa(executor, target)
-        val result = api.get(target)
+        val result = api.findRequests(target)
         assertEquals(1, result.size)
         assertEquals(TpaApiRequestType.TPA, result[executor]?.type)
         assertEquals(target, result[executor]?.targetUuid)
@@ -101,7 +101,7 @@ internal class TpaApiTest {
         val executor = UUID.randomUUID()
         val target = UUID.randomUUID()
         api.tpaHere(executor, target)
-        val result = api.get(target)
+        val result = api.findRequests(target)
         assertEquals(1, result.size)
         assertEquals(TpaApiRequestType.TPAHERE, result[executor]?.type)
     }
@@ -111,7 +111,7 @@ internal class TpaApiTest {
         val api = tpaApi()
         val executor = UUID.randomUUID()
         api.tpa(executor, UUID.randomUUID())
-        assertTrue(api.get(executor).isEmpty())
+        assertTrue(api.findRequests(executor).isEmpty())
     }
 
     @Test
@@ -122,7 +122,7 @@ internal class TpaApiTest {
         val target = UUID.randomUUID()
         api.tpa(executorA, target)
         api.tpa(executorB, target)
-        val result = api.get(target)
+        val result = api.findRequests(target)
         assertEquals(2, result.size)
         assertTrue(executorA in result)
         assertTrue(executorB in result)
@@ -235,7 +235,7 @@ internal class TpaApiTest {
         api.tpa(executor, targetSecond)
         assertFalse(api.isBeingWaited(targetFirst))
         assertTrue(api.isBeingWaited(targetSecond))
-        assertEquals(targetSecond, api.get(targetSecond)[executor]?.targetUuid)
+        assertEquals(targetSecond, api.findRequests(targetSecond)[executor]?.targetUuid)
     }
 
     @Test
@@ -245,7 +245,7 @@ internal class TpaApiTest {
         val target = UUID.randomUUID()
         api.tpa(executor, target)
         api.tpaHere(executor, target)
-        assertEquals(TpaApiRequestType.TPAHERE, api.get(target)[executor]?.type)
+        assertEquals(TpaApiRequestType.TPAHERE, api.findRequests(target)[executor]?.type)
     }
 
     // isolation
@@ -256,7 +256,7 @@ internal class TpaApiTest {
         val playerA = UUID.randomUUID()
         val playerB = UUID.randomUUID()
         api.tpa(UUID.randomUUID(), playerA)
-        assertTrue(api.get(playerB).isEmpty())
+        assertTrue(api.findRequests(playerB).isEmpty())
         assertFalse(api.isBeingWaited(playerB))
     }
 }

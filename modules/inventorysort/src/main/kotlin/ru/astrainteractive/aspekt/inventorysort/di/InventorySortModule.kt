@@ -12,6 +12,8 @@ class InventorySortModule(
     private val sortEvent: SortEvent by lazy {
         SortEvent(SortController())
     }
+
+    @Suppress("TrivialLambdaReference")
     val lifecycle = Lifecycle.Lambda(
         onEnable = {
             sortEvent.onEnable(bukkitCoreModule.plugin)
@@ -22,6 +24,6 @@ class InventorySortModule(
     )
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("inventory_sort.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("inventory_sort.yml")
     }
 }

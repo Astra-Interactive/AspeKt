@@ -5,4 +5,4 @@ import kotlin.time.Duration
 private const val TICKS_IN_SECOND = 20
 
 internal val Duration.ticks: Int
-    get() = (inWholeSeconds * TICKS_IN_SECOND).toInt()
+    get() = inWholeSeconds.times(TICKS_IN_SECOND).toInt()

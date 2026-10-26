@@ -84,6 +84,6 @@ class JailModule(
     companion object {
         private val UN_JAIL_CHECK_INTERVAL = 10.seconds
 
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("jail.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("jail.yml")
     }
 }

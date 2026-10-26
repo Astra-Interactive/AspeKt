@@ -44,7 +44,7 @@ internal class NewBeeEventListener(
     }
 
     @Suppress("MagicNumber")
-    private fun getNewBeeEffects(player: Player): List<PotionEffect> {
+    private fun buildNewBeeEffects(player: Player): List<PotionEffect> {
         return buildList {
             createInfinitePotionEffect(
                 player,
@@ -74,26 +74,32 @@ internal class NewBeeEventListener(
         }
     }
 
-    private fun Player.giveNewBeeEffects() = ioScope.launch(dispatcher.Main) {
-        withContext(dispatcher.IO) { delay(5.seconds) }
-        val effects = getNewBeeEffects(this@giveNewBeeEffects)
-        addPotionEffects(effects)
-        asKAudience().sendMessage(translation.newBee.welcome)
-        Title.title(
-            translation.newBee.title.toComponent(locale()),
-            translation.newBee.subtitle.toComponent(locale()),
-            Title.Times.times(
-                1.seconds.toJavaDuration(),
-                3.seconds.toJavaDuration(),
-                1.seconds.toJavaDuration()
-            )
-        ).run(::showTitle)
+    private fun Player.giveNewBeeEffects() {
+        ioScope.launch(dispatcher.Main) {
+            withContext(dispatcher.IO) { delay(5.seconds) }
+            val effects = buildNewBeeEffects(this@giveNewBeeEffects)
+            addPotionEffects(effects)
+            asKAudience().sendMessage(translation.newBee.welcome)
+            Title.title(
+                translation.newBee.title.toComponent(locale()),
+                translation.newBee.subtitle.toComponent(locale()),
+                Title.Times.times(
+                    1.seconds.toJavaDuration(),
+                    3.seconds.toJavaDuration(),
+                    1.seconds.toJavaDuration()
+                )
+            ).run(::showTitle)
+        }
     }
 
-    private fun Player.takeNewBeeEffects() = ioScope.launch(dispatcher.Main) {
-        if (this@takeNewBeeEffects.activePotionEffects.isEmpty()) return@launch
-        getNewBeeEffects(this@takeNewBeeEffects).map(PotionEffect::getType).forEach(::removePotionEffect)
-        asKAudience().sendMessage(translation.newBee.protectionRemoved)
+    private fun Player.takeNewBeeEffects() {
+        ioScope.launch(dispatcher.Main) {
+            if (this@takeNewBeeEffects.activePotionEffects.isEmpty()) return@launch
+            buildNewBeeEffects(this@takeNewBeeEffects)
+                .map(PotionEffect::getType)
+                .forEach(::removePotionEffect)
+            asKAudience().sendMessage(translation.newBee.protectionRemoved)
+        }
     }
 
     @EventHandler

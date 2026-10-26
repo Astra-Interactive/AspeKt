@@ -12,6 +12,7 @@ import org.jetbrains.exposed.v1.jdbc.update
 import ru.astrainteractive.aspekt.module.auth.dao.api.AuthRepository
 import ru.astrainteractive.aspekt.module.auth.dao.model.AuthData
 import ru.astrainteractive.aspekt.module.auth.exposed.table.UserTable
+import ru.astrainteractive.klibs.mikro.core.coroutines.propagateCancellationException
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -28,8 +29,9 @@ internal class ExposedAuthRepository(private val databaseFlow: Flow<Database>) :
                     statement[UserTable.updatedAt] = LocalDateTime.now()
                     statement[UserTable.lastIpAddress] = authData.lastIpAddress
                 }
+                Unit
             }
-        }
+        }.propagateCancellationException()
     }
 
     override suspend fun deleteAccount(uuid: UUID): Result<Unit> {
@@ -38,8 +40,9 @@ internal class ExposedAuthRepository(private val databaseFlow: Flow<Database>) :
                 UserTable.deleteWhere {
                     UserTable.id eq uuid.toString()
                 }
+                Unit
             }
-        }
+        }.propagateCancellationException()
     }
 
     override suspend fun updateAccount(authData: AuthData): Result<Unit> {
@@ -56,11 +59,12 @@ internal class ExposedAuthRepository(private val databaseFlow: Flow<Database>) :
                         statement[UserTable.lastIpAddress] = authData.lastIpAddress
                     }
                 )
+                Unit
             }
-        }
+        }.propagateCancellationException()
     }
 
-    override suspend fun getUser(uuid: UUID): Result<AuthData> {
+    override suspend fun findUser(uuid: UUID): Result<AuthData> {
         return runCatching {
             transaction(requireDatabase()) {
                 UserTable.selectAll()
@@ -75,10 +79,10 @@ internal class ExposedAuthRepository(private val databaseFlow: Flow<Database>) :
                     }
                     .first()
             }
-        }
+        }.propagateCancellationException()
     }
 
-    override suspend fun getUser(username: String): Result<AuthData> {
+    override suspend fun findUser(username: String): Result<AuthData> {
         return runCatching {
             transaction(requireDatabase()) {
                 UserTable.selectAll()
@@ -93,6 +97,6 @@ internal class ExposedAuthRepository(private val databaseFlow: Flow<Database>) :
                     }
                     .first()
             }
-        }
+        }.propagateCancellationException()
     }
 }

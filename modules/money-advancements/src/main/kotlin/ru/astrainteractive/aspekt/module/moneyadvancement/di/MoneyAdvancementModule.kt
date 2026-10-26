@@ -17,7 +17,7 @@ class MoneyAdvancementModule(
 ) : Logger by JUtiltLogger("MoneyAdvancementModule") {
     private val mAdvConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = getConfigurationFile(coreModule.dataFolder),
+            file = resolveConfigurationFile(coreModule.dataFolder),
             factory = ::MoneyAdvancementsConfiguration
         )
         .asCachedMutableKrate()
@@ -28,6 +28,7 @@ class MoneyAdvancementModule(
         mAdvConfigKrate = mAdvConfigKrate,
     )
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle: Lifecycle by lazy {
         Lifecycle.Lambda(
             onEnable = {
@@ -43,6 +44,6 @@ class MoneyAdvancementModule(
     }
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("money_advancements.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("money_advancements.yml")
     }
 }

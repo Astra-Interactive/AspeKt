@@ -31,7 +31,11 @@ class TrackPlaytimeUseCaseTest {
         name = "Player"
     )
     private val configuration = PlaytimeRewardConfiguration(rewardAmount = 5.0, requiredDuration = 60.minutes)
-    private val repository = KratePlaytimeRewardRepository(tempDataFolder = folder, stringFormat = Json, clock = clock)
+    private val repository = KratePlaytimeRewardRepository(
+        tempDataFolder = folder,
+        stringFormat = Json,
+        clock = clock
+    )
     private val useCase = TrackPlaytimeUseCase(
         clock = clock,
         playtimeRewardRepository = repository,
@@ -49,41 +53,47 @@ class TrackPlaytimeUseCaseTest {
     }
 
     @Test
-    fun GIVEN_player_played_long_enough_WHEN_checked_THEN_player_is_rewarded_and_playtime_resets() = runTest {
-        useCase.invoke(player, PlaytimeEvent.Joined)
-        clock.current = clock.current + 61.minutes
+    fun GIVEN_player_played_long_enough_WHEN_checked_THEN_player_is_rewarded_and_playtime_resets() {
+        runTest {
+            useCase.invoke(player, PlaytimeEvent.Joined)
+            clock.current = clock.current + 61.minutes
 
-        useCase.invoke(player, PlaytimeEvent.Checked)
+            useCase.invoke(player, PlaytimeEvent.Checked)
 
-        assertEquals(5.0, economy.deposits[player.uuid])
-        assertEquals(1, player.messages.size)
-        assertEquals(0.minutes, repository.krateOf(player).getValue().timePlayed)
+            assertEquals(5.0, economy.deposits[player.uuid])
+            assertEquals(1, player.messages.size)
+            assertEquals(0.minutes, repository.krateOf(player).getValue().timePlayed)
+        }
     }
 
     @Test
-    fun GIVEN_player_played_too_little_WHEN_checked_THEN_playtime_is_counted_without_reward() = runTest {
-        useCase.invoke(player, PlaytimeEvent.Joined)
-        clock.current = clock.current + 30.minutes
+    fun GIVEN_player_played_too_little_WHEN_checked_THEN_playtime_is_counted_without_reward() {
+        runTest {
+            useCase.invoke(player, PlaytimeEvent.Joined)
+            clock.current = clock.current + 30.minutes
 
-        useCase.invoke(player, PlaytimeEvent.Checked)
+            useCase.invoke(player, PlaytimeEvent.Checked)
 
-        assertTrue(economy.deposits.isEmpty())
-        assertTrue(player.messages.isEmpty())
-        assertEquals(30.minutes, repository.krateOf(player).getValue().timePlayed)
+            assertTrue(economy.deposits.isEmpty())
+            assertTrue(player.messages.isEmpty())
+            assertEquals(30.minutes, repository.krateOf(player).getValue().timePlayed)
+        }
     }
 
     @Test
-    fun GIVEN_player_left_and_rejoined_WHEN_checked_THEN_time_offline_is_not_counted() = runTest {
-        useCase.invoke(player, PlaytimeEvent.Joined)
-        clock.current = clock.current + 40.minutes
-        useCase.invoke(player, PlaytimeEvent.Left)
-        clock.current = clock.current + 120.minutes
-        useCase.invoke(player, PlaytimeEvent.Joined)
-        clock.current = clock.current + 10.minutes
+    fun GIVEN_player_left_and_rejoined_WHEN_checked_THEN_time_offline_is_not_counted() {
+        runTest {
+            useCase.invoke(player, PlaytimeEvent.Joined)
+            clock.current = clock.current + 40.minutes
+            useCase.invoke(player, PlaytimeEvent.Left)
+            clock.current = clock.current + 120.minutes
+            useCase.invoke(player, PlaytimeEvent.Joined)
+            clock.current = clock.current + 10.minutes
 
-        useCase.invoke(player, PlaytimeEvent.Checked)
+            useCase.invoke(player, PlaytimeEvent.Checked)
 
-        assertTrue(economy.deposits.isEmpty())
-        assertEquals(50.minutes, repository.krateOf(player).getValue().timePlayed)
+            assertTrue(economy.deposits.isEmpty())
+            assertEquals(50.minutes, repository.krateOf(player).getValue().timePlayed)
+        }
     }
 }

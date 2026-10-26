@@ -22,7 +22,7 @@ internal class TpaApi {
         cache.put(executorUuid, TpaApiRequest(targetUuid, TpaApiRequestType.TPAHERE))
     }
 
-    fun get(playerUuid: UUID): Map<UUID, TpaApiRequest> {
+    fun findRequests(playerUuid: UUID): Map<UUID, TpaApiRequest> {
         return cache.asMap().filter { entry -> entry.value.targetUuid == playerUuid }
     }
 

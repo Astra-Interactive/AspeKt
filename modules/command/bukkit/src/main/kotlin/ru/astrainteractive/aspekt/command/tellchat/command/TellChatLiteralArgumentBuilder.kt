@@ -30,7 +30,7 @@ internal class TellChatLiteralArgumentBuilder(
                         }
                     }
                     argument("message", StringArgumentType.greedyString()) { messageArg ->
-                        runs(commandExceptionHandler::handle) { ctx ->
+                        runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.TELL_CHAT)
                             val target = ctx.requireArgument(targetArg)
                             val message = ctx

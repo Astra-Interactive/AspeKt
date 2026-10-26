@@ -14,7 +14,7 @@ internal class SortEvent(
 
     @EventHandler
     fun playerQuitEvent(e: PlayerQuitEvent) {
-        sortController.rememberPlayer(e.player)
+        sortController.resetPlayerSort(e.player)
     }
 
     @EventHandler

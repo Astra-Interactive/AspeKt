@@ -59,6 +59,7 @@ class AuthCommandModule(
         ).createNodes().run(::addAll)
     }
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {
             commandRegistrarContext.registerWhenReady(nodes, moduleUnconfinedScope)

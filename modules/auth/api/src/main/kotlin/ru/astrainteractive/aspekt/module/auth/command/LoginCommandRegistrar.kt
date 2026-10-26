@@ -36,7 +36,7 @@ internal class LoginCommandRegistrar(
                     alias = "password",
                     type = StringArgumentType.string(),
                     block = { passwordArg ->
-                        runs(commandExceptionHandler::handle) { ctx ->
+                        runs(commandExceptionHandler::onException) { ctx ->
                             val player = ctx.requirePlayer()
                             ioScope.launch {
                                 val passwordSha = ctx.requireArgument(passwordArg).sha256()

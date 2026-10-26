@@ -25,7 +25,7 @@ class PlaytimeRewardModule(
 ) {
     private val configKrate = coreModule.yamlFormat
         .krateOf(
-            file = getConfigurationFile(coreModule.dataFolder),
+            file = resolveConfigurationFile(coreModule.dataFolder),
             factory = ::PlaytimeRewardConfiguration
         )
         .asStateFlowMutableKrate()
@@ -49,6 +49,7 @@ class PlaytimeRewardModule(
         ioScope = coreModule.ioScope
     )
 
+    @Suppress("TrivialLambdaReference")
     private val expireService = IntervalService(
         interval = configKrate.cachedStateFlow.map { rewardConfiguration -> rewardConfiguration.checkInterval },
         scope = coreModule.ioScope,
@@ -59,6 +60,7 @@ class PlaytimeRewardModule(
         )
     )
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle: Lifecycle by lazy {
         Lifecycle.Lambda(
             onEnable = {
@@ -76,6 +78,6 @@ class PlaytimeRewardModule(
     }
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("playtime_reward.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("playtime_reward.yml")
     }
 }

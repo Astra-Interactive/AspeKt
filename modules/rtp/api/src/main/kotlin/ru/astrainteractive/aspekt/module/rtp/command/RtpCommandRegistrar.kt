@@ -18,11 +18,11 @@ internal class RtpCommandRegistrar(
     private fun createNode(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command(alias = "rtp") {
-                runs(commandExceptionHandler::handle) { ctx ->
+                runs(commandExceptionHandler::onException) { ctx ->
                     val player = ctx.requirePlayer()
                     RtpCommand(
                         player = player,
-                        ticksPerSecond = safeLocationProvider.getNextTickTime()
+                        ticksPerSecond = safeLocationProvider.resolveNextTickTime()
                     ).run(executor::execute)
                 }
             }

@@ -62,12 +62,20 @@ internal class SetHomeCommandRegistrar(
         return with(multiplatformCommand) {
             command("sethome") {
                 argument("home_name", StringArgumentType.string()) { homeNameArg ->
-                    runs(commandExceptionHandler::handle) { ctx ->
-                        executeSetHome(ctx, homeNameArg, force = false)
+                    runs(commandExceptionHandler::onException) { ctx ->
+                        executeSetHome(
+                            ctx = ctx,
+                            homeNameArg = homeNameArg,
+                            force = false
+                        )
                     }
                     literal("force") {
-                        runs(commandExceptionHandler::handle) { ctx ->
-                            executeSetHome(ctx, homeNameArg, force = true)
+                        runs(commandExceptionHandler::onException) { ctx ->
+                            executeSetHome(
+                                ctx = ctx,
+                                homeNameArg = homeNameArg,
+                                force = true
+                            )
                         }
                     }
                 }
@@ -80,7 +88,7 @@ internal class SetHomeCommandRegistrar(
             command("delhome") {
                 argument("home_name", StringArgumentType.string()) { homeNameArg ->
                     hints { ctx -> homeNameHints(ctx, PluginPermission.DEL_HOME) }
-                    runs(commandExceptionHandler::handle) { ctx ->
+                    runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requirePermission(PluginPermission.DEL_HOME)
                         HomeCommand.DelHome(
                             playerData = ctx.requirePlayer(),
@@ -97,7 +105,7 @@ internal class SetHomeCommandRegistrar(
             command("home") {
                 argument("home_name", StringArgumentType.string()) { homeNameArg ->
                     hints { ctx -> homeNameHints(ctx, PluginPermission.HOME) }
-                    runs(commandExceptionHandler::handle) { ctx ->
+                    runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requirePermission(PluginPermission.HOME)
                         HomeCommand.TpHome(
                             playerData = ctx.requirePlayer(),

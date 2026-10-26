@@ -8,6 +8,9 @@ import org.bukkit.event.player.PlayerAdvancementDoneEvent
 import ru.astrainteractive.aspekt.economy.api.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.module.moneyadvancement.model.MoneyAdvancementsConfiguration
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.util.challengeCompleted
+import ru.astrainteractive.aspekt.plugin.util.goalCompleted
+import ru.astrainteractive.aspekt.plugin.util.taskCompleted
 import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.server.util.asKAudience

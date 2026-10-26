@@ -16,7 +16,7 @@ internal class TeleportInmateToJailUseCase(
     private val dispatchers: KotlinDispatchers
 ) : Logger by JUtiltLogger("AspeKt-TeleportInmateToJailUseCase") {
     suspend operator fun invoke(inmate: JailInmate) {
-        val jail = jailRepository.getJail(inmate.jailName)
+        val jail = jailRepository.findJail(inmate.jailName)
             .onFailure { throwable -> error(throwable) { "#invoke could not find jail ${inmate.jailName}" } }
             .getOrNull()
             ?: return

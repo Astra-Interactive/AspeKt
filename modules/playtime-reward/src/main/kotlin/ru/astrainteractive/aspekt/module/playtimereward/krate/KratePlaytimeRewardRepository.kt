@@ -17,15 +17,17 @@ internal class KratePlaytimeRewardRepository(
     private val stringFormat: StringFormat,
     private val clock: Clock
 ) : PlaytimeRewardRepository {
-    override fun krateOf(player: OnlineKPlayer): MutableKrate<PlaytimeReward> = stringFormat.krateOf(
-        file = tempDataFolder.resolve("playtime_${player.uuid}.json"),
-        factory = {
-            PlaytimeReward(
-                timePlayed = Duration.ZERO,
-                uuid = player.uuid,
-                latestUsername = player.name,
-                latestJoin = clock.now()
-            )
-        }
-    )
+    override fun krateOf(player: OnlineKPlayer): MutableKrate<PlaytimeReward> {
+        return stringFormat.krateOf(
+            file = tempDataFolder.resolve("playtime_${player.uuid}.json"),
+            factory = {
+                PlaytimeReward(
+                    timePlayed = Duration.ZERO,
+                    uuid = player.uuid,
+                    latestUsername = player.name,
+                    latestJoin = clock.now()
+                )
+            }
+        )
+    }
 }

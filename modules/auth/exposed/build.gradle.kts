@@ -1,10 +1,11 @@
 plugins {
     id("org.jetbrains.kotlin.jvm")
-    alias(libs.plugins.klibs.gradle.linter)
+    alias(libs.plugins.klibs.rules.gradle.linter)
     id("ru.astrainteractive.gradleplugin.java.version")
 }
 
 dependencies {
+    implementation(kotlin("stdlib"))
     implementation(libs.exposed.core)
     implementation(libs.exposed.dao)
     implementation(libs.exposed.java.time)

@@ -2,7 +2,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.kotlin.plugin.serialization")
     id("ru.astrainteractive.gradleplugin.java.version")
-    alias(libs.plugins.klibs.gradle.linter)
+    alias(libs.plugins.klibs.rules.gradle.linter)
     id("ru.astrainteractive.gradleplugin.publication")
     id("ru.astrainteractive.gradleplugin.rootinfo")
     alias(libs.plugins.gradle.fabric.loom)
@@ -13,6 +13,7 @@ repositories {
 }
 
 dependencies {
+    implementation(kotlin("stdlib"))
     minecraft(libs.minecraft.fabric.mojang)
     mappings(loom.officialMojangMappings())
 }

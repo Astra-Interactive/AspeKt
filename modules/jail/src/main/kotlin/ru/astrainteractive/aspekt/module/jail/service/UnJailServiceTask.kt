@@ -4,6 +4,7 @@ import ru.astrainteractive.aspekt.module.jail.api.JailCache
 import ru.astrainteractive.aspekt.module.jail.api.JailRepository
 import ru.astrainteractive.aspekt.module.jail.model.JailInmate
 import ru.astrainteractive.aspekt.module.jail.usecase.FreeInmateUseCase
+import ru.astrainteractive.aspekt.module.jail.util.isSentenceOver
 import ru.astrainteractive.aspekt.module.jail.util.offlinePlayer
 import ru.astrainteractive.aspekt.module.jail.util.sendMessage
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
@@ -12,7 +13,7 @@ import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
-import java.time.Instant
+import kotlin.time.Clock
 
 internal class UnJailServiceTask(
     private val jailCache: JailCache,
@@ -30,10 +31,10 @@ internal class UnJailServiceTask(
     }
 
     override suspend fun execute() {
-        jailRepository.getInmates()
+        jailRepository.findInmates()
             .getOrNull()
             .orEmpty()
-            .filter { inmate -> inmate.isSentenceOver(Instant.now()) }
+            .filter { inmate -> inmate.isSentenceOver(Clock.System.now()) }
             .forEach { inmate -> free(inmate) }
     }
 }

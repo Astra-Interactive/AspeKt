@@ -25,23 +25,25 @@ internal class TranslationCommandExceptionHandler(
     Logger by JUtiltLogger("AspeKt-CommandExceptionHandler") {
     private val translation by translationKrate
 
-    private fun messageOf(throwable: Throwable, commandName: String): LocalizableComponent = when (throwable) {
-        is LocalizableComponentCommandException -> throwable.localizableComponent
-        is NoPermissionException -> translation.commandError.noPermission
-        is NotPlayerExecutorException -> translation.commandError.onlyPlayerCommand
-        is NoPlayerException -> translation.commandError.playerNotFound
-        is ArgumentConverterException,
-        is BadArgumentException,
-        is NoPotionEffectTypeException -> translation.commandError.invalidArgument
+    private fun messageOf(throwable: Throwable, commandName: String): LocalizableComponent {
+        return when (throwable) {
+            is LocalizableComponentCommandException -> throwable.localizableComponent
+            is NoPermissionException -> translation.commandError.noPermission
+            is NotPlayerExecutorException -> translation.commandError.onlyPlayerCommand
+            is NoPlayerException -> translation.commandError.playerNotFound
+            is ArgumentConverterException,
+            is BadArgumentException,
+            is NoPotionEffectTypeException -> translation.commandError.invalidArgument
 
-        is CommandException -> translation.commandError.wrongUsage
-        else -> {
-            error(throwable) { "#messageOf /$commandName failed with an unexpected exception" }
-            translation.commandError.unknownError
+            is CommandException -> translation.commandError.wrongUsage
+            else -> {
+                error(throwable) { "#messageOf /$commandName failed with an unexpected exception" }
+                translation.commandError.unknownError
+            }
         }
     }
 
-    override fun handle(ctx: CommandContext<Any>, throwable: Throwable) {
+    override fun onException(ctx: CommandContext<Any>, throwable: Throwable) {
         val commandName = ctx.input.substringBefore(' ')
         val sender = runCatching { with(multiplatformCommand) { ctx.getSender() } }
             .getOrElse { senderError ->

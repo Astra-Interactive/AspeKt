@@ -15,7 +15,7 @@ class TreeCapitatorModule(
 ) {
     private val tcConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = getConfigurationFile(coreModule.dataFolder),
+            file = resolveConfigurationFile(coreModule.dataFolder),
             factory = ::TreeCapitatorConfiguration
         )
         .asCachedMutableKrate()
@@ -26,6 +26,7 @@ class TreeCapitatorModule(
         dispatchers = coreModule.dispatchers,
     )
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle = Lifecycle.Lambda(
         onEnable = {
             tcEvent.onEnable(bukkitCoreModule.plugin)
@@ -39,6 +40,6 @@ class TreeCapitatorModule(
     )
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("config.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("config.yml")
     }
 }

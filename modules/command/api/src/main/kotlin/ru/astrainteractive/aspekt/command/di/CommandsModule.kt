@@ -23,6 +23,7 @@ class CommandsModule(
         ).create(),
     )
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {
             coreModule.commandRegistrarContext.registerWhenReady(nodes, moduleUnconfinedScope)

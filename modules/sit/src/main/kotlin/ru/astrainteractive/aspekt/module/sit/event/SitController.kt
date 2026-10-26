@@ -34,7 +34,11 @@ internal class SitController(
     fun toggleSitPlayer(
         player: Player,
         location: Location = player.location.clone(),
-        locationWithOffset: Location = location.clone().add(0.0, -SIT_STAIR_OFFSET, 0.0)
+        locationWithOffset: Location = location.clone().add(
+            0.0,
+            -SIT_STAIR_OFFSET,
+            0.0
+        )
     ) {
         if (!sitConfig.isEnabled) return
         if (isFilledWithSolidBlocks(location)) {
@@ -81,7 +85,13 @@ internal class SitController(
         armorStand.remove()
         sitPlayers.remove(player.uniqueId.toString())
         // Телепортируем чуть повыше
-        player.teleport(player.location.add(0.0, SIT_STAIR_OFFSET, 0.0))
+        player.teleport(
+            player.location.add(
+                0.0,
+                SIT_STAIR_OFFSET,
+                0.0
+            )
+        )
     }
 
     fun onDisable() {

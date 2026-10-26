@@ -17,7 +17,7 @@ class AutoCropModule(
 
     private val autoCropConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = getConfigurationFile(coreModule.dataFolder),
+            file = resolveConfigurationFile(coreModule.dataFolder),
             factory = ::AutoCropConfiguration
         )
         .asCachedMutableKrate()
@@ -27,6 +27,7 @@ class AutoCropModule(
         cropDupeController = CropDupeController()
     )
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle: Lifecycle by lazy {
         Lifecycle.Lambda(
             onEnable = {
@@ -42,6 +43,6 @@ class AutoCropModule(
     }
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("auto_crop.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("auto_crop.yml")
     }
 }

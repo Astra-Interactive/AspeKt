@@ -8,7 +8,7 @@ import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimCommand
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.util.claim
-import ru.astrainteractive.aspekt.module.claims.util.map
+import ru.astrainteractive.aspekt.module.claims.util.createGrid
 import ru.astrainteractive.aspekt.module.claims.util.setFlag
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
@@ -16,6 +16,7 @@ import ru.astrainteractive.astralibs.localization.markup.KyoriComponentSerialize
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
+import ru.astrainteractive.klibs.mikro.core.coroutines.propagateCancellationException
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 @Suppress("LongParameterList")
@@ -32,13 +33,13 @@ internal class ClaimCommandExecutor(
     private val translation by translationKrate
 
     @Suppress("MagicNumber")
-    private suspend fun showMap(
+    private suspend fun renderClaimGrid(
         claimPlayer: ClaimPlayer,
         chunk: ClaimChunk
     ) {
         val result = runCatching {
-            claimsRepository.map(5, chunk)
-        }
+            claimsRepository.createGrid(5, chunk)
+        }.propagateCancellationException()
         result.onSuccess { claims ->
             platformServer
                 .findOnlinePlayer(claimPlayer.uuid)
@@ -152,7 +153,7 @@ internal class ClaimCommandExecutor(
             }
 
             is ClaimCommand.ShowMap -> scope.launch(dispatchers.IO) {
-                showMap(input.claimPlayer, input.chunk)
+                renderClaimGrid(input.claimPlayer, input.chunk)
             }
 
             is ClaimCommand.UnClaim -> scope.launch(dispatchers.IO) {

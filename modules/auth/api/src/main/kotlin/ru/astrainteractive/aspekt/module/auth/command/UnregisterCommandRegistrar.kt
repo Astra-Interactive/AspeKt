@@ -12,6 +12,7 @@ import ru.astrainteractive.aspekt.module.auth.model.AuthTranslation
 import ru.astrainteractive.aspekt.module.auth.model.PlayerLogin
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
+import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 
@@ -37,12 +38,12 @@ internal class UnregisterCommandRegistrar(
                     alias = "username",
                     type = StringArgumentType.string(),
                     block = { usernameArg ->
-                        hints { platformServer.getOnlinePlayers().map { player -> player.name } }
-                        runs(commandExceptionHandler::handle) { ctx ->
+                        hints { platformServer.getOnlinePlayers().map(OnlineKPlayer::name) }
+                        runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(AuthPermission.Unregister)
                             val usernameToDelete = ctx.requireArgument(usernameArg)
                             ioScope.launch {
-                                val authData = authRepository.getUser(usernameToDelete)
+                                val authData = authRepository.findUser(usernameToDelete)
                                     .onFailure {
                                         ctx.getSender().sendMessage(translation.userNotFound)
                                     }.getOrNull() ?: return@launch

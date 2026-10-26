@@ -8,6 +8,6 @@ internal interface JailCache {
     fun cache(uuid: String)
     fun forget(uuid: String)
 
-    fun getJails(): List<Jail>
-    fun getInmates(): List<JailInmate>
+    fun findJails(): List<Jail>
+    fun findInmates(): List<JailInmate>
 }

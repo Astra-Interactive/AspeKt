@@ -59,127 +59,180 @@ class ExposedEconomyRepositoryTest {
     }
 
     @Test
-    fun `GIVEN_different_db_configs_WHEN_try_THEN_db_changed`() = runTest {
-        val initialUrl = requireModule.databaseFlow.first().url
-        dbConfig.save { DatabaseConfiguration.H2(requireFolder.resolve("test1").path) }
-        requireModule.databaseFlow
-            .filter { database -> database.url != initialUrl }
-            .first()
-        val test1Url = requireModule.databaseFlow.first().url
+    fun `GIVEN_different_db_configs_WHEN_try_THEN_db_changed`() {
+        runTest {
+            val initialUrl = requireModule.databaseFlow.first().url
+            dbConfig.save { DatabaseConfiguration.H2(requireFolder.resolve("test1").path) }
+            requireModule.databaseFlow
+                .filter { database -> database.url != initialUrl }
+                .first()
+            val test1Url = requireModule.databaseFlow.first().url
 
-        val currencies = listOf(Currency(id = "0", name = "name", priority = 0))
-        requireModule.economyRepository.updateCurrencies(currencies)
-        assertEquals(1, requireModule.economyRepository.getAllCurrencies().size)
+            val currencies = listOf(
+                Currency(
+                    id = "0",
+                    name = "name",
+                    priority = 0
+                )
+            )
+            requireModule.economyRepository.updateCurrencies(currencies)
+            assertEquals(1, requireModule.economyRepository.loadAllCurrencies().size)
 
-        dbConfig.save { DatabaseConfiguration.H2(requireFolder.resolve("test2").path) }
-        requireModule.databaseFlow
-            .filter { database -> database.url != test1Url }
-            .first()
+            dbConfig.save { DatabaseConfiguration.H2(requireFolder.resolve("test2").path) }
+            requireModule.databaseFlow
+                .filter { database -> database.url != test1Url }
+                .first()
 
-        assertEquals(0, requireModule.economyRepository.getAllCurrencies().size)
-        dbConfig.save { DatabaseConfiguration.H2(requireFolder.resolve("test1").path) }
-        requireModule.databaseFlow
-            .filter { database -> database.url == test1Url }
-            .first()
-        assertEquals(1, requireModule.economyRepository.getAllCurrencies().size)
-    }
-
-    @Test
-    fun `GIVEN_currency_WHEN_try_find_THEN_found`() = runTest(scheduler) {
-        val currencies = listOf(Currency(id = "0", name = "name", priority = 0))
-        requireModule.economyRepository.updateCurrencies(currencies)
-        assertEquals(1, requireModule.economyRepository.getAllCurrencies().size)
-        assertEquals(currencies.first(), requireModule.economyRepository.findCurrency(currencies.first().id))
-    }
-
-    @Test
-    fun `GIVEN_multiple_currencies_WHEN_change_list_THEN_changed`() = runTest(scheduler) {
-        val currencies = listOf(Currency(id = "0", name = "name", priority = 0))
-        requireModule.economyRepository.updateCurrencies(currencies)
-        val newCurrencies = List(2) { index -> Currency(id = "$index", name = "name$index", priority = 0) }
-        requireModule.economyRepository.updateCurrencies(newCurrencies)
-        assertContentEquals(newCurrencies, requireModule.economyRepository.getAllCurrencies())
-        newCurrencies.forEach { currency ->
-            assertEquals(currency, requireModule.economyRepository.findCurrency(currency.id))
+            assertEquals(0, requireModule.economyRepository.loadAllCurrencies().size)
+            dbConfig.save { DatabaseConfiguration.H2(requireFolder.resolve("test1").path) }
+            requireModule.databaseFlow
+                .filter { database -> database.url == test1Url }
+                .first()
+            assertEquals(1, requireModule.economyRepository.loadAllCurrencies().size)
         }
     }
 
     @Test
-    fun `GIVEN_currency_WHEN_add_to_player_THEN_added`() = runTest(scheduler) {
-        val currencies = List(2) { index -> Currency(id = "$index", name = "name$index", priority = 0) }
-        requireModule.economyRepository.updateCurrencies(currencies)
-        val playerCurrency = PlayerCurrency(
-            playerModel = EconomyPlayer(
-                name = "player1",
-                uuid = "uuid1",
-            ),
-            balance = 0.0,
-            currencyModel = currencies.first()
-        )
-        assertEquals(0, requireModule.economyRepository.playerCurrencies(playerCurrency.playerModel.uuid).size)
-        requireModule.economyRepository.updatePlayerCurrency(playerCurrency)
-        assertEquals(
-            playerCurrency,
-            requireModule.economyRepository.findPlayerCurrency(
-                playerCurrency.playerModel.uuid,
-                playerCurrency.currencyModel.id
+    fun `GIVEN_currency_WHEN_try_find_THEN_found`() {
+        runTest(scheduler) {
+            val currencies = listOf(
+                Currency(
+                    id = "0",
+                    name = "name",
+                    priority = 0
+                )
             )
-        )
-        assertEquals(1, requireModule.economyRepository.playerCurrencies(playerCurrency.playerModel.uuid).size)
-        assertEquals(1, requireModule.economyRepository.topCurrency(playerCurrency.currencyModel.id, 0, 10).size)
+            requireModule.economyRepository.updateCurrencies(currencies)
+            assertEquals(1, requireModule.economyRepository.loadAllCurrencies().size)
+            assertEquals(currencies.first(), requireModule.economyRepository.findCurrency(currencies.first().id))
+        }
     }
 
     @Test
-    fun `GIVEN_currency_WHEN_transfer_to_player_THEN_transfered`() = runTest(scheduler) {
-        val currencies = List(2) { index -> Currency(id = "$index", name = "name$index", priority = 0) }
-        requireModule.economyRepository.updateCurrencies(currencies)
-        val playerCurrency = PlayerCurrency(
-            playerModel = EconomyPlayer(
-                name = "player1",
-                uuid = "uuid1",
-            ),
-            balance = 100.0,
-            currencyModel = currencies.first()
-        )
-        val otherPlayerModel = EconomyPlayer(
-            name = "player2",
-            uuid = "uuid2",
-        )
-        requireModule.economyRepository.updatePlayerCurrency(playerCurrency)
-        assertTrue(
-            requireModule.economyRepository.transfer(
-                from = playerCurrency.playerModel,
-                to = otherPlayerModel,
-                amount = playerCurrency.balance,
-                currencyId = playerCurrency.currencyModel.id
+    fun `GIVEN_multiple_currencies_WHEN_change_list_THEN_changed`() {
+        runTest(scheduler) {
+            val currencies = listOf(
+                Currency(
+                    id = "0",
+                    name = "name",
+                    priority = 0
+                )
             )
-        )
-        assertEquals(
-            0.0,
-            requireModule.economyRepository.findPlayerCurrency(
-                playerCurrency.playerModel.uuid,
-                currencies.first().id
-            )?.balance
-        )
-        assertNull(
-            requireModule.economyRepository.findPlayerCurrency(
-                playerCurrency.playerModel.uuid,
-                currencies.last().id
-            )
-        )
+            requireModule.economyRepository.updateCurrencies(currencies)
+            val newCurrencies = List(2) { index ->
+                Currency(
+                    id = "$index",
+                    name = "name$index",
+                    priority = 0
+                )
+            }
+            requireModule.economyRepository.updateCurrencies(newCurrencies)
+            assertContentEquals(newCurrencies, requireModule.economyRepository.loadAllCurrencies())
+            newCurrencies.forEach { currency ->
+                assertEquals(currency, requireModule.economyRepository.findCurrency(currency.id))
+            }
+        }
+    }
 
-        assertEquals(
-            100.0,
-            requireModule.economyRepository.findPlayerCurrency(
-                otherPlayerModel.uuid,
-                currencies.first().id
-            )?.balance
-        )
-        assertNull(
-            requireModule.economyRepository.findPlayerCurrency(
-                otherPlayerModel.uuid,
-                currencies.last().id
+    @Test
+    fun `GIVEN_currency_WHEN_add_to_player_THEN_added`() {
+        runTest(scheduler) {
+            val currencies = List(2) { index ->
+                Currency(
+                    id = "$index",
+                    name = "name$index",
+                    priority = 0
+                )
+            }
+            requireModule.economyRepository.updateCurrencies(currencies)
+            val playerCurrency = PlayerCurrency(
+                playerModel = EconomyPlayer(
+                    name = "player1",
+                    uuid = "uuid1",
+                ),
+                balance = 0.0,
+                currencyModel = currencies.first()
             )
-        )
+            assertEquals(0, requireModule.economyRepository.playerCurrencies(playerCurrency.playerModel.uuid).size)
+            requireModule.economyRepository.updatePlayerCurrency(playerCurrency)
+            assertEquals(
+                playerCurrency,
+                requireModule.economyRepository.findPlayerCurrency(
+                    playerCurrency.playerModel.uuid,
+                    playerCurrency.currencyModel.id
+                )
+            )
+            assertEquals(1, requireModule.economyRepository.playerCurrencies(playerCurrency.playerModel.uuid).size)
+            assertEquals(
+                1,
+                requireModule.economyRepository.topCurrency(
+                    id = playerCurrency.currencyModel.id,
+                    page = 0,
+                    size = 10
+                ).size
+            )
+        }
+    }
+
+    @Test
+    fun `GIVEN_currency_WHEN_transfer_to_player_THEN_transfered`() {
+        runTest(scheduler) {
+            val currencies = List(2) { index ->
+                Currency(
+                    id = "$index",
+                    name = "name$index",
+                    priority = 0
+                )
+            }
+            requireModule.economyRepository.updateCurrencies(currencies)
+            val playerCurrency = PlayerCurrency(
+                playerModel = EconomyPlayer(
+                    name = "player1",
+                    uuid = "uuid1",
+                ),
+                balance = 100.0,
+                currencyModel = currencies.first()
+            )
+            val otherPlayerModel = EconomyPlayer(
+                name = "player2",
+                uuid = "uuid2",
+            )
+            requireModule.economyRepository.updatePlayerCurrency(playerCurrency)
+            assertTrue(
+                requireModule.economyRepository.transfer(
+                    from = playerCurrency.playerModel,
+                    to = otherPlayerModel,
+                    amount = playerCurrency.balance,
+                    currencyId = playerCurrency.currencyModel.id
+                )
+            )
+            assertEquals(
+                0.0,
+                requireModule.economyRepository.findPlayerCurrency(
+                    playerCurrency.playerModel.uuid,
+                    currencies.first().id
+                )?.balance
+            )
+            assertNull(
+                requireModule.economyRepository.findPlayerCurrency(
+                    playerCurrency.playerModel.uuid,
+                    currencies.last().id
+                )
+            )
+
+            assertEquals(
+                100.0,
+                requireModule.economyRepository.findPlayerCurrency(
+                    otherPlayerModel.uuid,
+                    currencies.first().id
+                )?.balance
+            )
+            assertNull(
+                requireModule.economyRepository.findPlayerCurrency(
+                    otherPlayerModel.uuid,
+                    currencies.last().id
+                )
+            )
+        }
     }
 }

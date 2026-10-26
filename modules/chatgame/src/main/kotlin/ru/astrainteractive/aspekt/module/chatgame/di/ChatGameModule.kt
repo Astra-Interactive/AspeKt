@@ -21,7 +21,7 @@ class ChatGameModule(
 ) {
     private val chatGameConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = getConfigurationFile(coreModule.dataFolder),
+            file = resolveConfigurationFile(coreModule.dataFolder),
             factory = ::ChatGameConfig
         )
         .asStateFlowKrate()
@@ -70,6 +70,6 @@ class ChatGameModule(
     )
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("chat_game.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("chat_game.yml")
     }
 }

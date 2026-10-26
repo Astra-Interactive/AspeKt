@@ -31,10 +31,24 @@ internal class OreGenerationBlockPopulator(
         y: Int,
         z: Int
     ) {
-        val material = region.getType(x, y, z)
+        val material = region.getType(
+            x,
+            y,
+            z
+        )
         if (!ores.containsKey(material.name)) return
-        if (!shouldRemove(material.name, ores, random.nextDouble())) return
-        region.setType(x, y, z, material.toOreHostMaterial())
+        val shouldRemove = shouldRemove(
+            material.name,
+            ores,
+            random.nextDouble()
+        )
+        if (!shouldRemove) return
+        region.setType(
+            x,
+            y,
+            z,
+            material.toOreHostMaterial()
+        )
     }
 
     override fun populate(
@@ -54,7 +68,14 @@ internal class OreGenerationBlockPopulator(
         for (x in minX until minX + CHUNK_SIZE) {
             for (z in minZ until minZ + CHUNK_SIZE) {
                 for (y in worldInfo.minHeight until worldInfo.maxHeight) {
-                    removeOreIfNeeded(limitedRegion, ores, random, x, y, z)
+                    removeOreIfNeeded(
+                        limitedRegion,
+                        ores,
+                        random,
+                        x,
+                        y,
+                        z
+                    )
                 }
             }
         }

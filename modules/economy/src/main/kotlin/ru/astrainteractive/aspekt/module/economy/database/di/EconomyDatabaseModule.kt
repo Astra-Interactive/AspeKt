@@ -42,7 +42,7 @@ internal class EconomyDatabaseModule(
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     val databaseFlow: Flow<Database> = dbConfig.cachedStateFlow
-        .flatMapLatest { configuration -> configuration.connectAsFlow() }
+        .flatMapLatest(::connectDatabase)
         .onEach { database ->
             TransactionManager.manager.defaultIsolationLevel = java.sql.Connection.TRANSACTION_SERIALIZABLE
             transaction(database) {
@@ -54,7 +54,11 @@ internal class EconomyDatabaseModule(
             }
         }
         .flowOn(dispatchers.IO)
-        .shareIn(moduleIoScope, SharingStarted.Lazily, replay = 1)
+        .shareIn(
+            scope = moduleIoScope,
+            started = SharingStarted.Lazily,
+            replay = 1
+        )
 
     val economyRepository: EconomyRepository = ExposedEconomyRepository(databaseFlow)
 
@@ -64,6 +68,7 @@ internal class EconomyDatabaseModule(
         ioDispatcher = dispatchers.IO
     )
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onReload = { currencyCache.reset() },
         onDisable = {
@@ -71,4 +76,8 @@ internal class EconomyDatabaseModule(
             moduleIoScope.cancel()
         }
     )
+
+    private fun connectDatabase(configuration: DatabaseConfiguration): Flow<Database> {
+        return configuration.connectAsFlow()
+    }
 }

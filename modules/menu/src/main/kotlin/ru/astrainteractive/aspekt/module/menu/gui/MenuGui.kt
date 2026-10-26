@@ -96,7 +96,7 @@ internal class MenuGui(
         return isMeetConditions(menuItem.visibilityConditions)
     }
 
-    private fun processReward(menuItem: MenuConfiguration.MenuItem) {
+    private fun grantReward(menuItem: MenuConfiguration.MenuItem) {
         when (val reward = menuItem.reward) {
             is MenuConfiguration.Reward.ConsoleCommands -> {
                 val consoleSender = Bukkit.getConsoleSender()
@@ -162,7 +162,7 @@ internal class MenuGui(
                                 return@launch
                             }
 
-                            processReward(menuItem)
+                            grantReward(menuItem)
                         }
                     }.build()
             )

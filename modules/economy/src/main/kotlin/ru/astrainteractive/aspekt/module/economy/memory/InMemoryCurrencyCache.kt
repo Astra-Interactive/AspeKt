@@ -20,11 +20,11 @@ internal class InMemoryCurrencyCache(
         .expireAfterWrite(1.minutes)
         .build()
 
-    override fun getAllCurrencies(): List<Currency> {
+    override fun loadAllCurrencies(): List<Currency> {
         val cacheValue = allCurrenciesCache.get(Unit)
         if (cacheValue == null) {
             scope.launch(ioDispatcher) {
-                allCurrenciesCache.put(Unit, economyRepository.getAllCurrencies())
+                allCurrenciesCache.put(Unit, economyRepository.loadAllCurrencies())
             }
         }
         return cacheValue.orEmpty()

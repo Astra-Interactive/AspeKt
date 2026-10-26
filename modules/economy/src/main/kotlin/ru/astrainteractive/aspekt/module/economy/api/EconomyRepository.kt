@@ -8,7 +8,7 @@ internal interface EconomyRepository {
     /**
      * Fetch all available currencies from database
      */
-    suspend fun getAllCurrencies(): List<Currency>
+    suspend fun loadAllCurrencies(): List<Currency>
 
     /**
      * Insert or update currencies in database

@@ -51,7 +51,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = MenuModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = MenuModule.getConfigurationFile(coreModule.dataFolder)
+            file = MenuModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = { MenuModule(coreModule, bukkitCoreModule) },
         lifecycleSelector = MenuModule::lifecycle
@@ -60,7 +60,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = AutoBroadcastModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = AutoBroadcastModule.getConfigurationFile(coreModule.dataFolder)
+            file = AutoBroadcastModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = { AutoBroadcastModule(coreModule) },
         lifecycleSelector = AutoBroadcastModule::lifecycle
@@ -69,7 +69,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = SitModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = SitModule.getConfigurationFile(coreModule.dataFolder)
+            file = SitModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = { SitModule(coreModule, bukkitCoreModule) },
         lifecycleSelector = SitModule::lifecycle
@@ -78,7 +78,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = BukkitClaimModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = ClaimModule.getConfigurationFile(coreModule.dataFolder)
+            file = ClaimModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = {
             BukkitClaimModule(
@@ -98,7 +98,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = MoneyDropModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = MoneyDropModule.getConfigurationFile(coreModule.dataFolder)
+            file = MoneyDropModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = { MoneyDropModule(coreModule, bukkitCoreModule) },
         lifecycleSelector = MoneyDropModule::lifecycle
@@ -107,7 +107,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = PlaytimeRewardModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = PlaytimeRewardModule.getConfigurationFile(coreModule.dataFolder)
+            file = PlaytimeRewardModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = { PlaytimeRewardModule(coreModule, bukkitCoreModule) },
         lifecycleSelector = PlaytimeRewardModule::lifecycle
@@ -116,7 +116,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = AutoCropModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = AutoCropModule.getConfigurationFile(coreModule.dataFolder)
+            file = AutoCropModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = { AutoCropModule(coreModule, bukkitCoreModule) },
         lifecycleSelector = AutoCropModule::lifecycle
@@ -125,7 +125,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = NewBeeModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = NewBeeModule.getConfigurationFile(coreModule.dataFolder)
+            file = NewBeeModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = { NewBeeModule(coreModule, bukkitCoreModule) },
         lifecycleSelector = NewBeeModule::lifecycle
@@ -134,7 +134,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = AntiSwearModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = AntiSwearModule.getConfigurationFile(coreModule.dataFolder)
+            file = AntiSwearModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = { AntiSwearModule(coreModule, bukkitCoreModule) },
         lifecycleSelector = AntiSwearModule::lifecycle
@@ -143,7 +143,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = MoneyAdvancementModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = MoneyAdvancementModule.getConfigurationFile(coreModule.dataFolder)
+            file = MoneyAdvancementModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = { MoneyAdvancementModule(coreModule, bukkitCoreModule) },
         lifecycleSelector = MoneyAdvancementModule::lifecycle
@@ -152,7 +152,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = ChatGameModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = ChatGameModule.getConfigurationFile(coreModule.dataFolder)
+            file = ChatGameModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = { ChatGameModule(coreModule, bukkitCoreModule) },
         lifecycleSelector = ChatGameModule::lifecycle
@@ -161,7 +161,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = RestrictionModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = RestrictionModule.getConfigurationFile(coreModule.dataFolder)
+            file = RestrictionModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = { RestrictionModule(coreModule, bukkitCoreModule) },
         lifecycleSelector = RestrictionModule::lifecycle
@@ -170,7 +170,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = OreGenerationModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = OreGenerationModule.getConfigurationFile(coreModule.dataFolder)
+            file = OreGenerationModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = { OreGenerationModule(coreModule, bukkitCoreModule) },
         lifecycleSelector = OreGenerationModule::lifecycle
@@ -179,7 +179,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = TreeCapitatorModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = TreeCapitatorModule.getConfigurationFile(coreModule.dataFolder)
+            file = TreeCapitatorModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = { TreeCapitatorModule(coreModule, bukkitCoreModule) },
         lifecycleSelector = TreeCapitatorModule::lifecycle
@@ -188,7 +188,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = InventorySortModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = InventorySortModule.getConfigurationFile(coreModule.dataFolder)
+            file = InventorySortModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = { InventorySortModule(bukkitCoreModule) },
         lifecycleSelector = InventorySortModule::lifecycle
@@ -197,7 +197,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = JailModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = JailModule.getConfigurationFile(coreModule.dataFolder)
+            file = JailModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = { JailModule(coreModule, bukkitCoreModule) },
         lifecycleSelector = JailModule::lifecycle
@@ -206,7 +206,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = InvisibleItemFrameModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = InvisibleItemFrameModule.getConfigurationFile(coreModule.dataFolder)
+            file = InvisibleItemFrameModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = { InvisibleItemFrameModule(bukkitCoreModule) },
         lifecycleSelector = InvisibleItemFrameModule::lifecycle
@@ -215,7 +215,7 @@ class RootModule(plugin: LifecyclePlugin) {
         featureClass = SetHomeModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = SetHomeModule.getConfigurationFile(coreModule.dataFolder)
+            file = SetHomeModule.resolveConfigurationFile(coreModule.dataFolder)
         ),
         featureFactory = {
             SetHomeModule(

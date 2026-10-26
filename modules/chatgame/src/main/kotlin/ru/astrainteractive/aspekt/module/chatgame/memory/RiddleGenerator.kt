@@ -4,6 +4,9 @@ import ru.astrainteractive.aspekt.module.chatgame.model.ChatGame
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameData
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.util.solveExample
+import ru.astrainteractive.aspekt.plugin.util.solveQuadratic
+import ru.astrainteractive.aspekt.plugin.util.solveRiddle
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import kotlin.math.pow
@@ -94,11 +97,13 @@ internal class RiddleGenerator(
 
                 val d = b * b - 4 * a * c
                 val sqrtD = sqrt(d.toDouble())
-                val root1 = (-b + sqrtD).div(2 * a).roundDec(2)
-                val root2 = (-b - sqrtD).div(2 * a).roundDec(2)
+                val root1Numerator = -b.plus(sqrtD)
+                val root2Numerator = -b.minus(sqrtD)
+                val root1 = root1Numerator.div(2 * a).roundDec(2)
+                val root2 = root2Numerator.div(2 * a).roundDec(2)
                 ChatGameData(
                     question = translation.chatGame.solveQuadratic(equation),
-                    answers = listOf(root1.toString(), root2.toString()).also { answers -> println(answers) },
+                    answers = listOf(root1.toString(), root2.toString()).also(::println),
                     reward = instance.reward ?: config.defaultReward
                 )
             }

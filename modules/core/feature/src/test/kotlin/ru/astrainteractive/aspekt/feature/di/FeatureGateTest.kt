@@ -15,12 +15,14 @@ class FeatureGateTest {
         flagReader: FakeFeatureFlagReader,
         events: MutableList<String> = mutableListOf(),
         featureFactory: () -> FakeFeature = { FakeFeature("feature", events) }
-    ): FeatureGate<FakeFeature> = FeatureGate(
-        featureClass = FakeFeature::class,
-        flagReader = flagReader,
-        featureFactory = featureFactory,
-        lifecycleSelector = FakeFeature::lifecycle
-    )
+    ): FeatureGate<FakeFeature> {
+        return FeatureGate(
+            featureClass = FakeFeature::class,
+            flagReader = flagReader,
+            featureFactory = featureFactory,
+            lifecycleSelector = FakeFeature::lifecycle
+        )
+    }
 
     private fun requireEnabledFeature(gate: FeatureGate<FakeFeature>): FakeFeature {
         val state = gate.currentState

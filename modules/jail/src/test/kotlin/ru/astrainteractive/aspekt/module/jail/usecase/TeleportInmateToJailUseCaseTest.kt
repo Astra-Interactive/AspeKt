@@ -23,12 +23,16 @@ import kotlin.test.assertTrue
 class TeleportInmateToJailUseCaseTest {
     private val player = FakeOnlineKPlayer(uuid = JailTestData.inmateUuid, name = "Prisoner")
 
-    private fun useCase(repository: FakeJailRepository, onlinePlayers: List<FakeOnlineKPlayer>) =
-        TeleportInmateToJailUseCase(
+    private fun useCase(
+        repository: FakeJailRepository,
+        onlinePlayers: List<FakeOnlineKPlayer>
+    ): TeleportInmateToJailUseCase {
+        return TeleportInmateToJailUseCase(
             jailRepository = repository,
             platformServer = FakePlatformServer(onlinePlayers),
             dispatchers = DefaultKotlinDispatchers
         )
+    }
 
     @BeforeTest
     fun setUp() {
@@ -41,29 +45,51 @@ class TeleportInmateToJailUseCaseTest {
     }
 
     @Test
-    fun GIVEN_online_inmate_WHEN_teleported_to_jail_THEN_player_is_in_the_jail() = runTest {
-        val repository = FakeJailRepository(jails = listOf(JailTestData.jail), inmates = listOf(JailTestData.inmate))
+    fun GIVEN_online_inmate_WHEN_teleported_to_jail_THEN_player_is_in_the_jail() {
+        runTest {
+            val repository = FakeJailRepository(
+                jails = listOf(JailTestData.jail),
+                inmates = listOf(JailTestData.inmate)
+            )
 
-        useCase(repository, onlinePlayers = listOf(player)).invoke(JailTestData.inmate)
+            useCase(repository, onlinePlayers = listOf(player)).invoke(JailTestData.inmate)
 
-        assertEquals(listOf(KLocation(x = 1.0, y = 2.0, z = 3.0, worldName = "world")), player.teleports)
+            assertEquals(
+                listOf(
+                    KLocation(
+                        x = 1.0,
+                        y = 2.0,
+                        z = 3.0,
+                        worldName = "world"
+                    )
+                ),
+                player.teleports
+            )
+        }
     }
 
     @Test
-    fun GIVEN_missing_jail_WHEN_teleported_to_jail_THEN_player_stays() = runTest {
-        val repository = FakeJailRepository(jails = emptyList(), inmates = listOf(JailTestData.inmate))
+    fun GIVEN_missing_jail_WHEN_teleported_to_jail_THEN_player_stays() {
+        runTest {
+            val repository = FakeJailRepository(jails = emptyList(), inmates = listOf(JailTestData.inmate))
 
-        useCase(repository, onlinePlayers = listOf(player)).invoke(JailTestData.inmate)
+            useCase(repository, onlinePlayers = listOf(player)).invoke(JailTestData.inmate)
 
-        assertTrue(player.teleports.isEmpty())
+            assertTrue(player.teleports.isEmpty())
+        }
     }
 
     @Test
-    fun GIVEN_offline_inmate_WHEN_teleported_to_jail_THEN_nothing_happens() = runTest {
-        val repository = FakeJailRepository(jails = listOf(JailTestData.jail), inmates = listOf(JailTestData.inmate))
+    fun GIVEN_offline_inmate_WHEN_teleported_to_jail_THEN_nothing_happens() {
+        runTest {
+            val repository = FakeJailRepository(
+                jails = listOf(JailTestData.jail),
+                inmates = listOf(JailTestData.inmate)
+            )
 
-        useCase(repository, onlinePlayers = emptyList()).invoke(JailTestData.inmate)
+            useCase(repository, onlinePlayers = emptyList()).invoke(JailTestData.inmate)
 
-        assertTrue(player.teleports.isEmpty())
+            assertTrue(player.teleports.isEmpty())
+        }
     }
 }

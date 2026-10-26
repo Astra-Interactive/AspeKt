@@ -29,11 +29,36 @@ internal class OnlineSimulator(private val scope: CoroutineScope) {
     }
 
     private val ranges = listOf(
-        OnlineRange.Default(startHour = 23, endHour = 2, min = 2, max = 4), // 23:00 - 02:59
-        OnlineRange.Default(startHour = 3, endHour = 7, min = 2, max = 6), // 03:00 - 07:59
-        OnlineRange.Default(startHour = 8, endHour = 12, min = 4, max = 12), // 08:00 - 12:59
-        OnlineRange.Default(startHour = 13, endHour = 18, min = 6, max = 15), // 13:00 - 18:59
-        OnlineRange.Default(startHour = 19, endHour = 22, min = 4, max = 15) // 19:00 - 22:59
+        OnlineRange.Default(
+            startHour = 23,
+            endHour = 2,
+            min = 2,
+            max = 4
+        ),
+        OnlineRange.Default(
+            startHour = 3,
+            endHour = 7,
+            min = 2,
+            max = 6
+        ),
+        OnlineRange.Default(
+            startHour = 8,
+            endHour = 12,
+            min = 4,
+            max = 12
+        ),
+        OnlineRange.Default(
+            startHour = 13,
+            endHour = 18,
+            min = 6,
+            max = 15
+        ),
+        OnlineRange.Default(
+            startHour = 19,
+            endHour = 22,
+            min = 4,
+            max = 15
+        )
     )
 
     @Suppress("MagicNumber")
@@ -41,9 +66,13 @@ internal class OnlineSimulator(private val scope: CoroutineScope) {
 
     val currentOnlineFlow = TickFlow(30.seconds)
         .map { generateOnline() }
-        .stateIn(scope, SharingStarted.Eagerly, 1)
+        .stateIn(
+            scope,
+            SharingStarted.Eagerly,
+            1
+        )
 
-    private fun OnlineRange.getRandomOnline(): Int {
+    private fun OnlineRange.computeRandomOnline(): Int {
         if (max == min) return max
         return Random.nextInt(min, max)
     }
@@ -53,6 +82,6 @@ internal class OnlineSimulator(private val scope: CoroutineScope) {
         val currentRange = ranges
             .firstOrNull { range -> currentHour in range.startHour..range.endHour }
             ?: fallbackRange
-        return currentRange.getRandomOnline()
+        return currentRange.computeRandomOnline()
     }
 }

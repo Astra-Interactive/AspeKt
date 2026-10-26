@@ -13,7 +13,7 @@ private val MAX_DURATION_FOR_NEW_BEE = 50.minutes
 internal val Player.playDuration: Duration
     get() {
         val ticksPlayed = getStatistic(Statistic.PLAY_ONE_MINUTE)
-        return (ticksPlayed / TICKS_IN_SECOND).seconds
+        return ticksPlayed.div(TICKS_IN_SECOND).seconds
     }
 
 internal val Player.newBeeShieldDurationLeft: Duration

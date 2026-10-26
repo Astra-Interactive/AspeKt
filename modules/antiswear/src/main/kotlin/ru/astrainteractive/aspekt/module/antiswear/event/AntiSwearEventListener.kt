@@ -21,7 +21,7 @@ internal class AntiSwearEventListener(
     @EventHandler
     fun onJoin(e: PlayerJoinEvent) {
         scope.launch {
-            swearRepository.rememberPlayer(e.player.asOnlineMinecraftPlayer())
+            swearRepository.loadPlayer(e.player.asOnlineMinecraftPlayer())
         }
     }
 
@@ -32,10 +32,12 @@ internal class AntiSwearEventListener(
         }
     }
 
-    private fun preHeatPlayers() = scope.launch {
-        Bukkit.getOnlinePlayers().map { player ->
-            async { swearRepository.rememberPlayer(player.asOnlineMinecraftPlayer()) }
-        }.awaitAll()
+    private fun preHeatPlayers() {
+        scope.launch {
+            Bukkit.getOnlinePlayers().map { player ->
+                async { swearRepository.loadPlayer(player.asOnlineMinecraftPlayer()) }
+            }.awaitAll()
+        }
     }
 
     override fun onEnable(plugin: Plugin) {

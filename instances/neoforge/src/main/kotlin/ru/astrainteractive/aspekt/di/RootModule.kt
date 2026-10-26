@@ -5,8 +5,8 @@ import com.charleskorn.kaml.Yaml
 import net.neoforged.fml.loading.FMLPaths
 import ru.astrainteractive.aspekt.command.di.CommandsModule
 import ru.astrainteractive.aspekt.feature.di.FeatureGate
-import ru.astrainteractive.aspekt.feature.di.mapEnabled
 import ru.astrainteractive.aspekt.feature.file.FileFeatureFlagReader
+import ru.astrainteractive.aspekt.feature.util.deriveEnabled
 import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.di.ForgeAuthModule
 import ru.astrainteractive.aspekt.module.auth.exposed.di.AuthExposedModule
@@ -63,7 +63,7 @@ class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltL
     )
     private val authApiFlagReader = FileFeatureFlagReader(
         yamlFormat = authStringFormat,
-        file = AuthApiModule.getConfigurationFile(authDataFolder)
+        file = AuthApiModule.resolveConfigurationFile(authDataFolder)
     )
 
     private val authExposedModuleGate = FeatureGate(
@@ -78,7 +78,7 @@ class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltL
         lifecycleSelector = AuthExposedModule::lifecycle
     )
 
-    private val authApiModuleGate = authExposedModuleGate.mapEnabled(
+    private val authApiModuleGate = authExposedModuleGate.deriveEnabled(
         featureClass = AuthApiModule::class,
         flagReader = authApiFlagReader,
         lifecycleSelector = AuthApiModule::lifecycle,
@@ -92,11 +92,11 @@ class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltL
         }
     )
 
-    private val forgeAuthModuleGate = authApiModuleGate.mapEnabled(
+    private val forgeAuthModuleGate = authApiModuleGate.deriveEnabled(
         featureClass = ForgeAuthModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = authStringFormat,
-            file = ForgeAuthModule.getConfigurationFile(authDataFolder)
+            file = ForgeAuthModule.resolveConfigurationFile(authDataFolder)
         ),
         lifecycleSelector = ForgeAuthModule::lifecycle,
         transform = { authApiModule ->
@@ -112,7 +112,7 @@ class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltL
         featureClass = NeoForgeClaimModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = ClaimModule.getConfigurationFile(dataFolder)
+            file = ClaimModule.resolveConfigurationFile(dataFolder)
         ),
         featureFactory = {
             NeoForgeClaimModule(
@@ -133,7 +133,7 @@ class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltL
         featureClass = SetHomeModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = SetHomeModule.getConfigurationFile(dataFolder)
+            file = SetHomeModule.resolveConfigurationFile(dataFolder)
         ),
         featureFactory = {
             SetHomeModule(
@@ -150,7 +150,7 @@ class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltL
         featureClass = TpaModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = TpaModule.getConfigurationFile(dataFolder)
+            file = TpaModule.resolveConfigurationFile(dataFolder)
         ),
         featureFactory = {
             TpaModule(
@@ -165,7 +165,7 @@ class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltL
         featureClass = RtpModule::class,
         flagReader = FileFeatureFlagReader(
             yamlFormat = coreModule.yamlFormat,
-            file = RtpModule.getConfigurationFile(dataFolder)
+            file = RtpModule.resolveConfigurationFile(dataFolder)
         ),
         featureFactory = {
             RtpModule(

@@ -21,6 +21,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.level.BlockEvent
 import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
+import ru.astrainteractive.aspekt.module.auth.model.AuthState
 import ru.astrainteractive.aspekt.module.auth.model.AuthTranslation
 import ru.astrainteractive.aspekt.module.auth.model.PlayerLogin
 import ru.astrainteractive.astralibs.event.flowEvent
@@ -57,25 +58,24 @@ internal class ForgeAuthEvent(
 
     @Suppress("MagicNumber")
     val playerMoveEvent = playerMoveFlowEvent()
-        .filter { event -> authorizedApi.getAuthState(event.player.uuid) !is AuthorizedApi.AuthState.Authorized }
+        .filter { event -> authorizedApi.resolveAuthState(event.player.uuid) !is AuthState.Authorized }
         .onEach { event ->
-            if (event.newKLocation.dist(event.oldKLocation) > 0.001) {
-                processPlayerEvent(event.player)
-                event.player.teleportTo(
-                    event.oldKLocation.x,
-                    event.oldKLocation.y,
-                    event.oldKLocation.z
-                )
-            }
+            if (event.newKLocation.dist(event.oldKLocation) <= 0.001) return@onEach
+            notifyPlayer(event.player)
+            event.player.teleportTo(
+                event.oldKLocation.x,
+                event.oldKLocation.y,
+                event.oldKLocation.z
+            )
         }.launchIn(mainScope)
 
     val breakEvent = flowEvent<BlockEvent.BreakEvent>(EventPriority.HIGHEST)
         .filter { event -> event.player.isAlive }
-        .filter { event -> authorizedApi.getAuthState(event.player.uuid) !is AuthorizedApi.AuthState.Authorized }
+        .filter { event -> authorizedApi.resolveAuthState(event.player.uuid) !is AuthState.Authorized }
         .onEach { event ->
             println(event)
             event.isCanceled = true
-            processPlayerEvent(event.player)
+            notifyPlayer(event.player)
         }.launchIn(mainScope)
 
     val playerEvent = flowEvent<PlayerInteractEvent>(EventPriority.HIGHEST)
@@ -86,40 +86,44 @@ internal class ForgeAuthEvent(
         .filter { event -> event.isPlayerInvolved()?.isAlive == true }
         .filter { event ->
             val player = event.isPlayerInvolved() ?: return@filter false
-            authorizedApi.getAuthState(player.uuid) !is AuthorizedApi.AuthState.Authorized
+            authorizedApi.resolveAuthState(player.uuid) !is AuthState.Authorized
         }
         .onEach { event ->
             event.tryCast<ICancellableEvent>()?.isCanceled = true
             event.tryCast<ItemEntityPickupEvent.Pre>()?.setCanPickup(TriState.FALSE)
-            event.isPlayerInvolved()?.let(::processPlayerEvent)
+            event.isPlayerInvolved()?.let(::notifyPlayer)
         }
         .launchIn(mainScope)
 
-    private fun processPlayerEvent(player: Player) = mainScope.launch {
-        // Only a server-side player has a client to send the message to
-        val serverPlayer = player as? ServerPlayer ?: return@launch
-        when (authorizedApi.getAuthState(player.uuid)) {
-            AuthorizedApi.AuthState.Authorized -> Unit
+    private fun notifyPlayer(player: Player) {
+        mainScope.launch {
+            // Only a server-side player has a client to send the message to
+            val serverPlayer = player as? ServerPlayer ?: return@launch
+            when (authorizedApi.resolveAuthState(player.uuid)) {
+                AuthState.Authorized -> Unit
 
-            AuthorizedApi.AuthState.Pending,
-            AuthorizedApi.AuthState.NotAuthorized -> {
-                serverPlayer
-                    .asKAudience()
-                    .sendMessage(translation.notAuthorized)
-            }
+                AuthState.Pending,
+                AuthState.NotAuthorized -> {
+                    serverPlayer
+                        .asKAudience()
+                        .sendMessage(translation.notAuthorized)
+                }
 
-            AuthorizedApi.AuthState.NotRegistered -> {
-                serverPlayer
-                    .asKAudience()
-                    .sendMessage(translation.notRegistered)
+                AuthState.NotRegistered -> {
+                    serverPlayer
+                        .asKAudience()
+                        .sendMessage(translation.notRegistered)
+                }
             }
         }
     }
 
-    private fun Event.isPlayerInvolved(): Player? = when (this) {
-        is ItemTossEvent -> player
-        is ItemEntityPickupEvent -> player
-        is EntityEvent -> entity as? Player
-        else -> null
+    private fun Event.isPlayerInvolved(): Player? {
+        return when (this) {
+            is ItemTossEvent -> player
+            is ItemEntityPickupEvent -> player
+            is EntityEvent -> entity as? Player
+            else -> null
+        }
     }
 }

@@ -6,17 +6,17 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import java.time.Instant
+import kotlin.time.Instant
 
 internal object InstantSerializer : KSerializer<Instant> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("JInstant", PrimitiveKind.LONG)
 
     override fun serialize(encoder: Encoder, value: Instant) {
-        encoder.encodeLong(value.toEpochMilli())
+        encoder.encodeLong(value.toEpochMilliseconds())
     }
 
     override fun deserialize(decoder: Decoder): Instant {
         val long = decoder.decodeLong()
-        return Instant.ofEpochMilli(long)
+        return Instant.fromEpochMilliseconds(long)
     }
 }

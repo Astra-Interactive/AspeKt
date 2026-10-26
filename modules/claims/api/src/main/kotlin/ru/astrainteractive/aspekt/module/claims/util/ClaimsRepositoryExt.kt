@@ -17,15 +17,17 @@ suspend fun ClaimsRepository.isPlayerOwnClaim(uuid: UUID, key: UniqueWorldKey): 
     return claimOwnerUuid(key) == uuid
 }
 
-suspend fun ClaimsRepository.getAllChunks(uuid: UUID): List<ClaimChunk> {
+suspend fun ClaimsRepository.loadAllChunks(uuid: UUID): List<ClaimChunk> {
     return requireKrate(uuid).getValue().chunks.map { entry -> entry.value }
 }
 
-suspend fun ClaimsRepository.getChunk(
+suspend fun ClaimsRepository.findChunk(
     uuid: UUID,
     key: UniqueWorldKey
-): ClaimChunk? = getAllChunks(uuid).firstOrNull { claimChunk ->
-    claimChunk.uniqueWorldKey == key
+): ClaimChunk? {
+    return loadAllChunks(uuid).firstOrNull { claimChunk ->
+        claimChunk.uniqueWorldKey == key
+    }
 }
 
 suspend fun ClaimsRepository.setFlag(
@@ -34,10 +36,9 @@ suspend fun ClaimsRepository.setFlag(
     value: Boolean,
     key: UniqueWorldKey
 ): Result<Unit> {
-    claimOwnerUuid(key)?.let { ownerUuid ->
-        if (ownerUuid != uuid) return Result.failure(UnderClaimException(ownerUuid))
-    }
-    val actualChunk = getChunk(uuid, key) ?: return Result.failure(ClaimNotFoundException)
+    val ownerUuid = claimOwnerUuid(key)
+    if (ownerUuid != null && ownerUuid != uuid) return Result.failure(UnderClaimException(ownerUuid))
+    val actualChunk = findChunk(uuid, key) ?: return Result.failure(ClaimNotFoundException)
     val updatedChunk = actualChunk.copy(
         flags = actualChunk.flags.toMutableMap().apply {
             this[flag] = value
@@ -58,17 +59,17 @@ suspend fun ClaimsRepository.claim(uuid: UUID, claimChunk: ClaimChunk): Result<U
     )
 }
 
-fun ClaimsRepository.getAllChunks(): List<ClaimChunk> {
+fun ClaimsRepository.loadAllChunks(): List<ClaimChunk> {
     return allKrates
         .map { claimDataKrate -> claimDataKrate.cachedStateFlow.value }
         .flatMap { claimData -> claimData.chunks.values }
 }
 
-fun ClaimsRepository.map(size: Int, chunk: ClaimChunk): Array<Array<Boolean>> {
+fun ClaimsRepository.createGrid(size: Int, chunk: ClaimChunk): Array<Array<Boolean>> {
     val m = Array(size) {
         Array(size) { false }
     }
-    val chunks = getAllChunks()
+    val chunks = loadAllChunks()
     for (i in 0 until size) {
         for (j in 0 until size) {
             m[i][j] = chunks.any { claimChunk ->
@@ -86,7 +87,7 @@ fun ClaimsRepository.isAble(
     chunkFlag: ChunkFlag,
     claimPlayer: ClaimPlayer? = null
 ): Boolean {
-    val chunkValue = getAllChunks()
+    val chunkValue = loadAllChunks()
         .firstOrNull { claimChunk -> claimChunk.uniqueWorldKey == key }
         ?.flags
         ?.get(chunkFlag)

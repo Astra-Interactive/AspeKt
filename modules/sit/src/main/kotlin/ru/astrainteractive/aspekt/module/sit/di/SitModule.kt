@@ -17,7 +17,7 @@ class SitModule(
 ) {
     private val sitConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = getConfigurationFile(coreModule.dataFolder),
+            file = resolveConfigurationFile(coreModule.dataFolder),
             factory = ::SitConfiguration
         )
         .asCachedMutableKrate()
@@ -54,6 +54,6 @@ class SitModule(
     )
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("sit.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("sit.yml")
     }
 }

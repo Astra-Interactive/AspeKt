@@ -30,7 +30,7 @@ class MinecraftSafeLocationProvider(
         destinationPreparer = DestinationPreparer(chunkLoader)
     )
 
-    override suspend fun getLocation(ioScope: CoroutineScope, uuid: UUID): RtpSearchResult {
+    override suspend fun findLocation(ioScope: CoroutineScope, uuid: UUID): RtpSearchResult {
         val player = MinecraftUtil.getOnlinePlayer(uuid) ?: return RtpSearchResult.NotFound
         val level = player.level().tryCast<ServerLevel>()
         if (level == null) {
@@ -45,11 +45,11 @@ class MinecraftSafeLocationProvider(
         }
     }
 
-    override fun getJobsNumber(): Int = jobRegistry.count()
+    override fun countJobs(): Int = jobRegistry.count()
 
     override fun isActive(uuid: UUID): Boolean = jobRegistry.isActive(uuid)
 
     override fun hasTimeout(uuid: UUID): Boolean = cooldownRegistry.hasTimeout(uuid)
 
-    override fun getNextTickTime(): Double = MinecraftUtil.getNextTickTime()
+    override fun resolveNextTickTime(): Double = MinecraftUtil.getNextTickTime()
 }

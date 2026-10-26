@@ -9,6 +9,8 @@ class InvisibleItemFrameModule(
     bukkitCoreModule: BukkitCoreModule
 ) {
     private val invisibleFramesEvent: InvisibleFramesEvent = InvisibleFramesEvent()
+
+    @Suppress("TrivialLambdaReference")
     val lifecycle = Lifecycle.Lambda(
         onEnable = {
             invisibleFramesEvent.onEnable(bukkitCoreModule.plugin)
@@ -19,6 +21,6 @@ class InvisibleItemFrameModule(
     )
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("invisible_frames.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("invisible_frames.yml")
     }
 }

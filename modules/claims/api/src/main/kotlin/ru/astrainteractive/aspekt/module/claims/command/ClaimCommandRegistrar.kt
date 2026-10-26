@@ -15,6 +15,7 @@ import ru.astrainteractive.aspekt.plugin.model.PluginPermission
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.brigadier.sender.KPlayerKCommandSender
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
+import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 /**
@@ -45,7 +46,7 @@ internal class ClaimCommandRegistrar(
                         hints { ChunkFlag.entries.map(ChunkFlag::name) }
                         argument("bool", BoolArgumentType.bool()) { boolArg ->
                             hints { listOf("true", "false") }
-                            runs(commandExceptionHandler::handle) { ctx ->
+                            runs(commandExceptionHandler::onException) { ctx ->
                                 ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                                 val flag = ctx.requireArgument(chunkFlagArg, ChunkFlagArgumentConverter)
                                 val value = ctx.requireArgument(boolArg)
@@ -53,7 +54,7 @@ internal class ClaimCommandRegistrar(
                                 claimCommandExecutor.execute(
                                     ClaimCommand.SetFlag(
                                         claimPlayer = player.toClaimPlayer(),
-                                        chunk = chunkProvider.getChunk(player),
+                                        chunk = chunkProvider.findChunk(player),
                                         value = value,
                                         flag = flag
                                     )
@@ -64,8 +65,8 @@ internal class ClaimCommandRegistrar(
                 }
                 literal(ClaimCommandArgument.ADD_MEMBER.value) {
                     argument("player", StringArgumentType.string()) { playerArg ->
-                        hints { platformServer.getOnlinePlayers().map { player -> player.name } }
-                        runs(commandExceptionHandler::handle) { ctx ->
+                        hints { platformServer.getOnlinePlayers().map(OnlineKPlayer::name) }
+                        runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                             val ownerPlayer = ctx.requirePlayer()
                             val memberPlayerName = ctx.requireArgument(playerArg)
@@ -97,7 +98,7 @@ internal class ClaimCommandRegistrar(
                                 ?.map(ClaimPlayer::username)
                                 .orEmpty()
                         }
-                        runs(commandExceptionHandler::handle) { ctx ->
+                        runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                             val ownerPlayer = ctx.requirePlayer()
                             val memberPlayerName = ctx.requireArgument(playerArg)
@@ -116,37 +117,37 @@ internal class ClaimCommandRegistrar(
                     }
                 }
                 literal(ClaimCommandArgument.MAP.value) {
-                    runs(commandExceptionHandler::handle) { ctx ->
+                    runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                         val player = ctx.requirePlayer()
                         claimCommandExecutor.execute(
                             ClaimCommand.ShowMap(
                                 claimPlayer = player.toClaimPlayer(),
-                                chunk = chunkProvider.getChunk(player)
+                                chunk = chunkProvider.findChunk(player)
                             )
                         )
                     }
                 }
                 literal(ClaimCommandArgument.CLAIM.value) {
-                    runs(commandExceptionHandler::handle) { ctx ->
+                    runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                         val player = ctx.requirePlayer()
                         claimCommandExecutor.execute(
                             ClaimCommand.Claim(
                                 claimPlayer = player.toClaimPlayer(),
-                                chunk = chunkProvider.getChunk(player)
+                                chunk = chunkProvider.findChunk(player)
                             )
                         )
                     }
                 }
                 literal(ClaimCommandArgument.UNCLAIM.value) {
-                    runs(commandExceptionHandler::handle) { ctx ->
+                    runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                         val player = ctx.requirePlayer()
                         claimCommandExecutor.execute(
                             ClaimCommand.UnClaim(
                                 claimPlayer = player.toClaimPlayer(),
-                                chunk = chunkProvider.getChunk(player)
+                                chunk = chunkProvider.findChunk(player)
                             )
                         )
                     }

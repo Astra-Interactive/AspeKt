@@ -57,6 +57,6 @@ class AntiSwearModule(
     )
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("antiswear.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("antiswear.yml")
     }
 }

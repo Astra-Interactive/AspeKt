@@ -27,7 +27,7 @@ internal class MenuLiteralArgumentBuilder(
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("menu") {
-                runs(commandExceptionHandler::handle) { ctx ->
+                runs(commandExceptionHandler::onException) { ctx ->
                     val player = ctx.requirePlayer()
                     val menuModel = menuModels.firstOrNull()
                     if (menuModel == null) {
@@ -38,7 +38,7 @@ internal class MenuLiteralArgumentBuilder(
                 }
                 argument("menu", StringArgumentType.string()) { menuArg ->
                     hints { menuModels.map(MenuConfiguration::command) }
-                    runs(commandExceptionHandler::handle) { ctx ->
+                    runs(commandExceptionHandler::onException) { ctx ->
                         val player = ctx.requirePlayer()
                         val cmd = ctx.requireArgument(menuArg)
                         val menuModel = menuModels.firstOrNull { menu -> menu.command == cmd }

@@ -15,7 +15,7 @@ class RestrictionModule(
 ) {
     private val restrictionConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = getConfigurationFile(coreModule.dataFolder),
+            file = resolveConfigurationFile(coreModule.dataFolder),
             factory = ::RestrictionsConfiguration
         )
         .asCachedMutableKrate()
@@ -23,6 +23,8 @@ class RestrictionModule(
     private val restrictionsEvent: RestrictionsEvent by lazy {
         RestrictionsEvent(configKrate = restrictionConfigKrate)
     }
+
+    @Suppress("TrivialLambdaReference")
     val lifecycle = Lifecycle.Lambda(
         onEnable = {
             restrictionsEvent.onEnable(bukkitCoreModule.plugin)
@@ -36,6 +38,6 @@ class RestrictionModule(
     )
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("restrictions.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("restrictions.yml")
     }
 }

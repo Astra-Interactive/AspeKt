@@ -31,7 +31,7 @@ internal fun OnlineKPlayer.toClaimPlayer(): ClaimPlayer {
 }
 
 @Suppress("MagicNumber")
-internal fun ServerPlayer.getClaimChunk(): ClaimChunk {
+internal fun ServerPlayer.findClaimChunk(): ClaimChunk {
     val chunkPos = chunkPosition()
     val serverLevel = serverLevel()
     val levelData = serverLevel.levelData as ServerLevelData

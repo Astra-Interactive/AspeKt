@@ -27,7 +27,7 @@ class RtpModule(
 
     private val rtpConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = getConfigurationFile(coreModule.dataFolder),
+            file = resolveConfigurationFile(coreModule.dataFolder),
             factory = ::RtpConfig
         )
         .asCachedKrate()
@@ -47,6 +47,7 @@ class RtpModule(
         commandExceptionHandler = coreModule.commandExceptionHandler
     ).createNodes()
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {
             commandRegistrarContext.registerWhenReady(nodes, moduleUnconfinedScope)
@@ -60,6 +61,6 @@ class RtpModule(
     )
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("rtp.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("rtp.yml")
     }
 }

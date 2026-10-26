@@ -1,13 +1,14 @@
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.kotlin.plugin.serialization")
-    alias(libs.plugins.klibs.gradle.linter)
+    alias(libs.plugins.klibs.rules.gradle.linter)
     id("ru.astrainteractive.gradleplugin.java.version")
 }
 
 dependencies {
-    api(libs.klibs.kstorage)
-    api(libs.minecraft.astralibs.core)
+    implementation(kotlin("stdlib"))
+    implementation(libs.klibs.kstorage)
+    implementation(libs.minecraft.astralibs.core)
 
     compileOnly(libs.minecraft.brigadier)
     compileOnly(libs.minecraft.kyori.gson)

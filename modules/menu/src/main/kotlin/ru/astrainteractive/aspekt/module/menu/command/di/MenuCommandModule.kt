@@ -38,6 +38,7 @@ internal class MenuCommandModule(
         ).create()
     )
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {
             bukkitCoreModule.commandRegistrarContext.registerWhenReady(nodes, moduleUnconfinedScope)

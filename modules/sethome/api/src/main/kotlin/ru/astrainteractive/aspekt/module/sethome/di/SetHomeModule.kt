@@ -20,7 +20,7 @@ class SetHomeModule(
 ) {
     private val setHomeConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = getConfigurationFile(dataFolder),
+            file = resolveConfigurationFile(dataFolder),
             factory = ::SetHomeConfiguration
         )
         .asCachedKrate()
@@ -46,6 +46,7 @@ class SetHomeModule(
         unconfinedScope = coreModule.unconfinedScope
     )
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle = Lifecycle.Lambda(
         onEnable = {
             setHomeCommandModule.lifecycle.onEnable()
@@ -60,6 +61,6 @@ class SetHomeModule(
     )
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("sethome.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("sethome.yml")
     }
 }
