@@ -1,3 +1,5 @@
+@file:Suppress("RolelessClassName")
+
 package ru.astrainteractive.aspekt.economy.vault
 
 import net.milkbowl.vault.economy.Economy

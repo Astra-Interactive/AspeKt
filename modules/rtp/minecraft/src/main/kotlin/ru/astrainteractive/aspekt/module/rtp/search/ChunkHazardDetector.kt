@@ -12,9 +12,9 @@ internal class ChunkHazardDetector {
             chunk.pos.minBlockX.toDouble(),
             level.minBuildHeight.toDouble(),
             chunk.pos.minBlockZ.toDouble(),
-            (chunk.pos.maxBlockX + 1).toDouble(),
+            chunk.pos.maxBlockX.plus(1).toDouble(),
             level.maxBuildHeight.toDouble(),
-            (chunk.pos.maxBlockZ + 1).toDouble()
+            chunk.pos.maxBlockZ.plus(1).toDouble()
         )
         return level.getEntities(
             null,

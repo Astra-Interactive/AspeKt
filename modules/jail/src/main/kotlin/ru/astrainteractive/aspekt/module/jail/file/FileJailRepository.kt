@@ -8,6 +8,7 @@ import ru.astrainteractive.astralibs.util.parse
 import ru.astrainteractive.astralibs.util.parseOrDefault
 import ru.astrainteractive.astralibs.util.parseOrNull
 import ru.astrainteractive.astralibs.util.writeIntoFile
+import ru.astrainteractive.klibs.mikro.core.coroutines.propagateCancellationException
 import java.io.File
 
 internal class FileJailRepository(
@@ -18,38 +19,39 @@ internal class FileJailRepository(
         return runCatching {
             val file = folder.resolve("$jailName.yml")
             file.delete()
-        }
+            Unit
+        }.propagateCancellationException()
     }
 
     override suspend fun addJail(jail: Jail): Result<Unit> {
         return runCatching {
             val file = folder.resolve("${jail.name}.yml")
             stringFormat.writeIntoFile(jail, file)
-        }
+        }.propagateCancellationException()
     }
 
-    override suspend fun getJails(): Result<List<Jail>> {
+    override suspend fun findJails(): Result<List<Jail>> {
         return runCatching {
             folder.listFiles()
                 .orEmpty()
-                .mapNotNull { file -> stringFormat.parseOrNull(file) }
-        }
+                .mapNotNull { file -> stringFormat.parseOrNull<Jail>(file) }
+        }.propagateCancellationException()
     }
 
-    override suspend fun getJail(name: String): Result<Jail> {
+    override suspend fun findJail(name: String): Result<Jail> {
         val file = folder.resolve("$name.yml")
         return stringFormat.parse(file)
     }
 
-    override suspend fun getInmates(): Result<List<JailInmate>> {
+    override suspend fun findInmates(): Result<List<JailInmate>> {
         val file = folder.resolve("jail.inmates.yml")
         return runCatching {
             stringFormat.parseOrDefault(file = file, factory = { emptyList<JailInmate>() })
-        }
+        }.propagateCancellationException()
     }
 
-    override suspend fun getJailInmates(jailName: String): Result<List<JailInmate>> {
-        return getInmates().map { inmates -> inmates.filter { inmate -> inmate.jailName == jailName } }
+    override suspend fun findJailInmates(jailName: String): Result<List<JailInmate>> {
+        return findInmates().map { inmates -> inmates.filter { inmate -> inmate.jailName == jailName } }
     }
 
     override suspend fun addInmate(inmate: JailInmate): Result<Unit> {
@@ -57,15 +59,15 @@ internal class FileJailRepository(
             val file = folder.resolve("jail.inmates.yml")
             val inmates = stringFormat.parseOrDefault(file = file, factory = { emptyList<JailInmate>() })
             stringFormat.writeIntoFile(inmates.plus(inmate), file)
-        }
+        }.propagateCancellationException()
     }
 
-    override suspend fun getInmate(uuid: String): Result<JailInmate> {
+    override suspend fun findInmate(uuid: String): Result<JailInmate> {
         val file = folder.resolve("jail.inmates.yml")
         return runCatching {
             stringFormat.parseOrDefault(file = file, factory = { emptyList<JailInmate>() })
                 .first { inmate -> inmate.uuid == uuid }
-        }
+        }.propagateCancellationException()
     }
 
     override suspend fun free(uuid: String): Result<Unit> {
@@ -75,6 +77,6 @@ internal class FileJailRepository(
                 .parseOrDefault(file = file, factory = { emptyList<JailInmate>() })
                 .filter { inmate -> inmate.uuid != uuid }
             stringFormat.writeIntoFile(newInmatesList, file)
-        }
+        }.propagateCancellationException()
     }
 }

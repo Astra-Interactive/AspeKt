@@ -16,13 +16,20 @@ import ru.astrainteractive.aspekt.module.jail.util.sendMessage
 import ru.astrainteractive.aspekt.module.jail.util.toJailLocation
 import ru.astrainteractive.aspekt.plugin.model.PluginPermission
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.util.created
+import ru.astrainteractive.aspekt.plugin.util.deleted
+import ru.astrainteractive.aspekt.plugin.util.hasInmates
+import ru.astrainteractive.aspekt.plugin.util.inmateJailed
+import ru.astrainteractive.aspekt.plugin.util.inmateReleased
+import ru.astrainteractive.aspekt.plugin.util.jailed
+import ru.astrainteractive.aspekt.plugin.util.list
 import ru.astrainteractive.astralibs.command.api.argumenttype.OfflinePlayerArgumentConverter
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
-import java.time.Instant
+import kotlin.time.Clock
 
 /**
  * /jail list
@@ -50,10 +57,10 @@ internal class JailLiteralArgumentBuilder(
         return with(multiplatformCommand) {
             command("jail") {
                 literal("list") {
-                    runs(commandExceptionHandler::handle) { ctx ->
+                    runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requirePermission(PluginPermission.JAIL_LIST)
                         scope.launch {
-                            val jails = jailRepository.getJails().getOrNull().orEmpty().map(Jail::name)
+                            val jails = jailRepository.findJails().getOrNull().orEmpty().map(Jail::name)
                             val jailsString = jails.joinToString()
                             ctx.getSender().sendMessage(translation.jails.list(jailsString))
                         }
@@ -61,7 +68,7 @@ internal class JailLiteralArgumentBuilder(
                 }
                 literal("create") {
                     argument("jail", StringArgumentType.string()) { jailArg ->
-                        runs(commandExceptionHandler::handle) { ctx ->
+                        runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.JAIL_CREATE)
                             val player = ctx.requirePlayer()
                             val jail = Jail(
@@ -84,12 +91,12 @@ internal class JailLiteralArgumentBuilder(
                 }
                 literal("delete") {
                     argument("jail", StringArgumentType.string()) { jailArg ->
-                        hints { jailCache.getJails().map(Jail::name) }
-                        runs(commandExceptionHandler::handle) { ctx ->
+                        hints { jailCache.findJails().map(Jail::name) }
+                        runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.JAIL_DELETE)
                             scope.launch {
                                 val jailName = ctx.requireArgument(jailArg)
-                                if (jailRepository.getJailInmates(jailName).getOrNull().orEmpty().isNotEmpty()) {
+                                if (jailRepository.findJailInmates(jailName).getOrNull().orEmpty().isNotEmpty()) {
                                     ctx.getSender().sendMessage(translation.jails.hasInmates(jailName))
                                 } else {
                                     jailRepository.deleteJail(jailName)
@@ -109,11 +116,11 @@ internal class JailLiteralArgumentBuilder(
                 literal("free") {
                     argument("player", StringArgumentType.string()) { playerArg ->
                         hints { platformServer.getOnlinePlayers().map(OnlineKPlayer::name) }
-                        runs(commandExceptionHandler::handle) { ctx ->
+                        runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.JAIL_FREE)
                             scope.launch {
                                 val offlinePlayerToFree = ctx.requireArgument(playerArg, OfflinePlayerArgumentConverter)
-                                val inmate = jailRepository.getInmate(offlinePlayerToFree.uniqueId.toString())
+                                val inmate = jailRepository.findInmate(offlinePlayerToFree.uniqueId.toString())
                                     .getOrNull()
                                     ?: return@launch
 
@@ -137,12 +144,12 @@ internal class JailLiteralArgumentBuilder(
                 }
                 literal("inmate") {
                     argument("jail", StringArgumentType.string()) { jailArg ->
-                        hints { jailCache.getJails().map(Jail::name) }
+                        hints { jailCache.findJails().map(Jail::name) }
                         argument("player", StringArgumentType.string()) { playerArg ->
                             hints { platformServer.getOnlinePlayers().map(OnlineKPlayer::name) }
                             argument("time", StringArgumentType.string()) { timeArg ->
                                 hints { listOf("TIME:1s,1m,1h10m") }
-                                runs(commandExceptionHandler::handle) { ctx ->
+                                runs(commandExceptionHandler::onException) { ctx ->
                                     ctx.requirePermission(PluginPermission.JAIL_INMATE)
                                     scope.launch {
                                         val jailName = ctx.requireArgument(jailArg)
@@ -155,7 +162,7 @@ internal class JailLiteralArgumentBuilder(
                                         val inmate = JailInmate(
                                             uuid = jailOfflinePlayer.uniqueId.toString(),
                                             jailName = jailName,
-                                            start = Instant.now(),
+                                            start = Clock.System.now(),
                                             duration = jailDuration,
                                             lastUsername = jailOfflinePlayer.name.orEmpty(),
                                             lastLocation = jailOfflinePlayer.location
@@ -168,9 +175,7 @@ internal class JailLiteralArgumentBuilder(
                                             }
                                             .onSuccess {
                                                 jailOfflinePlayer.sendMessage(
-                                                    translation.jails.jailed(
-                                                        jailDuration.toString()
-                                                    )
+                                                    translation.jails.jailed(jailDuration)
                                                 )
                                                 ctx.getSender().sendMessage(
                                                     translation.jails.inmateJailed(

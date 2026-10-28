@@ -17,14 +17,16 @@ internal class RtpSearchJobRegistry {
         uuid: UUID,
         ioScope: CoroutineScope,
         search: suspend () -> RtpSearchResult,
-    ): RtpSearchResult = mutex.withLock {
-        val deferred = jobMap.getOrPut(uuid) {
-            ioScope.async { search() }
+    ): RtpSearchResult {
+        return mutex.withLock {
+            val deferred = jobMap.getOrPut(uuid) {
+                ioScope.async { search.invoke() }
+            }
+            deferred.invokeOnCompletion {
+                jobMap.remove(uuid)
+            }
+            deferred.await()
         }
-        deferred.invokeOnCompletion {
-            jobMap.remove(uuid)
-        }
-        deferred.await()
     }
 
     fun count(): Int = jobMap.size

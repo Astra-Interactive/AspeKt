@@ -36,6 +36,7 @@ class AuthApiModule(
         }
     ).asCachedKrate()
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onReload = {
             translationKrate.getValue()
@@ -46,6 +47,6 @@ class AuthApiModule(
     )
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("api.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("api.yml")
     }
 }

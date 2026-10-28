@@ -1,3 +1,5 @@
+@file:Suppress("ImplementationVisibility")
+
 package ru.astrainteractive.aspekt.module.claims.krate
 
 import kotlinx.serialization.StringFormat

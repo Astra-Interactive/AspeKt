@@ -15,7 +15,7 @@ class AutoBroadcastModule(coreModule: CoreModule) {
 
     private val announcementsConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = getConfigurationFile(coreModule.dataFolder),
+            file = resolveConfigurationFile(coreModule.dataFolder),
             factory = ::AnnouncementsConfiguration
         )
         .asStateFlowMutableKrate()
@@ -26,6 +26,7 @@ class AutoBroadcastModule(coreModule: CoreModule) {
         dispatchers = coreModule.dispatchers
     )
 
+    @Suppress("TrivialLambdaReference")
     private val autoBroadcastService = IntervalService(
         interval = announcementsConfigKrate.cachedStateFlow.map { configuration -> configuration.interval },
         scope = coreModule.ioScope,
@@ -33,6 +34,7 @@ class AutoBroadcastModule(coreModule: CoreModule) {
         task = autoBroadcastServiceTask
     )
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle by lazy {
         Lifecycle.Lambda(
             onEnable = {
@@ -52,6 +54,6 @@ class AutoBroadcastModule(coreModule: CoreModule) {
     }
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("announcements.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("announcements.yml")
     }
 }

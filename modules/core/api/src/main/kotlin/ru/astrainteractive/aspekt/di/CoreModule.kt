@@ -82,6 +82,7 @@ class CoreModule(
         prettyPrint = true
     }
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {},
         onReload = {
@@ -94,8 +95,10 @@ class CoreModule(
         }
     )
 
-    private fun createCoroutineExceptionHandler() = CoroutineExceptionHandler { _, throwable ->
-        val logger = JUtiltLogger("CoroutineExceptionHandler-AspeKt")
-        logger.error(throwable) { "Error happened inside global coroutine scope!" }
+    private fun createCoroutineExceptionHandler(): CoroutineExceptionHandler {
+        return CoroutineExceptionHandler { _, throwable ->
+            val logger = JUtiltLogger("CoroutineExceptionHandler-AspeKt")
+            logger.error(throwable) { "Error happened inside global coroutine scope!" }
+        }
     }
 }

@@ -1,3 +1,5 @@
+@file:Suppress("RolelessClassName")
+
 package ru.astrainteractive.aspekt.economy.api
 
 import ru.astrainteractive.astralibs.economy.EconomyFacade

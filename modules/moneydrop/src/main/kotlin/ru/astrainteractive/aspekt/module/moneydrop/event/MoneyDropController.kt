@@ -18,10 +18,10 @@ import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
-import java.time.Instant
 import java.util.Locale
 import kotlin.math.roundToInt
 import kotlin.random.Random
+import kotlin.time.Clock
 
 internal class MoneyDropController(
     moneyDropKrate: CachedKrate<MoneyDropConfiguration>,
@@ -32,14 +32,16 @@ internal class MoneyDropController(
     private val moneyDropConfig by moneyDropKrate
     private val translation by translationDependency
 
-    private fun Location.toMoneyDropLocation(additionalConstraint: String?) = MoneyDropLocation(
-        x = this.x.roundToInt(),
-        y = this.y.roundToInt(),
-        z = this.z.roundToInt(),
-        world = this.world.name,
-        additionalConstraint = additionalConstraint,
-        instant = Instant.now()
-    )
+    private fun Location.toMoneyDropLocation(additionalConstraint: String?): MoneyDropLocation {
+        return MoneyDropLocation(
+            x = this.x.roundToInt(),
+            y = this.y.roundToInt(),
+            z = this.z.roundToInt(),
+            world = this.world.name,
+            additionalConstraint = additionalConstraint,
+            instant = Clock.System.now()
+        )
+    }
 
     @Suppress("MagicNumber")
     private fun checkForChance(entry: MoneyDropConfiguration.MoneyDropEntry): Boolean {
@@ -47,13 +49,13 @@ internal class MoneyDropController(
         return chance > Random.nextDouble(0.0, 100.0)
     }
 
-    fun rememberLocation(location: Location, additionalConstraint: String? = null) {
+    fun recordLocation(location: Location, additionalConstraint: String? = null) {
         launch { repository.addLocation(location.toMoneyDropLocation(additionalConstraint)) }
     }
 
     private suspend fun drop(location: Location, entry: MoneyDropConfiguration.MoneyDropEntry) {
         if (repository.isLocationExists(location.toMoneyDropLocation(entry.from))) return
-        rememberLocation(location, entry.from)
+        recordLocation(location, entry.from)
 
         val amount = Random.nextDouble(entry.min, entry.max)
         val material = Material.RAW_GOLD
@@ -78,18 +80,20 @@ internal class MoneyDropController(
         return itemStack.itemMeta.getPersistentDataOrNull(MoneyDropFlag.Flag) ?: false
     }
 
-    fun getMoneyAmount(itemStack: ItemStack): Double? {
+    fun findMoneyAmount(itemStack: ItemStack): Double? {
         return itemStack.itemMeta.getPersistentDataOrNull(MoneyDropFlag.Amount)
     }
 
-    fun getMoneyCurrency(itemStack: ItemStack): String? {
+    fun findMoneyCurrency(itemStack: ItemStack): String? {
         return itemStack.itemMeta.getPersistentDataOrNull(MoneyDropFlag.CurrencyId)
     }
 
-    fun tryDrop(location: Location, from: String) = launch {
-        moneyDropConfig.moneyDrop.values
-            .filter { entry -> entry.from == from }
-            .filter(::checkForChance)
-            .forEach { entry -> drop(location, entry) }
+    fun tryDrop(location: Location, from: String) {
+        launch {
+            moneyDropConfig.moneyDrop.values
+                .filter { entry -> entry.from == from }
+                .filter(::checkForChance)
+                .forEach { entry -> drop(location, entry) }
+        }
     }
 }

@@ -1,3 +1,5 @@
+@file:Suppress("ForbiddenPackageName")
+
 package ru.astrainteractive.aspekt.module.economy.database.table
 
 import ru.astrainteractive.klibs.mikro.exposed.dao.StringIdTable

@@ -1,8 +1,5 @@
 package ru.astrainteractive.aspekt.module.economy.integration.papi.api
 
-/**
- * This expansion is used to handle ClassNotFound exception
- */
 interface PlaceholderExpansionApi {
     /**
      * Check if this placeholder identifier has already been registered

@@ -1,3 +1,5 @@
+@file:Suppress("FieldDependencyConstruction")
+
 package ru.astrainteractive.aspekt.module.claims.event
 
 import kotlinx.coroutines.CoroutineScope
@@ -23,6 +25,7 @@ import ru.astrainteractive.aspekt.module.claims.util.toClaimPlayer
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.aspekt.plugin.model.PluginPermission
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.util.actionBlocked
 import ru.astrainteractive.astralibs.coroutines.MinecraftMainDispatcher
 import ru.astrainteractive.astralibs.event.flowEvent
 import ru.astrainteractive.astralibs.server.util.asKAudience
@@ -50,8 +53,12 @@ internal class ForgeClaimEvent(
             val serverPlayer = e.player as? ServerPlayer ?: return@onEach
             val chunk = e.level.getChunk(e.pos)
 
-            handleDefault(
-                retractKey = RetractKey.Vararg(e.pos, serverPlayer, "breakEvent"),
+            tryCancelEvent(
+                retractKey = RetractKey.Vararg(
+                    e.pos,
+                    serverPlayer,
+                    "breakEvent"
+                ),
                 e = e,
                 claimChunk = chunk.toClaimChunk(e.level),
                 player = serverPlayer,
@@ -64,8 +71,12 @@ internal class ForgeClaimEvent(
             val serverPlayer = e.entity as? ServerPlayer ?: return@onEach
             val chunk = e.level.getChunk(e.pos)
 
-            handleDefault(
-                retractKey = RetractKey.Vararg(e.pos, serverPlayer, "entityPlaceEvent"),
+            tryCancelEvent(
+                retractKey = RetractKey.Vararg(
+                    e.pos,
+                    serverPlayer,
+                    "entityPlaceEvent"
+                ),
                 e = e,
                 claimChunk = chunk.toClaimChunk(e.level),
                 player = serverPlayer,
@@ -78,8 +89,12 @@ internal class ForgeClaimEvent(
             val serverPlayer = e.entity as? ServerPlayer ?: return@onEach
             val chunk = e.level.getChunk(e.pos)
 
-            handleDefault(
-                retractKey = RetractKey.Vararg(e.pos, serverPlayer, "playerInteractEvent"),
+            tryCancelEvent(
+                retractKey = RetractKey.Vararg(
+                    e.pos,
+                    serverPlayer,
+                    "playerInteractEvent"
+                ),
                 e = e,
                 claimChunk = chunk.toClaimChunk(e.level),
                 player = serverPlayer,
@@ -99,7 +114,7 @@ internal class ForgeClaimEvent(
                 .map { chunk -> chunk.toClaimChunk(e.level) }
                 .distinct()
                 .map { claimChunk ->
-                    handleDefault(
+                    tryCancelEvent(
                         retractKey = RetractKey.Vararg(
                             claimChunk.x,
                             claimChunk.z,
@@ -117,7 +132,7 @@ internal class ForgeClaimEvent(
             }
         }.launchIn(scope)
 
-    private fun <T : Event> handleDefault(
+    private fun <T : Event> tryCancelEvent(
         retractKey: RetractKey,
         e: T,
         claimChunk: ClaimChunk,

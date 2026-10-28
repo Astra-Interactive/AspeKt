@@ -48,6 +48,6 @@ class ForgeAuthModule(
     )
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("auth.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("auth.yml")
     }
 }

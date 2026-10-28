@@ -16,6 +16,7 @@ class NewBeeModule(
         dispatcher = coreModule.dispatchers
     )
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {
             newBeeEventListener.onEnable(bukkitCoreModule.plugin)
@@ -26,6 +27,6 @@ class NewBeeModule(
     )
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("newbee.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("newbee.yml")
     }
 }

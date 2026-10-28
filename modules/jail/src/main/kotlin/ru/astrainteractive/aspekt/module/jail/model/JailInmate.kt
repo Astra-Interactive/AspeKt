@@ -1,8 +1,8 @@
 package ru.astrainteractive.aspekt.module.jail.model
 
 import kotlinx.serialization.Serializable
-import java.time.Instant
 import kotlin.time.Duration
+import kotlin.time.Instant
 
 @Serializable
 internal data class JailInmate(
@@ -13,6 +13,4 @@ internal data class JailInmate(
     @Serializable(InstantSerializer::class)
     val start: Instant,
     val lastLocation: JailLocation
-) {
-    fun isSentenceOver(now: Instant): Boolean = now.epochSecond - start.epochSecond > duration.inWholeSeconds
-}
+)

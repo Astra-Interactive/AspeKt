@@ -1,3 +1,5 @@
+@file:Suppress("UtilFileName")
+
 package ru.astrainteractive.aspekt.module.claims.util
 
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer

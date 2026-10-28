@@ -1,3 +1,5 @@
+@file:Suppress("FieldDependencyConstruction")
+
 package ru.astrainteractive.aspekt.module.antiswear.krate
 
 import kotlinx.coroutines.withContext
@@ -19,20 +21,26 @@ internal class KrateSwearRepository(
 ) : SwearRepository, Logger by JUtiltLogger("AspeKt-KrateSwearRepository") {
     private val swearFilterMap = mutableMapOf<UUID, Boolean>()
 
-    private fun getAntiSwearKrate(
+    private fun createAntiSwearKrate(
         player: OnlineKPlayer
-    ): SuspendMutableKrate<AntiSwearStorage> = AntiSwearKrate(
-        kPlayer = player,
-        stringFormat = tempFileStringFormat,
-        folder = folder
-    )
-
-    override suspend fun rememberPlayer(player: OnlineKPlayer) = withContext(dispatchers.IO) {
-        swearFilterMap[player.uuid] = getAntiSwearKrate(player).getValue().isSwearFilterEnabled
+    ): SuspendMutableKrate<AntiSwearStorage> {
+        return AntiSwearKrate(
+            kPlayer = player,
+            stringFormat = tempFileStringFormat,
+            folder = folder
+        )
     }
 
-    override suspend fun forgetPlayer(player: OnlineKPlayer): Unit = withContext(dispatchers.IO) {
-        swearFilterMap.remove(player.uuid)
+    override suspend fun loadPlayer(player: OnlineKPlayer) {
+        return withContext(dispatchers.IO) {
+            swearFilterMap[player.uuid] = createAntiSwearKrate(player).getValue().isSwearFilterEnabled
+        }
+    }
+
+    override suspend fun forgetPlayer(player: OnlineKPlayer) {
+        return withContext(dispatchers.IO) {
+            swearFilterMap.remove(player.uuid)
+        }
     }
 
     override fun isSwearFilterEnabled(player: OnlineKPlayer): Boolean {
@@ -43,7 +51,7 @@ internal class KrateSwearRepository(
     override suspend fun setSwearFilterEnabled(player: OnlineKPlayer, isEnabled: Boolean) {
         return withContext(dispatchers.IO) {
             swearFilterMap[player.uuid] = isEnabled
-            getAntiSwearKrate(player).save { value ->
+            createAntiSwearKrate(player).save { value ->
                 value.copy(isSwearFilterEnabled = isEnabled)
             }
         }

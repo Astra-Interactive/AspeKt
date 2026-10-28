@@ -1,18 +1,20 @@
+@file:Suppress("KindImportDirection")
+
 package ru.astrainteractive.aspekt.module.claims.neoforge
 
 import ru.astrainteractive.aspekt.module.claims.api.ChunkProvider
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
-import ru.astrainteractive.aspekt.module.claims.util.getClaimChunk
+import ru.astrainteractive.aspekt.module.claims.util.findClaimChunk
 import ru.astrainteractive.astralibs.server.player.MinecraftOnlineKPlayer
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
-class NeoForgeChunkProvider : ChunkProvider {
-    override fun getChunk(player: OnlineKPlayer): ClaimChunk {
+internal class NeoForgeChunkProvider : ChunkProvider {
+    override fun findChunk(player: OnlineKPlayer): ClaimChunk {
         @Suppress("MaxLineLength")
         return player.tryCast<MinecraftOnlineKPlayer>()
             ?.instance
-            ?.getClaimChunk()
+            ?.findClaimChunk()
             ?: error(
                 "Could not convert OnlineKPlayer into MinecraftOnlineKPlayer. " +
                     "This should not happen. Contact developer."

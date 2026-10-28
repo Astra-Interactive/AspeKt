@@ -23,5 +23,3 @@ enum class PluginPermission(override val value: String) : Permission {
     DEL_HOME("aspekt.delhome"),
     HOME("aspekt.home"),
 }
-
-data class PluginNamedPermission(override val value: String) : Permission

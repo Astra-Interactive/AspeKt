@@ -1,30 +1,25 @@
 package ru.astrainteractive.aspekt.module.auth.api
 
+import ru.astrainteractive.aspekt.module.auth.model.AuthState
 import ru.astrainteractive.aspekt.module.auth.model.PlayerLogin
 import java.util.UUID
 
 interface AuthorizedApi {
-    sealed interface AuthState {
-        data object NotAuthorized : AuthState
-        data object NotRegistered : AuthState
-        data object Authorized : AuthState
-        data object Pending : AuthState
-    }
 
     /**
      * Check is user authorized or not
      */
-    fun getAuthState(uuid: UUID): AuthState
+    fun resolveAuthState(uuid: UUID): AuthState
 
     /**
-     * Remember user on join so we can call [getAuthState]
+     * Remember user on join so we can call [resolveAuthState]
      */
     fun loadUserInfo(player: PlayerLogin)
 
     fun authUser(uuid: UUID)
 
     /**
-     * Clear [getAuthState] when user leave server
+     * Clear [resolveAuthState] when user leave server
      */
     fun forgetUser(uuid: UUID)
 }

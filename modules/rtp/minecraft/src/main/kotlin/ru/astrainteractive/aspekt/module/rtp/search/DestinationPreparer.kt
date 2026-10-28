@@ -13,7 +13,11 @@ internal class DestinationPreparer(private val chunkLoader: ChunkLoader) {
             ?: 1
         return (-simulationDistance..simulationDistance).flatMap { dx ->
             (-simulationDistance..simulationDistance).map { dz ->
-                val chunk = chunkLoader.loadToFull(level, chunkX + dx, chunkZ + dz)
+                val chunk = chunkLoader.loadToFull(
+                    level,
+                    chunkX + dx,
+                    chunkZ + dz
+                )
                 yield()
                 chunk
             }

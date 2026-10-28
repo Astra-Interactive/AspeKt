@@ -1,3 +1,5 @@
+@file:Suppress("FieldDependencyConstruction", "KindImportDirection")
+
 package ru.astrainteractive.aspekt.module.claims.krate
 
 import kotlinx.coroutines.CoroutineScope
@@ -21,8 +23,8 @@ import ru.astrainteractive.aspekt.module.claims.model.ClaimNotFoundException
 import ru.astrainteractive.aspekt.module.claims.model.ClaimNotOwnedException
 import ru.astrainteractive.aspekt.module.claims.model.UniqueWorldKey
 import ru.astrainteractive.aspekt.module.claims.util.isPlayerOwnClaim
-import ru.astrainteractive.aspekt.module.claims.util.map
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
+import ru.astrainteractive.klibs.mikro.core.coroutines.propagateCancellationException
 import java.io.File
 import java.util.UUID
 
@@ -46,14 +48,18 @@ internal class KrateClaimsRepository(
             }
         }
         .flowOn(Dispatchers.IO)
-        .stateIn(ioScope, SharingStarted.Eagerly, emptyList())
+        .stateIn(
+            scope = ioScope,
+            started = SharingStarted.Eagerly,
+            initialValue = emptyList()
+        )
 
     override val allKrates: List<ClaimKrate>
         get() = krates.value
 
     private val _chunkByKrate = krates
         .flatMapLatest { claimKrates ->
-            combine(claimKrates.map { krate -> krate.cachedStateFlow }) { claimDataList ->
+            combine(claimKrates.map(ClaimKrate::cachedStateFlow)) { claimDataList ->
                 buildMap {
                     claimDataList.forEachIndexed { i, data ->
                         val krate = claimKrates[i]
@@ -65,7 +71,11 @@ internal class KrateClaimsRepository(
             }
         }
         .flowOn(Dispatchers.IO)
-        .stateIn(ioScope, SharingStarted.Eagerly, emptyMap())
+        .stateIn(
+            scope = ioScope,
+            started = SharingStarted.Eagerly,
+            initialValue = emptyMap()
+        )
 
     override val chunkByKrate: Map<UniqueWorldKey, ClaimKrate>
         get() = _chunkByKrate.value
@@ -89,33 +99,37 @@ internal class KrateClaimsRepository(
         return krates.value.firstOrNull { krate -> krate.cachedStateFlow.value.ownerUUID == uuid }
     }
 
-    override suspend fun saveChunk(uuid: UUID, chunk: ClaimChunk) = mutex.withLock {
-        runCatching {
-            requireKrate(uuid).save { data ->
-                data.copy(
-                    chunks = data.chunks.toMutableMap().apply {
-                        this[chunk.uniqueWorldKey] = chunk
-                    }
-                )
-            }
+    override suspend fun saveChunk(uuid: UUID, chunk: ClaimChunk): Result<Unit> {
+        return mutex.withLock {
+            runCatching {
+                requireKrate(uuid).save { data ->
+                    data.copy(
+                        chunks = data.chunks.toMutableMap().apply {
+                            this[chunk.uniqueWorldKey] = chunk
+                        }
+                    )
+                }
+            }.propagateCancellationException()
         }
     }
 
-    override suspend fun deleteChunk(uuid: UUID, key: UniqueWorldKey) = mutex.withLock {
-        runCatching {
+    override suspend fun deleteChunk(uuid: UUID, key: UniqueWorldKey): Result<Unit> {
+        return mutex.withLock {
             if (key !in chunkByKrate) {
-                throw ClaimNotFoundException
+                return@withLock Result.failure(ClaimNotFoundException)
             }
             if (!isPlayerOwnClaim(uuid, key)) {
-                throw ClaimNotOwnedException
+                return@withLock Result.failure(ClaimNotOwnedException)
             }
-            requireKrate(uuid).save { data ->
-                data.copy(
-                    chunks = data.chunks
-                        .toMutableMap()
-                        .minus(key)
-                )
-            }
-        }.onFailure { throwable -> throwable.printStackTrace() }
+            runCatching {
+                requireKrate(uuid).save { data ->
+                    data.copy(
+                        chunks = data.chunks
+                            .toMutableMap()
+                            .minus(key)
+                    )
+                }
+            }.propagateCancellationException().onFailure { throwable -> throwable.printStackTrace() }
+        }
     }
 }

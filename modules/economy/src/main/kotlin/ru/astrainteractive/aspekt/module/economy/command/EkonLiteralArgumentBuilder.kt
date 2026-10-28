@@ -8,6 +8,7 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.economy.api.CurrencyCache
+import ru.astrainteractive.aspekt.module.economy.model.Currency
 import ru.astrainteractive.aspekt.plugin.model.PluginPermission
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.argumenttype.KPlayerArgumentConverter
@@ -33,18 +34,18 @@ internal class EkonLiteralArgumentBuilder(
     private val commandExceptionHandler: CommandExceptionHandler
 ) {
     private val translation by translationKrate
-    private fun currencyNames(): List<String> = currencyCache.getAllCurrencies().map { currency -> currency.name }
+    private fun currencyNames(): List<String> = currencyCache.loadAllCurrencies().map(Currency::name)
 
     @Suppress("LongMethod")
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("ekon") {
-                runs(commandExceptionHandler::handle) { ctx ->
+                runs(commandExceptionHandler::onException) { ctx ->
                     ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                     ctx.getSender().sendMessage(translation.commandError.wrongUsage)
                 }
                 literal("list") {
-                    runs(commandExceptionHandler::handle) { ctx ->
+                    runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                         EkonCommand.Model
                             .ListCurrencies(ctx.getSender())
@@ -54,10 +55,10 @@ internal class EkonLiteralArgumentBuilder(
                 literal("top") {
                     argument("currency", StringArgumentType.string()) { currencyArg ->
                         hints { currencyNames() }
-                        runs(commandExceptionHandler::handle) { ctx ->
+                        runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                             val currencyName = ctx.requireArgument(currencyArg)
-                            val currency = currencyCache.getAllCurrencies()
+                            val currency = currencyCache.loadAllCurrencies()
                                 .firstOrNull { candidate -> candidate.name.equals(currencyName, true) }
                             if (currency == null) {
                                 ctx.getSender().sendMessage(translation.economy.currencyNotFound)
@@ -70,11 +71,11 @@ internal class EkonLiteralArgumentBuilder(
                             ).run(executor::execute)
                         }
                         argument("page", IntegerArgumentType.integer(0)) { pageArg ->
-                            runs(commandExceptionHandler::handle) { ctx ->
+                            runs(commandExceptionHandler::onException) { ctx ->
                                 ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                                 val currencyName = ctx.requireArgument(currencyArg)
                                 val page = ctx.requireArgument(pageArg)
-                                val currency = currencyCache.getAllCurrencies().firstOrNull { candidate ->
+                                val currency = currencyCache.loadAllCurrencies().firstOrNull { candidate ->
                                     candidate.name.equals(
                                         currencyName,
                                         true
@@ -98,10 +99,10 @@ internal class EkonLiteralArgumentBuilder(
                         hints { currencyNames() }
                         argument("player", StringArgumentType.string()) { playerArg ->
                             hints { Bukkit.getOnlinePlayers().map(Player::getName) }
-                            runs(commandExceptionHandler::handle) { ctx ->
+                            runs(commandExceptionHandler::onException) { ctx ->
                                 ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                                 val currencyName = ctx.requireArgument(currencyArg)
-                                val currency = currencyCache.getAllCurrencies().firstOrNull { candidate ->
+                                val currency = currencyCache.loadAllCurrencies().firstOrNull { candidate ->
                                     candidate.name.equals(
                                         currencyName,
                                         true
@@ -130,10 +131,10 @@ internal class EkonLiteralArgumentBuilder(
                         argument("player", StringArgumentType.string()) { playerArg ->
                             hints { Bukkit.getOnlinePlayers().map(Player::getName) }
                             argument("amount", DoubleArgumentType.doubleArg()) { amountArg ->
-                                runs(commandExceptionHandler::handle) { ctx ->
+                                runs(commandExceptionHandler::onException) { ctx ->
                                     ctx.requirePermission(PluginPermission.SET_BALANCE)
                                     val currencyName = ctx.requireArgument(currencyArg)
-                                    val currency = currencyCache.getAllCurrencies().firstOrNull { candidate ->
+                                    val currency = currencyCache.loadAllCurrencies().firstOrNull { candidate ->
                                         candidate.name.equals(
                                             currencyName,
                                             true
@@ -165,10 +166,10 @@ internal class EkonLiteralArgumentBuilder(
                         argument("player", StringArgumentType.string()) { playerArg ->
                             hints { Bukkit.getOnlinePlayers().map(Player::getName) }
                             argument("amount", DoubleArgumentType.doubleArg()) { amountArg ->
-                                runs(commandExceptionHandler::handle) { ctx ->
+                                runs(commandExceptionHandler::onException) { ctx ->
                                     ctx.requirePermission(PluginPermission.SET_BALANCE)
                                     val currencyName = ctx.requireArgument(currencyArg)
-                                    val currency = currencyCache.getAllCurrencies().firstOrNull { candidate ->
+                                    val currency = currencyCache.loadAllCurrencies().firstOrNull { candidate ->
                                         candidate.name.equals(
                                             currencyName,
                                             true

@@ -5,6 +5,9 @@ import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.module.tpa.api.TpaApi
 import ru.astrainteractive.aspekt.module.tpa.model.TpaApiRequestType
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.util.requestDenied
+import ru.astrainteractive.aspekt.plugin.util.requestTpa
+import ru.astrainteractive.aspekt.plugin.util.requestTpaHere
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
@@ -78,7 +81,7 @@ internal class TpaCommandExecutor(
                 .sendMessage(translation.tpa.noPendingTpToDeny)
             return
         }
-        val tpas = tpaApi.get(input.executorPlayer.uuid)
+        val tpas = tpaApi.findRequests(input.executorPlayer.uuid)
         tpas.forEach { (executorUuid, request) ->
             val executor = platformServer.findOnlinePlayer(executorUuid) ?: return@forEach
             val target = platformServer.findOnlinePlayer(request.targetUuid) ?: return@forEach

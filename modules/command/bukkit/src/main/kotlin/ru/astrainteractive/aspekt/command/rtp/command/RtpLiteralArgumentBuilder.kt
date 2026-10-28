@@ -20,7 +20,7 @@ internal class RtpLiteralArgumentBuilder(
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("rtp") {
-                runs(commandExceptionHandler::handle) { ctx ->
+                runs(commandExceptionHandler::onException) { ctx ->
                     ctx.getSender().sendMessage(translation.rtp.didYouMeanTpr)
                 }
             }

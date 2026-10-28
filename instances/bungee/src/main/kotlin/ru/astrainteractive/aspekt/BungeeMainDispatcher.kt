@@ -10,8 +10,13 @@ class BungeeMainDispatcher(private val plugin: Plugin) : MainCoroutineDispatcher
     override val immediate: MainCoroutineDispatcher get() = this
 
     override fun dispatch(context: CoroutineContext, block: Runnable) {
-        ProxyServer.getInstance().scheduler.schedule(plugin, {
-            block.run()
-        }, 0L, TimeUnit.MILLISECONDS)
+        ProxyServer.getInstance().scheduler.schedule(
+            plugin,
+            {
+                block.run()
+            },
+            0L,
+            TimeUnit.MILLISECONDS
+        )
     }
 }

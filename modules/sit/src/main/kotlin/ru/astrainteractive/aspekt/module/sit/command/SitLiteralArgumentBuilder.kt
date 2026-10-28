@@ -20,7 +20,7 @@ internal class SitLiteralArgumentBuilder(
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("sit") {
-                runs(commandExceptionHandler::handle) { ctx ->
+                runs(commandExceptionHandler::onException) { ctx ->
                     val onlineKPlayer = ctx.requirePlayer()
 
                     @Suppress("MaxLineLength")
@@ -37,7 +37,11 @@ internal class SitLiteralArgumentBuilder(
                         player = player,
                         locationWithOffset = onlineKPlayer.getLocation()
                             .asBukkitLocation()
-                            .add(0.0, -2.0, 0.0)
+                            .add(
+                                0.0,
+                                -2.0,
+                                0.0
+                            )
                     )
                 }
             }

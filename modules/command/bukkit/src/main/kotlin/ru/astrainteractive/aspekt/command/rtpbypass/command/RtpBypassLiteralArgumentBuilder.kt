@@ -30,7 +30,7 @@ internal class RtpBypassLiteralArgumentBuilder(
             command("rtpbypass") {
                 argument("player", StringArgumentType.string()) { playerArg ->
                     hints { Bukkit.getOnlinePlayers().map(Player::getName) }
-                    runs(commandExceptionHandler::handle) { ctx ->
+                    runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requirePermission(PluginPermission.RTP_BYPASS)
                         val player = ctx.requireArgument(playerArg, OnlinePlayerArgumentConverter)
                         val randomTeleport = RandomTeleport(essentials)

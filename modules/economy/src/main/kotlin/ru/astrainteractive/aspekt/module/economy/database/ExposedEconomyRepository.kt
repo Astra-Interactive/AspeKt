@@ -1,3 +1,5 @@
+@file:Suppress("ForbiddenPackageName", "KindShape")
+
 package ru.astrainteractive.aspekt.module.economy.database
 
 import kotlinx.coroutines.flow.Flow
@@ -41,59 +43,65 @@ internal class ExposedEconomyRepository(
         return databaseFlow.first()
     }
 
-    private fun ResultRow.toCurrency() = Currency(
-        id = this[CurrencyTable.id].value,
-        name = this[CurrencyTable.name],
-        priority = this[CurrencyTable.priority],
-    )
-
-    private fun ResultRow.toPlayerCurrency() = PlayerCurrency(
-        playerModel = EconomyPlayer(
-            name = this[PlayerCurrencyTable.lastUsername],
-            uuid = this[PlayerCurrencyTable.uuid],
-        ),
-        balance = this[PlayerCurrencyTable.amount],
-        currencyModel = Currency(
+    private fun ResultRow.toCurrency(): Currency {
+        return Currency(
             id = this[CurrencyTable.id].value,
             name = this[CurrencyTable.name],
             priority = this[CurrencyTable.priority],
         )
-    )
+    }
 
-    override suspend fun getAllCurrencies(): List<Currency> {
+    private fun ResultRow.toPlayerCurrency(): PlayerCurrency {
+        return PlayerCurrency(
+            playerModel = EconomyPlayer(
+                name = this[PlayerCurrencyTable.lastUsername],
+                uuid = this[PlayerCurrencyTable.uuid],
+            ),
+            balance = this[PlayerCurrencyTable.amount],
+            currencyModel = Currency(
+                id = this[CurrencyTable.id].value,
+                name = this[CurrencyTable.name],
+                priority = this[CurrencyTable.priority],
+            )
+        )
+    }
+
+    override suspend fun loadAllCurrencies(): List<Currency> {
         return newSuspendedTransaction(db = currentDatabase()) {
             CurrencyTable.selectAll()
                 .map { item -> item.toCurrency() }
         }
     }
 
-    override suspend fun updateCurrencies(currencies: List<Currency>) = withMutex {
-        val existingCurrencies = getAllCurrencies()
-        val nonExistingCurrencies = existingCurrencies
-            .map(Currency::id)
-            .toSet()
-            .minus(currencies.map(Currency::id).toSet())
-        if (currencies.isEmpty()) {
-            error { "#updateCurrencies you didn't setup any currencies! Economy may break!" }
-        }
-        if (nonExistingCurrencies.isNotEmpty()) {
-            newSuspendedTransaction(db = currentDatabase()) {
-                CurrencyTable.deleteWhere { CurrencyTable.id inList nonExistingCurrencies }
-                PlayerCurrencyTable.deleteWhere { PlayerCurrencyTable.currencyId inList nonExistingCurrencies }
+    override suspend fun updateCurrencies(currencies: List<Currency>) {
+        return withMutex {
+            val existingCurrencies = loadAllCurrencies()
+            val nonExistingCurrencies = existingCurrencies
+                .map(Currency::id)
+                .toSet()
+                .minus(currencies.map(Currency::id).toSet())
+            if (currencies.isEmpty()) {
+                error { "#updateCurrencies you didn't setup any currencies! Economy may break!" }
             }
-        }
-        newSuspendedTransaction(db = currentDatabase()) {
-            currencies.forEach { currency ->
-                if (existingCurrencies.find { existingCurrency -> currency.id == existingCurrency.id } != null) {
-                    CurrencyTable.update(where = { CurrencyTable.id eq currency.id }) { statement ->
-                        statement[CurrencyTable.name] = currency.name
-                        statement[CurrencyTable.priority] = currency.priority
-                    }
-                } else {
-                    CurrencyTable.insert { statement ->
-                        statement[CurrencyTable.id] = currency.id
-                        statement[CurrencyTable.name] = currency.name
-                        statement[CurrencyTable.priority] = currency.priority
+            if (nonExistingCurrencies.isNotEmpty()) {
+                newSuspendedTransaction(db = currentDatabase()) {
+                    CurrencyTable.deleteWhere { CurrencyTable.id inList nonExistingCurrencies }
+                    PlayerCurrencyTable.deleteWhere { PlayerCurrencyTable.currencyId inList nonExistingCurrencies }
+                }
+            }
+            newSuspendedTransaction(db = currentDatabase()) {
+                currencies.forEach { currency ->
+                    if (existingCurrencies.find { existingCurrency -> currency.id == existingCurrency.id } != null) {
+                        CurrencyTable.update(where = { CurrencyTable.id eq currency.id }) { statement ->
+                            statement[CurrencyTable.name] = currency.name
+                            statement[CurrencyTable.priority] = currency.priority
+                        }
+                    } else {
+                        CurrencyTable.insert { statement ->
+                            statement[CurrencyTable.id] = currency.id
+                            statement[CurrencyTable.name] = currency.name
+                            statement[CurrencyTable.priority] = currency.priority
+                        }
                     }
                 }
             }
@@ -151,7 +159,7 @@ internal class ExposedEconomyRepository(
                 .orderBy(PlayerCurrencyTable.amount to SortOrder.DESC)
                 .where { CurrencyTable.id eq id }
                 .limit(size)
-                .offset((page * size).toLong())
+                .offset(page.times(size).toLong())
                 .map { item -> item.toPlayerCurrency() }
         }
     }
@@ -188,30 +196,34 @@ internal class ExposedEconomyRepository(
         to: EconomyPlayer,
         amount: Double,
         currencyId: String
-    ): Boolean = withMutex {
-        newSuspendedTransaction(db = currentDatabase()) {
-            val fromPlayerCurrency =
-                findPlayerCurrency(from.uuid, currencyId) ?: return@newSuspendedTransaction false
-            if (fromPlayerCurrency.balance - amount < 0) return@newSuspendedTransaction false
-            val toPlayerCurrency = PlayerCurrency(
-                playerModel = EconomyPlayer(
-                    name = to.name,
-                    uuid = to.uuid,
-                ),
-                balance = amount,
-                currencyModel = fromPlayerCurrency.currencyModel
-            )
-            updatePlayerCurrencyWithoutTransaction(
-                fromPlayerCurrency.copy(balance = fromPlayerCurrency.balance - amount)
-            )
-            updatePlayerCurrencyWithoutTransaction(toPlayerCurrency)
-            true
+    ): Boolean {
+        return withMutex {
+            newSuspendedTransaction(db = currentDatabase()) {
+                val fromPlayerCurrency =
+                    findPlayerCurrency(from.uuid, currencyId) ?: return@newSuspendedTransaction false
+                if (fromPlayerCurrency.balance - amount < 0) return@newSuspendedTransaction false
+                val toPlayerCurrency = PlayerCurrency(
+                    playerModel = EconomyPlayer(
+                        name = to.name,
+                        uuid = to.uuid,
+                    ),
+                    balance = amount,
+                    currencyModel = fromPlayerCurrency.currencyModel
+                )
+                updatePlayerCurrencyWithoutTransaction(
+                    fromPlayerCurrency.copy(balance = fromPlayerCurrency.balance - amount)
+                )
+                updatePlayerCurrencyWithoutTransaction(toPlayerCurrency)
+                true
+            }
         }
     }
 
-    override suspend fun updatePlayerCurrency(currency: PlayerCurrency) = withMutex {
-        newSuspendedTransaction(db = currentDatabase()) {
-            updatePlayerCurrencyWithoutTransaction(currency)
+    override suspend fun updatePlayerCurrency(currency: PlayerCurrency) {
+        return withMutex {
+            newSuspendedTransaction(db = currentDatabase()) {
+                updatePlayerCurrencyWithoutTransaction(currency)
+            }
         }
     }
 }

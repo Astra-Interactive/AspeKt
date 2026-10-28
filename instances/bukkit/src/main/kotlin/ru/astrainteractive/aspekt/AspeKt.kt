@@ -1,3 +1,5 @@
+@file:Suppress("FieldDependencyConstruction")
+
 package ru.astrainteractive.aspekt
 
 import ru.astrainteractive.aspekt.di.RootModule

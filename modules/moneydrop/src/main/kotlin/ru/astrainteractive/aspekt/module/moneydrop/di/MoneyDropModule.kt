@@ -18,7 +18,7 @@ class MoneyDropModule(
 
     private val moneyDropConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = getConfigurationFile(coreModule.dataFolder),
+            file = resolveConfigurationFile(coreModule.dataFolder),
             factory = ::MoneyDropConfiguration
         )
         .asCachedMutableKrate()
@@ -61,6 +61,6 @@ class MoneyDropModule(
     }
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("money_drop.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("money_drop.yml")
     }
 }

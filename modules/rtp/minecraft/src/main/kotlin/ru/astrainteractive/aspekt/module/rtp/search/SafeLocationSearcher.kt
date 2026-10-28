@@ -32,7 +32,11 @@ internal class SafeLocationSearcher(
             val chunkX = SectionPos.blockToSectionCoord(Random.nextInt(config.minX, config.maxX))
             val chunkZ = SectionPos.blockToSectionCoord(Random.nextInt(config.minZ, config.maxZ))
             info { "#findSafeLocation started finding chunk..." }
-            val chunk = chunkLoader.loadToFull(level, chunkX, chunkZ)
+            val chunk = chunkLoader.loadToFull(
+                level,
+                chunkX,
+                chunkZ
+            )
             info { "#findSafeLocation chunk find finished: $chunk" }
             if (chunk == null) {
                 error { "#findSafeLocation could not load chunk. Attempt: ${attempt + 1}" }
@@ -58,7 +62,11 @@ internal class SafeLocationSearcher(
             info { "#findSafeLocation safe location found: $location" }
             if (location != null) {
                 // Pre-generate & hold the destination area loaded before the teleport happens.
-                val isHazardous = destinationPreparer.prepare(level, chunkX, chunkZ)
+                val isHazardous = destinationPreparer.prepare(
+                    level,
+                    chunkX,
+                    chunkZ
+                )
                     .any { preparedChunk -> hazardDetector.isHazardous(preparedChunk, config.hazardNamespaces) }
                 if (isHazardous) {
                     yield()

@@ -1,3 +1,5 @@
+@file:Suppress("ImplementationVisibility")
+
 package ru.astrainteractive.aspekt.feature.file
 
 import kotlinx.serialization.StringFormat

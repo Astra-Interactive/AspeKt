@@ -18,7 +18,7 @@ class OreGenerationModule(
 ) {
     private val oreGenerationConfigKrate = coreModule.yamlFormat
         .krateOf(
-            file = getConfigurationFile(coreModule.dataFolder),
+            file = resolveConfigurationFile(coreModule.dataFolder),
             factory = ::OreGenerationConfiguration
         )
         .asCachedMutableKrate()
@@ -56,6 +56,6 @@ class OreGenerationModule(
     )
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("ore-generation.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("ore-generation.yml")
     }
 }

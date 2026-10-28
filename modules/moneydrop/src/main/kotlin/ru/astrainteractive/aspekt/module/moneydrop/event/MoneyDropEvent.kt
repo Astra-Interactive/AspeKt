@@ -15,6 +15,7 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent
 import org.bukkit.event.inventory.InventoryPickupItemEvent
 import ru.astrainteractive.aspekt.economy.api.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.util.pickedUp
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
@@ -50,11 +51,11 @@ internal class MoneyDropEvent(
         val item = e.item.itemStack
         val amount = e.item.itemStack.amount
         if (!moneyDropController.isMoneyDropItem(item)) return
-        val money = moneyDropController.getMoneyAmount(item) ?: return
+        val money = moneyDropController.findMoneyAmount(item) ?: return
         e.item.remove()
         e.isCancelled = true
         ioScope.launch {
-            val economyProvider = when (val currencyId = moneyDropController.getMoneyCurrency(item)) {
+            val economyProvider = when (val currencyId = moneyDropController.findMoneyCurrency(item)) {
                 null -> currencyEconomyProviderFactory.findDefault()
                 else -> currencyEconomyProviderFactory.findByCurrencyId(currencyId)
             }
@@ -83,24 +84,24 @@ internal class MoneyDropEvent(
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     fun blockPlaceEvent(e: BlockPlaceEvent) {
-        moneyDropController.rememberLocation(e.blockPlaced.location, e.blockPlaced.type.name)
+        moneyDropController.recordLocation(e.blockPlaced.location, e.blockPlaced.type.name)
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     fun blockPistonRetractEvent(e: BlockPistonRetractEvent) {
         e.blocks.plus(e.block).forEach { block ->
-            moneyDropController.rememberLocation(block.location, block.type.name)
+            moneyDropController.recordLocation(block.location, block.type.name)
             val relative = block.getRelative(e.direction)
-            moneyDropController.rememberLocation(relative.location, block.type.name)
+            moneyDropController.recordLocation(relative.location, block.type.name)
         }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     fun blockPistonExtendEvent(e: BlockPistonExtendEvent) {
         e.blocks.plus(e.block).forEach { block ->
-            moneyDropController.rememberLocation(block.location, block.type.name)
+            moneyDropController.recordLocation(block.location, block.type.name)
             val relative = block.getRelative(e.direction)
-            moneyDropController.rememberLocation(relative.location, block.type.name)
+            moneyDropController.recordLocation(relative.location, block.type.name)
         }
     }
 }

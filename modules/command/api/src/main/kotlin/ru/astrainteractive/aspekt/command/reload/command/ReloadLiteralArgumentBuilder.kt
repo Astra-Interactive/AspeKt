@@ -19,7 +19,7 @@ internal class ReloadLiteralArgumentBuilder(
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("aesreload") {
-                runs(commandExceptionHandler::handle) { ctx ->
+                runs(commandExceptionHandler::onException) { ctx ->
                     ctx.requirePermission(PluginPermission.RELOAD)
                     val audience = ctx.getSender()
                     audience.sendMessage(translation.reload.started)

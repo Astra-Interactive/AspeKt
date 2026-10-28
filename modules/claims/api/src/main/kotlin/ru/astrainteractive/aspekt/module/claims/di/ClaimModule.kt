@@ -29,11 +29,12 @@ class ClaimModule(
     )
     internal val claimErrorMapper = ClaimErrorMapper(translationKrate = translationKrate)
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onDisable = { moduleIoScope.cancel() }
     )
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("claims.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("claims.yml")
     }
 }

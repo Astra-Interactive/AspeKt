@@ -1,3 +1,5 @@
+@file:Suppress("ForbiddenPackageName")
+
 package ru.astrainteractive.aspekt.module.moneydrop.database.table
 
 import org.jetbrains.exposed.v1.core.dao.id.LongIdTable

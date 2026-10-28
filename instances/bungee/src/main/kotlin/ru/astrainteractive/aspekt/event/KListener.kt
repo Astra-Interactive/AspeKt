@@ -1,3 +1,5 @@
+@file:Suppress("EntryPointShape")
+
 package ru.astrainteractive.aspekt.event
 
 import net.md_5.bungee.api.plugin.Listener

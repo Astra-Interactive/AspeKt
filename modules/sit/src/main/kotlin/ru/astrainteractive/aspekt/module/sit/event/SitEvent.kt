@@ -54,8 +54,17 @@ internal class SitEvent(
         val sitBlockType = sitBlockType(material) ?: return
         val blockLocation = e.clickedBlock?.location?.clone() ?: return
         val offset = when (sitBlockType) {
-            SitBlockEnum.STAIRS -> Vector(0.5, 0.2, 0.5)
-            SitBlockEnum.SLAB -> Vector(0.5, 0.2, 0.5)
+            SitBlockEnum.STAIRS -> Vector(
+                0.5,
+                0.2,
+                0.5
+            )
+
+            SitBlockEnum.SLAB -> Vector(
+                0.5,
+                0.2,
+                0.5
+            )
         }
         sitController.toggleSitPlayer(
             e.player,

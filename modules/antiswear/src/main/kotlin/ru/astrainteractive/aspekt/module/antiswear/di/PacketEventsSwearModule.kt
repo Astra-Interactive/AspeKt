@@ -11,6 +11,7 @@ internal class PacketEventsSwearModule(
 ) {
     private val packetEventSwearListener = PacketEventSwearListener(swearRepository)
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {
             packetEventSwearListener.onEnable(plugin)

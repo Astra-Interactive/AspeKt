@@ -39,12 +39,12 @@ internal class AtemFrameLiteralArgumentBuilder(
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("atemframe") {
-                runs(commandExceptionHandler::handle) { ctx ->
+                runs(commandExceptionHandler::onException) { ctx ->
                     ctx.requirePermission(PluginPermission.ATEM_FRAME)
                     execute(player = ctx.requirePlayer())
                 }
                 argument("isVisible", BoolArgumentType.bool()) { isVisibleArg ->
-                    runs(commandExceptionHandler::handle) { ctx ->
+                    runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requirePermission(PluginPermission.ATEM_FRAME)
                         execute(
                             player = ctx.requirePlayer(),
@@ -52,7 +52,7 @@ internal class AtemFrameLiteralArgumentBuilder(
                         )
                     }
                     argument("isFixed", BoolArgumentType.bool()) { isFixedArg ->
-                        runs(commandExceptionHandler::handle) { ctx ->
+                        runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.ATEM_FRAME)
                             execute(
                                 player = ctx.requirePlayer(),
@@ -61,7 +61,7 @@ internal class AtemFrameLiteralArgumentBuilder(
                             )
                         }
                         argument("radius", DoubleArgumentType.doubleArg(0.0)) { radiusArg ->
-                            runs(commandExceptionHandler::handle) { ctx ->
+                            runs(commandExceptionHandler::onException) { ctx ->
                                 ctx.requirePermission(PluginPermission.ATEM_FRAME)
                                 execute(
                                     player = ctx.requirePlayer(),

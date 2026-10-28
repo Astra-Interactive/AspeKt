@@ -26,7 +26,7 @@ internal class TpaCommandRegistrar(
             command("tpa") {
                 argument("player", StringArgumentType.string()) { playerArg ->
                     hints { platformServer.getOnlinePlayers().map(OnlineKPlayer::name) }
-                    runs(commandExceptionHandler::handle) { ctx ->
+                    runs(commandExceptionHandler::onException) { ctx ->
                         val targetPlayerName = ctx.requireArgument(playerArg)
                         TpaCommand.TpaTo(
                             executorPlayer = ctx.requirePlayer(),
@@ -44,7 +44,7 @@ internal class TpaCommandRegistrar(
             command("tpahere") {
                 argument("player", StringArgumentType.string()) { playerArg ->
                     hints { platformServer.getOnlinePlayers().map(OnlineKPlayer::name) }
-                    runs(commandExceptionHandler::handle) { ctx ->
+                    runs(commandExceptionHandler::onException) { ctx ->
                         val targetPlayerName = ctx.requireArgument(playerArg)
                         TpaCommand.TpaHere(
                             executorPlayer = ctx.requirePlayer(),
@@ -60,7 +60,7 @@ internal class TpaCommandRegistrar(
     private fun createTpaCancelNode(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("tpacancel") {
-                runs(commandExceptionHandler::handle) { ctx ->
+                runs(commandExceptionHandler::onException) { ctx ->
                     TpaCommand.TpaCancel(
                         executorPlayer = ctx.requirePlayer()
                     ).run(executor::execute)
@@ -72,7 +72,7 @@ internal class TpaCommandRegistrar(
     private fun createTpaAcceptNode(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("tpaccept") {
-                runs(commandExceptionHandler::handle) { ctx ->
+                runs(commandExceptionHandler::onException) { ctx ->
                     TpaCommand.TpaAccept(
                         executorPlayer = ctx.requirePlayer()
                     ).run(executor::execute)
@@ -84,7 +84,7 @@ internal class TpaCommandRegistrar(
     private fun createTpaDenyNode(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("tpadeny") {
-                runs(commandExceptionHandler::handle) { ctx ->
+                runs(commandExceptionHandler::onException) { ctx ->
                     TpaCommand.TpaDeny(
                         executorPlayer = ctx.requirePlayer()
                     ).run(executor::execute)

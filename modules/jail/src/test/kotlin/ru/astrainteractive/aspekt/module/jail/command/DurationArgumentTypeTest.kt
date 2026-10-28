@@ -22,8 +22,12 @@ internal class DurationArgumentTypeTest {
     @Test
     fun GIVEN_several_units_WHEN_transformed_THEN_returns_their_sum() {
         assertEquals(7.days.plus(1.days), DurationArgumentType.transform("1w1d"))
+        val weekAndDay = 7.days.plus(1.days)
+        val withHours = weekAndDay.plus(1.hours)
+        val withMinutes = withHours.plus(1.minutes)
+        val expected = withMinutes.plus(1.seconds)
         assertEquals(
-            expected = 7.days.plus(1.days).plus(1.hours).plus(1.minutes).plus(1.seconds),
+            expected = expected,
             actual = DurationArgumentType.transform("1w1d1h1m1s")
         )
     }

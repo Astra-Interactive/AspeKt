@@ -7,10 +7,14 @@ import ru.astrainteractive.aspekt.module.economy.model.Currency
 import ru.astrainteractive.aspekt.module.economy.model.EconomyPlayer
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.util.balance
+import ru.astrainteractive.aspekt.plugin.util.currencies
+import ru.astrainteractive.aspekt.plugin.util.topItem
 import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
+import ru.astrainteractive.klibs.mikro.core.coroutines.propagateCancellationException
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
@@ -37,7 +41,7 @@ internal class EkonCommandExecutor(
         kotlin.runCatching {
             val updatedCurrency = playerCurrency.copy(balance = playerCurrency.balance + input.amount)
             repository.updatePlayerCurrency(updatedCurrency)
-        }.onFailure { throwable ->
+        }.propagateCancellationException().onFailure { throwable ->
             error { "#execute_Add: ${throwable.message}" }
             input.sender.sendMessage(translation.economy.transferFailed)
         }.onSuccess { input.sender.sendMessage(translation.economy.transferred) }
@@ -54,7 +58,7 @@ internal class EkonCommandExecutor(
                 currencyModel = input.currency
             )
             repository.updatePlayerCurrency(updatedCurrency)
-        }.onFailure { throwable ->
+        }.propagateCancellationException().onFailure { throwable ->
             error { "#execute_Add: ${throwable.message}" }
             input.sender.sendMessage(translation.economy.transferFailed)
         }.onSuccess { input.sender.sendMessage(translation.economy.transferred) }
@@ -69,7 +73,7 @@ internal class EkonCommandExecutor(
     }
 
     private suspend fun listCurrencies(input: EkonCommand.Model.ListCurrencies) {
-        val currencies = repository.getAllCurrencies()
+        val currencies = repository.loadAllCurrencies()
             .map(Currency::name)
             .joinToString(",")
 

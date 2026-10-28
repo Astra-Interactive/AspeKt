@@ -1,3 +1,5 @@
+@file:Suppress("FieldDependencyConstruction")
+
 package ru.astrainteractive.aspekt.module.economy.integration.papi.expansion
 
 import kotlinx.coroutines.CoroutineScope

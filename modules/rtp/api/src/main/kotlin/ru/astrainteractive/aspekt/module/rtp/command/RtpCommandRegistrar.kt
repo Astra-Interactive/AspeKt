@@ -1,3 +1,5 @@
+@file:Suppress("FieldDependencyConstruction")
+
 package ru.astrainteractive.aspekt.module.rtp.command
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
@@ -18,11 +20,11 @@ internal class RtpCommandRegistrar(
     private fun createNode(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command(alias = "rtp") {
-                runs(commandExceptionHandler::handle) { ctx ->
+                runs(commandExceptionHandler::onException) { ctx ->
                     val player = ctx.requirePlayer()
                     RtpCommand(
                         player = player,
-                        ticksPerSecond = safeLocationProvider.getNextTickTime()
+                        ticksPerSecond = safeLocationProvider.resolveNextTickTime()
                     ).run(executor::execute)
                 }
             }

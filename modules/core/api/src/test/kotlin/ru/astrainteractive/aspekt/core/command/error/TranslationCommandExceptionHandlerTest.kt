@@ -50,7 +50,7 @@ class TranslationCommandExceptionHandlerTest {
     private fun executeFailing(failure: Throwable) {
         val command = with(multiplatformCommand) {
             command("fail") {
-                runs(handler::handle) { _ -> throw failure }
+                runs(handler::onException) { _ -> throw failure }
             }
         }
         execute(command, "fail")
@@ -60,7 +60,7 @@ class TranslationCommandExceptionHandlerTest {
     fun GIVEN_sender_without_permission_WHEN_command_requires_it_THEN_sender_reads_no_permission() {
         val command = with(multiplatformCommand) {
             command("reload") {
-                runs(handler::handle) { ctx -> ctx.requirePermission(PluginPermission.RELOAD) }
+                runs(handler::onException) { ctx -> ctx.requirePermission(PluginPermission.RELOAD) }
             }
         }
 
@@ -71,9 +71,10 @@ class TranslationCommandExceptionHandlerTest {
 
     @Test
     fun GIVEN_console_WHEN_command_requires_player_THEN_console_reads_only_player_command() {
+        @Suppress("TrivialLambdaReference")
         val command = with(multiplatformCommand) {
             command("sit") {
-                runs(handler::handle) { ctx -> ctx.requirePlayer() }
+                runs(handler::onException) { ctx -> ctx.requirePlayer() }
             }
         }
 
@@ -94,7 +95,7 @@ class TranslationCommandExceptionHandlerTest {
         val command = with(multiplatformCommand) {
             command("pay") {
                 argument("amount", StringArgumentType.string()) { amountArg ->
-                    runs(handler::handle) { ctx -> ctx.requireArgument(amountArg, IntArgumentConverter) }
+                    runs(handler::onException) { ctx -> ctx.requireArgument(amountArg, IntArgumentConverter) }
                 }
             }
         }
@@ -143,7 +144,7 @@ class TranslationCommandExceptionHandlerTest {
         )
         val command = with(multiplatformCommand) {
             command("pay") {
-                runs(handler::handle) { ctx -> ctx.requireArgument(missingArgument) }
+                runs(handler::onException) { ctx -> ctx.requireArgument(missingArgument) }
             }
         }
 
@@ -180,7 +181,7 @@ class TranslationCommandExceptionHandlerTest {
         )
         val command = with(unresolvableCommand) {
             command("reload") {
-                runs(unresolvableHandler::handle) { _ -> throw NoPlayerException("Notch") }
+                runs(unresolvableHandler::onException) { _ -> throw NoPlayerException("Notch") }
             }
         }
 

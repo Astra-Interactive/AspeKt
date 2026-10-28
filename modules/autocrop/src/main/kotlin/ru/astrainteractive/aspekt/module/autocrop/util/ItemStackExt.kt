@@ -13,12 +13,14 @@ internal fun ItemStack.applyHoeDamage(): Result<Unit> {
 }
 
 @Suppress("MagicNumber")
-internal fun ItemStack.hoeRadius(): Int = when (type) {
-    Material.WOODEN_HOE -> 2
-    Material.STONE_HOE -> 3
-    Material.IRON_HOE -> 4
-    Material.GOLDEN_HOE -> 5
-    Material.DIAMOND_HOE -> 6
-    Material.NETHERITE_HOE -> 7
-    else -> 1
+internal fun ItemStack.hoeRadius(): Int {
+    return when (type) {
+        Material.WOODEN_HOE -> 2
+        Material.STONE_HOE -> 3
+        Material.IRON_HOE -> 4
+        Material.GOLDEN_HOE -> 5
+        Material.DIAMOND_HOE -> 6
+        Material.NETHERITE_HOE -> 7
+        else -> 1
+    }
 }

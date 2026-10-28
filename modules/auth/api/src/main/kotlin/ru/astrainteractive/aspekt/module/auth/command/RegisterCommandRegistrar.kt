@@ -39,7 +39,7 @@ internal class RegisterCommandRegistrar(
                             alias = "password_confirm",
                             type = StringArgumentType.string(),
                             block = {
-                                runs(commandExceptionHandler::handle) { ctx ->
+                                runs(commandExceptionHandler::onException) { ctx ->
                                     ioScope.launch {
                                         val player = ctx.requirePlayer()
                                         val passwordSha = ctx.requireArgument(passwordArg).sha256()

@@ -24,7 +24,7 @@ internal class InvCloseLiteralArgumentBuilder(
             command("invclose") {
                 argument("player", StringArgumentType.string()) { playerArg ->
                     hints { Bukkit.getOnlinePlayers().map(Player::getName) }
-                    runs(commandExceptionHandler::handle) { ctx ->
+                    runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requireArgument(playerArg, OnlinePlayerArgumentConverter)
                             .closeInventory()
                     }

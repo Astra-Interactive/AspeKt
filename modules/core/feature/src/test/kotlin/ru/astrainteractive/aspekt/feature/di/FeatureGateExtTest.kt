@@ -1,8 +1,12 @@
+@file:Suppress("TestMirror")
+
 package ru.astrainteractive.aspekt.feature.di
 
 import ru.astrainteractive.aspekt.feature.fake.FakeFeature
 import ru.astrainteractive.aspekt.feature.fake.FakeFeatureFlagReader
 import ru.astrainteractive.aspekt.feature.model.ModuleState
+import ru.astrainteractive.aspekt.feature.util.deriveEnabled
+import ru.astrainteractive.aspekt.feature.util.withFeature
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -15,27 +19,31 @@ class FeatureGateExtTest {
     private fun createParentGate(
         flagReader: FakeFeatureFlagReader,
         events: MutableList<String>
-    ): FeatureGate<FakeFeature> = FeatureGate(
-        featureClass = FakeFeature::class,
-        flagReader = flagReader,
-        featureFactory = { FakeFeature("parent", events) },
-        lifecycleSelector = FakeFeature::lifecycle
-    )
+    ): FeatureGate<FakeFeature> {
+        return FeatureGate(
+            featureClass = FakeFeature::class,
+            flagReader = flagReader,
+            featureFactory = { FakeFeature("parent", events) },
+            lifecycleSelector = FakeFeature::lifecycle
+        )
+    }
 
     private fun createChildGate(
         parentGate: FeatureGate<FakeFeature>,
         flagReader: FakeFeatureFlagReader,
         events: MutableList<String>,
         receivedParents: MutableList<FakeFeature> = mutableListOf()
-    ): FeatureGate<FakeFeature> = parentGate.mapEnabled(
-        featureClass = FakeFeature::class,
-        flagReader = flagReader,
-        lifecycleSelector = FakeFeature::lifecycle,
-        transform = { parentFeature ->
-            receivedParents.add(parentFeature)
-            FakeFeature("child", events)
-        }
-    )
+    ): FeatureGate<FakeFeature> {
+        return parentGate.deriveEnabled(
+            featureClass = FakeFeature::class,
+            flagReader = flagReader,
+            lifecycleSelector = FakeFeature::lifecycle,
+            transform = { parentFeature ->
+                receivedParents.add(parentFeature)
+                FakeFeature("child", events)
+            }
+        )
+    }
 
     private fun requireEnabledFeature(gate: FeatureGate<FakeFeature>): FakeFeature {
         val state = gate.currentState
@@ -66,7 +74,11 @@ class FeatureGateExtTest {
     fun GIVEN_child_flag_off_WHEN_both_enabled_THEN_child_stays_disabled() {
         val events = mutableListOf<String>()
         val parentGate = createParentGate(FakeFeatureFlagReader(isEnabled = true), events)
-        val childGate = createChildGate(parentGate, FakeFeatureFlagReader(isEnabled = false), events)
+        val childGate = createChildGate(
+            parentGate,
+            FakeFeatureFlagReader(isEnabled = false),
+            events
+        )
 
         parentGate.onEnable()
         childGate.onEnable()
@@ -98,7 +110,11 @@ class FeatureGateExtTest {
         val events = mutableListOf<String>()
         val parentFlagReader = FakeFeatureFlagReader(isEnabled = true)
         val parentGate = createParentGate(parentFlagReader, events)
-        val childGate = createChildGate(parentGate, FakeFeatureFlagReader(isEnabled = true), events)
+        val childGate = createChildGate(
+            parentGate,
+            FakeFeatureFlagReader(isEnabled = true),
+            events
+        )
         parentGate.onEnable()
         childGate.onEnable()
         events.clear()
@@ -116,7 +132,11 @@ class FeatureGateExtTest {
         val events = mutableListOf<String>()
         val parentFlagReader = FakeFeatureFlagReader(isEnabled = true)
         val parentGate = createParentGate(parentFlagReader, events)
-        val childGate = createChildGate(parentGate, FakeFeatureFlagReader(isEnabled = true), events)
+        val childGate = createChildGate(
+            parentGate,
+            FakeFeatureFlagReader(isEnabled = true),
+            events
+        )
         parentGate.onEnable()
         childGate.onEnable()
 
@@ -163,7 +183,11 @@ class FeatureGateExtTest {
         val events = mutableListOf<String>()
         val childFlagReader = FakeFeatureFlagReader(isEnabled = true)
         val parentGate = createParentGate(FakeFeatureFlagReader(isEnabled = true), events)
-        val childGate = createChildGate(parentGate, childFlagReader, events)
+        val childGate = createChildGate(
+            parentGate,
+            childFlagReader,
+            events
+        )
         parentGate.onEnable()
         childGate.onEnable()
 
@@ -180,7 +204,11 @@ class FeatureGateExtTest {
         val events = mutableListOf<String>()
         val parentFlagReader = FakeFeatureFlagReader(isEnabled = false)
         val parentGate = createParentGate(parentFlagReader, events)
-        val childGate = createChildGate(parentGate, FakeFeatureFlagReader(isEnabled = true), events)
+        val childGate = createChildGate(
+            parentGate,
+            FakeFeatureFlagReader(isEnabled = true),
+            events
+        )
         parentGate.onEnable()
         childGate.onEnable()
         assertEquals(ModuleState.Disabled, childGate.currentState)
@@ -197,23 +225,41 @@ class FeatureGateExtTest {
         val events = mutableListOf<String>()
         val rootFlagReader = FakeFeatureFlagReader(isEnabled = true)
         val rootGate = createParentGate(rootFlagReader, events)
-        val childGate = createChildGate(rootGate, FakeFeatureFlagReader(isEnabled = true), events)
-        val grandChildGate = childGate.mapEnabled(
+        val childGate = createChildGate(
+            rootGate,
+            FakeFeatureFlagReader(isEnabled = true),
+            events
+        )
+        val grandChildGate = childGate.deriveEnabled(
             featureClass = FakeFeature::class,
             flagReader = FakeFeatureFlagReader(isEnabled = true),
             lifecycleSelector = FakeFeature::lifecycle,
             transform = { _ -> FakeFeature("grandchild", events) }
         )
-        val gatesInEnableOrder = listOf(rootGate, childGate, grandChildGate)
+        val gatesInEnableOrder = listOf(
+            rootGate,
+            childGate,
+            grandChildGate
+        )
 
         gatesInEnableOrder.forEach(FeatureGate<*>::onEnable)
-        assertEquals(listOf("parent.enable", "child.enable", "grandchild.enable"), events)
+        val enableEvents = listOf(
+            "parent.enable",
+            "child.enable",
+            "grandchild.enable"
+        )
+        assertEquals(enableEvents, events)
         events.clear()
 
         rootFlagReader.isEnabled = false
         gatesInEnableOrder.forEach(FeatureGate<*>::onReload)
 
-        assertEquals(listOf("parent.disable", "child.disable", "grandchild.disable"), events)
+        val disableEvents = listOf(
+            "parent.disable",
+            "child.disable",
+            "grandchild.disable"
+        )
+        assertEquals(disableEvents, events)
     }
 
     @Test
@@ -222,7 +268,7 @@ class FeatureGateExtTest {
 
         parentGate.onEnable()
 
-        assertNull(parentGate.withFeature { feature -> feature.enableCount })
+        assertNull(parentGate.withFeature(FakeFeature::enableCount))
     }
 
     @Test
@@ -231,6 +277,6 @@ class FeatureGateExtTest {
 
         parentGate.onEnable()
 
-        assertEquals(1, parentGate.withFeature { feature -> feature.enableCount })
+        assertEquals(1, parentGate.withFeature(FakeFeature::enableCount))
     }
 }

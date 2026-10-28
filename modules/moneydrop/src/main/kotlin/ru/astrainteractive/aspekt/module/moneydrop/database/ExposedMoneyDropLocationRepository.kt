@@ -1,3 +1,5 @@
+@file:Suppress("ForbiddenPackageName", "KindShape")
+
 package ru.astrainteractive.aspekt.module.moneydrop.database
 
 import kotlinx.coroutines.flow.Flow
@@ -13,20 +15,17 @@ import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import ru.astrainteractive.aspekt.module.moneydrop.api.MoneyDropLocationRepository
 import ru.astrainteractive.aspekt.module.moneydrop.database.table.MoneyDropLocationTable
 import ru.astrainteractive.aspekt.module.moneydrop.model.MoneyDropLocation
+import ru.astrainteractive.klibs.mikro.core.coroutines.propagateCancellationException
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
-import java.time.Instant
 import kotlin.coroutines.CoroutineContext
-import kotlin.time.Duration
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 
 internal class ExposedMoneyDropLocationRepository(
     private val databaseFlow: Flow<Database>,
     private val ioDispatcher: CoroutineContext
 ) : MoneyDropLocationRepository, Logger by JUtiltLogger("MoneyDropLocationRepository") {
-    operator fun Instant.minus(duration: Duration): Instant {
-        return this.minusMillis(duration.inWholeMilliseconds)
-    }
 
     override suspend fun isLocationExists(location: MoneyDropLocation): Boolean {
         return runCatching {
@@ -41,9 +40,10 @@ internal class ExposedMoneyDropLocationRepository(
                                 .and(MoneyDropLocationTable.world.eq(location.world))
                                 .and(MoneyDropLocationTable.additionalConstraint.eq(location.additionalConstraint))
                                 .and {
-                                    val offset = Instant
-                                        .now()
+                                    val offset = Clock.System.now()
                                         .minus(MAX_MONEY_DROP_TIMEOUT)
+                                        .toEpochMilliseconds()
+                                        .let(java.time.Instant::ofEpochMilli)
                                     MoneyDropLocationTable
                                         .instant
                                         .greater(offset)
@@ -52,6 +52,7 @@ internal class ExposedMoneyDropLocationRepository(
                 }
             }
         }
+            .propagateCancellationException()
             .onFailure { throwable -> error(throwable) { "#isLocationExists -> ${throwable.message}" } }
             .getOrElse { false }
     }
@@ -67,11 +68,15 @@ internal class ExposedMoneyDropLocationRepository(
                         statement[MoneyDropLocationTable.z] = location.z
                         statement[MoneyDropLocationTable.world] = location.world
                         statement[MoneyDropLocationTable.additionalConstraint] = location.additionalConstraint
-                        statement[MoneyDropLocationTable.instant] = location.instant
+                        statement[MoneyDropLocationTable.instant] = java.time.Instant.ofEpochMilli(
+                            location.instant.toEpochMilliseconds()
+                        )
                     }
                 }
             }
-        }.onFailure { throwable -> error(throwable) { "#addLocation -> ${throwable.message}" } }
+        }.propagateCancellationException().onFailure { throwable ->
+            error(throwable) { "#addLocation -> ${throwable.message}" }
+        }
     }
 
     companion object {

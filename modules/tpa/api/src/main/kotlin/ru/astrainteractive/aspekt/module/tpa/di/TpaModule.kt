@@ -38,6 +38,6 @@ class TpaModule(
     )
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("tpa.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("tpa.yml")
     }
 }

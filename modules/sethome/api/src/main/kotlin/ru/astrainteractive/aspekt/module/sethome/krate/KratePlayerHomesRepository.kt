@@ -1,3 +1,5 @@
+@file:Suppress("FieldDependencyConstruction")
+
 package ru.astrainteractive.aspekt.module.sethome.krate
 
 import com.google.common.cache.CacheBuilder

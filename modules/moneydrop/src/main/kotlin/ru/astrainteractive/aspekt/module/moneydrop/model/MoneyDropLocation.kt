@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.module.moneydrop.model
 
 import kotlinx.serialization.Serializable
-import java.time.Instant
+import kotlin.time.Instant
 
 @Serializable
 internal data class MoneyDropLocation(

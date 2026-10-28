@@ -31,20 +31,20 @@ internal class TCEvent(
     private val treeCapitatorConfigurationConfig by tcConfigKrate
 
     private fun isDirt(mat: Material): Boolean {
-        return mat == Material.GRASS_BLOCK ||
-            mat == Material.DIRT ||
-            mat == Material.ROOTED_DIRT ||
-            mat == Material.COARSE_DIRT
+        if (mat == Material.GRASS_BLOCK) return true
+        if (mat == Material.DIRT) return true
+        if (mat == Material.ROOTED_DIRT) return true
+        return mat == Material.COARSE_DIRT
     }
 
     /**
      * Checks if material is log or not
      */
     private fun isLog(mat: Material): Boolean {
-        return mat.name.contains("STRIPPED_") ||
-            mat.name.contains("_LOG") ||
-            mat == Material.CRIMSON_STEM ||
-            mat == Material.WARPED_STEM
+        if (mat.name.contains("STRIPPED_")) return true
+        if (mat.name.contains("_LOG")) return true
+        if (mat == Material.CRIMSON_STEM) return true
+        return mat == Material.WARPED_STEM
     }
 
     /**
@@ -65,7 +65,12 @@ internal class TCEvent(
         if (dmg < maxDmg) return
         if (treeCapitatorConfigurationConfig.breakAxe) {
             tool.amount = 0
-            player.playSound(player.location, Sound.ENTITY_ITEM_BREAK, 1f, 1f)
+            player.playSound(
+                player.location,
+                Sound.ENTITY_ITEM_BREAK,
+                1f,
+                1f
+            )
         } else {
             damageable.damage = maxDmg - 1
             tool.setItemMeta(damageable)
@@ -76,10 +81,10 @@ internal class TCEvent(
      * Checks if material is leave or not
      */
     private fun isLeaves(mat: Material): Boolean {
-        return mat.name.contains("LEAVES") ||
-            mat == Material.NETHER_WART_BLOCK ||
-            mat == Material.WARPED_WART_BLOCK ||
-            mat == Material.SHROOMLIGHT
+        if (mat.name.contains("LEAVES")) return true
+        if (mat == Material.NETHER_WART_BLOCK) return true
+        if (mat == Material.WARPED_WART_BLOCK) return true
+        return mat == Material.SHROOMLIGHT
     }
 
     /**
@@ -103,12 +108,20 @@ internal class TCEvent(
     private tailrec fun placeSapling(sapling: Material, block: Block, i: Int) {
         if (i >= treeCapitatorConfigurationConfig.replantMaxIterations) return
         if (!isDirt(block.type)) {
-            placeSapling(sapling, block.getRelative(BlockFace.DOWN), i + 1)
+            placeSapling(
+                sapling,
+                block.getRelative(BlockFace.DOWN),
+                i + 1
+            )
             return
         }
         val airBlock = block.getRelative(BlockFace.UP)
         if (airBlock.type != Material.AIR) {
-            placeSapling(sapling, block.getRelative(BlockFace.DOWN), i + 1)
+            placeSapling(
+                sapling,
+                block.getRelative(BlockFace.DOWN),
+                i + 1
+            )
             return
         }
         @Suppress("MagicNumber")
@@ -133,7 +146,12 @@ internal class TCEvent(
             damageItem(player, tool)
         }
         BlockFace.entries.forEach { blockFace ->
-            breakRecursively(player, block.getRelative(blockFace), i + 1, tool)
+            breakRecursively(
+                player,
+                block.getRelative(blockFace),
+                i + 1,
+                tool
+            )
         }
     }
 
@@ -149,10 +167,19 @@ internal class TCEvent(
         if (!player.isSneaking) return
         if (!treeCapitatorConfigurationConfig.isEnabled) return
         if (!isLog(block.type)) return
-        breakRecursively(player, block, 0, tool)
+        breakRecursively(
+            player,
+            block,
+            0,
+            tool
+        )
         if (treeCapitatorConfigurationConfig.replant) {
             val sapling = saplingFromBlock(material) ?: return
-            placeSapling(sapling, block, 0)
+            placeSapling(
+                sapling,
+                block,
+                0
+            )
         }
     }
 }

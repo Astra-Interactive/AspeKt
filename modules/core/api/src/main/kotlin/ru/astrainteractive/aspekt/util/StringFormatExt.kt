@@ -10,22 +10,24 @@ import java.io.File
 inline fun <reified T> StringFormat.krateOf(
     file: File,
     factory: ValueFactory<T>
-): DefaultMutableKrate<T> = DefaultMutableKrate(
-    factory = factory,
-    loader = {
-        parseOrWriteIntoDefault<T?>(
-            file = file,
-            default = factory::create
-        )
-    },
-    saver = { value ->
-        if (value == null) {
-            file.delete()
-        } else {
-            writeIntoFile<T>(
-                value = value,
-                file = file
+): DefaultMutableKrate<T> {
+    return DefaultMutableKrate(
+        factory = factory,
+        loader = {
+            parseOrWriteIntoDefault<T?>(
+                file = file,
+                default = factory::create
             )
+        },
+        saver = { value ->
+            if (value == null) {
+                file.delete()
+            } else {
+                writeIntoFile<T>(
+                    value = value,
+                    file = file
+                )
+            }
         }
-    }
-)
+    )
+}

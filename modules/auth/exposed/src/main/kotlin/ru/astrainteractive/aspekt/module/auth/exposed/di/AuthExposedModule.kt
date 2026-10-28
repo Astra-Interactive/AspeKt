@@ -37,10 +37,15 @@ class AuthExposedModule(
                 SchemaUtils.create(UserTable)
             }
         }
-        .shareIn(moduleIoScope, SharingStarted.Lazily, replay = 1)
+        .shareIn(
+            scope = moduleIoScope,
+            started = SharingStarted.Lazily,
+            replay = 1
+        )
 
     val authRepository: AuthRepository = ExposedAuthRepository(databaseFlow = databaseFlow)
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onDisable = {
             moduleIoScope.cancel()

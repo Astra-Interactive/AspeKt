@@ -18,10 +18,12 @@ internal class PreHeatService(
     Logger by JUtiltLogger("PreHeatService") {
     private var lastJob: Job? = null
 
-    fun tryPreHeat() = launch {
-        lastJob?.join()
-        lastJob = coroutineContext.job
-        repository.updateCurrencies(getCurrencies.invoke())
-        lastJob = null
+    fun tryPreHeat() {
+        launch {
+            lastJob?.join()
+            lastJob = coroutineContext.job
+            repository.updateCurrencies(getCurrencies.invoke())
+            lastJob = null
+        }
     }
 }

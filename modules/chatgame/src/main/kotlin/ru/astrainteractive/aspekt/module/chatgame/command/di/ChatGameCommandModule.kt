@@ -40,6 +40,7 @@ internal class ChatGameCommandModule(
         ).create().run(::add)
     }
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {
             bukkitCoreModule.commandRegistrarContext.registerWhenReady(nodes, moduleUnconfinedScope)

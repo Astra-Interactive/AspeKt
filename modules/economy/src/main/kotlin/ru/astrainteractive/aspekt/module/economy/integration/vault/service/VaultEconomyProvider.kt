@@ -40,7 +40,12 @@ internal class VaultEconomyProvider(
     }
 
     private fun notImplemented(message: String): EconomyResponse {
-        return EconomyResponse(0.0, 0.0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, message)
+        return EconomyResponse(
+            0.0,
+            0.0,
+            EconomyResponse.ResponseType.NOT_IMPLEMENTED,
+            message
+        )
     }
 
     private fun requireOfflinePlayer(name: String?): OfflinePlayer {
@@ -67,9 +72,11 @@ internal class VaultEconomyProvider(
 
     override fun hasAccount(playerName: String?): Boolean = hasAccount(requireOfflinePlayer(playerName))
 
-    override fun hasAccount(player: OfflinePlayer?): Boolean = runIoBlocking {
-        player ?: return@runIoBlocking false
-        repository.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id) != null
+    override fun hasAccount(player: OfflinePlayer?): Boolean {
+        return runIoBlocking {
+            player ?: return@runIoBlocking false
+            repository.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id) != null
+        }
     }
 
     override fun hasAccount(playerName: String?, worldName: String?): Boolean {
@@ -80,9 +87,14 @@ internal class VaultEconomyProvider(
 
     override fun getBalance(playerName: String?): Double = getBalance(requireOfflinePlayer(playerName))
 
-    override fun getBalance(player: OfflinePlayer?): Double = runIoBlocking {
-        player ?: return@runIoBlocking 0.0
-        repository.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id)?.balance ?: 0.0
+    override fun getBalance(player: OfflinePlayer?): Double {
+        return runIoBlocking {
+            player ?: return@runIoBlocking 0.0
+            repository.findPlayerCurrency(
+                playerUuid = player.uniqueId.toString(),
+                currencyId = primaryCurrencyModel.id
+            )?.balance ?: 0.0
+        }
     }
 
     override fun getBalance(playerName: String?, world: String?): Double {
@@ -98,7 +110,11 @@ internal class VaultEconomyProvider(
     override fun has(p0: OfflinePlayer?, amount: Double): Boolean = getBalance(p0) >= amount
 
     override fun has(playerName: String?, worldName: String?, amount: Double): Boolean {
-        return has(requireOfflinePlayer(playerName), worldName, amount)
+        return has(
+            requireOfflinePlayer(playerName),
+            worldName,
+            amount
+        )
     }
 
     override fun has(p0: OfflinePlayer?, p1: String?, amount: Double): Boolean {
@@ -106,19 +122,32 @@ internal class VaultEconomyProvider(
     }
 
     override fun withdrawPlayer(playerName: String?, amount: Double): EconomyResponse {
-        return withdrawPlayer(requireOfflinePlayer(playerName), amount)
+        return withdrawPlayer(
+            requireOfflinePlayer(playerName),
+            amount
+        )
     }
 
     override fun withdrawPlayer(player: OfflinePlayer?, amount: Double): EconomyResponse {
         val playerName = player?.name
         if (player == null || playerName.isNullOrBlank()) {
-            return EconomyResponse(0.0, 0.0, EconomyResponse.ResponseType.FAILURE, "Player is null")
+            return EconomyResponse(
+                0.0,
+                0.0,
+                EconomyResponse.ResponseType.FAILURE,
+                "Player is null"
+            )
         }
         val playerCurrency = runIoBlocking {
             repository.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id)
         }
         if (playerCurrency == null) {
-            return EconomyResponse(0.0, 0.0, EconomyResponse.ResponseType.FAILURE, "Player is null")
+            return EconomyResponse(
+                0.0,
+                0.0,
+                EconomyResponse.ResponseType.FAILURE,
+                "Player is null"
+            )
         }
         if (playerCurrency.balance - amount < 0) {
             return EconomyResponse(
@@ -140,19 +169,31 @@ internal class VaultEconomyProvider(
     }
 
     override fun withdrawPlayer(playerName: String?, worldName: String?, amount: Double): EconomyResponse {
-        return withdrawPlayer(requireOfflinePlayer(playerName), worldName, amount)
+        return withdrawPlayer(
+            requireOfflinePlayer(playerName),
+            worldName,
+            amount
+        )
     }
 
     override fun withdrawPlayer(p0: OfflinePlayer?, p1: String?, p2: Double): EconomyResponse = withdrawPlayer(p0, p2)
 
     override fun depositPlayer(playerName: String?, amount: Double): EconomyResponse {
-        return depositPlayer(requireOfflinePlayer(playerName), amount)
+        return depositPlayer(
+            requireOfflinePlayer(playerName),
+            amount
+        )
     }
 
     override fun depositPlayer(player: OfflinePlayer?, amount: Double): EconomyResponse {
         val playerName = player?.name
         if (player == null || playerName.isNullOrBlank()) {
-            return EconomyResponse(0.0, 0.0, EconomyResponse.ResponseType.FAILURE, "Player is null")
+            return EconomyResponse(
+                0.0,
+                0.0,
+                EconomyResponse.ResponseType.FAILURE,
+                "Player is null"
+            )
         }
         val playerCurrency = runIoBlocking {
             repository.findPlayerCurrency(player.uniqueId.toString(), currencyId = primaryCurrencyModel.id)
@@ -177,7 +218,11 @@ internal class VaultEconomyProvider(
     }
 
     override fun depositPlayer(playerName: String?, worldName: String?, amount: Double): EconomyResponse {
-        return depositPlayer(requireOfflinePlayer(playerName), worldName, amount)
+        return depositPlayer(
+            requireOfflinePlayer(playerName),
+            worldName,
+            amount
+        )
     }
 
     override fun depositPlayer(player: OfflinePlayer?, p1: String?, amount: Double): EconomyResponse {

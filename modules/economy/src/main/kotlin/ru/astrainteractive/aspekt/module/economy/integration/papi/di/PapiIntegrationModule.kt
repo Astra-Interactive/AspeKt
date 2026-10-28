@@ -23,20 +23,17 @@ internal class PapiIntegrationModule(
     }
     val lifecycle: Lifecycle = Lifecycle.Lambda(
         onEnable = {
-            if (isPapiEnabled) {
-                economyPlaceholderExtension.register()
-            }
+            if (!isPapiEnabled) return@Lambda
+            economyPlaceholderExtension.register()
         },
         onReload = {
-            if (isPapiEnabled) {
-                if (economyPlaceholderExtension.isRegistered()) economyPlaceholderExtension.unregister()
-                economyPlaceholderExtension.register()
-            }
+            if (!isPapiEnabled) return@Lambda
+            if (economyPlaceholderExtension.isRegistered()) economyPlaceholderExtension.unregister()
+            economyPlaceholderExtension.register()
         },
         onDisable = {
-            if (isPapiEnabled) {
-                if (economyPlaceholderExtension.isRegistered()) economyPlaceholderExtension.unregister()
-            }
+            if (!isPapiEnabled) return@Lambda
+            if (economyPlaceholderExtension.isRegistered()) economyPlaceholderExtension.unregister()
         }
     )
 }

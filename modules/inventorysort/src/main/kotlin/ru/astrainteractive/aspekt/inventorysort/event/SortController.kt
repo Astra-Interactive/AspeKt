@@ -11,7 +11,7 @@ internal class SortController {
 
     private val sortTypes = mutableMapOf<UUID, Sort>()
 
-    fun rememberPlayer(player: Player) {
+    fun resetPlayerSort(player: Player) {
         sortTypes[player.uniqueId] = Sort.values().first()
     }
 
@@ -23,55 +23,69 @@ internal class SortController {
         content: Array<out ItemStack?>,
         desc: Boolean,
         algorithm: () -> Comparator<ItemStack?>,
-    ): Array<out ItemStack?> = if (desc) {
-        content.sortedArrayWith(algorithm())
-    } else {
-        content.sortedArrayWith(algorithm()).reversedArray()
-    }
-
-    private fun sortByType(content: Array<out ItemStack?>, desc: Boolean) = sortBy(content, desc) {
-        compareBy { itemStack -> itemStack?.type }
-    }
-
-    private fun sortByName(content: Array<out ItemStack?>, desc: Boolean) = sortBy(content, desc) {
-        compareBy { itemStack -> itemStack?.itemMeta?.displayName }
-    }
-
-    private fun sortByWool(content: Array<out ItemStack?>, desc: Boolean) = sortBy(content, desc) {
-        compareBy { itemStack ->
-            itemStack?.type?.name?.contains("wool", ignoreCase = true)
+    ): Array<out ItemStack?> {
+        return if (desc) {
+            content.sortedArrayWith(algorithm.invoke())
+        } else {
+            content.sortedArrayWith(algorithm.invoke()).reversedArray()
         }
     }
 
-    private fun sortByGlass(content: Array<out ItemStack?>, desc: Boolean) = sortBy(content, desc) {
-        compareBy { itemStack ->
-            itemStack?.type?.name?.contains("glass", ignoreCase = true)
+    private fun sortByType(content: Array<out ItemStack?>, desc: Boolean): Array<out ItemStack?> {
+        return sortBy(content, desc) {
+            compareBy { itemStack -> itemStack?.type }
         }
     }
 
-    private fun sortByBlock(content: Array<out ItemStack?>, desc: Boolean) = sortBy(content, desc) {
-        compareBy(
-            { itemStack -> itemStack?.type?.isBlock },
-            { itemStack -> itemStack?.type?.name?.contains("glass", ignoreCase = true) },
-            { itemStack -> itemStack?.type?.name?.contains("wool", ignoreCase = true) },
-            { itemStack -> itemStack?.type?.name?.contains("wool", ignoreCase = true) },
-            { itemStack -> itemStack?.type?.name?.contains("plank", ignoreCase = true) },
-            { itemStack -> itemStack?.type?.name?.contains("wood", ignoreCase = true) },
-            { itemStack -> itemStack?.type?.name?.contains("ore", ignoreCase = true) },
-            { itemStack -> itemStack?.type?.name?.contains("block", ignoreCase = true) },
-        )
+    private fun sortByName(content: Array<out ItemStack?>, desc: Boolean): Array<out ItemStack?> {
+        return sortBy(content, desc) {
+            compareBy { itemStack -> itemStack?.itemMeta?.displayName }
+        }
     }
 
-    private fun sortByTool(content: Array<out ItemStack?>, desc: Boolean) = sortBy(content, desc) {
-        compareBy(
-            { itemStack -> itemStack?.type?.name?.contains("axe", ignoreCase = true) },
-            { itemStack -> itemStack?.type?.name?.contains("head", ignoreCase = true) },
-            { itemStack -> itemStack?.type?.name?.contains("leggings", ignoreCase = true) },
-            { itemStack -> itemStack?.type?.name?.contains("boots", ignoreCase = true) },
-            { itemStack -> itemStack?.type?.name?.contains("chestplate", ignoreCase = true) },
-            { itemStack -> itemStack?.type?.name?.contains("sword", ignoreCase = true) },
-            { itemStack -> itemStack?.type?.name?.contains("hoe", ignoreCase = true) },
-        )
+    private fun sortByWool(content: Array<out ItemStack?>, desc: Boolean): Array<out ItemStack?> {
+        return sortBy(content, desc) {
+            compareBy { itemStack ->
+                itemStack?.type?.name?.contains("wool", ignoreCase = true)
+            }
+        }
+    }
+
+    private fun sortByGlass(content: Array<out ItemStack?>, desc: Boolean): Array<out ItemStack?> {
+        return sortBy(content, desc) {
+            compareBy { itemStack ->
+                itemStack?.type?.name?.contains("glass", ignoreCase = true)
+            }
+        }
+    }
+
+    private fun sortByBlock(content: Array<out ItemStack?>, desc: Boolean): Array<out ItemStack?> {
+        return sortBy(content, desc) {
+            compareBy(
+                { itemStack -> itemStack?.type?.isBlock },
+                { itemStack -> itemStack?.type?.name?.contains("glass", ignoreCase = true) },
+                { itemStack -> itemStack?.type?.name?.contains("wool", ignoreCase = true) },
+                { itemStack -> itemStack?.type?.name?.contains("wool", ignoreCase = true) },
+                { itemStack -> itemStack?.type?.name?.contains("plank", ignoreCase = true) },
+                { itemStack -> itemStack?.type?.name?.contains("wood", ignoreCase = true) },
+                { itemStack -> itemStack?.type?.name?.contains("ore", ignoreCase = true) },
+                { itemStack -> itemStack?.type?.name?.contains("block", ignoreCase = true) },
+            )
+        }
+    }
+
+    private fun sortByTool(content: Array<out ItemStack?>, desc: Boolean): Array<out ItemStack?> {
+        return sortBy(content, desc) {
+            compareBy(
+                { itemStack -> itemStack?.type?.name?.contains("axe", ignoreCase = true) },
+                { itemStack -> itemStack?.type?.name?.contains("head", ignoreCase = true) },
+                { itemStack -> itemStack?.type?.name?.contains("leggings", ignoreCase = true) },
+                { itemStack -> itemStack?.type?.name?.contains("boots", ignoreCase = true) },
+                { itemStack -> itemStack?.type?.name?.contains("chestplate", ignoreCase = true) },
+                { itemStack -> itemStack?.type?.name?.contains("sword", ignoreCase = true) },
+                { itemStack -> itemStack?.type?.name?.contains("hoe", ignoreCase = true) },
+            )
+        }
     }
 
     fun trySortInventory(clickedInventory: Inventory, player: Player) {

@@ -17,18 +17,18 @@ internal interface JailRepository {
     /**
      * Fetch all jails
      */
-    suspend fun getJails(): Result<List<Jail>>
+    suspend fun findJails(): Result<List<Jail>>
 
     /**
      * get specific jail
      */
-    suspend fun getJail(name: String): Result<Jail>
+    suspend fun findJail(name: String): Result<Jail>
 
     /**
      * Get current jail inmates
      */
-    suspend fun getJailInmates(jailName: String): Result<List<JailInmate>>
-    suspend fun getInmates(): Result<List<JailInmate>>
+    suspend fun findJailInmates(jailName: String): Result<List<JailInmate>>
+    suspend fun findInmates(): Result<List<JailInmate>>
 
     /**
      * Add player into jail cell
@@ -38,7 +38,7 @@ internal interface JailRepository {
     /**
      * Find jail inmate
      */
-    suspend fun getInmate(uuid: String): Result<JailInmate>
+    suspend fun findInmate(uuid: String): Result<JailInmate>
 
     /**
      * Free inmate from jail

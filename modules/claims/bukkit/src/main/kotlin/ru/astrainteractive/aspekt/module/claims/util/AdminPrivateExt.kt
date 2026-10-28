@@ -8,20 +8,26 @@ import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 
-internal fun Chunk.asClaimChunk(): ClaimChunk = ClaimChunk(
-    x = x,
-    z = z,
-    worldName = world.name,
-    flags = emptyMap(),
-    chunkKey = chunkKey
-)
+internal fun Chunk.asClaimChunk(): ClaimChunk {
+    return ClaimChunk(
+        x = x,
+        z = z,
+        worldName = world.name,
+        flags = emptyMap(),
+        chunkKey = chunkKey
+    )
+}
 
-internal fun Player.asClaimPlayer(): ClaimPlayer = ClaimPlayer(
-    uuid = uniqueId,
-    username = name
-)
+internal fun Player.asClaimPlayer(): ClaimPlayer {
+    return ClaimPlayer(
+        uuid = uniqueId,
+        username = name
+    )
+}
 
-internal fun OnlineKPlayer.asClaimPlayer(): ClaimPlayer = ClaimPlayer(
-    uuid = uuid,
-    username = name
-)
+internal fun OnlineKPlayer.asClaimPlayer(): ClaimPlayer {
+    return ClaimPlayer(
+        uuid = uuid,
+        username = name
+    )
+}

@@ -1,3 +1,5 @@
+@file:Suppress("FieldDependencyConstruction")
+
 package ru.astrainteractive.aspekt.module.claims.event
 
 import io.papermc.paper.event.player.PlayerItemFrameChangeEvent
@@ -44,6 +46,7 @@ import ru.astrainteractive.aspekt.module.claims.util.isAble
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.aspekt.plugin.model.PluginPermission
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.util.actionBlocked
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.server.permission.asKPermissible
 import ru.astrainteractive.astralibs.server.util.asKAudience
@@ -60,7 +63,7 @@ internal class BukkitClaimEvent(
 
     @Suppress("MagicNumber")
     private val debounce = EventDebounce<RetractKey>(5.seconds)
-    private fun <T> handleDefault(
+    private fun <T> cancelIfNotAllowed(
         retractKey: RetractKey,
         e: T,
         claimChunk: ClaimChunk,
@@ -86,8 +89,12 @@ internal class BukkitClaimEvent(
 
     @EventHandler
     fun blockBreakEvent(e: BlockBreakEvent) {
-        handleDefault(
-            retractKey = RetractKey.Vararg(e.block.chunk, e.player, "blockBreakEvent"),
+        cancelIfNotAllowed(
+            retractKey = RetractKey.Vararg(
+                e.block.chunk,
+                e.player,
+                "blockBreakEvent"
+            ),
             e = e,
             claimChunk = e.block.chunk.asClaimChunk(),
             player = e.player,
@@ -97,8 +104,12 @@ internal class BukkitClaimEvent(
 
     @EventHandler
     fun blockPlaceEvent(e: BlockPlaceEvent) {
-        handleDefault(
-            retractKey = RetractKey.Vararg(e.block.chunk, e.player, "blockPlaceEvent"),
+        cancelIfNotAllowed(
+            retractKey = RetractKey.Vararg(
+                e.block.chunk,
+                e.player,
+                "blockPlaceEvent"
+            ),
             e = e,
             claimChunk = e.blockPlaced.chunk.asClaimChunk(),
             player = e.player,
@@ -111,8 +122,12 @@ internal class BukkitClaimEvent(
         val location = e.interactionPoint ?: e.player.location
         if (e.action == Action.LEFT_CLICK_AIR) return
         if (e.action == Action.RIGHT_CLICK_AIR) return
-        handleDefault(
-            retractKey = RetractKey.Vararg(location, e.player, "interactEvent"),
+        cancelIfNotAllowed(
+            retractKey = RetractKey.Vararg(
+                location,
+                e.player,
+                "interactEvent"
+            ),
             e = e,
             claimChunk = location.chunk.asClaimChunk(),
             player = e.player,
@@ -122,8 +137,12 @@ internal class BukkitClaimEvent(
 
     @EventHandler
     fun itemFrameEvent(e: PlayerItemFrameChangeEvent) {
-        handleDefault(
-            retractKey = RetractKey.Vararg(e.player.location, e.player, "itemFrameEvent"),
+        cancelIfNotAllowed(
+            retractKey = RetractKey.Vararg(
+                e.player.location,
+                e.player,
+                "itemFrameEvent"
+            ),
             e = e,
             claimChunk = e.player.location.chunk.asClaimChunk(),
             player = e.player,
@@ -133,8 +152,12 @@ internal class BukkitClaimEvent(
 
     @EventHandler
     fun breakItemFrameEvent(e: HangingBreakByEntityEvent) {
-        handleDefault(
-            retractKey = RetractKey.Vararg(e.entity.location, e.entity, "breakItemFrameEvent"),
+        cancelIfNotAllowed(
+            retractKey = RetractKey.Vararg(
+                e.entity.location,
+                e.entity,
+                "breakItemFrameEvent"
+            ),
             e = e,
             claimChunk = e.entity.location.chunk.asClaimChunk(),
             player = e.remover as? Player,
@@ -144,8 +167,12 @@ internal class BukkitClaimEvent(
 
     @EventHandler
     fun armorStandEvent(e: PlayerArmorStandManipulateEvent) {
-        handleDefault(
-            retractKey = RetractKey.Vararg(e.player.location, e.player, "armorStandEvent"),
+        cancelIfNotAllowed(
+            retractKey = RetractKey.Vararg(
+                e.player.location,
+                e.player,
+                "armorStandEvent"
+            ),
             e = e,
             claimChunk = e.player.location.chunk.asClaimChunk(),
             player = e.player,
@@ -156,8 +183,12 @@ internal class BukkitClaimEvent(
     @EventHandler
     fun armorStandBreakEvent(e: EntityDamageByEntityEvent) {
         val armorStand = e.entity as? ArmorStand ?: return
-        handleDefault(
-            retractKey = RetractKey.Vararg(armorStand.location, armorStand, "armorStandBreakEvent"),
+        cancelIfNotAllowed(
+            retractKey = RetractKey.Vararg(
+                armorStand.location,
+                armorStand,
+                "armorStandBreakEvent"
+            ),
             e = e,
             claimChunk = armorStand.location.chunk.asClaimChunk(),
             player = e.damager as? Player,
@@ -169,7 +200,7 @@ internal class BukkitClaimEvent(
     @EventHandler
     fun onBlockExplode(e: BlockExplodeEvent) {
         e.blockList().forEach { block ->
-            handleDefault(
+            cancelIfNotAllowed(
                 retractKey = RetractKey.Vararg(block.chunk, "onBlockExplode"),
                 e = e,
                 claimChunk = block.chunk.asClaimChunk(),
@@ -182,7 +213,7 @@ internal class BukkitClaimEvent(
     @EventHandler
     fun onEntityExplode(e: EntityExplodeEvent) {
         e.blockList().forEach { block ->
-            handleDefault(
+            cancelIfNotAllowed(
                 retractKey = RetractKey.Vararg(block.chunk, "onEntityExplode"),
                 e = e,
                 claimChunk = block.chunk.asClaimChunk(),
@@ -194,7 +225,7 @@ internal class BukkitClaimEvent(
 
     @EventHandler
     fun onPrimeExplosion(e: ExplosionPrimeEvent) {
-        handleDefault(
+        cancelIfNotAllowed(
             retractKey = RetractKey.Vararg(e.entity.location.chunk, "onPrimeExplosion"),
             e = e,
             claimChunk = e.entity.location.chunk.asClaimChunk(),
@@ -206,7 +237,7 @@ internal class BukkitClaimEvent(
     // Placing
     @EventHandler
     fun onBucketEmptyEvent(e: PlayerBucketEmptyEvent) {
-        handleDefault(
+        cancelIfNotAllowed(
             retractKey = RetractKey.Vararg(e.blockClicked.location.chunk, "onBucketEmptyEvent"),
             e = e,
             claimChunk = e.blockClicked.location.chunk.asClaimChunk(),
@@ -217,8 +248,13 @@ internal class BukkitClaimEvent(
 
     @EventHandler
     fun onTntLavaPlace(e: BlockPlaceEvent) {
-        if (!listOf(Material.TNT, Material.LAVA, Material.LAVA_BUCKET).contains(e.blockPlaced.type)) return
-        handleDefault(
+        val materials = listOf(
+            Material.TNT,
+            Material.LAVA,
+            Material.LAVA_BUCKET
+        )
+        if (!materials.contains(e.blockPlaced.type)) return
+        cancelIfNotAllowed(
             retractKey = RetractKey.Vararg(e.blockPlaced.location.chunk, "onTntLavaPlace"),
             e = e,
             claimChunk = e.blockPlaced.location.chunk.asClaimChunk(),
@@ -230,7 +266,7 @@ internal class BukkitClaimEvent(
     @EventHandler
     fun onBlockFromTo(e: BlockFromToEvent) {
         if (!listOf(Material.LAVA, Material.LAVA_BUCKET).contains(e.block.type)) return
-        handleDefault(
+        cancelIfNotAllowed(
             retractKey = RetractKey.Vararg(e.block.location.chunk, "onBlockFromTo"),
             e = e,
             claimChunk = e.block.location.chunk.asClaimChunk(),
@@ -242,7 +278,7 @@ internal class BukkitClaimEvent(
     @EventHandler
     fun onBlockIgniteEvent(e: BlockIgniteEvent) {
         val location = (e.ignitingBlock ?: e.block).location
-        handleDefault(
+        cancelIfNotAllowed(
             retractKey = RetractKey.Vararg(location.chunk, "onBlockIgniteEvent"),
             e = e,
             claimChunk = location.chunk.asClaimChunk(),
@@ -254,7 +290,7 @@ internal class BukkitClaimEvent(
     @EventHandler
     fun onBlockBurnEvent(e: BlockBurnEvent) {
         val location = (e.ignitingBlock ?: e.block).location
-        handleDefault(
+        cancelIfNotAllowed(
             retractKey = RetractKey.Vararg(location.chunk, "onBlockBurnEvent"),
             e = e,
             claimChunk = location.chunk.asClaimChunk(),
@@ -266,7 +302,7 @@ internal class BukkitClaimEvent(
     @EventHandler
     fun onBlockSpread(e: BlockSpreadEvent) {
         if (!listOf(Material.LAVA, Material.FIRE).contains(e.block.type)) return
-        handleDefault(
+        cancelIfNotAllowed(
             retractKey = RetractKey.Vararg(e.block.location.chunk, "onBlockSpread"),
             e = e,
             claimChunk = e.block.location.chunk.asClaimChunk(),
@@ -278,8 +314,12 @@ internal class BukkitClaimEvent(
     @EventHandler
     fun playerDamageEvent(e: EntityDamageEvent) {
         val player = e.entity as? Player ?: return
-        handleDefault(
-            retractKey = RetractKey.Vararg(e.entity.location.chunk, player, "playerDamageEvent"),
+        cancelIfNotAllowed(
+            retractKey = RetractKey.Vararg(
+                e.entity.location.chunk,
+                player,
+                "playerDamageEvent"
+            ),
             e = e,
             claimChunk = player.location.chunk.asClaimChunk(),
             player = null,
@@ -290,8 +330,12 @@ internal class BukkitClaimEvent(
     @EventHandler
     fun entitySpawnEvent(e: EntitySpawnEvent) {
         if (e.entity !is Monster || e.entity !is Enemy) return
-        handleDefault(
-            retractKey = RetractKey.Vararg(e.entity.location.chunk, e.entity, "entitySpawnEvent"),
+        cancelIfNotAllowed(
+            retractKey = RetractKey.Vararg(
+                e.entity.location.chunk,
+                e.entity,
+                "entitySpawnEvent"
+            ),
             e = e,
             claimChunk = e.entity.location.chunk.asClaimChunk(),
             player = null,
@@ -306,7 +350,7 @@ internal class BukkitClaimEvent(
             .distinctBy(Location::getChunk)
             .map(Location::getChunk)
         chunks.forEach { chunk ->
-            handleDefault(
+            cancelIfNotAllowed(
                 retractKey = RetractKey.Vararg(
                     chunks,
                     "portalCreateEvent"
@@ -320,7 +364,7 @@ internal class BukkitClaimEvent(
     }
 
     private fun pistonEvent(e: BlockPistonEvent) {
-        handleDefault(
+        cancelIfNotAllowed(
             retractKey = RetractKey.Vararg(e.block.location.chunk, "BlockPistonEvent"),
             e = e,
             claimChunk = e.block.location.chunk.asClaimChunk(),
@@ -341,7 +385,7 @@ internal class BukkitClaimEvent(
 
     @EventHandler
     fun onBlockPistonRetractEvent(e: BlockFadeEvent) {
-        handleDefault(
+        cancelIfNotAllowed(
             retractKey = RetractKey.Vararg(e.block.location.chunk, "BlockFadeEvent"),
             e = e,
             claimChunk = e.block.location.chunk.asClaimChunk(),

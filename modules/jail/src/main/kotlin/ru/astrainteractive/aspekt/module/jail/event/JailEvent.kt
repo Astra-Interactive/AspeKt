@@ -57,7 +57,7 @@ internal class JailEvent(
 
     private fun teleportBackToJail(player: Player) {
         scope.launch {
-            val inmate = jailRepository.getInmate(player.uniqueId.toString())
+            val inmate = jailRepository.findInmate(player.uniqueId.toString())
                 .getOrNull()
                 ?: return@launch
             teleportInmateToJailUseCase.invoke(inmate)
@@ -79,6 +79,6 @@ internal class JailEvent(
     @Suppress("UnusedParameter")
     fun onStart(e: ServerLoadEvent) {
         Bukkit.getOnlinePlayers()
-            .forEach { player -> jailCache.cache(player) }
+            .forEach(jailCache::cache)
     }
 }

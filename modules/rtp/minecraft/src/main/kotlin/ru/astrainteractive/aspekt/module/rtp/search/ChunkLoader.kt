@@ -20,10 +20,20 @@ internal class ChunkLoader(
     suspend fun loadToFull(level: ServerLevel, chunkX: Int, chunkZ: Int): LevelChunk? {
         val chunkPos = ChunkPos(chunkX, chunkZ)
         withContext(dispatchers.Main) {
-            level.chunkSource.addRegionTicket(RTP_TICKET, chunkPos, 0, chunkPos)
+            level.chunkSource.addRegionTicket(
+                RTP_TICKET,
+                chunkPos,
+                0,
+                chunkPos
+            )
         }
         val chunkResult = level.chunkSource
-            .getChunkFuture(chunkX, chunkZ, ChunkStatus.FULL, true)
+            .getChunkFuture(
+                chunkX,
+                chunkZ,
+                ChunkStatus.FULL,
+                true
+            )
             .await()
         if (!chunkResult.isSuccess) {
             error { "#loadChunkToFull fail: ${chunkResult.error}" }
@@ -38,7 +48,7 @@ internal class ChunkLoader(
 
         private val RTP_TICKET: TicketType<ChunkPos> = TicketType.create(
             "aspekt_rtp",
-            Comparator.comparingLong { pos: ChunkPos -> pos.toLong() },
+            Comparator.comparingLong(ChunkPos::toLong),
             RTP_TICKET_TIMEOUT_TICKS
         )
     }

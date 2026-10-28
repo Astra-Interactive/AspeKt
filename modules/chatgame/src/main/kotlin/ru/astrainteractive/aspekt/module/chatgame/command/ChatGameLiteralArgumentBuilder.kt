@@ -14,6 +14,7 @@ import ru.astrainteractive.aspekt.module.chatgame.model.Reward
 import ru.astrainteractive.aspekt.module.chatgame.service.MoneyRewardPayer
 import ru.astrainteractive.aspekt.module.chatgame.service.broadcast
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.util.moneyRewarded
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
@@ -41,7 +42,7 @@ internal class ChatGameLiteralArgumentBuilder(
     private val chatGameConfig by chatGameConfigKrate
     private val mutex = Mutex()
 
-    private fun handleAnswer(player: OnlineKPlayer, answer: String) {
+    private fun checkAnswer(player: OnlineKPlayer, answer: String) {
         ioScope.launch(mutex) {
             supervisorScope {
                 val chatGame = chatGameStore.state.first() as? ChatGameStore.State.Started
@@ -74,15 +75,15 @@ internal class ChatGameLiteralArgumentBuilder(
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("quiz") {
-                runs(commandExceptionHandler::handle) { ctx ->
+                runs(commandExceptionHandler::onException) { ctx ->
                     val player = ctx.requirePlayer()
-                    handleAnswer(player, "")
+                    checkAnswer(player, "")
                 }
                 argument("answer", StringArgumentType.greedyString()) { answerArg ->
-                    runs(commandExceptionHandler::handle) { ctx ->
+                    runs(commandExceptionHandler::onException) { ctx ->
                         val player = ctx.requirePlayer()
                         val answer = ctx.requireArgument(answerArg)
-                        handleAnswer(player, answer)
+                        checkAnswer(player, answer)
                     }
                 }
             }

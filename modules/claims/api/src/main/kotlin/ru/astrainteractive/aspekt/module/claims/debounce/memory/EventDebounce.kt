@@ -1,3 +1,5 @@
+@file:Suppress("ImplementationVisibility")
+
 package ru.astrainteractive.aspekt.module.claims.debounce.memory
 
 import com.google.common.cache.CacheBuilder

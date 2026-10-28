@@ -2,17 +2,16 @@
 
 package ru.astrainteractive.aspekt.module.chatgame.model
 
+import ru.astrainteractive.aspekt.module.chatgame.util.randomAmount
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class RewardTest {
-    private val drawCount = 1_000
-
     private fun drawnAmounts(minAmount: Double, maxAmount: Double): Set<Int> {
         val reward = Reward.Money(minAmount = minAmount, maxAmount = maxAmount)
         val random = Random(seed = 42)
-        return List(drawCount) { _ -> reward.randomAmount(random) }.toSet()
+        return List(DRAW_COUNT) { _ -> reward.randomAmount(random) }.toSet()
     }
 
     @Test
@@ -38,5 +37,9 @@ class RewardTest {
     @Test
     fun GIVEN_negative_bound_WHEN_amount_is_drawn_THEN_it_counts_as_zero() {
         assertEquals((0..2).toSet(), drawnAmounts(minAmount = -5.0, maxAmount = 2.0))
+    }
+
+    companion object {
+        private const val DRAW_COUNT = 1_000
     }
 }

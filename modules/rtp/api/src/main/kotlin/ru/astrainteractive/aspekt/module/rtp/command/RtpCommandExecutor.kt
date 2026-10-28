@@ -7,6 +7,7 @@ import ru.astrainteractive.aspekt.module.rtp.api.RtpSearchResult
 import ru.astrainteractive.aspekt.module.rtp.api.SafeLocationProvider
 import ru.astrainteractive.aspekt.module.rtp.model.RtpConfig
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.plugin.util.lowTickTime
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
@@ -24,7 +25,7 @@ internal class RtpCommandExecutor(
     fun execute(input: RtpCommand) {
         ioScope.launch {
             val player = input.player
-            if (safeLocationProvider.getJobsNumber() >= rtpConfig.maxSearchJobs) {
+            if (safeLocationProvider.countJobs() >= rtpConfig.maxSearchJobs) {
                 player.sendMessage(translation.rtp.maxJobs)
                 return@launch
             }
@@ -39,7 +40,7 @@ internal class RtpCommandExecutor(
                 return@launch
             }
             player.sendMessage(translation.rtp.searching)
-            when (val result = safeLocationProvider.getLocation(this@launch, player.uuid)) {
+            when (val result = safeLocationProvider.findLocation(this@launch, player.uuid)) {
                 is RtpSearchResult.Success -> {
                     player.sendMessage(translation.rtp.foundPlace)
                     withContext(dispatchers.Main) {

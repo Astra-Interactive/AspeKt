@@ -21,7 +21,7 @@ internal class InMemoryJailCache(
 
     override fun cache(uuid: String) {
         scope.launch {
-            val isInmate = jailRepository.getInmate(uuid).getOrNull() != null
+            val isInmate = jailRepository.findInmate(uuid).getOrNull() != null
             cache[uuid] = isInmate
         }
     }
@@ -30,9 +30,9 @@ internal class InMemoryJailCache(
         cache.remove(uuid)
     }
 
-    override fun getJails(): List<Jail> {
+    override fun findJails(): List<Jail> {
         scope.launch {
-            jailRepository.getJails()
+            jailRepository.findJails()
                 .onSuccess { jails ->
                     cachedJails.clear()
                     cachedJails.addAll(jails)
@@ -41,9 +41,9 @@ internal class InMemoryJailCache(
         return cachedJails
     }
 
-    override fun getInmates(): List<JailInmate> {
+    override fun findInmates(): List<JailInmate> {
         scope.launch {
-            jailRepository.getInmates()
+            jailRepository.findInmates()
                 .onSuccess { jailInmates ->
                     cachedInmates.clear()
                     cachedInmates.addAll(jailInmates)

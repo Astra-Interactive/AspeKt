@@ -20,7 +20,12 @@ internal class SafeColumnScanner {
         for (x in pos.minBlockX until pos.maxBlockX) {
             for (z in pos.minBlockZ until pos.maxBlockZ) {
                 for (y in minY until maxY) {
-                    val block = chunk.getBlockState(BlockPos(x, y, z)).block
+                    val blockPos = BlockPos(
+                        x,
+                        y,
+                        z
+                    )
+                    val block = chunk.getBlockState(blockPos).block
                     if (block is LiquidBlock) {
                         yield()
                         continue

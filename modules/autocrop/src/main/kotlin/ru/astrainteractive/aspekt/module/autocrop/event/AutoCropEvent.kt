@@ -24,7 +24,7 @@ internal class AutoCropEvent(
 ) : EventListener {
     private val autoCropConfig by pluginConfig
 
-    private fun processBlock(block: Block, hoeItemStack: ItemStack?) {
+    private fun harvestCrop(block: Block, hoeItemStack: ItemStack?) {
         if (block.type == Material.AIR) return
         val clickedCrop = (block.blockData as? Ageable) ?: return
 
@@ -63,7 +63,7 @@ internal class AutoCropEvent(
         clickedBlock
             .relativeBlocks(radius)
             .forEach { block ->
-                processBlock(block, hoeItemStack)
+                harvestCrop(block, hoeItemStack)
             }
     }
 }

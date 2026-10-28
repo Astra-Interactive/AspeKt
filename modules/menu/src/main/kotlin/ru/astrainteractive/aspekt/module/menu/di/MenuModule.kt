@@ -34,6 +34,7 @@ class MenuModule(
         menuModelsKrate = menuModels
     )
 
+    @Suppress("TrivialLambdaReference")
     val lifecycle: Lifecycle by lazy {
         Lifecycle.Lambda(
             onEnable = {
@@ -49,6 +50,6 @@ class MenuModule(
     }
 
     companion object {
-        fun getConfigurationFile(dataFolder: File): File = dataFolder.resolve("menu.yml")
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("menu.yml")
     }
 }
