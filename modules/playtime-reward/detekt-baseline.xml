@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ClassSignature:FakeOnlineKPlayer.kt:FakeOnlineKPlayer : OnlineKPlayer</ID>
+    <ID>ClassSignature:PlaytimeRewardModule.kt:PlaytimeRewardModule</ID>
+    <ID>FunctionExpressionBody:KratePlaytimeRewardRepository.kt:KratePlaytimeRewardRepository${ return stringFormat.krateOf( file = tempDataFolder.resolve("playtime_${player.uuid}.json"), factory = { PlaytimeReward( timePlayed = Duration.ZERO, uuid = player.uuid, latestUsername = player.name, latestJoin = clock.now() ) } ) }</ID>
+    <ID>FunctionExpressionBody:PlaytimeRewardExt.kt:{ return copy( latestJoin = now, timePlayed = timePlayed + (now - latestJoin) ) }</ID>
+    <ID>FunctionExpressionBody:PlaytimeRewardExt.kt:{ return timePlayed >= requiredDuration }</ID>
+    <ID>TrailingCommaOnCallSite:KratePlaytimeRewardRepository.kt:KratePlaytimeRewardRepository$( file = tempDataFolder.resolve("playtime_${player.uuid}.json"), factory = { PlaytimeReward( timePlayed = Duration.ZERO, uuid = player.uuid, latestUsername = player.name, latestJoin = clock.now() ) } )</ID>
+    <ID>TrailingCommaOnCallSite:KratePlaytimeRewardRepository.kt:KratePlaytimeRewardRepository$( timePlayed = Duration.ZERO, uuid = player.uuid, latestUsername = player.name, latestJoin = clock.now() )</ID>
+    <ID>TrailingCommaOnCallSite:PlaytimeRewardExt.kt:( latestJoin = now, timePlayed = timePlayed + (now - latestJoin) )</ID>
+    <ID>TrailingCommaOnCallSite:PlaytimeRewardModule.kt:PlaytimeRewardModule$( clock = Clock.System, playtimeRewardRepository = KratePlaytimeRewardRepository( tempDataFolder = coreModule.dataFolder .resolve(".temp") .also(File::mkdirs), stringFormat = coreModule.jsonStringFormat, clock = Clock.System ), economyFacade = bukkitCoreModule.currencyEconomyProviderFactory.findDefault(), playtimeRewardConfigurationKrate = configKrate, pluginTranslationKrate = coreModule.translationKrate )</ID>
+    <ID>TrailingCommaOnCallSite:PlaytimeRewardModule.kt:PlaytimeRewardModule$( file = resolveConfigurationFile(coreModule.dataFolder), factory = ::PlaytimeRewardConfiguration )</ID>
+    <ID>TrailingCommaOnCallSite:PlaytimeRewardModule.kt:PlaytimeRewardModule$( interval = configKrate.cachedStateFlow.map { rewardConfiguration -> rewardConfiguration.checkInterval }, scope = coreModule.ioScope, logger = JUtiltLogger("PlaytimeRewardService"), task = PlaytimeServiceTask( trackPlaytimeUseCase = trackPlaytimeUseCase, platformServer = coreModule.platformServer ) )</ID>
+    <ID>TrailingCommaOnCallSite:PlaytimeRewardModule.kt:PlaytimeRewardModule$( onEnable = { eventListener.onEnable(bukkitCoreModule.plugin) expireService.onEnable() }, onDisable = { expireService.onDisable() eventListener.onDisable() }, onReload = { configKrate.getValue() } )</ID>
+    <ID>TrailingCommaOnCallSite:PlaytimeRewardModule.kt:PlaytimeRewardModule$( tempDataFolder = coreModule.dataFolder .resolve(".temp") .also(File::mkdirs), stringFormat = coreModule.jsonStringFormat, clock = Clock.System )</ID>
+    <ID>TrailingCommaOnCallSite:PlaytimeRewardModule.kt:PlaytimeRewardModule$( trackPlaytimeUseCase = trackPlaytimeUseCase, ioScope = coreModule.ioScope )</ID>
+    <ID>TrailingCommaOnCallSite:PlaytimeRewardModule.kt:PlaytimeRewardModule$( trackPlaytimeUseCase = trackPlaytimeUseCase, platformServer = coreModule.platformServer )</ID>
+    <ID>TrailingCommaOnCallSite:PlaytimeRewardTest.kt:PlaytimeRewardTest$( timePlayed = 10.minutes, uuid = UUID.fromString("550e8400-e29b-41d4-a716-446655440001"), latestUsername = "Player", latestJoin = joinedAt )</ID>
+    <ID>TrailingCommaOnCallSite:TrackPlaytimeUseCaseTest.kt:TrackPlaytimeUseCaseTest$( clock = clock, playtimeRewardRepository = repository, economyFacade = economy, playtimeRewardConfigurationKrate = DefaultMutableKrate( factory = { configuration }, loader = { null } ).asCachedKrate(), pluginTranslationKrate = DefaultMutableKrate(factory = ::PluginTranslation, loader = { null }).asCachedKrate() )</ID>
+    <ID>TrailingCommaOnCallSite:TrackPlaytimeUseCaseTest.kt:TrackPlaytimeUseCaseTest$( factory = { configuration }, loader = { null } )</ID>
+    <ID>TrailingCommaOnCallSite:TrackPlaytimeUseCaseTest.kt:TrackPlaytimeUseCaseTest$( tempDataFolder = folder, stringFormat = Json, clock = clock )</ID>
+    <ID>TrailingCommaOnCallSite:TrackPlaytimeUseCaseTest.kt:TrackPlaytimeUseCaseTest$( uuid = UUID.fromString("550e8400-e29b-41d4-a716-446655440001"), name = "Player" )</ID>
+    <ID>TrailingCommaOnDeclarationSite:FakeOnlineKPlayer.kt:FakeOnlineKPlayer$( override val uuid: UUID, override val name: String )</ID>
+    <ID>TrailingCommaOnDeclarationSite:KratePlaytimeRewardRepository.kt:KratePlaytimeRewardRepository$( private val tempDataFolder: File, private val stringFormat: StringFormat, private val clock: Clock )</ID>
+    <ID>TrailingCommaOnDeclarationSite:PlaytimeReward.kt:PlaytimeReward$( @SerialName("time_played") val timePlayed: Duration, @SerialName("uuid") @Serializable(JUuidSerializer::class) val uuid: UUID, @SerialName("latest_username") val latestUsername: String, @SerialName("latest_join") @Serializable(KInstantSerializer::class) val latestJoin: Instant )</ID>
+    <ID>TrailingCommaOnDeclarationSite:PlaytimeRewardEventListener.kt:PlaytimeRewardEventListener$( private val trackPlaytimeUseCase: TrackPlaytimeUseCase, private val ioScope: CoroutineScope )</ID>
+    <ID>TrailingCommaOnDeclarationSite:PlaytimeRewardModule.kt:PlaytimeRewardModule$( coreModule: CoreModule, bukkitCoreModule: BukkitCoreModule )</ID>
+    <ID>TrailingCommaOnDeclarationSite:PlaytimeServiceTask.kt:PlaytimeServiceTask$( private val trackPlaytimeUseCase: TrackPlaytimeUseCase, private val platformServer: PlatformServer )</ID>
+    <ID>TrailingCommaOnDeclarationSite:TrackPlaytimeUseCase.kt:TrackPlaytimeUseCase$( private val clock: Clock, private val playtimeRewardRepository: PlaytimeRewardRepository, private val economyFacade: EconomyFacade?, playtimeRewardConfigurationKrate: CachedKrate&lt;PlaytimeRewardConfiguration>, pluginTranslationKrate: CachedKrate&lt;PluginTranslation> )</ID>
+  </CurrentIssues>
+</SmellBaseline>

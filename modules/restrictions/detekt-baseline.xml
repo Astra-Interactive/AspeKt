@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ClassSignature:RestrictionModule.kt:RestrictionModule</ID>
+    <ID>ClassSignature:RestrictionsEvent.kt:RestrictionsEvent : EventListener</ID>
+    <ID>ReturnCount:RestrictionsEvent.kt:RestrictionsEvent$@EventHandler fun onEntityExplode</ID>
+    <ID>TrailingCommaOnCallSite:RestrictionModule.kt:RestrictionModule$( file = resolveConfigurationFile(coreModule.dataFolder), factory = ::RestrictionsConfiguration )</ID>
+    <ID>TrailingCommaOnCallSite:RestrictionModule.kt:RestrictionModule$( onEnable = { restrictionsEvent.onEnable(bukkitCoreModule.plugin) }, onDisable = { restrictionsEvent.onDisable() }, onReload = { restrictionConfigKrate.getValue() } )</ID>
+    <ID>TrailingCommaOnCallSite:RestrictionsEvent.kt:RestrictionsEvent$( event = event, rule = restrictionsConfiguration.explosion.destroy, worldName = event.block.world.name )</ID>
+    <ID>TrailingCommaOnCallSite:RestrictionsEvent.kt:RestrictionsEvent$( event = event, rule = restrictionsConfiguration.place.lava, worldName = event.block.world.name )</ID>
+    <ID>TrailingCommaOnCallSite:RestrictionsEvent.kt:RestrictionsEvent$( event = event, rule = restrictionsConfiguration.place.lava, worldName = worldName )</ID>
+    <ID>TrailingCommaOnCallSite:RestrictionsEvent.kt:RestrictionsEvent$( event = event, rule = restrictionsConfiguration.place.tnt, worldName = worldName )</ID>
+    <ID>TrailingCommaOnCallSite:RestrictionsEvent.kt:RestrictionsEvent$( event = event, rule = restrictionsConfiguration.spread.fire, worldName = event.block.world.name )</ID>
+    <ID>TrailingCommaOnCallSite:RestrictionsEvent.kt:RestrictionsEvent$( event = event, rule = restrictionsConfiguration.spread.fire, worldName = worldName )</ID>
+    <ID>TrailingCommaOnCallSite:RestrictionsEvent.kt:RestrictionsEvent$( event = event, rule = restrictionsConfiguration.spread.lava, worldName = worldName )</ID>
+    <ID>TrailingCommaOnDeclarationSite:RestrictionModule.kt:RestrictionModule$( coreModule: CoreModule, bukkitCoreModule: BukkitCoreModule )</ID>
+    <ID>TrailingCommaOnDeclarationSite:RestrictionsConfiguration.kt:RestrictionsConfiguration$( @SerialName("is_enabled") val isEnabled: Boolean = false, @SerialName("explosion") val explosion: Explosion = Explosion(), @SerialName("place") val place: Place = Place(), @SerialName("spread") val spread: Spread = Spread() )</ID>
+    <ID>TrailingCommaOnDeclarationSite:RestrictionsConfiguration.kt:RestrictionsConfiguration.Explosion$( @SerialName("damage_creeper") val creeperDamage: RestrictionRule = RestrictionRule(), @SerialName("damage_other") val otherDamage: RestrictionRule = RestrictionRule(), @SerialName("destroy") val destroy: RestrictionRule = RestrictionRule() )</ID>
+    <ID>TrailingCommaOnDeclarationSite:RestrictionsConfiguration.kt:RestrictionsConfiguration.RestrictionRule$( @SerialName("is_enabled") val isEnabled: Boolean = true, @SerialName("restricted_in_worlds") val restrictedInWorlds: List&lt;String> = emptyList(), @SerialName("invert") val invert: Boolean = false )</ID>
+    <ID>TrailingCommaOnDeclarationSite:RestrictionsConfiguration.kt:RestrictionsConfiguration.Spread$( @SerialName("lava") val lava: RestrictionRule = RestrictionRule(), @SerialName("fire") val fire: RestrictionRule = RestrictionRule() )</ID>
+    <ID>TrailingCommaOnDeclarationSite:RestrictionsEvent.kt:RestrictionsEvent$( configKrate: CachedKrate&lt;RestrictionsConfiguration> )</ID>
+    <ID>TrailingCommaOnDeclarationSite:RestrictionsEvent.kt:RestrictionsEvent$( event: Cancellable, rule: RestrictionsConfiguration.RestrictionRule, worldName: String )</ID>
+  </CurrentIssues>
+</SmellBaseline>

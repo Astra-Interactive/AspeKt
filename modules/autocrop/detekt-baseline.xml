@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ClassSignature:AutoCropModule.kt:AutoCropModule</ID>
+    <ID>FunctionExpressionBody:ItemStackExt.kt:{ return when (type) { Material.WOODEN_HOE -> 2 Material.STONE_HOE -> 3 Material.IRON_HOE -> 4 Material.GOLDEN_HOE -> 5 Material.DIAMOND_HOE -> 6 Material.NETHERITE_HOE -> 7 else -> 1 } }</ID>
+    <ID>FunctionExpressionBody:MaterialExt.kt:{ return when (this) { Material.BEETROOTS -> Material.BEETROOT_SEEDS Material.SWEET_BERRIES -> Material.SWEET_BERRIES Material.WHEAT -> Material.WHEAT_SEEDS else -> null } }</ID>
+    <ID>FunctionExpressionBody:MaterialExt.kt:{ return when (this) { Material.POTATOES -> Material.POTATO Material.CARROTS -> Material.CARROT Material.BEETROOTS -> Material.BEETROOT Material.SWEET_BERRIES -> Material.SWEET_BERRIES Material.WHEAT -> Material.WHEAT else -> null } }</ID>
+    <ID>ReturnCount:AutoCropEvent.kt:AutoCropEvent$@EventHandler fun onCropInteract</ID>
+    <ID>ReturnCount:AutoCropEvent.kt:AutoCropEvent$private fun harvestCrop</ID>
+    <ID>ReturnCount:ItemStackExt.kt:internal fun ItemStack.applyHoeDamage: Result&lt;Unit></ID>
+    <ID>TrailingCommaOnCallSite:AutoCropModule.kt:AutoCropModule$( file = resolveConfigurationFile(coreModule.dataFolder), factory = ::AutoCropConfiguration )</ID>
+    <ID>TrailingCommaOnCallSite:AutoCropModule.kt:AutoCropModule$( onEnable = { autoCropEvent.onEnable(bukkitCoreModule.plugin) }, onDisable = { autoCropEvent.onDisable() }, onReload = { autoCropConfigKrate.getValue() } )</ID>
+    <ID>TrailingCommaOnCallSite:AutoCropModule.kt:AutoCropModule$( pluginConfig = autoCropConfigKrate, cropDupeController = CropDupeController() )</ID>
+    <ID>TrailingCommaOnDeclarationSite:AutoCropEvent.kt:AutoCropEvent$( pluginConfig: CachedKrate&lt;AutoCropConfiguration>, private val cropDupeController: CropDupeController )</ID>
+    <ID>TrailingCommaOnDeclarationSite:AutoCropModule.kt:AutoCropModule$( coreModule: CoreModule, bukkitCoreModule: BukkitCoreModule )</ID>
+  </CurrentIssues>
+</SmellBaseline>

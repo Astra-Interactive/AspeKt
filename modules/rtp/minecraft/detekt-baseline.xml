@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ClassSignature:ChunkLoader.kt:ChunkLoader : Logger</ID>
+    <ID>ClassSignature:MinecraftSafeLocationProvider.kt:MinecraftSafeLocationProvider : SafeLocationProviderLogger</ID>
+    <ID>FunctionExpressionBody:RtpSearchJobRegistry.kt:RtpSearchJobRegistry${ return mutex.withLock { val deferred = jobMap.getOrPut(uuid) { ioScope.async { search.invoke() } } deferred.invokeOnCompletion { jobMap.remove(uuid) } deferred.await() } }</ID>
+    <ID>FunctionSignature:RtpSearchJobRegistry.kt:RtpSearchJobRegistry$suspend fun await: RtpSearchResult</ID>
+    <ID>FunctionSignature:SafeColumnScanner.kt:SafeColumnScanner$@Suppress("LoopWithTooManyJumpStatements", "ReturnCount") suspend fun findStandableLocation: KLocation?</ID>
+    <ID>ReturnCount:MinecraftSafeLocationProvider.kt:MinecraftSafeLocationProvider$override suspend fun findLocation: RtpSearchResult</ID>
+    <ID>TrailingCommaOnCallSite:ChunkHazardDetector.kt:ChunkHazardDetector$( chunk.pos.minBlockX.toDouble(), level.minBuildHeight.toDouble(), chunk.pos.minBlockZ.toDouble(), chunk.pos.maxBlockX.plus(1).toDouble(), level.maxBuildHeight.toDouble(), chunk.pos.maxBlockZ.plus(1).toDouble() )</ID>
+    <ID>TrailingCommaOnCallSite:ChunkHazardDetector.kt:ChunkHazardDetector$( null, area )</ID>
+    <ID>TrailingCommaOnCallSite:ChunkLoader.kt:ChunkLoader$( RTP_TICKET, chunkPos, 0, chunkPos )</ID>
+    <ID>TrailingCommaOnCallSite:ChunkLoader.kt:ChunkLoader$( chunkX, chunkZ, ChunkStatus.FULL, true )</ID>
+    <ID>TrailingCommaOnCallSite:ChunkLoader.kt:ChunkLoader.Companion$( "aspekt_rtp", Comparator.comparingLong(ChunkPos::toLong), RTP_TICKET_TIMEOUT_TICKS )</ID>
+    <ID>TrailingCommaOnCallSite:DestinationPreparer.kt:DestinationPreparer$( level, chunkX + dx, chunkZ + dz )</ID>
+    <ID>TrailingCommaOnCallSite:MinecraftSafeLocationProvider.kt:MinecraftSafeLocationProvider$( dispatchers = dispatchers, chunkLoader = chunkLoader, hazardDetector = ChunkHazardDetector(), columnScanner = SafeColumnScanner(), destinationPreparer = DestinationPreparer(chunkLoader) )</ID>
+    <ID>TrailingCommaOnCallSite:SafeColumnScanner.kt:SafeColumnScanner$( x = x.toDouble() + BLOCK_CENTER_OFFSET, y = y.toDouble(), z = z.toDouble() + BLOCK_CENTER_OFFSET, worldName = worldName )</ID>
+    <ID>TrailingCommaOnCallSite:SafeColumnScanner.kt:SafeColumnScanner$( x, y, z )</ID>
+    <ID>TrailingCommaOnCallSite:SafeLocationSearcher.kt:SafeLocationSearcher$( level, chunkX, chunkZ )</ID>
+  </CurrentIssues>
+</SmellBaseline>

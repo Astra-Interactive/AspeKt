@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ClassSignature:MoneyAdvancementModule.kt:MoneyAdvancementModule : Logger</ID>
+    <ID>TrailingCommaOnCallSite:MoneyAdvancementModule.kt:MoneyAdvancementModule$( file = resolveConfigurationFile(coreModule.dataFolder), factory = ::MoneyAdvancementsConfiguration )</ID>
+    <ID>TrailingCommaOnCallSite:MoneyAdvancementModule.kt:MoneyAdvancementModule$( onEnable = { moneyAdvancementEvent.onEnable(bukkitCoreModule.plugin) }, onDisable = { moneyAdvancementEvent.onDisable() }, onReload = { mAdvConfigKrate.getValue() } )</ID>
+    <ID>TrailingCommaOnDeclarationSite:MoneyAdvancementEvent.kt:MoneyAdvancementEvent$( mAdvConfigKrate: CachedKrate&lt;MoneyAdvancementsConfiguration>, private val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory, translationKrate: CachedKrate&lt;PluginTranslation> )</ID>
+    <ID>TrailingCommaOnDeclarationSite:MoneyAdvancementModule.kt:MoneyAdvancementModule$( coreModule: CoreModule, bukkitCoreModule: BukkitCoreModule )</ID>
+    <ID>TrailingCommaOnDeclarationSite:MoneyAdvancementsConfiguration.kt:MoneyAdvancementsConfiguration$( @SerialName("is_enabled") val isEnabled: Boolean = false, @SerialName("challenge") @YamlComment("Money given for challenge advancemetn") val challenge: Int = 5000, @SerialName("goal") @YamlComment("Money given long-road advancement") val goal: Int = 1000, @SerialName("task") @YamlComment("Money given for default task") val task: Int = 1000, @SerialName("currency_id") val currencyId: String? = null )</ID>
+  </CurrentIssues>
+</SmellBaseline>

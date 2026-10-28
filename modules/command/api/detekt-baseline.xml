@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ClassSignature:CommandsModule.kt:CommandsModule</ID>
+    <ID>FunctionExpressionBody:ReloadLiteralArgumentBuilder.kt:ReloadLiteralArgumentBuilder${ return with(multiplatformCommand) { command("aesreload") { runs(commandExceptionHandler::onException) { ctx -> ctx.requirePermission(PluginPermission.RELOAD) val audience = ctx.getSender() audience.sendMessage(translation.reload.started) lifecyclePlugin.onReload() audience.sendMessage(translation.reload.completed) } } } }</ID>
+    <ID>TrailingCommaOnCallSite:CommandsModule.kt:CommandsModule$( onEnable = { coreModule.commandRegistrarContext.registerWhenReady(nodes, moduleUnconfinedScope) }, onDisable = { moduleUnconfinedScope.cancel() } )</ID>
+    <ID>TrailingCommaOnCallSite:CommandsModule.kt:CommandsModule$( translationKrate = coreModule.translationKrate, lifecyclePlugin = lifecyclePlugin, multiplatformCommand = coreModule.multiplatformCommand, commandExceptionHandler = coreModule.commandExceptionHandler )</ID>
+    <ID>TrailingCommaOnDeclarationSite:CommandsModule.kt:CommandsModule$( private val coreModule: CoreModule, lifecyclePlugin: Lifecycle )</ID>
+    <ID>TrailingCommaOnDeclarationSite:ReloadLiteralArgumentBuilder.kt:ReloadLiteralArgumentBuilder$( private val lifecyclePlugin: Lifecycle, private val multiplatformCommand: MultiplatformCommand, translationKrate: CachedKrate&lt;PluginTranslation>, private val commandExceptionHandler: CommandExceptionHandler )</ID>
+  </CurrentIssues>
+</SmellBaseline>

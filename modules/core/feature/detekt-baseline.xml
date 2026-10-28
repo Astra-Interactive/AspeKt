@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ClassSignature:FakeFeature.kt:FakeFeature</ID>
+    <ID>ClassSignature:FakeFeatureFlagReader.kt:FakeFeatureFlagReader : FeatureFlagReader</ID>
+    <ID>ClassSignature:FileFeatureFlagReader.kt:FileFeatureFlagReader : FeatureFlagReader</ID>
+    <ID>FunctionExpressionBody:FeatureGateExt.kt:{ return when (val current = currentState) { is ModuleState.Enabled -> block.invoke(current.feature) ModuleState.Disabled -> null } }</ID>
+    <ID>FunctionExpressionBody:FeatureGateExtTest.kt:FeatureGateExtTest${ return FeatureGate( featureClass = FakeFeature::class, flagReader = flagReader, featureFactory = { FakeFeature("parent", events) }, lifecycleSelector = FakeFeature::lifecycle ) }</ID>
+    <ID>FunctionExpressionBody:FeatureGateExtTest.kt:FeatureGateExtTest${ return parentGate.deriveEnabled( featureClass = FakeFeature::class, flagReader = flagReader, lifecycleSelector = FakeFeature::lifecycle, transform = { parentFeature -> receivedParents.add(parentFeature) FakeFeature("child", events) } ) }</ID>
+    <ID>FunctionExpressionBody:FeatureGateTest.kt:FeatureGateTest${ return FeatureGate( featureClass = FakeFeature::class, flagReader = flagReader, featureFactory = featureFactory, lifecycleSelector = FakeFeature::lifecycle ) }</ID>
+    <ID>ReturnCount:ParentGatedFeatureFlagReader.kt:ParentGatedFeatureFlagReader$override fun read: FeatureFlag</ID>
+    <ID>TrailingCommaOnCallSite:FakeFeature.kt:FakeFeature$( onEnable = { enableCount++ events.add("$name.enable") }, onDisable = { disableCount++ events.add("$name.disable") }, onReload = { reloadCount++ events.add("$name.reload") } )</ID>
+    <ID>TrailingCommaOnCallSite:FeatureGateExt.kt:( featureClass = featureClass, flagReader = ParentGatedFeatureFlagReader( featureClass = featureClass, parentFeatureGate = parentFeatureGate, delegate = flagReader ), featureFactory = { val parentState = parentFeatureGate.currentState check(parentState is ModuleState.Enabled) { "Feature '${parentFeatureGate.name}' is not enabled" } transform.invoke(parentState.feature) }, lifecycleSelector = lifecycleSelector )</ID>
+    <ID>TrailingCommaOnCallSite:FeatureGateExt.kt:( featureClass = featureClass, parentFeatureGate = parentFeatureGate, delegate = flagReader )</ID>
+    <ID>TrailingCommaOnCallSite:FeatureGateExtTest.kt:FeatureGateExtTest$( "parent.disable", "child.disable", "grandchild.disable" )</ID>
+    <ID>TrailingCommaOnCallSite:FeatureGateExtTest.kt:FeatureGateExtTest$( "parent.enable", "child.enable", "grandchild.enable" )</ID>
+    <ID>TrailingCommaOnCallSite:FeatureGateExtTest.kt:FeatureGateExtTest$( featureClass = FakeFeature::class, flagReader = FakeFeatureFlagReader(isEnabled = true), lifecycleSelector = FakeFeature::lifecycle, transform = { _ -> FakeFeature("grandchild", events) } )</ID>
+    <ID>TrailingCommaOnCallSite:FeatureGateExtTest.kt:FeatureGateExtTest$( featureClass = FakeFeature::class, flagReader = flagReader, featureFactory = { FakeFeature("parent", events) }, lifecycleSelector = FakeFeature::lifecycle )</ID>
+    <ID>TrailingCommaOnCallSite:FeatureGateExtTest.kt:FeatureGateExtTest$( featureClass = FakeFeature::class, flagReader = flagReader, lifecycleSelector = FakeFeature::lifecycle, transform = { parentFeature -> receivedParents.add(parentFeature) FakeFeature("child", events) } )</ID>
+    <ID>TrailingCommaOnCallSite:FeatureGateExtTest.kt:FeatureGateExtTest$( parentGate = parentGate, flagReader = FakeFeatureFlagReader(isEnabled = true), events = events, receivedParents = receivedParents )</ID>
+    <ID>TrailingCommaOnCallSite:FeatureGateExtTest.kt:FeatureGateExtTest$( parentGate, FakeFeatureFlagReader(isEnabled = false), events )</ID>
+    <ID>TrailingCommaOnCallSite:FeatureGateExtTest.kt:FeatureGateExtTest$( parentGate, FakeFeatureFlagReader(isEnabled = true), events )</ID>
+    <ID>TrailingCommaOnCallSite:FeatureGateExtTest.kt:FeatureGateExtTest$( parentGate, childFlagReader, events )</ID>
+    <ID>TrailingCommaOnCallSite:FeatureGateExtTest.kt:FeatureGateExtTest$( rootGate, FakeFeatureFlagReader(isEnabled = true), events )</ID>
+    <ID>TrailingCommaOnCallSite:FeatureGateExtTest.kt:FeatureGateExtTest$( rootGate, childGate, grandChildGate )</ID>
+    <ID>TrailingCommaOnCallSite:FeatureGateTest.kt:FeatureGateTest$( featureClass = FakeFeature::class, flagReader = flagReader, featureFactory = featureFactory, lifecycleSelector = FakeFeature::lifecycle )</ID>
+    <ID>TrailingCommaOnCallSite:FeatureGateTest.kt:FeatureGateTest$( flagReader = FakeFeatureFlagReader(isEnabled = false), featureFactory = { factoryInvocations++ FakeFeature("feature", mutableListOf()) } )</ID>
+    <ID>TrailingCommaOnCallSite:FeatureGateTest.kt:FeatureGateTest$( flagReader = FakeFeatureFlagReader(isEnabled = true), featureFactory = { error("Feature construction failed") } )</ID>
+    <ID>TrailingCommaOnCallSite:FileFeatureFlagReader.kt:FileFeatureFlagReader$( file = file, factory = { FeatureFlag.DISABLED } )</ID>
+    <ID>TrailingCommaOnDeclarationSite:FakeFeature.kt:FakeFeature$( private val name: String, private val events: MutableList&lt;String> )</ID>
+    <ID>TrailingCommaOnDeclarationSite:FakeFeatureFlagReader.kt:FakeFeatureFlagReader$( var isEnabled: Boolean )</ID>
+    <ID>TrailingCommaOnDeclarationSite:FeatureFlag.kt:FeatureFlag$( @SerialName("is_enabled") val isEnabled: Boolean = false )</ID>
+    <ID>TrailingCommaOnDeclarationSite:FeatureGateExtTest.kt:FeatureGateExtTest$( flagReader: FakeFeatureFlagReader, events: MutableList&lt;String> )</ID>
+    <ID>TrailingCommaOnDeclarationSite:FeatureGateExtTest.kt:FeatureGateExtTest$( parentGate: FeatureGate&lt;FakeFeature>, flagReader: FakeFeatureFlagReader, events: MutableList&lt;String>, receivedParents: MutableList&lt;FakeFeature> = mutableListOf() )</ID>
+    <ID>TrailingCommaOnDeclarationSite:FeatureGateTest.kt:FeatureGateTest$( flagReader: FakeFeatureFlagReader, events: MutableList&lt;String> = mutableListOf(), featureFactory: () -> FakeFeature = { FakeFeature("feature", events) } )</ID>
+  </CurrentIssues>
+</SmellBaseline>

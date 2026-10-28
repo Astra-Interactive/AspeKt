@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>FunctionExpressionBody:ForgeAuthEvent.kt:ForgeAuthEvent${ return when (this) { is ItemTossEvent -> player is ItemEntityPickupEvent -> player is EntityEvent -> entity as? Player else -> null } }</ID>
+    <ID>TrailingCommaOnCallSite:ForgeAuthEvent.kt:ForgeAuthEvent$( event.oldKLocation.x, event.oldKLocation.y, event.oldKLocation.z )</ID>
+    <ID>TrailingCommaOnCallSite:ForgeAuthEvent.kt:ForgeAuthEvent$( username = event.entity.name.toPlain(), uuid = event.entity.uuid, ip = (event.entity as ServerPlayer).ipAddress )</ID>
+    <ID>TrailingCommaOnCallSite:ForgeAuthModule.kt:ForgeAuthModule$( authRepository = authApiModule.authRepository, authorizedApi = authApiModule.authorizedApi, translationKrate = authApiModule.translationKrate, ioScope = coreModule.ioScope, platformServer = coreModule.platformServer, multiplatformCommand = coreModule.multiplatformCommand, commandExceptionHandler = coreModule.commandExceptionHandler, unconfinedScope = coreModule.unconfinedScope, commandRegistrarContext = commandRegistrarContext )</ID>
+    <ID>TrailingCommaOnCallSite:ForgeAuthModule.kt:ForgeAuthModule$( authorizedApi = authApiModule.authorizedApi, translationKrate = authApiModule.translationKrate, mainScope = moduleMainScope )</ID>
+    <ID>TrailingCommaOnCallSite:ForgeAuthModule.kt:ForgeAuthModule$( onEnable = { authCommandModule.lifecycle.onEnable() }, onDisable = { authCommandModule.lifecycle.onDisable() moduleMainScope.cancel() } )</ID>
+    <ID>TrailingCommaOnDeclarationSite:ForgeAuthEvent.kt:ForgeAuthEvent$( private val authorizedApi: AuthorizedApi, private val mainScope: CoroutineScope, translationKrate: CachedKrate&lt;AuthTranslation> )</ID>
+    <ID>TrailingCommaOnDeclarationSite:ForgeAuthEvent.kt:ForgeAuthEvent$AuthState.Pending, AuthState.NotAuthorized -> { serverPlayer .asKAudience() .sendMessage(translation.notAuthorized) }</ID>
+    <ID>TrailingCommaOnDeclarationSite:ForgeAuthModule.kt:ForgeAuthModule$( authApiModule: AuthApiModule, coreModule: CoreModule, commandRegistrarContext: CommandRegistrarContext )</ID>
+  </CurrentIssues>
+</SmellBaseline>

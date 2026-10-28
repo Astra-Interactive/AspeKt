@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ClassSignature:SitController.kt:SitController</ID>
+    <ID>ClassSignature:SitEvent.kt:SitEvent : EventListener</ID>
+    <ID>ClassSignature:SitModule.kt:SitModule</ID>
+    <ID>EnumWrapping:SitEvent.kt:SitEvent$SitBlockEnum</ID>
+    <ID>FunctionExpressionBody:SitLiteralArgumentBuilder.kt:SitLiteralArgumentBuilder${ return with(multiplatformCommand) { command("sit") { runs(commandExceptionHandler::onException) { ctx -> val onlineKPlayer = ctx.requirePlayer() @Suppress("MaxLineLength") val player = onlineKPlayer .tryCast&lt;BukkitOnlineKPlayer>() ?.instance ?: error( "Could not convert OnlineKPlayer into MinecraftOnlineKPlayer. " + "This should not happen. Contact developer." ) @Suppress("MagicNumber") sitController.toggleSitPlayer( player = player, locationWithOffset = onlineKPlayer.getLocation() .asBukkitLocation() .add( 0.0, -2.0, 0.0 ) ) } } } }</ID>
+    <ID>ReturnCount:SitController.kt:SitController$fun toggleSitPlayer</ID>
+    <ID>ReturnCount:SitEvent.kt:SitEvent$@EventHandler @Suppress("MagicNumber") fun playerInteractEvent</ID>
+    <ID>ReturnCount:SitEvent.kt:SitEvent$private fun sitBlockType: SitBlockEnum?</ID>
+    <ID>TrailingCommaOnCallSite:SitCommandModule.kt:SitCommandModule$( onEnable = { bukkitCoreModule.commandRegistrarContext.registerWhenReady(nodes, moduleUnconfinedScope) }, onDisable = { moduleUnconfinedScope.cancel() } )</ID>
+    <ID>TrailingCommaOnCallSite:SitCommandModule.kt:SitCommandModule$( sitController = sitController, multiplatformCommand = coreModule.multiplatformCommand, commandExceptionHandler = coreModule.commandExceptionHandler )</ID>
+    <ID>TrailingCommaOnCallSite:SitController.kt:SitController$( 0.0, -SIT_STAIR_OFFSET, 0.0 )</ID>
+    <ID>TrailingCommaOnCallSite:SitController.kt:SitController$( 0.0, SIT_STAIR_OFFSET, 0.0 )</ID>
+    <ID>TrailingCommaOnCallSite:SitController.kt:SitController$( player.location.add( 0.0, SIT_STAIR_OFFSET, 0.0 ) )</ID>
+    <ID>TrailingCommaOnCallSite:SitEvent.kt:SitEvent$( 0.5, 0.2, 0.5 )</ID>
+    <ID>TrailingCommaOnCallSite:SitEvent.kt:SitEvent$( e.player, blockLocation.add(offset) )</ID>
+    <ID>TrailingCommaOnCallSite:SitLiteralArgumentBuilder.kt:SitLiteralArgumentBuilder$( "Could not convert OnlineKPlayer into MinecraftOnlineKPlayer. " + "This should not happen. Contact developer." )</ID>
+    <ID>TrailingCommaOnCallSite:SitLiteralArgumentBuilder.kt:SitLiteralArgumentBuilder$( 0.0, -2.0, 0.0 )</ID>
+    <ID>TrailingCommaOnCallSite:SitLiteralArgumentBuilder.kt:SitLiteralArgumentBuilder$( player = player, locationWithOffset = onlineKPlayer.getLocation() .asBukkitLocation() .add( 0.0, -2.0, 0.0 ) )</ID>
+    <ID>TrailingCommaOnCallSite:SitModule.kt:SitModule$( bukkitCoreModule = bukkitCoreModule, sitController = sitController, coreModule = coreModule )</ID>
+    <ID>TrailingCommaOnCallSite:SitModule.kt:SitModule$( file = resolveConfigurationFile(coreModule.dataFolder), factory = ::SitConfiguration )</ID>
+    <ID>TrailingCommaOnCallSite:SitModule.kt:SitModule$( onEnable = { sitEvent.onEnable(bukkitCoreModule.plugin) sitCommandModule.lifecycle.onEnable() }, onReload = { sitController.onDisable() sitConfigKrate.getValue() }, onDisable = { sitCommandModule.lifecycle.onDisable() sitEvent.onDisable() sitController.onDisable() } )</ID>
+    <ID>TrailingCommaOnCallSite:SitModule.kt:SitModule$( sitKrate = sitConfigKrate, sitController = sitController )</ID>
+    <ID>TrailingCommaOnCallSite:SitModule.kt:SitModule$( sitKrate = sitConfigKrate, translation = coreModule.translationKrate )</ID>
+    <ID>TrailingCommaOnDeclarationSite:SitConfiguration.kt:SitConfiguration$( @SerialName("is_enabled") val isEnabled: Boolean = false )</ID>
+    <ID>TrailingCommaOnDeclarationSite:SitController.kt:SitController$( player: Player, location: Location = player.location.clone(), locationWithOffset: Location = location.clone().add( 0.0, -SIT_STAIR_OFFSET, 0.0 ) )</ID>
+    <ID>TrailingCommaOnDeclarationSite:SitController.kt:SitController$( sitKrate: CachedKrate&lt;SitConfiguration>, translation: CachedKrate&lt;PluginTranslation> )</ID>
+    <ID>TrailingCommaOnDeclarationSite:SitEvent.kt:SitEvent$( sitKrate: CachedKrate&lt;SitConfiguration>, private val sitController: SitController )</ID>
+    <ID>TrailingCommaOnDeclarationSite:SitLiteralArgumentBuilder.kt:SitLiteralArgumentBuilder$( private val sitController: SitController, private val multiplatformCommand: MultiplatformCommand, private val commandExceptionHandler: CommandExceptionHandler )</ID>
+    <ID>TrailingCommaOnDeclarationSite:SitModule.kt:SitModule$( coreModule: CoreModule, private val bukkitCoreModule: BukkitCoreModule )</ID>
+  </CurrentIssues>
+</SmellBaseline>

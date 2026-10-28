@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ClassSignature:AuthExposedModule.kt:AuthExposedModule</ID>
+    <ID>FunctionExpressionBody:ExposedAuthRepository.kt:ExposedAuthRepository${ return runCatching { transaction(requireDatabase()) { UserTable.deleteWhere { UserTable.id eq uuid.toString() } Unit } }.propagateCancellationException() }</ID>
+    <ID>FunctionExpressionBody:ExposedAuthRepository.kt:ExposedAuthRepository${ return runCatching { transaction(requireDatabase()) { UserTable.insert { statement -> statement[UserTable.id] = authData.uuid.toString() statement[UserTable.lastUsername] = authData.lastUsername statement[UserTable.passwordHash] = authData.passwordSha256 statement[UserTable.createdAt] = LocalDateTime.now() statement[UserTable.updatedAt] = LocalDateTime.now() statement[UserTable.lastIpAddress] = authData.lastIpAddress } Unit } }.propagateCancellationException() }</ID>
+    <ID>FunctionExpressionBody:ExposedAuthRepository.kt:ExposedAuthRepository${ return runCatching { transaction(requireDatabase()) { UserTable.selectAll() .where { UserTable.id eq uuid.toString() } .map { row -> AuthData( lastUsername = row[UserTable.lastUsername], uuid = UUID.fromString(row[UserTable.id].value), passwordSha256 = row[UserTable.passwordHash], lastIpAddress = row[UserTable.lastIpAddress] ) } .first() } }.propagateCancellationException() }</ID>
+    <ID>FunctionExpressionBody:ExposedAuthRepository.kt:ExposedAuthRepository${ return runCatching { transaction(requireDatabase()) { UserTable.selectAll() .where { UserTable.lastUsername eq username } .map { row -> AuthData( lastUsername = row[UserTable.lastUsername], uuid = UUID.fromString(row[UserTable.id].value), passwordSha256 = row[UserTable.passwordHash], lastIpAddress = row[UserTable.lastIpAddress] ) } .first() } }.propagateCancellationException() }</ID>
+    <ID>FunctionExpressionBody:ExposedAuthRepository.kt:ExposedAuthRepository${ return runCatching { transaction(requireDatabase()) { UserTable.update( where = { UserTable.id eq authData.uuid.toString() }, body = { statement -> statement[UserTable.passwordHash] = authData.passwordSha256 statement[UserTable.lastUsername] = authData.lastUsername statement[UserTable.updatedAt] = LocalDateTime.now() statement[UserTable.lastIpAddress] = authData.lastIpAddress } ) Unit } }.propagateCancellationException() }</ID>
+    <ID>TrailingCommaOnCallSite:AuthExposedModule.kt:AuthExposedModule$( onDisable = { moduleIoScope.cancel() } )</ID>
+    <ID>TrailingCommaOnCallSite:AuthExposedModule.kt:AuthExposedModule$( scope = moduleIoScope, started = SharingStarted.Lazily, replay = 1 )</ID>
+    <ID>TrailingCommaOnCallSite:ExposedAuthRepository.kt:ExposedAuthRepository$( lastUsername = row[UserTable.lastUsername], uuid = UUID.fromString(row[UserTable.id].value), passwordSha256 = row[UserTable.passwordHash], lastIpAddress = row[UserTable.lastIpAddress] )</ID>
+    <ID>TrailingCommaOnCallSite:ExposedAuthRepository.kt:ExposedAuthRepository$( where = { UserTable.id eq authData.uuid.toString() }, body = { statement -> statement[UserTable.passwordHash] = authData.passwordSha256 statement[UserTable.lastUsername] = authData.lastUsername statement[UserTable.updatedAt] = LocalDateTime.now() statement[UserTable.lastIpAddress] = authData.lastIpAddress } )</ID>
+    <ID>TrailingCommaOnDeclarationSite:AuthExposedModule.kt:AuthExposedModule$( ioScope: CoroutineScope, dataFolder: File )</ID>
+  </CurrentIssues>
+</SmellBaseline>

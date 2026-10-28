@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ClassSignature:LootGenerationEvent.kt:LootGenerationEvent : EventListener</ID>
+    <ID>ClassSignature:OreGenerationBlockPopulator.kt:OreGenerationBlockPopulator : BlockPopulator</ID>
+    <ID>ClassSignature:OreGenerationEvent.kt:OreGenerationEvent : EventListener</ID>
+    <ID>ClassSignature:OreGenerationModule.kt:OreGenerationModule</ID>
+    <ID>FunctionExpressionBody:MaterialExt.kt:{ return when { name.startsWith("DEEPSLATE", ignoreCase = true) -> Material.DEEPSLATE this == Material.NETHER_GOLD_ORE -> Material.NETHERRACK this == Material.NETHER_QUARTZ_ORE -> Material.NETHERRACK this == Material.ANCIENT_DEBRIS -> Material.NETHERRACK else -> Material.STONE } }</ID>
+    <ID>FunctionSignature:LootGenerationEvent.kt:LootGenerationEvent$private fun newAmount: Int</ID>
+    <ID>FunctionSignature:OreGenerationBlockPopulator.kt:OreGenerationBlockPopulator$private fun shouldRemove: Boolean</ID>
+    <ID>ReturnCount:LootGenerationEvent.kt:LootGenerationEvent$private fun newAmount: Int</ID>
+    <ID>TrailingCommaOnCallSite:LootGenerationConfiguration.kt:LootGenerationConfiguration$( "COAL", "RAW_IRON", "IRON_INGOT", "IRON_NUGGET", "RAW_COPPER", "COPPER_INGOT", "RAW_GOLD", "GOLD_INGOT", "GOLD_NUGGET", "REDSTONE", "LAPIS_LAZULI", "QUARTZ", "DIAMOND", "EMERALD", "NETHERITE_SCRAP", "NETHERITE_INGOT", "ANCIENT_DEBRIS" )</ID>
+    <ID>TrailingCommaOnCallSite:OreGenerationBlockPopulator.kt:OreGenerationBlockPopulator$( limitedRegion, ores, random, x, y, z )</ID>
+    <ID>TrailingCommaOnCallSite:OreGenerationBlockPopulator.kt:OreGenerationBlockPopulator$( material.name, ores, random.nextDouble() )</ID>
+    <ID>TrailingCommaOnCallSite:OreGenerationBlockPopulator.kt:OreGenerationBlockPopulator$( x, y, z )</ID>
+    <ID>TrailingCommaOnCallSite:OreGenerationBlockPopulator.kt:OreGenerationBlockPopulator$( x, y, z, material.toOreHostMaterial() )</ID>
+    <ID>TrailingCommaOnCallSite:OreGenerationConfiguration.kt:OreGenerationConfiguration$( "COAL_ORE", "DEEPSLATE_COAL_ORE", "IRON_ORE", "DEEPSLATE_IRON_ORE", "COPPER_ORE", "DEEPSLATE_COPPER_ORE", "GOLD_ORE", "DEEPSLATE_GOLD_ORE", "REDSTONE_ORE", "DEEPSLATE_REDSTONE_ORE", "LAPIS_ORE", "DEEPSLATE_LAPIS_ORE", "DIAMOND_ORE", "DEEPSLATE_DIAMOND_ORE", "EMERALD_ORE", "DEEPSLATE_EMERALD_ORE", "NETHER_GOLD_ORE", "NETHER_QUARTZ_ORE", "ANCIENT_DEBRIS" )</ID>
+    <ID>TrailingCommaOnCallSite:OreGenerationModule.kt:OreGenerationModule$( configKrate = oreGenerationConfigKrate )</ID>
+    <ID>TrailingCommaOnCallSite:OreGenerationModule.kt:OreGenerationModule$( file = coreModule.dataFolder.resolve("loot-generation.yml"), factory = ::LootGenerationConfiguration )</ID>
+    <ID>TrailingCommaOnCallSite:OreGenerationModule.kt:OreGenerationModule$( file = resolveConfigurationFile(coreModule.dataFolder), factory = ::OreGenerationConfiguration )</ID>
+    <ID>TrailingCommaOnCallSite:OreGenerationModule.kt:OreGenerationModule$( onEnable = { oreGenerationEvent.onEnable(bukkitCoreModule.plugin) lootGenerationEvent.onEnable(bukkitCoreModule.plugin) }, onDisable = { lootGenerationEvent.onDisable() oreGenerationEvent.onDisable() }, onReload = { oreGenerationConfigKrate.getValue() lootGenerationConfigKrate.getValue() } )</ID>
+    <ID>TrailingCommaOnCallSite:OreGenerationModule.kt:OreGenerationModule$( server = bukkitCoreModule.plugin.server, populator = oreGenerationBlockPopulator )</ID>
+    <ID>TrailingCommaOnDeclarationSite:LootGenerationConfiguration.kt:LootGenerationConfiguration$( @SerialName("enabled") val enabled: Boolean = true, @SerialName("items") @YamlComment("The chance in range [0.0, 1.0] that each unit of the loot item will be excluded") val items: Map&lt;String, Double> = listOf( "COAL", "RAW_IRON", "IRON_INGOT", "IRON_NUGGET", "RAW_COPPER", "COPPER_INGOT", "RAW_GOLD", "GOLD_INGOT", "GOLD_NUGGET", "REDSTONE", "LAPIS_LAZULI", "QUARTZ", "DIAMOND", "EMERALD", "NETHERITE_SCRAP", "NETHERITE_INGOT", "ANCIENT_DEBRIS" ).associateWith { 0.5 } )</ID>
+    <ID>TrailingCommaOnDeclarationSite:LootGenerationEvent.kt:LootGenerationEvent$( itemStack: ItemStack, items: Map&lt;String, Double> )</ID>
+    <ID>TrailingCommaOnDeclarationSite:OreGenerationBlockPopulator.kt:OreGenerationBlockPopulator$( configKrate: CachedKrate&lt;OreGenerationConfiguration> )</ID>
+    <ID>TrailingCommaOnDeclarationSite:OreGenerationBlockPopulator.kt:OreGenerationBlockPopulator$( materialName: String, ores: Map&lt;String, Double>, roll: Double )</ID>
+    <ID>TrailingCommaOnDeclarationSite:OreGenerationBlockPopulator.kt:OreGenerationBlockPopulator$( region: LimitedRegion, ores: Map&lt;String, Double>, random: Random, x: Int, y: Int, z: Int )</ID>
+    <ID>TrailingCommaOnDeclarationSite:OreGenerationBlockPopulator.kt:OreGenerationBlockPopulator$( worldInfo: WorldInfo, random: Random, chunkX: Int, chunkZ: Int, limitedRegion: LimitedRegion )</ID>
+    <ID>TrailingCommaOnDeclarationSite:OreGenerationConfiguration.kt:OreGenerationConfiguration$( @SerialName("is_enabled") val isEnabled: Boolean = false, @SerialName("ores") @YamlComment("The chance in range [0.0, 1.0] of the ore will be excluded") val ores: Map&lt;String, Double> = listOf( "COAL_ORE", "DEEPSLATE_COAL_ORE", "IRON_ORE", "DEEPSLATE_IRON_ORE", "COPPER_ORE", "DEEPSLATE_COPPER_ORE", "GOLD_ORE", "DEEPSLATE_GOLD_ORE", "REDSTONE_ORE", "DEEPSLATE_REDSTONE_ORE", "LAPIS_ORE", "DEEPSLATE_LAPIS_ORE", "DIAMOND_ORE", "DEEPSLATE_DIAMOND_ORE", "EMERALD_ORE", "DEEPSLATE_EMERALD_ORE", "NETHER_GOLD_ORE", "NETHER_QUARTZ_ORE", "ANCIENT_DEBRIS" ).associateWith { 0.5 } )</ID>
+    <ID>TrailingCommaOnDeclarationSite:OreGenerationEvent.kt:OreGenerationEvent$( private val server: Server, private val populator: OreGenerationBlockPopulator )</ID>
+    <ID>TrailingCommaOnDeclarationSite:OreGenerationModule.kt:OreGenerationModule$( coreModule: CoreModule, bukkitCoreModule: BukkitCoreModule )</ID>
+  </CurrentIssues>
+</SmellBaseline>

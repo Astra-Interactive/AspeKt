@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ClassSignature:BukkitCoreModule.kt:BukkitCoreModule</ID>
+    <ID>FunctionExpressionBody:VaultCurrencyEconomyProviderFactory.kt:VaultCurrencyEconomyProviderFactory${ return kotlin.runCatching { Bukkit.getServer().servicesManager.getRegistration(Economy::class.java) ?.provider ?.let(::VaultEconomyFacade) }.getOrNull() ?: kotlin.runCatching { info { "Could not find default vault economy provider" } if (!Bukkit.getServer().pluginManager.isPluginEnabled("Essentials")) { error("Essentials not enabled") } else { EssentialsEconomyFacade } }.getOrNull() }</ID>
+    <ID>TrailingCommaOnCallSite:BukkitCoreModule.kt:BukkitCoreModule$( mainScope = mainScope, plugin = plugin )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitCoreModule.kt:BukkitCoreModule$( onEnable = { inventoryClickEventListener.onEnable(plugin) eventListener.onEnable(plugin) }, onDisable = { eventListener.onDisable() inventoryClickEventListener.onDisable() } )</ID>
+    <ID>TrailingCommaOnDeclarationSite:BukkitCoreModule.kt:BukkitCoreModule$( val plugin: LifecyclePlugin, private val mainScope: CoroutineScope )</ID>
+    <ID>TrailingCommaOnDeclarationSite:LifecycleEventFlow.kt:( configuration: LifecycleEventType.Prioritizable&lt;LifecycleEventOwner, E> )</ID>
+  </CurrentIssues>
+</SmellBaseline>

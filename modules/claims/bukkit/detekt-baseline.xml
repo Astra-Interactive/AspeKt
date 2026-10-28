@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>FunctionExpressionBody:AdminPrivateExt.kt:{ return ClaimChunk( x = x, z = z, worldName = world.name, flags = emptyMap(), chunkKey = chunkKey ) }</ID>
+    <ID>FunctionExpressionBody:AdminPrivateExt.kt:{ return ClaimPlayer( uuid = uniqueId, username = name ) }</ID>
+    <ID>FunctionExpressionBody:AdminPrivateExt.kt:{ return ClaimPlayer( uuid = uuid, username = name ) }</ID>
+    <ID>FunctionExpressionBody:BukkitChunkProvider.kt:BukkitChunkProvider${ return player.getLocation().asBukkitLocation().chunk.asClaimChunk() }</ID>
+    <ID>TrailingCommaOnCallSite:AdminPrivateExt.kt:( uuid = uniqueId, username = name )</ID>
+    <ID>TrailingCommaOnCallSite:AdminPrivateExt.kt:( uuid = uuid, username = name )</ID>
+    <ID>TrailingCommaOnCallSite:AdminPrivateExt.kt:( x = x, z = z, worldName = world.name, flags = emptyMap(), chunkKey = chunkKey )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( Material.TNT, Material.LAVA, Material.LAVA_BUCKET )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( armorStand.location, armorStand, "armorStandBreakEvent" )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( chunks, "portalCreateEvent" )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( e.block.chunk, e.player, "blockBreakEvent" )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( e.block.chunk, e.player, "blockPlaceEvent" )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( e.entity.location, e.entity, "breakItemFrameEvent" )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( e.entity.location.chunk, e.entity, "entitySpawnEvent" )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( e.entity.location.chunk, player, "playerDamageEvent" )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( e.player.location, e.player, "armorStandEvent" )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( e.player.location, e.player, "itemFrameEvent" )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( key = claimChunk.uniqueWorldKey, chunkFlag = flag, claimPlayer = player?.asClaimPlayer() )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( location, e.player, "interactEvent" )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg( armorStand.location, armorStand, "armorStandBreakEvent" ), e = e, claimChunk = armorStand.location.chunk.asClaimChunk(), player = e.damager as? Player, flag = ChunkFlag.ALLOW_INTERACT )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg( chunks, "portalCreateEvent" ), e = e, claimChunk = chunk.asClaimChunk(), player = null, flag = ChunkFlag.ALLOW_PLACE )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg( e.block.chunk, e.player, "blockBreakEvent" ), e = e, claimChunk = e.block.chunk.asClaimChunk(), player = e.player, flag = ChunkFlag.ALLOW_BREAK )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg( e.block.chunk, e.player, "blockPlaceEvent" ), e = e, claimChunk = e.blockPlaced.chunk.asClaimChunk(), player = e.player, flag = ChunkFlag.ALLOW_PLACE )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg( e.entity.location, e.entity, "breakItemFrameEvent" ), e = e, claimChunk = e.entity.location.chunk.asClaimChunk(), player = e.remover as? Player, flag = ChunkFlag.ALLOW_INTERACT )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg( e.entity.location.chunk, e.entity, "entitySpawnEvent" ), e = e, claimChunk = e.entity.location.chunk.asClaimChunk(), player = null, flag = ChunkFlag.ALLOW_HOSTILE_MOB_SPAWN )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg( e.entity.location.chunk, player, "playerDamageEvent" ), e = e, claimChunk = player.location.chunk.asClaimChunk(), player = null, flag = ChunkFlag.ALLOW_RECEIVE_DAMAGE )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg( e.player.location, e.player, "armorStandEvent" ), e = e, claimChunk = e.player.location.chunk.asClaimChunk(), player = e.player, flag = ChunkFlag.ALLOW_INTERACT )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg( e.player.location, e.player, "itemFrameEvent" ), e = e, claimChunk = e.player.location.chunk.asClaimChunk(), player = e.player, flag = ChunkFlag.ALLOW_INTERACT )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg( location, e.player, "interactEvent" ), e = e, claimChunk = location.chunk.asClaimChunk(), player = e.player, flag = ChunkFlag.ALLOW_INTERACT )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg(block.chunk, "onBlockExplode"), e = e, claimChunk = block.chunk.asClaimChunk(), player = null, flag = ChunkFlag.ALLOW_EXPLODE )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg(block.chunk, "onEntityExplode"), e = e, claimChunk = block.chunk.asClaimChunk(), player = null, flag = ChunkFlag.ALLOW_EXPLODE )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg(e.block.location.chunk, "BlockFadeEvent"), e = e, claimChunk = e.block.location.chunk.asClaimChunk(), player = null, flag = ChunkFlag.ALLOW_ICE_MELT )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg(e.block.location.chunk, "BlockPistonEvent"), e = e, claimChunk = e.block.location.chunk.asClaimChunk(), player = null, flag = ChunkFlag.ALLOW_PLACE )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg(e.block.location.chunk, "onBlockFromTo"), e = e, claimChunk = e.block.location.chunk.asClaimChunk(), player = null, flag = ChunkFlag.ALLOW_SPREAD )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg(e.block.location.chunk, "onBlockSpread"), e = e, claimChunk = e.block.location.chunk.asClaimChunk(), player = null, flag = ChunkFlag.ALLOW_SPREAD )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg(e.blockClicked.location.chunk, "onBucketEmptyEvent"), e = e, claimChunk = e.blockClicked.location.chunk.asClaimChunk(), player = null, flag = ChunkFlag.ALLOW_EMPTY_BUCKET )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg(e.blockPlaced.location.chunk, "onTntLavaPlace"), e = e, claimChunk = e.blockPlaced.location.chunk.asClaimChunk(), player = null, flag = ChunkFlag.ALLOW_EXPLODE )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg(e.entity.location.chunk, "onPrimeExplosion"), e = e, claimChunk = e.entity.location.chunk.asClaimChunk(), player = null, flag = ChunkFlag.ALLOW_EXPLODE )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg(location.chunk, "onBlockBurnEvent"), e = e, claimChunk = location.chunk.asClaimChunk(), player = null, flag = ChunkFlag.ALLOW_SPREAD )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey = RetractKey.Vararg(location.chunk, "onBlockIgniteEvent"), e = e, claimChunk = location.chunk.asClaimChunk(), player = e.player, flag = ChunkFlag.ALLOW_SPREAD )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimModule.kt:BukkitClaimModule$( claimModule = claimModule, commandRegistrarContext = bukkitCoreModule.commandRegistrarContext, coreModule = coreModule, chunkProvider = BukkitChunkProvider() )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimModule.kt:BukkitClaimModule$( claimsRepository = claimModule.claimsRepository, translationKrate = coreModule.translationKrate )</ID>
+    <ID>TrailingCommaOnCallSite:BukkitClaimModule.kt:BukkitClaimModule$( onEnable = { claimModule.lifecycle.onEnable() claimCommandModule.lifecycle.onEnable() bukkitClaimEvent.onEnable(bukkitCoreModule.plugin) }, onDisable = { bukkitClaimEvent.onDisable() claimCommandModule.lifecycle.onDisable() claimModule.lifecycle.onDisable() } )</ID>
+    <ID>TrailingCommaOnDeclarationSite:BukkitClaimEvent.kt:BukkitClaimEvent$( retractKey: RetractKey, e: T, claimChunk: ClaimChunk, player: Player?, flag: ChunkFlag )</ID>
+    <ID>TrailingCommaOnDeclarationSite:BukkitClaimEvent.kt:BukkitClaimEvent$( translationKrate: CachedKrate&lt;PluginTranslation>, private val claimsRepository: ClaimsRepository )</ID>
+    <ID>TrailingCommaOnDeclarationSite:BukkitClaimModule.kt:BukkitClaimModule$( bukkitCoreModule: BukkitCoreModule, private val claimModule: ClaimModule, private val coreModule: CoreModule )</ID>
+  </CurrentIssues>
+</SmellBaseline>
