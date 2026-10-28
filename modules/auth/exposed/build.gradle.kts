@@ -5,7 +5,6 @@ plugins {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     implementation(libs.exposed.core)
     implementation(libs.exposed.dao)
     implementation(libs.exposed.java.time)

@@ -13,7 +13,6 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     minecraft(libs.minecraft.fabric.mojang)
     mappings(loom.officialMojangMappings())
 }

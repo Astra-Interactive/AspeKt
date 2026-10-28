@@ -18,7 +18,6 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     shadow(libs.driver.h2)
     shadow(libs.driver.jdbc)
     shadow(libs.klibs.kstorage)

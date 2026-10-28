@@ -23,7 +23,6 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     // Kotlin
     shadow(libs.kotlin.coroutines.core)
     // AstraLibs

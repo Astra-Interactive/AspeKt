@@ -5,7 +5,6 @@ plugins {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.tests.kotlin.test)
 }

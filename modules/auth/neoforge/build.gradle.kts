@@ -8,7 +8,6 @@ plugins {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     compileOnly(libs.minecraft.kyori.gson)
     compileOnly(libs.minecraft.kyori.legacy)
     compileOnly(libs.minecraft.kyori.plain)

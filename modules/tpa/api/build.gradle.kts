@@ -6,7 +6,6 @@ plugins {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     compileOnly(libs.guava)
     compileOnly(libs.minecraft.brigadier)
     compileOnly(libs.minecraft.kyori.plain)

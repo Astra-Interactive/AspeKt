@@ -6,7 +6,6 @@ plugins {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     compileOnly(libs.minecraft.packetevents)
     compileOnly(libs.minecraft.paper.api)
 

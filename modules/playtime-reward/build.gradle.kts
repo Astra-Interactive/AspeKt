@@ -6,7 +6,6 @@ plugins {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     compileOnly(libs.minecraft.paper.api)
     implementation(libs.klibs.kstorage)
     implementation(libs.klibs.mikro.core)

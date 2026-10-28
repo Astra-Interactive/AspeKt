@@ -12,7 +12,6 @@ plugins {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     compileOnly(libs.minecraft.bungee)
 
     implementation(libs.klibs.mikro.core)

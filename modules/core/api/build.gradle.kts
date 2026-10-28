@@ -6,7 +6,6 @@ plugins {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     implementation(libs.klibs.kstorage)
     implementation(libs.minecraft.astralibs.core)
 

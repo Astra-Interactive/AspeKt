@@ -13,7 +13,6 @@ plugins {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     compileOnly(libs.driver.h2)
     compileOnly(libs.driver.jdbc)
     compileOnly(libs.driver.mysql)

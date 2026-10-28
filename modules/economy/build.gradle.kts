@@ -6,7 +6,6 @@ plugins {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     compileOnly(libs.minecraft.paper.api)
     compileOnly(libs.minecraft.papi)
     compileOnly(libs.minecraft.vaultapi)
