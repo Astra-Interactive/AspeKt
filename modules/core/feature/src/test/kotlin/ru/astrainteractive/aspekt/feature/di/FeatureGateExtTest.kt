@@ -1,3 +1,5 @@
+@file:Suppress("TestMirror")
+
 package ru.astrainteractive.aspekt.feature.di
 
 import ru.astrainteractive.aspekt.feature.fake.FakeFeature

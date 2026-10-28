@@ -1,3 +1,5 @@
+@file:Suppress("KindImportDirection")
+
 package ru.astrainteractive.aspekt.module.claims.bukkit
 
 import ru.astrainteractive.aspekt.module.claims.api.ChunkProvider

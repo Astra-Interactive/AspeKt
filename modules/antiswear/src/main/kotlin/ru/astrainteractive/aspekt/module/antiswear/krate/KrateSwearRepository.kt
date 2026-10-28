@@ -1,3 +1,5 @@
+@file:Suppress("FieldDependencyConstruction")
+
 package ru.astrainteractive.aspekt.module.antiswear.krate
 
 import kotlinx.coroutines.withContext

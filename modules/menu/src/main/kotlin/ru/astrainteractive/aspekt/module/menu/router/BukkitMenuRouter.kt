@@ -1,3 +1,5 @@
+@file:Suppress("FieldDependencyConstruction")
+
 package ru.astrainteractive.aspekt.module.menu.router
 
 import kotlinx.coroutines.launch

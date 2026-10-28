@@ -1,3 +1,5 @@
+@file:Suppress("EntryPointShape")
+
 package ru.astrainteractive.aspekt.event
 
 import kotlinx.coroutines.CoroutineScope

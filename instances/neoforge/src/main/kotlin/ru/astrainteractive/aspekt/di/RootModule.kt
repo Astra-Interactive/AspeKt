@@ -1,3 +1,5 @@
+@file:Suppress("RootModuleConstruction")
+
 package ru.astrainteractive.aspekt.di
 
 import com.charleskorn.kaml.PolymorphismStyle

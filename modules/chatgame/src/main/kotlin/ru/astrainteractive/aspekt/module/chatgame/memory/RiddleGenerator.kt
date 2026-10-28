@@ -1,3 +1,5 @@
+@file:Suppress("FieldDependencyConstruction")
+
 package ru.astrainteractive.aspekt.module.chatgame.memory
 
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGame

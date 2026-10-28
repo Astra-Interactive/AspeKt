@@ -1,3 +1,5 @@
+@file:Suppress("FieldDependencyConstruction")
+
 package ru.astrainteractive.aspekt.module.economy.service
 
 import net.milkbowl.vault.economy.Economy

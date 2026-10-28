@@ -1,3 +1,5 @@
+@file:Suppress("ForbiddenPackageName")
+
 package ru.astrainteractive.aspekt.module.economy.database.di
 
 import kotlinx.coroutines.CoroutineScope

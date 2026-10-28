@@ -1,3 +1,5 @@
+@file:Suppress("FieldDependencyConstruction")
+
 package ru.astrainteractive.aspekt.module.rtp.command
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder

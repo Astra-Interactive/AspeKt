@@ -1,3 +1,5 @@
+@file:Suppress("FieldDependencyConstruction", "ImplementationVisibility")
+
 package ru.astrainteractive.aspekt.module.rtp.search
 
 import kotlinx.coroutines.CoroutineScope
@@ -15,6 +17,7 @@ import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
 import java.util.UUID
 
+@Suppress("FieldDependencyConstruction", "ImplementationVisibility")
 class MinecraftSafeLocationProvider(
     dispatchers: KotlinDispatchers,
     private val rtpConfigKrate: CachedKrate<RtpConfig>,

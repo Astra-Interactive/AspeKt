@@ -1,3 +1,5 @@
+@file:Suppress("FieldDependencyConstruction")
+
 package ru.astrainteractive.aspekt.module.claims.event
 
 import kotlinx.coroutines.CoroutineScope

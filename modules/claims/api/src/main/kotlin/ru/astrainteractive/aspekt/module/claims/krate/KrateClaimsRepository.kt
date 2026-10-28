@@ -1,3 +1,5 @@
+@file:Suppress("FieldDependencyConstruction", "KindImportDirection")
+
 package ru.astrainteractive.aspekt.module.claims.krate
 
 import kotlinx.coroutines.CoroutineScope

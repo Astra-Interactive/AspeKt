@@ -1,3 +1,5 @@
+@file:Suppress("ForbiddenPackageName", "KindShape")
+
 package ru.astrainteractive.aspekt.module.moneydrop.database
 
 import kotlinx.coroutines.flow.Flow

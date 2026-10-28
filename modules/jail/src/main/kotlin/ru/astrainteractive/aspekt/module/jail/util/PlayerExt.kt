@@ -1,3 +1,5 @@
+@file:Suppress("UtilFileName")
+
 package ru.astrainteractive.aspekt.module.jail.util
 
 import org.bukkit.Bukkit

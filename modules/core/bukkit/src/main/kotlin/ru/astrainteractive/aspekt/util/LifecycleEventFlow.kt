@@ -1,3 +1,5 @@
+@file:Suppress("UtilFileName")
+
 package ru.astrainteractive.aspekt.util
 
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEvent

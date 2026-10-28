@@ -1,3 +1,5 @@
+@file:Suppress("KindImportDirection")
+
 package ru.astrainteractive.aspekt.feature.util
 
 import ru.astrainteractive.aspekt.feature.api.FeatureFlagReader
