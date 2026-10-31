@@ -4,6 +4,7 @@ package ru.astrainteractive.aspekt.module.jail.usecase
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestResult
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -45,8 +46,8 @@ class TeleportInmateToJailUseCaseTest {
     }
 
     @Test
-    fun GIVEN_online_inmate_WHEN_teleported_to_jail_THEN_player_is_in_the_jail() {
-        runTest {
+    fun GIVEN_online_inmate_WHEN_teleported_to_jail_THEN_player_is_in_the_jail(): TestResult {
+        return runTest {
             val repository = FakeJailRepository(
                 jails = listOf(JailTestData.jail),
                 inmates = listOf(JailTestData.inmate)
@@ -69,8 +70,8 @@ class TeleportInmateToJailUseCaseTest {
     }
 
     @Test
-    fun GIVEN_missing_jail_WHEN_teleported_to_jail_THEN_player_stays() {
-        runTest {
+    fun GIVEN_missing_jail_WHEN_teleported_to_jail_THEN_player_stays(): TestResult {
+        return runTest {
             val repository = FakeJailRepository(jails = emptyList(), inmates = listOf(JailTestData.inmate))
 
             useCase(repository, onlinePlayers = listOf(player)).invoke(JailTestData.inmate)
@@ -80,8 +81,8 @@ class TeleportInmateToJailUseCaseTest {
     }
 
     @Test
-    fun GIVEN_offline_inmate_WHEN_teleported_to_jail_THEN_nothing_happens() {
-        runTest {
+    fun GIVEN_offline_inmate_WHEN_teleported_to_jail_THEN_nothing_happens(): TestResult {
+        return runTest {
             val repository = FakeJailRepository(
                 jails = listOf(JailTestData.jail),
                 inmates = listOf(JailTestData.inmate)

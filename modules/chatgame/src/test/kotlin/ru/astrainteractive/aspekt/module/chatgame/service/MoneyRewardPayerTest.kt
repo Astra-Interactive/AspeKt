@@ -2,6 +2,7 @@
 
 package ru.astrainteractive.aspekt.module.chatgame.service
 
+import kotlinx.coroutines.test.TestResult
 import kotlinx.coroutines.test.runTest
 import ru.astrainteractive.aspekt.economy.api.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.module.chatgame.fake.FakeEconomyFacade
@@ -35,8 +36,8 @@ class MoneyRewardPayerTest {
     }
 
     @Test
-    fun GIVEN_reward_without_currency_WHEN_paid_THEN_default_economy_receives_the_amount() {
-        runTest {
+    fun GIVEN_reward_without_currency_WHEN_paid_THEN_default_economy_receives_the_amount(): TestResult {
+        return runTest {
             val defaultEconomy = FakeEconomyFacade(acceptsDeposits = true)
 
             val paid = payer(defaultEconomy).pay(winnerUuid, fixedReward)
@@ -47,8 +48,8 @@ class MoneyRewardPayerTest {
     }
 
     @Test
-    fun GIVEN_reward_in_a_currency_WHEN_paid_THEN_only_that_currency_receives_the_amount() {
-        runTest {
+    fun GIVEN_reward_in_a_currency_WHEN_paid_THEN_only_that_currency_receives_the_amount(): TestResult {
+        return runTest {
             val defaultEconomy = FakeEconomyFacade(acceptsDeposits = true)
             val gemsEconomy = FakeEconomyFacade(acceptsDeposits = true)
             val gemsReward = Reward.Money(
@@ -66,8 +67,8 @@ class MoneyRewardPayerTest {
     }
 
     @Test
-    fun GIVEN_currency_without_economy_WHEN_paid_THEN_nothing_is_paid() {
-        runTest {
+    fun GIVEN_currency_without_economy_WHEN_paid_THEN_nothing_is_paid(): TestResult {
+        return runTest {
             val defaultEconomy = FakeEconomyFacade(acceptsDeposits = true)
             val unknownCurrencyReward = Reward.Money(
                 minAmount = 3.0,
@@ -83,15 +84,15 @@ class MoneyRewardPayerTest {
     }
 
     @Test
-    fun GIVEN_server_without_default_economy_WHEN_paid_THEN_nothing_is_paid() {
-        runTest {
+    fun GIVEN_server_without_default_economy_WHEN_paid_THEN_nothing_is_paid(): TestResult {
+        return runTest {
             assertNull(payer(defaultEconomy = null).pay(winnerUuid, fixedReward))
         }
     }
 
     @Test
-    fun GIVEN_economy_that_refuses_the_deposit_WHEN_paid_THEN_nothing_is_paid() {
-        runTest {
+    fun GIVEN_economy_that_refuses_the_deposit_WHEN_paid_THEN_nothing_is_paid(): TestResult {
+        return runTest {
             val refusingEconomy = FakeEconomyFacade(acceptsDeposits = false)
 
             val paid = payer(refusingEconomy).pay(winnerUuid, fixedReward)

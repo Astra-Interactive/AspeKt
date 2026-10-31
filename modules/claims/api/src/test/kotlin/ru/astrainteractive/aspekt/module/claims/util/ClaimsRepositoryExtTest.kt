@@ -2,6 +2,7 @@
 
 package ru.astrainteractive.aspekt.module.claims.util
 
+import kotlinx.coroutines.test.TestResult
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -49,8 +50,8 @@ internal class ClaimsRepositoryExtTest {
     }
 
     @Test
-    fun GIVEN_free_chunk_WHEN_claimed_and_deleted_THEN_chunk_count_follows() {
-        runTest {
+    fun GIVEN_free_chunk_WHEN_claimed_and_deleted_THEN_chunk_count_follows(): TestResult {
+        return runTest {
             val repository = createRepository()
             randomChunk.let { chunk ->
                 assertEquals(0, repository.loadAllChunks().size)
@@ -64,8 +65,8 @@ internal class ClaimsRepositoryExtTest {
     }
 
     @Test
-    fun GIVEN_claimed_chunk_WHEN_flag_is_set_THEN_chunk_keeps_the_flag_value() {
-        runTest {
+    fun GIVEN_claimed_chunk_WHEN_flag_is_set_THEN_chunk_keeps_the_flag_value(): TestResult {
+        return runTest {
             val repository = createRepository()
             randomChunk.let { chunk ->
                 repository.claim(claimPlayer.uuid, chunk)
@@ -94,8 +95,8 @@ internal class ClaimsRepositoryExtTest {
     }
 
     @Test
-    fun GIVEN_chunk_WHEN_claimed_and_flag_changes_THEN_action_permission_follows() {
-        runTest {
+    fun GIVEN_chunk_WHEN_claimed_and_flag_changes_THEN_action_permission_follows(): TestResult {
+        return runTest {
             val repository = createRepository()
             randomChunk.let { chunk ->
                 assertTrue { repository.isAble(chunk.uniqueWorldKey, ChunkFlag.ALLOW_BREAK) }
@@ -120,8 +121,8 @@ internal class ClaimsRepositoryExtTest {
     }
 
     @Test
-    fun GIVEN_claimed_chunk_WHEN_mapped_with_size_three_THEN_only_center_is_claimed() {
-        runTest {
+    fun GIVEN_claimed_chunk_WHEN_mapped_with_size_three_THEN_only_center_is_claimed(): TestResult {
+        return runTest {
             val repository = createRepository()
             randomChunk.let { chunk ->
                 repository.claim(claimPlayer.uuid, chunk)

@@ -2,6 +2,7 @@
 
 package ru.astrainteractive.aspekt.module.playtimereward.usecase
 
+import kotlinx.coroutines.test.TestResult
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import ru.astrainteractive.aspekt.module.playtimereward.fake.FakeClock
@@ -53,8 +54,8 @@ class TrackPlaytimeUseCaseTest {
     }
 
     @Test
-    fun GIVEN_player_played_long_enough_WHEN_checked_THEN_player_is_rewarded_and_playtime_resets() {
-        runTest {
+    fun GIVEN_player_played_long_enough_WHEN_checked_THEN_player_is_rewarded_and_playtime_resets(): TestResult {
+        return runTest {
             useCase.invoke(player, PlaytimeEvent.Joined)
             clock.current = clock.current + 61.minutes
 
@@ -67,8 +68,8 @@ class TrackPlaytimeUseCaseTest {
     }
 
     @Test
-    fun GIVEN_player_played_too_little_WHEN_checked_THEN_playtime_is_counted_without_reward() {
-        runTest {
+    fun GIVEN_player_played_too_little_WHEN_checked_THEN_playtime_is_counted_without_reward(): TestResult {
+        return runTest {
             useCase.invoke(player, PlaytimeEvent.Joined)
             clock.current = clock.current + 30.minutes
 
@@ -81,8 +82,8 @@ class TrackPlaytimeUseCaseTest {
     }
 
     @Test
-    fun GIVEN_player_left_and_rejoined_WHEN_checked_THEN_time_offline_is_not_counted() {
-        runTest {
+    fun GIVEN_player_left_and_rejoined_WHEN_checked_THEN_time_offline_is_not_counted(): TestResult {
+        return runTest {
             useCase.invoke(player, PlaytimeEvent.Joined)
             clock.current = clock.current + 40.minutes
             useCase.invoke(player, PlaytimeEvent.Left)
