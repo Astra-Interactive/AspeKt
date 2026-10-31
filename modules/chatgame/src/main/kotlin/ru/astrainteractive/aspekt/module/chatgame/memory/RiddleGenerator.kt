@@ -2,13 +2,13 @@
 
 package ru.astrainteractive.aspekt.module.chatgame.memory
 
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.core.plugin.util.solveExample
+import ru.astrainteractive.aspekt.core.plugin.util.solveQuadratic
+import ru.astrainteractive.aspekt.core.plugin.util.solveRiddle
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGame
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameData
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
-import ru.astrainteractive.aspekt.plugin.util.solveExample
-import ru.astrainteractive.aspekt.plugin.util.solveQuadratic
-import ru.astrainteractive.aspekt.plugin.util.solveRiddle
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import kotlin.math.pow

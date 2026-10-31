@@ -32,19 +32,28 @@ internal class SortController {
     }
 
     private fun sortByType(content: Array<out ItemStack?>, desc: Boolean): Array<out ItemStack?> {
-        return sortBy(content, desc) {
+        return sortBy(
+            content,
+            desc
+        ) {
             compareBy { itemStack -> itemStack?.type }
         }
     }
 
     private fun sortByName(content: Array<out ItemStack?>, desc: Boolean): Array<out ItemStack?> {
-        return sortBy(content, desc) {
+        return sortBy(
+            content,
+            desc
+        ) {
             compareBy { itemStack -> itemStack?.itemMeta?.displayName }
         }
     }
 
     private fun sortByWool(content: Array<out ItemStack?>, desc: Boolean): Array<out ItemStack?> {
-        return sortBy(content, desc) {
+        return sortBy(
+            content,
+            desc
+        ) {
             compareBy { itemStack ->
                 itemStack?.type?.name?.contains("wool", ignoreCase = true)
             }
@@ -52,7 +61,10 @@ internal class SortController {
     }
 
     private fun sortByGlass(content: Array<out ItemStack?>, desc: Boolean): Array<out ItemStack?> {
-        return sortBy(content, desc) {
+        return sortBy(
+            content,
+            desc
+        ) {
             compareBy { itemStack ->
                 itemStack?.type?.name?.contains("glass", ignoreCase = true)
             }
@@ -60,7 +72,10 @@ internal class SortController {
     }
 
     private fun sortByBlock(content: Array<out ItemStack?>, desc: Boolean): Array<out ItemStack?> {
-        return sortBy(content, desc) {
+        return sortBy(
+            content,
+            desc
+        ) {
             compareBy(
                 { itemStack -> itemStack?.type?.isBlock },
                 { itemStack -> itemStack?.type?.name?.contains("glass", ignoreCase = true) },
@@ -75,7 +90,10 @@ internal class SortController {
     }
 
     private fun sortByTool(content: Array<out ItemStack?>, desc: Boolean): Array<out ItemStack?> {
-        return sortBy(content, desc) {
+        return sortBy(
+            content,
+            desc
+        ) {
             compareBy(
                 { itemStack -> itemStack?.type?.name?.contains("axe", ignoreCase = true) },
                 { itemStack -> itemStack?.type?.name?.contains("head", ignoreCase = true) },

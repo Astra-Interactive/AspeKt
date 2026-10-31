@@ -1,10 +1,10 @@
 package ru.astrainteractive.aspekt.module.chatgame.memory
 
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.core.plugin.util.solveAnagram
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGame
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameData
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
-import ru.astrainteractive.aspekt.plugin.util.solveAnagram
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import kotlin.random.Random

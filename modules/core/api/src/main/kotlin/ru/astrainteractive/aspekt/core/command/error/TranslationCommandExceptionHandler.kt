@@ -2,7 +2,7 @@ package ru.astrainteractive.aspekt.core.command.error
 
 import com.mojang.brigadier.context.CommandContext
 import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.exception.ArgumentConverterException
 import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException

@@ -5,19 +5,20 @@ package ru.astrainteractive.aspekt.di
 import com.charleskorn.kaml.PolymorphismStyle
 import com.charleskorn.kaml.Yaml
 import net.neoforged.fml.loading.FMLPaths
-import ru.astrainteractive.aspekt.command.di.CommandsModule
+import ru.astrainteractive.aspekt.command.api.di.CommandsModule
+import ru.astrainteractive.aspekt.core.di.CoreModule
 import ru.astrainteractive.aspekt.feature.di.FeatureGate
 import ru.astrainteractive.aspekt.feature.file.FileFeatureFlagReader
 import ru.astrainteractive.aspekt.feature.util.deriveEnabled
 import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
-import ru.astrainteractive.aspekt.module.auth.di.ForgeAuthModule
 import ru.astrainteractive.aspekt.module.auth.exposed.di.AuthExposedModule
-import ru.astrainteractive.aspekt.module.claims.di.ClaimModule
-import ru.astrainteractive.aspekt.module.claims.di.NeoForgeClaimModule
-import ru.astrainteractive.aspekt.module.rtp.di.RtpModule
-import ru.astrainteractive.aspekt.module.rtp.search.MinecraftSafeLocationProvider
-import ru.astrainteractive.aspekt.module.sethome.di.SetHomeModule
-import ru.astrainteractive.aspekt.module.tpa.di.TpaModule
+import ru.astrainteractive.aspekt.module.auth.neoforge.di.ForgeAuthModule
+import ru.astrainteractive.aspekt.module.claims.api.di.ClaimModule
+import ru.astrainteractive.aspekt.module.claims.neoforge.di.NeoForgeClaimModule
+import ru.astrainteractive.aspekt.module.rtp.api.di.RtpModule
+import ru.astrainteractive.aspekt.module.rtp.minecraft.search.MinecraftSafeLocationProvider
+import ru.astrainteractive.aspekt.module.sethome.api.di.SetHomeModule
+import ru.astrainteractive.aspekt.module.tpa.api.di.TpaModule
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.brigadier.command.MinecraftMultiplatformCommands
 import ru.astrainteractive.astralibs.command.registrar.NeoForgeCommandRegistrarContext
@@ -30,7 +31,9 @@ import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import java.io.File
 
-class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
+internal class RootModule(
+    forgeLifecycleServer: ForgeLifecycleServer
+) : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
     private val dataFolder by lazy {
         FMLPaths.CONFIGDIR.get()
             .resolve("AspeKt")
@@ -124,6 +127,7 @@ class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltL
                     stringFormat = coreModule.jsonStringFormat,
                     dataFolder = dataFolder,
                     ioScope = coreModule.ioScope,
+                    dispatchers = coreModule.dispatchers,
                     translationKrate = coreModule.translationKrate
                 )
             )

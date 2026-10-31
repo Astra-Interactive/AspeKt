@@ -3,26 +3,25 @@ package ru.astrainteractive.aspekt.module.sit.command.di
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
-import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.core.di.BukkitCoreModule
+import ru.astrainteractive.aspekt.core.di.CoreModule
 import ru.astrainteractive.aspekt.module.sit.command.SitLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.sit.event.SitController
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
-/**
- * Aggregates and registers Brigadier command nodes for Sit module.
- */
 internal class SitCommandModule(
-    private val bukkitCoreModule: BukkitCoreModule,
-    private val coreModule: CoreModule,
-    private val sitController: SitController,
+    bukkitCoreModule: BukkitCoreModule,
+    coreModule: CoreModule,
+    sitController: SitController,
 ) {
     private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())
 
     private val nodes = buildList {
         SitLiteralArgumentBuilder(
-            sitController = sitController,
+            toggleSitPlayer = { player, locationWithOffset ->
+                sitController.toggleSitPlayer(player = player, locationWithOffset = locationWithOffset)
+            },
             multiplatformCommand = coreModule.multiplatformCommand,
             commandExceptionHandler = coreModule.commandExceptionHandler
         ).create().run(::add)

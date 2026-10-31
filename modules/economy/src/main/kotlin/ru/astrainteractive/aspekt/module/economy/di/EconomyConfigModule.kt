@@ -1,8 +1,8 @@
 package ru.astrainteractive.aspekt.module.economy.di
 
-import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.core.di.CoreModule
+import ru.astrainteractive.aspekt.core.util.krateOf
 import ru.astrainteractive.aspekt.module.economy.model.CurrencyConfiguration
-import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asStateFlowKrate
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger

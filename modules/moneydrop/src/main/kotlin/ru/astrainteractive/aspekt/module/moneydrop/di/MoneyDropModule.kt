@@ -1,15 +1,16 @@
 package ru.astrainteractive.aspekt.module.moneydrop.di
 
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
-import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.core.di.BukkitCoreModule
+import ru.astrainteractive.aspekt.core.di.CoreModule
+import ru.astrainteractive.aspekt.core.util.krateOf
 import ru.astrainteractive.aspekt.module.moneydrop.database.di.MoneyDropDaoModule
 import ru.astrainteractive.aspekt.module.moneydrop.event.MoneyDropController
 import ru.astrainteractive.aspekt.module.moneydrop.event.MoneyDropEvent
 import ru.astrainteractive.aspekt.module.moneydrop.model.MoneyDropConfiguration
-import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
 import java.io.File
+import kotlin.time.Clock
 
 class MoneyDropModule(
     coreModule: CoreModule,
@@ -33,7 +34,8 @@ class MoneyDropModule(
         translationDependency = coreModule.translationKrate,
         dispatchers = coreModule.dispatchers,
         moneyDropKrate = moneyDropConfigKrate,
-        repository = moneyDropDaoModule.repository
+        repository = moneyDropDaoModule.repository,
+        clock = Clock.System
     )
 
     private val moneyDropEvent: MoneyDropEvent = MoneyDropEvent(

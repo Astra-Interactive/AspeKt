@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.module.jail.di
 
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
-import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.core.di.BukkitCoreModule
+import ru.astrainteractive.aspekt.core.di.CoreModule
 import ru.astrainteractive.aspekt.module.jail.api.JailCache
 import ru.astrainteractive.aspekt.module.jail.api.JailRepository
 import ru.astrainteractive.aspekt.module.jail.command.di.JailCommandModule
@@ -15,6 +15,7 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.service.IntervalService
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import java.io.File
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 
 class JailModule(
@@ -64,6 +65,7 @@ class JailModule(
             jailCache = jailCache,
             jailRepository = jailRepository,
             freeInmateUseCase = freeInmateUseCase,
+            clock = Clock.System,
             translationKrate = coreModule.translationKrate
         )
     )

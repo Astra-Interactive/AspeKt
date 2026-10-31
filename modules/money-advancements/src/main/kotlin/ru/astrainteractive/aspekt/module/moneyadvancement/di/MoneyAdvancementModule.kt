@@ -1,10 +1,10 @@
 package ru.astrainteractive.aspekt.module.moneyadvancement.di
 
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
-import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.core.di.BukkitCoreModule
+import ru.astrainteractive.aspekt.core.di.CoreModule
+import ru.astrainteractive.aspekt.core.util.krateOf
 import ru.astrainteractive.aspekt.module.moneyadvancement.event.MoneyAdvancementEvent
 import ru.astrainteractive.aspekt.module.moneyadvancement.model.MoneyAdvancementsConfiguration
-import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
@@ -25,6 +25,7 @@ class MoneyAdvancementModule(
     private val moneyAdvancementEvent = MoneyAdvancementEvent(
         currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory,
         translationKrate = coreModule.translationKrate,
+        dispatchers = coreModule.dispatchers,
         mAdvConfigKrate = mAdvConfigKrate,
     )
 

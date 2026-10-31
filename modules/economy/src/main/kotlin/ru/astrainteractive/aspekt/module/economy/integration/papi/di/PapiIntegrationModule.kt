@@ -1,9 +1,9 @@
 package ru.astrainteractive.aspekt.module.economy.integration.papi.di
 
 import org.bukkit.Bukkit
-import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.core.di.CoreModule
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
-import ru.astrainteractive.aspekt.module.economy.integration.papi.api.PlaceholderExpansionApi
+import ru.astrainteractive.aspekt.module.economy.integration.papi.api.PlaceholderRegistration
 import ru.astrainteractive.aspekt.module.economy.integration.papi.expansion.EconomyPlaceholderExtension
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
@@ -15,7 +15,7 @@ internal class PapiIntegrationModule(
     private val isPapiEnabled: Boolean
         get() = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")
 
-    private val economyPlaceholderExtension: PlaceholderExpansionApi by lazy {
+    private val economyPlaceholderExtension: PlaceholderRegistration by lazy {
         EconomyPlaceholderExtension(
             repository = databaseModule.economyRepository,
             scope = coreModule.ioScope

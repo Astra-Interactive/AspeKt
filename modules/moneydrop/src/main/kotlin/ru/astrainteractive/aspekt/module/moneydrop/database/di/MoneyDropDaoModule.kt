@@ -22,8 +22,9 @@ import ru.astrainteractive.klibs.mikro.exposed.model.DatabaseConfiguration
 import ru.astrainteractive.klibs.mikro.exposed.util.connectAsFlow
 import java.io.File
 import kotlin.coroutines.CoroutineContext
+import kotlin.time.Clock
 
-class MoneyDropDaoModule(
+internal class MoneyDropDaoModule(
     ioScope: CoroutineScope,
     dataFolder: File,
     ioDispatcher: CoroutineContext
@@ -50,7 +51,8 @@ class MoneyDropDaoModule(
 
     internal val repository: MoneyDropLocationRepository = ExposedMoneyDropLocationRepository(
         databaseFlow = databaseFlow,
-        ioDispatcher = ioDispatcher
+        ioDispatcher = ioDispatcher,
+        clock = Clock.System
     )
 
     @Suppress("TrivialLambdaReference")

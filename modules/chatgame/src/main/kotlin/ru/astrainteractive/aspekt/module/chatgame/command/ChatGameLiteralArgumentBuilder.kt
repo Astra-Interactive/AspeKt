@@ -8,32 +8,25 @@ import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Mutex
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.core.plugin.util.moneyRewarded
 import ru.astrainteractive.aspekt.module.chatgame.api.ChatGameStore
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.Reward
-import ru.astrainteractive.aspekt.module.chatgame.service.MoneyRewardPayer
-import ru.astrainteractive.aspekt.module.chatgame.service.broadcast
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
-import ru.astrainteractive.aspekt.plugin.util.moneyRewarded
+import ru.astrainteractive.aspekt.module.chatgame.usecase.PayMoneyRewardUseCase
+import ru.astrainteractive.aspekt.module.chatgame.util.broadcast
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.coroutines.launch
 
-/**
- * ChatGame /quiz command registrar. Preserves legacy behavior:
- * - Player-only
- * - With or without an answer argument (no-args uses empty string)
- * - Checks active game, validates answer with mutex to ensure single winner
- * - Rewards money if configured and ends the game
- */
 @Suppress("LongParameterList")
 internal class ChatGameLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
     private val chatGameStore: ChatGameStore,
     chatGameConfigKrate: CachedKrate<ChatGameConfig>,
-    private val moneyRewardPayer: MoneyRewardPayer,
+    private val payMoneyRewardUseCase: PayMoneyRewardUseCase,
     private val ioScope: CoroutineScope,
     private val multiplatformCommand: MultiplatformCommand,
     private val commandExceptionHandler: CommandExceptionHandler
@@ -57,7 +50,7 @@ internal class ChatGameLiteralArgumentBuilder(
                 } else {
                     when (reward) {
                         is Reward.Money -> {
-                            val amount = moneyRewardPayer.pay(player.uuid, reward)
+                            val amount = payMoneyRewardUseCase.invoke(player.uuid, reward)
                             if (amount == null) {
                                 player.sendMessage(translation.chatGame.rewardNotPaid)
                             } else {
@@ -79,7 +72,10 @@ internal class ChatGameLiteralArgumentBuilder(
                     val player = ctx.requirePlayer()
                     checkAnswer(player, "")
                 }
-                argument("answer", StringArgumentType.greedyString()) { answerArg ->
+                argument(
+                    "answer",
+                    StringArgumentType.greedyString()
+                ) { answerArg ->
                     runs(commandExceptionHandler::onException) { ctx ->
                         val player = ctx.requirePlayer()
                         val answer = ctx.requireArgument(answerArg)

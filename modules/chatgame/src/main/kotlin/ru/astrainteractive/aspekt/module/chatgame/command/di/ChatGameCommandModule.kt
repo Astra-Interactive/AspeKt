@@ -3,25 +3,22 @@ package ru.astrainteractive.aspekt.module.chatgame.command.di
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
-import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.core.di.BukkitCoreModule
+import ru.astrainteractive.aspekt.core.di.CoreModule
 import ru.astrainteractive.aspekt.module.chatgame.api.ChatGameStore
 import ru.astrainteractive.aspekt.module.chatgame.command.ChatGameLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
-import ru.astrainteractive.aspekt.module.chatgame.service.MoneyRewardPayer
+import ru.astrainteractive.aspekt.module.chatgame.usecase.PayMoneyRewardUseCase
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import kotlin.random.Random
 
-/**
- * Aggregates and registers Brigadier command nodes for ChatGame module.
- */
 internal class ChatGameCommandModule(
-    private val coreModule: CoreModule,
-    private val bukkitCoreModule: BukkitCoreModule,
-    private val chatGameStore: ChatGameStore,
-    private val chatGameConfigKrate: CachedKrate<ChatGameConfig>
+    coreModule: CoreModule,
+    bukkitCoreModule: BukkitCoreModule,
+    chatGameStore: ChatGameStore,
+    chatGameConfigKrate: CachedKrate<ChatGameConfig>
 ) {
     private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())
 
@@ -30,7 +27,7 @@ internal class ChatGameCommandModule(
             chatGameStore = chatGameStore,
             translationKrate = coreModule.translationKrate,
             chatGameConfigKrate = chatGameConfigKrate,
-            moneyRewardPayer = MoneyRewardPayer(
+            payMoneyRewardUseCase = PayMoneyRewardUseCase(
                 currencyEconomyProviderFactory = bukkitCoreModule.currencyEconomyProviderFactory,
                 random = Random.Default
             ),

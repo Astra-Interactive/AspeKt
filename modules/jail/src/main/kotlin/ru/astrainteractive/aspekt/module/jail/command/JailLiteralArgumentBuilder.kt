@@ -6,6 +6,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.plugin.model.PluginPermission
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.core.plugin.util.created
+import ru.astrainteractive.aspekt.core.plugin.util.deleted
+import ru.astrainteractive.aspekt.core.plugin.util.hasInmates
+import ru.astrainteractive.aspekt.core.plugin.util.inmateJailed
+import ru.astrainteractive.aspekt.core.plugin.util.inmateReleased
+import ru.astrainteractive.aspekt.core.plugin.util.jailed
+import ru.astrainteractive.aspekt.core.plugin.util.list
 import ru.astrainteractive.aspekt.module.jail.api.JailCache
 import ru.astrainteractive.aspekt.module.jail.api.JailRepository
 import ru.astrainteractive.aspekt.module.jail.model.Jail
@@ -14,15 +23,6 @@ import ru.astrainteractive.aspekt.module.jail.usecase.FreeInmateUseCase
 import ru.astrainteractive.aspekt.module.jail.usecase.TeleportInmateToJailUseCase
 import ru.astrainteractive.aspekt.module.jail.util.sendMessage
 import ru.astrainteractive.aspekt.module.jail.util.toJailLocation
-import ru.astrainteractive.aspekt.plugin.model.PluginPermission
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
-import ru.astrainteractive.aspekt.plugin.util.created
-import ru.astrainteractive.aspekt.plugin.util.deleted
-import ru.astrainteractive.aspekt.plugin.util.hasInmates
-import ru.astrainteractive.aspekt.plugin.util.inmateJailed
-import ru.astrainteractive.aspekt.plugin.util.inmateReleased
-import ru.astrainteractive.aspekt.plugin.util.jailed
-import ru.astrainteractive.aspekt.plugin.util.list
 import ru.astrainteractive.astralibs.command.api.argumenttype.OfflinePlayerArgumentConverter
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
@@ -31,13 +31,6 @@ import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import kotlin.time.Clock
 
-/**
- * /jail list
- * /jail create <jail>
- * /jail delete <jail>
- * /jail free <player>
- * /jail inmate <jail> <player> <time>
- */
 @Suppress("LongParameterList")
 internal class JailLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
@@ -48,6 +41,7 @@ internal class JailLiteralArgumentBuilder(
     private val teleportInmateToJailUseCase: TeleportInmateToJailUseCase,
     private val multiplatformCommand: MultiplatformCommand,
     private val platformServer: PlatformServer,
+    private val clock: Clock,
     private val commandExceptionHandler: CommandExceptionHandler
 ) {
     private val translation by translationKrate
@@ -67,7 +61,10 @@ internal class JailLiteralArgumentBuilder(
                     }
                 }
                 literal("create") {
-                    argument("jail", StringArgumentType.string()) { jailArg ->
+                    argument(
+                        "jail",
+                        StringArgumentType.string()
+                    ) { jailArg ->
                         runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.JAIL_CREATE)
                             val player = ctx.requirePlayer()
@@ -90,7 +87,10 @@ internal class JailLiteralArgumentBuilder(
                     }
                 }
                 literal("delete") {
-                    argument("jail", StringArgumentType.string()) { jailArg ->
+                    argument(
+                        "jail",
+                        StringArgumentType.string()
+                    ) { jailArg ->
                         hints { jailCache.findJails().map(Jail::name) }
                         runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.JAIL_DELETE)
@@ -114,7 +114,10 @@ internal class JailLiteralArgumentBuilder(
                     }
                 }
                 literal("free") {
-                    argument("player", StringArgumentType.string()) { playerArg ->
+                    argument(
+                        "player",
+                        StringArgumentType.string()
+                    ) { playerArg ->
                         hints { platformServer.getOnlinePlayers().map(OnlineKPlayer::name) }
                         runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.JAIL_FREE)
@@ -143,11 +146,20 @@ internal class JailLiteralArgumentBuilder(
                     }
                 }
                 literal("inmate") {
-                    argument("jail", StringArgumentType.string()) { jailArg ->
+                    argument(
+                        "jail",
+                        StringArgumentType.string()
+                    ) { jailArg ->
                         hints { jailCache.findJails().map(Jail::name) }
-                        argument("player", StringArgumentType.string()) { playerArg ->
+                        argument(
+                            "player",
+                            StringArgumentType.string()
+                        ) { playerArg ->
                             hints { platformServer.getOnlinePlayers().map(OnlineKPlayer::name) }
-                            argument("time", StringArgumentType.string()) { timeArg ->
+                            argument(
+                                "time",
+                                StringArgumentType.string()
+                            ) { timeArg ->
                                 hints { listOf("TIME:1s,1m,1h10m") }
                                 runs(commandExceptionHandler::onException) { ctx ->
                                     ctx.requirePermission(PluginPermission.JAIL_INMATE)
@@ -162,7 +174,7 @@ internal class JailLiteralArgumentBuilder(
                                         val inmate = JailInmate(
                                             uuid = jailOfflinePlayer.uniqueId.toString(),
                                             jailName = jailName,
-                                            start = Clock.System.now(),
+                                            start = clock.now(),
                                             duration = jailDuration,
                                             lastUsername = jailOfflinePlayer.name.orEmpty(),
                                             lastLocation = jailOfflinePlayer.location

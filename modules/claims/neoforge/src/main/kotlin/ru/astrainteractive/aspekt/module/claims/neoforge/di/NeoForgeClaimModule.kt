@@ -1,0 +1,40 @@
+package ru.astrainteractive.aspekt.module.claims.neoforge.di
+
+import ru.astrainteractive.aspekt.core.di.CoreModule
+import ru.astrainteractive.aspekt.module.claims.api.command.di.ClaimCommandModule
+import ru.astrainteractive.aspekt.module.claims.api.di.ClaimModule
+import ru.astrainteractive.aspekt.module.claims.neoforge.chunk.NeoForgeChunkProvider
+import ru.astrainteractive.aspekt.module.claims.neoforge.event.ForgeClaimEvent
+import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
+import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+
+class NeoForgeClaimModule(
+    commandRegistrarContext: CommandRegistrarContext,
+    coreModule: CoreModule,
+    claimModule: ClaimModule
+) {
+
+    @Suppress("UnusedPrivateProperty")
+    private val forgeClaimEvent = ForgeClaimEvent(
+        translationKrate = coreModule.translationKrate,
+        claimsRepository = claimModule.claimsRepository
+    )
+
+    private val claimCommandModule = ClaimCommandModule(
+        claimModule = claimModule,
+        commandRegistrarContext = commandRegistrarContext,
+        coreModule = coreModule,
+        chunkProvider = NeoForgeChunkProvider()
+    )
+
+    val lifecycle: Lifecycle = Lifecycle.Lambda(
+        onEnable = {
+            claimModule.lifecycle.onEnable()
+            claimCommandModule.lifecycle.onEnable()
+        },
+        onDisable = {
+            claimCommandModule.lifecycle.onDisable()
+            claimModule.lifecycle.onDisable()
+        }
+    )
+}

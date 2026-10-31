@@ -4,6 +4,7 @@ package ru.astrainteractive.aspekt.module.moneydrop.database
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.TestCoroutineScheduler
+import kotlinx.coroutines.test.TestResult
 import kotlinx.coroutines.test.runTest
 import ru.astrainteractive.aspekt.module.moneydrop.database.di.MoneyDropDaoModule
 import ru.astrainteractive.aspekt.module.moneydrop.model.MoneyDropLocation
@@ -39,8 +40,8 @@ internal class ExposedMoneyDropLocationRepositoryTest {
     }
 
     @Test
-    fun GIVEN_new_location_WHEN_added_THEN_it_exists() {
-        runTest(scheduler) {
+    fun GIVEN_new_location_WHEN_added_THEN_it_exists(): TestResult {
+        return runTest(scheduler) {
             val location = MoneyDropLocation(
                 x = 0,
                 y = 0,

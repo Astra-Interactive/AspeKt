@@ -1,0 +1,41 @@
+package ru.astrainteractive.aspekt.module.tpa.api.command.di
+
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
+import ru.astrainteractive.aspekt.module.tpa.api.command.TpaCommandExecutor
+import ru.astrainteractive.aspekt.module.tpa.api.command.TpaCommandRegistrar
+import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
+import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
+import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
+import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.astralibs.server.bridge.PlatformServer
+
+internal class TpaCommandModule(
+    executor: TpaCommandExecutor,
+    platformServer: PlatformServer,
+    multiplatformCommand: MultiplatformCommand,
+    commandExceptionHandler: CommandExceptionHandler,
+    unconfinedScope: CoroutineScope,
+    commandRegistrarContext: CommandRegistrarContext
+) {
+    private val moduleUnconfinedScope = CoroutineScope(unconfinedScope.coroutineContext + SupervisorJob())
+
+    private val nodes = TpaCommandRegistrar(
+        executor = executor,
+        platformServer = platformServer,
+        multiplatformCommand = multiplatformCommand,
+        commandExceptionHandler = commandExceptionHandler
+    ).createNodes()
+
+    @Suppress("TrivialLambdaReference")
+    val lifecycle: Lifecycle = Lifecycle.Lambda(
+        onEnable = {
+            commandRegistrarContext.registerWhenReady(nodes, moduleUnconfinedScope)
+        },
+        onDisable = {
+            moduleUnconfinedScope.cancel()
+        }
+    )
+}

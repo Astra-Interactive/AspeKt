@@ -7,24 +7,17 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.plugin.model.PluginPermission
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.module.economy.api.CurrencyCache
 import ru.astrainteractive.aspekt.module.economy.model.Currency
-import ru.astrainteractive.aspekt.plugin.model.PluginPermission
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.module.economy.model.EkonCommand
 import ru.astrainteractive.astralibs.command.api.argumenttype.KPlayerArgumentConverter
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 
-/**
- * Ekon command registrar. Builds Brigadier node for:
- * /ekon list
- * /ekon top <currency> [page]
- * /ekon balance <currency> <player>
- * /ekon set <currency> <player> <amount>
- * /ekon add <currency> <player> <amount>
- */
 internal class EkonLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
     private val currencyCache: CurrencyCache,
@@ -47,13 +40,16 @@ internal class EkonLiteralArgumentBuilder(
                 literal("list") {
                     runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
-                        EkonCommand.Model
+                        EkonCommand
                             .ListCurrencies(ctx.getSender())
                             .run(executor::execute)
                     }
                 }
                 literal("top") {
-                    argument("currency", StringArgumentType.string()) { currencyArg ->
+                    argument(
+                        "currency",
+                        StringArgumentType.string()
+                    ) { currencyArg ->
                         hints { currencyNames() }
                         runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
@@ -64,13 +60,16 @@ internal class EkonLiteralArgumentBuilder(
                                 ctx.getSender().sendMessage(translation.economy.currencyNotFound)
                                 return@runs
                             }
-                            EkonCommand.Model.Top(
+                            EkonCommand.Top(
                                 sender = ctx.getSender(),
                                 currency = currency,
                                 page = 0
                             ).run(executor::execute)
                         }
-                        argument("page", IntegerArgumentType.integer(0)) { pageArg ->
+                        argument(
+                            "page",
+                            IntegerArgumentType.integer(0)
+                        ) { pageArg ->
                             runs(commandExceptionHandler::onException) { ctx ->
                                 ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                                 val currencyName = ctx.requireArgument(currencyArg)
@@ -85,7 +84,7 @@ internal class EkonLiteralArgumentBuilder(
                                     ctx.getSender().sendMessage(translation.economy.currencyNotFound)
                                     return@runs
                                 }
-                                EkonCommand.Model.Top(
+                                EkonCommand.Top(
                                     sender = ctx.getSender(),
                                     currency = currency,
                                     page = page
@@ -95,9 +94,15 @@ internal class EkonLiteralArgumentBuilder(
                     }
                 }
                 literal("balance") {
-                    argument("currency", StringArgumentType.string()) { currencyArg ->
+                    argument(
+                        "currency",
+                        StringArgumentType.string()
+                    ) { currencyArg ->
                         hints { currencyNames() }
-                        argument("player", StringArgumentType.string()) { playerArg ->
+                        argument(
+                            "player",
+                            StringArgumentType.string()
+                        ) { playerArg ->
                             hints { Bukkit.getOnlinePlayers().map(Player::getName) }
                             runs(commandExceptionHandler::onException) { ctx ->
                                 ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
@@ -116,7 +121,7 @@ internal class EkonLiteralArgumentBuilder(
                                     playerArg,
                                     KPlayerArgumentConverter(platformServer)
                                 )
-                                EkonCommand.Model.Balance(
+                                EkonCommand.Balance(
                                     sender = ctx.getSender(),
                                     otherPlayer = offlinePlayer,
                                     currency = currency
@@ -126,11 +131,20 @@ internal class EkonLiteralArgumentBuilder(
                     }
                 }
                 literal("set") {
-                    argument("currency", StringArgumentType.string()) { currencyArg ->
+                    argument(
+                        "currency",
+                        StringArgumentType.string()
+                    ) { currencyArg ->
                         hints { currencyNames() }
-                        argument("player", StringArgumentType.string()) { playerArg ->
+                        argument(
+                            "player",
+                            StringArgumentType.string()
+                        ) { playerArg ->
                             hints { Bukkit.getOnlinePlayers().map(Player::getName) }
-                            argument("amount", DoubleArgumentType.doubleArg()) { amountArg ->
+                            argument(
+                                "amount",
+                                DoubleArgumentType.doubleArg()
+                            ) { amountArg ->
                                 runs(commandExceptionHandler::onException) { ctx ->
                                     ctx.requirePermission(PluginPermission.SET_BALANCE)
                                     val currencyName = ctx.requireArgument(currencyArg)
@@ -149,7 +163,7 @@ internal class EkonLiteralArgumentBuilder(
                                         KPlayerArgumentConverter(platformServer)
                                     )
                                     val amount: Double = ctx.requireArgument(amountArg)
-                                    EkonCommand.Model.Set(
+                                    EkonCommand.Set(
                                         sender = ctx.getSender(),
                                         otherPlayer = offlinePlayer,
                                         currency = currency,
@@ -161,11 +175,20 @@ internal class EkonLiteralArgumentBuilder(
                     }
                 }
                 literal("add") {
-                    argument("currency", StringArgumentType.string()) { currencyArg ->
+                    argument(
+                        "currency",
+                        StringArgumentType.string()
+                    ) { currencyArg ->
                         hints { currencyNames() }
-                        argument("player", StringArgumentType.string()) { playerArg ->
+                        argument(
+                            "player",
+                            StringArgumentType.string()
+                        ) { playerArg ->
                             hints { Bukkit.getOnlinePlayers().map(Player::getName) }
-                            argument("amount", DoubleArgumentType.doubleArg()) { amountArg ->
+                            argument(
+                                "amount",
+                                DoubleArgumentType.doubleArg()
+                            ) { amountArg ->
                                 runs(commandExceptionHandler::onException) { ctx ->
                                     ctx.requirePermission(PluginPermission.SET_BALANCE)
                                     val currencyName = ctx.requireArgument(currencyArg)
@@ -184,7 +207,7 @@ internal class EkonLiteralArgumentBuilder(
                                         KPlayerArgumentConverter(platformServer)
                                     )
                                     val amount: Double = ctx.requireArgument(amountArg)
-                                    EkonCommand.Model.Add(
+                                    EkonCommand.Add(
                                         sender = ctx.getSender(),
                                         otherPlayer = offlinePlayer,
                                         currency = currency,

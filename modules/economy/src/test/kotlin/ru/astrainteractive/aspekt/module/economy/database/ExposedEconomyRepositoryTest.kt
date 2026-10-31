@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestCoroutineScheduler
+import kotlinx.coroutines.test.TestResult
 import kotlinx.coroutines.test.runTest
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
 import ru.astrainteractive.aspekt.module.economy.model.Currency
@@ -59,8 +60,8 @@ class ExposedEconomyRepositoryTest {
     }
 
     @Test
-    fun `GIVEN_different_db_configs_WHEN_try_THEN_db_changed`() {
-        runTest {
+    fun `GIVEN_different_db_configs_WHEN_try_THEN_db_changed`(): TestResult {
+        return runTest {
             val initialUrl = requireModule.databaseFlow.first().url
             dbConfig.save { DatabaseConfiguration.H2(requireFolder.resolve("test1").path) }
             requireModule.databaseFlow
@@ -93,8 +94,8 @@ class ExposedEconomyRepositoryTest {
     }
 
     @Test
-    fun `GIVEN_currency_WHEN_try_find_THEN_found`() {
-        runTest(scheduler) {
+    fun `GIVEN_currency_WHEN_try_find_THEN_found`(): TestResult {
+        return runTest(scheduler) {
             val currencies = listOf(
                 Currency(
                     id = "0",
@@ -109,8 +110,8 @@ class ExposedEconomyRepositoryTest {
     }
 
     @Test
-    fun `GIVEN_multiple_currencies_WHEN_change_list_THEN_changed`() {
-        runTest(scheduler) {
+    fun `GIVEN_multiple_currencies_WHEN_change_list_THEN_changed`(): TestResult {
+        return runTest(scheduler) {
             val currencies = listOf(
                 Currency(
                     id = "0",
@@ -135,8 +136,8 @@ class ExposedEconomyRepositoryTest {
     }
 
     @Test
-    fun `GIVEN_currency_WHEN_add_to_player_THEN_added`() {
-        runTest(scheduler) {
+    fun `GIVEN_currency_WHEN_add_to_player_THEN_added`(): TestResult {
+        return runTest(scheduler) {
             val currencies = List(2) { index ->
                 Currency(
                     id = "$index",
@@ -175,8 +176,8 @@ class ExposedEconomyRepositoryTest {
     }
 
     @Test
-    fun `GIVEN_currency_WHEN_transfer_to_player_THEN_transfered`() {
-        runTest(scheduler) {
+    fun `GIVEN_currency_WHEN_transfer_to_player_THEN_transfered`(): TestResult {
+        return runTest(scheduler) {
             val currencies = List(2) { index ->
                 Currency(
                     id = "$index",
