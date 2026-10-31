@@ -26,19 +26,13 @@ internal class EconomyServiceModule(
         repository = databaseModule.economyRepository,
         dispatchers = dispatchers,
         getCurrencies = {
-            economyConfigModule.currencyConfigKrate.cachedValue.currencies
-                ?.values
-                .orEmpty()
-                .toList()
+            economyConfigModule.currencyConfigKrate.cachedValue.currencies.values.toList()
         },
     )
 
     private val preHeatService = PreHeatService(
         getCurrencies = {
-            economyConfigModule.currencyConfigKrate.cachedValue.currencies
-                ?.values
-                .orEmpty()
-                .toList()
+            economyConfigModule.currencyConfigKrate.cachedValue.currencies.values.toList()
         },
         dispatchers = dispatchers,
         repository = databaseModule.economyRepository
