@@ -14,7 +14,7 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class ClaimCommandModule(
     claimModule: ClaimModule,
-    private val commandRegistrarContext: CommandRegistrarContext,
+    commandRegistrarContext: CommandRegistrarContext,
     coreModule: CoreModule,
     chunkProvider: ChunkProvider
 ) {

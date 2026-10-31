@@ -9,7 +9,7 @@ import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class CommandsModule(
-    private val coreModule: CoreModule,
+    coreModule: CoreModule,
     lifecyclePlugin: Lifecycle
 ) {
     private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())

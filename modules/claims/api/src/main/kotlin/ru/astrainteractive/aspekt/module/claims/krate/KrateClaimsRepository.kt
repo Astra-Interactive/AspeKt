@@ -30,7 +30,7 @@ import java.util.UUID
 
 internal class KrateClaimsRepository(
     private val folder: File,
-    private val stringFormat: StringFormat,
+    stringFormat: StringFormat,
     private val ioScope: CoroutineScope
 ) : ClaimsRepository {
     private val mutex = Mutex()

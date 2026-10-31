@@ -14,7 +14,7 @@ import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class BukkitCommandsModule(
-    private val bukkitCoreModule: BukkitCoreModule,
+    bukkitCoreModule: BukkitCoreModule,
     coreModule: CoreModule,
 ) {
     private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())

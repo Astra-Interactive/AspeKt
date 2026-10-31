@@ -14,12 +14,12 @@ import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 internal class JailCommandModule(
-    private val coreModule: CoreModule,
-    private val bukkitCoreModule: BukkitCoreModule,
-    private val jailRepository: JailRepository,
-    private val jailCache: JailCache,
-    private val freeInmateUseCase: FreeInmateUseCase,
-    private val teleportInmateToJailUseCase: TeleportInmateToJailUseCase
+    coreModule: CoreModule,
+    bukkitCoreModule: BukkitCoreModule,
+    jailRepository: JailRepository,
+    jailCache: JailCache,
+    freeInmateUseCase: FreeInmateUseCase,
+    teleportInmateToJailUseCase: TeleportInmateToJailUseCase
 ) {
     private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())
 

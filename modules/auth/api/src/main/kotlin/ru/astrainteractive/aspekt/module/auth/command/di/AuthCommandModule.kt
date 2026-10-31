@@ -27,7 +27,7 @@ class AuthCommandModule(
     multiplatformCommand: MultiplatformCommand,
     commandExceptionHandler: CommandExceptionHandler,
     unconfinedScope: CoroutineScope,
-    private val commandRegistrarContext: CommandRegistrarContext
+    commandRegistrarContext: CommandRegistrarContext
 ) {
     private val moduleUnconfinedScope = CoroutineScope(unconfinedScope.coroutineContext + SupervisorJob())
 

@@ -11,9 +11,9 @@ import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 internal class SitCommandModule(
-    private val bukkitCoreModule: BukkitCoreModule,
-    private val coreModule: CoreModule,
-    private val sitController: SitController,
+    bukkitCoreModule: BukkitCoreModule,
+    coreModule: CoreModule,
+    sitController: SitController,
 ) {
     private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())
 

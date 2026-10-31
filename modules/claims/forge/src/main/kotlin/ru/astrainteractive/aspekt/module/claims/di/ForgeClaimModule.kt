@@ -10,7 +10,7 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 class ForgeClaimModule(
     commandRegistrarContext: CommandRegistrarContext,
     coreModule: CoreModule,
-    private val claimModule: ClaimModule
+    claimModule: ClaimModule
 ) {
 
     @Suppress("UnusedPrivateProperty")

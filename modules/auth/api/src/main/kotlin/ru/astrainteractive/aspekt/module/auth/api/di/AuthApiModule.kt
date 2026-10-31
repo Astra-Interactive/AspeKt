@@ -17,8 +17,8 @@ import java.io.File
 class AuthApiModule(
     val authRepository: AuthRepository,
     ioScope: CoroutineScope,
-    private val dataFolder: File,
-    private val stringFormat: StringFormat
+    dataFolder: File,
+    stringFormat: StringFormat
 ) {
     private val moduleIoScope = CoroutineScope(ioScope.coroutineContext + SupervisorJob())
 

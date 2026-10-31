@@ -19,7 +19,7 @@ import java.io.File
 
 class RtpModule(
     coreModule: CoreModule,
-    private val commandRegistrarContext: CommandRegistrarContext,
+    commandRegistrarContext: CommandRegistrarContext,
     safeLocationProviderFactory: (CachedKrate<RtpConfig>) -> SafeLocationProvider,
     multiplatformCommand: MultiplatformCommand,
 ) {

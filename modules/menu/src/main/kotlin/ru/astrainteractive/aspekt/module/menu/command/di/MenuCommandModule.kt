@@ -14,10 +14,10 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 
 internal class MenuCommandModule(
-    private val coreModule: CoreModule,
-    private val bukkitCoreModule: BukkitCoreModule,
-    private val menuRouter: () -> MenuRouter,
-    private val menuModelsKrate: CachedKrate<List<MenuConfiguration>>
+    coreModule: CoreModule,
+    bukkitCoreModule: BukkitCoreModule,
+    menuRouter: () -> MenuRouter,
+    menuModelsKrate: CachedKrate<List<MenuConfiguration>>
 ) {
     private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())
 

@@ -12,9 +12,9 @@ import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 internal class EconomyCommandModule(
-    private val coreModule: CoreModule,
-    private val databaseModule: EconomyDatabaseModule,
-    private val bukkitCoreModule: BukkitCoreModule
+    coreModule: CoreModule,
+    databaseModule: EconomyDatabaseModule,
+    bukkitCoreModule: BukkitCoreModule
 ) {
     private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())
 

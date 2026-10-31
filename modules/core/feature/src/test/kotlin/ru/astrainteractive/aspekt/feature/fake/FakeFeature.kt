@@ -3,8 +3,8 @@ package ru.astrainteractive.aspekt.feature.fake
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class FakeFeature(
-    private val name: String,
-    private val events: MutableList<String>
+    name: String,
+    events: MutableList<String>
 ) {
     var enableCount = 0
         private set

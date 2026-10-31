@@ -9,8 +9,8 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class BukkitClaimModule(
     bukkitCoreModule: BukkitCoreModule,
-    private val claimModule: ClaimModule,
-    private val coreModule: CoreModule
+    claimModule: ClaimModule,
+    coreModule: CoreModule
 ) {
     private val claimCommandModule = ClaimCommandModule(
         claimModule = claimModule,

@@ -12,8 +12,8 @@ import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 import java.io.File
 
 class MenuModule(
-    private val coreModule: CoreModule,
-    private val bukkitCoreModule: BukkitCoreModule
+    coreModule: CoreModule,
+    bukkitCoreModule: BukkitCoreModule
 ) {
     private val menuModels = DefaultMutableKrate(
         loader = {

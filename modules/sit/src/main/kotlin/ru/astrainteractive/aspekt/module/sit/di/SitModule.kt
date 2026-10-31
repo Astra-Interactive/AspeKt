@@ -13,7 +13,7 @@ import java.io.File
 
 class SitModule(
     coreModule: CoreModule,
-    private val bukkitCoreModule: BukkitCoreModule
+    bukkitCoreModule: BukkitCoreModule
 ) {
     private val sitConfigKrate = coreModule.yamlFormat
         .krateOf(

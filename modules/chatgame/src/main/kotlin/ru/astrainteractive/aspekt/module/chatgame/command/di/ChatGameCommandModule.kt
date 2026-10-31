@@ -15,10 +15,10 @@ import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import kotlin.random.Random
 
 internal class ChatGameCommandModule(
-    private val coreModule: CoreModule,
-    private val bukkitCoreModule: BukkitCoreModule,
-    private val chatGameStore: ChatGameStore,
-    private val chatGameConfigKrate: CachedKrate<ChatGameConfig>
+    coreModule: CoreModule,
+    bukkitCoreModule: BukkitCoreModule,
+    chatGameStore: ChatGameStore,
+    chatGameConfigKrate: CachedKrate<ChatGameConfig>
 ) {
     private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())
 

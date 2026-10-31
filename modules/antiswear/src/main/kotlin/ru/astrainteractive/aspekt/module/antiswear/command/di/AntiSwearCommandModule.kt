@@ -13,7 +13,7 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 internal class AntiSwearCommandModule(
     swearRepository: SwearRepository,
     coreModule: CoreModule,
-    private val bukkitCoreModule: BukkitCoreModule,
+    bukkitCoreModule: BukkitCoreModule,
 ) {
     private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())
 

@@ -11,7 +11,7 @@ import ru.astrainteractive.astralibs.menu.event.DefaultInventoryClickEvent
 
 class BukkitCoreModule(
     val plugin: LifecyclePlugin,
-    private val mainScope: CoroutineScope
+    mainScope: CoroutineScope
 ) {
     private val eventListener = EventListener.Default()
     private val inventoryClickEventListener = DefaultInventoryClickEvent()
