@@ -30,7 +30,9 @@ import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import java.io.File
 
-class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
+internal class RootModule(
+    forgeLifecycleServer: ForgeLifecycleServer
+) : Logger by JUtiltLogger("AspeKt-RootModuleImpl") {
     private val dataFolder by lazy {
         FMLPaths.CONFIGDIR.get()
             .resolve("AspeKt")

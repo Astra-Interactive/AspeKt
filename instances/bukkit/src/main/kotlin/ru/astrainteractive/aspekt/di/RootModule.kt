@@ -36,7 +36,7 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.lifecycle.LifecyclePlugin
 import ru.astrainteractive.astralibs.server.bridge.BukkitPlatformServer
 
-class RootModule(plugin: LifecyclePlugin) {
+internal class RootModule(plugin: LifecyclePlugin) {
     private val coreModule: CoreModule = CoreModule(
         dataFolder = plugin.dataFolder,
         dispatchers = DefaultBukkitDispatchers(plugin),
