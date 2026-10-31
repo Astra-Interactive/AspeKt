@@ -142,9 +142,8 @@ internal class TCEvent(
         }
     }
 
-    @Suppress("UnusedPrivateMember")
     @EventHandler(priority = EventPriority.HIGHEST)
-    private fun onBlockBreak(e: BlockBreakEvent) {
+    fun onBlockBreak(e: BlockBreakEvent) {
         val block = e.block
         val material = block.type
         val player = e.player
