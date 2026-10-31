@@ -38,16 +38,10 @@ internal class TpaApi {
         return requesters
     }
 
-    /**
-     * This player is awaiting to teleport
-     */
     fun hasPendingRequest(playerUuid: UUID): Boolean {
         return cache.getIfPresent(playerUuid) != null
     }
 
-    /**
-     * Some people has request for this player
-     */
     fun isBeingWaited(playerUuid: UUID): Boolean {
         return playerUuid in cache.asMap().values.map(TpaApiRequest::targetUuid)
     }

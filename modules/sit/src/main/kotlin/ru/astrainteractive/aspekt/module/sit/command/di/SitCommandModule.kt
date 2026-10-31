@@ -10,9 +10,6 @@ import ru.astrainteractive.aspekt.module.sit.event.SitController
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
-/**
- * Aggregates and registers Brigadier command nodes for Sit module.
- */
 internal class SitCommandModule(
     private val bukkitCoreModule: BukkitCoreModule,
     private val coreModule: CoreModule,

@@ -24,9 +24,6 @@ internal class VaultEconomyProvider(
     private val primaryCurrencyModel: Currency,
     private val repository: EconomyRepository
 ) : Economy, Logger by JUtiltLogger("Economy-${primaryCurrencyModel.id}") {
-    /**
-     * Run blocking function but try not to block main thread
-     */
     private fun <T> runIoBlocking(block: suspend CoroutineScope.() -> T): T {
         return if (Bukkit.isPrimaryThread()) {
             runBlocking(Dispatchers.IO) {

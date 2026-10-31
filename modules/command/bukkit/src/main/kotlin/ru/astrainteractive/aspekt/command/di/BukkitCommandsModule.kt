@@ -13,9 +13,6 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
-/**
- * Aggregates and registers Brigadier command nodes for the Bukkit instance module.
- */
 class BukkitCommandsModule(
     private val bukkitCoreModule: BukkitCoreModule,
     coreModule: CoreModule,

@@ -18,16 +18,6 @@ import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
-/**
- * Platform-agnostic Claim command registrar.
- * Builds Brigadier node for:
- * - /claim flag <ChunkFlag> <bool>
- * - /claim add <player>
- * - /claim remove <player>
- * - /claim map
- * - /claim claim
- * - /claim unclaim
- */
 internal class ClaimCommandRegistrar(
     private val claimCommandExecutor: ClaimCommandExecutor,
     private val claimsRepository: ClaimsRepository,

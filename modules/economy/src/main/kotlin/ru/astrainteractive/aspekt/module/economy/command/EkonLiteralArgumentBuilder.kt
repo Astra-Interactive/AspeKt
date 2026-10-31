@@ -17,14 +17,6 @@ import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 
-/**
- * Ekon command registrar. Builds Brigadier node for:
- * /ekon list
- * /ekon top <currency> [page]
- * /ekon balance <currency> <player>
- * /ekon set <currency> <player> <amount>
- * /ekon add <currency> <player> <amount>
- */
 internal class EkonLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
     private val currencyCache: CurrencyCache,

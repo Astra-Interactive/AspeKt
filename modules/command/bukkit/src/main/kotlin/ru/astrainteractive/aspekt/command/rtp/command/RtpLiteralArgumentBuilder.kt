@@ -7,10 +7,6 @@ import ru.astrainteractive.astralibs.command.api.brigadier.command.Multiplatform
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 
-/**
- * RTP command registrar. Builds Brigadier node for:
- * /rtp
- */
 internal class RtpLiteralArgumentBuilder(
     private val multiplatformCommand: MultiplatformCommand,
     translationKrate: CachedKrate<PluginTranslation>,

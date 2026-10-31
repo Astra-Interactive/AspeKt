@@ -15,9 +15,6 @@ import ru.astrainteractive.astralibs.command.api.brigadier.command.Multiplatform
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 
-/**
- * /register <password> <password_confirm>
- */
 internal class RegisterCommandRegistrar(
     translationKrate: CachedKrate<AuthTranslation>,
     private val ioScope: CoroutineScope,

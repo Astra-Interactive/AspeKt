@@ -12,10 +12,6 @@ import ru.astrainteractive.astralibs.command.api.argumenttype.OnlinePlayerArgume
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
-/**
- * RTP Bypassed command registrar. Builds Brigadier node for:
- * /rtpbypass <player>
- */
 internal class RtpBypassLiteralArgumentBuilder(
     private val multiplatformCommand: MultiplatformCommand,
     private val commandExceptionHandler: CommandExceptionHandler

@@ -5,7 +5,6 @@ import ru.astrainteractive.astralibs.localization.component.LocalizableComponent
 import ru.astrainteractive.astralibs.server.sendMessage
 import ru.astrainteractive.astralibs.server.util.asKAudience
 
-/** Like [Server.broadcast], but every player reads [message] in their own language; the console gets it too. */
 @Suppress("TrivialLambdaReference")
 internal fun Server.broadcast(message: LocalizableComponent) {
     val receivers = onlinePlayers + consoleSender

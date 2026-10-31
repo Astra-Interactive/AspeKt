@@ -7,10 +7,6 @@ import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.rtp.api.SafeLocationProvider
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 
-/**
- * Platform-agnostic RTP command registrar. Builds and registers Brigadier node for:
- * /rtp
- */
 internal class RtpCommandRegistrar(
     private val executor: RtpCommandExecutor,
     private val safeLocationProvider: SafeLocationProvider,

@@ -10,10 +10,6 @@ import ru.astrainteractive.astralibs.command.api.brigadier.command.Multiplatform
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 
-/**
- * Menu command registrar. Builds Brigadier node for:
- * /menu [menu]
- */
 internal class MenuLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
     private val menuRouter: () -> MenuRouter,

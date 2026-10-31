@@ -31,13 +31,6 @@ import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import kotlin.time.Clock
 
-/**
- * /jail list
- * /jail create <jail>
- * /jail delete <jail>
- * /jail free <player>
- * /jail inmate <jail> <player> <time>
- */
 @Suppress("LongParameterList")
 internal class JailLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,

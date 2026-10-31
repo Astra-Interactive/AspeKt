@@ -8,10 +8,6 @@ import ru.astrainteractive.astralibs.server.player.BukkitOnlineKPlayer
 import ru.astrainteractive.astralibs.server.util.asBukkitLocation
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
-/**
- * Sit command registrar. Builds Brigadier node for:
- * /sit
- */
 internal class SitLiteralArgumentBuilder(
     private val sitController: SitController,
     private val multiplatformCommand: MultiplatformCommand,

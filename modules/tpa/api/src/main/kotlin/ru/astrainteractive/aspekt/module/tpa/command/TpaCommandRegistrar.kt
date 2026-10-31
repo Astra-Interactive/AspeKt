@@ -7,14 +7,6 @@ import ru.astrainteractive.astralibs.command.api.brigadier.command.Multiplatform
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 
-/**
- * Platform-agnostic TPA command registrar. Registers:
- * - /tpa <player>
- * - /tpahere <player>
- * - /tpacancel
- * - /tpaccept
- * - /tpadeny
- */
 internal class TpaCommandRegistrar(
     private val executor: TpaCommandExecutor,
     private val platformServer: PlatformServer,

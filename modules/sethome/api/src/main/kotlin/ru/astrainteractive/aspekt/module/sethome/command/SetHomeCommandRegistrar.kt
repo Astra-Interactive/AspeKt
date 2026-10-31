@@ -12,14 +12,6 @@ import ru.astrainteractive.astralibs.command.api.brigadier.sender.KPlayerKComman
 import ru.astrainteractive.astralibs.server.permission.Permission
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
-/**
- * Platform-agnostic SetHome command registrar. Registers:
- * - /sethome <home_name> [force]
- * - /delhome <home_name>
- * - /home <home_name>
- *
- * Every node is player-only and guarded by its own [PluginPermission] node.
- */
 @Suppress("LongParameterList")
 internal class SetHomeCommandRegistrar(
     private val playerHomesRepository: PlayerHomesRepository,

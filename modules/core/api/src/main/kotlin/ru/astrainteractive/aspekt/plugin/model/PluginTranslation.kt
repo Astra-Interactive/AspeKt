@@ -7,10 +7,6 @@ import kotlinx.serialization.Serializable
 import ru.astrainteractive.astralibs.localization.locale.MinecraftLocales
 import ru.astrainteractive.astralibs.localization.text.LocalizedText
 
-/**
- * Texts of the plugin, grouped by the feature that sends them. A key missing from `translations.yml` keeps its
- * default; the `prefix` of a group is applied to the defaults of that group only.
- */
 @Serializable
 data class PluginTranslation(
     @SerialName("command_error")
@@ -46,7 +42,6 @@ data class PluginTranslation(
     @SerialName("playtime_reward")
     val playtimeReward: PlaytimeReward = PlaytimeReward(),
 ) {
-    /** Failures any command can report. */
     @Serializable
     data class CommandError(
         @SerialName("prefix")
@@ -495,7 +490,6 @@ data class PluginTranslation(
         ),
     )
 
-    /** Texts of `/menu` and of the menus it opens. */
     @Serializable
     data class Menu(
         @SerialName("prefix")

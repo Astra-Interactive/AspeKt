@@ -37,9 +37,6 @@ internal class TCEvent(
         return mat == Material.COARSE_DIRT
     }
 
-    /**
-     * Checks if material is log or not
-     */
     private fun isLog(mat: Material): Boolean {
         if (mat.name.contains("STRIPPED_")) return true
         if (mat.name.contains("_LOG")) return true
@@ -47,9 +44,6 @@ internal class TCEvent(
         return mat == Material.WARPED_STEM
     }
 
-    /**
-     * Damage axe item
-     */
     private fun damageItem(player: Player, tool: ItemStack) {
         if (!treeCapitatorConfigurationConfig.damageAxe) return
         val meta: ItemMeta = tool.itemMeta ?: return
@@ -77,9 +71,6 @@ internal class TCEvent(
         }
     }
 
-    /**
-     * Checks if material is leave or not
-     */
     private fun isLeaves(mat: Material): Boolean {
         if (mat.name.contains("LEAVES")) return true
         if (mat == Material.NETHER_WART_BLOCK) return true
@@ -87,10 +78,6 @@ internal class TCEvent(
         return mat == Material.SHROOMLIGHT
     }
 
-    /**
-     * Converts WoodLog into it's sapling
-     * @return sapling material or null if it's not found
-     */
     private fun saplingFromBlock(material: Material): Material? {
         return when (material) {
             Material.OAK_LOG -> Material.OAK_SAPLING

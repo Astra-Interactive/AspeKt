@@ -13,9 +13,6 @@ import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 
-/**
- * Aggregates and registers Brigadier command nodes for Menu module.
- */
 internal class MenuCommandModule(
     private val coreModule: CoreModule,
     private val bukkitCoreModule: BukkitCoreModule,

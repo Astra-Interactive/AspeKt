@@ -21,13 +21,6 @@ import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.coroutines.launch
 
-/**
- * ChatGame /quiz command registrar. Preserves legacy behavior:
- * - Player-only
- * - With or without an answer argument (no-args uses empty string)
- * - Checks active game, validates answer with mutex to ensure single winner
- * - Rewards money if configured and ends the game
- */
 @Suppress("LongParameterList")
 internal class ChatGameLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,

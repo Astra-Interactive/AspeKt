@@ -26,13 +26,8 @@ internal class AutoBroadcastServiceTask(
 ) : ServiceTask {
     private val announcementsConfiguration by announcementsConfigKrate
 
-    /**
-     * Rotation cursor over the configured announcements. Starts at a random position so that
-     * a server restart does not always replay the announcements in the same order.
-     */
     private var announcementIndex: Int = Random.nextInt()
 
-    /** Written from the drain coroutine, read from the lifecycle thread on shutdown. */
     @Volatile
     private var shownBossBar: BossBar? = null
 
@@ -53,10 +48,6 @@ internal class AutoBroadcastServiceTask(
         Bukkit.getOnlinePlayers().forEach(bossBar::removeViewer)
     }
 
-    /**
-     * Drains the boss bar progress from full to empty over [duration], then hides it.
-     * Runs detached from the caller so that the broadcast interval is not extended by [duration].
-     */
     private fun drainBossBarProgress(bossBar: BossBar, duration: Duration) {
         ioScope.launch(dispatchers.IO) {
             val progressStep = PROGRESS_STEP_DELAY.inWholeMilliseconds
@@ -112,10 +103,6 @@ internal class AutoBroadcastServiceTask(
         return announcements[announcementIndex]
     }
 
-    /**
-     * Hides the boss bar that is still being drained, if any. Must be called when the module
-     * shuts down, otherwise the bar stays on screen until the player reconnects.
-     */
     fun hideShownBossBar() {
         shownBossBar?.let(::hideBossBar)
         shownBossBar = null

@@ -18,7 +18,6 @@ enum class PluginPermission(override val value: String) : Permission {
     SET_BALANCE("aspekt.economy.set"),
     RTP_BYPASS("aspekt.rtpbypass"),
 
-    /** Also carries the per-role home limit as `aspekt.sethome.<count>`. */
     SET_HOME("aspekt.sethome"),
     DEL_HOME("aspekt.delhome"),
     HOME("aspekt.home"),

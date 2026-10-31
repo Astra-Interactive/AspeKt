@@ -10,9 +10,6 @@ import ru.astrainteractive.aspekt.module.antiswear.command.SwearFilterLiteralArg
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
-/**
- * Aggregates and registers Brigadier command nodes for AntiSwear module.
- */
 internal class AntiSwearCommandModule(
     swearRepository: SwearRepository,
     coreModule: CoreModule,

@@ -24,10 +24,6 @@ internal class HomeCommandExecutor(
     private val translation by translationKrate
     private val setHomeConfig by setHomeConfigKrate
 
-    /**
-     * Per-role limit: the highest `aspekt.sethome.<count>` node the player holds wins over the
-     * server-wide [SetHomeConfiguration.maxHomes] default.
-     */
     private fun maxHomesOf(player: OnlineKPlayer): Int {
         return player.maxPermissionSize(PluginPermission.SET_HOME) ?: setHomeConfig.maxHomes
     }

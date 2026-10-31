@@ -12,9 +12,6 @@ import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import java.util.UUID
 import kotlin.time.Duration.Companion.seconds
 
-/**
- * aspekt_balance_<currency>_<player>
- */
 internal class BalancePlaceholder(
     private val repository: EconomyRepository,
     private val scope: CoroutineScope

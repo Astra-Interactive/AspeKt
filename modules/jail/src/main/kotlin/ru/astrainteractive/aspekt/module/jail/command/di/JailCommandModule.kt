@@ -13,9 +13,6 @@ import ru.astrainteractive.aspekt.module.jail.usecase.TeleportInmateToJailUseCas
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
-/**
- * Aggregates and registers Brigadier command nodes for Jail module.
- */
 internal class JailCommandModule(
     private val coreModule: CoreModule,
     private val bukkitCoreModule: BukkitCoreModule,

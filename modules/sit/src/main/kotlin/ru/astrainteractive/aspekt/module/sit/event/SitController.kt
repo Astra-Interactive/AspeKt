@@ -28,9 +28,6 @@ internal class SitController(
         return aboveSitBlock.isSolid && aboveAboveSitBlock.isSolid
     }
 
-    /**
-     * Заставляет игрока сесть
-     */
     fun toggleSitPlayer(
         player: Player,
         location: Location = player.location.clone(),
@@ -75,9 +72,6 @@ internal class SitController(
         sitPlayers[player.uniqueId.toString()] = chair
     }
 
-    /**
-     * Функция заставляет игрока встать
-     */
     fun stopSitPlayer(player: Player) {
         // Берем текущий стул игрока
         val armorStand = sitPlayers[player.uniqueId.toString()] ?: return

@@ -14,9 +14,6 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import kotlin.random.Random
 
-/**
- * Aggregates and registers Brigadier command nodes for ChatGame module.
- */
 internal class ChatGameCommandModule(
     private val coreModule: CoreModule,
     private val bukkitCoreModule: BukkitCoreModule,
