@@ -1,6 +1,5 @@
 package ru.astrainteractive.aspekt.module.moneydrop.event
 
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.bukkit.Location
@@ -27,8 +26,9 @@ internal class MoneyDropController(
     moneyDropKrate: CachedKrate<MoneyDropConfiguration>,
     translationDependency: CachedKrate<PluginTranslation>,
     private val repository: MoneyDropLocationRepository,
+    private val clock: Clock,
     private val dispatchers: KotlinDispatchers
-) : CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO).withTimings() {
+) : CoroutineFeature by CoroutineFeature.Default(dispatchers.IO).withTimings() {
     private val moneyDropConfig by moneyDropKrate
     private val translation by translationDependency
 
@@ -39,7 +39,7 @@ internal class MoneyDropController(
             z = this.z.roundToInt(),
             world = this.world.name,
             additionalConstraint = additionalConstraint,
-            instant = Clock.System.now()
+            instant = clock.now()
         )
     }
 

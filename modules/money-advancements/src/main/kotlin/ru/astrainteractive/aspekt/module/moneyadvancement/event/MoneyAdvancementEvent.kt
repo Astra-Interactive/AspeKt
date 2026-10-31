@@ -1,7 +1,6 @@
 package ru.astrainteractive.aspekt.module.moneyadvancement.event
 
 import io.papermc.paper.advancement.AdvancementDisplay
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.bukkit.event.EventHandler
 import org.bukkit.event.player.PlayerAdvancementDoneEvent
@@ -17,16 +16,18 @@ import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.coroutines.CoroutineFeature
+import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
 internal class MoneyAdvancementEvent(
     mAdvConfigKrate: CachedKrate<MoneyAdvancementsConfiguration>,
     private val currencyEconomyProviderFactory: CurrencyEconomyProviderFactory,
-    translationKrate: CachedKrate<PluginTranslation>
+    translationKrate: CachedKrate<PluginTranslation>,
+    dispatchers: KotlinDispatchers
 ) : EventListener,
     Logger by JUtiltLogger("MoneyAdvancementEvent"),
-    CoroutineFeature by CoroutineFeature.Default(Dispatchers.IO).withTimings() {
+    CoroutineFeature by CoroutineFeature.Default(dispatchers.IO).withTimings() {
     private val mAdvConfig by mAdvConfigKrate
     private val translation by translationKrate
 

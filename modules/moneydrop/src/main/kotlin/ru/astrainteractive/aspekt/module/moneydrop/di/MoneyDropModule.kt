@@ -10,6 +10,7 @@ import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
 import java.io.File
+import kotlin.time.Clock
 
 class MoneyDropModule(
     coreModule: CoreModule,
@@ -33,7 +34,8 @@ class MoneyDropModule(
         translationDependency = coreModule.translationKrate,
         dispatchers = coreModule.dispatchers,
         moneyDropKrate = moneyDropConfigKrate,
-        repository = moneyDropDaoModule.repository
+        repository = moneyDropDaoModule.repository,
+        clock = Clock.System
     )
 
     private val moneyDropEvent: MoneyDropEvent = MoneyDropEvent(
