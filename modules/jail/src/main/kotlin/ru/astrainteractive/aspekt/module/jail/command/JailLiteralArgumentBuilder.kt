@@ -60,7 +60,10 @@ internal class JailLiteralArgumentBuilder(
                     }
                 }
                 literal("create") {
-                    argument("jail", StringArgumentType.string()) { jailArg ->
+                    argument(
+                        "jail",
+                        StringArgumentType.string()
+                    ) { jailArg ->
                         runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.JAIL_CREATE)
                             val player = ctx.requirePlayer()
@@ -83,7 +86,10 @@ internal class JailLiteralArgumentBuilder(
                     }
                 }
                 literal("delete") {
-                    argument("jail", StringArgumentType.string()) { jailArg ->
+                    argument(
+                        "jail",
+                        StringArgumentType.string()
+                    ) { jailArg ->
                         hints { jailCache.findJails().map(Jail::name) }
                         runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.JAIL_DELETE)
@@ -107,7 +113,10 @@ internal class JailLiteralArgumentBuilder(
                     }
                 }
                 literal("free") {
-                    argument("player", StringArgumentType.string()) { playerArg ->
+                    argument(
+                        "player",
+                        StringArgumentType.string()
+                    ) { playerArg ->
                         hints { platformServer.getOnlinePlayers().map(OnlineKPlayer::name) }
                         runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.JAIL_FREE)
@@ -136,11 +145,20 @@ internal class JailLiteralArgumentBuilder(
                     }
                 }
                 literal("inmate") {
-                    argument("jail", StringArgumentType.string()) { jailArg ->
+                    argument(
+                        "jail",
+                        StringArgumentType.string()
+                    ) { jailArg ->
                         hints { jailCache.findJails().map(Jail::name) }
-                        argument("player", StringArgumentType.string()) { playerArg ->
+                        argument(
+                            "player",
+                            StringArgumentType.string()
+                        ) { playerArg ->
                             hints { platformServer.getOnlinePlayers().map(OnlineKPlayer::name) }
-                            argument("time", StringArgumentType.string()) { timeArg ->
+                            argument(
+                                "time",
+                                StringArgumentType.string()
+                            ) { timeArg ->
                                 hints { listOf("TIME:1s,1m,1h10m") }
                                 runs(commandExceptionHandler::onException) { ctx ->
                                     ctx.requirePermission(PluginPermission.JAIL_INMATE)

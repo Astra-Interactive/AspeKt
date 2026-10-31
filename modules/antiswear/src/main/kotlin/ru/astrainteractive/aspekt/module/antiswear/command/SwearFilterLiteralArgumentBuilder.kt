@@ -57,7 +57,10 @@ internal class SwearFilterLiteralArgumentBuilder(
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("swearfilter") {
-                argument("on_off", StringArgumentType.string()) { onOffArg ->
+                argument(
+                    "on_off",
+                    StringArgumentType.string()
+                ) { onOffArg ->
                     hints { listOf("on", "off") }
                     runs(commandExceptionHandler::onException) { ctx ->
                         val value = ctx.requireArgument(onOffArg, OnOffArgumentConverter)
@@ -67,7 +70,10 @@ internal class SwearFilterLiteralArgumentBuilder(
                             isEnabled = value
                         )
                     }
-                    argument("player", StringArgumentType.string()) { playerArg ->
+                    argument(
+                        "player",
+                        StringArgumentType.string()
+                    ) { playerArg ->
                         hints { Bukkit.getOnlinePlayers().map(Player::getName) }
                         runs(commandExceptionHandler::onException) { ctx ->
                             val targetPlayer = ctx.requireArgument(

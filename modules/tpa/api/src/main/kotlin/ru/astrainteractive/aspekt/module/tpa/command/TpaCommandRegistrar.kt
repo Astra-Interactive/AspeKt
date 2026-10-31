@@ -16,7 +16,10 @@ internal class TpaCommandRegistrar(
     private fun createTpaNode(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("tpa") {
-                argument("player", StringArgumentType.string()) { playerArg ->
+                argument(
+                    "player",
+                    StringArgumentType.string()
+                ) { playerArg ->
                     hints { platformServer.getOnlinePlayers().map(OnlineKPlayer::name) }
                     runs(commandExceptionHandler::onException) { ctx ->
                         val targetPlayerName = ctx.requireArgument(playerArg)
@@ -34,7 +37,10 @@ internal class TpaCommandRegistrar(
     private fun createTpaHereNode(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("tpahere") {
-                argument("player", StringArgumentType.string()) { playerArg ->
+                argument(
+                    "player",
+                    StringArgumentType.string()
+                ) { playerArg ->
                     hints { platformServer.getOnlinePlayers().map(OnlineKPlayer::name) }
                     runs(commandExceptionHandler::onException) { ctx ->
                         val targetPlayerName = ctx.requireArgument(playerArg)

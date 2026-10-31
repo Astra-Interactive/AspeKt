@@ -32,7 +32,10 @@ internal class MenuLiteralArgumentBuilder(
                         menuRouter.invoke().openMenu(player = player, menuModel = menuModel)
                     }
                 }
-                argument("menu", StringArgumentType.string()) { menuArg ->
+                argument(
+                    "menu",
+                    StringArgumentType.string()
+                ) { menuArg ->
                     hints { menuModels.map(MenuConfiguration::command) }
                     runs(commandExceptionHandler::onException) { ctx ->
                         val player = ctx.requirePlayer()

@@ -24,7 +24,10 @@ internal class RtpBypassLiteralArgumentBuilder(
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("rtpbypass") {
-                argument("player", StringArgumentType.string()) { playerArg ->
+                argument(
+                    "player",
+                    StringArgumentType.string()
+                ) { playerArg ->
                     hints { Bukkit.getOnlinePlayers().map(Player::getName) }
                     runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requirePermission(PluginPermission.RTP_BYPASS)

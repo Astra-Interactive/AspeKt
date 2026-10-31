@@ -146,7 +146,10 @@ internal class ForgeClaimEvent(
             return true
         }
         val sharedEvent = if (e.isCancelable) ForgeSharedCancellableEvent(e) else ForgeEmptyCancellableEvent()
-        return debounce.debounceEvent(retractKey, sharedEvent) {
+        return debounce.debounceEvent(
+            retractKey,
+            sharedEvent
+        ) {
             val isAble = claimsRepository.isAble(
                 key = claimChunk.uniqueWorldKey,
                 chunkFlag = flag,

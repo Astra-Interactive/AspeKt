@@ -40,7 +40,10 @@ class MinecraftSafeLocationProvider(
             error { "#getLocation could not get level" }
             return RtpSearchResult.NotFound
         }
-        return jobRegistry.await(uuid, ioScope) {
+        return jobRegistry.await(
+            uuid,
+            ioScope
+        ) {
             searcher.findSafeLocation(
                 level = level,
                 config = rtpConfigKrate.cachedValue,

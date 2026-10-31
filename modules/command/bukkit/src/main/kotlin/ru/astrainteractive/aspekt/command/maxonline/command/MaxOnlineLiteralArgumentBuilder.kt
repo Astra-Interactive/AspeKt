@@ -15,7 +15,10 @@ internal class MaxOnlineLiteralArgumentBuilder(
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("maxonline") {
-                argument("online", IntegerArgumentType.integer()) { onlineArg ->
+                argument(
+                    "online",
+                    IntegerArgumentType.integer()
+                ) { onlineArg ->
                     runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requirePermission(PluginPermission.MAX_ONLINE)
                         val sender = ctx.getSender()

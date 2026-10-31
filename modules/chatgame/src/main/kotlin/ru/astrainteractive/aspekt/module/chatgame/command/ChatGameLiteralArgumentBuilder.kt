@@ -72,7 +72,10 @@ internal class ChatGameLiteralArgumentBuilder(
                     val player = ctx.requirePlayer()
                     checkAnswer(player, "")
                 }
-                argument("answer", StringArgumentType.greedyString()) { answerArg ->
+                argument(
+                    "answer",
+                    StringArgumentType.greedyString()
+                ) { answerArg ->
                     runs(commandExceptionHandler::onException) { ctx ->
                         val player = ctx.requirePlayer()
                         val answer = ctx.requireArgument(answerArg)

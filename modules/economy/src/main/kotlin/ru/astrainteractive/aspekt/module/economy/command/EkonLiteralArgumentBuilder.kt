@@ -45,7 +45,10 @@ internal class EkonLiteralArgumentBuilder(
                     }
                 }
                 literal("top") {
-                    argument("currency", StringArgumentType.string()) { currencyArg ->
+                    argument(
+                        "currency",
+                        StringArgumentType.string()
+                    ) { currencyArg ->
                         hints { currencyNames() }
                         runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
@@ -62,7 +65,10 @@ internal class EkonLiteralArgumentBuilder(
                                 page = 0
                             ).run(executor::execute)
                         }
-                        argument("page", IntegerArgumentType.integer(0)) { pageArg ->
+                        argument(
+                            "page",
+                            IntegerArgumentType.integer(0)
+                        ) { pageArg ->
                             runs(commandExceptionHandler::onException) { ctx ->
                                 ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
                                 val currencyName = ctx.requireArgument(currencyArg)
@@ -87,9 +93,15 @@ internal class EkonLiteralArgumentBuilder(
                     }
                 }
                 literal("balance") {
-                    argument("currency", StringArgumentType.string()) { currencyArg ->
+                    argument(
+                        "currency",
+                        StringArgumentType.string()
+                    ) { currencyArg ->
                         hints { currencyNames() }
-                        argument("player", StringArgumentType.string()) { playerArg ->
+                        argument(
+                            "player",
+                            StringArgumentType.string()
+                        ) { playerArg ->
                             hints { Bukkit.getOnlinePlayers().map(Player::getName) }
                             runs(commandExceptionHandler::onException) { ctx ->
                                 ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
@@ -118,11 +130,20 @@ internal class EkonLiteralArgumentBuilder(
                     }
                 }
                 literal("set") {
-                    argument("currency", StringArgumentType.string()) { currencyArg ->
+                    argument(
+                        "currency",
+                        StringArgumentType.string()
+                    ) { currencyArg ->
                         hints { currencyNames() }
-                        argument("player", StringArgumentType.string()) { playerArg ->
+                        argument(
+                            "player",
+                            StringArgumentType.string()
+                        ) { playerArg ->
                             hints { Bukkit.getOnlinePlayers().map(Player::getName) }
-                            argument("amount", DoubleArgumentType.doubleArg()) { amountArg ->
+                            argument(
+                                "amount",
+                                DoubleArgumentType.doubleArg()
+                            ) { amountArg ->
                                 runs(commandExceptionHandler::onException) { ctx ->
                                     ctx.requirePermission(PluginPermission.SET_BALANCE)
                                     val currencyName = ctx.requireArgument(currencyArg)
@@ -153,11 +174,20 @@ internal class EkonLiteralArgumentBuilder(
                     }
                 }
                 literal("add") {
-                    argument("currency", StringArgumentType.string()) { currencyArg ->
+                    argument(
+                        "currency",
+                        StringArgumentType.string()
+                    ) { currencyArg ->
                         hints { currencyNames() }
-                        argument("player", StringArgumentType.string()) { playerArg ->
+                        argument(
+                            "player",
+                            StringArgumentType.string()
+                        ) { playerArg ->
                             hints { Bukkit.getOnlinePlayers().map(Player::getName) }
-                            argument("amount", DoubleArgumentType.doubleArg()) { amountArg ->
+                            argument(
+                                "amount",
+                                DoubleArgumentType.doubleArg()
+                            ) { amountArg ->
                                 runs(commandExceptionHandler::onException) { ctx ->
                                     ctx.requirePermission(PluginPermission.SET_BALANCE)
                                     val currencyName = ctx.requireArgument(currencyArg)

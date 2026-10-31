@@ -15,7 +15,10 @@ internal class InvCloseLiteralArgumentBuilder(
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("invclose") {
-                argument("player", StringArgumentType.string()) { playerArg ->
+                argument(
+                    "player",
+                    StringArgumentType.string()
+                ) { playerArg ->
                     hints { Bukkit.getOnlinePlayers().map(Player::getName) }
                     runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requireArgument(playerArg, OnlinePlayerArgumentConverter)

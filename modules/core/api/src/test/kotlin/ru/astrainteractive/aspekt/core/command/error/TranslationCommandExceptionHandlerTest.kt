@@ -94,7 +94,10 @@ class TranslationCommandExceptionHandlerTest {
     fun GIVEN_argument_that_is_not_a_number_WHEN_command_converts_it_THEN_sender_reads_invalid_argument() {
         val command = with(multiplatformCommand) {
             command("pay") {
-                argument("amount", StringArgumentType.string()) { amountArg ->
+                argument(
+                    "amount",
+                    StringArgumentType.string()
+                ) { amountArg ->
                     runs(handler::onException) { ctx -> ctx.requireArgument(amountArg, IntArgumentConverter) }
                 }
             }

@@ -53,7 +53,10 @@ internal class SetHomeCommandRegistrar(
     private fun createSetHomeNode(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("sethome") {
-                argument("home_name", StringArgumentType.string()) { homeNameArg ->
+                argument(
+                    "home_name",
+                    StringArgumentType.string()
+                ) { homeNameArg ->
                     runs(commandExceptionHandler::onException) { ctx ->
                         executeSetHome(
                             ctx = ctx,
@@ -78,7 +81,10 @@ internal class SetHomeCommandRegistrar(
     private fun createDelHomeNode(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("delhome") {
-                argument("home_name", StringArgumentType.string()) { homeNameArg ->
+                argument(
+                    "home_name",
+                    StringArgumentType.string()
+                ) { homeNameArg ->
                     hints { ctx -> homeNameHints(ctx, PluginPermission.DEL_HOME) }
                     runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requirePermission(PluginPermission.DEL_HOME)
@@ -95,7 +101,10 @@ internal class SetHomeCommandRegistrar(
     private fun createHomeNode(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("home") {
-                argument("home_name", StringArgumentType.string()) { homeNameArg ->
+                argument(
+                    "home_name",
+                    StringArgumentType.string()
+                ) { homeNameArg ->
                     hints { ctx -> homeNameHints(ctx, PluginPermission.HOME) }
                     runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requirePermission(PluginPermission.HOME)

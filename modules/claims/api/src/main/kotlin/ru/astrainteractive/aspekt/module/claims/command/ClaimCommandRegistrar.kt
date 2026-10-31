@@ -32,9 +32,15 @@ internal class ClaimCommandRegistrar(
         return with(multiplatformCommand) {
             command("claim") {
                 literal(ClaimCommandArgument.FLAG.value) {
-                    argument("ChunkFlag", StringArgumentType.string()) { chunkFlagArg ->
+                    argument(
+                        "ChunkFlag",
+                        StringArgumentType.string()
+                    ) { chunkFlagArg ->
                         hints { ChunkFlag.entries.map(ChunkFlag::name) }
-                        argument("bool", BoolArgumentType.bool()) { boolArg ->
+                        argument(
+                            "bool",
+                            BoolArgumentType.bool()
+                        ) { boolArg ->
                             hints { listOf("true", "false") }
                             runs(commandExceptionHandler::onException) { ctx ->
                                 ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
@@ -54,7 +60,10 @@ internal class ClaimCommandRegistrar(
                     }
                 }
                 literal(ClaimCommandArgument.ADD_MEMBER.value) {
-                    argument("player", StringArgumentType.string()) { playerArg ->
+                    argument(
+                        "player",
+                        StringArgumentType.string()
+                    ) { playerArg ->
                         hints { platformServer.getOnlinePlayers().map(OnlineKPlayer::name) }
                         runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
@@ -75,7 +84,10 @@ internal class ClaimCommandRegistrar(
                     }
                 }
                 literal(ClaimCommandArgument.REMOVE_MEMBER.value) {
-                    argument("player", StringArgumentType.string()) { playerArg ->
+                    argument(
+                        "player",
+                        StringArgumentType.string()
+                    ) { playerArg ->
                         hints { ctx ->
                             ctx.getSender()
                                 .tryCast<KPlayerKCommandSender>()

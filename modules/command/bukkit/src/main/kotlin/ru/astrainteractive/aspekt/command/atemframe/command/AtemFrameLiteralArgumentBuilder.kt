@@ -43,7 +43,10 @@ internal class AtemFrameLiteralArgumentBuilder(
                     ctx.requirePermission(PluginPermission.ATEM_FRAME)
                     execute(player = ctx.requirePlayer())
                 }
-                argument("isVisible", BoolArgumentType.bool()) { isVisibleArg ->
+                argument(
+                    "isVisible",
+                    BoolArgumentType.bool()
+                ) { isVisibleArg ->
                     runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requirePermission(PluginPermission.ATEM_FRAME)
                         execute(
@@ -51,7 +54,10 @@ internal class AtemFrameLiteralArgumentBuilder(
                             isVisible = ctx.requireArgument(isVisibleArg)
                         )
                     }
-                    argument("isFixed", BoolArgumentType.bool()) { isFixedArg ->
+                    argument(
+                        "isFixed",
+                        BoolArgumentType.bool()
+                    ) { isFixedArg ->
                         runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.ATEM_FRAME)
                             execute(
@@ -60,7 +66,10 @@ internal class AtemFrameLiteralArgumentBuilder(
                                 isFixed = ctx.requireArgument(isFixedArg)
                             )
                         }
-                        argument("radius", DoubleArgumentType.doubleArg(0.0)) { radiusArg ->
+                        argument(
+                            "radius",
+                            DoubleArgumentType.doubleArg(0.0)
+                        ) { radiusArg ->
                             runs(commandExceptionHandler::onException) { ctx ->
                                 ctx.requirePermission(PluginPermission.ATEM_FRAME)
                                 execute(

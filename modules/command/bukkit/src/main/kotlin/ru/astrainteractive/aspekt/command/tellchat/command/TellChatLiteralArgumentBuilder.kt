@@ -22,14 +22,20 @@ internal class TellChatLiteralArgumentBuilder(
     fun create(): LiteralArgumentBuilder<Any> {
         return with(multiplatformCommand) {
             command("tellchat") {
-                argument("target", StringArgumentType.string()) { targetArg ->
+                argument(
+                    "target",
+                    StringArgumentType.string()
+                ) { targetArg ->
                     hints {
                         buildList {
                             add("*")
                             addAll(Bukkit.getOnlinePlayers().map(Player::getName))
                         }
                     }
-                    argument("message", StringArgumentType.greedyString()) { messageArg ->
+                    argument(
+                        "message",
+                        StringArgumentType.greedyString()
+                    ) { messageArg ->
                         runs(commandExceptionHandler::onException) { ctx ->
                             ctx.requirePermission(PluginPermission.TELL_CHAT)
                             val target = ctx.requireArgument(targetArg)
