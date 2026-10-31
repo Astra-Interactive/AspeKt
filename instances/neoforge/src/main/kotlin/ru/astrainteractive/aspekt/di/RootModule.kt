@@ -124,6 +124,7 @@ class RootModule(forgeLifecycleServer: ForgeLifecycleServer) : Logger by JUtiltL
                     stringFormat = coreModule.jsonStringFormat,
                     dataFolder = dataFolder,
                     ioScope = coreModule.ioScope,
+                    dispatchers = coreModule.dispatchers,
                     translationKrate = coreModule.translationKrate
                 )
             )

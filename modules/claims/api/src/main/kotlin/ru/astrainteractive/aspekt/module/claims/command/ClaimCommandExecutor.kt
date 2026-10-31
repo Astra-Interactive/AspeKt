@@ -2,8 +2,8 @@ package ru.astrainteractive.aspekt.module.claims.command
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import ru.astrainteractive.aspekt.module.claims.api.ClaimErrorMapper
 import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
-import ru.astrainteractive.aspekt.module.claims.error.ClaimErrorMapper
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimCommand
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
@@ -33,7 +33,7 @@ internal class ClaimCommandExecutor(
     private val translation by translationKrate
 
     @Suppress("MagicNumber")
-    private suspend fun renderClaimGrid(
+    private fun renderClaimGrid(
         claimPlayer: ClaimPlayer,
         chunk: ClaimChunk
     ) {

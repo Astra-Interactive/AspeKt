@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.module.claims.error
+package ru.astrainteractive.aspekt.module.claims.api
 
 import ru.astrainteractive.aspekt.module.claims.model.ClaimNotFoundException
 import ru.astrainteractive.aspekt.module.claims.model.ClaimNotOwnedException

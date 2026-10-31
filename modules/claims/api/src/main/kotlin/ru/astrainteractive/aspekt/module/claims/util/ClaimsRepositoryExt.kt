@@ -9,16 +9,16 @@ import ru.astrainteractive.aspekt.module.claims.model.UnderClaimException
 import ru.astrainteractive.aspekt.module.claims.model.UniqueWorldKey
 import java.util.UUID
 
-suspend fun ClaimsRepository.claimOwnerUuid(key: UniqueWorldKey): UUID? {
+fun ClaimsRepository.claimOwnerUuid(key: UniqueWorldKey): UUID? {
     return chunkByKrate[key]?.cachedStateFlow?.value?.ownerUUID
 }
 
-suspend fun ClaimsRepository.isPlayerOwnClaim(uuid: UUID, key: UniqueWorldKey): Boolean {
+fun ClaimsRepository.isPlayerOwnClaim(uuid: UUID, key: UniqueWorldKey): Boolean {
     return claimOwnerUuid(key) == uuid
 }
 
 suspend fun ClaimsRepository.loadAllChunks(uuid: UUID): List<ClaimChunk> {
-    return requireKrate(uuid).getValue().chunks.map { entry -> entry.value }
+    return requireKrate(uuid).getValue().chunks.values.toList()
 }
 
 suspend fun ClaimsRepository.findChunk(
@@ -65,21 +65,15 @@ fun ClaimsRepository.loadAllChunks(): List<ClaimChunk> {
         .flatMap { claimData -> claimData.chunks.values }
 }
 
-fun ClaimsRepository.createGrid(size: Int, chunk: ClaimChunk): Array<Array<Boolean>> {
-    val m = Array(size) {
-        Array(size) { false }
-    }
+fun ClaimsRepository.createGrid(size: Int, chunk: ClaimChunk): List<List<Boolean>> {
     val chunks = loadAllChunks()
-    for (i in 0 until size) {
-        for (j in 0 until size) {
-            m[i][j] = chunks.any { claimChunk ->
-                val x = chunk.x - size / 2 + i
-                val z = chunk.z + size / 2 - j
-                claimChunk.x == x && claimChunk.z == z
-            }
+    return List(size) { i ->
+        List(size) { j ->
+            val x = chunk.x - size / 2 + i
+            val z = chunk.z + size / 2 - j
+            chunks.any { claimChunk -> claimChunk.x == x && claimChunk.z == z }
         }
     }
-    return m
 }
 
 fun ClaimsRepository.isAble(
@@ -93,14 +87,8 @@ fun ClaimsRepository.isAble(
         ?.get(chunkFlag)
         ?: true
     val krate = chunkByKrate[key]
-    if (krate == null) {
-        return chunkValue
-    }
-    if (krate.cachedStateFlow.value.ownerUUID == claimPlayer?.uuid) {
-        return true
-    }
-    if (krate.cachedStateFlow.value.members.map(ClaimPlayer::uuid).contains(claimPlayer?.uuid)) {
-        return true
-    }
+    if (krate == null) return chunkValue
+    if (krate.cachedStateFlow.value.ownerUUID == claimPlayer?.uuid) return true
+    if (krate.cachedStateFlow.value.members.map(ClaimPlayer::uuid).contains(claimPlayer?.uuid)) return true
     return chunkValue
 }

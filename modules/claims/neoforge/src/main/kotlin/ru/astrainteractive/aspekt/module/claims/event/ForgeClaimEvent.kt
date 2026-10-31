@@ -17,8 +17,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.neoforged.neoforge.event.level.BlockEvent
 import net.neoforged.neoforge.event.level.ExplosionEvent
 import ru.astrainteractive.aspekt.module.claims.api.ClaimsRepository
+import ru.astrainteractive.aspekt.module.claims.debounce.api.RetractKey
 import ru.astrainteractive.aspekt.module.claims.debounce.memory.EventDebounce
-import ru.astrainteractive.aspekt.module.claims.debounce.model.RetractKey
 import ru.astrainteractive.aspekt.module.claims.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.util.isAble
@@ -140,12 +140,8 @@ internal class ForgeClaimEvent(
         player: ServerPlayer?,
         flag: ChunkFlag
     ): Boolean where T : Event {
-        if (player?.asPermissible()?.hasPermission(PluginPermission.ADMIN_CLAIM) == true) {
-            return false
-        }
-        if (e.tryCast<ICancellableEvent>()?.isCanceled == true) {
-            return true
-        }
+        if (player?.asPermissible()?.hasPermission(PluginPermission.ADMIN_CLAIM) == true) return false
+        if (e.tryCast<ICancellableEvent>()?.isCanceled == true) return true
         val sharedEvent = if (e is ICancellableEvent) ForgeSharedCancellableEvent(e) else ForgeEmptyCancellableEvent()
         return debounce.debounceEvent(
             retractKey,

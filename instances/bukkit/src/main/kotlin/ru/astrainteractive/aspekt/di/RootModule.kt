@@ -90,6 +90,7 @@ class RootModule(plugin: LifecyclePlugin) {
                     stringFormat = coreModule.jsonStringFormat,
                     dataFolder = coreModule.dataFolder,
                     ioScope = coreModule.ioScope,
+                    dispatchers = coreModule.dispatchers,
                     translationKrate = coreModule.translationKrate
                 )
             )

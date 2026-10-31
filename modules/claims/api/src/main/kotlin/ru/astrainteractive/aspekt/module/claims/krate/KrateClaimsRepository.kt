@@ -3,7 +3,6 @@
 package ru.astrainteractive.aspekt.module.claims.krate
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -25,12 +24,14 @@ import ru.astrainteractive.aspekt.module.claims.model.UniqueWorldKey
 import ru.astrainteractive.aspekt.module.claims.util.isPlayerOwnClaim
 import ru.astrainteractive.aspekt.module.claims.util.uniqueWorldKey
 import ru.astrainteractive.klibs.mikro.core.coroutines.propagateCancellationException
+import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import java.io.File
 import java.util.UUID
 
 internal class KrateClaimsRepository(
     private val folder: File,
     stringFormat: StringFormat,
+    dispatchers: KotlinDispatchers,
     private val ioScope: CoroutineScope
 ) : ClaimsRepository {
     private val mutex = Mutex()
@@ -47,7 +48,7 @@ internal class KrateClaimsRepository(
                 krate
             }
         }
-        .flowOn(Dispatchers.IO)
+        .flowOn(dispatchers.IO)
         .stateIn(
             scope = ioScope,
             started = SharingStarted.Eagerly,
@@ -70,7 +71,7 @@ internal class KrateClaimsRepository(
                 }
             }
         }
-        .flowOn(Dispatchers.IO)
+        .flowOn(dispatchers.IO)
         .stateIn(
             scope = ioScope,
             started = SharingStarted.Eagerly,
@@ -101,7 +102,7 @@ internal class KrateClaimsRepository(
 
     override suspend fun saveChunk(uuid: UUID, chunk: ClaimChunk): Result<Unit> {
         return mutex.withLock {
-            runCatching {
+            return@withLock runCatching {
                 requireKrate(uuid).save { data ->
                     data.copy(
                         chunks = data.chunks.toMutableMap().apply {
@@ -115,12 +116,8 @@ internal class KrateClaimsRepository(
 
     override suspend fun deleteChunk(uuid: UUID, key: UniqueWorldKey): Result<Unit> {
         return mutex.withLock {
-            if (key !in chunkByKrate) {
-                return@withLock Result.failure(ClaimNotFoundException)
-            }
-            if (!isPlayerOwnClaim(uuid, key)) {
-                return@withLock Result.failure(ClaimNotOwnedException)
-            }
+            if (key !in chunkByKrate) return@withLock Result.failure(ClaimNotFoundException)
+            if (!isPlayerOwnClaim(uuid, key)) return@withLock Result.failure(ClaimNotOwnedException)
             runCatching {
                 requireKrate(uuid).save { data ->
                     data.copy(
@@ -129,7 +126,7 @@ internal class KrateClaimsRepository(
                             .minus(key)
                     )
                 }
-            }.propagateCancellationException().onFailure { throwable -> throwable.printStackTrace() }
+            }.propagateCancellationException().onFailure(Throwable::printStackTrace)
         }
     }
 }

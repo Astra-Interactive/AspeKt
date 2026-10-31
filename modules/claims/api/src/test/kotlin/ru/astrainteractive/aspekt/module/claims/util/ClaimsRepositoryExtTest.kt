@@ -12,6 +12,7 @@ import ru.astrainteractive.aspekt.module.claims.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.model.ClaimPlayer
 import ru.astrainteractive.astralibs.util.YamlStringFormat
 import ru.astrainteractive.klibs.mikro.core.coroutines.awaitForCompletion
+import ru.astrainteractive.klibs.mikro.core.dispatchers.DefaultKotlinDispatchers
 import java.io.File
 import java.util.UUID
 import kotlin.random.Random
@@ -45,6 +46,7 @@ internal class ClaimsRepositoryExtTest {
         return KrateClaimsRepository(
             folder = tempFile.resolve(UUID.randomUUID().toString()),
             stringFormat = YamlStringFormat(),
+            dispatchers = DefaultKotlinDispatchers,
             ioScope = backgroundScope
         )
     }
@@ -143,7 +145,7 @@ internal class ClaimsRepositoryExtTest {
                         false
                     )
                 )
-                assertContentEquals(expectArray, repository.createGrid(3, chunk).map { row -> row.toList() }.toList())
+                assertContentEquals(expectArray, repository.createGrid(3, chunk))
             }
         }
     }
