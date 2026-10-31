@@ -20,7 +20,7 @@ internal class TpaCommandExecutor(
 ) {
     private val translation by translationKrate
 
-    private suspend fun tpaCancel(input: TpaCommand.TpaCancel) {
+    private fun tpaCancel(input: TpaCommand.TpaCancel) {
         if (!tpaApi.isBeingWaited(input.executorPlayer.uuid)) {
             input.executorPlayer.sendMessage(translation.tpa.youHaveNoPendingTp)
             return
@@ -29,7 +29,7 @@ internal class TpaCommandExecutor(
         input.executorPlayer.sendMessage(translation.tpa.requestCancelled)
     }
 
-    private suspend fun tpaDeny(input: TpaCommand.TpaDeny) {
+    private fun tpaDeny(input: TpaCommand.TpaDeny) {
         if (!tpaApi.isBeingWaited(input.executorPlayer.uuid)) {
             input.executorPlayer
                 .sendMessage(translation.tpa.noPendingTpToDeny)
@@ -43,7 +43,7 @@ internal class TpaCommandExecutor(
             .sendMessage(translation.tpa.requestCancelled)
     }
 
-    private suspend fun tpaHere(input: TpaCommand.TpaHere) {
+    private fun tpaHere(input: TpaCommand.TpaHere) {
         if (input.executorPlayer.uuid == input.targetPlayer.uuid) {
             input.executorPlayer
                 .sendMessage(translation.tpa.cantTpSelf)
@@ -59,7 +59,7 @@ internal class TpaCommandExecutor(
             .sendMessage(translation.tpa.requestTpaHere(input.executorPlayer.name))
     }
 
-    private suspend fun tpaTo(input: TpaCommand.TpaTo) {
+    private fun tpaTo(input: TpaCommand.TpaTo) {
         if (input.executorPlayer.uuid == input.targetPlayer.uuid) {
             input.executorPlayer
                 .sendMessage(translation.tpa.cantTpSelf)
@@ -75,7 +75,7 @@ internal class TpaCommandExecutor(
             .sendMessage(translation.tpa.requestTpa(input.executorPlayer.name))
     }
 
-    private suspend fun tpaAccept(input: TpaCommand.TpaAccept) {
+    private fun tpaAccept(input: TpaCommand.TpaAccept) {
         if (!tpaApi.isBeingWaited(input.executorPlayer.uuid)) {
             input.executorPlayer
                 .sendMessage(translation.tpa.noPendingTpToDeny)
