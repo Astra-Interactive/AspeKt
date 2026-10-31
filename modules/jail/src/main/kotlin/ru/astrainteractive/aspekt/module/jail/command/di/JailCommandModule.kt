@@ -12,6 +12,7 @@ import ru.astrainteractive.aspekt.module.jail.usecase.FreeInmateUseCase
 import ru.astrainteractive.aspekt.module.jail.usecase.TeleportInmateToJailUseCase
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import kotlin.time.Clock
 
 internal class JailCommandModule(
     coreModule: CoreModule,
@@ -33,6 +34,7 @@ internal class JailCommandModule(
             teleportInmateToJailUseCase = teleportInmateToJailUseCase,
             multiplatformCommand = coreModule.multiplatformCommand,
             platformServer = coreModule.platformServer,
+            clock = Clock.System,
             commandExceptionHandler = coreModule.commandExceptionHandler
         ).create().run(::add)
     }

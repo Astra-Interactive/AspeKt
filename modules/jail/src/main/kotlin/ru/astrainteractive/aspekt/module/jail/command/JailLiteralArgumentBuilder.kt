@@ -41,6 +41,7 @@ internal class JailLiteralArgumentBuilder(
     private val teleportInmateToJailUseCase: TeleportInmateToJailUseCase,
     private val multiplatformCommand: MultiplatformCommand,
     private val platformServer: PlatformServer,
+    private val clock: Clock,
     private val commandExceptionHandler: CommandExceptionHandler
 ) {
     private val translation by translationKrate
@@ -173,7 +174,7 @@ internal class JailLiteralArgumentBuilder(
                                         val inmate = JailInmate(
                                             uuid = jailOfflinePlayer.uniqueId.toString(),
                                             jailName = jailName,
-                                            start = Clock.System.now(),
+                                            start = clock.now(),
                                             duration = jailDuration,
                                             lastUsername = jailOfflinePlayer.name.orEmpty(),
                                             lastLocation = jailOfflinePlayer.location

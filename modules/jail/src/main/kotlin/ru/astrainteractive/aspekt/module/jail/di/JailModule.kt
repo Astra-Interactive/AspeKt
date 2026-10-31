@@ -15,6 +15,7 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.service.IntervalService
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import java.io.File
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 
 class JailModule(
@@ -64,6 +65,7 @@ class JailModule(
             jailCache = jailCache,
             jailRepository = jailRepository,
             freeInmateUseCase = freeInmateUseCase,
+            clock = Clock.System,
             translationKrate = coreModule.translationKrate
         )
     )

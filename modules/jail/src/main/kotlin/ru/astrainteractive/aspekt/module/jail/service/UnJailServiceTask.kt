@@ -19,6 +19,7 @@ internal class UnJailServiceTask(
     private val jailCache: JailCache,
     private val jailRepository: JailRepository,
     private val freeInmateUseCase: FreeInmateUseCase,
+    private val clock: Clock,
     translationKrate: CachedKrate<PluginTranslation>
 ) : ServiceTask, Logger by JUtiltLogger("AspeKt-UnJailServiceTask") {
     private val translation by translationKrate
@@ -34,7 +35,7 @@ internal class UnJailServiceTask(
         jailRepository.findInmates()
             .getOrNull()
             .orEmpty()
-            .filter { inmate -> inmate.isSentenceOver(Clock.System.now()) }
+            .filter { inmate -> inmate.isSentenceOver(clock.now()) }
             .forEach { inmate -> free(inmate) }
     }
 }
