@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.module.chatgame.service
+package ru.astrainteractive.aspekt.module.chatgame.util
 
 import org.bukkit.Server
 import ru.astrainteractive.astralibs.localization.component.LocalizableComponent

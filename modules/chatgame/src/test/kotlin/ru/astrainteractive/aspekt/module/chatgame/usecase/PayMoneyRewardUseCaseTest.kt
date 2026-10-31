@@ -1,6 +1,6 @@
 @file:Suppress("FunctionNaming")
 
-package ru.astrainteractive.aspekt.module.chatgame.service
+package ru.astrainteractive.aspekt.module.chatgame.usecase
 
 import kotlinx.coroutines.test.TestResult
 import kotlinx.coroutines.test.runTest
@@ -14,14 +14,14 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-class MoneyRewardPayerTest {
+class PayMoneyRewardUseCaseTest {
     private val winnerUuid = UUID.fromString("0f8fad5b-d9cb-469f-a165-70867728950e")
     private val fixedReward = Reward.Money(minAmount = 25.0, maxAmount = 25.0)
 
     private fun payer(
         defaultEconomy: FakeEconomyFacade?,
         economiesByCurrencyId: Map<String, FakeEconomyFacade> = emptyMap()
-    ): MoneyRewardPayer {
+    ): PayMoneyRewardUseCase {
         val provider = object : CurrencyEconomyProviderFactory {
             override fun findByCurrencyId(currencyId: String): EconomyFacade? {
                 return economiesByCurrencyId[currencyId]
@@ -29,7 +29,7 @@ class MoneyRewardPayerTest {
 
             override fun findDefault(): EconomyFacade? = defaultEconomy
         }
-        return MoneyRewardPayer(
+        return PayMoneyRewardUseCase(
             currencyEconomyProviderFactory = provider,
             random = Random(seed = 42)
         )
@@ -40,7 +40,7 @@ class MoneyRewardPayerTest {
         return runTest {
             val defaultEconomy = FakeEconomyFacade(acceptsDeposits = true)
 
-            val paid = payer(defaultEconomy).pay(winnerUuid, fixedReward)
+            val paid = payer(defaultEconomy).invoke(winnerUuid, fixedReward)
 
             assertEquals(25, paid)
             assertEquals(mapOf(winnerUuid to 25.0), defaultEconomy.deposits)
@@ -58,7 +58,7 @@ class MoneyRewardPayerTest {
                 currencyId = "gems"
             )
 
-            val paid = payer(defaultEconomy, mapOf("gems" to gemsEconomy)).pay(winnerUuid, gemsReward)
+            val paid = payer(defaultEconomy, mapOf("gems" to gemsEconomy)).invoke(winnerUuid, gemsReward)
 
             assertEquals(3, paid)
             assertEquals(mapOf(winnerUuid to 3.0), gemsEconomy.deposits)
@@ -76,7 +76,7 @@ class MoneyRewardPayerTest {
                 currencyId = "gems"
             )
 
-            val paid = payer(defaultEconomy).pay(winnerUuid, unknownCurrencyReward)
+            val paid = payer(defaultEconomy).invoke(winnerUuid, unknownCurrencyReward)
 
             assertNull(paid)
             assertEquals(emptyMap(), defaultEconomy.deposits)
@@ -86,7 +86,7 @@ class MoneyRewardPayerTest {
     @Test
     fun GIVEN_server_without_default_economy_WHEN_paid_THEN_nothing_is_paid(): TestResult {
         return runTest {
-            assertNull(payer(defaultEconomy = null).pay(winnerUuid, fixedReward))
+            assertNull(payer(defaultEconomy = null).invoke(winnerUuid, fixedReward))
         }
     }
 
@@ -95,7 +95,7 @@ class MoneyRewardPayerTest {
         return runTest {
             val refusingEconomy = FakeEconomyFacade(acceptsDeposits = false)
 
-            val paid = payer(refusingEconomy).pay(winnerUuid, fixedReward)
+            val paid = payer(refusingEconomy).invoke(winnerUuid, fixedReward)
 
             assertNull(paid)
             assertEquals(emptyMap(), refusingEconomy.deposits)

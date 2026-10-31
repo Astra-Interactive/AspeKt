@@ -11,8 +11,8 @@ import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.chatgame.api.ChatGameStore
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.Reward
-import ru.astrainteractive.aspekt.module.chatgame.service.MoneyRewardPayer
-import ru.astrainteractive.aspekt.module.chatgame.service.broadcast
+import ru.astrainteractive.aspekt.module.chatgame.usecase.PayMoneyRewardUseCase
+import ru.astrainteractive.aspekt.module.chatgame.util.broadcast
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.plugin.util.moneyRewarded
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
@@ -26,7 +26,7 @@ internal class ChatGameLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
     private val chatGameStore: ChatGameStore,
     chatGameConfigKrate: CachedKrate<ChatGameConfig>,
-    private val moneyRewardPayer: MoneyRewardPayer,
+    private val payMoneyRewardUseCase: PayMoneyRewardUseCase,
     private val ioScope: CoroutineScope,
     private val multiplatformCommand: MultiplatformCommand,
     private val commandExceptionHandler: CommandExceptionHandler
@@ -50,7 +50,7 @@ internal class ChatGameLiteralArgumentBuilder(
                 } else {
                     when (reward) {
                         is Reward.Money -> {
-                            val amount = moneyRewardPayer.pay(player.uuid, reward)
+                            val amount = payMoneyRewardUseCase.invoke(player.uuid, reward)
                             if (amount == null) {
                                 player.sendMessage(translation.chatGame.rewardNotPaid)
                             } else {
