@@ -62,7 +62,8 @@ internal class SitController(
             return
         }
         // Создаем стул
-        val chair = location.world?.spawnEntity(locationWithOffset, EntityType.ARMOR_STAND) as ArmorStand
+        val spawnedChair = location.world?.spawnEntity(locationWithOffset, EntityType.ARMOR_STAND)
+        val chair = (spawnedChair ?: error("Could not spawn a chair: the location has no world")) as ArmorStand
         chair.setGravity(false)
         chair.isVisible = false
         chair.isInvulnerable = false
@@ -89,9 +90,7 @@ internal class SitController(
     }
 
     fun onDisable() {
-        for (player in sitPlayers.keys) {
-            sitPlayers[player]!!.remove()
-        }
+        sitPlayers.values.forEach(ArmorStand::remove)
         sitPlayers.clear()
     }
 

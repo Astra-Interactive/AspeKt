@@ -19,7 +19,9 @@ internal class SitCommandModule(
 
     private val nodes = buildList {
         SitLiteralArgumentBuilder(
-            sitController = sitController,
+            toggleSitPlayer = { player, locationWithOffset ->
+                sitController.toggleSitPlayer(player = player, locationWithOffset = locationWithOffset)
+            },
             multiplatformCommand = coreModule.multiplatformCommand,
             commandExceptionHandler = coreModule.commandExceptionHandler
         ).create().run(::add)
