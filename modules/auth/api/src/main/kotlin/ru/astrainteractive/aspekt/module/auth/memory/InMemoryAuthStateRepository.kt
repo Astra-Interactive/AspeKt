@@ -2,16 +2,16 @@ package ru.astrainteractive.aspekt.module.auth.memory
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
+import ru.astrainteractive.aspekt.module.auth.api.AuthStateRepository
 import ru.astrainteractive.aspekt.module.auth.dao.api.AuthRepository
 import ru.astrainteractive.aspekt.module.auth.model.AuthState
 import ru.astrainteractive.aspekt.module.auth.model.PlayerLogin
 import java.util.UUID
 
-internal class InMemoryAuthorizedApi(
+internal class InMemoryAuthStateRepository(
     private val authRepository: AuthRepository,
     private val scope: CoroutineScope
-) : AuthorizedApi {
+) : AuthStateRepository {
     private val authorizedMap = HashMap<UUID, AuthState>()
 
     override fun resolveAuthState(uuid: UUID): AuthState {

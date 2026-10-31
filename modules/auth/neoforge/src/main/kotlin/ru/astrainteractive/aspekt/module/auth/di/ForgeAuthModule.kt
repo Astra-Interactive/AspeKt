@@ -20,7 +20,7 @@ class ForgeAuthModule(
 
     private val authCommandModule = AuthCommandModule(
         authRepository = authApiModule.authRepository,
-        authorizedApi = authApiModule.authorizedApi,
+        authStateRepository = authApiModule.authStateRepository,
         translationKrate = authApiModule.translationKrate,
         ioScope = coreModule.ioScope,
         platformServer = coreModule.platformServer,
@@ -32,7 +32,7 @@ class ForgeAuthModule(
 
     @Suppress("UnusedPrivateProperty")
     private val forgeAuthEvent = ForgeAuthEvent(
-        authorizedApi = authApiModule.authorizedApi,
+        authStateRepository = authApiModule.authStateRepository,
         translationKrate = authApiModule.translationKrate,
         mainScope = moduleMainScope
     )

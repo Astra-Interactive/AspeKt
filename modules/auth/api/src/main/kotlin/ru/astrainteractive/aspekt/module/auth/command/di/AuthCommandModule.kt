@@ -4,7 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
-import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
+import ru.astrainteractive.aspekt.module.auth.api.AuthStateRepository
 import ru.astrainteractive.aspekt.module.auth.command.LoginCommandRegistrar
 import ru.astrainteractive.aspekt.module.auth.command.RegisterCommandRegistrar
 import ru.astrainteractive.aspekt.module.auth.command.UnregisterCommandRegistrar
@@ -20,7 +20,7 @@ import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 @Suppress("LongParameterList")
 class AuthCommandModule(
     authRepository: AuthRepository,
-    authorizedApi: AuthorizedApi,
+    authStateRepository: AuthStateRepository,
     translationKrate: CachedKrate<AuthTranslation>,
     ioScope: CoroutineScope,
     platformServer: PlatformServer,
@@ -35,7 +35,7 @@ class AuthCommandModule(
         LoginCommandRegistrar(
             ioScope = ioScope,
             authRepository = authRepository,
-            authorizedApi = authorizedApi,
+            authStateRepository = authStateRepository,
             translationKrate = translationKrate,
             multiplatformCommand = multiplatformCommand,
             commandExceptionHandler = commandExceptionHandler
@@ -43,7 +43,7 @@ class AuthCommandModule(
         RegisterCommandRegistrar(
             ioScope = ioScope,
             authRepository = authRepository,
-            authorizedApi = authorizedApi,
+            authStateRepository = authStateRepository,
             translationKrate = translationKrate,
             multiplatformCommand = multiplatformCommand,
             commandExceptionHandler = commandExceptionHandler
@@ -51,7 +51,7 @@ class AuthCommandModule(
         UnregisterCommandRegistrar(
             ioScope = ioScope,
             authRepository = authRepository,
-            authorizedApi = authorizedApi,
+            authStateRepository = authStateRepository,
             platformServer = platformServer,
             translationKrate = translationKrate,
             multiplatformCommand = multiplatformCommand,

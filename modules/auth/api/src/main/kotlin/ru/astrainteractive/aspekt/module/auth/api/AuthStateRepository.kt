@@ -4,7 +4,7 @@ import ru.astrainteractive.aspekt.module.auth.model.AuthState
 import ru.astrainteractive.aspekt.module.auth.model.PlayerLogin
 import java.util.UUID
 
-interface AuthorizedApi {
+interface AuthStateRepository {
 
     fun resolveAuthState(uuid: UUID): AuthState
 

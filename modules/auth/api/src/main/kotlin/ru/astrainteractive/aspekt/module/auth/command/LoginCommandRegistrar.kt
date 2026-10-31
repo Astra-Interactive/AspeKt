@@ -5,7 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
-import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
+import ru.astrainteractive.aspekt.module.auth.api.AuthStateRepository
 import ru.astrainteractive.aspekt.module.auth.dao.api.AuthRepository
 import ru.astrainteractive.aspekt.module.auth.dao.model.AuthData
 import ru.astrainteractive.aspekt.module.auth.dao.util.checkAuthDataIsValid
@@ -20,7 +20,7 @@ internal class LoginCommandRegistrar(
     translationKrate: CachedKrate<AuthTranslation>,
     private val ioScope: CoroutineScope,
     private val authRepository: AuthRepository,
-    private val authorizedApi: AuthorizedApi,
+    private val authStateRepository: AuthStateRepository,
     private val multiplatformCommand: MultiplatformCommand,
     private val commandExceptionHandler: CommandExceptionHandler
 ) {
@@ -50,7 +50,7 @@ internal class LoginCommandRegistrar(
                                 )
                                 if (authRepository.checkAuthDataIsValid(authData).getOrDefault(false)) {
                                     ctx.getSender().sendMessage(translation.authSuccess)
-                                    authorizedApi.authUser(player.uuid)
+                                    authStateRepository.authUser(player.uuid)
                                 } else {
                                     ctx.getSender().sendMessage(translation.wrongPassword)
                                 }

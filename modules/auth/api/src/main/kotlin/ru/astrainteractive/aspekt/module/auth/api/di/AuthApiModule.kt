@@ -4,9 +4,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.StringFormat
-import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
+import ru.astrainteractive.aspekt.module.auth.api.AuthStateRepository
 import ru.astrainteractive.aspekt.module.auth.dao.api.AuthRepository
-import ru.astrainteractive.aspekt.module.auth.memory.InMemoryAuthorizedApi
+import ru.astrainteractive.aspekt.module.auth.memory.InMemoryAuthStateRepository
 import ru.astrainteractive.aspekt.module.auth.model.AuthTranslation
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.util.parseOrWriteIntoDefault
@@ -22,7 +22,7 @@ class AuthApiModule(
 ) {
     private val moduleIoScope = CoroutineScope(ioScope.coroutineContext + SupervisorJob())
 
-    val authorizedApi: AuthorizedApi = InMemoryAuthorizedApi(
+    val authStateRepository: AuthStateRepository = InMemoryAuthStateRepository(
         authRepository = authRepository,
         scope = moduleIoScope
     )

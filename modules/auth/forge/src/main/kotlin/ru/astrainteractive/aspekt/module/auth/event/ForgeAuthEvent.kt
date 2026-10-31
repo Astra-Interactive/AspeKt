@@ -12,7 +12,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent
 import net.minecraftforge.event.entity.player.PlayerEvent
 import net.minecraftforge.event.level.BlockEvent
 import net.minecraftforge.eventbus.api.EventPriority
-import ru.astrainteractive.aspekt.module.auth.api.AuthorizedApi
+import ru.astrainteractive.aspekt.module.auth.api.AuthStateRepository
 import ru.astrainteractive.aspekt.module.auth.model.AuthState
 import ru.astrainteractive.aspekt.module.auth.model.AuthTranslation
 import ru.astrainteractive.aspekt.module.auth.model.PlayerLogin
@@ -25,14 +25,14 @@ import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 
 internal class ForgeAuthEvent(
-    private val authorizedApi: AuthorizedApi,
+    private val authStateRepository: AuthStateRepository,
     private val mainScope: CoroutineScope,
     translationKrate: CachedKrate<AuthTranslation>
 ) {
     val translation by translationKrate
 
     val playerLoggedOutEvent = flowEvent<PlayerEvent.PlayerLoggedOutEvent>()
-        .onEach { event -> authorizedApi.forgetUser(event.entity.uuid) }
+        .onEach { event -> authStateRepository.forgetUser(event.entity.uuid) }
         .launchIn(mainScope)
 
     val playerLoggedInEvent = flowEvent<PlayerEvent.PlayerLoggedInEvent>()
@@ -42,13 +42,13 @@ internal class ForgeAuthEvent(
                 uuid = event.entity.uuid,
                 ip = (event.entity as ServerPlayer).ipAddress
             )
-            authorizedApi.loadUserInfo(playerLoginModel)
+            authStateRepository.loadUserInfo(playerLoginModel)
         }
         .launchIn(mainScope)
 
     @Suppress("MagicNumber")
     val playerMoveEvent = playerMoveFlowEvent()
-        .filter { event -> authorizedApi.resolveAuthState(event.player.uuid) !is AuthState.Authorized }
+        .filter { event -> authStateRepository.resolveAuthState(event.player.uuid) !is AuthState.Authorized }
         .onEach { event ->
             if (event.newKLocation.dist(event.oldKLocation) <= 0.001) return@onEach
             notifyPlayer(event.player)
@@ -61,7 +61,7 @@ internal class ForgeAuthEvent(
 
     val breakEvent = flowEvent<BlockEvent.BreakEvent>(EventPriority.HIGHEST)
         .filter { event -> event.player.isAlive }
-        .filter { event -> authorizedApi.resolveAuthState(event.player.uuid) !is AuthState.Authorized }
+        .filter { event -> authStateRepository.resolveAuthState(event.player.uuid) !is AuthState.Authorized }
         .onEach { event ->
             println(event)
             event.isCanceled = true
@@ -73,7 +73,7 @@ internal class ForgeAuthEvent(
         .filter { event -> event !is EntityJoinLevelEvent }
         .filter { event -> event !is PlayerEvent.PlayerLoggedInEvent }
         .filter { event -> event.entity.isAlive }
-        .filter { event -> authorizedApi.resolveAuthState(event.entity.uuid) !is AuthState.Authorized }
+        .filter { event -> authStateRepository.resolveAuthState(event.entity.uuid) !is AuthState.Authorized }
         .onEach { event ->
             if (event.isCancelable) event.isCanceled = true
             notifyPlayer(event.entity as Player)
@@ -85,7 +85,7 @@ internal class ForgeAuthEvent(
             // Only a server-side player has a client to send the message to
             val serverPlayer = player as? ServerPlayer ?: return@launch
             try {
-                when (authorizedApi.resolveAuthState(player.uuid)) {
+                when (authStateRepository.resolveAuthState(player.uuid)) {
                     AuthState.Authorized -> Unit
 
                     AuthState.Pending,
