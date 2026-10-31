@@ -43,25 +43,25 @@ internal class ExposedEconomyRepository(
         return databaseFlow.first()
     }
 
-    private fun ResultRow.toCurrency(): Currency {
+    private fun toCurrency(row: ResultRow): Currency {
         return Currency(
-            id = this[CurrencyTable.id].value,
-            name = this[CurrencyTable.name],
-            priority = this[CurrencyTable.priority],
+            id = row[CurrencyTable.id].value,
+            name = row[CurrencyTable.name],
+            priority = row[CurrencyTable.priority],
         )
     }
 
-    private fun ResultRow.toPlayerCurrency(): PlayerCurrency {
+    private fun toPlayerCurrency(row: ResultRow): PlayerCurrency {
         return PlayerCurrency(
             playerModel = EconomyPlayer(
-                name = this[PlayerCurrencyTable.lastUsername],
-                uuid = this[PlayerCurrencyTable.uuid],
+                name = row[PlayerCurrencyTable.lastUsername],
+                uuid = row[PlayerCurrencyTable.uuid],
             ),
-            balance = this[PlayerCurrencyTable.amount],
+            balance = row[PlayerCurrencyTable.amount],
             currencyModel = Currency(
-                id = this[CurrencyTable.id].value,
-                name = this[CurrencyTable.name],
-                priority = this[CurrencyTable.priority],
+                id = row[CurrencyTable.id].value,
+                name = row[CurrencyTable.name],
+                priority = row[CurrencyTable.priority],
             )
         )
     }
@@ -69,7 +69,7 @@ internal class ExposedEconomyRepository(
     override suspend fun loadAllCurrencies(): List<Currency> {
         return newSuspendedTransaction(db = currentDatabase()) {
             CurrencyTable.selectAll()
-                .map { item -> item.toCurrency() }
+                .map(::toCurrency)
         }
     }
 
@@ -91,7 +91,7 @@ internal class ExposedEconomyRepository(
             }
             newSuspendedTransaction(db = currentDatabase()) {
                 currencies.forEach { currency ->
-                    if (existingCurrencies.find { existingCurrency -> currency.id == existingCurrency.id } != null) {
+                    if (existingCurrencies.any { existingCurrency -> currency.id == existingCurrency.id }) {
                         CurrencyTable.update(where = { CurrencyTable.id eq currency.id }) { statement ->
                             statement[CurrencyTable.name] = currency.name
                             statement[CurrencyTable.priority] = currency.priority
@@ -112,7 +112,7 @@ internal class ExposedEconomyRepository(
         return newSuspendedTransaction(db = currentDatabase()) {
             CurrencyTable.selectAll()
                 .where { CurrencyTable.id eq id }
-                .map { item -> item.toCurrency() }
+                .map(::toCurrency)
                 .firstOrNull()
         }
     }
@@ -128,7 +128,7 @@ internal class ExposedEconomyRepository(
                 .selectAll()
                 .where { PlayerCurrencyTable.uuid eq playerUuid }
                 .andWhere { PlayerCurrencyTable.currencyId eq currencyId }
-                .map { item -> item.toPlayerCurrency() }
+                .map(::toPlayerCurrency)
                 .firstOrNull()
         }
     }
@@ -143,7 +143,7 @@ internal class ExposedEconomyRepository(
             )
                 .selectAll()
                 .where { PlayerCurrencyTable.uuid eq playerUuid }
-                .map { item -> item.toPlayerCurrency() }
+                .map(::toPlayerCurrency)
         }
     }
 
@@ -156,15 +156,15 @@ internal class ExposedEconomyRepository(
                 otherColumn = PlayerCurrencyTable.currencyId
             )
                 .selectAll()
-                .orderBy(PlayerCurrencyTable.amount to SortOrder.DESC)
+                .orderBy(column = PlayerCurrencyTable.amount, order = SortOrder.DESC)
                 .where { CurrencyTable.id eq id }
                 .limit(size)
                 .offset(page.times(size).toLong())
-                .map { item -> item.toPlayerCurrency() }
+                .map(::toPlayerCurrency)
         }
     }
 
-    private suspend fun updatePlayerCurrencyWithoutTransaction(currency: PlayerCurrency) {
+    private fun updatePlayerCurrencyWithoutTransaction(currency: PlayerCurrency) {
         val isPlayerCurrencyExists = PlayerCurrencyTable.selectAll()
             .where { PlayerCurrencyTable.currencyId eq currency.currencyModel.id }
             .andWhere { PlayerCurrencyTable.uuid eq currency.playerModel.uuid }

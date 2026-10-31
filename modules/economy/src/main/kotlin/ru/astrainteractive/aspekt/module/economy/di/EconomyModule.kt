@@ -39,6 +39,7 @@ class EconomyModule(
     private val serviceModule = EconomyServiceModule(
         economyConfigModule = economyConfigModule,
         databaseModule = databaseModule,
+        dispatchers = coreModule.dispatchers,
         bukkitCoreModule = bukkitCoreModule
     )
 

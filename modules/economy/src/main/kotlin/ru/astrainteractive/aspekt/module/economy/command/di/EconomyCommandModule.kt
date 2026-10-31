@@ -20,6 +20,7 @@ internal class EconomyCommandModule(
 
     private val executor = EkonCommandExecutor(
         translationKrate = coreModule.translationKrate,
+        dispatchers = coreModule.dispatchers,
         repository = databaseModule.economyRepository
     )
 

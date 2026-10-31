@@ -1,6 +1,6 @@
 package ru.astrainteractive.aspekt.module.economy.integration.papi.api
 
-interface PlaceholderExpansionApi {
+interface PlaceholderRegistration {
     fun isRegistered(): Boolean
 
     fun register(): Boolean

@@ -1,20 +1,21 @@
 @file:Suppress("FieldDependencyConstruction")
 
-package ru.astrainteractive.aspekt.module.economy.service
+package ru.astrainteractive.aspekt.module.economy.integration.vault.service
 
 import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
 import ru.astrainteractive.aspekt.module.economy.api.EconomyRepository
-import ru.astrainteractive.aspekt.module.economy.integration.vault.service.VaultEconomyProvider
 import ru.astrainteractive.aspekt.module.economy.model.Currency
+import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 
 internal class BukkitVaultService(
     private val plugin: JavaPlugin,
     private val getCurrencies: () -> List<Currency>,
+    private val dispatchers: KotlinDispatchers,
     private val repository: EconomyRepository
 ) : Logger by JUtiltLogger("BukkitService") {
 
@@ -37,6 +38,7 @@ internal class BukkitVaultService(
                 Economy::class.java,
                 VaultEconomyProvider(
                     primaryCurrencyModel = currency,
+                    dispatchers = dispatchers,
                     repository = repository
                 ),
                 plugin,

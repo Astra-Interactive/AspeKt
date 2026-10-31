@@ -5,16 +5,18 @@ import org.bukkit.Bukkit
 import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
 import ru.astrainteractive.aspekt.module.economy.di.EconomyConfigModule
-import ru.astrainteractive.aspekt.module.economy.service.BukkitVaultService
+import ru.astrainteractive.aspekt.module.economy.integration.vault.service.BukkitVaultService
 import ru.astrainteractive.aspekt.module.economy.service.PreHeatService
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 
 internal class EconomyServiceModule(
     bukkitCoreModule: BukkitCoreModule,
     databaseModule: EconomyDatabaseModule,
+    dispatchers: KotlinDispatchers,
     private val economyConfigModule: EconomyConfigModule
 ) {
-    private val shouldSync get() = economyConfigModule.currencyConfigKrate.cachedValue?.shouldSync == true
+    private val shouldSync get() = economyConfigModule.currencyConfigKrate.cachedValue.shouldSync == true
 
     private val isVaultEnabled: Boolean
         get() = Bukkit.getPluginManager().isPluginEnabled("Vault")
@@ -22,8 +24,9 @@ internal class EconomyServiceModule(
     private val bukkitVaultService = BukkitVaultService(
         plugin = bukkitCoreModule.plugin,
         repository = databaseModule.economyRepository,
+        dispatchers = dispatchers,
         getCurrencies = {
-            economyConfigModule.currencyConfigKrate.cachedValue?.currencies
+            economyConfigModule.currencyConfigKrate.cachedValue.currencies
                 ?.values
                 .orEmpty()
                 .toList()
@@ -32,11 +35,12 @@ internal class EconomyServiceModule(
 
     private val preHeatService = PreHeatService(
         getCurrencies = {
-            economyConfigModule.currencyConfigKrate.cachedValue?.currencies
+            economyConfigModule.currencyConfigKrate.cachedValue.currencies
                 ?.values
                 .orEmpty()
                 .toList()
         },
+        dispatchers = dispatchers,
         repository = databaseModule.economyRepository
     )
 

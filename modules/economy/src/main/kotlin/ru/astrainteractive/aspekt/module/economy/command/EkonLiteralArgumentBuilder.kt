@@ -9,6 +9,7 @@ import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
 import ru.astrainteractive.aspekt.module.economy.api.CurrencyCache
 import ru.astrainteractive.aspekt.module.economy.model.Currency
+import ru.astrainteractive.aspekt.module.economy.model.EkonCommand
 import ru.astrainteractive.aspekt.plugin.model.PluginPermission
 import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.argumenttype.KPlayerArgumentConverter
@@ -39,7 +40,7 @@ internal class EkonLiteralArgumentBuilder(
                 literal("list") {
                     runs(commandExceptionHandler::onException) { ctx ->
                         ctx.requirePermission(PluginPermission.ADMIN_CLAIM)
-                        EkonCommand.Model
+                        EkonCommand
                             .ListCurrencies(ctx.getSender())
                             .run(executor::execute)
                     }
@@ -59,7 +60,7 @@ internal class EkonLiteralArgumentBuilder(
                                 ctx.getSender().sendMessage(translation.economy.currencyNotFound)
                                 return@runs
                             }
-                            EkonCommand.Model.Top(
+                            EkonCommand.Top(
                                 sender = ctx.getSender(),
                                 currency = currency,
                                 page = 0
@@ -83,7 +84,7 @@ internal class EkonLiteralArgumentBuilder(
                                     ctx.getSender().sendMessage(translation.economy.currencyNotFound)
                                     return@runs
                                 }
-                                EkonCommand.Model.Top(
+                                EkonCommand.Top(
                                     sender = ctx.getSender(),
                                     currency = currency,
                                     page = page
@@ -120,7 +121,7 @@ internal class EkonLiteralArgumentBuilder(
                                     playerArg,
                                     KPlayerArgumentConverter(platformServer)
                                 )
-                                EkonCommand.Model.Balance(
+                                EkonCommand.Balance(
                                     sender = ctx.getSender(),
                                     otherPlayer = offlinePlayer,
                                     currency = currency
@@ -162,7 +163,7 @@ internal class EkonLiteralArgumentBuilder(
                                         KPlayerArgumentConverter(platformServer)
                                     )
                                     val amount: Double = ctx.requireArgument(amountArg)
-                                    EkonCommand.Model.Set(
+                                    EkonCommand.Set(
                                         sender = ctx.getSender(),
                                         otherPlayer = offlinePlayer,
                                         currency = currency,
@@ -206,7 +207,7 @@ internal class EkonLiteralArgumentBuilder(
                                         KPlayerArgumentConverter(platformServer)
                                     )
                                     val amount: Double = ctx.requireArgument(amountArg)
-                                    EkonCommand.Model.Add(
+                                    EkonCommand.Add(
                                         sender = ctx.getSender(),
                                         otherPlayer = offlinePlayer,
                                         currency = currency,
