@@ -1,4 +1,4 @@
-@file:Suppress("MaxLineLength", "MaximumLineLength", "LongParameterList")
+@file:Suppress("MaxLineLength", "MaximumLineLength", "LongParameterList", "FileLength")
 
 package ru.astrainteractive.aspekt.core.plugin.model
 
