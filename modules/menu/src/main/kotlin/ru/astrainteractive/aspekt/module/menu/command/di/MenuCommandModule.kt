@@ -8,7 +8,7 @@ import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.menu.command.InvCloseLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.menu.command.MenuLiteralArgumentBuilder
 import ru.astrainteractive.aspekt.module.menu.model.MenuConfiguration
-import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
+import ru.astrainteractive.aspekt.module.menu.router.api.MenuRouter
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate

@@ -1,6 +1,6 @@
 @file:Suppress("FieldDependencyConstruction")
 
-package ru.astrainteractive.aspekt.module.menu.router
+package ru.astrainteractive.aspekt.module.menu.router.bukkit
 
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -8,6 +8,7 @@ import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.menu.gui.MenuGui
 import ru.astrainteractive.aspekt.module.menu.model.MenuConfiguration
+import ru.astrainteractive.aspekt.module.menu.router.api.MenuRouter
 import ru.astrainteractive.astralibs.server.player.BukkitOnlineKPlayer
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger

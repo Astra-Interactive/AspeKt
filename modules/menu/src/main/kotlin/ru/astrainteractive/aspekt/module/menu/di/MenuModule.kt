@@ -4,8 +4,8 @@ import ru.astrainteractive.aspekt.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.di.CoreModule
 import ru.astrainteractive.aspekt.module.menu.command.di.MenuCommandModule
 import ru.astrainteractive.aspekt.module.menu.file.readMenuModels
-import ru.astrainteractive.aspekt.module.menu.router.BukkitMenuRouter
-import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
+import ru.astrainteractive.aspekt.module.menu.router.api.MenuRouter
+import ru.astrainteractive.aspekt.module.menu.router.bukkit.BukkitMenuRouter
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
