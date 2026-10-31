@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.module.economy.integration.papi.di
 
 import org.bukkit.Bukkit
-import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.core.di.CoreModule
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
 import ru.astrainteractive.aspekt.module.economy.integration.papi.api.PlaceholderRegistration
 import ru.astrainteractive.aspekt.module.economy.integration.papi.expansion.EconomyPlaceholderExtension

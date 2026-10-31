@@ -1,6 +1,6 @@
 package ru.astrainteractive.aspekt.module.chatgame.usecase
 
-import ru.astrainteractive.aspekt.economy.api.CurrencyEconomyProviderFactory
+import ru.astrainteractive.aspekt.core.economy.api.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.module.chatgame.model.Reward
 import ru.astrainteractive.aspekt.module.chatgame.util.randomAmount
 import ru.astrainteractive.astralibs.economy.EconomyFacade

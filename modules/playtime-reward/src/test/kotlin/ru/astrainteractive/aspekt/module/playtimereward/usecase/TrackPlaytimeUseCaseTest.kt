@@ -5,13 +5,13 @@ package ru.astrainteractive.aspekt.module.playtimereward.usecase
 import kotlinx.coroutines.test.TestResult
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.module.playtimereward.fake.FakeClock
 import ru.astrainteractive.aspekt.module.playtimereward.fake.FakeEconomyFacade
 import ru.astrainteractive.aspekt.module.playtimereward.fake.FakeOnlineKPlayer
 import ru.astrainteractive.aspekt.module.playtimereward.krate.KratePlaytimeRewardRepository
 import ru.astrainteractive.aspekt.module.playtimereward.model.PlaytimeEvent
 import ru.astrainteractive.aspekt.module.playtimereward.model.PlaytimeRewardConfiguration
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.klibs.kstorage.api.asCachedKrate
 import ru.astrainteractive.klibs.kstorage.api.impl.DefaultMutableKrate
 import java.nio.file.Files

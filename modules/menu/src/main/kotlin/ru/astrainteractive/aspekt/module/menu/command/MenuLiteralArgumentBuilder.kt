@@ -3,9 +3,9 @@ package ru.astrainteractive.aspekt.module.menu.command
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.module.menu.model.MenuConfiguration
 import ru.astrainteractive.aspekt.module.menu.router.api.MenuRouter
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue

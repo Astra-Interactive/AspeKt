@@ -2,6 +2,8 @@ package ru.astrainteractive.aspekt.module.playtimereward.usecase
 
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.core.plugin.util.rewarded
 import ru.astrainteractive.aspekt.module.playtimereward.api.PlaytimeRewardRepository
 import ru.astrainteractive.aspekt.module.playtimereward.model.PlaytimeEvent
 import ru.astrainteractive.aspekt.module.playtimereward.model.PlaytimeReward
@@ -9,8 +11,6 @@ import ru.astrainteractive.aspekt.module.playtimereward.model.PlaytimeRewardConf
 import ru.astrainteractive.aspekt.module.playtimereward.util.countedUntil
 import ru.astrainteractive.aspekt.module.playtimereward.util.isRewardDue
 import ru.astrainteractive.aspekt.module.playtimereward.util.joinedAt
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
-import ru.astrainteractive.aspekt.plugin.util.rewarded
 import ru.astrainteractive.astralibs.economy.EconomyFacade
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate

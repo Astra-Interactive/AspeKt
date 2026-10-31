@@ -4,7 +4,7 @@ package ru.astrainteractive.aspekt.module.chatgame.usecase
 
 import kotlinx.coroutines.test.TestResult
 import kotlinx.coroutines.test.runTest
-import ru.astrainteractive.aspekt.economy.api.CurrencyEconomyProviderFactory
+import ru.astrainteractive.aspekt.core.economy.api.CurrencyEconomyProviderFactory
 import ru.astrainteractive.aspekt.module.chatgame.fake.FakeEconomyFacade
 import ru.astrainteractive.aspekt.module.chatgame.model.Reward
 import ru.astrainteractive.astralibs.economy.EconomyFacade

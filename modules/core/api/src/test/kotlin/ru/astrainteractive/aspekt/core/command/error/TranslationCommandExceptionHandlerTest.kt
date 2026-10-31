@@ -8,8 +8,8 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import ru.astrainteractive.aspekt.core.command.fake.FakeMultiplatformCommands
 import ru.astrainteractive.aspekt.core.command.fake.RecordingConsoleKCommandSender
-import ru.astrainteractive.aspekt.plugin.model.PluginPermission
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.core.plugin.model.PluginPermission
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.argumenttype.IntArgumentConverter
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.command.api.exception.BadArgumentException

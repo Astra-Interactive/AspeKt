@@ -5,10 +5,10 @@ import kotlinx.coroutines.withContext
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.module.moneydrop.api.MoneyDropLocationRepository
 import ru.astrainteractive.aspekt.module.moneydrop.model.MoneyDropConfiguration
 import ru.astrainteractive.aspekt.module.moneydrop.model.MoneyDropLocation
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.coroutines.withTimings
 import ru.astrainteractive.astralibs.persistence.Persistence.getPersistentDataOrNull
 import ru.astrainteractive.astralibs.persistence.Persistence.hasPersistentData

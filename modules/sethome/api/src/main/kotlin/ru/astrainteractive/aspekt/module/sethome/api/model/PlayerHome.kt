@@ -1,0 +1,10 @@
+package ru.astrainteractive.aspekt.module.sethome.api.model
+
+import kotlinx.serialization.Serializable
+import ru.astrainteractive.astralibs.server.location.KLocation
+
+@Serializable
+internal data class PlayerHome(
+    val name: String,
+    val location: KLocation
+)

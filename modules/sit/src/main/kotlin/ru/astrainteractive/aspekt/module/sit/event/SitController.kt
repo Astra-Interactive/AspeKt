@@ -6,8 +6,8 @@ import org.bukkit.block.BlockFace
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.module.sit.model.SitConfiguration
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue

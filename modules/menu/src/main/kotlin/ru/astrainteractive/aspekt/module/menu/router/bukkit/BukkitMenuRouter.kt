@@ -4,8 +4,8 @@ package ru.astrainteractive.aspekt.module.menu.router.bukkit
 
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
-import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.core.di.BukkitCoreModule
+import ru.astrainteractive.aspekt.core.di.CoreModule
 import ru.astrainteractive.aspekt.module.menu.gui.MenuGui
 import ru.astrainteractive.aspekt.module.menu.model.MenuConfiguration
 import ru.astrainteractive.aspekt.module.menu.router.api.MenuRouter

@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.jail.service
 
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.module.jail.api.JailCache
 import ru.astrainteractive.aspekt.module.jail.api.JailRepository
 import ru.astrainteractive.aspekt.module.jail.model.JailInmate
@@ -7,7 +8,6 @@ import ru.astrainteractive.aspekt.module.jail.usecase.FreeInmateUseCase
 import ru.astrainteractive.aspekt.module.jail.util.isSentenceOver
 import ru.astrainteractive.aspekt.module.jail.util.offlinePlayer
 import ru.astrainteractive.aspekt.module.jail.util.sendMessage
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.service.ServiceTask
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue

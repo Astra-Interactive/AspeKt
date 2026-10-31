@@ -7,11 +7,11 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.plugin.model.PluginPermission
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.module.economy.api.CurrencyCache
 import ru.astrainteractive.aspekt.module.economy.model.Currency
 import ru.astrainteractive.aspekt.module.economy.model.EkonCommand
-import ru.astrainteractive.aspekt.plugin.model.PluginPermission
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.command.api.argumenttype.KPlayerArgumentConverter
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer

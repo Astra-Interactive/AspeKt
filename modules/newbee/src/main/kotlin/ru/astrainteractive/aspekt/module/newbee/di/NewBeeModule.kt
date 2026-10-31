@@ -1,7 +1,7 @@
 package ru.astrainteractive.aspekt.module.newbee.di
 
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
-import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.core.di.BukkitCoreModule
+import ru.astrainteractive.aspekt.core.di.CoreModule
 import ru.astrainteractive.aspekt.module.newbee.event.NewBeeEventListener
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import java.io.File

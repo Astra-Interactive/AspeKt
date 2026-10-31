@@ -3,8 +3,8 @@ package ru.astrainteractive.aspekt.module.antiswear.command.di
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
-import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.core.di.BukkitCoreModule
+import ru.astrainteractive.aspekt.core.di.CoreModule
 import ru.astrainteractive.aspekt.module.antiswear.api.SwearRepository
 import ru.astrainteractive.aspekt.module.antiswear.command.SwearFilterLiteralArgumentBuilder
 import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady

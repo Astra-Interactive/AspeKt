@@ -4,10 +4,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.StringFormat
-import ru.astrainteractive.aspekt.module.auth.api.AuthStateRepository
+import ru.astrainteractive.aspekt.module.auth.api.api.AuthStateRepository
+import ru.astrainteractive.aspekt.module.auth.api.memory.InMemoryAuthStateRepository
+import ru.astrainteractive.aspekt.module.auth.api.model.AuthTranslation
 import ru.astrainteractive.aspekt.module.auth.dao.api.AuthRepository
-import ru.astrainteractive.aspekt.module.auth.memory.InMemoryAuthStateRepository
-import ru.astrainteractive.aspekt.module.auth.model.AuthTranslation
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.util.parseOrWriteIntoDefault
 import ru.astrainteractive.klibs.kstorage.api.asCachedKrate
