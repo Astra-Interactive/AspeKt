@@ -4,9 +4,6 @@ import org.bukkit.persistence.PersistentDataType
 import ru.astrainteractive.astralibs.persistence.BukkitConstant
 
 internal object MoneyDropFlag {
-    /**
-     * Amount of money will be added
-     */
     data object Amount : BukkitConstant<Double, Double> by BukkitConstant(
         "esmp",
         "amount",
@@ -19,9 +16,6 @@ internal object MoneyDropFlag {
         PersistentDataType.STRING
     )
 
-    /**
-     * Flag which declares item as MoneyDropItem
-     */
     data object Flag : BukkitConstant<Byte, Boolean> by BukkitConstant(
         "esmp",
         "flag",

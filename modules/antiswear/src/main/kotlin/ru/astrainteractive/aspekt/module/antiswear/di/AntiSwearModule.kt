@@ -1,8 +1,8 @@
 package ru.astrainteractive.aspekt.module.antiswear.di
 
 import org.bukkit.Bukkit
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
-import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.core.di.BukkitCoreModule
+import ru.astrainteractive.aspekt.core.di.CoreModule
 import ru.astrainteractive.aspekt.module.antiswear.command.di.AntiSwearCommandModule
 import ru.astrainteractive.aspekt.module.antiswear.event.AntiSwearEventListener
 import ru.astrainteractive.aspekt.module.antiswear.krate.KrateSwearRepository

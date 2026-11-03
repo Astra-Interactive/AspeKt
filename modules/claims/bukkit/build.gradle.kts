@@ -11,6 +11,7 @@ dependencies {
     implementation(libs.klibs.kstorage)
     implementation(libs.klibs.mikro.core)
     implementation(libs.kotlin.coroutines.core)
+    implementation(libs.kotlin.serialization.json)
     implementation(libs.minecraft.astralibs.command)
     implementation(libs.minecraft.astralibs.command.bukkit)
     implementation(libs.minecraft.astralibs.core)
@@ -25,5 +26,5 @@ dependencies {
 }
 
 linter {
-    unitKind.set("technology")
+    unit(ru.astrainteractive.klibs.rules.core.unit.model.UnitRole.Platform())
 }

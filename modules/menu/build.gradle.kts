@@ -21,3 +21,7 @@ dependencies {
     implementation(projects.modules.core.api)
     implementation(projects.modules.core.bukkit)
 }
+
+linter {
+    technologyWords.add("bukkit")
+}

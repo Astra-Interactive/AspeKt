@@ -2,6 +2,7 @@
 
 package ru.astrainteractive.aspekt.module.antiswear.krate
 
+import kotlinx.coroutines.test.TestResult
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.mockito.Mockito
@@ -41,15 +42,15 @@ class KrateSwearRepositoryTest {
     }
 
     @Test
-    fun GIVEN_unknown_player_WHEN_checked_THEN_filter_is_enabled() {
-        runTest {
+    fun GIVEN_unknown_player_WHEN_checked_THEN_filter_is_enabled(): TestResult {
+        return runTest {
             assertTrue(repository().isSwearFilterEnabled(player()))
         }
     }
 
     @Test
-    fun GIVEN_player_WHEN_filter_is_toggled_THEN_check_follows_the_toggle() {
-        runTest {
+    fun GIVEN_player_WHEN_filter_is_toggled_THEN_check_follows_the_toggle(): TestResult {
+        return runTest {
             val repository = repository()
             val player = player()
 
@@ -61,8 +62,8 @@ class KrateSwearRepositoryTest {
     }
 
     @Test
-    fun GIVEN_disabled_filter_WHEN_player_rejoins_THEN_filter_stays_disabled() {
-        runTest {
+    fun GIVEN_disabled_filter_WHEN_player_rejoins_THEN_filter_stays_disabled(): TestResult {
+        return runTest {
             val repository = repository()
             val player = player()
             repository.setSwearFilterEnabled(player, false)
@@ -75,8 +76,8 @@ class KrateSwearRepositoryTest {
     }
 
     @Test
-    fun GIVEN_enabled_filter_WHEN_player_rejoins_THEN_filter_stays_enabled() {
-        runTest {
+    fun GIVEN_enabled_filter_WHEN_player_rejoins_THEN_filter_stays_enabled(): TestResult {
+        return runTest {
             val repository = repository()
             val player = player()
             repository.setSwearFilterEnabled(player, true)

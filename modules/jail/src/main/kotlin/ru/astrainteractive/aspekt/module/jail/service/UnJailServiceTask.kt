@@ -1,5 +1,6 @@
 package ru.astrainteractive.aspekt.module.jail.service
 
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.module.jail.api.JailCache
 import ru.astrainteractive.aspekt.module.jail.api.JailRepository
 import ru.astrainteractive.aspekt.module.jail.model.JailInmate
@@ -7,7 +8,6 @@ import ru.astrainteractive.aspekt.module.jail.usecase.FreeInmateUseCase
 import ru.astrainteractive.aspekt.module.jail.util.isSentenceOver
 import ru.astrainteractive.aspekt.module.jail.util.offlinePlayer
 import ru.astrainteractive.aspekt.module.jail.util.sendMessage
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.service.ServiceTask
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
@@ -19,6 +19,7 @@ internal class UnJailServiceTask(
     private val jailCache: JailCache,
     private val jailRepository: JailRepository,
     private val freeInmateUseCase: FreeInmateUseCase,
+    private val clock: Clock,
     translationKrate: CachedKrate<PluginTranslation>
 ) : ServiceTask, Logger by JUtiltLogger("AspeKt-UnJailServiceTask") {
     private val translation by translationKrate
@@ -34,7 +35,7 @@ internal class UnJailServiceTask(
         jailRepository.findInmates()
             .getOrNull()
             .orEmpty()
-            .filter { inmate -> inmate.isSentenceOver(Clock.System.now()) }
+            .filter { inmate -> inmate.isSentenceOver(clock.now()) }
             .forEach { inmate -> free(inmate) }
     }
 }

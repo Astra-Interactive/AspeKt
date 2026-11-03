@@ -1,19 +1,19 @@
 package ru.astrainteractive.aspekt.module.sit.di
 
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
-import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.core.di.BukkitCoreModule
+import ru.astrainteractive.aspekt.core.di.CoreModule
+import ru.astrainteractive.aspekt.core.util.krateOf
 import ru.astrainteractive.aspekt.module.sit.command.di.SitCommandModule
 import ru.astrainteractive.aspekt.module.sit.event.SitController
 import ru.astrainteractive.aspekt.module.sit.event.SitEvent
 import ru.astrainteractive.aspekt.module.sit.model.SitConfiguration
-import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
 import java.io.File
 
 class SitModule(
     coreModule: CoreModule,
-    private val bukkitCoreModule: BukkitCoreModule
+    bukkitCoreModule: BukkitCoreModule
 ) {
     private val sitConfigKrate = coreModule.yamlFormat
         .krateOf(

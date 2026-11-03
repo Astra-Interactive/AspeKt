@@ -4,6 +4,7 @@ package ru.astrainteractive.aspekt.module.jail.usecase
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestResult
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -46,8 +47,8 @@ class FreeInmateUseCaseTest {
     }
 
     @Test
-    fun GIVEN_online_inmate_WHEN_freed_THEN_inmate_is_removed_and_returns_to_last_location() {
-        runTest {
+    fun GIVEN_online_inmate_WHEN_freed_THEN_inmate_is_removed_and_returns_to_last_location(): TestResult {
+        return runTest {
             val result = useCase(onlinePlayers = listOf(player)).invoke(JailTestData.inmate)
 
             assertTrue(result.isSuccess)
@@ -67,8 +68,8 @@ class FreeInmateUseCaseTest {
     }
 
     @Test
-    fun GIVEN_offline_inmate_WHEN_freed_THEN_inmate_is_removed_without_teleport() {
-        runTest {
+    fun GIVEN_offline_inmate_WHEN_freed_THEN_inmate_is_removed_without_teleport(): TestResult {
+        return runTest {
             val result = useCase(onlinePlayers = emptyList()).invoke(JailTestData.inmate)
 
             assertTrue(result.isSuccess)
@@ -78,8 +79,8 @@ class FreeInmateUseCaseTest {
     }
 
     @Test
-    fun GIVEN_storage_fails_WHEN_freed_THEN_returns_failure_and_player_stays() {
-        runTest {
+    fun GIVEN_storage_fails_WHEN_freed_THEN_returns_failure_and_player_stays(): TestResult {
+        return runTest {
             repository.isFreeFailing = true
 
             val result = useCase(onlinePlayers = listOf(player)).invoke(JailTestData.inmate)

@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.event.server.ServerLoadEvent
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.module.jail.api.JailCache
 import ru.astrainteractive.aspekt.module.jail.api.JailRepository
 import ru.astrainteractive.aspekt.module.jail.usecase.TeleportInmateToJailUseCase
@@ -19,7 +20,6 @@ import ru.astrainteractive.aspekt.module.jail.util.cache
 import ru.astrainteractive.aspekt.module.jail.util.forget
 import ru.astrainteractive.aspekt.module.jail.util.isInJail
 import ru.astrainteractive.aspekt.module.jail.util.sendMessage
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue

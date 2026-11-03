@@ -13,9 +13,9 @@ import org.bukkit.event.entity.EntityDeathEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.inventory.InventoryMoveItemEvent
 import org.bukkit.event.inventory.InventoryPickupItemEvent
-import ru.astrainteractive.aspekt.economy.api.CurrencyEconomyProviderFactory
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
-import ru.astrainteractive.aspekt.plugin.util.pickedUp
+import ru.astrainteractive.aspekt.core.economy.api.CurrencyEconomyProviderFactory
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.core.plugin.util.pickedUp
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate

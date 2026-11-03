@@ -1,0 +1,33 @@
+@file:Suppress("Filename")
+
+package ru.astrainteractive.aspekt.module.claims.bukkit.util
+
+import org.bukkit.Chunk
+import org.bukkit.entity.Player
+import ru.astrainteractive.aspekt.module.claims.api.model.ClaimChunk
+import ru.astrainteractive.aspekt.module.claims.api.model.ClaimPlayer
+import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
+
+internal fun Chunk.asClaimChunk(): ClaimChunk {
+    return ClaimChunk(
+        x = x,
+        z = z,
+        worldName = world.name,
+        flags = emptyMap(),
+        chunkKey = chunkKey
+    )
+}
+
+internal fun Player.asClaimPlayer(): ClaimPlayer {
+    return ClaimPlayer(
+        uuid = uniqueId,
+        username = name
+    )
+}
+
+internal fun OnlineKPlayer.asClaimPlayer(): ClaimPlayer {
+    return ClaimPlayer(
+        uuid = uuid,
+        username = name
+    )
+}

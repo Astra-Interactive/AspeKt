@@ -20,11 +20,11 @@ class AspeKt : Plugin() {
     )
 
     override fun onEnable() {
-        proxyPingEventListener.register(this)
+        proxy.pluginManager.registerListener(this, proxyPingEventListener)
     }
 
     override fun onDisable() {
-        proxyPingEventListener.unregister(this)
+        proxy.pluginManager.unregisterListener(proxyPingEventListener)
         ioScope.cancel()
     }
 }

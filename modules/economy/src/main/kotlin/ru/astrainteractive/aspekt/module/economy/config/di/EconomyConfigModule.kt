@@ -1,0 +1,35 @@
+package ru.astrainteractive.aspekt.module.economy.config.di
+
+import ru.astrainteractive.aspekt.core.di.CoreModule
+import ru.astrainteractive.aspekt.core.util.krateOf
+import ru.astrainteractive.aspekt.module.economy.model.CurrencyConfiguration
+import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.klibs.kstorage.api.asStateFlowKrate
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
+import ru.astrainteractive.klibs.mikro.exposed.model.DatabaseConfiguration
+
+internal class EconomyConfigModule(coreModule: CoreModule) : Logger by JUtiltLogger("EconomyConfigModule") {
+    private val folder = coreModule.dataFolder.resolve("economy")
+
+    val dbConfigKrate = coreModule.yamlFormat
+        .krateOf<DatabaseConfiguration>(
+            file = folder.resolve("db"),
+            factory = { DatabaseConfiguration.H2(path = folder.resolve("db").path, arguments = emptyList()) }
+        )
+        .asStateFlowKrate()
+
+    val currencyConfigKrate = coreModule.yamlFormat
+        .krateOf(
+            file = folder.resolve("currencies"),
+            factory = ::CurrencyConfiguration
+        )
+        .asStateFlowKrate()
+
+    val lifecycle: Lifecycle = Lifecycle.Lambda(
+        onReload = {
+            dbConfigKrate.getValue()
+            currencyConfigKrate.getValue()
+        }
+    )
+}

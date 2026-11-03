@@ -1,6 +1,6 @@
 package ru.astrainteractive.aspekt.inventorysort.di
 
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
+import ru.astrainteractive.aspekt.core.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.inventorysort.event.SortController
 import ru.astrainteractive.aspekt.inventorysort.event.SortEvent
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle

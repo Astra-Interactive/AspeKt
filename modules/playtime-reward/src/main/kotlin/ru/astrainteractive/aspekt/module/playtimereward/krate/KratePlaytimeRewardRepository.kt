@@ -1,9 +1,9 @@
 package ru.astrainteractive.aspekt.module.playtimereward.krate
 
 import kotlinx.serialization.StringFormat
+import ru.astrainteractive.aspekt.core.util.krateOf
 import ru.astrainteractive.aspekt.module.playtimereward.api.PlaytimeRewardRepository
 import ru.astrainteractive.aspekt.module.playtimereward.model.PlaytimeReward
-import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.server.player.OnlineKPlayer
 import ru.astrainteractive.klibs.kstorage.api.MutableKrate
 import java.io.File

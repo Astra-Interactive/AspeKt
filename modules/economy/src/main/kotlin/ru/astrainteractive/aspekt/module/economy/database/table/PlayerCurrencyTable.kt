@@ -9,7 +9,7 @@ object PlayerCurrencyTable : IntIdTable(name = "PLAYER_CURRENCY", columnName = "
     val amount = double("amount")
 
     init {
-        foreignKey(currencyId to CurrencyTable.id)
+        foreignKey(currencyId, target = CurrencyTable.primaryKey)
         uniqueIndex(uuid, currencyId)
     }
 }

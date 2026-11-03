@@ -13,10 +13,10 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.module.newbee.util.isNewBee
 import ru.astrainteractive.aspekt.module.newbee.util.newBeeShieldDurationLeft
 import ru.astrainteractive.aspekt.module.newbee.util.ticks
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate

@@ -24,7 +24,8 @@ import kotlin.time.Duration.Companion.days
 
 internal class ExposedMoneyDropLocationRepository(
     private val databaseFlow: Flow<Database>,
-    private val ioDispatcher: CoroutineContext
+    private val ioDispatcher: CoroutineContext,
+    private val clock: Clock
 ) : MoneyDropLocationRepository, Logger by JUtiltLogger("MoneyDropLocationRepository") {
 
     override suspend fun isLocationExists(location: MoneyDropLocation): Boolean {
@@ -40,7 +41,7 @@ internal class ExposedMoneyDropLocationRepository(
                                 .and(MoneyDropLocationTable.world.eq(location.world))
                                 .and(MoneyDropLocationTable.additionalConstraint.eq(location.additionalConstraint))
                                 .and {
-                                    val offset = Clock.System.now()
+                                    val offset = clock.now()
                                         .minus(MAX_MONEY_DROP_TIMEOUT)
                                         .toEpochMilliseconds()
                                         .let(java.time.Instant::ofEpochMilli)

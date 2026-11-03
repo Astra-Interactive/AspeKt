@@ -1,10 +1,10 @@
 package ru.astrainteractive.aspekt.module.treecapitator.di
 
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
-import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.core.di.BukkitCoreModule
+import ru.astrainteractive.aspekt.core.di.CoreModule
+import ru.astrainteractive.aspekt.core.util.krateOf
 import ru.astrainteractive.aspekt.module.treecapitator.event.TCEvent
 import ru.astrainteractive.aspekt.module.treecapitator.model.TreeCapitatorConfiguration
-import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.asCachedMutableKrate
 import java.io.File

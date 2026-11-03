@@ -1,0 +1,66 @@
+package ru.astrainteractive.aspekt.module.rtp.api.di
+
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import ru.astrainteractive.aspekt.core.di.CoreModule
+import ru.astrainteractive.aspekt.core.util.krateOf
+import ru.astrainteractive.aspekt.module.rtp.api.api.SafeLocationProvider
+import ru.astrainteractive.aspekt.module.rtp.api.command.RtpCommandExecutor
+import ru.astrainteractive.aspekt.module.rtp.api.command.RtpCommandRegistrar
+import ru.astrainteractive.aspekt.module.rtp.api.model.RtpConfig
+import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
+import ru.astrainteractive.astralibs.command.api.registrar.CommandRegistrarContext
+import ru.astrainteractive.astralibs.command.api.registrar.registerWhenReady
+import ru.astrainteractive.astralibs.lifecycle.Lifecycle
+import ru.astrainteractive.klibs.kstorage.api.CachedKrate
+import ru.astrainteractive.klibs.kstorage.api.asCachedKrate
+import java.io.File
+
+class RtpModule(
+    coreModule: CoreModule,
+    commandRegistrarContext: CommandRegistrarContext,
+    safeLocationProviderFactory: (CachedKrate<RtpConfig>) -> SafeLocationProvider,
+    multiplatformCommand: MultiplatformCommand,
+) {
+    private val moduleUnconfinedScope = CoroutineScope(coreModule.unconfinedScope.coroutineContext + SupervisorJob())
+
+    private val rtpConfigKrate = coreModule.yamlFormat
+        .krateOf(
+            file = resolveConfigurationFile(coreModule.dataFolder),
+            factory = ::RtpConfig
+        )
+        .asCachedKrate()
+    private val safeLocationProvider = safeLocationProviderFactory.invoke(rtpConfigKrate)
+    private val executor = RtpCommandExecutor(
+        ioScope = coreModule.ioScope,
+        safeLocationProvider = safeLocationProvider,
+        dispatchers = coreModule.dispatchers,
+        translationKrate = coreModule.translationKrate,
+        rtpConfigKrate = rtpConfigKrate,
+    )
+
+    private val nodes = RtpCommandRegistrar(
+        executor = executor,
+        safeLocationProvider = safeLocationProvider,
+        multiplatformCommand = multiplatformCommand,
+        commandExceptionHandler = coreModule.commandExceptionHandler
+    ).createNodes()
+
+    @Suppress("TrivialLambdaReference")
+    val lifecycle: Lifecycle = Lifecycle.Lambda(
+        onEnable = {
+            commandRegistrarContext.registerWhenReady(nodes, moduleUnconfinedScope)
+        },
+        onReload = {
+            rtpConfigKrate.getValue()
+        },
+        onDisable = {
+            moduleUnconfinedScope.cancel()
+        }
+    )
+
+    companion object {
+        fun resolveConfigurationFile(dataFolder: File): File = dataFolder.resolve("rtp.yml")
+    }
+}

@@ -38,10 +38,6 @@ internal class EconomyDatabaseModule(
 ) : Logger by JUtiltLogger("EconomyDatabaseModule") {
     private val moduleIoScope = CoroutineScope(ioScope.coroutineContext + SupervisorJob())
 
-    /**
-     * Reconnects whenever [dbConfig] changes; the previous connection is closed and unregistered
-     * by [connectAsFlow] when its flow is cancelled by [flatMapLatest].
-     */
     @OptIn(ExperimentalCoroutinesApi::class)
     val databaseFlow: Flow<Database> = dbConfig.cachedStateFlow
         .flatMapLatest(::connectDatabase)

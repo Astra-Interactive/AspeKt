@@ -3,14 +3,14 @@
 package ru.astrainteractive.aspekt.module.playtimereward.di
 
 import kotlinx.coroutines.flow.map
-import ru.astrainteractive.aspekt.di.BukkitCoreModule
-import ru.astrainteractive.aspekt.di.CoreModule
+import ru.astrainteractive.aspekt.core.di.BukkitCoreModule
+import ru.astrainteractive.aspekt.core.di.CoreModule
+import ru.astrainteractive.aspekt.core.util.krateOf
 import ru.astrainteractive.aspekt.module.playtimereward.event.PlaytimeRewardEventListener
 import ru.astrainteractive.aspekt.module.playtimereward.krate.KratePlaytimeRewardRepository
 import ru.astrainteractive.aspekt.module.playtimereward.model.PlaytimeRewardConfiguration
 import ru.astrainteractive.aspekt.module.playtimereward.service.PlaytimeServiceTask
 import ru.astrainteractive.aspekt.module.playtimereward.usecase.TrackPlaytimeUseCase
-import ru.astrainteractive.aspekt.util.krateOf
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.astralibs.service.IntervalService
 import ru.astrainteractive.klibs.kstorage.api.asStateFlowMutableKrate

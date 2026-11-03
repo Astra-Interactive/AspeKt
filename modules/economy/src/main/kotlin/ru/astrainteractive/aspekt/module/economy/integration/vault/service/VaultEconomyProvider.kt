@@ -1,7 +1,6 @@
 package ru.astrainteractive.aspekt.module.economy.integration.vault.service
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.timeout
@@ -14,6 +13,7 @@ import ru.astrainteractive.aspekt.module.economy.api.EconomyRepository
 import ru.astrainteractive.aspekt.module.economy.model.Currency
 import ru.astrainteractive.aspekt.module.economy.model.EconomyPlayer
 import ru.astrainteractive.aspekt.module.economy.model.PlayerCurrency
+import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
 import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import java.text.DecimalFormat
@@ -22,14 +22,12 @@ import kotlin.time.Duration.Companion.seconds
 @Suppress("TooManyFunctions")
 internal class VaultEconomyProvider(
     private val primaryCurrencyModel: Currency,
+    private val dispatchers: KotlinDispatchers,
     private val repository: EconomyRepository
 ) : Economy, Logger by JUtiltLogger("Economy-${primaryCurrencyModel.id}") {
-    /**
-     * Run blocking function but try not to block main thread
-     */
     private fun <T> runIoBlocking(block: suspend CoroutineScope.() -> T): T {
         return if (Bukkit.isPrimaryThread()) {
-            runBlocking(Dispatchers.IO) {
+            runBlocking(dispatchers.IO) {
                 flow<T> { emit(block.invoke(this@runBlocking)) }
                     .timeout(timeout = 15.seconds)
                     .first()

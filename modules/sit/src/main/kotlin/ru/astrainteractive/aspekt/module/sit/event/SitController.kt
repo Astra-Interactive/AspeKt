@@ -6,8 +6,8 @@ import org.bukkit.block.BlockFace
 import org.bukkit.entity.ArmorStand
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.module.sit.model.SitConfiguration
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
 import ru.astrainteractive.astralibs.server.util.asKAudience
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
@@ -28,9 +28,6 @@ internal class SitController(
         return aboveSitBlock.isSolid && aboveAboveSitBlock.isSolid
     }
 
-    /**
-     * Заставляет игрока сесть
-     */
     fun toggleSitPlayer(
         player: Player,
         location: Location = player.location.clone(),
@@ -65,7 +62,8 @@ internal class SitController(
             return
         }
         // Создаем стул
-        val chair = location.world?.spawnEntity(locationWithOffset, EntityType.ARMOR_STAND) as ArmorStand
+        val spawnedChair = location.world?.spawnEntity(locationWithOffset, EntityType.ARMOR_STAND)
+        val chair = (spawnedChair ?: error("Could not spawn a chair: the location has no world")) as ArmorStand
         chair.setGravity(false)
         chair.isVisible = false
         chair.isInvulnerable = false
@@ -75,9 +73,6 @@ internal class SitController(
         sitPlayers[player.uniqueId.toString()] = chair
     }
 
-    /**
-     * Функция заставляет игрока встать
-     */
     fun stopSitPlayer(player: Player) {
         // Берем текущий стул игрока
         val armorStand = sitPlayers[player.uniqueId.toString()] ?: return
@@ -95,9 +90,7 @@ internal class SitController(
     }
 
     fun onDisable() {
-        for (player in sitPlayers.keys) {
-            sitPlayers[player]!!.remove()
-        }
+        sitPlayers.values.forEach(ArmorStand::remove)
         sitPlayers.clear()
     }
 

@@ -3,17 +3,13 @@ package ru.astrainteractive.aspekt.module.menu.command
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import ru.astrainteractive.aspekt.core.command.api.CommandExceptionHandler
+import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.module.menu.model.MenuConfiguration
-import ru.astrainteractive.aspekt.module.menu.router.MenuRouter
-import ru.astrainteractive.aspekt.plugin.model.PluginTranslation
+import ru.astrainteractive.aspekt.module.menu.router.api.MenuRouter
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 
-/**
- * Menu command registrar. Builds Brigadier node for:
- * /menu [menu]
- */
 internal class MenuLiteralArgumentBuilder(
     translationKrate: CachedKrate<PluginTranslation>,
     private val menuRouter: () -> MenuRouter,
@@ -36,7 +32,10 @@ internal class MenuLiteralArgumentBuilder(
                         menuRouter.invoke().openMenu(player = player, menuModel = menuModel)
                     }
                 }
-                argument("menu", StringArgumentType.string()) { menuArg ->
+                argument(
+                    "menu",
+                    StringArgumentType.string()
+                ) { menuArg ->
                     hints { menuModels.map(MenuConfiguration::command) }
                     runs(commandExceptionHandler::onException) { ctx ->
                         val player = ctx.requirePlayer()
