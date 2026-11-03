@@ -42,6 +42,6 @@ dependencies {
 }
 
 linter {
-    unitKind.set("technology")
+    unit(ru.astrainteractive.klibs.rules.core.unit.model.UnitRole.Platform())
     rootPackage.set("ru.astrainteractive.aspekt.module.rtp.minecraft")
 }
