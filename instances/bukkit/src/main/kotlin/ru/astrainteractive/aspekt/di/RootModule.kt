@@ -87,14 +87,7 @@ internal class RootModule(plugin: LifecyclePlugin) {
         featureFactory = {
             BukkitClaimModule(
                 coreModule = coreModule,
-                bukkitCoreModule = bukkitCoreModule,
-                claimModule = ClaimModule(
-                    stringFormat = coreModule.jsonStringFormat,
-                    dataFolder = coreModule.dataFolder,
-                    ioScope = coreModule.ioScope,
-                    dispatchers = coreModule.dispatchers,
-                    translationKrate = coreModule.translationKrate
-                )
+                bukkitCoreModule = bukkitCoreModule
             )
         },
         lifecycleSelector = BukkitClaimModule::lifecycle

@@ -122,14 +122,7 @@ internal class RootModule(
         featureFactory = {
             NeoForgeClaimModule(
                 commandRegistrarContext = coreModule.commandRegistrarContext,
-                coreModule = coreModule,
-                claimModule = ClaimModule(
-                    stringFormat = coreModule.jsonStringFormat,
-                    dataFolder = dataFolder,
-                    ioScope = coreModule.ioScope,
-                    dispatchers = coreModule.dispatchers,
-                    translationKrate = coreModule.translationKrate
-                )
+                coreModule = coreModule
             )
         },
         lifecycleSelector = NeoForgeClaimModule::lifecycle

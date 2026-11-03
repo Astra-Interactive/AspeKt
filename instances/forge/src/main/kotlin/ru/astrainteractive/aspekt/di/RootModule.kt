@@ -123,14 +123,7 @@ internal class RootModule(
         featureFactory = {
             ForgeClaimModule(
                 commandRegistrarContext = coreModule.commandRegistrarContext,
-                coreModule = coreModule,
-                claimModule = ClaimModule(
-                    stringFormat = coreModule.jsonStringFormat,
-                    dataFolder = dataFolder,
-                    ioScope = coreModule.ioScope,
-                    dispatchers = coreModule.dispatchers,
-                    translationKrate = coreModule.translationKrate
-                )
+                coreModule = coreModule
             )
         },
         lifecycleSelector = ForgeClaimModule::lifecycle

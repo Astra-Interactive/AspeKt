@@ -10,9 +10,15 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class NeoForgeClaimModule(
     commandRegistrarContext: CommandRegistrarContext,
-    coreModule: CoreModule,
-    claimModule: ClaimModule
+    coreModule: CoreModule
 ) {
+    private val claimModule = ClaimModule(
+        stringFormat = coreModule.jsonStringFormat,
+        dataFolder = coreModule.dataFolder,
+        ioScope = coreModule.ioScope,
+        dispatchers = coreModule.dispatchers,
+        translationKrate = coreModule.translationKrate
+    )
 
     @Suppress("UnusedPrivateProperty")
     private val forgeClaimEvent = ForgeClaimEvent(

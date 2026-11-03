@@ -10,9 +10,16 @@ import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 
 class BukkitClaimModule(
     bukkitCoreModule: BukkitCoreModule,
-    claimModule: ClaimModule,
     coreModule: CoreModule
 ) {
+    private val claimModule = ClaimModule(
+        stringFormat = coreModule.jsonStringFormat,
+        dataFolder = coreModule.dataFolder,
+        ioScope = coreModule.ioScope,
+        dispatchers = coreModule.dispatchers,
+        translationKrate = coreModule.translationKrate
+    )
+
     private val claimCommandModule = ClaimCommandModule(
         claimModule = claimModule,
         commandRegistrarContext = bukkitCoreModule.commandRegistrarContext,
