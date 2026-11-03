@@ -3,6 +3,7 @@ package ru.astrainteractive.aspekt.module.economy.di
 import ru.astrainteractive.aspekt.core.di.BukkitCoreModule
 import ru.astrainteractive.aspekt.core.di.CoreModule
 import ru.astrainteractive.aspekt.module.economy.command.di.EconomyCommandModule
+import ru.astrainteractive.aspekt.module.economy.config.di.EconomyConfigModule
 import ru.astrainteractive.aspekt.module.economy.database.di.EconomyDatabaseModule
 import ru.astrainteractive.aspekt.module.economy.integration.papi.di.PapiIntegrationModule
 import ru.astrainteractive.aspekt.module.economy.service.di.EconomyServiceModule

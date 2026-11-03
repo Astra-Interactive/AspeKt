@@ -1,4 +1,4 @@
-package ru.astrainteractive.aspekt.module.economy.di
+package ru.astrainteractive.aspekt.module.economy.config.di
 
 import ru.astrainteractive.aspekt.core.di.CoreModule
 import ru.astrainteractive.aspekt.core.util.krateOf
