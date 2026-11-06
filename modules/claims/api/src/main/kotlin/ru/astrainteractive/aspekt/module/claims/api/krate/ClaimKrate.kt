@@ -8,8 +8,11 @@ import ru.astrainteractive.astralibs.util.parse
 import ru.astrainteractive.astralibs.util.writeIntoFile
 import ru.astrainteractive.klibs.kstorage.suspend.StateFlowSuspendMutableKrate
 import ru.astrainteractive.klibs.kstorage.suspend.impl.DefaultStateFlowSuspendMutableKrate
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
 import java.io.File
 import java.util.UUID
+
+private val logger = JUtiltLogger("AspeKt-ClaimKrate")
 
 class ClaimKrate(
     file: File,
@@ -25,7 +28,9 @@ class ClaimKrate(
             null
         } else {
             stringFormat.parse<ClaimData>(file)
-                .onFailure(Throwable::printStackTrace)
+                .onFailure { throwable ->
+                    logger.error(throwable) { "#loader could not parse claim ${file.name} of $ownerUUID" }
+                }
                 .getOrNull()
         }
     },

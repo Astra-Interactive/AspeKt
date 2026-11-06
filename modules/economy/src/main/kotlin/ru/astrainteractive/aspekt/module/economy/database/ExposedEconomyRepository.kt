@@ -199,8 +199,8 @@ internal class ExposedEconomyRepository(
     ): Boolean {
         return withMutex {
             newSuspendedTransaction(db = currentDatabase()) {
-                val fromPlayerCurrency =
-                    findPlayerCurrency(from.uuid, currencyId) ?: return@newSuspendedTransaction false
+                val fromPlayerCurrency = findPlayerCurrency(from.uuid, currencyId)
+                    ?: return@newSuspendedTransaction false
                 if (fromPlayerCurrency.balance - amount < 0) return@newSuspendedTransaction false
                 val toPlayerCurrency = PlayerCurrency(
                     playerModel = EconomyPlayer(

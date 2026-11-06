@@ -25,6 +25,8 @@ import ru.astrainteractive.aspekt.module.claims.api.util.isPlayerOwnClaim
 import ru.astrainteractive.aspekt.module.claims.api.util.uniqueWorldKey
 import ru.astrainteractive.klibs.mikro.core.coroutines.propagateCancellationException
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import java.io.File
 import java.util.UUID
 
@@ -33,7 +35,7 @@ internal class KrateClaimsRepository(
     stringFormat: StringFormat,
     dispatchers: KotlinDispatchers,
     private val ioScope: CoroutineScope
-) : ClaimsRepository {
+) : ClaimsRepository, Logger by JUtiltLogger("AspeKt-KrateClaimsRepository") {
     private val mutex = Mutex()
     private val krateFilesStateFlow = MutableStateFlow(folder.listFiles().orEmpty().toList())
     private val krates = krateFilesStateFlow
@@ -126,7 +128,9 @@ internal class KrateClaimsRepository(
                             .minus(key)
                     )
                 }
-            }.propagateCancellationException().onFailure(Throwable::printStackTrace)
+            }.propagateCancellationException().onFailure { throwable ->
+                error(throwable) { "#deleteChunk could not delete chunk $key of $uuid" }
+            }
         }
     }
 }

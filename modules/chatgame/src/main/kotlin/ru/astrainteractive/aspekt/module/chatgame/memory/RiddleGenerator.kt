@@ -11,6 +11,8 @@ import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameConfig
 import ru.astrainteractive.aspekt.module.chatgame.model.ChatGameData
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import kotlin.math.pow
 import kotlin.math.sign
 import kotlin.math.sqrt
@@ -19,7 +21,7 @@ import kotlin.random.Random
 internal class RiddleGenerator(
     configKrate: CachedKrate<ChatGameConfig>,
     translationKrate: CachedKrate<PluginTranslation>
-) {
+) : Logger by JUtiltLogger("AspeKt-RiddleGenerator") {
     private val config by configKrate
     private val translation by translationKrate
     private val anagramRiddleGenerator = AnagramRiddleGenerator(
@@ -105,7 +107,9 @@ internal class RiddleGenerator(
                 val root2 = root2Numerator.div(2 * a).roundDec(2)
                 ChatGameData(
                     question = translation.chatGame.solveQuadratic(equation),
-                    answers = listOf(root1.toString(), root2.toString()).also(::println),
+                    answers = listOf(root1.toString(), root2.toString()).also { roots ->
+                        debug { "#generate quadratic equation $equation has roots $roots" }
+                    },
                     reward = instance.reward ?: config.defaultReward
                 )
             }

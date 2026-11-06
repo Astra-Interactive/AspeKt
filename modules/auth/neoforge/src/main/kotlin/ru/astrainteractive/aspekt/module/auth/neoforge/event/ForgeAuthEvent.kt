@@ -31,13 +31,15 @@ import ru.astrainteractive.astralibs.server.util.toPlain
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
 import ru.astrainteractive.klibs.mikro.core.coroutines.merge
+import ru.astrainteractive.klibs.mikro.core.logging.JUtiltLogger
+import ru.astrainteractive.klibs.mikro.core.logging.Logger
 import ru.astrainteractive.klibs.mikro.core.util.tryCast
 
 internal class ForgeAuthEvent(
     private val authStateRepository: AuthStateRepository,
     private val mainScope: CoroutineScope,
     translationKrate: CachedKrate<AuthTranslation>
-) {
+) : Logger by JUtiltLogger("AspeKt-ForgeAuthEvent") {
     val translation by translationKrate
 
     val playerLoggedOutEvent = flowEvent<PlayerEvent.PlayerLoggedOutEvent>()
@@ -72,7 +74,7 @@ internal class ForgeAuthEvent(
         .filter { event -> event.player.isAlive }
         .filter { event -> authStateRepository.resolveAuthState(event.player.uuid) !is AuthState.Authorized }
         .onEach { event ->
-            println(event)
+            debug { "#breakEvent cancelled for unauthorized player ${event.player.uuid}: $event" }
             event.isCanceled = true
             notifyPlayer(event.player)
         }.launchIn(mainScope)
