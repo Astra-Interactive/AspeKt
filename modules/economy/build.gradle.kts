@@ -5,6 +5,11 @@ plugins {
     id("ru.astrainteractive.gradleplugin.java.version")
 }
 
+linter {
+    unit(ru.astrainteractive.klibs.rules.core.unit.model.UnitRole.Context())
+    rootPackage.set("ru.astrainteractive.aspekt.module.economy")
+}
+
 dependencies {
     compileOnly(libs.minecraft.paper.api)
     compileOnly(libs.minecraft.papi)

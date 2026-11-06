@@ -5,6 +5,11 @@ plugins {
     id("ru.astrainteractive.gradleplugin.java.version")
 }
 
+linter {
+    unit(ru.astrainteractive.klibs.rules.core.unit.model.UnitRole.Platform())
+    rootPackage.set("ru.astrainteractive.aspekt.module.claims.bukkit")
+}
+
 dependencies {
     compileOnly(libs.minecraft.paper.api)
 
@@ -23,8 +28,4 @@ dependencies {
     implementation(projects.modules.core.bukkit)
 
     testImplementation(libs.tests.kotlin.test)
-}
-
-linter {
-    unit(ru.astrainteractive.klibs.rules.core.unit.model.UnitRole.Platform())
 }

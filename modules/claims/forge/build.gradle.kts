@@ -5,6 +5,11 @@ plugins {
     id("ru.astrainteractive.gradleplugin.java.version")
 }
 
+linter {
+    unit(ru.astrainteractive.klibs.rules.core.unit.model.UnitRole.Platform())
+    rootPackage.set("ru.astrainteractive.aspekt.module.claims.forge")
+}
+
 dependencies {
     compileOnly(libs.minecraft.kyori.gson)
     compileOnly(libs.minecraft.kyori.legacy)
@@ -45,8 +50,4 @@ dependencies {
     compileOnly(libs.minecraft.datafixerupper)
     compileOnly(libs.minecraft.forge.bus)
     compileOnly(libs.joml)
-}
-
-linter {
-    unit(ru.astrainteractive.klibs.rules.core.unit.model.UnitRole.Platform())
 }
