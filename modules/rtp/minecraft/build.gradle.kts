@@ -8,6 +8,11 @@ plugins {
     alias(libs.plugins.gradle.fabric.loom)
 }
 
+linter {
+    unit(ru.astrainteractive.klibs.rules.core.unit.model.UnitRole.Platform())
+    rootPackage.set("ru.astrainteractive.aspekt.module.rtp.minecraft")
+}
+
 repositories {
     mavenLocal()
 }
@@ -39,9 +44,4 @@ dependencies {
     compileOnly(libs.minecraft.brigadier)
     compileOnly(libs.minecraft.datafixerupper)
     compileOnly(libs.joml)
-}
-
-linter {
-    unit(ru.astrainteractive.klibs.rules.core.unit.model.UnitRole.Platform())
-    rootPackage.set("ru.astrainteractive.aspekt.module.rtp.minecraft")
 }

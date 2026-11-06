@@ -5,6 +5,11 @@ plugins {
     id("ru.astrainteractive.gradleplugin.java.version")
 }
 
+linter {
+    unit(ru.astrainteractive.klibs.rules.core.unit.model.UnitRole.Api())
+    rootPackage.set("ru.astrainteractive.aspekt.module.sethome.api")
+}
+
 dependencies {
     compileOnly(libs.guava)
     compileOnly(libs.minecraft.brigadier)

@@ -4,6 +4,11 @@ plugins {
     id("ru.astrainteractive.gradleplugin.java.version")
 }
 
+linter {
+    unit(ru.astrainteractive.klibs.rules.core.unit.model.UnitRole.Technology())
+    rootPackage.set("ru.astrainteractive.aspekt.module.auth.exposed")
+}
+
 dependencies {
     implementation(libs.exposed.core)
     implementation(libs.exposed.dao)

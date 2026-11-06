@@ -7,6 +7,11 @@ plugins {
     id("ru.astrainteractive.gradleplugin.java.version")
 }
 
+linter {
+    unit(ru.astrainteractive.klibs.rules.core.unit.model.UnitRole.Platform())
+    rootPackage.set("ru.astrainteractive.aspekt.module.claims.neoforge")
+}
+
 dependencies {
     compileOnly(libs.minecraft.kyori.gson)
     compileOnly(libs.minecraft.kyori.legacy)
@@ -51,8 +56,4 @@ dependencies {
 
 tasks.withType<KotlinCompile>().configureEach {
     dependsOn(":instances:neoforge:generateNeoforgeJar")
-}
-
-linter {
-    unit(ru.astrainteractive.klibs.rules.core.unit.model.UnitRole.Platform())
 }

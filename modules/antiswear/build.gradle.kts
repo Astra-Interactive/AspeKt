@@ -5,6 +5,11 @@ plugins {
     id("ru.astrainteractive.gradleplugin.java.version")
 }
 
+linter {
+    unit(ru.astrainteractive.klibs.rules.core.unit.model.UnitRole.Context())
+    rootPackage.set("ru.astrainteractive.aspekt.module.antiswear")
+}
+
 dependencies {
     compileOnly(libs.minecraft.packetevents)
     compileOnly(libs.minecraft.paper.api)

@@ -5,6 +5,11 @@ plugins {
     id("ru.astrainteractive.gradleplugin.java.version")
 }
 
+linter {
+    unit(ru.astrainteractive.klibs.rules.core.unit.model.UnitRole.CorePlatform())
+    rootPackage.set("ru.astrainteractive.aspekt.core")
+}
+
 dependencies {
     implementation(libs.klibs.kstorage)
 
@@ -21,8 +26,4 @@ dependencies {
     implementation(libs.minecraft.astralibs.menu.bukkit)
 
     implementation(projects.modules.core.api)
-}
-
-linter {
-    unit(ru.astrainteractive.klibs.rules.core.unit.model.UnitRole.CorePlatform())
 }
