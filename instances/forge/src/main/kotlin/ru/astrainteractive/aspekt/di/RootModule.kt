@@ -9,7 +9,6 @@ import ru.astrainteractive.aspekt.command.api.di.CommandsModule
 import ru.astrainteractive.aspekt.core.di.CoreModule
 import ru.astrainteractive.aspekt.feature.di.FeatureGate
 import ru.astrainteractive.aspekt.feature.file.FileFeatureFlagReader
-import ru.astrainteractive.aspekt.feature.util.deriveEnabled
 import ru.astrainteractive.aspekt.module.auth.api.di.AuthApiModule
 import ru.astrainteractive.aspekt.module.auth.exposed.di.AuthExposedModule
 import ru.astrainteractive.aspekt.module.auth.forge.di.ForgeAuthModule
