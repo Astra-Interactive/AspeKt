@@ -68,4 +68,27 @@ class FeatureGate<T : Any>(
     override fun onDisable() {
         disableNow()
     }
+
+    fun <R : Any> deriveEnabled(
+        featureClass: KClass<R>,
+        flagReader: FeatureFlagReader,
+        lifecycleSelector: (R) -> Lifecycle,
+        transform: (T) -> R,
+    ): FeatureGate<R> {
+        val parentFeatureGate = this
+        return FeatureGate(
+            featureClass = featureClass,
+            flagReader = ParentGatedFeatureFlagReader(
+                featureClass = featureClass,
+                parentFeatureGate = parentFeatureGate,
+                delegate = flagReader
+            ),
+            featureFactory = {
+                val parentState = parentFeatureGate.currentState
+                check(parentState is ModuleState.Enabled) { "Feature '${parentFeatureGate.name}' is not enabled" }
+                transform.invoke(parentState.feature)
+            },
+            lifecycleSelector = lifecycleSelector
+        )
+    }
 }

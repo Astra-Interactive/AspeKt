@@ -19,12 +19,11 @@ import net.neoforged.neoforge.event.level.ExplosionEvent
 import ru.astrainteractive.aspekt.core.plugin.model.PluginPermission
 import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.core.plugin.util.actionBlocked
-import ru.astrainteractive.aspekt.module.claims.api.api.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.api.debounce.api.RetractKey
 import ru.astrainteractive.aspekt.module.claims.api.debounce.memory.EventDebounce
 import ru.astrainteractive.aspekt.module.claims.api.model.ChunkFlag
 import ru.astrainteractive.aspekt.module.claims.api.model.ClaimChunk
-import ru.astrainteractive.aspekt.module.claims.api.util.isAble
+import ru.astrainteractive.aspekt.module.claims.api.usecase.CheckChunkActionUseCase
 import ru.astrainteractive.aspekt.module.claims.api.util.uniqueWorldKey
 import ru.astrainteractive.aspekt.module.claims.neoforge.util.toClaimPlayer
 import ru.astrainteractive.astralibs.coroutines.MinecraftMainDispatcher
@@ -39,7 +38,7 @@ import ru.astrainteractive.klibs.mikro.core.util.tryCast
 import kotlin.time.Duration.Companion.seconds
 
 internal class ForgeClaimEvent(
-    private val claimsRepository: ClaimsRepository,
+    private val checkChunkActionUseCase: CheckChunkActionUseCase,
     translationKrate: CachedKrate<PluginTranslation>
 ) : Logger by JUtiltLogger("AspeKt-ForgeClaimEvent") {
     private val translation by translationKrate
@@ -147,7 +146,7 @@ internal class ForgeClaimEvent(
             retractKey,
             sharedEvent
         ) {
-            val isAble = claimsRepository.isAble(
+            val isAble = checkChunkActionUseCase.invoke(
                 key = claimChunk.uniqueWorldKey,
                 chunkFlag = flag,
                 claimPlayer = player?.toClaimPlayer()

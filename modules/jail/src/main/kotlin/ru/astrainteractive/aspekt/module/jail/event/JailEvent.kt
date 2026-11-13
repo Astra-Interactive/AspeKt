@@ -16,10 +16,8 @@ import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.module.jail.api.JailCache
 import ru.astrainteractive.aspekt.module.jail.api.JailRepository
 import ru.astrainteractive.aspekt.module.jail.usecase.TeleportInmateToJailUseCase
-import ru.astrainteractive.aspekt.module.jail.util.cache
-import ru.astrainteractive.aspekt.module.jail.util.forget
-import ru.astrainteractive.aspekt.module.jail.util.isInJail
 import ru.astrainteractive.aspekt.module.jail.util.sendMessage
+import ru.astrainteractive.aspekt.module.jail.util.toUuidString
 import ru.astrainteractive.astralibs.event.EventListener
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
@@ -38,21 +36,22 @@ internal class JailEvent(
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun playerCommandPreprocessEvent(e: PlayerCommandPreprocessEvent) {
-        if (!jailCache.isInJail(e.player)) return
+        if (!jailCache.isInJail(e.player.toUuidString())) return
         e.isCancelled = true
         e.player.sendMessage(translation.jails.commandBlocked)
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onInteract(e: PlayerInteractEvent) {
-        jailCache.cache(e.player)
-        if (!jailCache.isInJail(e.player)) return
+        val playerUuid = e.player.toUuidString()
+        jailCache.cache(playerUuid)
+        if (!jailCache.isInJail(playerUuid)) return
         e.isCancelled = true
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onQuit(e: PlayerQuitEvent) {
-        jailCache.forget(e.player)
+        jailCache.forget(e.player.toUuidString())
     }
 
     private fun teleportBackToJail(player: Player) {
@@ -79,6 +78,7 @@ internal class JailEvent(
     @Suppress("UnusedParameter")
     fun onStart(e: ServerLoadEvent) {
         Bukkit.getOnlinePlayers()
+            .map(Player::toUuidString)
             .forEach(jailCache::cache)
     }
 }

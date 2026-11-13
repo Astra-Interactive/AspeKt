@@ -24,6 +24,9 @@ class ClaimCommandModule(
         translationKrate = coreModule.translationKrate,
         claimsRepository = claimModule.claimsRepository,
         claimErrorMapper = claimModule.claimErrorMapper,
+        claimChunkUseCase = claimModule.claimChunkUseCase,
+        setChunkFlagUseCase = claimModule.setChunkFlagUseCase,
+        createClaimGridUseCase = claimModule.createClaimGridUseCase,
         kyoriKrate = coreModule.kyoriKrate,
         platformServer = coreModule.platformServer
     )

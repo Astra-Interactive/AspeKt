@@ -10,8 +10,7 @@ import ru.astrainteractive.aspekt.module.auth.api.model.AuthTranslation
 import ru.astrainteractive.aspekt.module.auth.api.util.sha256
 import ru.astrainteractive.aspekt.module.auth.dao.api.AuthRepository
 import ru.astrainteractive.aspekt.module.auth.dao.model.AuthData
-import ru.astrainteractive.aspekt.module.auth.dao.util.checkAuthDataIsValid
-import ru.astrainteractive.aspekt.module.auth.dao.util.isRegistered
+import ru.astrainteractive.aspekt.module.auth.dao.util.hasSamePasswordAs
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
@@ -37,7 +36,7 @@ internal class LoginCommandRegistrar(
                             val player = ctx.requirePlayer()
                             ioScope.launch {
                                 val passwordSha = ctx.requireArgument(passwordArg).sha256()
-                                val isRegistered = authRepository.isRegistered(player.uuid)
+                                val isRegistered = authRepository.findUser(player.uuid).getOrNull() != null
                                 if (!isRegistered) {
                                     ctx.getSender().sendMessage(translation.notRegistered)
                                     return@launch
@@ -48,7 +47,10 @@ internal class LoginCommandRegistrar(
                                     passwordSha256 = passwordSha,
                                     lastIpAddress = player.address.hostName
                                 )
-                                if (authRepository.checkAuthDataIsValid(authData).getOrDefault(false)) {
+                                val isAuthDataValid = authRepository.findUser(authData.uuid)
+                                    .map(authData::hasSamePasswordAs)
+                                    .getOrDefault(false)
+                                if (isAuthDataValid) {
                                     ctx.getSender().sendMessage(translation.authSuccess)
                                     authStateRepository.authUser(player.uuid)
                                 } else {

@@ -8,6 +8,10 @@ import ru.astrainteractive.aspekt.core.plugin.model.PluginTranslation
 import ru.astrainteractive.aspekt.module.claims.api.api.ClaimErrorMapper
 import ru.astrainteractive.aspekt.module.claims.api.api.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.api.krate.KrateClaimsRepository
+import ru.astrainteractive.aspekt.module.claims.api.usecase.CheckChunkActionUseCase
+import ru.astrainteractive.aspekt.module.claims.api.usecase.ClaimChunkUseCase
+import ru.astrainteractive.aspekt.module.claims.api.usecase.CreateClaimGridUseCase
+import ru.astrainteractive.aspekt.module.claims.api.usecase.SetChunkFlagUseCase
 import ru.astrainteractive.astralibs.lifecycle.Lifecycle
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
@@ -31,6 +35,10 @@ class ClaimModule(
         ioScope = moduleIoScope
     )
     internal val claimErrorMapper = ClaimErrorMapper(translationKrate = translationKrate)
+    internal val claimChunkUseCase = ClaimChunkUseCase(claimsRepository = claimsRepository)
+    internal val setChunkFlagUseCase = SetChunkFlagUseCase(claimsRepository = claimsRepository)
+    internal val createClaimGridUseCase = CreateClaimGridUseCase(claimsRepository = claimsRepository)
+    val checkChunkActionUseCase = CheckChunkActionUseCase(claimsRepository = claimsRepository)
 
     @Suppress("TrivialLambdaReference")
     val lifecycle: Lifecycle = Lifecycle.Lambda(
