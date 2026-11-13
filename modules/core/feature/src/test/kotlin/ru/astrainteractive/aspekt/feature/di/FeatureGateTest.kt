@@ -30,16 +30,6 @@ class FeatureGateTest {
         return state.feature
     }
 
-    private fun createParentGate(
-        flagReader: FakeFeatureFlagReader,
-        events: MutableList<String>
-    ): FeatureGate<FakeFeature> {
-        return createGate(
-            flagReader = flagReader,
-            featureFactory = { FakeFeature("parent", events) }
-        )
-    }
-
     private fun createChildGate(
         parentGate: FeatureGate<FakeFeature>,
         flagReader: FakeFeatureFlagReader,

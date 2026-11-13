@@ -11,18 +11,6 @@ import kotlin.test.assertNull
 
 class FeatureGateExtTest {
 
-    private fun createParentGate(
-        flagReader: FakeFeatureFlagReader,
-        events: MutableList<String>
-    ): FeatureGate<FakeFeature> {
-        return FeatureGate(
-            featureClass = FakeFeature::class,
-            flagReader = flagReader,
-            featureFactory = { FakeFeature("parent", events) },
-            lifecycleSelector = FakeFeature::lifecycle
-        )
-    }
-
     @Test
     fun GIVEN_disabled_gate_WHEN_with_feature_THEN_returns_null() {
         val parentGate = createParentGate(FakeFeatureFlagReader(isEnabled = false), mutableListOf())
