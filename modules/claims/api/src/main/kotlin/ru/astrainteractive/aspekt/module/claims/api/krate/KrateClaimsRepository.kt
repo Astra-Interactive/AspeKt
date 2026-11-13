@@ -18,6 +18,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.StringFormat
 import ru.astrainteractive.aspekt.module.claims.api.api.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.api.model.ClaimChunk
+import ru.astrainteractive.aspekt.module.claims.api.model.ClaimData
 import ru.astrainteractive.aspekt.module.claims.api.model.ClaimNotFoundException
 import ru.astrainteractive.aspekt.module.claims.api.model.ClaimNotOwnedException
 import ru.astrainteractive.aspekt.module.claims.api.model.UniqueWorldKey
@@ -101,8 +102,12 @@ internal class KrateClaimsRepository(
         return krates.value.firstOrNull { krate -> krate.cachedStateFlow.value.ownerUUID == uuid }
     }
 
-    override fun claimOwnerUuid(key: UniqueWorldKey): UUID? {
+    override fun findOwnerUuid(key: UniqueWorldKey): UUID? {
         return chunkByKrate[key]?.cachedStateFlow?.value?.ownerUUID
+    }
+
+    override fun findClaimData(key: UniqueWorldKey): ClaimData? {
+        return chunkByKrate[key]?.cachedStateFlow?.value
     }
 
     override fun loadAllChunks(): List<ClaimChunk> {
@@ -128,7 +133,7 @@ internal class KrateClaimsRepository(
     override suspend fun deleteChunk(uuid: UUID, key: UniqueWorldKey): Result<Unit> {
         return mutex.withLock {
             if (key !in chunkByKrate) return@withLock Result.failure(ClaimNotFoundException)
-            if (claimOwnerUuid(key) != uuid) return@withLock Result.failure(ClaimNotOwnedException)
+            if (findOwnerUuid(key) != uuid) return@withLock Result.failure(ClaimNotOwnedException)
             runCatching {
                 requireKrate(uuid).save { data ->
                     data.copy(
