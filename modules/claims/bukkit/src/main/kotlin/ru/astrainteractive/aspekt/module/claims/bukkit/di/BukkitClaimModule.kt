@@ -28,7 +28,7 @@ class BukkitClaimModule(
     )
 
     private val bukkitClaimEvent = BukkitClaimEvent(
-        claimsRepository = claimModule.claimsRepository,
+        checkChunkActionUseCase = claimModule.checkChunkActionUseCase,
         translationKrate = coreModule.translationKrate
     )
 

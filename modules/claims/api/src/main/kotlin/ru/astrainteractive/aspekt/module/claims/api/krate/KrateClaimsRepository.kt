@@ -21,7 +21,6 @@ import ru.astrainteractive.aspekt.module.claims.api.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.api.model.ClaimNotFoundException
 import ru.astrainteractive.aspekt.module.claims.api.model.ClaimNotOwnedException
 import ru.astrainteractive.aspekt.module.claims.api.model.UniqueWorldKey
-import ru.astrainteractive.aspekt.module.claims.api.util.isPlayerOwnClaim
 import ru.astrainteractive.aspekt.module.claims.api.util.uniqueWorldKey
 import ru.astrainteractive.klibs.mikro.core.coroutines.propagateCancellationException
 import ru.astrainteractive.klibs.mikro.core.dispatchers.KotlinDispatchers
@@ -102,6 +101,16 @@ internal class KrateClaimsRepository(
         return krates.value.firstOrNull { krate -> krate.cachedStateFlow.value.ownerUUID == uuid }
     }
 
+    override fun claimOwnerUuid(key: UniqueWorldKey): UUID? {
+        return chunkByKrate[key]?.cachedStateFlow?.value?.ownerUUID
+    }
+
+    override fun loadAllChunks(): List<ClaimChunk> {
+        return allKrates
+            .map { claimDataKrate -> claimDataKrate.cachedStateFlow.value }
+            .flatMap { claimData -> claimData.chunks.values }
+    }
+
     override suspend fun saveChunk(uuid: UUID, chunk: ClaimChunk): Result<Unit> {
         return mutex.withLock {
             return@withLock runCatching {
@@ -119,7 +128,7 @@ internal class KrateClaimsRepository(
     override suspend fun deleteChunk(uuid: UUID, key: UniqueWorldKey): Result<Unit> {
         return mutex.withLock {
             if (key !in chunkByKrate) return@withLock Result.failure(ClaimNotFoundException)
-            if (!isPlayerOwnClaim(uuid, key)) return@withLock Result.failure(ClaimNotOwnedException)
+            if (claimOwnerUuid(key) != uuid) return@withLock Result.failure(ClaimNotOwnedException)
             runCatching {
                 requireKrate(uuid).save { data ->
                     data.copy(

@@ -11,6 +11,8 @@ interface ClaimsRepository {
     val chunkByKrate: Map<UniqueWorldKey, StateFlowSuspendMutableKrate<ClaimData>>
     suspend fun requireKrate(uuid: UUID): StateFlowSuspendMutableKrate<ClaimData>
     fun findKrate(uuid: UUID): StateFlowSuspendMutableKrate<ClaimData>?
+    fun claimOwnerUuid(key: UniqueWorldKey): UUID?
+    fun loadAllChunks(): List<ClaimChunk>
     suspend fun saveChunk(uuid: UUID, chunk: ClaimChunk): Result<Unit>
     suspend fun deleteChunk(uuid: UUID, key: UniqueWorldKey): Result<Unit>
 }

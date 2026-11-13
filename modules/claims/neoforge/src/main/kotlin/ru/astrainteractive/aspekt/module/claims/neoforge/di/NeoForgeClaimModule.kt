@@ -23,7 +23,7 @@ class NeoForgeClaimModule(
     @Suppress("UnusedPrivateProperty")
     private val forgeClaimEvent = ForgeClaimEvent(
         translationKrate = coreModule.translationKrate,
-        claimsRepository = claimModule.claimsRepository
+        checkChunkActionUseCase = claimModule.checkChunkActionUseCase
     )
 
     private val claimCommandModule = ClaimCommandModule(

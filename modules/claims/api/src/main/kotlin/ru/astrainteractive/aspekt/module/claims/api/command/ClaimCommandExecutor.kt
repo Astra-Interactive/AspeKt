@@ -8,9 +8,9 @@ import ru.astrainteractive.aspekt.module.claims.api.api.ClaimsRepository
 import ru.astrainteractive.aspekt.module.claims.api.model.ClaimChunk
 import ru.astrainteractive.aspekt.module.claims.api.model.ClaimCommand
 import ru.astrainteractive.aspekt.module.claims.api.model.ClaimPlayer
-import ru.astrainteractive.aspekt.module.claims.api.util.claim
-import ru.astrainteractive.aspekt.module.claims.api.util.createGrid
-import ru.astrainteractive.aspekt.module.claims.api.util.setFlag
+import ru.astrainteractive.aspekt.module.claims.api.usecase.ClaimChunkUseCase
+import ru.astrainteractive.aspekt.module.claims.api.usecase.CreateClaimGridUseCase
+import ru.astrainteractive.aspekt.module.claims.api.usecase.SetChunkFlagUseCase
 import ru.astrainteractive.aspekt.module.claims.api.util.uniqueWorldKey
 import ru.astrainteractive.astralibs.localization.markup.KyoriComponentSerializer
 import ru.astrainteractive.astralibs.server.bridge.PlatformServer
@@ -25,6 +25,9 @@ internal class ClaimCommandExecutor(
     private val dispatchers: KotlinDispatchers,
     private val claimsRepository: ClaimsRepository,
     private val claimErrorMapper: ClaimErrorMapper,
+    private val claimChunkUseCase: ClaimChunkUseCase,
+    private val setChunkFlagUseCase: SetChunkFlagUseCase,
+    private val createClaimGridUseCase: CreateClaimGridUseCase,
     private val platformServer: PlatformServer,
     kyoriKrate: CachedKrate<KyoriComponentSerializer>,
     translationKrate: CachedKrate<PluginTranslation>,
@@ -38,7 +41,7 @@ internal class ClaimCommandExecutor(
         chunk: ClaimChunk
     ) {
         val result = runCatching {
-            claimsRepository.createGrid(5, chunk)
+            createClaimGridUseCase.invoke(5, chunk)
         }.propagateCancellationException()
         result.onSuccess { claims ->
             platformServer
@@ -61,7 +64,7 @@ internal class ClaimCommandExecutor(
     }
 
     private suspend fun setFlag(input: ClaimCommand.SetFlag) {
-        val result = claimsRepository.setFlag(
+        val result = setChunkFlagUseCase.invoke(
             flag = input.flag,
             value = input.value,
             key = input.chunk.uniqueWorldKey,
@@ -81,7 +84,7 @@ internal class ClaimCommandExecutor(
     }
 
     private suspend fun claim(input: ClaimCommand.Claim) {
-        val result = claimsRepository.claim(input.claimPlayer.uuid, input.chunk)
+        val result = claimChunkUseCase.invoke(input.claimPlayer.uuid, input.chunk)
         result.onSuccess {
             platformServer
                 .findOnlinePlayer(input.claimPlayer.uuid)
