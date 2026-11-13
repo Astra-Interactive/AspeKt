@@ -10,6 +10,7 @@ import ru.astrainteractive.aspekt.module.auth.api.model.AuthTranslation
 import ru.astrainteractive.aspekt.module.auth.api.util.sha256
 import ru.astrainteractive.aspekt.module.auth.dao.api.AuthRepository
 import ru.astrainteractive.aspekt.module.auth.dao.model.AuthData
+import ru.astrainteractive.aspekt.module.auth.dao.util.hasSamePasswordAs
 import ru.astrainteractive.astralibs.command.api.brigadier.command.MultiplatformCommand
 import ru.astrainteractive.klibs.kstorage.api.CachedKrate
 import ru.astrainteractive.klibs.kstorage.api.getValue
@@ -47,7 +48,7 @@ internal class LoginCommandRegistrar(
                                     lastIpAddress = player.address.hostName
                                 )
                                 val isAuthDataValid = authRepository.findUser(authData.uuid)
-                                    .map { storedAuthData -> storedAuthData.passwordSha256 == authData.passwordSha256 }
+                                    .map(authData::hasSamePasswordAs)
                                     .getOrDefault(false)
                                 if (isAuthDataValid) {
                                     ctx.getSender().sendMessage(translation.authSuccess)
